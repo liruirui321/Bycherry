@@ -15,6 +15,7 @@ import { works } from "./components/Works";
 
 const siteTitle = "By Cherry";
 const defaultDescription = "A warm illustrated portfolio about science education, AI learning tools, project-based courses, and creative workflows.";
+const siteUrl = "https://bycherry.me";
 
 function upsertMeta(selector: string, attributes: Record<string, string>, content: string) {
   let element = document.head.querySelector<HTMLMetaElement>(selector);
@@ -34,6 +35,17 @@ function upsertCanonical(url: string) {
     document.head.appendChild(element);
   }
   element.setAttribute("href", url);
+}
+
+function upsertJsonLd(data: Record<string, unknown>) {
+  let element = document.head.querySelector<HTMLScriptElement>('script[data-schema="bycherry-page"]');
+  if (!element) {
+    element = document.createElement("script");
+    element.type = "application/ld+json";
+    element.dataset.schema = "bycherry-page";
+    document.head.appendChild(element);
+  }
+  element.textContent = JSON.stringify(data);
 }
 
 export default function App() {
@@ -86,7 +98,46 @@ export default function App() {
     const title = work?.title ?? note?.title ?? essay?.title ?? "Science, Education & AI";
     const description = work?.desc ?? note?.excerpt ?? essay?.body ?? defaultDescription;
     const fullTitle = title === "Science, Education & AI" ? `${siteTitle} | ${title}` : `${title} | ${siteTitle}`;
-    const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
+    const canonicalPath = window.location.pathname === "/" ? "/" : window.location.pathname.replace(/\/$/, "");
+    const canonicalUrl = `${siteUrl}${canonicalPath}`;
+    const jsonLdBase = {
+      publisher: {
+        "@type": "Person",
+        name: "Cherry",
+        url: siteUrl,
+      },
+      url: canonicalUrl,
+      name: title,
+      description,
+    };
+    const jsonLd = work
+      ? {
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          ...jsonLdBase,
+          genre: work.category,
+          keywords: work.tags.join(", "),
+        }
+      : note || essay
+        ? {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            ...jsonLdBase,
+            headline: title,
+            datePublished: note?.date ?? essay?.date,
+            author: {
+              "@type": "Person",
+              name: "Cherry",
+              url: siteUrl,
+            },
+            keywords: essay?.tags?.join(", ") ?? note?.tag,
+          }
+        : {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            ...jsonLdBase,
+            alternateName: "Bycherry",
+          };
 
     document.title = fullTitle;
     upsertMeta('meta[name="description"]', { name: "description" }, description);
@@ -96,6 +147,7 @@ export default function App() {
     upsertMeta('meta[name="twitter:title"]', { name: "twitter:title" }, fullTitle);
     upsertMeta('meta[name="twitter:description"]', { name: "twitter:description" }, description);
     upsertCanonical(canonicalUrl);
+    upsertJsonLd(jsonLd);
   }, [detailSlug, noteSlug, researchSlug, locationKey]);
 
   return (
