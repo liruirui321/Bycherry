@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { type FormEvent, useState } from "react";
 import { IconMail, IconSend, IconGithub, IconLeaf, IconCheck } from "./Icons";
 
 export function Contact() {
@@ -6,7 +6,8 @@ export function Contact() {
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
 
-  function sendMail() {
+  function sendMail(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     if (!name.trim() || !message.trim()) return;
     const subject = encodeURIComponent(`By Cherry 留言 - ${name.trim()}`);
     const body = encodeURIComponent(`${message.trim()}\n\n来自：${name.trim()}`);
@@ -61,7 +62,8 @@ export function Contact() {
 
         {/* Note form card */}
         {!sent ? (
-          <div
+          <form
+            onSubmit={sendMail}
             style={{
               background: "var(--cherry-yellow-light)",
               border: "1.5px solid var(--cherry-yellow)",
@@ -77,44 +79,50 @@ export function Contact() {
             <div style={{ position: "absolute", top: -9, right: "20%", width: 48, height: 14, background: "var(--cherry-sage-light)", opacity: 0.7, borderRadius: 3, transform: "rotate(3.5deg)" }} />
 
             {/* Name */}
-            <label style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>
+            <label htmlFor="contact-name" style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>
               你的名字
             </label>
             <input
+              id="contact-name"
+              name="name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Cherry 会怎么叫你？"
+              required
               style={{
                 width: "100%", background: "rgba(250,247,241,0.85)",
                 border: "1.5px solid var(--cherry-yellow)", borderRadius: 10,
                 padding: "0.65rem 1rem", fontSize: "0.9rem",
                 fontFamily: "'Nunito', sans-serif", color: "var(--cherry-warm-brown)",
-                outline: "none", marginBottom: "1.25rem", boxSizing: "border-box",
+                marginBottom: "1.25rem", boxSizing: "border-box",
               }}
             />
 
             {/* Message */}
-            <label style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>
+            <label htmlFor="contact-message" style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>
               你想说什么
             </label>
             <textarea
+              id="contact-message"
+              name="message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={4}
               placeholder="聊聊你感兴趣的话题、反馈，或者只是打个招呼都好~"
+              required
               style={{
                 width: "100%", background: "rgba(250,247,241,0.85)",
                 border: "1.5px solid var(--cherry-yellow)", borderRadius: 10,
                 padding: "0.65rem 1rem", fontSize: "0.9rem",
                 fontFamily: "'Nunito', sans-serif", color: "var(--cherry-warm-brown)",
-                outline: "none", resize: "none", marginBottom: "1.5rem",
+                resize: "none", marginBottom: "1.5rem",
                 boxSizing: "border-box", lineHeight: 1.65,
               }}
             />
 
             <button
-              onClick={sendMail}
+              type="submit"
               disabled={!name.trim() || !message.trim()}
               style={{
                 display: "inline-flex",
@@ -138,7 +146,7 @@ export function Contact() {
               <IconSend size={18} color={name.trim() && message.trim() ? "#FAF7F1" : "var(--cherry-warm-mid)"} />
               发送小纸条
             </button>
-          </div>
+          </form>
         ) : (
           <div
             style={{
