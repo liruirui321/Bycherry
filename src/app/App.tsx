@@ -71,8 +71,8 @@ export default function App() {
       ) : (
         <main>
           <Hero />
-          <About />
           <Works />
+          <About />
           <ResearchEssays />
           <Notes />
           <Contact />

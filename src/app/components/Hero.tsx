@@ -1,4 +1,5 @@
-import { IconMicroscope, IconTestTube, IconDNA, IconLeaf, IconLeafSmall, IconNotebook, IconStar, IconMushroom, IconBranch, IconSparkle, IconArrowDown, IconSeedling } from "./Icons";
+import { IconMicroscope, IconTestTube, IconDNA, IconLeaf, IconLeafSmall, IconNotebook, IconStar, IconMushroom, IconBranch, IconSparkle, IconSeedling } from "./Icons";
+import { works } from "./Works";
 
 function FloatDeco({ children, style }: { children: React.ReactNode; style: React.CSSProperties }) {
   return (
@@ -55,18 +56,23 @@ function DotTexture({ style }: { style: React.CSSProperties }) {
 }
 
 export function Hero() {
+  function openWork(href: string) {
+    window.history.pushState(null, "", href);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }
+
   return (
     <section
       id="top"
       style={{
         fontFamily: "'Nunito', sans-serif",
-        minHeight: "94vh",
+        minHeight: "auto",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
         overflow: "hidden",
-        padding: "5rem 1.5rem 4rem",
+        padding: "5.5rem 1.5rem 2.5rem",
       }}
     >
       {/* Forest atmosphere blobs */}
@@ -122,7 +128,7 @@ export function Hero() {
       </FloatDeco>
 
       {/* Main content */}
-      <div style={{ position: "relative", zIndex: 2, textAlign: "center", maxWidth: 660 }}>
+      <div style={{ position: "relative", zIndex: 2, textAlign: "center", maxWidth: 980, width: "100%" }}>
         {/* Tag */}
         <div
           style={{
@@ -147,7 +153,7 @@ export function Hero() {
         <h1
           style={{
             fontFamily: "'Nunito', sans-serif",
-            fontSize: "clamp(2.4rem, 6vw, 3.9rem)",
+            fontSize: "clamp(2rem, 5vw, 3.25rem)",
             fontWeight: 800,
             lineHeight: 1.15,
             color: "var(--cherry-warm-brown)",
@@ -175,7 +181,7 @@ export function Hero() {
             fontSize: "clamp(1.1rem, 2.5vw, 1.35rem)",
             color: "var(--cherry-warm-mid)",
             lineHeight: 1.65,
-            marginBottom: "2.5rem",
+            marginBottom: "1.4rem",
             fontWeight: 500,
           }}
         >
@@ -218,17 +224,42 @@ export function Hero() {
           </a>
         </div>
 
-        {/* Scroll hint */}
-        <div
-          style={{
-            marginTop: "3.5rem",
-            display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
-            opacity: 0.45,
-            animation: "floatDeco 2.2s ease-in-out infinite",
-          }}
-        >
-          <span style={{ fontFamily: "'Caveat', cursive", fontSize: "0.82rem", color: "var(--cherry-warm-mid)" }}>往下滚~</span>
-          <IconArrowDown size={16} />
+        <div style={{ marginTop: "1.6rem", background: "rgba(250,247,241,0.76)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.07)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: "0.75rem", flexWrap: "wrap" }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.95rem" }}>当前可打开的内容</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800 }}>{works.length} 个作品入口</div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.65rem" }}>
+            {works.map((work) => (
+              <a
+                key={work.slug}
+                href={work.href}
+                onClick={(event) => {
+                  event.preventDefault();
+                  openWork(work.href);
+                }}
+                style={{
+                  background: work.color,
+                  border: `1.5px solid ${work.border}`,
+                  borderRadius: 16,
+                  padding: "0.78rem",
+                  color: "var(--cherry-warm-brown)",
+                  textDecoration: "none",
+                  textAlign: "left",
+                  minHeight: 112,
+                  display: "grid",
+                  alignContent: "start",
+                  gap: "0.4rem",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ width: 28, height: 28, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{work.icon}</span>
+                  <strong style={{ fontSize: "0.88rem", lineHeight: 1.35 }}>{work.title}</strong>
+                </div>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.45 }}>{work.desc}</span>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 
