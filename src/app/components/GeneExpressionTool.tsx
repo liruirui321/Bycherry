@@ -247,6 +247,22 @@ function partialPolylinePath(points: Point[], progress: number) {
   return path.join(" ");
 }
 
+function fullPolylinePath(points: Point[]) {
+  return partialPolylinePath(points, 1);
+}
+
+function buildNascentMrnaPath(polymerasePoint: Point, progress: number, offset: Point = { x: 0, y: 0 }) {
+  const exit = { x: polymerasePoint.x + 10 + offset.x, y: polymerasePoint.y + 31 + offset.y };
+  const tailLength = 52 + clamp01(progress) * 184;
+
+  return [
+    { x: exit.x - tailLength, y: exit.y + 82 },
+    { x: exit.x - tailLength * 0.7, y: exit.y + 54 },
+    { x: exit.x - tailLength * 0.35, y: exit.y + 72 },
+    exit,
+  ];
+}
+
 function buildPolymeraseTracks(progress: number, polBound: number) {
   return Array.from({ length: Math.max(1, polBound) }).map((_, index) => {
     const activeSpan = 0.86;
@@ -277,7 +293,7 @@ function maxVisibleTranscribedProgress(progress: number, polBound: number) {
   return Math.max(transcriptionProgress, ...polymerases.map((polymerase) => polymerase.progress * polymerase.opacity));
 }
 
-function buildRibosomeTracks(progress: number, ribBound: number, canRead: boolean, maxTranscribedProgress: number) {
+function buildRibosomeTracks(progress: number, ribBound: number, canRead: boolean, maxTranscribedProgress: number, path: Point[] = transcriptPath) {
   return Array.from({ length: ribBound }).map((_, index) => {
     const activeStart = 0.24;
     const activeEnd = 0.94;
@@ -287,7 +303,7 @@ function buildRibosomeTracks(progress: number, ribBound: number, canRead: boolea
     const entryOpacity = clamp01((phase - activeStart) / 0.07);
     const exitOpacity = clamp01((activeEnd - phase) / 0.08);
     return {
-      point: pointOnPolyline(transcriptPath, localProgress),
+      point: pointOnPolyline(path, localProgress),
       progress: localProgress,
       opacity: onReadableSegment ? Math.min(entryOpacity, exitOpacity) : 0,
     };
@@ -298,10 +314,14 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
   const transcriptionProgress = model.transcriptionOn ? clamp01(progress / 0.78) : 0;
   const ribosomeCanRead = canTranslate && (model.transcriptionOn ? transcriptionProgress > 0.28 : retainedMrnaCount > 0);
   const polymerases = buildPolymeraseTracks(progress, model.polBound);
+  const leadPolymerase = polymerases.find((polymerase) => polymerase.opacity > 0);
+  const coupledMrnaPath = model.transcriptionOn && leadPolymerase
+    ? buildNascentMrnaPath(leadPolymerase.point, leadPolymerase.progress, leadPolymerase.offset)
+    : transcriptPath;
   const maxTranscribedProgress = model.transcriptionOn
     ? Math.max(transcriptionProgress, ...polymerases.map((polymerase) => polymerase.progress * polymerase.opacity))
     : retainedMrnaCount > 0 ? 1 : 0;
-  const ribosomes = buildRibosomeTracks(progress, model.ribBound, ribosomeCanRead, maxTranscribedProgress);
+  const ribosomes = buildRibosomeTracks(progress, model.ribBound, ribosomeCanRead, maxTranscribedProgress, coupledMrnaPath);
   const leadRibosome = ribosomes.find((ribosome) => ribosome.opacity > 0);
   const leadRibosomeProgress = leadRibosome?.progress ?? 0;
   const leadRibosomePoint = leadRibosome?.point ?? null;
@@ -309,7 +329,8 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
   const aminoCount = ribosomeCanRead ? Math.min(codons.length, Math.max(0, Math.floor(leadRibosomeProgress * (codons.length + 0.75)))) : 0;
   const proteinChainStart = { x: 392, y: 570 };
   const proteinChainGap = 48;
-  const leadRibosomeExit = leadRibosomePoint && aminoCount > 0 ? { x: leadRibosomePoint.x + 32, y: leadRibosomePoint.y + 34 } : null;
+  const leadRibosomeExit = leadRibosomePoint && aminoCount > 0 ? { x: leadRibosomePoint.x + 28, y: leadRibosomePoint.y + 24 } : null;
+  const livePeptideStart = leadRibosomeExit ? { x: leadRibosomeExit.x + 20, y: leadRibosomeExit.y + 18 } : null;
   const translationLayer = canTranslate ? (
     <>
       {ribosomes.map((ribosome, index) => {
@@ -351,25 +372,47 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
         );
       })}
 
-      {leadRibosomeExit ? (
-        <path
-          d={`M${leadRibosomeExit.x} ${leadRibosomeExit.y} C${leadRibosomeExit.x + 26} ${leadRibosomeExit.y + 42} ${proteinChainStart.x - 62} ${proteinChainStart.y - 22} ${proteinChainStart.x - 22} ${proteinChainStart.y}`}
-          fill="none"
-          stroke="var(--cherry-peach)"
-          strokeWidth={4}
-          strokeLinecap="round"
-          strokeDasharray="6 7"
-          markerEnd="url(#proteinArrow)"
-          opacity={0.84}
-        />
+      {leadRibosomeExit && livePeptideStart ? (
+        <g>
+          <path
+            d={`M${leadRibosomeExit.x} ${leadRibosomeExit.y} C${leadRibosomeExit.x + 9} ${leadRibosomeExit.y + 12} ${livePeptideStart.x - 10} ${livePeptideStart.y} ${livePeptideStart.x} ${livePeptideStart.y}`}
+            fill="none"
+            stroke="var(--cherry-peach)"
+            strokeWidth={4}
+            strokeLinecap="round"
+            markerEnd="url(#proteinArrow)"
+            opacity={0.9}
+          />
+          <text x={livePeptideStart.x - 10} y={livePeptideStart.y - 26} fill="var(--cherry-warm-brown)" fontSize={11} fontWeight={900}>
+            核糖体出口
+          </text>
+          {codons.slice(0, aminoCount).map((codon, index) => {
+            const x = livePeptideStart.x + index * 28;
+            const y = livePeptideStart.y + index * 14;
+
+            return (
+              <g key={`live-peptide-${codon.amino}`} transform={`translate(${x} ${y})`}>
+                {index > 0 ? (
+                  <line x1={-23} y1={-11} x2={-9} y2={-4} stroke="var(--cherry-forest)" strokeWidth={4} strokeLinecap="round" />
+                ) : null}
+                <circle r={12} fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4}>
+                  <animate attributeName="r" values="10;13;12" dur="0.7s" begin={`${index * 0.08}s`} repeatCount="1" />
+                </circle>
+                <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={7} fontWeight={900}>
+                  {codon.amino}
+                </text>
+              </g>
+            );
+          })}
+        </g>
       ) : null}
 
       <g transform={`translate(${proteinChainStart.x} ${proteinChainStart.y})`}>
         <text x={0} y={-32} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
-          核糖体正在接出多肽链
+          多肽链序列参考
         </text>
         <text x={0} y={-14} fill="var(--cherry-warm-mid)" fontSize={11} fontWeight={800} opacity={aminoCount > 0 ? 1 : 0.58}>
-          每读完一个密码子，就接上一个氨基酸小圆
+          真实生成位置在核糖体出口旁边
         </text>
         {codons.map((codon, index) => {
           const active = index < aminoCount;
@@ -443,56 +486,44 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
 
   return (
     <g>
-      {polymerases.map((polymerase, index) => (
-        <g key={`moving-transcript-${index}`} opacity={polymerase.opacity}>
-          <g transform={`translate(${polymerase.offset.x} ${polymerase.offset.y})`}>
-            <path d={polymerase.path} fill="none" stroke="rgba(232,121,95,0.2)" strokeWidth={17} strokeLinecap="round" strokeLinejoin="round" />
-            <path d={polymerase.path} fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" strokeLinejoin="round" />
+      {polymerases.map((polymerase, index) => {
+        const nascentPath = buildNascentMrnaPath(polymerase.point, polymerase.progress, polymerase.offset);
+        const fiveEnd = nascentPath[0];
+        const growthEnd = nascentPath[nascentPath.length - 1];
+
+        return (
+          <g key={`moving-transcript-${index}`} opacity={polymerase.opacity}>
+            <path d={fullPolylinePath(nascentPath)} fill="none" stroke="rgba(232,121,95,0.2)" strokeWidth={17} strokeLinecap="round" strokeLinejoin="round" />
+            <path d={fullPolylinePath(nascentPath)} fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" strokeLinejoin="round" markerEnd="url(#mrnaArrow)" />
             {polymerase.progress > 0.16 ? (
-              <text x={382} y={288} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
-                5' 已生成端
+              <text x={fiveEnd.x - 8} y={fiveEnd.y + 24} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
+                5' 先露出
               </text>
             ) : null}
-          </g>
-          <path
-            d={`M${polymerase.tip.x} ${polymerase.tip.y} C${polymerase.tip.x + 20} ${polymerase.tip.y - 20} ${polymerase.exit.x - 20} ${polymerase.exit.y + 10} ${polymerase.exit.x} ${polymerase.exit.y}`}
-            fill="none"
-            stroke="rgba(232,121,95,0.2)"
-            strokeWidth={17}
-            strokeLinecap="round"
-          />
-          <path
-            d={`M${polymerase.tip.x} ${polymerase.tip.y} C${polymerase.tip.x + 20} ${polymerase.tip.y - 20} ${polymerase.exit.x - 20} ${polymerase.exit.y + 10} ${polymerase.exit.x} ${polymerase.exit.y}`}
-            fill="none"
-            stroke="var(--cherry-red)"
-            strokeWidth={9}
-            strokeLinecap="round"
-            markerEnd="url(#mrnaArrow)"
-          />
-          {codons.map((codon, baseIndex) => {
-            const baseProgress = 0.12 + baseIndex * 0.18;
-            const visible = polymerase.progress > baseProgress;
-            const basePoint = pointOnPolyline(transcriptPath, Math.min(polymerase.progress, baseProgress));
+            {codons.map((codon, baseIndex) => {
+              const baseProgress = 0.14 + baseIndex * 0.18;
+              const visible = polymerase.progress > baseProgress;
+              const basePoint = pointOnPolyline(nascentPath, 0.12 + baseIndex * 0.2);
 
-            return (
-              <g key={`rna-base-${index}-${codon.rna}`} transform={`translate(${basePoint.x + polymerase.offset.x} ${basePoint.y + polymerase.offset.y})`} opacity={visible ? 1 : 0}>
-                <circle r={14} fill="rgba(250,247,241,0.92)" stroke="var(--cherry-red)" strokeWidth={2.2} />
-                <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-red)" fontSize={9} fontWeight={900}>
-                  {codon.rna}
-                </text>
-              </g>
-            );
-          })}
-          <circle cx={polymerase.tip.x} cy={polymerase.tip.y} r={8} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={3} />
-          <circle cx={polymerase.exit.x} cy={polymerase.exit.y} r={9} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={3} />
-          <text x={polymerase.exit.x + 14} y={polymerase.exit.y + 5} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
-            3' 生长端
-          </text>
-          <text x={polymerase.exit.x - 56} y={polymerase.exit.y + 31} fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={800}>
-            mRNA 跟随 RNA 聚合酶延伸
-          </text>
-        </g>
-      ))}
+              return (
+                <g key={`rna-base-${index}-${codon.rna}`} transform={`translate(${basePoint.x} ${basePoint.y})`} opacity={visible ? 1 : 0}>
+                  <circle r={14} fill="rgba(250,247,241,0.92)" stroke="var(--cherry-red)" strokeWidth={2.2} />
+                  <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-red)" fontSize={9} fontWeight={900}>
+                    {codon.rna}
+                  </text>
+                </g>
+              );
+            })}
+            <circle cx={growthEnd.x} cy={growthEnd.y} r={9} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={3} />
+            <text x={growthEnd.x + 14} y={growthEnd.y + 5} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
+              3' 生长端
+            </text>
+            <text x={growthEnd.x - 76} y={growthEnd.y + 31} fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={800}>
+              原核模型：核糖体读取已露出的 5' 端
+            </text>
+          </g>
+        );
+      })}
 
       {polymerases.map((polymerase, index) => (
         <g key={`moving-pol-${index}`} transform={`translate(${polymerase.point.x} ${polymerase.point.y})`} opacity={polymerase.opacity}>
@@ -512,7 +543,7 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
       </text>
 
       {codons.map((codon, index) => {
-        const point = pointOnPolyline(transcriptPath, 0.18 + index * 0.2);
+        const point = pointOnPolyline(coupledMrnaPath, 0.12 + index * 0.2);
         const visible = maxTranscribedProgress > 0.22 + index * 0.13;
         const active = activeCodonIndex === index;
         return (
