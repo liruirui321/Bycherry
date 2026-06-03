@@ -219,7 +219,7 @@ function partialPolylinePath(points: Point[], progress: number) {
   return path.join(" ");
 }
 
-function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: boolean; translationOn: boolean; mrna: number }; progress: number }) {
+function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: boolean; translationOn: boolean; mrna: number; polBound: number; ribBound: number }; progress: number }) {
   const transcriptionProgress = model.transcriptionOn ? clamp01(progress / 0.78) : 0;
   const translationProgress = model.translationOn ? clamp01((progress - 0.28) / 0.62) : 0;
   const polymeraseX = model.transcriptionOn ? lerp(392, 676, transcriptionProgress) : 392;
@@ -227,7 +227,21 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
   const mrnaTip = pointOnPolyline(transcriptPath, transcriptionProgress);
   const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
   const ribosomeProgress = ribosomeCanRead ? Math.min(translationProgress, Math.max(0, transcriptionProgress - 0.08)) : 0;
-  const ribosomePoint = pointOnPolyline(transcriptPath, ribosomeProgress);
+  const polymerases = Array.from({ length: Math.max(1, model.polBound) }).map((_, index) => {
+    const localProgress = clamp01(transcriptionProgress - index * 0.22);
+    return {
+      point: { x: lerp(392, 676, localProgress), y: 250 + index * 12 },
+      opacity: localProgress > 0.02 || index === 0 ? 1 : 0,
+    };
+  });
+  const ribosomes = Array.from({ length: model.ribBound }).map((_, index) => {
+    const localProgress = clamp01(ribosomeProgress - index * 0.18);
+    return {
+      point: pointOnPolyline(transcriptPath, localProgress),
+      progress: localProgress,
+      opacity: ribosomeCanRead && (index === 0 || localProgress > 0.04) ? 1 : 0,
+    };
+  });
   const activeCodonIndex = ribosomeCanRead ? Math.min(codons.length - 1, Math.floor(ribosomeProgress * codons.length)) : -1;
   const aminoCount = ribosomeCanRead ? Math.min(codons.length, Math.max(0, Math.floor(ribosomeProgress * (codons.length + 0.75)))) : 0;
 
@@ -244,12 +258,15 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
 
   return (
     <g>
-      <g transform={`translate(${polymeraseX} 250)`}>
-        <ellipse rx={42} ry={27} fill="var(--cherry-blue-light)" stroke="var(--cherry-blue)" strokeWidth={3} />
-        <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>
-          RNA pol
-        </text>
-      </g>
+      {polymerases.map((polymerase, index) => (
+        <g key={`moving-pol-${index}`} transform={`translate(${polymerase.point.x} ${polymerase.point.y})`} opacity={polymerase.opacity}>
+          <ellipse rx={42} ry={27} fill="var(--cherry-blue-light)" stroke="var(--cherry-blue)" strokeWidth={3} />
+          <path d="M-18 9 C-6 16 6 16 18 9" fill="none" stroke="var(--cherry-blue)" strokeWidth={3} strokeLinecap="round" opacity={0.58} />
+          <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>
+            RNA pol
+          </text>
+        </g>
+      ))}
 
       <path d={mrnaPath} fill="none" stroke="rgba(232,121,95,0.2)" strokeWidth={17} strokeLinecap="round" strokeLinejoin="round" />
       <path d={mrnaPath} fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" strokeLinejoin="round" />
@@ -293,16 +310,23 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
 
       {model.translationOn ? (
         <>
-          <g transform={`translate(${ribosomePoint.x} ${ribosomePoint.y})`} opacity={ribosomeCanRead ? 1 : 0}>
-            <ellipse rx={48} ry={30} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={3} />
-            <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
-              ribosome
-            </text>
-            <rect x={-28} y={24} width={56} height={24} rx={8} fill="rgba(250,247,241,0.92)" stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
-            <text x={0} y={40} textAnchor="middle" fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
-              {activeCodonIndex >= 0 ? codons[activeCodonIndex].rna : ""}
-            </text>
-          </g>
+          {ribosomes.map((ribosome, index) => {
+            const codonIndex = Math.min(codons.length - 1, Math.floor(ribosome.progress * codons.length));
+            return (
+              <g key={`moving-ribosome-${index}`} transform={`translate(${ribosome.point.x} ${ribosome.point.y + index * 8})`} opacity={ribosome.opacity}>
+                <ellipse rx={48} ry={30} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={3} />
+                <circle cx={-22} cy={-7} r={9} fill="rgba(250,247,241,0.58)" />
+                <circle cx={18} cy={9} r={7} fill="rgba(250,247,241,0.58)" />
+                <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
+                  ribosome
+                </text>
+                <rect x={-28} y={24} width={56} height={24} rx={8} fill="rgba(250,247,241,0.92)" stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
+                <text x={0} y={40} textAnchor="middle" fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
+                  {codons[codonIndex]?.rna ?? ""}
+                </text>
+              </g>
+            );
+          })}
 
           {codons.map((codon, index) => (
             <g key={`trna-${codon.rna}`} transform={`translate(${540 + index * 42} ${500 - index * 16})`} opacity={activeCodonIndex === index ? 1 : 0.12}>
@@ -498,6 +522,10 @@ export function GeneExpressionTool() {
     return inBox(molecule, zones[moleculeZone(molecule.type)]);
   }
 
+  function isIntegratedIntoProcess(molecule: Molecule) {
+    return molecule.type !== "tf" && isMoleculeDocked(molecule);
+  }
+
   return (
     <section
       id="gene-expression"
@@ -593,7 +621,7 @@ export function GeneExpressionTool() {
               </text>
             </g>
 
-            {molecules.map((molecule) => (
+            {molecules.filter((molecule) => !isIntegratedIntoProcess(molecule)).map((molecule) => (
               <MoleculeNode key={molecule.id} molecule={molecule} docked={isMoleculeDocked(molecule)} dragging={dragging?.id === molecule.id} onPointerDown={startDrag} />
             ))}
           </svg>
@@ -639,7 +667,7 @@ export function GeneExpressionTool() {
               <button onClick={runExpressionPreset} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
                 运行表达
               </button>
-              <button onClick={() => setIsPaused((value) => !value)} disabled={!model.transcriptionOn} style={{ background: model.transcriptionOn ? "var(--cherry-blue)" : "var(--muted)", color: model.transcriptionOn ? "#FAF7F1" : "var(--cherry-warm-mid)", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: model.transcriptionOn ? "pointer" : "default" }}>
+              <button onClick={() => setIsPaused((value) => !value)} aria-pressed={isPaused} disabled={!model.transcriptionOn} style={{ background: model.transcriptionOn ? "var(--cherry-blue)" : "var(--muted)", color: model.transcriptionOn ? "#FAF7F1" : "var(--cherry-warm-mid)", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: model.transcriptionOn ? "pointer" : "default" }}>
                 {isPaused ? "继续" : "暂停"}
               </button>
               <button onClick={resetScene} style={{ background: "var(--muted)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
@@ -648,7 +676,7 @@ export function GeneExpressionTool() {
             </div>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: "0.75rem" }}>
               {([0.5, 1, 1.5] as const).map((value) => (
-                <button key={value} onClick={() => setSpeed(value)} style={{ background: speed === value ? "var(--cherry-yellow)" : "rgba(250,247,241,0.82)", color: "var(--cherry-warm-brown)", border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 999, padding: "0.32rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.75rem" }}>
+                <button key={value} onClick={() => setSpeed(value)} aria-pressed={speed === value} style={{ background: speed === value ? "var(--cherry-yellow)" : "rgba(250,247,241,0.82)", color: "var(--cherry-warm-brown)", border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 999, padding: "0.32rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.75rem" }}>
                   {value}x
                 </button>
               ))}
