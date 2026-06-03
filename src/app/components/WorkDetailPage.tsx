@@ -19,6 +19,33 @@ function ContentCard({ title, children }: { title: string; children: React.React
   );
 }
 
+async function copyText(text: string) {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // Fall back for browsers that expose Clipboard API but deny the call.
+    }
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  textarea.style.top = "0";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
+  try {
+    return document.execCommand("copy");
+  } finally {
+    document.body.removeChild(textarea);
+  }
+}
+
 function PromptKitContent() {
   const [activePromptIndex, setActivePromptIndex] = useState(0);
   const [material, setMaterial] = useState("研究问题：\n样本/材料：\n已有结果：\n我最担心的问题：");
@@ -81,15 +108,16 @@ ${material.trim() || "请在这里粘贴材料。"}
 ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")}`;
 
   async function copyPrompt() {
-    try {
-      await navigator.clipboard.writeText(finalPrompt);
+    const copiedToClipboard = await copyText(finalPrompt);
+    if (copiedToClipboard) {
       setCopied(true);
       setCopyStatus("Prompt 已复制到剪贴板。");
       window.setTimeout(() => setCopied(false), 1400);
-    } catch {
-      setCopied(false);
-      setCopyStatus("复制失败，请手动选中文本复制。");
+      return;
     }
+
+    setCopied(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
   return (
