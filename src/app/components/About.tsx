@@ -1,4 +1,7 @@
 import { IconMicroscope, IconBook, IconAI, IconLeaf, IconResearch } from "./Icons";
+import { notes } from "./Notes";
+import { essays } from "./ResearchEssays";
+import { works } from "./Works";
 
 const tags = [
   { label: "生命科学", icon: <IconMicroscope size={15} color="#1a5680" />, bg: "var(--cherry-blue-light)", color: "#1a5680" },
@@ -21,6 +24,13 @@ function LeafCluster() {
 }
 
 export function About() {
+  const reusableOutputs = works.reduce((count, work) => count + work.outputs.length, 0);
+  const stats = [
+    { num: String(works.length), label: "个可打开作品" },
+    { num: String(notes.length + essays.length), label: "篇笔记和随笔" },
+    { num: String(reusableOutputs), label: "类可复用产物" },
+  ];
+
   return (
     <section
       id="about"
@@ -137,13 +147,18 @@ export function About() {
             每个页面都尽量保留可阅读、可操作、可复用的内容：模拟器、时间轴、课程卡片、prompt 和研究笔记。
           </p>
 
+          <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginTop: "1.35rem" }}>
+            <a href="#works" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.58rem 1rem", textDecoration: "none", fontWeight: 900, fontSize: "0.86rem", boxShadow: "3px 5px 0px rgba(58,92,62,0.2)" }}>
+              打开作品
+            </a>
+            <a href="#contact" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.58rem 1rem", textDecoration: "none", fontWeight: 900, fontSize: "0.86rem" }}>
+              联系 Cherry
+            </a>
+          </div>
+
           {/* Stats */}
           <div style={{ display: "flex", gap: "2rem", marginTop: "2rem", flexWrap: "wrap" }}>
-            {[
-              { num: "4", label: "条实践线索" },
-              { num: "3", label: "个交叉领域" },
-              { num: "∞", label: "待打开的问题" },
-            ].map((s) => (
+            {stats.map((s) => (
               <div key={s.label}>
                 <div style={{ fontFamily: "'Caveat', cursive", fontSize: "2rem", fontWeight: 700, color: "var(--cherry-red)", lineHeight: 1 }}>{s.num}</div>
                 <div style={{ fontSize: "0.8rem", color: "var(--cherry-warm-mid)", marginTop: 2 }}>{s.label}</div>
@@ -152,6 +167,14 @@ export function About() {
           </div>
         </div>
       </div>
+      <style>
+        {`
+          #about a:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+        `}
+      </style>
     </section>
   );
 }
