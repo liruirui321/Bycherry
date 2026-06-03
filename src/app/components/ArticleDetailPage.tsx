@@ -118,7 +118,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             }}
           >
             <div style={{ position: "absolute", top: -12, right: 34, width: 78, height: 20, background: article.tagBg ?? article.labelBg, opacity: 0.75, borderRadius: 4, transform: "rotate(4deg)" }} />
-            <svg style={{ position: "absolute", right: 18, top: 50, opacity: 0.16 }} width="98" height="82" viewBox="0 0 98 82" fill="none">
+            <svg style={{ position: "absolute", right: 18, top: 50, opacity: 0.16 }} width="98" height="82" viewBox="0 0 98 82" fill="none" aria-hidden="true" focusable="false">
               <path d="M16 72 Q24 42 72 13 Q75 50 16 72Z" fill={article.tagColor ?? article.labelColor} />
               <path d="M22 67 Q43 51 68 22" stroke="var(--cherry-warm-brown)" strokeWidth="2" strokeLinecap="round" opacity="0.35" />
               <circle cx="27" cy="31" r="7" fill="var(--cherry-yellow)" opacity="0.8" />

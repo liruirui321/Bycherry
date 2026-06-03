@@ -166,6 +166,8 @@ function WaveDivider({ flip = false }: { flip?: boolean }) {
       viewBox="0 0 1440 28"
       preserveAspectRatio="none"
       fill="none"
+      aria-hidden="true"
+      focusable="false"
     >
       <path
         d={flip
@@ -197,10 +199,10 @@ export function Works() {
       <WaveDivider />
 
       {/* Scattered leaf deco */}
-      <svg style={{ position: "absolute", top: 40, right: 30, opacity: 0.18 }} width="60" height="60" viewBox="0 0 60 60" fill="none">
+      <svg style={{ position: "absolute", top: 40, right: 30, opacity: 0.18 }} width="60" height="60" viewBox="0 0 60 60" fill="none" aria-hidden="true" focusable="false">
         <path d="M10 55 Q15 35 50 12 Q50 38 10 55Z" fill="var(--cherry-forest)" />
       </svg>
-      <svg style={{ position: "absolute", bottom: 50, left: 20, opacity: 0.15, transform: "scaleX(-1) rotate(20deg)" }} width="50" height="55" viewBox="0 0 60 60" fill="none">
+      <svg style={{ position: "absolute", bottom: 50, left: 20, opacity: 0.15, transform: "scaleX(-1) rotate(20deg)" }} width="50" height="55" viewBox="0 0 60 60" fill="none" aria-hidden="true" focusable="false">
         <path d="M10 55 Q15 35 50 12 Q50 38 10 55Z" fill="var(--cherry-forest)" />
       </svg>
 
@@ -224,6 +226,7 @@ export function Works() {
             <button
               className="work-filter-button"
               key={cat}
+              type="button"
               onClick={() => setActiveCategory(cat)}
               aria-pressed={activeCategory === cat}
               style={{
