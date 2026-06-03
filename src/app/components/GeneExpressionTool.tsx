@@ -271,7 +271,7 @@ function buildRibosomeTracks(progress: number, ribBound: number, canRead: boolea
   });
 }
 
-function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: boolean; translationOn: boolean; polBound: number; ribBound: number }; progress: number }) {
+function LiveExpressionProcess({ model, progress, retainedMrnaCount }: { model: { transcriptionOn: boolean; translationOn: boolean; polBound: number; ribBound: number }; progress: number; retainedMrnaCount: number }) {
   const transcriptionProgress = model.transcriptionOn ? clamp01(progress / 0.78) : 0;
   const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
   const polymerases = buildPolymeraseTracks(progress, model.polBound);
@@ -284,6 +284,29 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
   const aminoCount = ribosomeCanRead ? Math.min(codons.length, Math.max(0, Math.floor(leadRibosomeProgress * (codons.length + 0.75)))) : 0;
 
   if (!model.transcriptionOn) {
+    if (retainedMrnaCount > 0) {
+      return (
+        <g opacity={0.72}>
+          {Array.from({ length: Math.min(4, retainedMrnaCount) }).map((_, index) => (
+            <path
+              key={index}
+              d={partialPolylinePath(transcriptPath, Math.min(1, 0.28 + index * 0.22))}
+              fill="none"
+              stroke="var(--cherry-red)"
+              strokeWidth={6}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              transform={`translate(${-8 - index * 8} ${10 + index * 13})`}
+              opacity={0.42}
+            />
+          ))}
+          <text x={418} y={362} fill="var(--cherry-warm-mid)" fontSize={15} fontWeight={800}>
+            已生成的 mRNA 片段仍保留在反应区域
+          </text>
+        </g>
+      );
+    }
+
     return (
       <g opacity={0.4}>
         <path d="M392 270 C396 312 424 324 462 330" fill="none" stroke="var(--cherry-red)" strokeWidth={8} strokeLinecap="round" strokeDasharray="12 14" />
@@ -446,7 +469,8 @@ export function GeneExpressionTool() {
   const transcriptionProgress = model.transcriptionOn ? clamp01(cycleProgress / 0.78) : 0;
   const transcribedProgress = model.transcriptionOn ? maxVisibleTranscribedProgress(cycleProgress, model.polBound) : 0;
   const instantMrnaCount = model.transcriptionOn ? Math.min(model.mrna, Math.floor(transcribedProgress * (model.mrna + 0.75))) : 0;
-  const visibleMrnaCount = model.transcriptionOn ? Math.min(model.mrna, Math.max(displayedMrnaCount, instantMrnaCount)) : 0;
+  const visibleMrnaCount = Math.min(5, Math.max(displayedMrnaCount, instantMrnaCount));
+  const mrnaReadoutMax = Math.max(visibleMrnaCount, model.mrna);
   const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
   const readableRibosomes = buildRibosomeTracks(cycleProgress, model.ribBound, ribosomeCanRead, transcribedProgress).filter((ribosome) => ribosome.opacity > 0);
   const activeRibosomeCount = readableRibosomes.length;
@@ -469,12 +493,8 @@ export function GeneExpressionTool() {
   }, [cycleProgress]);
 
   useEffect(() => {
-    if (!model.transcriptionOn) {
-      setDisplayedMrnaCount(0);
-      return;
-    }
-    setDisplayedMrnaCount((count) => Math.min(model.mrna, Math.max(count, instantMrnaCount)));
-  }, [instantMrnaCount, model.mrna, model.transcriptionOn]);
+    setDisplayedMrnaCount((count) => Math.min(5, Math.max(count, instantMrnaCount)));
+  }, [instantMrnaCount]);
 
   useEffect(() => {
     setDisplayedProteinCount((count) => Math.min(12, Math.max(count, instantProteinCount)));
@@ -706,7 +726,7 @@ export function GeneExpressionTool() {
               )}
             </g>
 
-            <LiveExpressionProcess model={model} progress={cycleProgress} />
+            <LiveExpressionProcess model={model} progress={cycleProgress} retainedMrnaCount={visibleMrnaCount} />
 
             <rect x={zones.ribosome.x} y={zones.ribosome.y} width={zones.ribosome.w} height={zones.ribosome.h} rx={22} fill={model.ribBound > 0 ? "rgba(232,121,95,0.15)" : "rgba(250,247,241,0.38)"} stroke="var(--cherry-peach)" strokeWidth={2} strokeDasharray="7 7" />
             <text x={zones.ribosome.x + 22} y={zones.ribosome.y + 34} fill="var(--cherry-warm-brown)" fontSize={15} fontWeight={900}>
@@ -748,7 +768,7 @@ export function GeneExpressionTool() {
                 ["启动子上的转录因子", model.tfBound],
                 ["参与转录的 RNA 聚合酶", model.polBound],
                 ["正在读取的核糖体", `${activeRibosomeCount}/${model.ribBound}`],
-                ["mRNA 数量", `${visibleMrnaCount}/${model.mrna}`],
+                ["mRNA 数量", `${visibleMrnaCount}/${mrnaReadoutMax}`],
                 ["蛋白质产量", `${visibleProteinCount}/${proteinReadoutMax}`],
               ].map(([label, value]) => (
                 <div key={label} style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
@@ -851,7 +871,9 @@ export function GeneExpressionTool() {
               {!model.transcriptionOn
                 ? visibleProteinCount > 0
                   ? "转录已经停止，已有蛋白质产物会保留；重新加入 TF 和 RNA 聚合酶可以继续表达。"
-                  : "转录尚未启动：启动子需要 TF，基因区域需要 RNA 聚合酶。"
+                  : visibleMrnaCount > 0
+                    ? "转录已经停止，已有 mRNA 片段会保留；重新加入 TF 和 RNA 聚合酶可以继续产生新 mRNA。"
+                    : "转录尚未启动：启动子需要 TF，基因区域需要 RNA 聚合酶。"
                 : visibleMrnaCount === 0
                   ? "RNA 聚合酶正在沿基因区移动，新生 mRNA 正从后方延伸出来。"
                   : !model.translationOn
