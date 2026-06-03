@@ -347,6 +347,7 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
           strokeWidth={4}
           strokeLinecap="round"
           strokeDasharray="6 7"
+          markerEnd="url(#proteinArrow)"
           opacity={0.84}
         />
       ) : null}
@@ -435,6 +436,11 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
           <g transform={`translate(${polymerase.offset.x} ${polymerase.offset.y})`}>
             <path d={polymerase.path} fill="none" stroke="rgba(232,121,95,0.2)" strokeWidth={17} strokeLinecap="round" strokeLinejoin="round" />
             <path d={polymerase.path} fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" strokeLinejoin="round" />
+            {polymerase.progress > 0.16 ? (
+              <text x={382} y={288} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
+                5' 已生成端
+              </text>
+            ) : null}
           </g>
           <path
             d={`M${polymerase.tip.x} ${polymerase.tip.y} C${polymerase.tip.x + 20} ${polymerase.tip.y - 20} ${polymerase.exit.x - 20} ${polymerase.exit.y + 10} ${polymerase.exit.x} ${polymerase.exit.y}`}
@@ -449,6 +455,7 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
             stroke="var(--cherry-red)"
             strokeWidth={9}
             strokeLinecap="round"
+            markerEnd="url(#mrnaArrow)"
           />
           {codons.map((codon, baseIndex) => {
             const baseProgress = 0.12 + baseIndex * 0.18;
@@ -466,6 +473,12 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
           })}
           <circle cx={polymerase.tip.x} cy={polymerase.tip.y} r={8} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={3} />
           <circle cx={polymerase.exit.x} cy={polymerase.exit.y} r={9} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={3} />
+          <text x={polymerase.exit.x + 14} y={polymerase.exit.y + 5} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
+            3' 生长端
+          </text>
+          <text x={polymerase.exit.x - 56} y={polymerase.exit.y + 31} fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={800}>
+            mRNA 跟随 RNA 聚合酶延伸
+          </text>
         </g>
       ))}
 
@@ -767,6 +780,12 @@ export function GeneExpressionTool() {
                 <stop offset="72%" stopColor="var(--cherry-sage)" />
                 <stop offset="100%" stopColor="var(--cherry-blue)" />
               </linearGradient>
+              <marker id="mrnaArrow" markerWidth={9} markerHeight={9} refX={7.5} refY={4.5} orient="auto" markerUnits="userSpaceOnUse">
+                <path d="M0 0 L9 4.5 L0 9Z" fill="var(--cherry-red)" />
+              </marker>
+              <marker id="proteinArrow" markerWidth={9} markerHeight={9} refX={7.5} refY={4.5} orient="auto" markerUnits="userSpaceOnUse">
+                <path d="M0 0 L9 4.5 L0 9Z" fill="var(--cherry-peach)" />
+              </marker>
             </defs>
 
             <rect x={22} y={26} width={936} height={606} rx={220} fill="rgba(169,201,172,0.2)" stroke="rgba(93,140,101,0.34)" strokeWidth={3} strokeDasharray="9 9" />
