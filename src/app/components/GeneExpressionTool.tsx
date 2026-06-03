@@ -141,12 +141,12 @@ function usePrefersReducedMotion() {
   return prefersReducedMotion;
 }
 
-function StageRail({ model }: { model: { tfBound: number; polBound: number; ribBound: number; transcriptionOn: boolean; translationOn: boolean; protein: number } }) {
+function StageRail({ model, visibleProteinCount }: { model: { tfBound: number; polBound: number; ribBound: number; transcriptionOn: boolean; translationOn: boolean }; visibleProteinCount: number }) {
   const stages = [
     { label: "TF 结合启动子", active: model.tfBound > 0 },
     { label: "RNA 聚合酶转录", active: model.transcriptionOn },
     { label: "核糖体翻译", active: model.translationOn },
-    { label: "蛋白质累积", active: model.protein > 0 },
+    { label: "蛋白质累积", active: visibleProteinCount > 0 },
   ];
 
   return (
@@ -650,7 +650,7 @@ export function GeneExpressionTool() {
             <text x={42} y={58} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>
               基因表达实验台
             </text>
-            <StageRail model={model} />
+            <StageRail model={model} visibleProteinCount={visibleProteinCount} />
 
             <g transform="translate(154 170)">
               <rect x={0} y={0} width={668} height={150} rx={34} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.18)" strokeWidth={2} />
@@ -732,7 +732,7 @@ export function GeneExpressionTool() {
                 ["参与转录的 RNA 聚合酶", model.polBound],
                 ["mRNA 上的核糖体", model.ribBound],
                 ["mRNA 数量", model.mrna],
-                ["蛋白质产量", model.protein],
+                ["蛋白质产量", `${visibleProteinCount}/${model.protein}`],
               ].map(([label, value]) => (
                 <div key={label} style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
                   <span>{label}</span>
