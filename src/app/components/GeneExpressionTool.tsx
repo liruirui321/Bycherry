@@ -614,7 +614,12 @@ export function GeneExpressionTool() {
   const reactionRunning = model.transcriptionOn || canTranslate;
   const canPauseReaction = reactionRunning && !prefersReducedMotion;
   const ribosomeCanRead = canTranslate && (model.transcriptionOn ? transcriptionProgress > 0.28 : visibleMrnaCount > 0);
-  const readableRibosomes = buildRibosomeTracks(cycleProgress, model.ribBound, ribosomeCanRead, retainedTranscriptProgress).filter((ribosome) => ribosome.opacity > 0);
+  const currentPolymerases = buildPolymeraseTracks(cycleProgress, model.polBound);
+  const currentLeadPolymerase = currentPolymerases.find((polymerase) => polymerase.opacity > 0);
+  const currentReadableMrnaPath = model.transcriptionOn && currentLeadPolymerase
+    ? buildNascentMrnaPath(currentLeadPolymerase.point, currentLeadPolymerase.progress, currentLeadPolymerase.offset)
+    : transcriptPath;
+  const readableRibosomes = buildRibosomeTracks(cycleProgress, model.ribBound, ribosomeCanRead, retainedTranscriptProgress, currentReadableMrnaPath).filter((ribosome) => ribosome.opacity > 0);
   const activeRibosomeCount = readableRibosomes.length;
   const leadRibosomeProgress = readableRibosomes[0]?.progress ?? 0;
   const activeCodonIndex = leadRibosomeProgress > 0 ? Math.min(codons.length - 1, Math.floor(leadRibosomeProgress * codons.length)) : -1;
@@ -1032,14 +1037,14 @@ export function GeneExpressionTool() {
                 : visibleMrnaCount === 0
                   ? "RNA 聚合酶正在沿基因区移动，新生 mRNA 的 3' 生长端正跟着聚合酶延伸。"
                   : !canTranslate
-                    ? "mRNA 已经开始积累：把核糖体放到 mRNA 附近可以开始翻译。"
+                    ? "mRNA 的 5' 端已经露出：把核糖体放到 mRNA 附近，可以模拟原核式边转录边翻译。"
                     : activeRibosomeCount === 0 && visibleProteinCount === 0
                       ? "核糖体已进入入口，正在等待可读的 mRNA 片段。"
                       : activeRibosomeCount === 0
                         ? "多肽链片段已经累积，下一批核糖体正在等待新的可读片段。"
                       : visibleProteinCount === 0
                         ? `核糖体正在读取 ${activeCodon?.rna ?? "密码子"}，tRNA 正在配对，第一颗氨基酸小圆即将接入多肽链。`
-                        : `核糖体正在读取 ${activeCodon?.rna ?? "密码子"}，多肽链正按 ${activeCodon?.amino ?? "氨基酸"} 继续延伸。`}
+                        : `原核式耦合表达正在发生：RNA 聚合酶延伸 mRNA，核糖体读取 ${activeCodon?.rna ?? "密码子"}，多肽链正按 ${activeCodon?.amino ?? "氨基酸"} 从出口长出。`}
             </div>
           </div>
         </aside>
