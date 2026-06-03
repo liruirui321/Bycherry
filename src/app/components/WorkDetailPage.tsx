@@ -301,7 +301,7 @@ function PlantEvolutionContent() {
         <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", overflow: "hidden" }}>
           <svg viewBox="0 0 760 360" role="img" aria-label="植物从淡水绿藻到被子植物的演化时间轴" style={{ width: "100%", display: "block", background: "linear-gradient(180deg, #FFF8EA 0%, #EDF3DF 100%)", borderRadius: 18 }}>
             <rect x={24} y={26} width={708} height={306} rx={120} fill="rgba(169,201,172,0.2)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
-            <text x={42} y={60} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>plant evolution trail</text>
+            <text x={42} y={60} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>植物演化路径</text>
             <path d="M88 246 C154 214 202 230 270 194 C340 156 430 170 502 118 C570 70 650 96 704 54" fill="none" stroke="var(--cherry-forest)" strokeWidth={8} strokeLinecap="round" opacity={0.25} />
             <path d="M88 246 C154 214 202 230 270 194 C340 156 430 170 502 118 C570 70 650 96 704 54" fill="none" stroke="var(--cherry-sage)" strokeWidth={4} strokeLinecap="round" />
             {chapters.map((chapter, index) => {
@@ -316,7 +316,21 @@ function PlantEvolutionContent() {
               const point = points[index];
               const active = activeChapterIndex === index;
               return (
-                <g key={chapter.title} transform={`translate(${point.x} ${point.y})`} onClick={() => setActiveChapterIndex(index)} style={{ cursor: "pointer" }}>
+                <g
+                  key={chapter.title}
+                  transform={`translate(${point.x} ${point.y})`}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`查看${chapter.title}`}
+                  aria-pressed={active}
+                  onClick={() => setActiveChapterIndex(index)}
+                  onKeyDown={(event) => {
+                    if (event.key !== "Enter" && event.key !== " ") return;
+                    event.preventDefault();
+                    setActiveChapterIndex(index);
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
                   <circle r={active ? 22 : 16} fill={active ? "var(--cherry-yellow)" : "var(--cherry-sage-light)"} stroke={active ? "var(--cherry-red)" : "var(--cherry-forest)"} strokeWidth={active ? 3 : 2} />
                   <text y={5} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>{index + 1}</text>
                   <text x={0} y={active ? 42 : 35} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={900}>{shortTimes[index]}</text>
@@ -399,6 +413,11 @@ function PlantEvolutionContent() {
             #plant-evolution-explorer > div:first-child {
               grid-template-columns: 1fr !important;
             }
+          }
+
+          #plant-evolution-explorer svg [role="button"]:focus-visible circle {
+            stroke: var(--cherry-red);
+            stroke-width: 4;
           }
         `}
       </style>
@@ -604,13 +623,13 @@ function CrisprContent() {
   const targetLength = 8;
   const pamStart = 12;
   const guides = [
-    { name: "guide A", sequence: "U A A U G G C A", start: targetStart, score: 96, mismatches: [] as number[], note: "目标区互补，旁边有 AGG PAM，Cas9 能稳定定位。" },
-    { name: "guide B", sequence: "U A A C G G C A", start: targetStart, score: 68, mismatches: [3], note: "seed 区有 1 个错配，Cas9 仍可能结合，但剪切效率下降。" },
-    { name: "guide C", sequence: "G C A U U A C G", start: 1, score: 32, mismatches: [1, 2, 5], note: "目标弱匹配且离 PAM 较远，Cas9 很难在预期位点剪切。" },
+    { name: "向导 A", sequence: "U A A U G G C A", start: targetStart, score: 96, mismatches: [] as number[], note: "目标区互补，旁边有 AGG PAM，Cas9 能稳定定位。" },
+    { name: "向导 B", sequence: "U A A C G G C A", start: targetStart, score: 68, mismatches: [3], note: "种子区有 1 个错配，Cas9 仍可能结合，但剪切效率下降。" },
+    { name: "向导 C", sequence: "G C A U U A C G", start: 1, score: 32, mismatches: [1, 2, 5], note: "目标弱匹配且离 PAM 较远，Cas9 很难在预期位点剪切。" },
   ];
   const stages = [
     { key: "scan", label: "找 PAM", text: "Cas9 先扫到 NGG 这类 PAM，才会检查旁边的 DNA 序列。" },
-    { key: "bind", label: "配对", text: "guide RNA 和目标 DNA 形成互补配对，错配会降低稳定性。" },
+    { key: "bind", label: "配对", text: "向导 RNA 和目标 DNA 形成互补配对，错配会降低稳定性。" },
     { key: "cut", label: "剪切", text: "匹配足够时，Cas9 在 PAM 上游附近切开两条 DNA 链。" },
     { key: "repair", label: "修复", text: "细胞修复切口，结果可能是插入/删除、模板替换或未编辑。" },
   ] as const;
@@ -652,7 +671,7 @@ function CrisprContent() {
           <svg viewBox="0 0 760 430" role="img" aria-label="CRISPR Cas9 识别、剪切和修复示意图" style={{ width: "100%", display: "block", background: "linear-gradient(180deg, #FFF8EA 0%, #F2E9DB 100%)" }}>
             <rect x={24} y={26} width={708} height={382} rx={90} fill="rgba(169,201,172,0.18)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
             <text x={42} y={60} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>
-              Cas9 editing bench
+              Cas9 编辑实验台
             </text>
             <line x1={60} y1={166} x2={704} y2={166} stroke="url(#crisprStrandA)" strokeWidth={10} strokeLinecap="round" />
             <line x1={60} y1={206} x2={704} y2={206} stroke="url(#crisprStrandB)" strokeWidth={10} strokeLinecap="round" opacity={0.82} />
@@ -706,12 +725,12 @@ function CrisprContent() {
               <g transform={`translate(${baseX(cutIndex)} 184)`}>
                 <path d="M-22 -28 L22 28 M22 -28 L-22 28" stroke="var(--cherry-red)" strokeWidth={4} strokeLinecap="round" />
                 <circle r={30} fill="none" stroke="var(--cherry-red)" strokeWidth={2} strokeDasharray="5 5" />
-                <text x={0} y={52} textAnchor="middle" fill="var(--cherry-red)" fontSize={12} fontWeight={900}>cut</text>
+                <text x={0} y={52} textAnchor="middle" fill="var(--cherry-red)" fontSize={12} fontWeight={900}>剪切</text>
               </g>
             ) : null}
 
             <g transform="translate(72 310)" opacity={repairActive ? 1 : 0.35}>
-              <text x={0} y={-18} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>repair product</text>
+              <text x={0} y={-18} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>修复产物</text>
               {effectiveRepair.sequence.map((base, index) => (
                 <g key={`${base}-${index}`} transform={`translate(${index * 38} 0)`}>
                   <rect x={-14} y={-14} width={28} height={28} rx={8} fill={index === cutIndex ? "var(--cherry-yellow-light)" : "rgba(250,247,241,0.86)"} stroke={index === cutIndex ? effectiveRepair.color : "rgba(94,68,42,0.14)"} strokeWidth={index === cutIndex ? 2.4 : 1.4} />
@@ -739,7 +758,7 @@ function CrisprContent() {
           </div>
 
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>guide RNA</div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>向导 RNA</div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: "0.75rem" }}>
               {guides.map((guide, index) => (
                 <button key={guide.name} aria-pressed={guideIndex === index} onClick={() => setGuideIndex(index)} style={{ background: guideIndex === index ? "var(--cherry-forest)" : "var(--muted)", color: guideIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.4rem 0.74rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
