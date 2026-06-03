@@ -460,6 +460,7 @@ export function GeneExpressionTool() {
   const translatedSignal = readableRibosomes.reduce((sum, ribosome) => sum + ribosome.progress, 0);
   const instantProteinCount = model.translationOn ? Math.min(model.protein, Math.floor(translatedSignal * 4)) : 0;
   const visibleProteinCount = model.translationOn ? Math.min(model.protein, Math.max(displayedProteinCount, instantProteinCount)) : 0;
+  const translationRate = activeRibosomeCount > 0 ? Math.min(100, 35 + activeRibosomeCount * 20) : 0;
   const integratedMolecules = molecules.filter((molecule) => molecule.type !== "tf" && inBox(molecule, zones[moleculeZone(molecule.type)]));
 
   useEffect(() => {
@@ -757,7 +758,7 @@ export function GeneExpressionTool() {
             <div style={{ display: "grid", gap: 8, marginTop: "1rem" }}>
               {[
                 ["转录速率", `${model.transcriptionOn ? Math.min(100, 28 + model.tfBound * 18 + model.polBound * 16) : 0}%`],
-                ["翻译速率", `${model.translationOn ? Math.min(100, 35 + model.ribBound * 20) : 0}%`],
+                ["翻译速率", `${translationRate}%`],
               ].map(([label, value]) => (
                 <div key={label}>
                   <div style={{ display: "flex", justifyContent: "space-between", color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 900, marginBottom: 4 }}>
