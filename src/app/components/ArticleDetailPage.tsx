@@ -1,17 +1,16 @@
 import { IconArrowRight, IconBook, IconCheck, IconCoffee, IconLeafSmall } from "./Icons";
 import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
+import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 type ArticleKind = "note" | "research";
 
 function navigateHome(hash: string) {
-  window.history.pushState(null, "", `/${hash}`);
-  window.dispatchEvent(new PopStateEvent("popstate"));
+  navigateClient(`/${hash}`);
 }
 
 function navigateToPath(href: string) {
-  window.history.pushState(null, "", href);
-  window.dispatchEvent(new PopStateEvent("popstate"));
+  navigateClient(href);
 }
 
 export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: string }) {
@@ -29,6 +28,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
         <a
           href={`/${backHash}`}
           onClick={(event) => {
+            if (!shouldUseClientNavigation(event)) return;
             event.preventDefault();
             navigateHome(backHash);
           }}
@@ -48,6 +48,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
           <a
             href={`/${backHash}`}
             onClick={(event) => {
+              if (!shouldUseClientNavigation(event)) return;
               event.preventDefault();
               navigateHome(backHash);
             }}
@@ -139,6 +140,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
             <a
               href={`/${backHash}`}
               onClick={(event) => {
+                if (!shouldUseClientNavigation(event)) return;
                 event.preventDefault();
                 navigateHome(backHash);
               }}
@@ -161,6 +163,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
                   <a
                     href={previousArticle.href}
                     onClick={(event) => {
+                      if (!shouldUseClientNavigation(event)) return;
                       event.preventDefault();
                       navigateToPath(previousArticle.href);
                     }}
@@ -174,6 +177,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
                   <a
                     href={nextArticle.href}
                     onClick={(event) => {
+                      if (!shouldUseClientNavigation(event)) return;
                       event.preventDefault();
                       navigateToPath(nextArticle.href);
                     }}

@@ -2,12 +2,12 @@ import { useState } from "react";
 import { GeneExpressionTool } from "./GeneExpressionTool";
 import { IconDNA } from "./Icons";
 import { works } from "./Works";
+import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 type Work = (typeof works)[number];
 
 function navigateHome(hash = "") {
-  window.history.pushState(null, "", `/${hash}`);
-  window.dispatchEvent(new PopStateEvent("popstate"));
+  navigateClient(`/${hash}`);
 }
 
 function ContentCard({ title, children }: { title: string; children: React.ReactNode }) {
@@ -813,6 +813,7 @@ function WorkHero({ work }: { work: Work }) {
         <a
           href="/#works"
           onClick={(event) => {
+            if (!shouldUseClientNavigation(event)) return;
             event.preventDefault();
             navigateHome("#works");
           }}
@@ -903,6 +904,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
         <a
           href="/#works"
           onClick={(event) => {
+            if (!shouldUseClientNavigation(event)) return;
             event.preventDefault();
             navigateHome("#works");
           }}

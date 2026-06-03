@@ -1,4 +1,5 @@
 import { IconBook, IconAI, IconLeaf, IconResearch, IconArrowRight, IconCoffee } from "./Icons";
+import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 export const notes = [
   {
@@ -80,9 +81,9 @@ export const notes = [
 ];
 
 function navigateTo(href: string, event?: React.MouseEvent<HTMLAnchorElement>) {
+  if (event && !shouldUseClientNavigation(event)) return;
   event?.preventDefault();
-  window.history.pushState(null, "", href);
-  window.dispatchEvent(new PopStateEvent("popstate"));
+  navigateClient(href);
 }
 
 export function Notes() {

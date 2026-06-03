@@ -1,5 +1,6 @@
 import { IconMicroscope, IconTestTube, IconDNA, IconLeaf, IconLeafSmall, IconNotebook, IconStar, IconMushroom, IconBranch, IconSparkle, IconSeedling } from "./Icons";
 import { works } from "./Works";
+import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 function FloatDeco({ children, style }: { children: React.ReactNode; style: React.CSSProperties }) {
   return (
@@ -56,9 +57,10 @@ function DotTexture({ style }: { style: React.CSSProperties }) {
 }
 
 export function Hero() {
-  function openWork(href: string) {
-    window.history.pushState(null, "", href);
-    window.dispatchEvent(new PopStateEvent("popstate"));
+  function openWork(href: string, event: React.MouseEvent<HTMLAnchorElement>) {
+    if (!shouldUseClientNavigation(event)) return;
+    event.preventDefault();
+    navigateClient(href);
   }
 
   return (
@@ -237,10 +239,7 @@ export function Hero() {
               <a
                 key={work.slug}
                 href={work.href}
-                onClick={(event) => {
-                  event.preventDefault();
-                  openWork(work.href);
-                }}
+                onClick={(event) => openWork(work.href, event)}
                 style={{
                   background: work.color,
                   border: `1.5px solid ${work.border}`,

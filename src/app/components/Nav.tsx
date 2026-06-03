@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { IconCherry, IconMenu, IconClose } from "./Icons";
+import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 export function Nav() {
   const [open, setOpen] = useState(false);
@@ -15,14 +16,12 @@ export function Nav() {
 
   function navigate(href: string) {
     if (href.startsWith("/")) {
-      window.history.pushState(null, "", href);
-      window.dispatchEvent(new PopStateEvent("popstate"));
+      navigateClient(href);
       return;
     }
 
     if (window.location.pathname !== "/") {
-      window.history.pushState(null, "", `/${href}`);
-      window.dispatchEvent(new PopStateEvent("popstate"));
+      navigateClient(`/${href}`);
       return;
     }
 
@@ -56,6 +55,7 @@ export function Nav() {
         <a
           href="/#top"
           onClick={(event) => {
+            if (!shouldUseClientNavigation(event)) return;
             event.preventDefault();
             navigate("#top");
           }}
@@ -74,6 +74,7 @@ export function Nav() {
               key={l.label}
               href={l.href}
               onClick={(event) => {
+                if (!shouldUseClientNavigation(event)) return;
                 event.preventDefault();
                 navigate(l.href);
               }}
@@ -106,6 +107,7 @@ export function Nav() {
               key={l.label}
               href={l.href}
               onClick={(event) => {
+                if (!shouldUseClientNavigation(event)) return;
                 event.preventDefault();
                 setOpen(false);
                 navigate(l.href);

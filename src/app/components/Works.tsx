@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { IconMicroscope, IconAI, IconLeaf, IconFlask, IconDNA } from "./Icons";
+import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 type Category = "全部" | "科学" | "课程" | "AI工具";
 
@@ -56,10 +57,10 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
   const href = "href" in work ? work.href : undefined;
 
   function openDetail(event?: React.MouseEvent<HTMLAnchorElement>) {
-    event?.preventDefault();
     if (!href) return;
-    window.history.pushState(null, "", href);
-    window.dispatchEvent(new PopStateEvent("popstate"));
+    if (event && !shouldUseClientNavigation(event)) return;
+    event?.preventDefault();
+    navigateClient(href);
   }
 
   return (

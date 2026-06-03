@@ -1,4 +1,5 @@
 import { IconDNA, IconMicroscope, IconFlask, IconResearch, IconArrowRight, IconLeafSmall, IconStar } from "./Icons";
+import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 export const essays = [
   {
@@ -84,9 +85,9 @@ export const essays = [
 ];
 
 function navigateTo(href: string, event?: React.MouseEvent<HTMLAnchorElement>) {
+  if (event && !shouldUseClientNavigation(event)) return;
   event?.preventDefault();
-  window.history.pushState(null, "", href);
-  window.dispatchEvent(new PopStateEvent("popstate"));
+  navigateClient(href);
 }
 
 function EssayCard({ essay }: {
