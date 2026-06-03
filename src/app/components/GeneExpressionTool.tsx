@@ -149,7 +149,7 @@ function StageRail({ model, activeRibosomeCount, visibleProteinCount }: { model:
     { label: "TF 结合启动子", active: model.tfBound > 0 },
     { label: "RNA 聚合酶转录", active: model.transcriptionOn },
     { label: "核糖体翻译", active: activeRibosomeCount > 0 || visibleProteinCount > 0 },
-    { label: "多肽链累积", active: visibleProteinCount > 0 },
+    { label: "出口长出多肽", active: visibleProteinCount > 0 },
   ];
 
   return (
@@ -335,12 +335,21 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
             <ellipse rx={48} ry={30} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={3} />
             <circle cx={-22} cy={-7} r={9} fill="rgba(250,247,241,0.58)" />
             <circle cx={18} cy={9} r={7} fill="rgba(250,247,241,0.58)" />
+            <rect x={-42} y={7} width={84} height={20} rx={9} fill="rgba(250,247,241,0.92)" stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} />
+            <path d="M-51 17 C-28 11 -14 24 0 17 S28 11 51 17" fill="none" stroke="var(--cherry-red)" strokeWidth={4.4} strokeLinecap="round" />
+            <circle cx={-13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
+            <circle cx={13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
+            <text x={-13} y={0} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={7} fontWeight={900}>
+              P
+            </text>
+            <text x={13} y={0} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={7} fontWeight={900}>
+              A
+            </text>
             <circle cx={35} cy={17} r={7} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={2} opacity={0.9} />
-            <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
+            <text y={-14} textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
               核糖体
             </text>
-            <rect x={-28} y={24} width={56} height={24} rx={8} fill="rgba(250,247,241,0.92)" stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
-            <text x={0} y={40} textAnchor="middle" fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
+            <text x={0} y={22} textAnchor="middle" fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
               {codons[codonIndex]?.rna ?? ""}
             </text>
           </g>
@@ -403,11 +412,11 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
         const activePoint = activeCodonIndex === index ? leadRibosomePoint : null;
         const poolX = 540 + index * 42;
         const poolY = 500 - index * 16;
-        const x = activePoint ? activePoint.x + 38 : poolX;
-        const y = activePoint ? activePoint.y - 42 : poolY;
+        const x = activePoint ? activePoint.x + 2 : poolX;
+        const y = activePoint ? activePoint.y - 48 : poolY;
         return (
           <g key={`trna-${codon.rna}`} transform={`translate(${x} ${y})`} opacity={activePoint ? 1 : 0.16}>
-            {activePoint ? <line x1={-24} y1={22} x2={-4} y2={4} stroke="var(--cherry-peach)" strokeWidth={2.2} strokeLinecap="round" strokeDasharray="4 4" /> : null}
+            {activePoint ? <line x1={10} y1={14} x2={10} y2={38} stroke="var(--cherry-peach)" strokeWidth={2.2} strokeLinecap="round" strokeDasharray="4 4" /> : null}
             <path d="M0 0 Q10 -18 20 0 Q10 15 0 0Z" fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
             <circle cx={10} cy={-18} r={10} fill={codon.color} stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} />
             <text x={10} y={4} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={8} fontWeight={900}>
@@ -620,9 +629,25 @@ export function GeneExpressionTool() {
   const taskStatuses = [
     { label: "把 TF 拖到启动子，观察启动子变亮。", done: model.tfBound > 0 },
     { label: "把 RNA 聚合酶拖到基因区，观察 mRNA 从 5' 端到 3' 生长端延伸。", done: visibleMrnaCount > 0 },
-    { label: "把核糖体拖到 mRNA 附近，观察多肽链小圆逐颗接上。", done: visibleProteinCount > 0 },
+    { label: "把核糖体拖到 mRNA 附近，观察多肽链从出口逐颗长出。", done: visibleProteinCount > 0 },
   ];
   const integratedMolecules = molecules.filter((molecule) => molecule.type !== "tf" && inBox(molecule, zones[moleculeZone(molecule.type)]));
+  const currentStatus = (() => {
+    if (!model.transcriptionOn) {
+      if (activeRibosomeCount > 0) return "转录已经停止，核糖体正在读取保留的 mRNA，多肽链仍会按密码子继续延伸。";
+      if (visibleProteinCount > 0) return "转录已经停止，已经形成的多肽链会保留；重新加入 TF 和 RNA 聚合酶可以继续表达。";
+      if (canTranslate) return "转录已经停止，已有 mRNA 片段会保留；核糖体可以继续读取这些片段。";
+      if (visibleMrnaCount > 0) return "转录已经停止，已有 mRNA 片段会保留；重新加入 TF 和 RNA 聚合酶可以继续产生新 mRNA。";
+      return "转录尚未启动：启动子需要 TF，基因区域需要 RNA 聚合酶。";
+    }
+
+    if (visibleMrnaCount === 0) return "RNA 聚合酶正在沿基因区移动，新生 mRNA 的 3' 生长端正跟着聚合酶延伸。";
+    if (!canTranslate) return "mRNA 的 5' 端已经露出：把核糖体放到 mRNA 附近，可以模拟原核式边转录边翻译。";
+    if (activeRibosomeCount === 0 && visibleProteinCount === 0) return "核糖体已进入入口，正在等待 mRNA 读带进入 A/P 位点。";
+    if (activeRibosomeCount === 0) return "多肽链片段已经从核糖体出口形成，下一批核糖体正在等待新的可读片段。";
+    if (visibleProteinCount === 0) return `核糖体正在读取 ${activeCodon?.rna ?? "密码子"}，tRNA 对准 A/P 位点，第一颗氨基酸小圆即将从出口出现。`;
+    return `原核式耦合表达正在发生：RNA 聚合酶延伸 mRNA，核糖体读取 ${activeCodon?.rna ?? "密码子"}，多肽链正按 ${activeCodon?.amino ?? "氨基酸"} 紧贴出口长出。`;
+  })();
 
   useEffect(() => {
     progressRef.current = cycleProgress;
@@ -1014,27 +1039,7 @@ export function GeneExpressionTool() {
           <div role="status" aria-live="polite" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", color: "var(--cherry-warm-mid)", lineHeight: 1.7 }}>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.65rem" }}>当前状态</div>
             <div style={{ fontSize: "0.88rem" }}>
-              {!model.transcriptionOn
-                ? activeRibosomeCount > 0
-                  ? "转录已经停止，核糖体正在读取保留的 mRNA，多肽链仍会按密码子继续延伸。"
-                  : visibleProteinCount > 0
-                    ? "转录已经停止，已经形成的多肽链会保留；重新加入 TF 和 RNA 聚合酶可以继续表达。"
-                    : canTranslate
-                      ? "转录已经停止，已有 mRNA 片段会保留；核糖体可以继续读取这些片段。"
-                      : visibleMrnaCount > 0
-                        ? "转录已经停止，已有 mRNA 片段会保留；重新加入 TF 和 RNA 聚合酶可以继续产生新 mRNA。"
-                        : "转录尚未启动：启动子需要 TF，基因区域需要 RNA 聚合酶。"
-                : visibleMrnaCount === 0
-                  ? "RNA 聚合酶正在沿基因区移动，新生 mRNA 的 3' 生长端正跟着聚合酶延伸。"
-                  : !canTranslate
-                    ? "mRNA 的 5' 端已经露出：把核糖体放到 mRNA 附近，可以模拟原核式边转录边翻译。"
-                    : activeRibosomeCount === 0 && visibleProteinCount === 0
-                      ? "核糖体已进入入口，正在等待可读的 mRNA 片段。"
-                      : activeRibosomeCount === 0
-                        ? "多肽链片段已经累积，下一批核糖体正在等待新的可读片段。"
-                      : visibleProteinCount === 0
-                        ? `核糖体正在读取 ${activeCodon?.rna ?? "密码子"}，tRNA 正在配对，第一颗氨基酸小圆即将接入多肽链。`
-                        : `原核式耦合表达正在发生：RNA 聚合酶延伸 mRNA，核糖体读取 ${activeCodon?.rna ?? "密码子"}，多肽链正按 ${activeCodon?.amino ?? "氨基酸"} 从出口长出。`}
+              {currentStatus}
             </div>
           </div>
         </aside>
