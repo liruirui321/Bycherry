@@ -486,6 +486,7 @@ export function GeneExpressionTool() {
   const retainedTranscriptProgress = model.transcriptionOn ? transcribedProgress : visibleMrnaCount > 0 ? 1 : 0;
   const canTranslate = model.ribBound > 0 && visibleMrnaCount > 0;
   const reactionRunning = model.transcriptionOn || canTranslate;
+  const canPauseReaction = reactionRunning && !prefersReducedMotion;
   const ribosomeCanRead = canTranslate && (model.transcriptionOn ? transcriptionProgress > 0.28 : visibleMrnaCount > 0);
   const readableRibosomes = buildRibosomeTracks(cycleProgress, model.ribBound, ribosomeCanRead, retainedTranscriptProgress).filter((ribosome) => ribosome.opacity > 0);
   const activeRibosomeCount = readableRibosomes.length;
@@ -810,19 +811,19 @@ export function GeneExpressionTool() {
               ))}
             </div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: "1rem" }}>
-              <button onClick={runExpressionPreset} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+              <button type="button" onClick={runExpressionPreset} aria-label="放入所有分子并从头运行表达过程" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
                 运行表达
               </button>
-              <button onClick={() => setIsPaused((value) => !value)} aria-pressed={isPaused} disabled={!reactionRunning} style={{ background: reactionRunning ? "var(--cherry-blue)" : "var(--muted)", color: reactionRunning ? "#FAF7F1" : "var(--cherry-warm-mid)", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: reactionRunning ? "pointer" : "default" }}>
+              <button type="button" onClick={() => setIsPaused((value) => !value)} aria-label={canPauseReaction ? (isPaused ? "继续基因表达动画" : "暂停基因表达动画") : prefersReducedMotion ? "系统已减少动态效果，动画保持静态" : "反应尚未开始，暂时不能暂停"} aria-pressed={isPaused} disabled={!canPauseReaction} style={{ background: canPauseReaction ? "var(--cherry-blue)" : "var(--muted)", color: canPauseReaction ? "#FAF7F1" : "var(--cherry-warm-mid)", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: canPauseReaction ? "pointer" : "default" }}>
                 {isPaused ? "继续" : "暂停"}
               </button>
-              <button onClick={resetScene} style={{ background: "var(--muted)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+              <button type="button" onClick={resetScene} aria-label="清空画布并重置基因表达仿真" style={{ background: "var(--muted)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
                 重置
               </button>
             </div>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: "0.75rem" }}>
               {([0.5, 1, 1.5] as const).map((value) => (
-                <button key={value} onClick={() => setSpeed(value)} aria-pressed={speed === value} style={{ background: speed === value ? "var(--cherry-yellow)" : "rgba(250,247,241,0.82)", color: "var(--cherry-warm-brown)", border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 999, padding: "0.32rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.75rem" }}>
+                <button key={value} type="button" onClick={() => setSpeed(value)} aria-label={`将动画速度设为 ${value} 倍`} aria-pressed={speed === value} style={{ background: speed === value ? "var(--cherry-yellow)" : "rgba(250,247,241,0.82)", color: "var(--cherry-warm-brown)", border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 999, padding: "0.32rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.75rem" }}>
                   {value}x
                 </button>
               ))}
@@ -832,7 +833,7 @@ export function GeneExpressionTool() {
                 <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>已加入反应</div>
                 <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                   {integratedMolecules.map((molecule) => (
-                    <button key={molecule.id} onClick={() => releaseMolecule(molecule.id)} aria-label={`移回${moleculeNames[molecule.type]}`} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: molecule.type === "pol" ? "rgba(141,190,221,0.22)" : "rgba(232,121,95,0.18)", color: "var(--cherry-warm-brown)", border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem" }}>
+                    <button key={molecule.id} type="button" onClick={() => releaseMolecule(molecule.id)} aria-label={`移回${moleculeNames[molecule.type]}`} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: molecule.type === "pol" ? "rgba(141,190,221,0.22)" : "rgba(232,121,95,0.18)", color: "var(--cherry-warm-brown)", border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem" }}>
                       <span>{moleculeNames[molecule.type]}</span>
                       <span aria-hidden="true" style={{ color: "var(--cherry-red)" }}>移回</span>
                     </button>
