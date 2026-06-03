@@ -454,7 +454,8 @@ export function GeneExpressionTool() {
   const activeCodonIndex = leadRibosomeProgress > 0 ? Math.min(codons.length - 1, Math.floor(leadRibosomeProgress * codons.length)) : -1;
   const translatedSignal = readableRibosomes.reduce((sum, ribosome) => sum + ribosome.progress, 0);
   const instantProteinCount = model.translationOn ? Math.min(model.protein, Math.floor(translatedSignal * 4)) : 0;
-  const visibleProteinCount = model.translationOn ? Math.min(model.protein, Math.max(displayedProteinCount, instantProteinCount)) : 0;
+  const visibleProteinCount = Math.min(12, Math.max(displayedProteinCount, instantProteinCount));
+  const proteinReadoutMax = Math.max(visibleProteinCount, model.protein);
   const translationRate = activeRibosomeCount > 0 ? Math.min(100, 35 + activeRibosomeCount * 20) : 0;
   const taskStatuses = [
     { label: "把 TF 拖到启动子，观察启动子变亮。", done: model.tfBound > 0 },
@@ -476,12 +477,8 @@ export function GeneExpressionTool() {
   }, [instantMrnaCount, model.mrna, model.transcriptionOn]);
 
   useEffect(() => {
-    if (!model.translationOn) {
-      setDisplayedProteinCount(0);
-      return;
-    }
-    setDisplayedProteinCount((count) => Math.min(model.protein, Math.max(count, instantProteinCount)));
-  }, [instantProteinCount, model.protein, model.translationOn]);
+    setDisplayedProteinCount((count) => Math.min(12, Math.max(count, instantProteinCount)));
+  }, [instantProteinCount]);
 
   useEffect(() => {
     if (!model.transcriptionOn) {
@@ -752,7 +749,7 @@ export function GeneExpressionTool() {
                 ["参与转录的 RNA 聚合酶", model.polBound],
                 ["正在读取的核糖体", `${activeRibosomeCount}/${model.ribBound}`],
                 ["mRNA 数量", `${visibleMrnaCount}/${model.mrna}`],
-                ["蛋白质产量", `${visibleProteinCount}/${model.protein}`],
+                ["蛋白质产量", `${visibleProteinCount}/${proteinReadoutMax}`],
               ].map(([label, value]) => (
                 <div key={label} style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
                   <span>{label}</span>
@@ -852,7 +849,9 @@ export function GeneExpressionTool() {
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.65rem" }}>当前状态</div>
             <div style={{ fontSize: "0.88rem" }}>
               {!model.transcriptionOn
-                ? "转录尚未启动：启动子需要 TF，基因区域需要 RNA 聚合酶。"
+                ? visibleProteinCount > 0
+                  ? "转录已经停止，已有蛋白质产物会保留；重新加入 TF 和 RNA 聚合酶可以继续表达。"
+                  : "转录尚未启动：启动子需要 TF，基因区域需要 RNA 聚合酶。"
                 : visibleMrnaCount === 0
                   ? "RNA 聚合酶正在沿基因区移动，新生 mRNA 正从后方延伸出来。"
                   : !model.translationOn
