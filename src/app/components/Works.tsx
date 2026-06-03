@@ -55,25 +55,21 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
   const [hovered, setHovered] = useState(false);
   const href = "href" in work ? work.href : undefined;
 
-  function openDetail() {
+  function openDetail(event?: React.MouseEvent<HTMLAnchorElement>) {
+    event?.preventDefault();
     if (!href) return;
     window.history.pushState(null, "", href);
     window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
   return (
-    <div
-      role={href ? "link" : undefined}
-      tabIndex={href ? 0 : undefined}
+    <a
+      href={href}
       onClick={openDetail}
-      onKeyDown={(event) => {
-        if (href && (event.key === "Enter" || event.key === " ")) {
-          event.preventDefault();
-          openDetail();
-        }
-      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
       style={{
         background: work.color,
         border: `1.5px solid ${work.border}`,
@@ -84,6 +80,9 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         boxShadow: hovered ? "5px 12px 0px rgba(94,68,42,0.12)" : "3px 5px 0px rgba(94,68,42,0.08)",
         cursor: href ? "pointer" : "default",
         position: "relative",
+        color: "inherit",
+        textDecoration: "none",
+        display: "block",
       }}
     >
       {/* Push pin */}
@@ -107,34 +106,27 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         ))}
       </div>
 
-      {href ? (
-        <a
-          href={href}
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            openDetail();
-          }}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 6,
-            marginTop: "1rem",
-            background: "rgba(250,247,241,0.82)",
-            border: "1.5px solid rgba(58,92,62,0.28)",
-            borderRadius: 999,
-            padding: "0.42rem 0.85rem",
-            color: "var(--cherry-forest)",
-            fontWeight: 900,
-            fontSize: "0.82rem",
-            textDecoration: "none",
-          }}
-        >
-          查看详情 →
-        </a>
-      ) : null}
-    </div>
+      <span
+        aria-hidden="true"
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 6,
+          marginTop: "1rem",
+          background: "rgba(250,247,241,0.82)",
+          border: "1.5px solid rgba(58,92,62,0.28)",
+          borderRadius: 999,
+          padding: "0.42rem 0.85rem",
+          color: "var(--cherry-forest)",
+          fontWeight: 900,
+          fontSize: "0.82rem",
+          textDecoration: "none",
+        }}
+      >
+        打开作品 →
+      </span>
+    </a>
   );
 }
 
@@ -204,6 +196,7 @@ export function Works() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
+              aria-pressed={activeCategory === cat}
               style={{
                 background: activeCategory === cat ? "var(--cherry-forest)" : "var(--card)",
                 color: activeCategory === cat ? "#FAF7F1" : "var(--cherry-warm-mid)",
