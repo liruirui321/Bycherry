@@ -237,8 +237,12 @@ function partialPolylinePath(points: Point[], progress: number) {
 
 function buildPolymeraseTracks(progress: number, polBound: number) {
   return Array.from({ length: Math.max(1, polBound) }).map((_, index) => {
-    const phase = (progress + index * 0.18) % 1;
-    const localProgress = clamp01(phase / 0.78);
+    const activeSpan = 0.86;
+    const phase = (progress + index * 0.22) % 1;
+    const localProgress = phase < activeSpan ? phase / activeSpan : 0;
+    const entryOpacity = clamp01(phase / 0.08);
+    const exitOpacity = clamp01((activeSpan - phase) / 0.1);
+    const opacity = phase < activeSpan ? Math.min(entryOpacity, exitOpacity) : 0;
     const offset = { x: -index * 12, y: index * 14 };
     const tip = pointOnPolyline(transcriptPath, localProgress);
     return {
@@ -247,7 +251,7 @@ function buildPolymeraseTracks(progress: number, polBound: number) {
       path: partialPolylinePath(transcriptPath, localProgress),
       tip: { x: tip.x + offset.x, y: tip.y + offset.y },
       progress: localProgress,
-      opacity: phase < 0.82 ? 1 : Math.max(0, 1 - (phase - 0.82) / 0.12),
+      opacity,
     };
   });
 }
@@ -260,13 +264,17 @@ function maxVisibleTranscribedProgress(progress: number, polBound: number) {
 
 function buildRibosomeTracks(progress: number, ribBound: number, canRead: boolean, maxTranscribedProgress: number) {
   return Array.from({ length: ribBound }).map((_, index) => {
-    const phase = (progress + index * 0.16) % 1;
-    const localProgress = clamp01((phase - 0.28) / 0.62);
-    const onReadableSegment = canRead && phase >= 0.28 && phase < 0.92 && localProgress <= Math.max(0.12, maxTranscribedProgress);
+    const activeStart = 0.24;
+    const activeEnd = 0.94;
+    const phase = (progress + index * 0.18) % 1;
+    const localProgress = phase >= activeStart && phase < activeEnd ? (phase - activeStart) / (activeEnd - activeStart) : 0;
+    const onReadableSegment = canRead && phase >= activeStart && phase < activeEnd && localProgress <= Math.max(0.12, maxTranscribedProgress);
+    const entryOpacity = clamp01((phase - activeStart) / 0.07);
+    const exitOpacity = clamp01((activeEnd - phase) / 0.08);
     return {
       point: pointOnPolyline(transcriptPath, localProgress),
       progress: localProgress,
-      opacity: onReadableSegment ? 1 : 0,
+      opacity: onReadableSegment ? Math.min(entryOpacity, exitOpacity) : 0,
     };
   });
 }
@@ -344,23 +352,25 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
   if (!model.transcriptionOn) {
     if (retainedMrnaCount > 0) {
       return (
-        <g opacity={0.72}>
-          {Array.from({ length: Math.min(4, retainedMrnaCount) }).map((_, index) => (
-            <path
-              key={index}
-              d={partialPolylinePath(transcriptPath, Math.min(1, 0.28 + index * 0.22))}
-              fill="none"
-              stroke="var(--cherry-red)"
-              strokeWidth={6}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              transform={`translate(${-8 - index * 8} ${10 + index * 13})`}
-              opacity={0.42}
-            />
-          ))}
-          <text x={418} y={362} fill="var(--cherry-warm-mid)" fontSize={15} fontWeight={800}>
-            已生成的 mRNA 片段仍保留在反应区域
-          </text>
+        <g>
+          <g opacity={0.72}>
+            {Array.from({ length: Math.min(4, retainedMrnaCount) }).map((_, index) => (
+              <path
+                key={index}
+                d={partialPolylinePath(transcriptPath, Math.min(1, 0.28 + index * 0.22))}
+                fill="none"
+                stroke="var(--cherry-red)"
+                strokeWidth={6}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                transform={`translate(${-8 - index * 8} ${10 + index * 13})`}
+                opacity={0.42}
+              />
+            ))}
+            <text x={418} y={362} fill="var(--cherry-warm-mid)" fontSize={15} fontWeight={800}>
+              已生成的 mRNA 片段仍保留在反应区域
+            </text>
+          </g>
           {translationLayer}
         </g>
       );
