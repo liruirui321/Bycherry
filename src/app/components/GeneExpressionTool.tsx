@@ -145,7 +145,7 @@ function StageRail({ model, activeRibosomeCount, visibleProteinCount }: { model:
   const stages = [
     { label: "TF 结合启动子", active: model.tfBound > 0 },
     { label: "RNA 聚合酶转录", active: model.transcriptionOn },
-    { label: "核糖体翻译", active: activeRibosomeCount > 0 },
+    { label: "核糖体翻译", active: activeRibosomeCount > 0 || visibleProteinCount > 0 },
     { label: "蛋白质累积", active: visibleProteinCount > 0 },
   ];
 
@@ -857,8 +857,10 @@ export function GeneExpressionTool() {
                   ? "RNA 聚合酶正在沿基因区移动，新生 mRNA 正从后方延伸出来。"
                   : !model.translationOn
                     ? "mRNA 已经开始积累：把核糖体放到 mRNA 附近可以开始翻译。"
-                    : activeRibosomeCount === 0
+                    : activeRibosomeCount === 0 && visibleProteinCount === 0
                       ? "核糖体已进入入口，正在等待可读的 mRNA 片段。"
+                      : activeRibosomeCount === 0
+                        ? "蛋白质产物已经累积，下一批核糖体正在等待新的可读片段。"
                       : visibleProteinCount === 0
                         ? "核糖体正在读取密码子，tRNA 正在配对，蛋白质产物即将出现。"
                         : "转录和翻译正在连续发生：mRNA 边延伸，核糖体边读取密码子，蛋白质产物持续累积。"}
