@@ -852,6 +852,12 @@ function RichWorkContent({ slug }: { slug: string }) {
   return null;
 }
 
+const richWorkSlugs = ["research-prompt-kit", "plant-evolution-stories", "concept-explainer", "crispr-interactive"];
+
+function hasRichWorkContent(slug: string) {
+  return richWorkSlugs.includes(slug);
+}
+
 function WorkHero({ work }: { work: Work }) {
   return (
     <section
@@ -989,16 +995,18 @@ export function WorkDetailPage({ slug }: { slug: string }) {
     <main id="main-content" tabIndex={-1}>
       <WorkHero work={work} />
 
-      <section
-        style={{
-          padding: work.slug === "gene-expression" ? "0" : "0 1.5rem 5rem",
-          maxWidth: 1060,
-          margin: "0 auto",
-          fontFamily: "'Nunito', sans-serif",
-        }}
-      >
-        <RichWorkContent slug={work.slug} />
-      </section>
+      {hasRichWorkContent(work.slug) ? (
+        <section
+          style={{
+            padding: "0 1.5rem 5rem",
+            maxWidth: 1060,
+            margin: "0 auto",
+            fontFamily: "'Nunito', sans-serif",
+          }}
+        >
+          <RichWorkContent slug={work.slug} />
+        </section>
+      ) : null}
       {work.slug === "gene-expression" ? <GeneExpressionTool /> : null}
       <style>
         {`
