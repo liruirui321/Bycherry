@@ -767,6 +767,24 @@ function CrisprContent() {
 
             <g opacity={stepIndex >= 1 ? 1 : 0.22}>
               <path d={`M${baseX(activeGuide.start)} 94 C${baseX(activeGuide.start + 2)} 76 ${baseX(activeGuide.start + 5)} 78 ${baseX(activeGuide.start + 7)} 94`} fill="none" stroke="var(--cherry-red)" strokeWidth={7} strokeLinecap="round" />
+              {guideBases.map((_, index) => {
+                const mismatch = computedMismatches.includes(index);
+                const x = baseX(activeGuide.start + index);
+                return (
+                  <line
+                    key={`pairing-${index}`}
+                    x1={x}
+                    y1={86}
+                    x2={x}
+                    y2={126}
+                    stroke={mismatch ? "var(--cherry-red)" : "var(--cherry-forest)"}
+                    strokeWidth={mismatch ? 2.4 : 3.2}
+                    strokeLinecap="round"
+                    strokeDasharray={mismatch ? "4 5" : undefined}
+                    opacity={mismatch ? 0.9 : 0.62}
+                  />
+                );
+              })}
               {guideBases.map((base, index) => (
                 <g key={`${base}-${index}`} transform={`translate(${baseX(activeGuide.start + index)} 70)`}>
                   <circle r={14} fill={computedMismatches.includes(index) ? "var(--cherry-peach-light)" : "var(--cherry-red)"} stroke="rgba(94,68,42,0.14)" strokeWidth={1.4} />
@@ -828,6 +846,10 @@ function CrisprContent() {
             <div style={{ color: "var(--cherry-red)", fontSize: "1.35rem", fontWeight: 900, marginBottom: "0.45rem" }}>{activeGuide.score}%</div>
             <div style={{ background: "rgba(250,247,241,0.74)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.6rem", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", fontWeight: 800, marginBottom: "0.75rem" }}>
               目标互补序列：<strong style={{ color: "var(--cherry-warm-brown)" }}>{expectedGuideBases.join(" ")}</strong>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: "0.45rem", color: "var(--cherry-warm-mid)", fontSize: "0.7rem" }}>
+                <span><strong style={{ color: "var(--cherry-forest)" }}>实线</strong> 互补</span>
+                <span><strong style={{ color: "var(--cherry-red)" }}>虚线</strong> 错配</span>
+              </div>
             </div>
             <div style={{ display: "grid", gap: 6, marginBottom: "0.75rem" }}>
               {[
