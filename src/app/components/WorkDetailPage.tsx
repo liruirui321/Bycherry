@@ -659,13 +659,14 @@ function CrisprContent() {
   const [step, setStep] = useState<"scan" | "bind" | "cut" | "repair">("scan");
   const [repair, setRepair] = useState<"indel" | "replace" | "failed">("indel");
   const target = "T A C G A T T A C C G T A G G".split(" ");
+  const rnaComplement: Record<string, string> = { A: "U", T: "A", C: "G", G: "C" };
   const targetStart = 4;
   const targetLength = 8;
   const pamStart = 12;
   const guides = [
-    { name: "向导 A", sequence: "U A A U G G C A", start: targetStart, score: 96, mismatches: [] as number[], note: "目标区互补，旁边有 AGG PAM，Cas9 能稳定定位。" },
-    { name: "向导 B", sequence: "U A A C G G C A", start: targetStart, score: 68, mismatches: [3], note: "种子区有 1 个错配，Cas9 仍可能结合，但剪切效率下降。" },
-    { name: "向导 C", sequence: "G C A U U A C G", start: 1, score: 32, mismatches: [1, 2, 5], note: "目标弱匹配且离 PAM 较远，Cas9 很难在预期位点剪切。" },
+    { name: "向导 A", sequence: "U A A U G G C A", start: targetStart, score: 96, note: "目标区互补，旁边有 AGG PAM，Cas9 能稳定定位。" },
+    { name: "向导 B", sequence: "U A A C G G C A", start: targetStart, score: 68, note: "目标区有 1 个错配，Cas9 仍可能结合，但剪切效率下降。" },
+    { name: "向导 C", sequence: "G C A U U A C G", start: 1, score: 32, note: "目标弱匹配且离 PAM 较远，Cas9 很难在预期位点剪切。" },
   ];
   const stages = [
     { key: "scan", label: "找 PAM", text: "Cas9 先扫到 NGG 这类 PAM，才会检查旁边的 DNA 序列。" },
@@ -675,6 +676,11 @@ function CrisprContent() {
   ] as const;
   const activeGuide = guides[guideIndex];
   const guideRange = Array.from({ length: targetLength }).map((_, index) => activeGuide.start + index);
+  const guideBases = activeGuide.sequence.split(" ");
+  const expectedGuideBases = guideRange.map((index) => rnaComplement[target[index]] ?? "?");
+  const computedMismatches = guideBases
+    .map((base, index) => (base !== expectedGuideBases[index] ? index : -1))
+    .filter((index) => index >= 0);
   const cutIndex = Math.min(target.length - 1, activeGuide.start + 5);
   const pamSequence = target.slice(pamStart).join("");
   const cutDistanceFromPam = pamStart - cutIndex;
@@ -739,7 +745,7 @@ function CrisprContent() {
             {target.map((base, index) => {
               const inGuide = guideRange.includes(index);
               const inPam = index >= pamStart;
-              const mismatch = activeGuide.mismatches.includes(index - activeGuide.start);
+              const mismatch = computedMismatches.includes(index - activeGuide.start);
               return (
                 <g key={`${base}-${index}`} transform={`translate(${baseX(index)} 0)`}>
                   <rect x={-15} y={126} width={30} height={30} rx={9} fill={inPam ? "var(--cherry-peach-light)" : inGuide ? "var(--cherry-yellow-light)" : "rgba(250,247,241,0.8)"} stroke={mismatch ? "var(--cherry-red)" : "rgba(94,68,42,0.16)"} strokeWidth={mismatch ? 2.3 : 1.4} />
@@ -761,10 +767,10 @@ function CrisprContent() {
 
             <g opacity={stepIndex >= 1 ? 1 : 0.22}>
               <path d={`M${baseX(activeGuide.start)} 94 C${baseX(activeGuide.start + 2)} 76 ${baseX(activeGuide.start + 5)} 78 ${baseX(activeGuide.start + 7)} 94`} fill="none" stroke="var(--cherry-red)" strokeWidth={7} strokeLinecap="round" />
-              {activeGuide.sequence.split(" ").map((base, index) => (
+              {guideBases.map((base, index) => (
                 <g key={`${base}-${index}`} transform={`translate(${baseX(activeGuide.start + index)} 70)`}>
-                  <circle r={14} fill={activeGuide.mismatches.includes(index) ? "var(--cherry-peach-light)" : "var(--cherry-red)"} stroke="rgba(94,68,42,0.14)" strokeWidth={1.4} />
-                  <text y={4} textAnchor="middle" fill={activeGuide.mismatches.includes(index) ? "var(--cherry-warm-brown)" : "#FAF7F1"} fontSize={11} fontWeight={900}>{base}</text>
+                  <circle r={14} fill={computedMismatches.includes(index) ? "var(--cherry-peach-light)" : "var(--cherry-red)"} stroke="rgba(94,68,42,0.14)" strokeWidth={1.4} />
+                  <text y={4} textAnchor="middle" fill={computedMismatches.includes(index) ? "var(--cherry-warm-brown)" : "#FAF7F1"} fontSize={11} fontWeight={900}>{base}</text>
                 </g>
               ))}
             </g>
@@ -820,11 +826,14 @@ function CrisprContent() {
               <div style={{ width: `${activeGuide.score}%`, height: "100%", background: activeGuide.score > 80 ? "var(--cherry-sage)" : activeGuide.score > 50 ? "var(--cherry-yellow)" : "var(--cherry-red)", transition: "width 0.25s ease" }} />
             </div>
             <div style={{ color: "var(--cherry-red)", fontSize: "1.35rem", fontWeight: 900, marginBottom: "0.45rem" }}>{activeGuide.score}%</div>
+            <div style={{ background: "rgba(250,247,241,0.74)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.6rem", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", fontWeight: 800, marginBottom: "0.75rem" }}>
+              目标互补序列：<strong style={{ color: "var(--cherry-warm-brown)" }}>{expectedGuideBases.join(" ")}</strong>
+            </div>
             <div style={{ display: "grid", gap: 6, marginBottom: "0.75rem" }}>
               {[
                 ["PAM", pamSequence],
                 ["剪切位点", activeGuide.score >= 60 ? `第 ${cutIndex + 1} 个碱基，PAM 上游 ${cutDistanceFromPam} nt` : "匹配不足，不执行剪切"],
-                ["错配数", `${activeGuide.mismatches.length} 个`],
+                ["错配数", `${computedMismatches.length} 个`],
               ].map(([label, value]) => (
                 <div key={label} style={{ display: "flex", justifyContent: "space-between", gap: 10, color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800 }}>
                   <span>{label}</span>
