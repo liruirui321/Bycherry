@@ -6,12 +6,12 @@ export function Nav() {
   const [open, setOpen] = useState(false);
 
   const links = [
-    { label: "作品", href: "#works" },
+    { label: "作品", href: "/#works" },
     { label: "小工具", href: "/works/gene-expression" },
-    { label: "科研", href: "#research" },
-    { label: "笔记", href: "#notes" },
-    { label: "关于", href: "#about" },
-    { label: "联系", href: "#contact" },
+    { label: "科研", href: "/#research" },
+    { label: "笔记", href: "/#notes" },
+    { label: "关于", href: "/#about" },
+    { label: "联系", href: "/#contact" },
   ];
 
   function navigate(href: string) {
