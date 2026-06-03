@@ -103,7 +103,7 @@ function ProductBeads({ count, animated = true }: { count: number; animated?: bo
   return (
     <g transform="translate(704 442)">
       <text x={0} y={-18} fill="var(--cherry-warm-brown)" fontSize={16} fontWeight={900}>
-        蛋白质产物
+        已完成蛋白质
       </text>
       {Array.from({ length: 12 }).map((_, index) => {
         const active = index < count;
@@ -245,11 +245,14 @@ function buildPolymeraseTracks(progress: number, polBound: number) {
     const opacity = phase < activeSpan ? Math.min(entryOpacity, exitOpacity) : 0;
     const offset = { x: -index * 12, y: index * 14 };
     const tip = pointOnPolyline(transcriptPath, localProgress);
+    const point = { x: lerp(392, 676, localProgress), y: 250 + index * 12 };
+    const exit = { x: point.x + 10, y: point.y + 31 };
     return {
-      point: { x: lerp(392, 676, localProgress), y: 250 + index * 12 },
+      point,
       offset,
       path: partialPolylinePath(transcriptPath, localProgress),
       tip: { x: tip.x + offset.x, y: tip.y + offset.y },
+      exit,
       progress: localProgress,
       opacity,
     };
@@ -292,6 +295,9 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
   const leadRibosomePoint = leadRibosome?.point ?? null;
   const activeCodonIndex = ribosomeCanRead && leadRibosomeProgress > 0 ? Math.min(codons.length - 1, Math.floor(leadRibosomeProgress * codons.length)) : -1;
   const aminoCount = ribosomeCanRead ? Math.min(codons.length, Math.max(0, Math.floor(leadRibosomeProgress * (codons.length + 0.75)))) : 0;
+  const proteinChainStart = { x: 392, y: 570 };
+  const proteinChainGap = 48;
+  const leadRibosomeExit = leadRibosomePoint && aminoCount > 0 ? { x: leadRibosomePoint.x + 32, y: leadRibosomePoint.y + 34 } : null;
   const translationLayer = canTranslate ? (
     <>
       {ribosomes.map((ribosome, index) => {
@@ -333,18 +339,54 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
         );
       })}
 
-      <g transform="translate(386 548)">
-        <text x={0} y={0} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
-          amino acid chain
+      {leadRibosomeExit ? (
+        <path
+          d={`M${leadRibosomeExit.x} ${leadRibosomeExit.y} C${leadRibosomeExit.x + 26} ${leadRibosomeExit.y + 42} ${proteinChainStart.x - 62} ${proteinChainStart.y - 22} ${proteinChainStart.x - 22} ${proteinChainStart.y}`}
+          fill="none"
+          stroke="var(--cherry-peach)"
+          strokeWidth={4}
+          strokeLinecap="round"
+          strokeDasharray="6 7"
+          opacity={0.84}
+        />
+      ) : null}
+
+      <g transform={`translate(${proteinChainStart.x} ${proteinChainStart.y})`}>
+        <text x={0} y={-32} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
+          核糖体正在接出多肽链
         </text>
-        {codons.map((codon, index) => (
-          <g key={codon.amino} transform={`translate(${index * 58} 22)`} opacity={index < aminoCount ? 1 : 0.22}>
-            <circle r={18} fill={codon.color} stroke="rgba(94,68,42,0.16)" strokeWidth={1.5} />
-            <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={10} fontWeight={900}>
-              {codon.amino}
-            </text>
-          </g>
-        ))}
+        <text x={0} y={-14} fill="var(--cherry-warm-mid)" fontSize={11} fontWeight={800} opacity={aminoCount > 0 ? 1 : 0.58}>
+          每读完一个密码子，就接上一个氨基酸小圆
+        </text>
+        {codons.map((codon, index) => {
+          const active = index < aminoCount;
+          const connectorActive = index > 0 && index < aminoCount;
+
+          return (
+            <g key={codon.amino} transform={`translate(${index * proteinChainGap} 0)`} opacity={active ? 1 : 0.2}>
+              {index > 0 ? (
+                <line
+                  x1={-proteinChainGap + 17}
+                  y1={0}
+                  x2={-17}
+                  y2={0}
+                  stroke={connectorActive ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"}
+                  strokeWidth={connectorActive ? 5 : 3}
+                  strokeLinecap="round"
+                />
+              ) : null}
+              <circle r={active ? 17 : 14} fill={active ? codon.color : "rgba(94,68,42,0.08)"} stroke={active ? "rgba(94,68,42,0.22)" : "rgba(94,68,42,0.14)"} strokeWidth={1.5}>
+                {active ? <animate attributeName="r" values="15;18;17" dur="0.7s" begin={`${index * 0.08}s`} repeatCount="1" /> : null}
+              </circle>
+              <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={10} fontWeight={900}>
+                {codon.amino}
+              </text>
+              <text y={31} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={9} fontWeight={800}>
+                {codon.rna}
+              </text>
+            </g>
+          );
+        })}
       </g>
     </>
   ) : null;
@@ -394,8 +436,36 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
             <path d={polymerase.path} fill="none" stroke="rgba(232,121,95,0.2)" strokeWidth={17} strokeLinecap="round" strokeLinejoin="round" />
             <path d={polymerase.path} fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" strokeLinejoin="round" />
           </g>
+          <path
+            d={`M${polymerase.tip.x} ${polymerase.tip.y} C${polymerase.tip.x + 20} ${polymerase.tip.y - 20} ${polymerase.exit.x - 20} ${polymerase.exit.y + 10} ${polymerase.exit.x} ${polymerase.exit.y}`}
+            fill="none"
+            stroke="rgba(232,121,95,0.2)"
+            strokeWidth={17}
+            strokeLinecap="round"
+          />
+          <path
+            d={`M${polymerase.tip.x} ${polymerase.tip.y} C${polymerase.tip.x + 20} ${polymerase.tip.y - 20} ${polymerase.exit.x - 20} ${polymerase.exit.y + 10} ${polymerase.exit.x} ${polymerase.exit.y}`}
+            fill="none"
+            stroke="var(--cherry-red)"
+            strokeWidth={9}
+            strokeLinecap="round"
+          />
+          {codons.map((codon, baseIndex) => {
+            const baseProgress = 0.12 + baseIndex * 0.18;
+            const visible = polymerase.progress > baseProgress;
+            const basePoint = pointOnPolyline(transcriptPath, Math.min(polymerase.progress, baseProgress));
+
+            return (
+              <g key={`rna-base-${index}-${codon.rna}`} transform={`translate(${basePoint.x + polymerase.offset.x} ${basePoint.y + polymerase.offset.y})`} opacity={visible ? 1 : 0}>
+                <circle r={14} fill="rgba(250,247,241,0.92)" stroke="var(--cherry-red)" strokeWidth={2.2} />
+                <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-red)" fontSize={9} fontWeight={900}>
+                  {codon.rna}
+                </text>
+              </g>
+            );
+          })}
           <circle cx={polymerase.tip.x} cy={polymerase.tip.y} r={8} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={3} />
-          <line x1={polymerase.point.x - 2} y1={polymerase.point.y + 24} x2={polymerase.tip.x} y2={polymerase.tip.y} stroke="var(--cherry-red)" strokeWidth={4} strokeLinecap="round" opacity={0.48} />
+          <circle cx={polymerase.exit.x} cy={polymerase.exit.y} r={9} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={3} />
         </g>
       ))}
 
