@@ -14,6 +14,7 @@ import { Footer } from "./components/Footer";
 import { works } from "./components/Works";
 
 const siteTitle = "By Cherry";
+const homeTitle = "科学、课程与 AI";
 const defaultDescription = "By Cherry 是一个可爱插画风的个人网站，收录科学教育、AI 学习工具、项目制课程和创作工作流。";
 const siteUrl = "https://bycherry.me";
 
@@ -99,9 +100,9 @@ export default function App() {
     const work = detailSlug ? works.find((item) => item.slug === detailSlug) : null;
     const note = noteSlug ? notes.find((item) => item.slug === noteSlug) : null;
     const essay = researchSlug ? essays.find((item) => item.slug === researchSlug) : null;
-    const title = work?.title ?? note?.title ?? essay?.title ?? "Science, Education & AI";
+    const title = work?.title ?? note?.title ?? essay?.title ?? homeTitle;
     const description = work?.desc ?? note?.excerpt ?? essay?.body ?? defaultDescription;
-    const fullTitle = title === "Science, Education & AI" ? `${siteTitle} | ${title}` : `${title} | ${siteTitle}`;
+    const fullTitle = title === homeTitle ? `${siteTitle} | ${title}` : `${title} | ${siteTitle}`;
     const canonicalPath = window.location.pathname === "/" ? "/" : window.location.pathname.replace(/\/$/, "");
     const canonicalUrl = `${siteUrl}${canonicalPath}`;
     const jsonLdBase = {
