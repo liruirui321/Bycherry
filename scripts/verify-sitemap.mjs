@@ -15,19 +15,35 @@ function extractHrefs(relativePath) {
     .filter((href) => href.startsWith("/"));
 }
 
+function extractDatedHrefs(relativePath) {
+  const source = read(relativePath);
+  return Array.from(source.matchAll(/href:\s*"([^"]+)"[\s\S]*?date:\s*"([^"]+)"/g), (match) => ({
+    path: match[1],
+    date: match[2],
+  })).filter((item) => item.path.startsWith("/"));
+}
+
 const expectedPaths = new Set([
   "/",
   ...extractHrefs("src/app/components/Works.tsx"),
   ...extractHrefs("src/app/components/Notes.tsx"),
   ...extractHrefs("src/app/components/ResearchEssays.tsx"),
 ]);
+const expectedLastmods = new Map([
+  ...extractDatedHrefs("src/app/components/Notes.tsx").map((item) => [item.path, item.date]),
+  ...extractDatedHrefs("src/app/components/ResearchEssays.tsx").map((item) => [item.path, item.date]),
+]);
 
 const sitemap = read("public/sitemap.xml");
-const sitemapUrls = Array.from(sitemap.matchAll(/<loc>([^<]+)<\/loc>/g), (match) => match[1]);
+const sitemapEntries = Array.from(sitemap.matchAll(/<url>[\s\S]*?<loc>([^<]+)<\/loc>[\s\S]*?<lastmod>([^<]+)<\/lastmod>[\s\S]*?<\/url>/g), (match) => ({
+  url: match[1],
+  lastmod: match[2],
+}));
 const sitemapPaths = new Set();
+const sitemapLastmods = new Map();
 const invalidUrls = [];
 
-for (const url of sitemapUrls) {
+for (const { url, lastmod } of sitemapEntries) {
   if (!url.startsWith(siteUrl)) {
     invalidUrls.push(url);
     continue;
@@ -35,17 +51,22 @@ for (const url of sitemapUrls) {
 
   const path = url.slice(siteUrl.length) || "/";
   sitemapPaths.add(path);
+  sitemapLastmods.set(path, lastmod);
 }
 
 const missing = Array.from(expectedPaths).filter((path) => !sitemapPaths.has(path));
 const stale = Array.from(sitemapPaths).filter((path) => !expectedPaths.has(path));
+const lastmodMismatches = Array.from(expectedLastmods).filter(([path, date]) => sitemapLastmods.get(path) !== date);
 
-if (invalidUrls.length || missing.length || stale.length) {
+if (invalidUrls.length || missing.length || stale.length || lastmodMismatches.length) {
   console.error("Sitemap verification failed.");
   if (invalidUrls.length) console.error(`Invalid domain:\n${invalidUrls.map((url) => `  - ${url}`).join("\n")}`);
   if (missing.length) console.error(`Missing routes:\n${missing.map((path) => `  - ${path}`).join("\n")}`);
   if (stale.length) console.error(`Stale routes:\n${stale.map((path) => `  - ${path}`).join("\n")}`);
+  if (lastmodMismatches.length) {
+    console.error(`Mismatched lastmod:\n${lastmodMismatches.map(([path, date]) => `  - ${path}: expected ${date}, found ${sitemapLastmods.get(path) ?? "missing"}`).join("\n")}`);
+  }
   process.exit(1);
 }
 
-console.log(`Sitemap covers ${expectedPaths.size} public routes.`);
+console.log(`Sitemap covers ${expectedPaths.size} public routes and ${expectedLastmods.size} dated entries.`);
