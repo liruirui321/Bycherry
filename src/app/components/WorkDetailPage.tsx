@@ -23,6 +23,7 @@ function PromptKitContent() {
   const [activePromptIndex, setActivePromptIndex] = useState(0);
   const [material, setMaterial] = useState("研究问题：\n样本/材料：\n已有结果：\n我最担心的问题：");
   const [copied, setCopied] = useState(false);
+  const [copyStatus, setCopyStatus] = useState("");
   const prompts = [
     {
       title: "文献精读",
@@ -83,9 +84,11 @@ ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")
     try {
       await navigator.clipboard.writeText(finalPrompt);
       setCopied(true);
+      setCopyStatus("Prompt 已复制到剪贴板。");
       window.setTimeout(() => setCopied(false), 1400);
     } catch {
       setCopied(false);
+      setCopyStatus("复制失败，请手动选中文本复制。");
     }
   }
 
@@ -96,7 +99,7 @@ ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")
           {prompts.map((prompt, index) => {
             const active = activePromptIndex === index;
             return (
-              <button key={prompt.title} aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
+              <button key={prompt.title} aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
                 <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>{prompt.title}</div>
                 <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginBottom: "0.55rem" }}>{prompt.input}</div>
                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
@@ -118,9 +121,12 @@ ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")
                 <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "1.05rem" }}>{activePrompt.title}</div>
                 <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", marginTop: "0.25rem" }}>输入材料：{activePrompt.input}</div>
               </div>
-              <button onClick={copyPrompt} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+              <button onClick={copyPrompt} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
                 {copied ? "已复制" : "复制 prompt"}
               </button>
+            </div>
+            <div id="prompt-copy-status" role="status" aria-live="polite" style={{ minHeight: "1.2rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginBottom: "0.65rem" }}>
+              {copyStatus}
             </div>
 
             <textarea
