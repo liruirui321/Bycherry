@@ -35,7 +35,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
 
   return (
     <main style={{ fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
-      <section style={{ padding: "4.5rem 1.5rem 2rem" }}>
+      <section style={{ padding: "3.9rem 1.5rem 1.4rem" }}>
         <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <a
             href={`/${backHash}`}
@@ -43,7 +43,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
               event.preventDefault();
               navigateHome(backHash);
             }}
-            style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-forest)", textDecoration: "none", fontWeight: 900, fontSize: "0.86rem", marginBottom: "1.5rem" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-forest)", textDecoration: "none", fontWeight: 900, fontSize: "0.82rem", marginBottom: "0.8rem" }}
           >
             ← {backText}
           </a>
@@ -52,16 +52,21 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
             style={{
               background: "var(--card)",
               border: "1.5px solid var(--border)",
-              borderRadius: 24,
-              padding: "2rem",
+              borderRadius: 20,
+              padding: "1.25rem",
               boxShadow: "6px 10px 0px rgba(94,68,42,0.08)",
               position: "relative",
               overflow: "hidden",
             }}
           >
-            <div style={{ position: "absolute", top: -14, right: 34, width: 86, height: 22, background: article.tagBg ?? article.labelBg, opacity: 0.75, borderRadius: 4, transform: "rotate(4deg)" }} />
+            <div style={{ position: "absolute", top: -12, right: 34, width: 78, height: 20, background: article.tagBg ?? article.labelBg, opacity: 0.75, borderRadius: 4, transform: "rotate(4deg)" }} />
+            <svg style={{ position: "absolute", right: 18, top: 50, opacity: 0.16 }} width="98" height="82" viewBox="0 0 98 82" fill="none">
+              <path d="M16 72 Q24 42 72 13 Q75 50 16 72Z" fill={article.tagColor ?? article.labelColor} />
+              <path d="M22 67 Q43 51 68 22" stroke="var(--cherry-warm-brown)" strokeWidth="2" strokeLinecap="round" opacity="0.35" />
+              <circle cx="27" cy="31" r="7" fill="var(--cherry-yellow)" opacity="0.8" />
+            </svg>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: "1rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: "0.65rem", paddingRight: 84 }}>
               <span
                 style={{
                   display: "inline-flex",
@@ -85,15 +90,15 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
               </span>
             </div>
 
-            <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.9rem, 5vw, 2.8rem)", fontWeight: 900, lineHeight: 1.22, marginBottom: "1rem" }}>
+            <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.45rem, 4vw, 2.15rem)", fontWeight: 900, lineHeight: 1.2, marginBottom: "0.65rem", maxWidth: 680 }}>
               {article.title}
             </h1>
 
-            <p style={{ color: "var(--cherry-warm-mid)", fontSize: "1rem", lineHeight: 1.85, marginBottom: "1.4rem" }}>
+            <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.92rem", lineHeight: 1.75, marginBottom: "0.9rem", maxWidth: 720 }}>
               {article.excerpt ?? article.body}
             </p>
 
-            <div style={{ display: "grid", gap: "1rem", marginBottom: "1.5rem" }}>
+            <div style={{ display: "grid", gap: "0.85rem", marginBottom: "1.1rem" }}>
               {article.paragraphs.map((paragraph) => (
                 <p key={paragraph} style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.9, fontSize: "0.96rem" }}>
                   {paragraph}

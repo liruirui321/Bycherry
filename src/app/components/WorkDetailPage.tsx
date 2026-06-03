@@ -409,7 +409,7 @@ function WorkHero({ work }: { work: Work }) {
   return (
     <section
       style={{
-        padding: "4.5rem 1.5rem 3rem",
+        padding: "3.8rem 1.5rem 1.2rem",
         background: "var(--background)",
         fontFamily: "'Nunito', sans-serif",
       }}
@@ -439,27 +439,33 @@ function WorkHero({ work }: { work: Work }) {
           style={{
             background: work.color,
             border: `1.5px solid ${work.border}`,
-            borderRadius: 24,
-            padding: "2rem",
+            borderRadius: 20,
+            padding: "1.2rem 1.35rem",
             boxShadow: "6px 10px 0px rgba(94,68,42,0.1)",
             position: "relative",
             overflow: "hidden",
           }}
         >
-          <div style={{ position: "absolute", top: -18, right: 26, width: 94, height: 26, background: "rgba(250,247,241,0.58)", borderRadius: 5, transform: "rotate(4deg)" }} />
-          <div style={{ marginBottom: "1rem" }}>{work.icon}</div>
+          <div style={{ position: "absolute", top: -14, right: 26, width: 82, height: 22, background: "rgba(250,247,241,0.58)", borderRadius: 5, transform: "rotate(4deg)" }} />
+          <svg style={{ position: "absolute", right: 18, bottom: 10, opacity: 0.24 }} width="120" height="92" viewBox="0 0 120 92" fill="none">
+            <path d="M18 80 Q30 42 94 12 Q98 55 18 80Z" fill={work.border} />
+            <path d="M28 72 Q54 52 88 22" stroke="var(--cherry-warm-brown)" strokeWidth="2" strokeLinecap="round" opacity="0.35" />
+            <circle cx="35" cy="34" r="8" fill="var(--cherry-yellow)" opacity="0.8" />
+          </svg>
+          <div style={{ marginBottom: "0.55rem", transform: "scale(0.82)", transformOrigin: "left center" }}>{work.icon}</div>
           <h1
             style={{
               color: "var(--cherry-warm-brown)",
-              fontSize: "clamp(2rem, 5vw, 3rem)",
+              fontSize: "clamp(1.55rem, 4vw, 2.3rem)",
               fontWeight: 900,
               lineHeight: 1.18,
-              marginBottom: "0.85rem",
+              marginBottom: "0.5rem",
+              maxWidth: 700,
             }}
           >
             {work.title}
           </h1>
-          <p style={{ color: "var(--cherry-warm-mid)", fontSize: "1rem", lineHeight: 1.85, maxWidth: 760, marginBottom: "1rem" }}>
+          <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.92rem", lineHeight: 1.65, maxWidth: 720, marginBottom: "0.7rem" }}>
             {work.desc}
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>

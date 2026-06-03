@@ -250,8 +250,14 @@ export function Hero() {
                   display: "grid",
                   alignContent: "start",
                   gap: "0.4rem",
+                  position: "relative",
+                  overflow: "hidden",
                 }}
               >
+                <svg style={{ position: "absolute", right: -8, bottom: -8, opacity: 0.22 }} width="82" height="72" viewBox="0 0 82 72" fill="none">
+                  <path d="M13 65 Q22 31 68 8 Q70 44 13 65Z" fill={work.border} />
+                  <path d="M20 58 Q38 42 62 16" stroke="var(--cherry-warm-brown)" strokeWidth="1.8" strokeLinecap="round" opacity="0.35" />
+                </svg>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ width: 28, height: 28, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{work.icon}</span>
                   <strong style={{ fontSize: "0.88rem", lineHeight: 1.35 }}>{work.title}</strong>
