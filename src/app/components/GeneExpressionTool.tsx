@@ -103,23 +103,35 @@ function ProductBeads({ count, animated = true }: { count: number; animated?: bo
   return (
     <g transform="translate(704 442)">
       <text x={0} y={-18} fill="var(--cherry-warm-brown)" fontSize={16} fontWeight={900}>
-        已完成蛋白质
+        累计多肽链
       </text>
       {Array.from({ length: 12 }).map((_, index) => {
         const active = index < count;
         const amino = codons[index % codons.length];
+        const chainIndex = Math.floor(index / codons.length);
+        const beadIndex = index % codons.length;
         return (
-          <circle
-            key={index}
-            cx={(index % 4) * 34}
-            cy={Math.floor(index / 4) * 34}
-            r={13}
-            fill={active ? amino.color : "rgba(94,68,42,0.08)"}
-            stroke="rgba(94,68,42,0.16)"
-            strokeWidth={1.5}
-          >
-            {active && animated ? <animate attributeName="r" values="12;15;13" dur="1.5s" begin={`${index * 0.08}s`} repeatCount="indefinite" /> : null}
-          </circle>
+          <g key={index} transform={`translate(${beadIndex * 34} ${chainIndex * 34})`} opacity={active ? 1 : 0.3}>
+            {beadIndex > 0 ? (
+              <line
+                x1={-21}
+                y1={0}
+                x2={-12}
+                y2={0}
+                stroke={active ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"}
+                strokeWidth={active ? 4 : 2.5}
+                strokeLinecap="round"
+              />
+            ) : null}
+            <circle
+              r={13}
+              fill={active ? amino.color : "rgba(94,68,42,0.08)"}
+              stroke="rgba(94,68,42,0.16)"
+              strokeWidth={1.5}
+            >
+              {active && animated ? <animate attributeName="r" values="12;15;13" dur="1.5s" begin={`${index * 0.08}s`} repeatCount="indefinite" /> : null}
+            </circle>
+          </g>
         );
       })}
     </g>
@@ -146,7 +158,7 @@ function StageRail({ model, activeRibosomeCount, visibleProteinCount }: { model:
     { label: "TF 结合启动子", active: model.tfBound > 0 },
     { label: "RNA 聚合酶转录", active: model.transcriptionOn },
     { label: "核糖体翻译", active: activeRibosomeCount > 0 || visibleProteinCount > 0 },
-    { label: "蛋白质累积", active: visibleProteinCount > 0 },
+    { label: "多肽链累积", active: visibleProteinCount > 0 },
   ];
 
   return (
@@ -877,7 +889,7 @@ export function GeneExpressionTool() {
                 ["正在读取的核糖体", `${activeRibosomeCount}/${model.ribBound}`],
                 ["当前密码子", activeCodon ? `${activeCodon.rna} → ${activeCodon.amino}` : "等待读取"],
                 ["mRNA 数量", `${visibleMrnaCount}/${mrnaReadoutMax}`],
-                ["已完成蛋白质", `${visibleProteinCount}/${proteinReadoutMax}`],
+                ["已接入氨基酸", `${visibleProteinCount}/${proteinReadoutMax}`],
               ].map(([label, value]) => (
                 <div key={label} style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
                   <span>{label}</span>
@@ -980,7 +992,7 @@ export function GeneExpressionTool() {
                 ? activeRibosomeCount > 0
                   ? "转录已经停止，核糖体正在读取保留的 mRNA，多肽链仍会按密码子继续延伸。"
                   : visibleProteinCount > 0
-                    ? "转录已经停止，已有蛋白质产物会保留；重新加入 TF 和 RNA 聚合酶可以继续表达。"
+                    ? "转录已经停止，已经形成的多肽链会保留；重新加入 TF 和 RNA 聚合酶可以继续表达。"
                     : canTranslate
                       ? "转录已经停止，已有 mRNA 片段会保留；核糖体可以继续读取这些片段。"
                       : visibleMrnaCount > 0
@@ -993,7 +1005,7 @@ export function GeneExpressionTool() {
                     : activeRibosomeCount === 0 && visibleProteinCount === 0
                       ? "核糖体已进入入口，正在等待可读的 mRNA 片段。"
                       : activeRibosomeCount === 0
-                        ? "蛋白质产物已经累积，下一批核糖体正在等待新的可读片段。"
+                        ? "多肽链片段已经累积，下一批核糖体正在等待新的可读片段。"
                       : visibleProteinCount === 0
                         ? `核糖体正在读取 ${activeCodon?.rna ?? "密码子"}，tRNA 正在配对，第一颗氨基酸小圆即将接入多肽链。`
                         : `核糖体正在读取 ${activeCodon?.rna ?? "密码子"}，多肽链正按 ${activeCodon?.amino ?? "氨基酸"} 继续延伸。`}
