@@ -485,6 +485,7 @@ export function GeneExpressionTool() {
   const mrnaReadoutMax = Math.max(visibleMrnaCount, model.mrna);
   const retainedTranscriptProgress = model.transcriptionOn ? transcribedProgress : visibleMrnaCount > 0 ? 1 : 0;
   const canTranslate = model.ribBound > 0 && visibleMrnaCount > 0;
+  const reactionRunning = model.transcriptionOn || canTranslate;
   const ribosomeCanRead = canTranslate && (model.transcriptionOn ? transcriptionProgress > 0.28 : visibleMrnaCount > 0);
   const readableRibosomes = buildRibosomeTracks(cycleProgress, model.ribBound, ribosomeCanRead, retainedTranscriptProgress).filter((ribosome) => ribosome.opacity > 0);
   const activeRibosomeCount = readableRibosomes.length;
@@ -812,7 +813,7 @@ export function GeneExpressionTool() {
               <button onClick={runExpressionPreset} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
                 运行表达
               </button>
-              <button onClick={() => setIsPaused((value) => !value)} aria-pressed={isPaused} disabled={!model.transcriptionOn} style={{ background: model.transcriptionOn ? "var(--cherry-blue)" : "var(--muted)", color: model.transcriptionOn ? "#FAF7F1" : "var(--cherry-warm-mid)", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: model.transcriptionOn ? "pointer" : "default" }}>
+              <button onClick={() => setIsPaused((value) => !value)} aria-pressed={isPaused} disabled={!reactionRunning} style={{ background: reactionRunning ? "var(--cherry-blue)" : "var(--muted)", color: reactionRunning ? "#FAF7F1" : "var(--cherry-warm-mid)", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: reactionRunning ? "pointer" : "default" }}>
                 {isPaused ? "继续" : "暂停"}
               </button>
               <button onClick={resetScene} style={{ background: "var(--muted)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
