@@ -1,7 +1,7 @@
 import { IconMicroscope, IconTestTube, IconDNA, IconLeaf, IconLeafSmall, IconNotebook, IconStar, IconMushroom, IconBranch, IconSparkle, IconSeedling } from "./Icons";
 import { works } from "./Works";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
-import { navigateClient, shouldUseClientNavigation } from "../navigation";
+import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
 
 function FloatDeco({ children, style }: { children: React.ReactNode; style: React.CSSProperties }) {
   return (
@@ -200,6 +200,7 @@ export function Hero() {
           <a
             className="hero-cta"
             href="#works"
+            onClick={(event) => navigateHomeSection("#works", event)}
             style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               background: "var(--cherry-forest)", color: "#FAF7F1",
@@ -216,6 +217,7 @@ export function Hero() {
           <a
             className="hero-cta"
             href="#notes"
+            onClick={(event) => navigateHomeSection("#notes", event)}
             style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               background: "transparent", color: "var(--cherry-warm-brown)",

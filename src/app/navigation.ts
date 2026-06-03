@@ -13,3 +13,11 @@ export function navigateClient(href: string) {
   window.history.pushState(null, "", href);
   window.dispatchEvent(new PopStateEvent("popstate"));
 }
+
+export function navigateHomeSection(hash: string, event?: MouseEvent<HTMLAnchorElement>) {
+  if (event && !shouldUseClientNavigation(event)) return;
+  event?.preventDefault();
+
+  const normalizedHash = hash.startsWith("#") ? hash : `#${hash}`;
+  navigateClient(`/${normalizedHash}`);
+}

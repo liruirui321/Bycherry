@@ -2,6 +2,7 @@ import { IconMicroscope, IconBook, IconAI, IconLeaf, IconResearch } from "./Icon
 import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
 import { works } from "./Works";
+import { navigateHomeSection } from "../navigation";
 
 const tags = [
   { label: "生命科学", icon: <IconMicroscope size={15} color="#1a5680" />, bg: "var(--cherry-blue-light)", color: "#1a5680" },
@@ -148,10 +149,10 @@ export function About() {
           </p>
 
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginTop: "1.35rem" }}>
-            <a href="#works" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.58rem 1rem", textDecoration: "none", fontWeight: 900, fontSize: "0.86rem", boxShadow: "3px 5px 0px rgba(58,92,62,0.2)" }}>
+            <a href="#works" onClick={(event) => navigateHomeSection("#works", event)} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.58rem 1rem", textDecoration: "none", fontWeight: 900, fontSize: "0.86rem", boxShadow: "3px 5px 0px rgba(58,92,62,0.2)" }}>
               打开作品
             </a>
-            <a href="#contact" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.58rem 1rem", textDecoration: "none", fontWeight: 900, fontSize: "0.86rem" }}>
+            <a href="#contact" onClick={(event) => navigateHomeSection("#contact", event)} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.58rem 1rem", textDecoration: "none", fontWeight: 900, fontSize: "0.86rem" }}>
               联系 Cherry
             </a>
           </div>
