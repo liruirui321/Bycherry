@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { IconCheck, IconDNA, IconMicroscope, IconSparkle } from "./Icons";
 
 type MoleculeType = "tf" | "pol" | "ribosome";
+type ZoneKey = "promoter" | "polymerase" | "ribosome";
 
 type Molecule = {
   id: string;
@@ -34,6 +35,16 @@ const codons = [
 
 function inBox(molecule: Molecule, box: { x: number; y: number; w: number; h: number }) {
   return molecule.x >= box.x && molecule.x <= box.x + box.w && molecule.y >= box.y && molecule.y <= box.y + box.h;
+}
+
+function inExpandedBox(molecule: Molecule, box: { x: number; y: number; w: number; h: number }, margin = 42) {
+  return molecule.x >= box.x - margin && molecule.x <= box.x + box.w + margin && molecule.y >= box.y - margin && molecule.y <= box.y + box.h + margin;
+}
+
+function moleculeZone(type: MoleculeType): ZoneKey {
+  if (type === "tf") return "promoter";
+  if (type === "pol") return "polymerase";
+  return "ribosome";
 }
 
 function MoleculeNode({
@@ -109,6 +120,32 @@ function ProductBeads({ count }: { count: number }) {
   );
 }
 
+function StageRail({ model }: { model: { tfBound: number; polBound: number; ribBound: number; transcriptionOn: boolean; translationOn: boolean; protein: number } }) {
+  const stages = [
+    { label: "TF binds promoter", active: model.tfBound > 0 },
+    { label: "RNA pol transcribes", active: model.transcriptionOn },
+    { label: "ribosome translates", active: model.translationOn },
+    { label: "protein accumulates", active: model.protein > 0 },
+  ];
+
+  return (
+    <g transform="translate(300 48)">
+      {stages.map((stage, index) => (
+        <g key={stage.label} transform={`translate(${index * 132} 0)`}>
+          {index > 0 ? <line x1={-78} y1={15} x2={-18} y2={15} stroke={stage.active ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={4} strokeLinecap="round" /> : null}
+          <circle cx={0} cy={15} r={15} fill={stage.active ? "var(--cherry-forest)" : "rgba(250,247,241,0.86)"} stroke="rgba(94,68,42,0.18)" strokeWidth={1.5} />
+          <text x={0} y={20} textAnchor="middle" fill={stage.active ? "#FAF7F1" : "var(--cherry-warm-mid)"} fontSize={12} fontWeight={900}>
+            {index + 1}
+          </text>
+          <text x={0} y={44} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={11} fontWeight={800}>
+            {stage.label}
+          </text>
+        </g>
+      ))}
+    </g>
+  );
+}
+
 export function GeneExpressionTool() {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [molecules, setMolecules] = useState(initialMolecules);
@@ -118,6 +155,22 @@ export function GeneExpressionTool() {
     promoter: { x: 214, y: 212, w: 160, h: 86 },
     polymerase: { x: 380, y: 206, w: 330, h: 96 },
     ribosome: { x: 332, y: 392, w: 358, h: 116 },
+  };
+  const slots: Record<ZoneKey, Array<{ x: number; y: number }>> = {
+    promoter: [
+      { x: 244, y: 254 },
+      { x: 302, y: 254 },
+      { x: 360, y: 254 },
+    ],
+    polymerase: [
+      { x: 456, y: 254 },
+      { x: 570, y: 254 },
+    ],
+    ribosome: [
+      { x: 406, y: 450 },
+      { x: 520, y: 450 },
+      { x: 634, y: 450 },
+    ],
   };
 
   const model = useMemo(() => {
@@ -165,8 +218,38 @@ export function GeneExpressionTool() {
     );
   }
 
+  function moleculeSlotIndex(molecule: Molecule) {
+    const rawIndex = Number(molecule.id.split("-")[1]) - 1;
+    return Number.isFinite(rawIndex) ? rawIndex : 0;
+  }
+
+  function snapMolecule(molecule: Molecule) {
+    const zoneKey = moleculeZone(molecule.type);
+    const zone = zones[zoneKey];
+    if (!inExpandedBox(molecule, zone)) return molecule;
+    const slot = slots[zoneKey][moleculeSlotIndex(molecule)] ?? slots[zoneKey][0];
+    return { ...molecule, x: slot.x, y: slot.y };
+  }
+
+  function endDrag() {
+    if (!dragging) return;
+    setMolecules((items) => items.map((molecule) => (molecule.id === dragging.id ? snapMolecule(molecule) : molecule)));
+    setDragging(null);
+  }
+
   function resetScene() {
     setMolecules(initialMolecules);
+    setDragging(null);
+  }
+
+  function runExpressionPreset() {
+    setMolecules((items) =>
+      items.map((molecule) => {
+        const zoneKey = moleculeZone(molecule.type);
+        const slot = slots[zoneKey][moleculeSlotIndex(molecule)] ?? slots[zoneKey][0];
+        return { ...molecule, x: slot.x, y: slot.y };
+      })
+    );
     setDragging(null);
   }
 
@@ -189,8 +272,8 @@ export function GeneExpressionTool() {
             role="img"
             aria-label="基因表达互动仿真画布"
             onPointerMove={moveDrag}
-            onPointerUp={() => setDragging(null)}
-            onPointerLeave={() => setDragging(null)}
+            onPointerUp={endDrag}
+            onPointerLeave={endDrag}
             style={{ width: "100%", display: "block", touchAction: "none", background: "linear-gradient(180deg, #FFF8EA 0%, #F3E8D7 100%)" }}
           >
             <defs>
@@ -211,8 +294,9 @@ export function GeneExpressionTool() {
             <rect x={22} y={26} width={936} height={606} rx={220} fill="rgba(169,201,172,0.2)" stroke="rgba(93,140,101,0.34)" strokeWidth={3} strokeDasharray="9 9" />
 
             <text x={42} y={58} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>
-              Drag molecules into the cell model
+              Gene Expression Lab
             </text>
+            <StageRail model={model} />
 
             <g transform="translate(154 170)">
               <rect x={0} y={0} width={668} height={150} rx={34} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.18)" strokeWidth={2} />
@@ -225,22 +309,40 @@ export function GeneExpressionTool() {
               <text x={92} y={88} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
                 promoter
               </text>
+              {[90, 148, 206].map((x, index) => (
+                <circle key={x} cx={x} cy={84} r={18} fill="none" stroke={model.tfBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
+              ))}
               <rect x={226} y={42} width={320} height={78} rx={18} fill={model.polBound > 0 ? "rgba(141,190,221,0.26)" : "rgba(250,247,241,0.4)"} stroke="var(--cherry-blue)" strokeWidth={2} strokeDasharray="7 7" />
               <text x={344} y={88} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
                 gene body
               </text>
+              {[302, 416].map((x, index) => (
+                <circle key={x} cx={x} cy={84} r={24} fill="none" stroke={model.polBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
+              ))}
+              {model.transcriptionOn ? (
+                <g className="gene-svg-pol-scan" transform="translate(238 80)">
+                  <ellipse rx={42} ry={27} fill="var(--cherry-blue-light)" stroke="var(--cherry-blue)" strokeWidth={3} />
+                  <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>
+                    RNA pol
+                  </text>
+                </g>
+              ) : null}
             </g>
 
             {model.transcriptionOn ? (
-              <g className="gene-svg-mrna" transform="translate(264 350)">
-                <path d="M0 0 C80 36 170 -34 250 0 C324 32 410 -20 490 8" fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" />
-                <CodonLabels x={74} y={18} />
-              </g>
+              <>
+                {Array.from({ length: model.mrna }).map((_, index) => (
+                  <g key={index} className="gene-svg-mrna" transform={`translate(${264 + index * 7} ${350 + index * 12})`} style={{ animationDelay: `${index * 0.12}s` }}>
+                    <path d="M0 0 C80 36 170 -34 250 0 C324 32 410 -20 490 8" fill="none" stroke="var(--cherry-red)" strokeWidth={index === 0 ? 9 : 5} strokeLinecap="round" opacity={index === 0 ? 1 : 0.42} />
+                    {index === 0 ? <CodonLabels x={74} y={18} /> : null}
+                  </g>
+                ))}
+              </>
             ) : (
               <g transform="translate(332 382)" opacity={0.35}>
                 <path d="M0 0 C68 26 150 -24 226 0" fill="none" stroke="var(--cherry-red)" strokeWidth={8} strokeLinecap="round" strokeDasharray="10 10" />
                 <text x={250} y={7} fill="var(--cherry-warm-mid)" fontSize={15} fontWeight={800}>
-                  mRNA appears after TF + RNA pol bind
+                  mRNA appears after TF and RNA pol bind
                 </text>
               </g>
             )}
@@ -249,6 +351,9 @@ export function GeneExpressionTool() {
             <text x={zones.ribosome.x + 22} y={zones.ribosome.y + 34} fill="var(--cherry-warm-brown)" fontSize={15} fontWeight={900}>
               ribosome dock
             </text>
+            {[406, 520, 634].map((x, index) => (
+              <circle key={x} cx={x} cy={450} r={30} fill="none" stroke={model.ribBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
+            ))}
 
             {model.translationOn ? (
               <g className="gene-svg-ribosome-scan" transform="translate(348 438)">
@@ -260,6 +365,22 @@ export function GeneExpressionTool() {
             ) : null}
 
             <ProductBeads count={model.protein} />
+
+            {model.translationOn ? (
+              <g transform="translate(372 548)">
+                <text x={0} y={0} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
+                  amino acid chain
+                </text>
+                {codons.map((codon, index) => (
+                  <g key={codon.amino} className="gene-svg-amino" transform={`translate(${index * 58} 22)`} style={{ animationDelay: `${index * 0.24}s` }}>
+                    <circle r={18} fill={codon.color} stroke="rgba(94,68,42,0.16)" strokeWidth={1.5} />
+                    <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={10} fontWeight={900}>
+                      {codon.amino}
+                    </text>
+                  </g>
+                ))}
+              </g>
+            ) : null}
 
             <g transform="translate(46 86)">
               <rect width={190} height={28} rx={999} fill="rgba(250,247,241,0.74)" stroke="rgba(94,68,42,0.16)" />
@@ -294,9 +415,14 @@ export function GeneExpressionTool() {
                 </div>
               ))}
             </div>
-            <button onClick={resetScene} style={{ marginTop: "1rem", background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
-              重置分子
-            </button>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: "1rem" }}>
+              <button onClick={runExpressionPreset} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+                运行表达
+              </button>
+              <button onClick={resetScene} style={{ background: "var(--muted)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+                重置
+              </button>
+            </div>
           </div>
 
           <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1.2rem", color: "var(--cherry-warm-mid)", lineHeight: 1.7 }}>
@@ -317,6 +443,17 @@ export function GeneExpressionTool() {
               ))}
             </div>
           </div>
+
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", color: "var(--cherry-warm-mid)", lineHeight: 1.7 }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.65rem" }}>当前状态</div>
+            <div style={{ fontSize: "0.88rem" }}>
+              {!model.transcriptionOn
+                ? "转录尚未启动：启动子需要 TF，基因区域需要 RNA 聚合酶。"
+                : !model.translationOn
+                  ? "mRNA 已生成：把核糖体放到 mRNA 附近可以开始翻译。"
+                  : "翻译正在进行：核糖体读取密码子，蛋白质产物开始累积。"}
+            </div>
+          </div>
         </aside>
       </div>
 
@@ -330,8 +467,16 @@ export function GeneExpressionTool() {
             animation: geneSvgRibosomeScan 4.2s linear infinite;
           }
 
+          .gene-svg-pol-scan {
+            animation: geneSvgPolScan 3.6s linear infinite;
+          }
+
           .gene-svg-pop {
             animation: geneSvgProteinPop 1.5s ease-in-out infinite;
+          }
+
+          .gene-svg-amino {
+            animation: geneSvgAminoBuild 2.2s ease-in-out infinite;
           }
 
           @keyframes geneSvgMrnaPulse {
@@ -346,9 +491,21 @@ export function GeneExpressionTool() {
             100% { transform: translate(632px, 438px); opacity: 0; }
           }
 
+          @keyframes geneSvgPolScan {
+            0% { transform: translate(238px, 80px); opacity: 0; }
+            12% { opacity: 1; }
+            82% { opacity: 1; }
+            100% { transform: translate(522px, 80px); opacity: 0; }
+          }
+
           @keyframes geneSvgProteinPop {
             0%, 100% { transform: scale(1); }
             45% { transform: scale(1.12); }
+          }
+
+          @keyframes geneSvgAminoBuild {
+            0%, 18% { opacity: 0.3; transform: translateY(10px) scale(0.82); }
+            44%, 100% { opacity: 1; transform: translateY(0) scale(1); }
           }
 
           @media (max-width: 920px) {
