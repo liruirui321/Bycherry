@@ -539,13 +539,6 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
         </g>
       ))}
 
-      <text x={390} y={342} fill="var(--cherry-red)" fontSize={13} fontWeight={900} opacity={transcriptionProgress > 0.08 ? 1 : 0}>
-        5' mRNA
-      </text>
-      <text x={392 + transcriptionProgress * 210} y={224} fill="var(--cherry-blue)" fontSize={12} fontWeight={900}>
-        RNA 聚合酶生成 3' 端
-      </text>
-
       {codons.map((codon, index) => {
         const point = pointOnPolyline(coupledMrnaPath, 0.12 + index * 0.2);
         const visible = maxTranscribedProgress > 0.22 + index * 0.13;
@@ -846,6 +839,12 @@ export function GeneExpressionTool() {
             <text x={42} y={58} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>
               基因表达实验台
             </text>
+            <g transform="translate(42 72)">
+              <rect width={162} height={26} rx={999} fill="rgba(250,247,241,0.78)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.4} />
+              <text x={81} y={18} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={11} fontWeight={900}>
+                原核耦合表达模型
+              </text>
+            </g>
             <StageRail model={model} activeRibosomeCount={activeRibosomeCount} visibleProteinCount={visibleProteinCount} />
 
             <g transform="translate(154 170)">
