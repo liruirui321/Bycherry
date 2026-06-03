@@ -35,7 +35,7 @@ export const works = [
     id: 5, slug: "concept-explainer", category: "AI工具" as Category,
     icon: <IconAI size={36} color="#7B6CC4" />,
     title: "概念解释生成器",
-    desc: "选择一个生物学概念，查看小学、高中、研究生三个解释层级。",
+    desc: "选择生物学概念和理解层级，生成类比、机制步骤、误区辨析和即时小测。",
     href: "/works/concept-explainer",
     tags: ["AI", "教育", "工具"],
     color: "#EDE9F5", border: "#B5AEDD", rotate: "-1.2deg",

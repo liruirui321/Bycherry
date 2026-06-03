@@ -220,67 +220,189 @@ function PlantEvolutionContent() {
 
 function ConceptExplainerContent() {
   const [concept, setConcept] = useState("转录");
-  const explanations: Record<string, { levels: string[]; terms: string[]; pitfall: string; check: string }> = {
+  const [levelIndex, setLevelIndex] = useState(1);
+  const [quizChoice, setQuizChoice] = useState<string | null>(null);
+  const explanations: Record<string, { color: string; analogy: string; levels: Array<{ title: string; body: string }>; terms: string[]; mechanism: string[]; compare: string; pitfall: string; quiz: { question: string; options: string[]; answer: string; explain: string } }> = {
     转录: {
-      levels: ["像把书上的一小段内容抄到便签上，便签可以被拿到别处继续使用。", "细胞以 DNA 的一条链为模板合成 mRNA，RNA 中用 U 替代 T，mRNA 会把遗传信息带到核糖体。", "转录涉及启动子识别、转录因子调控、RNA 聚合酶延伸、终止以及真核细胞中的剪接和转录后加工。"],
+      color: "var(--cherry-blue)",
+      analogy: "把书架上的原文抄成一张便签。书还在原处，便签可以被拿去加工。",
+      levels: [
+        { title: "小学版", body: "DNA 像一本很大的说明书，转录就是把其中一小段抄成 RNA 便签。" },
+        { title: "高中版", body: "细胞以 DNA 的一条链为模板合成 mRNA，RNA 中用 U 替代 T，mRNA 会把遗传信息带到核糖体。" },
+        { title: "研究生版", body: "转录包含启动子识别、转录因子调控、RNA 聚合酶延伸、终止，以及真核细胞中的剪接和转录后加工。" },
+      ],
       terms: ["DNA 模板链", "RNA 聚合酶", "mRNA", "启动子"],
+      mechanism: ["转录因子帮助定位启动子", "RNA 聚合酶结合 DNA", "按模板链合成 mRNA", "mRNA 离开 DNA，进入后续加工或翻译"],
+      compare: "转录负责“写出 RNA”；翻译负责“读 RNA 做蛋白质”。",
       pitfall: "转录不是把 DNA 变成 RNA；DNA 仍然保留，RNA 是按模板新合成出来的拷贝。",
-      check: "如果 DNA 片段是 ATG，mRNA 中对应片段通常写作 AUG。",
+      quiz: {
+        question: "DNA 编码链片段 ATG 对应的 mRNA 密码子通常写作什么？",
+        options: ["AUG", "TAC", "UAC"],
+        answer: "AUG",
+        explain: "mRNA 与编码链方向和信息相同，但 RNA 用 U 替代 T。",
+      },
     },
     端粒: {
-      levels: ["像鞋带末端的保护套，保护染色体末端不被磨坏。", "端粒位于染色体末端，随着细胞分裂逐渐缩短，能减少染色体末端被误认为断裂的风险。", "端粒长度、端粒酶活性与细胞衰老、肿瘤发生和干细胞状态有关；端粒维护机制会影响复制潜能。"],
+      color: "var(--cherry-red)",
+      analogy: "像鞋带末端的保护套，保护染色体末端不被磨坏、也不容易和别的断端混淆。",
+      levels: [
+        { title: "小学版", body: "端粒在染色体两头，像保护套一样保护重要信息。" },
+        { title: "高中版", body: "端粒位于染色体末端，随着细胞分裂逐渐缩短，能减少染色体末端被误认为断裂的风险。" },
+        { title: "研究生版", body: "端粒长度、端粒酶活性与复制潜能、细胞衰老、肿瘤发生和干细胞状态有关。" },
+      ],
       terms: ["染色体末端", "端粒酶", "复制末端问题", "细胞衰老"],
+      mechanism: ["DNA 复制不能完整复制最末端", "端粒重复序列先被消耗", "端粒过短会触发损伤反应", "端粒酶可在部分细胞中延长端粒"],
+      compare: "端粒是染色体末端结构；端粒酶是维护端粒长度的酶。",
       pitfall: "端粒缩短不是所有衰老现象的唯一原因，它只是细胞衰老机制中的一部分。",
-      check: "频繁分裂的细胞更依赖端粒维护，肿瘤细胞常见端粒酶重新激活。",
+      quiz: {
+        question: "下面哪类细胞更可能依赖端粒维护？",
+        options: ["频繁分裂的细胞", "成熟红细胞", "角质层死细胞"],
+        answer: "频繁分裂的细胞",
+        explain: "分裂越频繁，染色体末端复制问题越明显，因此更依赖端粒维护机制。",
+      },
     },
     生态位: {
-      levels: ["像一种生物在自然里的生活位置和工作。", "生态位描述生物如何利用资源、生活在什么环境、和其他生物如何相互作用。", "生态位包含资源维度、空间维度和相互作用维度，可用于解释竞争、共存、适应辐射和群落结构。"],
+      color: "var(--cherry-sage)",
+      analogy: "不只是住址，更像一份生活档案：住在哪里、吃什么、什么时候活动、和谁竞争。",
+      levels: [
+        { title: "小学版", body: "生态位像一种生物在自然里的生活位置和工作。" },
+        { title: "高中版", body: "生态位描述生物如何利用资源、生活在什么环境、和其他生物如何相互作用。" },
+        { title: "研究生版", body: "生态位包含资源维度、空间维度和相互作用维度，可用于解释竞争、共存、适应辐射和群落结构。" },
+      ],
       terms: ["资源利用", "竞争", "共存", "群落"],
+      mechanism: ["环境提供资源和限制", "物种选择可利用的资源范围", "相似物种发生竞争", "资源分化可帮助物种共存"],
+      compare: "栖息地偏向“住在哪里”；生态位还包含“怎么生活”。",
       pitfall: "生态位不等于栖息地。栖息地偏向“住在哪里”，生态位还包含“吃什么、怎样生存、和谁互动”。",
-      check: "两种鸟住在同一片森林，但取食高度和食物不同，它们的生态位可以不同。",
+      quiz: {
+        question: "两种鸟生活在同一片森林，但取食高度不同，这说明什么？",
+        options: ["生态位可以不同", "一定是同一物种", "不存在竞争"],
+        answer: "生态位可以不同",
+        explain: "同一栖息地内也可能通过资源或空间分化形成不同生态位。",
+      },
     },
     凋亡: {
-      levels: ["像细胞按下自我清理按钮，把自己有序拆开。", "凋亡是一种程序性细胞死亡，细胞会收缩、DNA 断裂，并被免疫细胞清除，通常不引发明显炎症。", "凋亡通过内源性线粒体通路或外源性死亡受体通路激活 caspase 级联反应，在发育、免疫和肿瘤抑制中很关键。"],
+      color: "var(--cherry-peach)",
+      analogy: "像细胞按下自我清理按钮，把自己有序拆开，再交给身体清理。",
+      levels: [
+        { title: "小学版", body: "凋亡是细胞有计划地结束自己，避免影响周围细胞。" },
+        { title: "高中版", body: "凋亡是一种程序性细胞死亡，细胞会收缩、DNA 断裂，并被免疫细胞清除，通常不引发明显炎症。" },
+        { title: "研究生版", body: "凋亡通过内源性线粒体通路或外源性死亡受体通路激活 caspase 级联反应，在发育、免疫和肿瘤抑制中很关键。" },
+      ],
       terms: ["程序性细胞死亡", "caspase", "线粒体通路", "死亡受体"],
+      mechanism: ["细胞收到内部或外部死亡信号", "caspase 级联被激活", "细胞结构被有序拆解", "碎片被吞噬清除"],
+      compare: "凋亡更有序、炎症较少；坏死常伴随细胞破裂和炎症。",
       pitfall: "凋亡不是细胞坏死。坏死常伴随细胞破裂和炎症，凋亡更有序。",
-      check: "胚胎手指分开、免疫细胞清除异常细胞，都和凋亡有关。",
+      quiz: {
+        question: "凋亡和坏死最核心的区别之一是什么？",
+        options: ["凋亡更有序", "凋亡一定会感染", "坏死没有细胞死亡"],
+        answer: "凋亡更有序",
+        explain: "凋亡是程序性死亡，坏死常伴随细胞破裂和炎症反应。",
+      },
     },
   };
   const active = explanations[concept];
+  const selectedLevel = active.levels[levelIndex];
+  const quizAnswered = quizChoice !== null;
+
+  function chooseConcept(name: string) {
+    setConcept(name);
+    setQuizChoice(null);
+  }
 
   return (
-    <section style={{ display: "grid", gap: "1rem" }}>
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+    <section id="concept-explainer-tool" style={{ display: "grid", gap: "1rem" }}>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
         {Object.keys(explanations).map((name) => (
-          <button key={name} onClick={() => setConcept(name)} style={{ border: concept === name ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", background: concept === name ? "var(--cherry-sage-light)" : "var(--card)", borderRadius: 999, padding: "0.45rem 0.9rem", color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>
+          <button key={name} onClick={() => chooseConcept(name)} style={{ border: concept === name ? `1.5px solid ${active.color}` : "1.5px solid var(--border)", background: concept === name ? "var(--cherry-yellow-light)" : "var(--card)", borderRadius: 999, padding: "0.45rem 0.9rem", color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>
             {name}
           </button>
         ))}
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
-        {["小学版", "高中版", "研究生版"].map((level, index) => (
-          <ContentCard key={level} title={level}>
-            {active.levels[index]}
-          </ContentCard>
-        ))}
+
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.25fr) minmax(280px, 0.78fr)", gap: "1rem", alignItems: "stretch" }}>
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", position: "relative", overflow: "hidden" }}>
+          <svg style={{ position: "absolute", right: -20, top: -14, opacity: 0.16 }} width="180" height="150" viewBox="0 0 180 150" fill="none">
+            <path d="M28 128 Q44 54 146 22 Q150 96 28 128Z" fill={active.color} />
+            <path d="M48 112 Q86 76 134 32" stroke="var(--cherry-warm-brown)" strokeWidth="3" strokeLinecap="round" opacity="0.28" />
+          </svg>
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: "0.9rem" }}>
+              {active.levels.map((level, index) => (
+                <button key={level.title} onClick={() => setLevelIndex(index)} style={{ background: levelIndex === index ? active.color : "var(--muted)", color: levelIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
+                  {level.title}
+                </button>
+              ))}
+            </div>
+            <h2 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "1.35rem", marginBottom: "0.65rem" }}>{concept}</h2>
+            <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.85rem", color: "var(--cherry-warm-mid)", lineHeight: 1.7, marginBottom: "0.9rem" }}>
+              <strong style={{ color: "var(--cherry-warm-brown)" }}>类比：</strong>{active.analogy}
+            </div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.45rem" }}>{selectedLevel.title}</div>
+            <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.78, fontSize: "0.95rem", marginBottom: "1rem" }}>{selectedLevel.body}</p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {active.terms.map((term) => (
+                <span key={term} style={{ background: "rgba(250,247,241,0.8)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.25rem 0.62rem", color: "var(--cherry-warm-brown)", fontWeight: 800, fontSize: "0.76rem" }}>
+                  {term}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>即时小测</div>
+          <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.9rem", marginBottom: "0.8rem" }}>{active.quiz.question}</div>
+          <div style={{ display: "grid", gap: 7 }}>
+            {active.quiz.options.map((option) => {
+              const correct = option === active.quiz.answer;
+              const selected = quizChoice === option;
+              return (
+                <button key={option} onClick={() => setQuizChoice(option)} style={{ textAlign: "left", background: selected ? (correct ? "var(--cherry-sage-light)" : "var(--cherry-peach-light)") : "var(--muted)", border: selected ? `1.5px solid ${correct ? "var(--cherry-forest)" : "var(--cherry-red)"}` : "1.5px solid var(--border)", borderRadius: 14, padding: "0.58rem 0.72rem", color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>
+                  {option}
+                </button>
+              );
+            })}
+          </div>
+          {quizAnswered ? (
+            <div style={{ marginTop: "0.85rem", background: quizChoice === active.quiz.answer ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
+              <strong style={{ color: "var(--cherry-warm-brown)" }}>{quizChoice === active.quiz.answer ? "答对了：" : "再看一遍："}</strong>{active.quiz.explain}
+            </div>
+          ) : null}
+        </div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1rem" }}>
-        <ContentCard title="关键术语">
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {active.terms.map((term) => (
-              <span key={term} style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.25rem 0.62rem", color: "var(--cherry-warm-brown)", fontWeight: 800, fontSize: "0.76rem" }}>
-                {term}
-              </span>
+
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(240px, 0.72fr)", gap: "1rem" }}>
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.9rem" }}>机制步骤</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.75rem" }}>
+            {active.mechanism.map((item, index) => (
+              <div key={item} style={{ background: index === levelIndex ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === levelIndex ? `1.5px solid ${active.color}` : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.78rem", minHeight: 112 }}>
+                <div style={{ width: 26, height: 26, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 900, marginBottom: "0.55rem" }}>{index + 1}</div>
+                <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.58, fontSize: "0.84rem", fontWeight: 800 }}>{item}</div>
+              </div>
             ))}
           </div>
-        </ContentCard>
-        <ContentCard title="常见误区">
-          {active.pitfall}
-        </ContentCard>
-        <ContentCard title="检查题">
-          {active.check}
-        </ContentCard>
+        </div>
+        <div style={{ display: "grid", gap: "1rem" }}>
+          <ContentCard title="辨析">
+            {active.compare}
+          </ContentCard>
+          <ContentCard title="常见误区">
+            {active.pitfall}
+          </ContentCard>
+        </div>
       </div>
+
+      <style>
+        {`
+          @media (max-width: 860px) {
+            #concept-explainer-tool > div:nth-of-type(2),
+            #concept-explainer-tool > div:nth-of-type(3) {
+              grid-template-columns: 1fr !important;
+            }
+          }
+        `}
+      </style>
     </section>
   );
 }
