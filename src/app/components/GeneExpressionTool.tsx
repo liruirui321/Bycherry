@@ -443,11 +443,6 @@ export function GeneExpressionTool() {
 
     return { tfBound, polBound, ribBound, transcriptionOn, mrna, translationOn, protein };
   }, [molecules, zones.polymerase, zones.promoter, zones.ribosome]);
-  const taskStatuses = [
-    { label: "把 TF 拖到启动子，观察启动子变亮。", done: model.tfBound > 0 },
-    { label: "把 RNA 聚合酶拖到基因区，观察 mRNA 出现。", done: model.transcriptionOn },
-    { label: "把核糖体拖到 mRNA 附近，观察蛋白质产物增加。", done: model.translationOn },
-  ];
   const transcriptionProgress = model.transcriptionOn ? clamp01(cycleProgress / 0.78) : 0;
   const transcribedProgress = model.transcriptionOn ? maxVisibleTranscribedProgress(cycleProgress, model.polBound) : 0;
   const instantMrnaCount = model.transcriptionOn ? Math.min(model.mrna, Math.floor(transcribedProgress * (model.mrna + 0.75))) : 0;
@@ -461,6 +456,11 @@ export function GeneExpressionTool() {
   const instantProteinCount = model.translationOn ? Math.min(model.protein, Math.floor(translatedSignal * 4)) : 0;
   const visibleProteinCount = model.translationOn ? Math.min(model.protein, Math.max(displayedProteinCount, instantProteinCount)) : 0;
   const translationRate = activeRibosomeCount > 0 ? Math.min(100, 35 + activeRibosomeCount * 20) : 0;
+  const taskStatuses = [
+    { label: "把 TF 拖到启动子，观察启动子变亮。", done: model.tfBound > 0 },
+    { label: "把 RNA 聚合酶拖到基因区，观察 mRNA 出现。", done: visibleMrnaCount > 0 },
+    { label: "把核糖体拖到 mRNA 附近，观察蛋白质产物增加。", done: visibleProteinCount > 0 },
+  ];
   const integratedMolecules = molecules.filter((molecule) => molecule.type !== "tf" && inBox(molecule, zones[moleculeZone(molecule.type)]));
 
   useEffect(() => {
@@ -848,9 +848,15 @@ export function GeneExpressionTool() {
             <div style={{ fontSize: "0.88rem" }}>
               {!model.transcriptionOn
                 ? "转录尚未启动：启动子需要 TF，基因区域需要 RNA 聚合酶。"
-                : !model.translationOn
-                  ? "mRNA 正从 RNA 聚合酶后方延伸出来：把核糖体放到 mRNA 附近可以开始翻译。"
-                  : "转录和翻译正在连续发生：mRNA 边延伸，核糖体边读取密码子，蛋白质产物开始累积。"}
+                : visibleMrnaCount === 0
+                  ? "RNA 聚合酶正在沿基因区移动，新生 mRNA 正从后方延伸出来。"
+                  : !model.translationOn
+                    ? "mRNA 已经开始积累：把核糖体放到 mRNA 附近可以开始翻译。"
+                    : activeRibosomeCount === 0
+                      ? "核糖体已进入入口，正在等待可读的 mRNA 片段。"
+                      : visibleProteinCount === 0
+                        ? "核糖体正在读取密码子，tRNA 正在配对，蛋白质产物即将出现。"
+                        : "转录和翻译正在连续发生：mRNA 边延伸，核糖体边读取密码子，蛋白质产物持续累积。"}
             </div>
           </div>
         </aside>
