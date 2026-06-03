@@ -101,6 +101,7 @@ export function Nav() {
       >
         {/* Logo */}
         <a
+          className="nav-logo"
           href="/#top"
           onClick={(event) => {
             if (!shouldUseClientNavigation(event)) return;
@@ -121,6 +122,7 @@ export function Nav() {
             const active = isActiveLink(l.href);
             return (
               <a
+                className="nav-link"
                 key={l.label}
                 href={l.href}
                 aria-current={active ? "page" : undefined}
@@ -130,8 +132,6 @@ export function Nav() {
                   navigate(l.href);
                 }}
                 style={desktopLinkStyle(active)}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--cherry-red)")}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = active ? "var(--cherry-red)" : "var(--cherry-warm-mid)")}
               >
                 {l.label}
               </a>
@@ -158,6 +158,7 @@ export function Nav() {
             const active = isActiveLink(l.href);
             return (
               <a
+                className="mobile-nav-link"
                 key={l.label}
                 href={l.href}
                 aria-current={active ? "page" : undefined}
@@ -175,6 +176,36 @@ export function Nav() {
           })}
         </div>
       )}
+
+      <style>
+        {`
+          nav .nav-logo:focus-visible,
+          nav .nav-link:focus-visible,
+          nav .mobile-nav-link:focus-visible,
+          nav button:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          nav .nav-link:hover,
+          nav .nav-link:focus-visible {
+            color: var(--cherry-red) !important;
+          }
+
+          nav .mobile-nav-link:hover,
+          nav .mobile-nav-link:focus-visible {
+            color: var(--cherry-red) !important;
+            background: rgba(232,144,124,0.14) !important;
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            nav .nav-link,
+            nav .mobile-nav-link {
+              transition: none !important;
+            }
+          }
+        `}
+      </style>
     </nav>
   );
 }

@@ -122,6 +122,7 @@ export function Contact() {
             />
 
             <button
+              className="contact-submit"
               type="submit"
               disabled={!name.trim() || !message.trim()}
               style={{
@@ -140,8 +141,6 @@ export function Contact() {
                 transition: "background 0.2s, transform 0.15s",
                 boxShadow: name.trim() && message.trim() ? "3px 4px 0px rgba(58,92,62,0.22)" : "none",
               }}
-              onMouseEnter={(e) => { if (name.trim() && message.trim()) (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = ""; }}
             >
               <IconSend size={18} color={name.trim() && message.trim() ? "#FAF7F1" : "var(--cherry-warm-mid)"} />
               发送小纸条
@@ -177,6 +176,7 @@ export function Contact() {
         <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", marginTop: "2.5rem", flexWrap: "wrap" }}>
           {socials.map((s) => (
             <a
+              className="contact-social-link"
               key={s.label}
               href={s.href}
               target={s.href.startsWith("https://") ? "_blank" : undefined}
@@ -192,22 +192,44 @@ export function Contact() {
                 border: "1.5px solid var(--border)",
                 transition: "color 0.2s, border-color 0.2s, background 0.2s",
               }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.color = "var(--cherry-forest)";
-                (e.currentTarget as HTMLElement).style.borderColor = "var(--cherry-sage)";
-                (e.currentTarget as HTMLElement).style.background = "var(--cherry-sage-light)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.color = "var(--cherry-warm-mid)";
-                (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
-                (e.currentTarget as HTMLElement).style.background = "var(--card)";
-              }}
             >
               {s.icon} {s.label}
             </a>
           ))}
         </div>
       </div>
+
+      <style>
+        {`
+          #contact input:focus-visible,
+          #contact textarea:focus-visible,
+          #contact .contact-submit:focus-visible,
+          #contact .contact-social-link:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          #contact .contact-submit:not(:disabled):hover,
+          #contact .contact-submit:not(:disabled):focus-visible {
+            transform: translateY(-2px);
+          }
+
+          #contact .contact-social-link:hover,
+          #contact .contact-social-link:focus-visible {
+            color: var(--cherry-forest) !important;
+            border-color: var(--cherry-sage) !important;
+            background: var(--cherry-sage-light) !important;
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            #contact .contact-submit,
+            #contact .contact-social-link {
+              transition: none !important;
+              transform: none !important;
+            }
+          }
+        `}
+      </style>
     </section>
   );
 }
