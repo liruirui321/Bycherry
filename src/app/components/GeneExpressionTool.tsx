@@ -322,9 +322,13 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
     ? Math.max(transcriptionProgress, ...polymerases.map((polymerase) => polymerase.progress * polymerase.opacity))
     : retainedMrnaCount > 0 ? 1 : 0;
   const ribosomes = buildRibosomeTracks(progress, model.ribBound, ribosomeCanRead, maxTranscribedProgress, coupledMrnaPath);
-  const leadRibosome = ribosomes.find((ribosome) => ribosome.opacity > 0);
+  const renderedRibosomes = ribosomes.map((ribosome, index) => ({
+    ...ribosome,
+    renderPoint: { x: ribosome.point.x, y: ribosome.point.y + index * 8 },
+  }));
+  const leadRibosome = renderedRibosomes.find((ribosome) => ribosome.opacity > 0);
   const leadRibosomeProgress = leadRibosome?.progress ?? 0;
-  const leadRibosomePoint = leadRibosome?.point ?? null;
+  const leadRibosomePoint = leadRibosome?.renderPoint ?? null;
   const activeCodonIndex = ribosomeCanRead && leadRibosomeProgress > 0 ? Math.min(codons.length - 1, Math.floor(leadRibosomeProgress * codons.length)) : -1;
   const aminoCount = ribosomeCanRead ? Math.min(codons.length, Math.max(0, Math.floor(leadRibosomeProgress * (codons.length + 0.75)))) : 0;
   const proteinChainStart = { x: 392, y: 570 };
@@ -333,10 +337,10 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
   const livePeptideStart = leadRibosomeExit ? { x: leadRibosomeExit.x + 20, y: leadRibosomeExit.y + 18 } : null;
   const translationLayer = canTranslate ? (
     <>
-      {ribosomes.map((ribosome, index) => {
+      {renderedRibosomes.map((ribosome, index) => {
         const codonIndex = Math.min(codons.length - 1, Math.floor(ribosome.progress * codons.length));
         return (
-          <g key={`moving-ribosome-${index}`} transform={`translate(${ribosome.point.x} ${ribosome.point.y + index * 8})`} opacity={ribosome.opacity}>
+          <g key={`moving-ribosome-${index}`} transform={`translate(${ribosome.renderPoint.x} ${ribosome.renderPoint.y})`} opacity={ribosome.opacity}>
             <ellipse rx={48} ry={30} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={3} />
             <circle cx={-22} cy={-7} r={9} fill="rgba(250,247,241,0.58)" />
             <circle cx={18} cy={9} r={7} fill="rgba(250,247,241,0.58)" />
