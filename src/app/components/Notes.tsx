@@ -129,6 +129,7 @@ export function Notes() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem" }}>
           {notes.map((note) => (
             <a
+              className="note-card"
               key={note.id}
               href={note.href}
               onClick={(event) => navigateTo(note.href, event)}
@@ -144,8 +145,6 @@ export function Notes() {
                 display: "block",
                 textDecoration: "none",
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(-3px)"; (e.currentTarget as HTMLElement).style.boxShadow = "4px 8px 0px rgba(94,68,42,0.1)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.boxShadow = ""; }}
             >
               {/* Left color bar */}
               <div style={{ position: "absolute", top: 16, left: 0, width: 4, height: "calc(100% - 32px)", background: note.tagColor, borderRadius: "0 2px 2px 0", opacity: 0.65 }} />
@@ -178,6 +177,28 @@ export function Notes() {
           ))}
         </div>
       </div>
+
+      <style>
+        {`
+          #notes .note-card:hover,
+          #notes .note-card:focus-visible {
+            transform: translateY(-3px);
+            box-shadow: 4px 8px 0px rgba(94,68,42,0.1);
+          }
+
+          #notes .note-card:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            #notes .note-card {
+              transition: none !important;
+              transform: none !important;
+            }
+          }
+        `}
+      </style>
     </section>
   );
 }

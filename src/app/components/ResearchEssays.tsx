@@ -95,13 +95,14 @@ function EssayCard({ essay }: {
 }) {
   return (
     <a
+      className="research-essay-card"
       href={essay.href}
       style={{
         background: "var(--card)",
         border: "1.5px solid var(--border)",
         borderRadius: 18,
         padding: "1.5rem",
-        transition: "box-shadow 0.2s",
+        transition: "transform 0.2s, box-shadow 0.2s",
         cursor: "pointer",
         position: "relative",
         overflow: "hidden",
@@ -109,8 +110,6 @@ function EssayCard({ essay }: {
         display: "block",
         textDecoration: "none",
       }}
-      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "4px 8px 0px rgba(94,68,42,0.1)"; }}
-      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = ""; }}
       onClick={(event) => navigateTo(essay.href, event)}
     >
       {/* Forest accent bar */}
@@ -182,6 +181,7 @@ function EssayCard({ essay }: {
 
       {/* Body excerpt — always shown partially, expanded on click */}
       <div
+        className="research-essay-excerpt"
         style={{
           marginTop: "0.9rem",
           overflow: "hidden",
@@ -218,6 +218,7 @@ function EssayCard({ essay }: {
             约 {essay.readMin} 分钟
           </span>
           <div
+            className="research-essay-arrow"
             style={{
               display: "flex",
               alignItems: "center",
@@ -290,6 +291,35 @@ export function ResearchEssays() {
           />
         ))}
       </div>
+
+      <style>
+        {`
+          #research .research-essay-card:hover,
+          #research .research-essay-card:focus-visible {
+            transform: translateY(-3px);
+            box-shadow: 4px 8px 0px rgba(94,68,42,0.1);
+          }
+
+          #research .research-essay-card:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          #research .research-essay-card:hover .research-essay-arrow,
+          #research .research-essay-card:focus-visible .research-essay-arrow {
+            transform: translateX(3px);
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            #research .research-essay-card,
+            #research .research-essay-excerpt,
+            #research .research-essay-arrow {
+              transition: none !important;
+              transform: none !important;
+            }
+          }
+        `}
+      </style>
 
       {/* Bottom note */}
       <div
