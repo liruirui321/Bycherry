@@ -11,11 +11,17 @@ export const works = [
     desc: "把 DNA -> mRNA -> 蛋白质的过程做成一页可拖动的小动画，适合高中生预习和课堂演示。",
     outcome: "MVP：3 个交互步骤 + 1 张过程图 + 5 道即时小测",
     status: "可落地小工具",
-    href: "#/works/gene-expression",
+    href: "/works/gene-expression",
     tags: ["生物", "可视化", "交互"],
     audience: "高中生、生物教师、科学课程开发者",
     deliverables: ["可拖动互动流程图", "DNA / mRNA / 蛋白质动态展示", "5 道即时小测", "课堂演示版本"],
     roadmap: ["加入自定义 DNA 序列输入", "增加密码子表查询", "加入突变前后对比", "输出教师讲解稿"],
+    why: "很多学生能背出“转录”和“翻译”，但没有真正看见信息如何一步步从核酸序列变成氨基酸链。这个小工具把抽象流程压缩成一页可操作的动态模型。",
+    contentBlocks: [
+      { title: "核心学习问题", body: "DNA 为什么不直接变成蛋白质？mRNA 在中间承担什么角色？密码子如何对应氨基酸？" },
+      { title: "第一版交互", body: "用固定序列 ATG GAA TTT CCG 演示转录和翻译，学生拖动步骤即可看到 DNA、mRNA、核糖体和蛋白质链的变化。" },
+      { title: "课堂使用", body: "适合放在新课导入或课后复习，教师可以边拖动边讲解，也可以让学生完成右侧即时小测。" },
+    ],
     color: "var(--cherry-blue-light)", border: "var(--cherry-blue)", rotate: "-1.5deg",
   },
   {
@@ -25,11 +31,17 @@ export const works = [
     desc: "用插画、类比和微型测验重做 8 讲细胞生物学入门内容，降低术语门槛但保留科学准确性。",
     outcome: "MVP：8 讲课程卡 + 每讲 1 张插画 + 1 组自测题",
     status: "课程原型",
-    href: "#/works/cell-biology-course",
+    href: "/works/cell-biology-course",
     tags: ["课程设计", "细胞生物", "自学"],
     audience: "高中生、大学新生、想补生物基础的学习者",
     deliverables: ["8 讲课程大纲", "插画式知识卡", "术语小词典", "每讲 5 题自测"],
     roadmap: ["完成第一讲细胞结构", "制作细胞器关系图", "加入学习路径推荐", "整理为可下载讲义"],
+    why: "细胞生物学入门常常被术语淹没：细胞器、膜系统、能量代谢、信号调控都很重要，但初学者需要先建立“细胞是一个运转系统”的整体图景。",
+    contentBlocks: [
+      { title: "8 讲草案", body: "细胞是什么、细胞膜、细胞核、线粒体、内膜系统、细胞骨架、细胞分裂、细胞如何协作。" },
+      { title: "视觉形式", body: "每讲用一张可爱的工作台式插画承载核心模型，再配一张术语卡和一组小测题。" },
+      { title: "学习路径", body: "不追求一次讲完全部细节，而是先让学习者能解释细胞内部各部分如何分工协作。" },
+    ],
     color: "var(--cherry-yellow-light)", border: "var(--cherry-yellow)", rotate: "1.2deg",
   },
   {
@@ -39,11 +51,17 @@ export const works = [
     desc: "为生命科学研究者整理一套可复用 prompt，用于文献拆解、实验设计、图表解读和论文写作检查。",
     outcome: "MVP：20 条 prompt + 使用场景 + 输入输出示例",
     status: "工具包",
-    href: "#/works/research-prompt-kit",
+    href: "/works/research-prompt-kit",
     tags: ["AI", "Prompt", "科研"],
     audience: "生命科学研究生、科研助理、文献阅读初学者",
     deliverables: ["20 条可复制 prompt", "文献阅读模板", "实验设计检查清单", "论文写作反馈模板"],
     roadmap: ["按任务分类 prompt", "加入反例和坏案例", "做成网页检索版本", "补充中英文双语模板"],
+    why: "科研场景里真正有用的 prompt 不是万能句子，而是把任务边界、材料输入、判断标准和输出格式说清楚的工作模板。",
+    contentBlocks: [
+      { title: "Prompt 分类", body: "文献精读、方法复现、实验设计、结果解释、图表检查、论文修改、审稿意见回应。" },
+      { title: "示例结构", body: "每条 prompt 都包含使用场景、输入材料、模型任务、输出格式、质量检查点和常见误用。" },
+      { title: "质量原则", body: "不让 AI 替代科学判断，而是让它帮助整理证据、暴露漏洞、生成可检查的初稿。" },
+    ],
     color: "var(--cherry-peach-light)", border: "var(--cherry-peach)", rotate: "-0.8deg",
   },
   {
@@ -53,11 +71,17 @@ export const works = [
     desc: "用绘本式插画讲述植物从水生到陆生、从孢子到种子的演化线索，适合初中生和科普阅读。",
     outcome: "MVP：6 个故事章节 + 时间轴 + 术语小词典",
     status: "科普连载",
-    href: "#/works/plant-evolution-stories",
+    href: "/works/plant-evolution-stories",
     tags: ["植物学", "科普", "插画"],
     audience: "初中生、科普读者、自然教育课程参与者",
     deliverables: ["6 个植物演化故事", "一条手绘时间轴", "术语小词典", "课堂讨论问题"],
     roadmap: ["完成苔藓章节", "制作时间轴插画", "加入演化证据卡", "整理成科普长图"],
+    why: "植物演化不应该只是一串年代和类群名。它可以被讲成一组“植物如何解决生存难题”的故事：保水、支撑、繁殖、运输和适应环境。",
+    contentBlocks: [
+      { title: "章节设计", body: "从藻类到苔藓、蕨类、裸子植物、被子植物，再回到今天身边可见的植物。" },
+      { title: "故事钩子", body: "每章用一个问题开场：没有根怎么活？没有种子怎么繁殖？为什么花改变了植物世界？" },
+      { title: "配套素材", body: "时间轴、植物小档案、术语解释、观察任务和适合自然教育课堂的讨论问题。" },
+    ],
     color: "var(--cherry-sage-light)", border: "var(--cherry-sage)", rotate: "1.8deg",
   },
   {
@@ -67,11 +91,17 @@ export const works = [
     desc: "输入一个生物学概念，生成小学、高中、研究生三个版本的解释，并附带类比、误区和检查题。",
     outcome: "MVP：概念输入框 + 三档解释 + 一键生成小测",
     status: "AI 小工具",
-    href: "#/works/concept-explainer",
+    href: "/works/concept-explainer",
     tags: ["AI", "教育", "工具"],
     audience: "教师、学习者、课程内容创作者",
     deliverables: ["概念输入框", "三档解释输出", "常见误区提示", "一键生成自测题"],
     roadmap: ["加入解释质量评分", "支持知识点标签", "接入课程标准维度", "导出为课堂讲义"],
+    why: "同一个科学概念面对不同学习者时，需要不同粒度的解释。好的解释不只是变短或变简单，而是改变类比、证据和术语密度。",
+    contentBlocks: [
+      { title: "输入与输出", body: "输入一个概念，例如“转录”“端粒”“生态位”，输出小学、高中、研究生三个版本。" },
+      { title: "解释维度", body: "每个版本包含一句话定义、生活类比、关键术语、常见误区和检查理解的小题。" },
+      { title: "使用边界", body: "生成内容只做教学草稿，最终仍需要教师检查准确性、学段适配和表达风险。" },
+    ],
     color: "#EDE9F5", border: "#B5AEDD", rotate: "-1.2deg",
   },
   {
@@ -81,11 +111,17 @@ export const works = [
     desc: "一个可以亲手模拟“识别、剪切、修复”的基因编辑互动页面，把 CRISPR 从概念变成可操作体验。",
     outcome: "MVP：剪切模拟器 + 三种修复结果 + 风险提示卡",
     status: "互动解释器",
-    href: "#/works/crispr-interactive",
+    href: "/works/crispr-interactive",
     tags: ["基因编辑", "互动", "CRISPR"],
     audience: "高中生、科普读者、生物竞赛入门学习者",
     deliverables: ["识别与剪切模拟器", "三种修复结果卡", "风险提示卡", "术语解释卡"],
     roadmap: ["加入 guide RNA 配对动画", "展示脱靶风险", "加入案例材料", "制作教师演示模式"],
+    why: "CRISPR 经常被讲成“基因剪刀”，但这个比喻容易让人忽略识别、定位、剪切、修复和风险。互动讲解要把每一步拆开。",
+    contentBlocks: [
+      { title: "交互流程", body: "选择 guide RNA，匹配目标序列，触发剪切，再展示非同源末端连接、同源重组和编辑失败三种结果。" },
+      { title: "风险提示", body: "用卡片解释脱靶、嵌合、修复不确定性和伦理边界，避免把基因编辑讲成无风险魔法。" },
+      { title: "课堂活动", body: "学生可以比较不同 guide RNA 的匹配效果，并讨论“能编辑”不等于“应该编辑”。" },
+    ],
     color: "var(--cherry-peach-light)", border: "var(--cherry-red)", rotate: "0.5deg",
   },
 ];
@@ -94,17 +130,21 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
   const [hovered, setHovered] = useState(false);
   const href = "href" in work ? work.href : undefined;
 
+  function openDetail() {
+    if (!href) return;
+    window.history.pushState(null, "", href);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }
+
   return (
     <div
       role={href ? "link" : undefined}
       tabIndex={href ? 0 : undefined}
-      onClick={() => {
-        if (href) window.location.hash = href.replace("#", "");
-      }}
+      onClick={openDetail}
       onKeyDown={(event) => {
         if (href && (event.key === "Enter" || event.key === " ")) {
           event.preventDefault();
-          window.location.hash = href.replace("#", "");
+          openDetail();
         }
       }}
       onMouseEnter={() => setHovered(true)}
@@ -162,7 +202,11 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
       {href ? (
         <a
           href={href}
-          onClick={(event) => event.stopPropagation()}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            openDetail();
+          }}
           style={{
             display: "inline-flex",
             alignItems: "center",

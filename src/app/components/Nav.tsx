@@ -6,12 +6,28 @@ export function Nav() {
 
   const links = [
     { label: "作品", href: "#works" },
-    { label: "小工具", href: "#/works/gene-expression" },
+    { label: "小工具", href: "/works/gene-expression" },
     { label: "科研", href: "#research" },
     { label: "笔记", href: "#notes" },
     { label: "关于", href: "#about" },
     { label: "联系", href: "#contact" },
   ];
+
+  function navigate(href: string) {
+    if (href.startsWith("/")) {
+      window.history.pushState(null, "", href);
+      window.dispatchEvent(new PopStateEvent("popstate"));
+      return;
+    }
+
+    if (window.location.pathname !== "/") {
+      window.history.pushState(null, "", `/${href}`);
+      window.dispatchEvent(new PopStateEvent("popstate"));
+      return;
+    }
+
+    window.location.hash = href;
+  }
 
   return (
     <nav
@@ -37,7 +53,14 @@ export function Nav() {
         }}
       >
         {/* Logo */}
-        <a href="#top" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
+        <a
+          href="/#top"
+          onClick={(event) => {
+            event.preventDefault();
+            navigate("#top");
+          }}
+          style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}
+        >
           <IconCherry size={28} />
           <span style={{ fontFamily: "'Caveat', cursive", fontSize: "1.25rem", fontWeight: 700, color: "var(--cherry-warm-brown)", letterSpacing: 0.3 }}>
             By Cherry
@@ -50,6 +73,10 @@ export function Nav() {
             <a
               key={l.label}
               href={l.href}
+              onClick={(event) => {
+                event.preventDefault();
+                navigate(l.href);
+              }}
               style={{ textDecoration: "none", color: "var(--cherry-warm-mid)", fontSize: "0.92rem", fontWeight: 600, transition: "color 0.2s" }}
               onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--cherry-red)")}
               onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--cherry-warm-mid)")}
@@ -76,7 +103,11 @@ export function Nav() {
             <a
               key={l.label}
               href={l.href}
-              onClick={() => setOpen(false)}
+              onClick={(event) => {
+                event.preventDefault();
+                setOpen(false);
+                navigate(l.href);
+              }}
               style={{ textDecoration: "none", color: "var(--cherry-warm-brown)", fontSize: "1rem", fontWeight: 600 }}
             >
               {l.label}

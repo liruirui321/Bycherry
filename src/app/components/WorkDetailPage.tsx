@@ -4,6 +4,11 @@ import { works } from "./Works";
 
 type Work = (typeof works)[number];
 
+function navigateHome(hash = "") {
+  window.history.pushState(null, "", `/${hash}`);
+  window.dispatchEvent(new PopStateEvent("popstate"));
+}
+
 function DetailList({ title, items }: { title: string; items: string[] }) {
   return (
     <div
@@ -61,7 +66,11 @@ function WorkHero({ work }: { work: Work }) {
     >
       <div style={{ maxWidth: 1060, margin: "0 auto" }}>
         <a
-          href="#works"
+          href="/#works"
+          onClick={(event) => {
+            event.preventDefault();
+            navigateHome("#works");
+          }}
           style={{
             display: "inline-flex",
             alignItems: "center",
@@ -186,7 +195,14 @@ export function WorkDetailPage({ slug }: { slug: string }) {
   if (!work) {
     return (
       <section style={{ padding: "5rem 1.5rem", maxWidth: 720, margin: "0 auto", fontFamily: "'Nunito', sans-serif" }}>
-        <a href="#works" style={{ color: "var(--cherry-forest)", fontWeight: 900, textDecoration: "none" }}>
+        <a
+          href="/#works"
+          onClick={(event) => {
+            event.preventDefault();
+            navigateHome("#works");
+          }}
+          style={{ color: "var(--cherry-forest)", fontWeight: 900, textDecoration: "none" }}
+        >
           ← 回到作品集
         </a>
         <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "2rem", marginTop: "1.5rem" }}>没有找到这个小作品</h1>
@@ -198,40 +214,78 @@ export function WorkDetailPage({ slug }: { slug: string }) {
     <main>
       <WorkHero work={work} />
 
-      {work.slug === "gene-expression" ? (
-        <GeneExpressionTool />
-      ) : (
-        <section
+      <section
+        style={{
+          padding: "0 1.5rem 5rem",
+          maxWidth: 1060,
+          margin: "0 auto",
+          fontFamily: "'Nunito', sans-serif",
+        }}
+      >
+        <div
           style={{
-            padding: "0 1.5rem 5rem",
-            maxWidth: 1060,
-            margin: "0 auto",
-            fontFamily: "'Nunito', sans-serif",
+            background: "var(--cherry-yellow-light)",
+            border: "1.5px solid var(--cherry-yellow)",
+            borderRadius: 18,
+            padding: "1.25rem",
+            color: "var(--cherry-warm-mid)",
+            lineHeight: 1.8,
+            marginBottom: "1.2rem",
           }}
         >
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.2rem" }}>
-            <DetailList title="第一版交付物" items={work.deliverables} />
-            <DetailList title="下一步路线图" items={work.roadmap} />
+          <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>
+            <IconBook size={18} />
+            为什么做
           </div>
+          {work.why}
+        </div>
 
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem", marginBottom: "1.2rem" }}>
+          {work.contentBlocks.map((block) => (
+            <div
+              key={block.title}
+              style={{
+                background: "var(--card)",
+                border: "1.5px solid var(--border)",
+                borderRadius: 18,
+                padding: "1.15rem",
+                boxShadow: "3px 5px 0px rgba(94,68,42,0.06)",
+              }}
+            >
+              <h3 style={{ color: "var(--cherry-warm-brown)", fontSize: "0.98rem", fontWeight: 900, marginBottom: "0.5rem" }}>
+                {block.title}
+              </h3>
+              <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.75, fontSize: "0.9rem" }}>
+                {block.body}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.2rem" }}>
+          <DetailList title="第一版交付物" items={work.deliverables} />
+          <DetailList title="下一步路线图" items={work.roadmap} />
+        </div>
+
+        {work.slug !== "gene-expression" ? (
           <div
             style={{
               marginTop: "1.2rem",
-              background: "var(--cherry-yellow-light)",
-              border: "1.5px solid var(--cherry-yellow)",
+              background: "var(--cherry-sage-light)",
+              border: "1.5px solid var(--cherry-sage)",
               borderRadius: 18,
               padding: "1.25rem",
-              color: "var(--cherry-warm-mid)",
+              color: "var(--cherry-warm-brown)",
               lineHeight: 1.75,
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>
-              <IconBook size={18} />
-              页面状态
-            </div>
-            这是一个作品详情页原型。后续可以继续往这里加真实 Demo、课程材料、插画草稿、下载链接或开发日志。
+            这页现在是作品详情稿，后续可以继续加真实 Demo、课程材料、插画草稿、下载链接或开发日志。
             <a
-              href="#works"
+              href="/#works"
+              onClick={(event) => {
+                event.preventDefault();
+                navigateHome("#works");
+              }}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -245,8 +299,10 @@ export function WorkDetailPage({ slug }: { slug: string }) {
               回作品集 <IconArrowRight size={14} color="var(--cherry-forest)" />
             </a>
           </div>
-        </section>
-      )}
+        ) : null}
+      </section>
+
+      {work.slug === "gene-expression" ? <GeneExpressionTool /> : null}
     </main>
   );
 }

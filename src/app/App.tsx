@@ -10,19 +10,23 @@ import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
 
 export default function App() {
-  const [hash, setHash] = useState(window.location.hash);
+  const [locationKey, setLocationKey] = useState(`${window.location.pathname}${window.location.hash}`);
   const detailSlug = useMemo(() => {
-    const match = hash.match(/^#\/works\/(.+)$/);
+    const match = window.location.pathname.match(/^\/works\/([^/]+)\/?$/);
     return match?.[1] ?? null;
-  }, [hash]);
+  }, [locationKey]);
 
   useEffect(() => {
-    function handleHashChange() {
-      setHash(window.location.hash);
+    function handleLocationChange() {
+      setLocationKey(`${window.location.pathname}${window.location.hash}`);
     }
 
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
+    window.addEventListener("popstate", handleLocationChange);
+    window.addEventListener("hashchange", handleLocationChange);
+    return () => {
+      window.removeEventListener("popstate", handleLocationChange);
+      window.removeEventListener("hashchange", handleLocationChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -31,14 +35,14 @@ export default function App() {
       return;
     }
 
-    const id = hash.replace("#", "");
+    const id = window.location.hash.replace("#", "");
     if (!id) return;
 
     window.requestAnimationFrame(() => {
       const target = document.getElementById(id);
       target?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
-  }, [detailSlug, hash]);
+  }, [detailSlug, locationKey]);
 
   return (
     <div
