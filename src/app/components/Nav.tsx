@@ -6,7 +6,7 @@ export function Nav() {
 
   const links = [
     { label: "作品", href: "#works" },
-    { label: "小工具", href: "#gene-expression" },
+    { label: "小工具", href: "#/works/gene-expression" },
     { label: "科研", href: "#research" },
     { label: "笔记", href: "#notes" },
     { label: "关于", href: "#about" },

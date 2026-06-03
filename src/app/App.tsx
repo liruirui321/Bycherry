@@ -1,30 +1,44 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
 import { About } from "./components/About";
 import { Works } from "./components/Works";
-import { GeneExpressionTool } from "./components/GeneExpressionTool";
+import { WorkDetailPage } from "./components/WorkDetailPage";
 import { ResearchEssays } from "./components/ResearchEssays";
 import { Notes } from "./components/Notes";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
 
 export default function App() {
-  useEffect(() => {
-    function scrollToHash() {
-      const id = window.location.hash.replace("#", "");
-      if (!id) return;
+  const [hash, setHash] = useState(window.location.hash);
+  const detailSlug = useMemo(() => {
+    const match = hash.match(/^#\/works\/(.+)$/);
+    return match?.[1] ?? null;
+  }, [hash]);
 
-      window.requestAnimationFrame(() => {
-        const target = document.getElementById(id);
-        target?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
+  useEffect(() => {
+    function handleHashChange() {
+      setHash(window.location.hash);
     }
 
-    scrollToHash();
-    window.addEventListener("hashchange", scrollToHash);
-    return () => window.removeEventListener("hashchange", scrollToHash);
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
+
+  useEffect(() => {
+    if (detailSlug) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const id = hash.replace("#", "");
+    if (!id) return;
+
+    window.requestAnimationFrame(() => {
+      const target = document.getElementById(id);
+      target?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [detailSlug, hash]);
 
   return (
     <div
@@ -35,15 +49,18 @@ export default function App() {
       }}
     >
       <Nav />
-      <main>
-        <Hero />
-        <About />
-        <Works />
-        <GeneExpressionTool />
-        <ResearchEssays />
-        <Notes />
-        <Contact />
-      </main>
+      {detailSlug ? (
+        <WorkDetailPage slug={detailSlug} />
+      ) : (
+        <main>
+          <Hero />
+          <About />
+          <Works />
+          <ResearchEssays />
+          <Notes />
+          <Contact />
+        </main>
+      )}
       <Footer />
     </div>
   );
