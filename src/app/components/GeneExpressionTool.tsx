@@ -271,17 +271,75 @@ function buildRibosomeTracks(progress: number, ribBound: number, canRead: boolea
   });
 }
 
-function LiveExpressionProcess({ model, progress, retainedMrnaCount }: { model: { transcriptionOn: boolean; translationOn: boolean; polBound: number; ribBound: number }; progress: number; retainedMrnaCount: number }) {
+function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslate }: { model: { transcriptionOn: boolean; polBound: number; ribBound: number }; progress: number; retainedMrnaCount: number; canTranslate: boolean }) {
   const transcriptionProgress = model.transcriptionOn ? clamp01(progress / 0.78) : 0;
-  const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
+  const ribosomeCanRead = canTranslate && (model.transcriptionOn ? transcriptionProgress > 0.28 : retainedMrnaCount > 0);
   const polymerases = buildPolymeraseTracks(progress, model.polBound);
-  const maxTranscribedProgress = Math.max(transcriptionProgress, ...polymerases.map((polymerase) => polymerase.progress * polymerase.opacity));
+  const maxTranscribedProgress = model.transcriptionOn
+    ? Math.max(transcriptionProgress, ...polymerases.map((polymerase) => polymerase.progress * polymerase.opacity))
+    : retainedMrnaCount > 0 ? 1 : 0;
   const ribosomes = buildRibosomeTracks(progress, model.ribBound, ribosomeCanRead, maxTranscribedProgress);
   const leadRibosome = ribosomes.find((ribosome) => ribosome.opacity > 0);
   const leadRibosomeProgress = leadRibosome?.progress ?? 0;
   const leadRibosomePoint = leadRibosome?.point ?? null;
   const activeCodonIndex = ribosomeCanRead && leadRibosomeProgress > 0 ? Math.min(codons.length - 1, Math.floor(leadRibosomeProgress * codons.length)) : -1;
   const aminoCount = ribosomeCanRead ? Math.min(codons.length, Math.max(0, Math.floor(leadRibosomeProgress * (codons.length + 0.75)))) : 0;
+  const translationLayer = canTranslate ? (
+    <>
+      {ribosomes.map((ribosome, index) => {
+        const codonIndex = Math.min(codons.length - 1, Math.floor(ribosome.progress * codons.length));
+        return (
+          <g key={`moving-ribosome-${index}`} transform={`translate(${ribosome.point.x} ${ribosome.point.y + index * 8})`} opacity={ribosome.opacity}>
+            <ellipse rx={48} ry={30} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={3} />
+            <circle cx={-22} cy={-7} r={9} fill="rgba(250,247,241,0.58)" />
+            <circle cx={18} cy={9} r={7} fill="rgba(250,247,241,0.58)" />
+            <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
+              核糖体
+            </text>
+            <rect x={-28} y={24} width={56} height={24} rx={8} fill="rgba(250,247,241,0.92)" stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
+            <text x={0} y={40} textAnchor="middle" fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
+              {codons[codonIndex]?.rna ?? ""}
+            </text>
+          </g>
+        );
+      })}
+
+      {codons.map((codon, index) => {
+        const activePoint = activeCodonIndex === index ? leadRibosomePoint : null;
+        const poolX = 540 + index * 42;
+        const poolY = 500 - index * 16;
+        const x = activePoint ? activePoint.x + 38 : poolX;
+        const y = activePoint ? activePoint.y - 42 : poolY;
+        return (
+          <g key={`trna-${codon.rna}`} transform={`translate(${x} ${y})`} opacity={activePoint ? 1 : 0.16}>
+            {activePoint ? <line x1={-24} y1={22} x2={-4} y2={4} stroke="var(--cherry-peach)" strokeWidth={2.2} strokeLinecap="round" strokeDasharray="4 4" /> : null}
+            <path d="M0 0 Q10 -18 20 0 Q10 15 0 0Z" fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
+            <circle cx={10} cy={-18} r={10} fill={codon.color} stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} />
+            <text x={10} y={4} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={8} fontWeight={900}>
+              {codon.anticodon}
+            </text>
+            <text x={10} y={-15} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={7} fontWeight={900}>
+              {codon.amino}
+            </text>
+          </g>
+        );
+      })}
+
+      <g transform="translate(386 548)">
+        <text x={0} y={0} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
+          amino acid chain
+        </text>
+        {codons.map((codon, index) => (
+          <g key={codon.amino} transform={`translate(${index * 58} 22)`} opacity={index < aminoCount ? 1 : 0.22}>
+            <circle r={18} fill={codon.color} stroke="rgba(94,68,42,0.16)" strokeWidth={1.5} />
+            <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={10} fontWeight={900}>
+              {codon.amino}
+            </text>
+          </g>
+        ))}
+      </g>
+    </>
+  ) : null;
 
   if (!model.transcriptionOn) {
     if (retainedMrnaCount > 0) {
@@ -303,6 +361,7 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount }: { model: 
           <text x={418} y={362} fill="var(--cherry-warm-mid)" fontSize={15} fontWeight={800}>
             已生成的 mRNA 片段仍保留在反应区域
           </text>
+          {translationLayer}
         </g>
       );
     }
@@ -361,62 +420,7 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount }: { model: 
         );
       })}
 
-      {model.translationOn ? (
-        <>
-          {ribosomes.map((ribosome, index) => {
-            const codonIndex = Math.min(codons.length - 1, Math.floor(ribosome.progress * codons.length));
-            return (
-              <g key={`moving-ribosome-${index}`} transform={`translate(${ribosome.point.x} ${ribosome.point.y + index * 8})`} opacity={ribosome.opacity}>
-                <ellipse rx={48} ry={30} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={3} />
-                <circle cx={-22} cy={-7} r={9} fill="rgba(250,247,241,0.58)" />
-                <circle cx={18} cy={9} r={7} fill="rgba(250,247,241,0.58)" />
-                <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
-                  核糖体
-                </text>
-                <rect x={-28} y={24} width={56} height={24} rx={8} fill="rgba(250,247,241,0.92)" stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
-                <text x={0} y={40} textAnchor="middle" fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
-                  {codons[codonIndex]?.rna ?? ""}
-                </text>
-              </g>
-            );
-          })}
-
-          {codons.map((codon, index) => {
-            const activePoint = activeCodonIndex === index ? leadRibosomePoint : null;
-            const poolX = 540 + index * 42;
-            const poolY = 500 - index * 16;
-            const x = activePoint ? activePoint.x + 38 : poolX;
-            const y = activePoint ? activePoint.y - 42 : poolY;
-            return (
-              <g key={`trna-${codon.rna}`} transform={`translate(${x} ${y})`} opacity={activePoint ? 1 : 0.16}>
-                {activePoint ? <line x1={-24} y1={22} x2={-4} y2={4} stroke="var(--cherry-peach)" strokeWidth={2.2} strokeLinecap="round" strokeDasharray="4 4" /> : null}
-                <path d="M0 0 Q10 -18 20 0 Q10 15 0 0Z" fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
-                <circle cx={10} cy={-18} r={10} fill={codon.color} stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} />
-                <text x={10} y={4} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={8} fontWeight={900}>
-                  {codon.anticodon}
-                </text>
-                <text x={10} y={-15} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={7} fontWeight={900}>
-                  {codon.amino}
-                </text>
-              </g>
-            );
-          })}
-
-          <g transform="translate(386 548)">
-            <text x={0} y={0} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
-              amino acid chain
-            </text>
-            {codons.map((codon, index) => (
-              <g key={codon.amino} transform={`translate(${index * 58} 22)`} opacity={index < aminoCount ? 1 : 0.22}>
-                <circle r={18} fill={codon.color} stroke="rgba(94,68,42,0.16)" strokeWidth={1.5} />
-                <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={10} fontWeight={900}>
-                  {codon.amino}
-                </text>
-              </g>
-            ))}
-          </g>
-        </>
-      ) : null}
+      {translationLayer}
     </g>
   );
 }
@@ -471,15 +475,18 @@ export function GeneExpressionTool() {
   const instantMrnaCount = model.transcriptionOn ? Math.min(model.mrna, Math.floor(transcribedProgress * (model.mrna + 0.75))) : 0;
   const visibleMrnaCount = Math.min(5, Math.max(displayedMrnaCount, instantMrnaCount));
   const mrnaReadoutMax = Math.max(visibleMrnaCount, model.mrna);
-  const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
-  const readableRibosomes = buildRibosomeTracks(cycleProgress, model.ribBound, ribosomeCanRead, transcribedProgress).filter((ribosome) => ribosome.opacity > 0);
+  const retainedTranscriptProgress = model.transcriptionOn ? transcribedProgress : visibleMrnaCount > 0 ? 1 : 0;
+  const canTranslate = model.ribBound > 0 && visibleMrnaCount > 0;
+  const ribosomeCanRead = canTranslate && (model.transcriptionOn ? transcriptionProgress > 0.28 : visibleMrnaCount > 0);
+  const readableRibosomes = buildRibosomeTracks(cycleProgress, model.ribBound, ribosomeCanRead, retainedTranscriptProgress).filter((ribosome) => ribosome.opacity > 0);
   const activeRibosomeCount = readableRibosomes.length;
   const leadRibosomeProgress = readableRibosomes[0]?.progress ?? 0;
   const activeCodonIndex = leadRibosomeProgress > 0 ? Math.min(codons.length - 1, Math.floor(leadRibosomeProgress * codons.length)) : -1;
   const translatedSignal = readableRibosomes.reduce((sum, ribosome) => sum + ribosome.progress, 0);
-  const instantProteinCount = model.translationOn ? Math.min(model.protein, Math.floor(translatedSignal * 4)) : 0;
+  const proteinCapacity = canTranslate ? Math.min(12, visibleMrnaCount * model.ribBound) : 0;
+  const instantProteinCount = canTranslate ? Math.min(proteinCapacity, Math.floor(translatedSignal * 4)) : 0;
   const visibleProteinCount = Math.min(12, Math.max(displayedProteinCount, instantProteinCount));
-  const proteinReadoutMax = Math.max(visibleProteinCount, model.protein);
+  const proteinReadoutMax = Math.max(visibleProteinCount, proteinCapacity);
   const translationRate = activeRibosomeCount > 0 ? Math.min(100, 35 + activeRibosomeCount * 20) : 0;
   const taskStatuses = [
     { label: "把 TF 拖到启动子，观察启动子变亮。", done: model.tfBound > 0 },
@@ -501,14 +508,14 @@ export function GeneExpressionTool() {
   }, [instantProteinCount]);
 
   useEffect(() => {
-    if (!model.transcriptionOn) {
+    if (!model.transcriptionOn && !canTranslate) {
       progressRef.current = 0;
       setCycleProgress(0);
       setIsPaused(false);
       return;
     }
     if (prefersReducedMotion) {
-      progressRef.current = model.translationOn ? 0.72 : 0.46;
+      progressRef.current = canTranslate ? 0.72 : 0.46;
       setCycleProgress(progressRef.current);
       return;
     }
@@ -528,7 +535,7 @@ export function GeneExpressionTool() {
 
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [model.transcriptionOn, model.translationOn, prefersReducedMotion, isPaused, speed]);
+  }, [model.transcriptionOn, canTranslate, prefersReducedMotion, isPaused, speed]);
 
   function svgPoint(event: React.PointerEvent<SVGSVGElement | SVGGElement>) {
     const svg = svgRef.current;
@@ -726,7 +733,7 @@ export function GeneExpressionTool() {
               )}
             </g>
 
-            <LiveExpressionProcess model={model} progress={cycleProgress} retainedMrnaCount={visibleMrnaCount} />
+            <LiveExpressionProcess model={model} progress={cycleProgress} retainedMrnaCount={visibleMrnaCount} canTranslate={canTranslate} />
 
             <rect x={zones.ribosome.x} y={zones.ribosome.y} width={zones.ribosome.w} height={zones.ribosome.h} rx={22} fill={model.ribBound > 0 ? "rgba(232,121,95,0.15)" : "rgba(250,247,241,0.38)"} stroke="var(--cherry-peach)" strokeWidth={2} strokeDasharray="7 7" />
             <text x={zones.ribosome.x + 22} y={zones.ribosome.y + 34} fill="var(--cherry-warm-brown)" fontSize={15} fontWeight={900}>
@@ -834,7 +841,7 @@ export function GeneExpressionTool() {
             <div style={{ display: "grid", gap: "0.55rem" }}>
               {codons.map((codon, index) => {
                 const active = activeCodonIndex === index;
-                const transcribed = transcribedProgress > 0.22 + index * 0.13;
+                const transcribed = retainedTranscriptProgress > 0.22 + index * 0.13;
                 return (
                   <div key={codon.rna} style={{ display: "grid", gridTemplateColumns: "42px 1fr 42px", alignItems: "center", gap: 8, background: active ? "var(--cherry-yellow-light)" : transcribed ? "rgba(250,247,241,0.78)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-red)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.55rem", color: "var(--cherry-warm-mid)" }}>
                     <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>{codon.dna}</strong>
@@ -869,11 +876,15 @@ export function GeneExpressionTool() {
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.65rem" }}>当前状态</div>
             <div style={{ fontSize: "0.88rem" }}>
               {!model.transcriptionOn
-                ? visibleProteinCount > 0
-                  ? "转录已经停止，已有蛋白质产物会保留；重新加入 TF 和 RNA 聚合酶可以继续表达。"
-                  : visibleMrnaCount > 0
-                    ? "转录已经停止，已有 mRNA 片段会保留；重新加入 TF 和 RNA 聚合酶可以继续产生新 mRNA。"
-                    : "转录尚未启动：启动子需要 TF，基因区域需要 RNA 聚合酶。"
+                ? activeRibosomeCount > 0
+                  ? "转录已经停止，核糖体正在读取保留的 mRNA，蛋白质产物仍会继续累积。"
+                  : visibleProteinCount > 0
+                    ? "转录已经停止，已有蛋白质产物会保留；重新加入 TF 和 RNA 聚合酶可以继续表达。"
+                    : canTranslate
+                      ? "转录已经停止，已有 mRNA 片段会保留；核糖体可以继续读取这些片段。"
+                      : visibleMrnaCount > 0
+                        ? "转录已经停止，已有 mRNA 片段会保留；重新加入 TF 和 RNA 聚合酶可以继续产生新 mRNA。"
+                        : "转录尚未启动：启动子需要 TF，基因区域需要 RNA 聚合酶。"
                 : visibleMrnaCount === 0
                   ? "RNA 聚合酶正在沿基因区移动，新生 mRNA 正从后方延伸出来。"
                   : !model.translationOn
