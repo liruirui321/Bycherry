@@ -791,6 +791,8 @@ function CrisprContent() {
   const [guideIndex, setGuideIndex] = useState(0);
   const [step, setStep] = useState<"scan" | "bind" | "cut" | "repair">("scan");
   const [repair, setRepair] = useState<"indel" | "replace" | "failed">("indel");
+  const [copiedReport, setCopiedReport] = useState(false);
+  const [reportStatus, setReportStatus] = useState("");
   const target = "T A C G A T T A C C G T A G G".split(" ");
   const rnaComplement: Record<string, string> = { A: "U", T: "A", C: "G", G: "C" };
   const targetStart = 4;
@@ -844,6 +846,63 @@ function CrisprContent() {
   const effectiveRepair = activeGuide.score < 60 ? repairResults.failed : activeRepair;
   const baseX = (index: number) => 72 + index * 44;
   const casX = canCut ? baseX(cutIndex) : stepIndex >= 1 ? baseX(activeGuide.start + 3) : baseX(pamStart + 1);
+  const reportResult = activeGuide.score < 60 ? "guide 匹配不足，Cas9 不稳定定位，本轮按未成功编辑处理。" : activeRepair.result;
+  const crisprReport = `【CRISPR 模拟报告】
+目标 DNA：${target.join(" ")}
+PAM：${pamSequence}
+
+1. 向导 RNA
+名称：${activeGuide.name}
+序列：${activeGuide.sequence}
+目标互补序列：${expectedGuideBases.join(" ")}
+匹配评分：${activeGuide.score}%
+错配数：${computedMismatches.length} 个
+说明：${activeGuide.note}
+
+2. 当前步骤
+${stages[stepIndex].label}：${stages[stepIndex].text}
+
+3. 剪切判断
+${activeGuide.score >= 60 ? `可剪切；位点为第 ${cutIndex + 1} 个碱基，PAM 上游 ${cutDistanceFromPam} nt。` : "不执行剪切；guide 匹配不足。"}
+
+4. 修复结果
+${effectiveRepair.title}
+产物序列：${effectiveRepair.sequence.join(" ")}
+结果解释：${reportResult}`;
+
+  function clearCrisprCopyStatus() {
+    setCopiedReport(false);
+    setReportStatus("");
+  }
+
+  function chooseCrisprStep(nextStep: typeof step) {
+    setStep(nextStep);
+    clearCrisprCopyStatus();
+  }
+
+  function chooseCrisprGuide(index: number) {
+    setGuideIndex(index);
+    clearCrisprCopyStatus();
+  }
+
+  function chooseCrisprRepair(nextRepair: typeof repair) {
+    setRepair(nextRepair);
+    setStep("repair");
+    clearCrisprCopyStatus();
+  }
+
+  async function copyCrisprReport() {
+    const copiedToClipboard = await copyText(crisprReport);
+    if (copiedToClipboard) {
+      setCopiedReport(true);
+      setReportStatus("模拟报告已复制到剪贴板。");
+      window.setTimeout(() => setCopiedReport(false), 1400);
+      return;
+    }
+
+    setCopiedReport(false);
+    setReportStatus("复制失败，请手动选中文本复制。");
+  }
 
   return (
     <section id="crispr-simulator" style={{ display: "grid", gap: "1rem" }}>
@@ -952,7 +1011,7 @@ function CrisprContent() {
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>流程控制</div>
             <div style={{ display: "grid", gap: 7 }}>
               {stages.map((item, index) => (
-                <button key={item.key} aria-pressed={step === item.key} onClick={() => setStep(item.key)} style={{ display: "grid", gridTemplateColumns: "26px 1fr", gap: 8, alignItems: "start", textAlign: "left", background: step === item.key ? "var(--cherry-sage-light)" : "var(--muted)", border: step === item.key ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.62rem", cursor: "pointer" }}>
+                <button key={item.key} aria-pressed={step === item.key} onClick={() => chooseCrisprStep(item.key)} style={{ display: "grid", gridTemplateColumns: "26px 1fr", gap: 8, alignItems: "start", textAlign: "left", background: step === item.key ? "var(--cherry-sage-light)" : "var(--muted)", border: step === item.key ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.62rem", cursor: "pointer" }}>
                   <span style={{ width: 24, height: 24, borderRadius: "50%", background: stepIndex >= index ? "var(--cherry-forest)" : "rgba(250,247,241,0.9)", color: stepIndex >= index ? "#FAF7F1" : "var(--cherry-warm-mid)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 900 }}>{index + 1}</span>
                   <span>
                     <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>{item.label}</strong>
@@ -967,7 +1026,7 @@ function CrisprContent() {
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>向导 RNA</div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: "0.75rem" }}>
               {guides.map((guide, index) => (
-                <button key={guide.name} aria-pressed={guideIndex === index} onClick={() => setGuideIndex(index)} style={{ background: guideIndex === index ? "var(--cherry-forest)" : "var(--muted)", color: guideIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.4rem 0.74rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                <button key={guide.name} aria-pressed={guideIndex === index} onClick={() => chooseCrisprGuide(index)} style={{ background: guideIndex === index ? "var(--cherry-forest)" : "var(--muted)", color: guideIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.4rem 0.74rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                   {guide.name}
                 </button>
               ))}
@@ -1010,7 +1069,7 @@ function CrisprContent() {
               ["replace", "模板替换"],
               ["failed", "未成功编辑"],
             ] as const).map(([key, label]) => (
-              <button key={key} aria-pressed={repair === key} onClick={() => { setRepair(key); setStep("repair"); }} style={{ background: repair === key ? "var(--cherry-forest)" : "var(--muted)", color: repair === key ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
+              <button key={key} aria-pressed={repair === key} onClick={() => chooseCrisprRepair(key)} style={{ background: repair === key ? "var(--cherry-forest)" : "var(--muted)", color: repair === key ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
                 {label}
               </button>
             ))}
@@ -1018,8 +1077,23 @@ function CrisprContent() {
         </div>
         <div role="status" aria-live="polite" style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.9rem" }}>
           <strong style={{ color: effectiveRepair.color }}>{effectiveRepair.title}：</strong>
-          {activeGuide.score < 60 ? "guide 匹配不足，Cas9 不稳定定位，本轮按未成功编辑处理。" : activeRepair.result}
+          {reportResult}
         </div>
+      </div>
+
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.75rem" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>模拟报告</div>
+          <button type="button" onClick={copyCrisprReport} aria-describedby="crispr-report-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.46rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
+            {copiedReport ? "已复制" : "复制报告"}
+          </button>
+        </div>
+        <div id="crispr-report-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 900, marginBottom: "0.55rem" }}>
+          {reportStatus}
+        </div>
+        <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.9rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65 }}>
+          {crisprReport}
+        </code>
       </div>
 
       <style>
