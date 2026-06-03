@@ -8,14 +8,19 @@
     <meta name="color-scheme" content="light" />
     <title>By Cherry | 正在返回</title>
     <script>
-      sessionStorage.setItem(
-        "bycherry-redirect-path",
-        window.location.pathname + window.location.search + window.location.hash
-      );
+      try {
+        sessionStorage.setItem(
+          "bycherry-redirect-path",
+          window.location.pathname + window.location.search + window.location.hash
+        );
+      } catch (error) {
+        // Continue to the homepage if browser storage is unavailable.
+      }
       window.location.replace("/");
     </script>
   </head>
   <body>
     <p>正在返回 By Cherry...</p>
+    <p><a href="/">如果页面没有自动跳转，请返回首页。</a></p>
   </body>
 </html>

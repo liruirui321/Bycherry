@@ -21,9 +21,14 @@
       <style>html, body { height: 100%; margin: 0; } #root { height: 100%; }</style>
       <script>
         (function () {
-          var redirectPath = sessionStorage.getItem("bycherry-redirect-path");
+          var redirectPath = null;
+          try {
+            redirectPath = sessionStorage.getItem("bycherry-redirect-path");
+            sessionStorage.removeItem("bycherry-redirect-path");
+          } catch (error) {
+            redirectPath = null;
+          }
           if (!redirectPath) return;
-          sessionStorage.removeItem("bycherry-redirect-path");
           window.history.replaceState(null, "", redirectPath);
         })();
       </script>
