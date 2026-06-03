@@ -8,6 +8,14 @@
       <title>By Cherry | Science, Education & AI</title>
       <meta name="description" content="By Cherry is a warm illustrated portfolio about science education, AI learning tools, project-based courses, and creative workflows." />
       <style>html, body { height: 100%; margin: 0; } #root { height: 100%; }</style>
+      <script>
+        (function () {
+          var redirectPath = sessionStorage.getItem("bycherry-redirect-path");
+          if (!redirectPath) return;
+          sessionStorage.removeItem("bycherry-redirect-path");
+          window.history.replaceState(null, "", redirectPath);
+        })();
+      </script>
       
     </head>
 

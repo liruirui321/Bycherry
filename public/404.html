@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>By Cherry</title>
+    <script>
+      sessionStorage.setItem(
+        "bycherry-redirect-path",
+        window.location.pathname + window.location.search + window.location.hash
+      );
+      window.location.replace("/");
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to By Cherry...</p>
+  </body>
+</html>
