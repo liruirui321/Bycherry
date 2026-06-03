@@ -254,7 +254,7 @@ export function Hero() {
                   textAlign: "left",
                   minHeight: 138,
                   display: "grid",
-                  gridTemplateRows: "auto 1fr auto",
+                  gridTemplateRows: "auto 1fr auto auto",
                   gap: "0.42rem",
                   position: "relative",
                   overflow: "hidden",
@@ -265,6 +265,13 @@ export function Hero() {
                   <strong style={{ fontSize: "0.88rem", lineHeight: 1.35 }}>{work.title}</strong>
                 </div>
                 <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.45, position: "relative", zIndex: 1 }}>{work.desc}</span>
+                <div style={{ display: "flex", gap: 5, flexWrap: "wrap", position: "relative", zIndex: 1 }}>
+                  {work.outputs.map((output) => (
+                    <span key={output} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.12rem 0.42rem", color: "var(--cherry-warm-brown)", fontSize: "0.64rem", fontWeight: 900 }}>
+                      {output}
+                    </span>
+                  ))}
+                </div>
                 <div style={{ display: "flex", justifyContent: "flex-end", minHeight: 54, marginTop: "-0.15rem", opacity: 0.92 }}>
                   <WorkPreviewIllustration slug={work.slug} color={work.border} />
                 </div>

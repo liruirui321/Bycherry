@@ -13,6 +13,8 @@ export const works = [
     desc: "拖拽 TF、RNA 聚合酶和核糖体，观察 mRNA 如何延伸、核糖体如何逐颗接出多肽链。",
     href: "/works/gene-expression",
     tags: ["生物", "可视化", "交互"],
+    outputs: ["实时表达读数", "多肽生成过程"],
+    action: "启动仿真",
     color: "var(--cherry-blue-light)", border: "var(--cherry-blue)", rotate: "-1.5deg",
   },
   {
@@ -22,6 +24,8 @@ export const works = [
     desc: "选择科研任务、填写材料，自动组装文献精读、实验设计、图表解读等可复制 prompt。",
     href: "/works/research-prompt-kit",
     tags: ["AI", "Prompt", "科研"],
+    outputs: ["可复制 prompt", "质控清单"],
+    action: "生成 prompt",
     color: "var(--cherry-peach-light)", border: "var(--cherry-peach)", rotate: "-0.8deg",
   },
   {
@@ -31,6 +35,8 @@ export const works = [
     desc: "点击演化时间轴，查看植物从淡水绿藻到花和果实的关键创新、证据和课堂提问。",
     href: "/works/plant-evolution-stories",
     tags: ["植物学", "科普", "插画"],
+    outputs: ["演化学习卡", "参考文献"],
+    action: "复制学习卡",
     color: "var(--cherry-sage-light)", border: "var(--cherry-sage)", rotate: "1.8deg",
   },
   {
@@ -40,6 +46,8 @@ export const works = [
     desc: "选择生物学概念和理解层级，生成类比、机制步骤、误区辨析和即时小测。",
     href: "/works/concept-explainer",
     tags: ["AI", "教育", "工具"],
+    outputs: ["讲解稿", "即时小测"],
+    action: "生成讲解稿",
     color: "#EDE9F5", border: "#B5AEDD", rotate: "-1.2deg",
   },
   {
@@ -49,6 +57,8 @@ export const works = [
     desc: "操作 guide RNA、Cas 蛋白和修复结果，观察 CRISPR 识别、剪切与修复三步。",
     href: "/works/crispr-interactive",
     tags: ["基因编辑", "互动", "CRISPR"],
+    outputs: ["编辑结果", "模拟报告"],
+    action: "运行编辑",
     color: "var(--cherry-peach-light)", border: "var(--cherry-red)", rotate: "0.5deg",
   },
 ];
@@ -86,8 +96,8 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         color: "inherit",
         textDecoration: "none",
         display: "grid",
-        gridTemplateRows: "auto auto 1fr auto auto",
-        minHeight: 330,
+        gridTemplateRows: "auto auto 1fr auto auto auto",
+        minHeight: 366,
       }}
     >
       {/* Push pin */}
@@ -115,6 +125,15 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         ))}
       </div>
 
+      <div style={{ display: "grid", gap: 5, marginTop: "0.85rem" }}>
+        {work.outputs.map((output) => (
+          <span key={output} style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 900 }}>
+            <span aria-hidden="true" style={{ width: 7, height: 7, borderRadius: "50%", background: work.border, flexShrink: 0 }} />
+            {output}
+          </span>
+        ))}
+      </div>
+
       <span
         aria-hidden="true"
         style={{
@@ -122,7 +141,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
           alignItems: "center",
           justifyContent: "center",
           gap: 6,
-          marginTop: "1rem",
+          marginTop: "0.95rem",
           background: "rgba(250,247,241,0.82)",
           border: "1.5px solid rgba(58,92,62,0.28)",
           borderRadius: 999,
@@ -133,7 +152,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
           textDecoration: "none",
         }}
       >
-        打开作品 →
+        {work.action} →
       </span>
     </a>
   );
