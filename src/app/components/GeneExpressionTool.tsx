@@ -49,36 +49,41 @@ function moleculeZone(type: MoleculeType): ZoneKey {
 
 function MoleculeNode({
   molecule,
+  docked,
   dragging,
   onPointerDown,
 }: {
   molecule: Molecule;
+  docked: boolean;
   dragging: boolean;
   onPointerDown: (event: React.PointerEvent<SVGGElement>, molecule: Molecule) => void;
 }) {
-  const radius = molecule.type === "pol" ? 44 : molecule.type === "ribosome" ? 38 : 31;
+  const radius = docked ? (molecule.type === "pol" ? 30 : molecule.type === "ribosome" ? 27 : 24) : molecule.type === "pol" ? 44 : molecule.type === "ribosome" ? 38 : 31;
+  const shortLabel = molecule.type === "pol" ? "RNA pol" : molecule.type === "ribosome" ? "ribo" : "TF";
 
   return (
     <g
       transform={`translate(${molecule.x} ${molecule.y})`}
       onPointerDown={(event) => onPointerDown(event, molecule)}
-      style={{ cursor: "grab", filter: dragging ? "drop-shadow(5px 8px 0 rgba(94,68,42,0.16))" : "drop-shadow(3px 4px 0 rgba(94,68,42,0.08))" }}
+      opacity={docked && !dragging ? 0.7 : 1}
+      style={{ cursor: "grab", filter: dragging ? "drop-shadow(5px 8px 0 rgba(94,68,42,0.16))" : docked ? "drop-shadow(1px 2px 0 rgba(94,68,42,0.07))" : "drop-shadow(3px 4px 0 rgba(94,68,42,0.08))" }}
     >
+      {docked ? <circle r={radius + 9} fill="none" stroke="var(--cherry-forest)" strokeWidth={2} strokeDasharray="4 6" opacity={0.72} /> : null}
       <ellipse
         rx={radius}
-        ry={molecule.type === "pol" ? 30 : 26}
+        ry={docked ? radius * 0.72 : molecule.type === "pol" ? 30 : 26}
         fill={molecule.color}
         stroke={molecule.type === "pol" ? "var(--cherry-blue)" : "rgba(94,68,42,0.22)"}
-        strokeWidth={molecule.type === "pol" ? 3 : 2}
+        strokeWidth={docked ? 2 : molecule.type === "pol" ? 3 : 2}
       />
       <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={molecule.type === "pol" ? 13 : 14} fontWeight={900}>
-        {molecule.label}
+        {docked ? shortLabel : molecule.label}
       </text>
     </g>
   );
 }
 
-function ProductBeads({ count }: { count: number }) {
+function ProductBeads({ count, animated = true }: { count: number; animated?: boolean }) {
   return (
     <g transform="translate(704 442)">
       <text x={0} y={-18} fill="var(--cherry-warm-brown)" fontSize={16} fontWeight={900}>
@@ -97,12 +102,27 @@ function ProductBeads({ count }: { count: number }) {
             stroke="rgba(94,68,42,0.16)"
             strokeWidth={1.5}
           >
-            {active ? <animate attributeName="r" values="12;15;13" dur="1.5s" begin={`${index * 0.08}s`} repeatCount="indefinite" /> : null}
+            {active && animated ? <animate attributeName="r" values="12;15;13" dur="1.5s" begin={`${index * 0.08}s`} repeatCount="indefinite" /> : null}
           </circle>
         );
       })}
     </g>
   );
+}
+
+function usePrefersReducedMotion() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setPrefersReducedMotion(query.matches);
+
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  return prefersReducedMotion;
 }
 
 function StageRail({ model }: { model: { tfBound: number; polBound: number; ribBound: number; transcriptionOn: boolean; translationOn: boolean; protein: number } }) {
@@ -315,6 +335,7 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
 export function GeneExpressionTool() {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const progressRef = useRef(0);
+  const prefersReducedMotion = usePrefersReducedMotion();
   const [molecules, setMolecules] = useState(initialMolecules);
   const [dragging, setDragging] = useState<{ id: string; dx: number; dy: number } | null>(null);
   const [cycleProgress, setCycleProgress] = useState(0);
@@ -333,13 +354,13 @@ export function GeneExpressionTool() {
       { x: 360, y: 254 },
     ],
     polymerase: [
-      { x: 456, y: 254 },
-      { x: 570, y: 254 },
+      { x: 452, y: 214 },
+      { x: 586, y: 214 },
     ],
     ribosome: [
-      { x: 406, y: 450 },
-      { x: 520, y: 450 },
-      { x: 634, y: 450 },
+      { x: 406, y: 404 },
+      { x: 520, y: 404 },
+      { x: 634, y: 404 },
     ],
   };
 
@@ -375,6 +396,11 @@ export function GeneExpressionTool() {
       setCycleProgress(0);
       return;
     }
+    if (prefersReducedMotion) {
+      progressRef.current = model.translationOn ? 0.72 : 0.46;
+      setCycleProgress(progressRef.current);
+      return;
+    }
     if (isPaused) return;
 
     let frame = 0;
@@ -391,7 +417,7 @@ export function GeneExpressionTool() {
 
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [model.transcriptionOn, isPaused, speed]);
+  }, [model.transcriptionOn, model.translationOn, prefersReducedMotion, isPaused, speed]);
 
   function svgPoint(event: React.PointerEvent<SVGSVGElement | SVGGElement>) {
     const svg = svgRef.current;
@@ -467,6 +493,11 @@ export function GeneExpressionTool() {
     setIsPaused(false);
   }
 
+  function isMoleculeDocked(molecule: Molecule) {
+    if (dragging?.id === molecule.id) return false;
+    return inBox(molecule, zones[moleculeZone(molecule.type)]);
+  }
+
   return (
     <section
       id="gene-expression"
@@ -538,8 +569,8 @@ export function GeneExpressionTool() {
               <text x={344} y={88} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
                 gene body
               </text>
-              {[302, 416].map((x, index) => (
-                <circle key={x} cx={x} cy={84} r={24} fill="none" stroke={model.polBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
+              {[298, 432].map((x, index) => (
+                <circle key={x} cx={x} cy={44} r={20} fill="none" stroke={model.polBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
               ))}
             </g>
 
@@ -550,10 +581,10 @@ export function GeneExpressionTool() {
               ribosome dock
             </text>
             {[406, 520, 634].map((x, index) => (
-              <circle key={x} cx={x} cy={450} r={30} fill="none" stroke={model.ribBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
+              <circle key={x} cx={x} cy={404} r={24} fill="none" stroke={model.ribBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
             ))}
 
-            <ProductBeads count={model.translationOn ? Math.min(model.protein, Math.max(1, Math.floor(cycleProgress * 12))) : 0} />
+            <ProductBeads count={model.translationOn ? Math.min(model.protein, Math.max(1, Math.floor(cycleProgress * 12))) : 0} animated={!prefersReducedMotion} />
 
             <g transform="translate(46 86)">
               <rect width={190} height={28} rx={999} fill="rgba(250,247,241,0.74)" stroke="rgba(94,68,42,0.16)" />
@@ -563,7 +594,7 @@ export function GeneExpressionTool() {
             </g>
 
             {molecules.map((molecule) => (
-              <MoleculeNode key={molecule.id} molecule={molecule} dragging={dragging?.id === molecule.id} onPointerDown={startDrag} />
+              <MoleculeNode key={molecule.id} molecule={molecule} docked={isMoleculeDocked(molecule)} dragging={dragging?.id === molecule.id} onPointerDown={startDrag} />
             ))}
           </svg>
         </div>
