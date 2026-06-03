@@ -29,7 +29,7 @@ function ForestBlob({ color, style }: { color: string; style: React.CSSPropertie
 /* Fern/plant decorative SVG */
 function FernDeco({ style }: { style: React.CSSProperties }) {
   return (
-    <svg width="70" height="80" viewBox="0 0 70 80" fill="none" style={{ position: "absolute", ...style }}>
+    <svg width="70" height="80" viewBox="0 0 70 80" fill="none" aria-hidden="true" focusable="false" style={{ position: "absolute", ...style }}>
       <path d="M35 78 Q35 50 35 30" stroke="var(--cherry-forest)" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
       <path d="M35 55 Q22 45 18 32 Q28 33 35 45" fill="var(--cherry-sage)" opacity="0.55" />
       <path d="M35 45 Q48 35 52 22 Q42 23 35 35" fill="var(--cherry-sage)" opacity="0.45" />
@@ -41,7 +41,7 @@ function FernDeco({ style }: { style: React.CSSProperties }) {
 /* Scattered dots texture */
 function DotTexture({ style }: { style: React.CSSProperties }) {
   return (
-    <svg width="120" height="120" viewBox="0 0 120 120" fill="none" style={{ position: "absolute", ...style, opacity: 0.18 }}>
+    <svg width="120" height="120" viewBox="0 0 120 120" fill="none" aria-hidden="true" focusable="false" style={{ position: "absolute", ...style, opacity: 0.18 }}>
       {Array.from({ length: 6 }).map((_, row) =>
         Array.from({ length: 6 }).map((_, col) => (
           <circle
@@ -169,7 +169,7 @@ export function Hero() {
           A tiny studio for{" "}
           <span style={{ color: "var(--cherry-red)", position: "relative", display: "inline-block" }}>
             science
-            <svg style={{ position: "absolute", bottom: -5, left: 0, width: "100%" }} viewBox="0 0 120 8" preserveAspectRatio="none" fill="none">
+            <svg style={{ position: "absolute", bottom: -5, left: 0, width: "100%" }} viewBox="0 0 120 8" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
               <path d="M2 5 Q20 1 40 5 Q60 9 80 5 Q100 1 118 5" stroke="var(--cherry-peach)" strokeWidth="2.8" strokeLinecap="round" />
             </svg>
           </span>

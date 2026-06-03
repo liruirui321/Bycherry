@@ -15,7 +15,7 @@ const tags = [
 /* Inline leaf cluster for decoration */
 function LeafCluster() {
   return (
-    <svg width="80" height="70" viewBox="0 0 80 70" fill="none">
+    <svg width="80" height="70" viewBox="0 0 80 70" fill="none" aria-hidden="true" focusable="false">
       <path d="M40 68 Q40 45 40 28" stroke="var(--cherry-forest)" strokeWidth="1.8" strokeLinecap="round" opacity="0.5" />
       <path d="M40 48 Q28 40 24 27 Q35 26 40 38" fill="var(--cherry-sage)" opacity="0.5" />
       <path d="M40 38 Q52 30 56 17 Q45 18 40 30" fill="var(--cherry-sage)" opacity="0.4" />
@@ -81,7 +81,7 @@ export function About() {
               }}
             >
               {/* Leaf face illustration */}
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false">
                 <circle cx="24" cy="24" r="18" fill="var(--cherry-sage-light)" />
                 <path d="M24 10 Q32 16 30 26 Q28 34 20 32 Q12 28 14 20 Q16 12 24 10Z" fill="var(--cherry-sage)" opacity="0.7" />
                 <circle cx="20" cy="22" r="2" fill="var(--cherry-warm-brown)" />

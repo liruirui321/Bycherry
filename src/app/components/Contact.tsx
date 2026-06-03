@@ -50,16 +50,16 @@ export function Contact() {
       }}
     >
       {/* Wave top */}
-      <svg style={{ position: "absolute", top: 0, left: 0, width: "100%", display: "block" }} viewBox="0 0 1440 28" preserveAspectRatio="none" fill="none">
+      <svg style={{ position: "absolute", top: 0, left: 0, width: "100%", display: "block" }} viewBox="0 0 1440 28" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
         <path d="M0 14 Q180 0 360 14 Q540 28 720 14 Q900 0 1080 14 Q1260 28 1440 14 L1440 0 L0 0Z" fill="var(--background)" />
       </svg>
 
       {/* Forest deco leaves */}
-      <svg style={{ position: "absolute", top: 40, left: 10, opacity: 0.1, pointerEvents: "none", transform: "rotate(-15deg)" }} width="80" height="85" viewBox="0 0 80 85" fill="none">
+      <svg style={{ position: "absolute", top: 40, left: 10, opacity: 0.1, pointerEvents: "none", transform: "rotate(-15deg)" }} width="80" height="85" viewBox="0 0 80 85" fill="none" aria-hidden="true" focusable="false">
         <path d="M10 80 Q14 52 65 15 Q65 48 10 80Z" fill="var(--cherry-forest)" />
         <path d="M10 80 Q36 56 65 15" stroke="var(--cherry-forest)" strokeWidth="1" fill="none" opacity="0.5" />
       </svg>
-      <svg style={{ position: "absolute", bottom: 50, right: 15, opacity: 0.1, pointerEvents: "none", transform: "scaleX(-1) rotate(10deg)" }} width="70" height="75" viewBox="0 0 80 85" fill="none">
+      <svg style={{ position: "absolute", bottom: 50, right: 15, opacity: 0.1, pointerEvents: "none", transform: "scaleX(-1) rotate(10deg)" }} width="70" height="75" viewBox="0 0 80 85" fill="none" aria-hidden="true" focusable="false">
         <path d="M10 80 Q14 52 65 15 Q65 48 10 80Z" fill="var(--cherry-forest)" />
       </svg>
 
