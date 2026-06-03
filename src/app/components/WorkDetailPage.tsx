@@ -676,6 +676,8 @@ function CrisprContent() {
   const activeGuide = guides[guideIndex];
   const guideRange = Array.from({ length: targetLength }).map((_, index) => activeGuide.start + index);
   const cutIndex = Math.min(target.length - 1, activeGuide.start + 5);
+  const pamSequence = target.slice(pamStart).join("");
+  const cutDistanceFromPam = pamStart - cutIndex;
   const stepIndex = stages.findIndex((item) => item.key === step);
   const canCut = activeGuide.score >= 60 && stepIndex >= 2;
   const repairActive = step === "repair";
@@ -713,6 +715,12 @@ function CrisprContent() {
             <text x={42} y={60} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>
               Cas9 编辑实验台
             </text>
+            <g transform="translate(42 74)">
+              <rect width={148} height={26} rx={999} fill="rgba(250,247,241,0.78)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.4} />
+              <text x={74} y={18} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={11} fontWeight={900}>
+                SpCas9 / NGG PAM
+              </text>
+            </g>
             <line x1={60} y1={166} x2={704} y2={166} stroke="url(#crisprStrandA)" strokeWidth={10} strokeLinecap="round" />
             <line x1={60} y1={206} x2={704} y2={206} stroke="url(#crisprStrandB)" strokeWidth={10} strokeLinecap="round" opacity={0.82} />
             <defs>
@@ -766,6 +774,7 @@ function CrisprContent() {
                 <path d="M-22 -28 L22 28 M22 -28 L-22 28" stroke="var(--cherry-red)" strokeWidth={4} strokeLinecap="round" />
                 <circle r={30} fill="none" stroke="var(--cherry-red)" strokeWidth={2} strokeDasharray="5 5" />
                 <text x={0} y={52} textAnchor="middle" fill="var(--cherry-red)" fontSize={12} fontWeight={900}>剪切</text>
+                <text x={0} y={68} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={800}>PAM 上游 {cutDistanceFromPam} nt</text>
               </g>
             ) : null}
 
@@ -811,6 +820,18 @@ function CrisprContent() {
               <div style={{ width: `${activeGuide.score}%`, height: "100%", background: activeGuide.score > 80 ? "var(--cherry-sage)" : activeGuide.score > 50 ? "var(--cherry-yellow)" : "var(--cherry-red)", transition: "width 0.25s ease" }} />
             </div>
             <div style={{ color: "var(--cherry-red)", fontSize: "1.35rem", fontWeight: 900, marginBottom: "0.45rem" }}>{activeGuide.score}%</div>
+            <div style={{ display: "grid", gap: 6, marginBottom: "0.75rem" }}>
+              {[
+                ["PAM", pamSequence],
+                ["剪切位点", activeGuide.score >= 60 ? `第 ${cutIndex + 1} 个碱基，PAM 上游 ${cutDistanceFromPam} nt` : "匹配不足，不执行剪切"],
+                ["错配数", `${activeGuide.mismatches.length} 个`],
+              ].map(([label, value]) => (
+                <div key={label} style={{ display: "flex", justifyContent: "space-between", gap: 10, color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800 }}>
+                  <span>{label}</span>
+                  <span style={{ color: "var(--cherry-warm-brown)", textAlign: "right", fontWeight: 900 }}>{value}</span>
+                </div>
+              ))}
+            </div>
             <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.82rem" }}>{activeGuide.note}</div>
           </div>
         </aside>
