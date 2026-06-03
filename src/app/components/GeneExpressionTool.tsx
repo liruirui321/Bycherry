@@ -465,10 +465,8 @@ export function GeneExpressionTool() {
     const ribBound = molecules.filter((molecule) => molecule.type === "ribosome" && inBox(molecule, zones.ribosome)).length;
     const transcriptionOn = tfBound > 0 && polBound > 0;
     const mrna = transcriptionOn ? Math.min(5, tfBound + polBound + 1) : 0;
-    const translationOn = mrna > 0 && ribBound > 0;
-    const protein = translationOn ? Math.min(12, mrna * ribBound) : 0;
 
-    return { tfBound, polBound, ribBound, transcriptionOn, mrna, translationOn, protein };
+    return { tfBound, polBound, ribBound, transcriptionOn, mrna };
   }, [molecules, zones.polymerase, zones.promoter, zones.ribosome]);
   const transcriptionProgress = model.transcriptionOn ? clamp01(cycleProgress / 0.78) : 0;
   const transcribedProgress = model.transcriptionOn ? maxVisibleTranscribedProgress(cycleProgress, model.polBound) : 0;
@@ -887,7 +885,7 @@ export function GeneExpressionTool() {
                         : "转录尚未启动：启动子需要 TF，基因区域需要 RNA 聚合酶。"
                 : visibleMrnaCount === 0
                   ? "RNA 聚合酶正在沿基因区移动，新生 mRNA 正从后方延伸出来。"
-                  : !model.translationOn
+                  : !canTranslate
                     ? "mRNA 已经开始积累：把核糖体放到 mRNA 附近可以开始翻译。"
                     : activeRibosomeCount === 0 && visibleProteinCount === 0
                       ? "核糖体已进入入口，正在等待可读的 mRNA 片段。"
