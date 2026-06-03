@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { IconCheck, IconDNA, IconMicroscope, IconSparkle } from "./Icons";
 
 type MoleculeType = "tf" | "pol" | "ribosome";
@@ -131,9 +131,83 @@ function StageRail({ model }: { model: { tfBound: number; polBound: number; ribB
   );
 }
 
-function LiveExpressionProcess({ model }: { model: { transcriptionOn: boolean; translationOn: boolean; mrna: number } }) {
-  const releasedPath = "M646 270 C640 322 614 360 650 398 C684 434 730 458 778 474";
-  const ribosomePath = "M520 356 C568 370 616 394 662 424 C708 454 742 468 778 474";
+type Point = { x: number; y: number };
+
+const transcriptPath: Point[] = [
+  { x: 396, y: 272 },
+  { x: 426, y: 318 },
+  { x: 494, y: 348 },
+  { x: 584, y: 382 },
+  { x: 676, y: 432 },
+  { x: 778, y: 474 },
+];
+
+function clamp01(value: number) {
+  return Math.max(0, Math.min(1, value));
+}
+
+function lerp(start: number, end: number, progress: number) {
+  return start + (end - start) * progress;
+}
+
+function pointOnPolyline(points: Point[], progress: number) {
+  const boundedProgress = clamp01(progress);
+  const lengths = points.slice(1).map((point, index) => {
+    const previous = points[index];
+    return Math.hypot(point.x - previous.x, point.y - previous.y);
+  });
+  const totalLength = lengths.reduce((sum, length) => sum + length, 0);
+  let remaining = totalLength * boundedProgress;
+
+  for (let index = 0; index < lengths.length; index += 1) {
+    if (remaining <= lengths[index]) {
+      const previous = points[index];
+      const next = points[index + 1];
+      const localProgress = lengths[index] === 0 ? 0 : remaining / lengths[index];
+      return { x: lerp(previous.x, next.x, localProgress), y: lerp(previous.y, next.y, localProgress) };
+    }
+    remaining -= lengths[index];
+  }
+
+  return points[points.length - 1];
+}
+
+function partialPolylinePath(points: Point[], progress: number) {
+  const boundedProgress = clamp01(progress);
+  if (boundedProgress <= 0) return `M${points[0].x} ${points[0].y}`;
+
+  const lengths = points.slice(1).map((point, index) => {
+    const previous = points[index];
+    return Math.hypot(point.x - previous.x, point.y - previous.y);
+  });
+  const totalLength = lengths.reduce((sum, length) => sum + length, 0);
+  let remaining = totalLength * boundedProgress;
+  const path = [`M${points[0].x} ${points[0].y}`];
+
+  for (let index = 0; index < lengths.length; index += 1) {
+    const previous = points[index];
+    const next = points[index + 1];
+    if (remaining >= lengths[index]) {
+      path.push(`L${next.x} ${next.y}`);
+      remaining -= lengths[index];
+    } else {
+      const localProgress = lengths[index] === 0 ? 0 : remaining / lengths[index];
+      path.push(`L${lerp(previous.x, next.x, localProgress)} ${lerp(previous.y, next.y, localProgress)}`);
+      break;
+    }
+  }
+
+  return path.join(" ");
+}
+
+function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: boolean; translationOn: boolean; mrna: number }; progress: number }) {
+  const transcriptionProgress = model.transcriptionOn ? clamp01(progress / 0.78) : 0;
+  const translationProgress = model.translationOn ? clamp01((progress - 0.28) / 0.62) : 0;
+  const polymeraseX = model.transcriptionOn ? lerp(392, 676, transcriptionProgress) : 392;
+  const mrnaPath = partialPolylinePath(transcriptPath, transcriptionProgress);
+  const mrnaTip = pointOnPolyline(transcriptPath, transcriptionProgress);
+  const ribosomePoint = pointOnPolyline(transcriptPath, translationProgress);
+  const aminoCount = model.translationOn ? Math.min(codons.length, Math.max(0, Math.floor(translationProgress * (codons.length + 0.75)))) : 0;
 
   if (!model.transcriptionOn) {
     return (
@@ -148,38 +222,26 @@ function LiveExpressionProcess({ model }: { model: { transcriptionOn: boolean; t
 
   return (
     <g>
-      <g opacity={0}>
-        <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.08;0.9;1" dur="6s" repeatCount="indefinite" />
-        <animateTransform attributeName="transform" type="translate" values="392 250;676 250" dur="6s" repeatCount="indefinite" />
+      <g transform={`translate(${polymeraseX} 250)`}>
         <ellipse rx={42} ry={27} fill="var(--cherry-blue-light)" stroke="var(--cherry-blue)" strokeWidth={3} />
         <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>
           RNA pol
         </text>
       </g>
 
-      <path d="M392 270 C396 310 426 322 462 330" fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" opacity={0}>
-        <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.28;0.38;1" dur="6s" repeatCount="indefinite" />
-      </path>
+      <path d={mrnaPath} fill="none" stroke="rgba(232,121,95,0.2)" strokeWidth={17} strokeLinecap="round" strokeLinejoin="round" />
+      <path d={mrnaPath} fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx={mrnaTip.x} cy={mrnaTip.y} r={8} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={3} />
 
-      <path d="M510 270 C508 320 530 346 586 370 C606 378 622 388 636 402" fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" opacity={0}>
-        <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.22;0.34;0.56;0.66;1" dur="6s" repeatCount="indefinite" />
-      </path>
-
-      <path d={releasedPath} fill="none" stroke="rgba(232,121,95,0.2)" strokeWidth={15} strokeLinecap="round" opacity={0}>
-        <animate attributeName="opacity" values="0;0;0;1;1;0" keyTimes="0;0.48;0.56;0.66;0.92;1" dur="6s" repeatCount="indefinite" />
-      </path>
-      <path d={releasedPath} fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" opacity={0}>
-        <animate attributeName="opacity" values="0;0;0;1;1;0" keyTimes="0;0.48;0.56;0.66;0.92;1" dur="6s" repeatCount="indefinite" />
-      </path>
-
-      <text x={390} y={342} fill="var(--cherry-red)" fontSize={13} fontWeight={900} opacity={0}>
+      <text x={390} y={342} fill="var(--cherry-red)" fontSize={13} fontWeight={900} opacity={transcriptionProgress > 0.08 ? 1 : 0}>
         新生 mRNA
-        <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.14;0.72;0.88;1" dur="6s" repeatCount="indefinite" />
+      </text>
+      <text x={polymeraseX - 34} y={224} fill="var(--cherry-blue)" fontSize={12} fontWeight={900}>
+        正在沿 DNA 读取模板链
       </text>
 
       {codons.map((codon, index) => (
-        <g key={codon.rna} transform={`translate(${502 + index * 58} ${350 + index * 22})`} opacity={0}>
-          <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.2;0.46;0.86;1" dur="6s" begin={`${index * 0.22}s`} repeatCount="indefinite" />
+        <g key={codon.rna} transform={`translate(${502 + index * 58} ${350 + index * 22})`} opacity={transcriptionProgress > 0.24 + index * 0.13 ? 1 : 0.18}>
           <rect width={50} height={25} rx={9} fill="rgba(250,247,241,0.84)" stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
           <text x={25} y={17} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>
             {codon.rna}
@@ -190,7 +252,7 @@ function LiveExpressionProcess({ model }: { model: { transcriptionOn: boolean; t
       {Array.from({ length: Math.max(0, model.mrna - 1) }).map((_, index) => (
         <path
           key={index}
-          d={releasedPath}
+          d={partialPolylinePath(transcriptPath, Math.max(0.25, transcriptionProgress - index * 0.08))}
           fill="none"
           stroke="var(--cherry-red)"
           strokeWidth={4}
@@ -203,9 +265,7 @@ function LiveExpressionProcess({ model }: { model: { transcriptionOn: boolean; t
 
       {model.translationOn ? (
         <>
-          <g opacity={0}>
-            <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.28;0.4;0.88;1" dur="6s" repeatCount="indefinite" />
-            <animateMotion path={ribosomePath} dur="6s" begin="1.6s" repeatCount="indefinite" />
+          <g transform={`translate(${ribosomePoint.x} ${ribosomePoint.y})`} opacity={translationProgress > 0.02 ? 1 : 0}>
             <ellipse rx={48} ry={30} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={3} />
             <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
               ribosome
@@ -213,8 +273,7 @@ function LiveExpressionProcess({ model }: { model: { transcriptionOn: boolean; t
           </g>
 
           {codons.map((codon, index) => (
-            <g key={`trna-${codon.rna}`} transform={`translate(${540 + index * 42} ${500 - index * 16})`} opacity={0}>
-              <animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.34;0.48;0.64;1" dur="6s" begin={`${index * 0.32}s`} repeatCount="indefinite" />
+            <g key={`trna-${codon.rna}`} transform={`translate(${540 + index * 42} ${500 - index * 16})`} opacity={translationProgress > 0.18 + index * 0.16 && translationProgress < 0.58 + index * 0.12 ? 1 : 0.12}>
               <path d="M0 0 Q10 -18 20 0 Q10 15 0 0Z" fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
               <text x={10} y={4} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={8} fontWeight={900}>
                 tRNA
@@ -227,8 +286,7 @@ function LiveExpressionProcess({ model }: { model: { transcriptionOn: boolean; t
               amino acid chain
             </text>
             {codons.map((codon, index) => (
-              <g key={codon.amino} transform={`translate(${index * 58} 22)`} opacity={0.25}>
-                <animate attributeName="opacity" values="0.25;0.25;1;1" keyTimes="0;0.36;0.56;1" dur="6s" begin={`${1.6 + index * 0.34}s`} repeatCount="indefinite" />
+              <g key={codon.amino} transform={`translate(${index * 58} 22)`} opacity={index < aminoCount ? 1 : 0.22}>
                 <circle r={18} fill={codon.color} stroke="rgba(94,68,42,0.16)" strokeWidth={1.5} />
                 <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={10} fontWeight={900}>
                   {codon.amino}
@@ -246,6 +304,7 @@ export function GeneExpressionTool() {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [molecules, setMolecules] = useState(initialMolecules);
   const [dragging, setDragging] = useState<{ id: string; dx: number; dy: number } | null>(null);
+  const [cycleProgress, setCycleProgress] = useState(0);
 
   const zones = {
     promoter: { x: 214, y: 212, w: 160, h: 86 },
@@ -285,6 +344,25 @@ export function GeneExpressionTool() {
     { label: "把 RNA pol 拖到 gene body，观察 mRNA 出现。", done: model.transcriptionOn },
     { label: "把 ribosome 拖到 mRNA 附近，观察蛋白质产物增加。", done: model.translationOn },
   ];
+
+  useEffect(() => {
+    if (!model.transcriptionOn) {
+      setCycleProgress(0);
+      return;
+    }
+
+    let frame = 0;
+    const cycleLength = 6800;
+    const start = performance.now();
+
+    function tick(now: number) {
+      setCycleProgress(((now - start) % cycleLength) / cycleLength);
+      frame = requestAnimationFrame(tick);
+    }
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [model.transcriptionOn]);
 
   function svgPoint(event: React.PointerEvent<SVGSVGElement | SVGGElement>) {
     const svg = svgRef.current;
@@ -422,7 +500,7 @@ export function GeneExpressionTool() {
               ))}
             </g>
 
-            <LiveExpressionProcess model={model} />
+            <LiveExpressionProcess model={model} progress={cycleProgress} />
 
             <rect x={zones.ribosome.x} y={zones.ribosome.y} width={zones.ribosome.w} height={zones.ribosome.h} rx={22} fill={model.ribBound > 0 ? "rgba(232,121,95,0.15)" : "rgba(250,247,241,0.38)"} stroke="var(--cherry-peach)" strokeWidth={2} strokeDasharray="7 7" />
             <text x={zones.ribosome.x + 22} y={zones.ribosome.y + 34} fill="var(--cherry-warm-brown)" fontSize={15} fontWeight={900}>
@@ -432,7 +510,7 @@ export function GeneExpressionTool() {
               <circle key={x} cx={x} cy={450} r={30} fill="none" stroke={model.ribBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
             ))}
 
-            <ProductBeads count={model.protein} />
+            <ProductBeads count={model.translationOn ? Math.min(model.protein, Math.max(1, Math.floor(cycleProgress * 12))) : 0} />
 
             <g transform="translate(46 86)">
               <rect width={190} height={28} rx={999} fill="rgba(250,247,241,0.74)" stroke="rgba(94,68,42,0.16)" />
