@@ -1273,6 +1273,82 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
   );
 }
 
+function WorkContinueLinks({ work }: { work: Work }) {
+  const relatedWorks = [
+    ...works.filter((item) => item.slug !== work.slug && item.category === work.category),
+    ...works.filter((item) => item.slug !== work.slug && item.category !== work.category),
+  ].slice(0, 2);
+
+  if (relatedWorks.length === 0) return null;
+
+  function openWork(href: string, event: React.MouseEvent<HTMLAnchorElement>) {
+    if (!shouldUseClientNavigation(event)) return;
+    event.preventDefault();
+    navigateClient(href);
+  }
+
+  return (
+    <section style={{ padding: "0 1.5rem 5rem", fontFamily: "'Nunito', sans-serif" }}>
+      <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gap: "0.9rem" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
+          <h2 style={{ color: "var(--cherry-warm-brown)", fontSize: "1.08rem", fontWeight: 900, margin: 0 }}>继续打开</h2>
+          <a
+            className="work-detail-link"
+            href="/#works"
+            onClick={(event) => {
+              if (!shouldUseClientNavigation(event)) return;
+              event.preventDefault();
+              navigateHome("#works");
+            }}
+            style={{ color: "var(--cherry-forest)", textDecoration: "none", fontWeight: 900, fontSize: "0.84rem" }}
+          >
+            全部作品 →
+          </a>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.85rem" }}>
+          {relatedWorks.map((item) => (
+            <a
+              className="work-next-card"
+              key={item.slug}
+              href={item.href}
+              onClick={(event) => openWork(item.href, event)}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto minmax(0, 1fr)",
+                gap: "0.75rem",
+                alignItems: "start",
+                background: item.color,
+                border: `1.5px solid ${item.border}`,
+                borderRadius: 18,
+                padding: "0.95rem",
+                color: "inherit",
+                textDecoration: "none",
+                boxShadow: "3px 5px 0px rgba(94,68,42,0.07)",
+              }}
+            >
+              <span style={{ width: 40, height: 40, borderRadius: 14, background: "rgba(250,247,241,0.58)", display: "grid", placeItems: "center", flexShrink: 0 }}>
+                <span style={{ transform: "scale(0.68)", display: "inline-flex" }}>{item.icon}</span>
+              </span>
+              <span style={{ minWidth: 0 }}>
+                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.35, marginBottom: "0.34rem" }}>{item.title}</strong>
+                <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginBottom: "0.5rem" }}>{item.desc}</span>
+                <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                  {item.outputs.map((output) => (
+                    <span key={output} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.13rem 0.46rem", color: "var(--cherry-warm-brown)", fontSize: "0.66rem", fontWeight: 900 }}>
+                      {output}
+                    </span>
+                  ))}
+                </span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function WorkDetailPage({ slug }: { slug: string }) {
   const work = works.find((item) => item.slug === slug);
 
@@ -1326,6 +1402,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
         </section>
       ) : null}
       {work.slug === "gene-expression" ? <GeneExpressionTool /> : null}
+      <WorkContinueLinks work={work} />
       <style>
         {`
           .work-detail-back-link:focus-visible {
@@ -1336,6 +1413,29 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           .work-detail-back-link:hover,
           .work-detail-back-link:focus-visible {
             color: var(--cherry-red) !important;
+          }
+
+          .work-detail-link:focus-visible,
+          .work-next-card:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          .work-next-card {
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+          }
+
+          .work-next-card:hover,
+          .work-next-card:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 4px 8px 0 rgba(94,68,42,0.1) !important;
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            .work-next-card {
+              transition: none !important;
+              transform: none !important;
+            }
           }
         `}
       </style>
