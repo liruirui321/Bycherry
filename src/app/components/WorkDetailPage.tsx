@@ -797,7 +797,7 @@ function CrisprContent() {
             ))}
           </div>
         </div>
-        <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.9rem" }}>
+        <div role="status" aria-live="polite" style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.9rem" }}>
           <strong style={{ color: effectiveRepair.color }}>{effectiveRepair.title}：</strong>
           {activeGuide.score < 60 ? "guide 匹配不足，Cas9 不稳定定位，本轮按未成功编辑处理。" : activeRepair.result}
         </div>

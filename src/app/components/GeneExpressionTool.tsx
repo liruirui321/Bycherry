@@ -779,7 +779,7 @@ export function GeneExpressionTool() {
             </div>
           </div>
 
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", color: "var(--cherry-warm-mid)", lineHeight: 1.7 }}>
+          <div role="status" aria-live="polite" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", color: "var(--cherry-warm-mid)", lineHeight: 1.7 }}>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.65rem" }}>当前状态</div>
             <div style={{ fontSize: "0.88rem" }}>
               {!model.transcriptionOn
