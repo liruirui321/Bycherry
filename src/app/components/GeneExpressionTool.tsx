@@ -141,11 +141,11 @@ function usePrefersReducedMotion() {
   return prefersReducedMotion;
 }
 
-function StageRail({ model, visibleProteinCount }: { model: { tfBound: number; polBound: number; ribBound: number; transcriptionOn: boolean; translationOn: boolean }; visibleProteinCount: number }) {
+function StageRail({ model, activeRibosomeCount, visibleProteinCount }: { model: { tfBound: number; polBound: number; transcriptionOn: boolean }; activeRibosomeCount: number; visibleProteinCount: number }) {
   const stages = [
     { label: "TF 结合启动子", active: model.tfBound > 0 },
     { label: "RNA 聚合酶转录", active: model.transcriptionOn },
-    { label: "核糖体翻译", active: model.translationOn },
+    { label: "核糖体翻译", active: activeRibosomeCount > 0 },
     { label: "蛋白质累积", active: visibleProteinCount > 0 },
   ];
 
@@ -454,6 +454,7 @@ export function GeneExpressionTool() {
   const visibleMrnaCount = model.transcriptionOn ? Math.min(model.mrna, Math.max(displayedMrnaCount, instantMrnaCount)) : 0;
   const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
   const readableRibosomes = buildRibosomeTracks(cycleProgress, model.ribBound, ribosomeCanRead, transcribedProgress).filter((ribosome) => ribosome.opacity > 0);
+  const activeRibosomeCount = readableRibosomes.length;
   const leadRibosomeProgress = readableRibosomes[0]?.progress ?? 0;
   const activeCodonIndex = leadRibosomeProgress > 0 ? Math.min(codons.length - 1, Math.floor(leadRibosomeProgress * codons.length)) : -1;
   const translatedSignal = readableRibosomes.reduce((sum, ribosome) => sum + ribosome.progress, 0);
@@ -663,7 +664,7 @@ export function GeneExpressionTool() {
             <text x={42} y={58} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>
               基因表达实验台
             </text>
-            <StageRail model={model} visibleProteinCount={visibleProteinCount} />
+            <StageRail model={model} activeRibosomeCount={activeRibosomeCount} visibleProteinCount={visibleProteinCount} />
 
             <g transform="translate(154 170)">
               <rect x={0} y={0} width={668} height={150} rx={34} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.18)" strokeWidth={2} />
@@ -743,7 +744,7 @@ export function GeneExpressionTool() {
               {[
                 ["启动子上的转录因子", model.tfBound],
                 ["参与转录的 RNA 聚合酶", model.polBound],
-                ["mRNA 上的核糖体", model.ribBound],
+                ["正在读取的核糖体", `${activeRibosomeCount}/${model.ribBound}`],
                 ["mRNA 数量", `${visibleMrnaCount}/${model.mrna}`],
                 ["蛋白质产量", `${visibleProteinCount}/${model.protein}`],
               ].map(([label, value]) => (
