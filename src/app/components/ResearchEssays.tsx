@@ -83,7 +83,8 @@ export const essays = [
   },
 ];
 
-function navigateTo(href: string) {
+function navigateTo(href: string, event?: React.MouseEvent<HTMLAnchorElement>) {
+  event?.preventDefault();
   window.history.pushState(null, "", href);
   window.dispatchEvent(new PopStateEvent("popstate"));
 }
@@ -92,9 +93,8 @@ function EssayCard({ essay }: {
   essay: (typeof essays)[0];
 }) {
   return (
-    <article
-      role="link"
-      tabIndex={0}
+    <a
+      href={essay.href}
       style={{
         background: "var(--card)",
         border: "1.5px solid var(--border)",
@@ -104,16 +104,13 @@ function EssayCard({ essay }: {
         cursor: "pointer",
         position: "relative",
         overflow: "hidden",
+        color: "inherit",
+        display: "block",
+        textDecoration: "none",
       }}
       onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "4px 8px 0px rgba(94,68,42,0.1)"; }}
       onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = ""; }}
-      onClick={() => navigateTo(essay.href)}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          navigateTo(essay.href);
-        }
-      }}
+      onClick={(event) => navigateTo(essay.href, event)}
     >
       {/* Forest accent bar */}
       <div
@@ -236,7 +233,7 @@ function EssayCard({ essay }: {
           </div>
         </div>
       </div>
-    </article>
+    </a>
   );
 }
 
@@ -273,22 +270,6 @@ export function ResearchEssays() {
           <h2 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
             科研随笔
           </h2>
-          <a
-            href="#"
-            style={{
-              fontFamily: "'Caveat', cursive",
-              color: "var(--cherry-forest)",
-              textDecoration: "none",
-              fontSize: "1rem",
-              fontWeight: 600,
-              display: "flex",
-              alignItems: "center",
-              gap: 4,
-            }}
-          >
-            全部随笔
-            <IconArrowRight size={14} color="var(--cherry-forest)" />
-          </a>
         </div>
 
         {/* Decorative horizontal rule */}

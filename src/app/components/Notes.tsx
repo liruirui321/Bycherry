@@ -79,7 +79,8 @@ export const notes = [
   },
 ];
 
-function navigateTo(href: string) {
+function navigateTo(href: string, event?: React.MouseEvent<HTMLAnchorElement>) {
+  event?.preventDefault();
   window.history.pushState(null, "", href);
   window.dispatchEvent(new PopStateEvent("popstate"));
 }
@@ -121,25 +122,15 @@ export function Notes() {
               最近在想的事
             </h2>
           </div>
-          <a href="#" style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-forest)", textDecoration: "none", fontSize: "1rem", fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}>
-            看全部笔记 <IconArrowRight size={14} color="var(--cherry-forest)" />
-          </a>
         </div>
 
         {/* Notes grid */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem" }}>
           {notes.map((note) => (
-            <article
+            <a
               key={note.id}
-              role="link"
-              tabIndex={0}
-              onClick={() => navigateTo(note.href)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  navigateTo(note.href);
-                }
-              }}
+              href={note.href}
+              onClick={(event) => navigateTo(note.href, event)}
               style={{
                 background: "var(--card)",
                 border: "1.5px solid var(--border)",
@@ -148,6 +139,9 @@ export function Notes() {
                 position: "relative",
                 transition: "transform 0.2s, box-shadow 0.2s",
                 cursor: "pointer",
+                color: "inherit",
+                display: "block",
+                textDecoration: "none",
               }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(-3px)"; (e.currentTarget as HTMLElement).style.boxShadow = "4px 8px 0px rgba(94,68,42,0.1)"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.boxShadow = ""; }}
@@ -179,7 +173,7 @@ export function Notes() {
                   阅读全文 <IconArrowRight size={13} color="var(--cherry-forest)" />
                 </span>
               </div>
-            </article>
+            </a>
           ))}
         </div>
       </div>
