@@ -487,6 +487,7 @@ export function GeneExpressionTool() {
     if (!model.transcriptionOn) {
       progressRef.current = 0;
       setCycleProgress(0);
+      setIsPaused(false);
       return;
     }
     if (prefersReducedMotion) {
