@@ -14,7 +14,7 @@ import { Footer } from "./components/Footer";
 import { works } from "./components/Works";
 
 const siteTitle = "By Cherry";
-const defaultDescription = "A warm illustrated portfolio about science education, AI learning tools, project-based courses, and creative workflows.";
+const defaultDescription = "By Cherry 是一个可爱插画风的个人网站，收录科学教育、AI 学习工具、项目制课程和创作工作流。";
 const siteUrl = "https://bycherry.me";
 
 function upsertMeta(selector: string, attributes: Record<string, string>, content: string) {
@@ -143,6 +143,8 @@ export default function App() {
     upsertMeta('meta[name="description"]', { name: "description" }, description);
     upsertMeta('meta[property="og:title"]', { property: "og:title" }, fullTitle);
     upsertMeta('meta[property="og:description"]', { property: "og:description" }, description);
+    upsertMeta('meta[property="og:type"]', { property: "og:type" }, work || note || essay ? "article" : "website");
+    upsertMeta('meta[property="og:locale"]', { property: "og:locale" }, "zh_CN");
     upsertMeta('meta[property="og:url"]', { property: "og:url" }, canonicalUrl);
     upsertMeta('meta[name="twitter:title"]', { name: "twitter:title" }, fullTitle);
     upsertMeta('meta[name="twitter:description"]', { name: "twitter:description" }, description);
