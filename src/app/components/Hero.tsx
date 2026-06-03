@@ -72,7 +72,7 @@ export function Hero() {
         justifyContent: "center",
         position: "relative",
         overflow: "hidden",
-        padding: "5.5rem 1.5rem 2.5rem",
+        padding: "4.6rem 1.5rem 2.2rem",
       }}
     >
       {/* Forest atmosphere blobs */}
@@ -128,7 +128,9 @@ export function Hero() {
       </FloatDeco>
 
       {/* Main content */}
-      <div style={{ position: "relative", zIndex: 2, textAlign: "center", maxWidth: 980, width: "100%" }}>
+      <div style={{ position: "relative", zIndex: 2, textAlign: "left", maxWidth: 1120, width: "100%" }}>
+        <div className="hero-content-grid" style={{ display: "grid", gridTemplateColumns: "minmax(260px, 0.72fr) minmax(0, 1.28fr)", gap: "1.2rem", alignItems: "start" }}>
+          <div className="hero-intro">
         {/* Tag */}
         <div
           style={{
@@ -139,7 +141,7 @@ export function Hero() {
             border: "1.5px dashed var(--cherry-yellow)",
             borderRadius: 999,
             padding: "0.35rem 1.1rem",
-            marginBottom: "1.8rem",
+            marginBottom: "1rem",
           }}
         >
           <IconSparkle size={13} color="var(--cherry-bark)" />
@@ -153,7 +155,7 @@ export function Hero() {
         <h1
           style={{
             fontFamily: "'Nunito', sans-serif",
-            fontSize: "clamp(2rem, 5vw, 3.25rem)",
+            fontSize: "clamp(1.85rem, 4.4vw, 3rem)",
             fontWeight: 800,
             lineHeight: 1.15,
             color: "var(--cherry-warm-brown)",
@@ -181,7 +183,7 @@ export function Hero() {
             fontSize: "clamp(1.1rem, 2.5vw, 1.35rem)",
             color: "var(--cherry-warm-mid)",
             lineHeight: 1.65,
-            marginBottom: "1.4rem",
+            marginBottom: "1.1rem",
             fontWeight: 500,
           }}
         >
@@ -191,13 +193,13 @@ export function Hero() {
         </p>
 
         {/* CTAs */}
-        <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-start", flexWrap: "wrap" }}>
           <a
             href="#works"
             style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               background: "var(--cherry-forest)", color: "#FAF7F1",
-              borderRadius: 999, padding: "0.72rem 1.85rem",
+              borderRadius: 999, padding: "0.62rem 1.25rem",
               textDecoration: "none", fontWeight: 700, fontSize: "0.93rem",
               boxShadow: "3px 5px 0px rgba(58,92,62,0.25)",
               transition: "transform 0.15s, box-shadow 0.15s",
@@ -213,7 +215,7 @@ export function Hero() {
               display: "inline-flex", alignItems: "center", gap: 8,
               background: "transparent", color: "var(--cherry-warm-brown)",
               border: "1.5px solid var(--border)", borderRadius: 999,
-              padding: "0.72rem 1.85rem",
+              padding: "0.62rem 1.25rem",
               textDecoration: "none", fontWeight: 700, fontSize: "0.93rem",
               transition: "background 0.15s, border-color 0.15s",
             }}
@@ -223,13 +225,14 @@ export function Hero() {
             <IconNotebook size={18} /> 读读笔记
           </a>
         </div>
+          </div>
 
-        <div style={{ marginTop: "1.6rem", background: "rgba(250,247,241,0.76)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.07)" }}>
+        <div className="hero-work-list" style={{ background: "transparent", border: "none", borderRadius: 0, padding: 0, boxShadow: "none" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: "0.75rem", flexWrap: "wrap" }}>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.95rem" }}>当前可打开的内容</div>
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800 }}>{works.length} 个作品入口</div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.65rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(178px, 1fr))", gap: "0.65rem" }}>
             {works.map((work) => (
               <a
                 key={work.slug}
@@ -242,11 +245,11 @@ export function Hero() {
                   background: work.color,
                   border: `1.5px solid ${work.border}`,
                   borderRadius: 16,
-                  padding: "0.78rem",
+                  padding: "0.72rem",
                   color: "var(--cherry-warm-brown)",
                   textDecoration: "none",
                   textAlign: "left",
-                  minHeight: 112,
+                  minHeight: 104,
                   display: "grid",
                   alignContent: "start",
                   gap: "0.4rem",
@@ -259,7 +262,7 @@ export function Hero() {
                   <path d="M20 58 Q38 42 62 16" stroke="var(--cherry-warm-brown)" strokeWidth="1.8" strokeLinecap="round" opacity="0.35" />
                 </svg>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ width: 28, height: 28, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{work.icon}</span>
+                  <span style={{ width: 28, height: 28, display: "inline-flex", alignItems: "center", justifyContent: "center", transform: "scale(0.68)", transformOrigin: "center" }}>{work.icon}</span>
                   <strong style={{ fontSize: "0.88rem", lineHeight: 1.35 }}>{work.title}</strong>
                 </div>
                 <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.45 }}>{work.desc}</span>
@@ -267,9 +270,20 @@ export function Hero() {
             ))}
           </div>
         </div>
+        </div>
       </div>
 
       <style>{`
+        @media (max-width: 860px) {
+          .hero-content-grid {
+            grid-template-columns: 1fr !important;
+          }
+
+          .hero-work-list {
+            order: -1;
+          }
+        }
+
         @keyframes floatDeco {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-9px); }
