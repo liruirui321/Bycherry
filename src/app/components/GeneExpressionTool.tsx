@@ -235,10 +235,8 @@ function partialPolylinePath(points: Point[], progress: number) {
   return path.join(" ");
 }
 
-function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: boolean; translationOn: boolean; polBound: number; ribBound: number }; progress: number }) {
-  const transcriptionProgress = model.transcriptionOn ? clamp01(progress / 0.78) : 0;
-  const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
-  const polymerases = Array.from({ length: Math.max(1, model.polBound) }).map((_, index) => {
+function buildPolymeraseTracks(progress: number, polBound: number) {
+  return Array.from({ length: Math.max(1, polBound) }).map((_, index) => {
     const phase = (progress + index * 0.18) % 1;
     const localProgress = clamp01(phase / 0.78);
     const offset = { x: -index * 12, y: index * 14 };
@@ -252,6 +250,18 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
       opacity: phase < 0.82 ? 1 : Math.max(0, 1 - (phase - 0.82) / 0.12),
     };
   });
+}
+
+function maxVisibleTranscribedProgress(progress: number, polBound: number) {
+  const transcriptionProgress = clamp01(progress / 0.78);
+  const polymerases = buildPolymeraseTracks(progress, polBound);
+  return Math.max(transcriptionProgress, ...polymerases.map((polymerase) => polymerase.progress * polymerase.opacity));
+}
+
+function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: boolean; translationOn: boolean; polBound: number; ribBound: number }; progress: number }) {
+  const transcriptionProgress = model.transcriptionOn ? clamp01(progress / 0.78) : 0;
+  const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
+  const polymerases = buildPolymeraseTracks(progress, model.polBound);
   const maxTranscribedProgress = Math.max(transcriptionProgress, ...polymerases.map((polymerase) => polymerase.progress * polymerase.opacity));
   const ribosomes = Array.from({ length: model.ribBound }).map((_, index) => {
     const phase = (progress + index * 0.16) % 1;
@@ -433,10 +443,11 @@ export function GeneExpressionTool() {
     { label: "把核糖体拖到 mRNA 附近，观察蛋白质产物增加。", done: model.translationOn },
   ];
   const transcriptionProgress = model.transcriptionOn ? clamp01(cycleProgress / 0.78) : 0;
+  const transcribedProgress = model.transcriptionOn ? maxVisibleTranscribedProgress(cycleProgress, model.polBound) : 0;
   const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
   const sequenceRibosomePhase = cycleProgress % 1;
   const sequenceRibosomeProgress = clamp01((sequenceRibosomePhase - 0.28) / 0.62);
-  const sequenceIsReading = ribosomeCanRead && sequenceRibosomePhase >= 0.28 && sequenceRibosomePhase < 0.92 && sequenceRibosomeProgress <= Math.max(0.12, transcriptionProgress);
+  const sequenceIsReading = ribosomeCanRead && sequenceRibosomePhase >= 0.28 && sequenceRibosomePhase < 0.92 && sequenceRibosomeProgress <= Math.max(0.12, transcribedProgress);
   const activeCodonIndex = sequenceIsReading ? Math.min(codons.length - 1, Math.floor(sequenceRibosomeProgress * codons.length)) : -1;
   const visibleProteinCount = sequenceIsReading ? Math.min(model.protein, Math.floor(sequenceRibosomeProgress * 12)) : 0;
   const integratedMolecules = molecules.filter((molecule) => molecule.type !== "tf" && inBox(molecule, zones[moleculeZone(molecule.type)]));
@@ -770,7 +781,7 @@ export function GeneExpressionTool() {
             <div style={{ display: "grid", gap: "0.55rem" }}>
               {codons.map((codon, index) => {
                 const active = activeCodonIndex === index;
-                const transcribed = model.transcriptionOn && cycleProgress > 0.2 + index * 0.12;
+                const transcribed = transcribedProgress > 0.22 + index * 0.13;
                 return (
                   <div key={codon.rna} style={{ display: "grid", gridTemplateColumns: "42px 1fr 42px", alignItems: "center", gap: 8, background: active ? "var(--cherry-yellow-light)" : transcribed ? "rgba(250,247,241,0.78)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-red)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.55rem", color: "var(--cherry-warm-mid)" }}>
                     <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>{codon.dna}</strong>
