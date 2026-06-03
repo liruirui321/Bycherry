@@ -78,21 +78,6 @@ function MoleculeNode({
   );
 }
 
-function CodonLabels({ x, y }: { x: number; y: number }) {
-  return (
-    <g transform={`translate(${x} ${y})`}>
-      {codons.map((codon, index) => (
-        <g key={codon.rna} transform={`translate(${index * 78} 0)`}>
-          <rect width={62} height={30} rx={10} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.18)" strokeWidth={1.5} />
-          <text x={31} y={20} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
-            {codon.rna}
-          </text>
-        </g>
-      ))}
-    </g>
-  );
-}
-
 function ProductBeads({ count }: { count: number }) {
   return (
     <g transform="translate(704 442)">
@@ -142,6 +127,88 @@ function StageRail({ model }: { model: { tfBound: number; polBound: number; ribB
           </text>
         </g>
       ))}
+    </g>
+  );
+}
+
+function LiveExpressionProcess({ model }: { model: { transcriptionOn: boolean; translationOn: boolean; mrna: number } }) {
+  const transcriptPath = "M358 318 C402 338 438 348 488 356 C558 368 614 392 664 424 C704 450 736 468 778 474";
+
+  if (!model.transcriptionOn) {
+    return (
+      <g opacity={0.4}>
+        <path d={transcriptPath} fill="none" stroke="var(--cherry-red)" strokeWidth={8} strokeLinecap="round" strokeDasharray="12 14" />
+        <text x={438} y={376} fill="var(--cherry-warm-mid)" fontSize={15} fontWeight={800}>
+          mRNA 会从 RNA pol 后方逐步延伸
+        </text>
+      </g>
+    );
+  }
+
+  return (
+    <g>
+      <path d={transcriptPath} fill="none" stroke="rgba(232,121,95,0.18)" strokeWidth={15} strokeLinecap="round" />
+      <path d={transcriptPath} fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" strokeDasharray="560" strokeDashoffset="560">
+        <animate attributeName="stroke-dashoffset" values="560;0;0;560" keyTimes="0;0.58;0.82;1" dur="5.6s" repeatCount="indefinite" />
+      </path>
+      <circle r={7} fill="var(--cherry-red)" opacity={0.9}>
+        <animateMotion path={transcriptPath} dur="5.6s" repeatCount="indefinite" />
+      </circle>
+      <text x={366} y={344} fill="var(--cherry-red)" fontSize={13} fontWeight={900}>
+        nascent mRNA
+        <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.18;0.78;1" dur="5.6s" repeatCount="indefinite" />
+      </text>
+
+      {codons.map((codon, index) => (
+        <g key={codon.rna} transform={`translate(${482 + index * 56} ${386 + index * 18})`} opacity={0}>
+          <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.18;0.42;0.82;1" dur="5.6s" begin={`${index * 0.28}s`} repeatCount="indefinite" />
+          <rect width={50} height={25} rx={9} fill="rgba(250,247,241,0.84)" stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
+          <text x={25} y={17} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>
+            {codon.rna}
+          </text>
+        </g>
+      ))}
+
+      {Array.from({ length: Math.max(0, model.mrna - 1) }).map((_, index) => (
+        <path
+          key={index}
+          d={transcriptPath}
+          fill="none"
+          stroke="var(--cherry-red)"
+          strokeWidth={4}
+          strokeLinecap="round"
+          opacity={0.18}
+          transform={`translate(${-10 - index * 7} ${18 + index * 10})`}
+          strokeDasharray="18 14"
+        />
+      ))}
+
+      {model.translationOn ? (
+        <>
+          <g opacity={0}>
+            <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.22;0.34;0.86;1" dur="5.6s" repeatCount="indefinite" />
+            <animateMotion path={transcriptPath} dur="5.6s" begin="1.05s" repeatCount="indefinite" />
+            <ellipse rx={48} ry={30} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={3} />
+            <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
+              ribosome
+            </text>
+          </g>
+          <g transform="translate(386 548)">
+            <text x={0} y={0} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
+              amino acid chain
+            </text>
+            {codons.map((codon, index) => (
+              <g key={codon.amino} transform={`translate(${index * 58} 22)`} opacity={0.25}>
+                <animate attributeName="opacity" values="0.25;0.25;1;1" keyTimes="0;0.28;0.48;1" dur="5.6s" begin={`${1.1 + index * 0.34}s`} repeatCount="indefinite" />
+                <circle r={18} fill={codon.color} stroke="rgba(94,68,42,0.16)" strokeWidth={1.5} />
+                <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={10} fontWeight={900}>
+                  {codon.amino}
+                </text>
+              </g>
+            ))}
+          </g>
+        </>
+      ) : null}
     </g>
   );
 }
@@ -336,24 +403,7 @@ export function GeneExpressionTool() {
               ) : null}
             </g>
 
-            {model.transcriptionOn ? (
-              <>
-                {Array.from({ length: model.mrna }).map((_, index) => (
-                  <g key={index} transform={`translate(${264 + index * 7} ${350 + index * 12})`}>
-                    <animate attributeName="opacity" values={`${index === 0 ? 0.76 : 0.34};${index === 0 ? 1 : 0.56};${index === 0 ? 0.76 : 0.34}`} dur="2.8s" begin={`${index * 0.12}s`} repeatCount="indefinite" />
-                    <path d="M0 0 C80 36 170 -34 250 0 C324 32 410 -20 490 8" fill="none" stroke="var(--cherry-red)" strokeWidth={index === 0 ? 9 : 5} strokeLinecap="round" opacity={index === 0 ? 1 : 0.42} />
-                    {index === 0 ? <CodonLabels x={74} y={18} /> : null}
-                  </g>
-                ))}
-              </>
-            ) : (
-              <g transform="translate(332 382)" opacity={0.35}>
-                <path d="M0 0 C68 26 150 -24 226 0" fill="none" stroke="var(--cherry-red)" strokeWidth={8} strokeLinecap="round" strokeDasharray="10 10" />
-                <text x={250} y={7} fill="var(--cherry-warm-mid)" fontSize={15} fontWeight={800}>
-                  mRNA appears after TF and RNA pol bind
-                </text>
-              </g>
-            )}
+            <LiveExpressionProcess model={model} />
 
             <rect x={zones.ribosome.x} y={zones.ribosome.y} width={zones.ribosome.w} height={zones.ribosome.h} rx={22} fill={model.ribBound > 0 ? "rgba(232,121,95,0.15)" : "rgba(250,247,241,0.38)"} stroke="var(--cherry-peach)" strokeWidth={2} strokeDasharray="7 7" />
             <text x={zones.ribosome.x + 22} y={zones.ribosome.y + 34} fill="var(--cherry-warm-brown)" fontSize={15} fontWeight={900}>
@@ -363,35 +413,7 @@ export function GeneExpressionTool() {
               <circle key={x} cx={x} cy={450} r={30} fill="none" stroke={model.ribBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
             ))}
 
-            {model.translationOn ? (
-              <g opacity={0}>
-                <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.12;0.82;1" dur="4.2s" repeatCount="indefinite" />
-                <animateTransform attributeName="transform" type="translate" values="348 438;632 438" dur="4.2s" repeatCount="indefinite" />
-                <ellipse rx={48} ry={30} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={3} />
-                <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
-                  ribosome
-                </text>
-              </g>
-            ) : null}
-
             <ProductBeads count={model.protein} />
-
-            {model.translationOn ? (
-              <g transform="translate(372 548)">
-                <text x={0} y={0} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
-                  amino acid chain
-                </text>
-                {codons.map((codon, index) => (
-                  <g key={codon.amino} transform={`translate(${index * 58} 22)`}>
-                    <circle r={18} fill={codon.color} stroke="rgba(94,68,42,0.16)" strokeWidth={1.5} />
-                    <animate attributeName="opacity" values="0.35;1;1" keyTimes="0;0.42;1" dur="2.2s" begin={`${index * 0.24}s`} repeatCount="indefinite" />
-                    <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={10} fontWeight={900}>
-                      {codon.amino}
-                    </text>
-                  </g>
-                ))}
-              </g>
-            ) : null}
 
             <g transform="translate(46 86)">
               <rect width={190} height={28} rx={999} fill="rgba(250,247,241,0.74)" stroke="rgba(94,68,42,0.16)" />
@@ -475,8 +497,8 @@ export function GeneExpressionTool() {
               {!model.transcriptionOn
                 ? "转录尚未启动：启动子需要 TF，基因区域需要 RNA 聚合酶。"
                 : !model.translationOn
-                  ? "mRNA 已生成：把核糖体放到 mRNA 附近可以开始翻译。"
-                  : "翻译正在进行：核糖体读取密码子，蛋白质产物开始累积。"}
+                  ? "mRNA 正从 RNA 聚合酶后方延伸出来：把核糖体放到 mRNA 附近可以开始翻译。"
+                  : "转录和翻译正在连续发生：mRNA 边延伸，核糖体边读取密码子，蛋白质产物开始累积。"}
             </div>
           </div>
         </aside>
