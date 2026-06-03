@@ -216,6 +216,8 @@ ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")
 
 function PlantEvolutionContent() {
   const [activeChapterIndex, setActiveChapterIndex] = useState(0);
+  const [copiedStudyCard, setCopiedStudyCard] = useState(false);
+  const [studyCardStatus, setStudyCardStatus] = useState("");
   const chapters = [
     {
       time: "约 5.1-4.7 亿年前",
@@ -334,6 +336,48 @@ function PlantEvolutionContent() {
       url: "https://www.nature.com/articles/nplants201715",
     },
   ];
+  const activeReferences = references.filter((reference) => activeChapter.refs.includes(reference.key));
+  const studyCardOutput = `【植物演化学习卡】
+阶段：${activeChapter.title}
+时间：${activeChapter.time}
+
+1. 发生了什么
+${activeChapter.story}
+
+2. 当时的生存问题
+${activeChapter.challenge}
+
+3. 关键创新
+${activeChapter.innovation}
+
+4. 证据状态
+${activeChapter.certainty}
+${activeChapter.evidence}
+
+5. 课堂提问
+${activeChapter.prompt}
+
+6. 参考文献
+${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).join("\n")}`;
+
+  async function copyStudyCard() {
+    const copiedToClipboard = await copyText(studyCardOutput);
+    if (copiedToClipboard) {
+      setCopiedStudyCard(true);
+      setStudyCardStatus("学习卡已复制到剪贴板。");
+      window.setTimeout(() => setCopiedStudyCard(false), 1400);
+      return;
+    }
+
+    setCopiedStudyCard(false);
+    setStudyCardStatus("复制失败，请手动选中文本复制。");
+  }
+
+  function choosePlantChapter(index: number) {
+    setActiveChapterIndex(index);
+    setCopiedStudyCard(false);
+    setStudyCardStatus("");
+  }
 
   return (
     <div id="plant-evolution-explorer" style={{ display: "grid", gap: "1rem" }}>
@@ -363,11 +407,11 @@ function PlantEvolutionContent() {
                   tabIndex={0}
                   aria-label={`查看${chapter.title}`}
                   aria-pressed={active}
-                  onClick={() => setActiveChapterIndex(index)}
+                  onClick={() => choosePlantChapter(index)}
                   onKeyDown={(event) => {
                     if (event.key !== "Enter" && event.key !== " ") return;
                     event.preventDefault();
-                    setActiveChapterIndex(index);
+                    choosePlantChapter(index);
                   }}
                   style={{ cursor: "pointer" }}
                 >
@@ -410,6 +454,21 @@ function PlantEvolutionContent() {
           <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1rem", color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.9rem" }}>
             <strong style={{ color: "var(--cherry-warm-brown)" }}>课堂提问：</strong>{activeChapter.prompt}
           </div>
+
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
+              <strong style={{ color: "var(--cherry-warm-brown)" }}>本阶段学习卡</strong>
+              <button type="button" onClick={copyStudyCard} aria-describedby="plant-study-card-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                {copiedStudyCard ? "已复制" : "复制学习卡"}
+              </button>
+            </div>
+            <div id="plant-study-card-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 900, marginBottom: "0.55rem" }}>
+              {studyCardStatus}
+            </div>
+            <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 14, padding: "0.75rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.72rem", lineHeight: 1.55, maxHeight: 180, overflow: "auto" }}>
+              {studyCardOutput}
+            </code>
+          </div>
         </aside>
       </div>
 
@@ -417,7 +476,7 @@ function PlantEvolutionContent() {
         {chapters.map((chapter, index) => {
           const active = activeChapterIndex === index;
           return (
-            <button key={chapter.title} aria-pressed={active} onClick={() => setActiveChapterIndex(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
+            <button key={chapter.title} aria-pressed={active} onClick={() => choosePlantChapter(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
               <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-red)", fontFamily: "'Caveat', cursive", fontSize: "0.95rem", fontWeight: 900, marginBottom: "0.35rem" }}>{chapter.time}</div>
               <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem", lineHeight: 1.45, marginBottom: "0.5rem" }}>{chapter.title}</div>
               <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.78rem", marginBottom: "0.55rem" }}>{chapter.innovation}</div>
