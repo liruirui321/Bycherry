@@ -2,6 +2,7 @@ import { IconBook, IconCheck, IconCoffee, IconLeafSmall } from "./Icons";
 import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
+import { useState } from "react";
 
 type ArticleKind = "note" | "research";
 
@@ -13,7 +14,36 @@ function navigateToPath(href: string) {
   navigateClient(href);
 }
 
+async function copyText(text: string) {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // Fall back for browsers that expose Clipboard API but deny the call.
+    }
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  textarea.style.top = "0";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
+  try {
+    return document.execCommand("copy");
+  } finally {
+    document.body.removeChild(textarea);
+  }
+}
+
 export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: string }) {
+  const [copiedSummary, setCopiedSummary] = useState(false);
+  const [copyStatus, setCopyStatus] = useState("");
   const collection = kind === "note" ? notes : essays;
   const article = collection.find((item) => item.slug === slug);
   const articleIndex = collection.findIndex((item) => item.slug === slug);
@@ -21,6 +51,36 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const nextArticle = articleIndex >= 0 && articleIndex < collection.length - 1 ? collection[articleIndex + 1] : null;
   const backHash = kind === "note" ? "#notes" : "#research";
   const backText = kind === "note" ? "回到笔记" : "回到科研随笔";
+  const summaryText = article
+    ? `【阅读摘要】
+标题：${article.title}
+日期：${article.date}
+类型：${"tag" in article ? article.tag : article.label}
+阅读时间：约 ${"readTime" in article ? article.readTime : article.readMin} 分钟
+
+一、摘要
+${article.excerpt ?? article.body}
+
+二、正文要点
+${article.paragraphs.map((paragraph, index) => `${index + 1}. ${paragraph}`).join("\n")}
+
+三、可以带走的想法
+${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).join("\n")}`
+    : "";
+
+  async function copyArticleSummary() {
+    if (!summaryText) return;
+    const copiedToClipboard = await copyText(summaryText);
+    if (copiedToClipboard) {
+      setCopiedSummary(true);
+      setCopyStatus("阅读摘要已复制到剪贴板。");
+      window.setTimeout(() => setCopiedSummary(false), 1400);
+      return;
+    }
+
+    setCopiedSummary(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
 
   if (!article) {
     return (
@@ -138,9 +198,17 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
                 padding: "1.15rem",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>
-                <IconBook size={18} />
-                可以带走的想法
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.75rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
+                  <IconBook size={18} />
+                  可以带走的想法
+                </div>
+                <button type="button" onClick={copyArticleSummary} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
+                  {copiedSummary ? "已复制" : "复制摘要"}
+                </button>
+              </div>
+              <div id="article-summary-copy-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 900, marginBottom: "0.5rem" }}>
+                {copyStatus}
               </div>
               <div style={{ display: "grid", gap: "0.65rem" }}>
                 {article.highlights.map((highlight) => (
