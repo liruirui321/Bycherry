@@ -258,21 +258,25 @@ function maxVisibleTranscribedProgress(progress: number, polBound: number) {
   return Math.max(transcriptionProgress, ...polymerases.map((polymerase) => polymerase.progress * polymerase.opacity));
 }
 
-function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: boolean; translationOn: boolean; polBound: number; ribBound: number }; progress: number }) {
-  const transcriptionProgress = model.transcriptionOn ? clamp01(progress / 0.78) : 0;
-  const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
-  const polymerases = buildPolymeraseTracks(progress, model.polBound);
-  const maxTranscribedProgress = Math.max(transcriptionProgress, ...polymerases.map((polymerase) => polymerase.progress * polymerase.opacity));
-  const ribosomes = Array.from({ length: model.ribBound }).map((_, index) => {
+function buildRibosomeTracks(progress: number, ribBound: number, canRead: boolean, maxTranscribedProgress: number) {
+  return Array.from({ length: ribBound }).map((_, index) => {
     const phase = (progress + index * 0.16) % 1;
     const localProgress = clamp01((phase - 0.28) / 0.62);
-    const onReadableSegment = ribosomeCanRead && phase >= 0.28 && phase < 0.92 && localProgress <= Math.max(0.12, maxTranscribedProgress);
+    const onReadableSegment = canRead && phase >= 0.28 && phase < 0.92 && localProgress <= Math.max(0.12, maxTranscribedProgress);
     return {
       point: pointOnPolyline(transcriptPath, localProgress),
       progress: localProgress,
       opacity: onReadableSegment ? 1 : 0,
     };
   });
+}
+
+function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: boolean; translationOn: boolean; polBound: number; ribBound: number }; progress: number }) {
+  const transcriptionProgress = model.transcriptionOn ? clamp01(progress / 0.78) : 0;
+  const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
+  const polymerases = buildPolymeraseTracks(progress, model.polBound);
+  const maxTranscribedProgress = Math.max(transcriptionProgress, ...polymerases.map((polymerase) => polymerase.progress * polymerase.opacity));
+  const ribosomes = buildRibosomeTracks(progress, model.ribBound, ribosomeCanRead, maxTranscribedProgress);
   const leadRibosome = ribosomes.find((ribosome) => ribosome.opacity > 0);
   const leadRibosomeProgress = leadRibosome?.progress ?? 0;
   const leadRibosomePoint = leadRibosome?.point ?? null;
@@ -445,11 +449,11 @@ export function GeneExpressionTool() {
   const transcriptionProgress = model.transcriptionOn ? clamp01(cycleProgress / 0.78) : 0;
   const transcribedProgress = model.transcriptionOn ? maxVisibleTranscribedProgress(cycleProgress, model.polBound) : 0;
   const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
-  const sequenceRibosomePhase = cycleProgress % 1;
-  const sequenceRibosomeProgress = clamp01((sequenceRibosomePhase - 0.28) / 0.62);
-  const sequenceIsReading = ribosomeCanRead && sequenceRibosomePhase >= 0.28 && sequenceRibosomePhase < 0.92 && sequenceRibosomeProgress <= Math.max(0.12, transcribedProgress);
-  const activeCodonIndex = sequenceIsReading ? Math.min(codons.length - 1, Math.floor(sequenceRibosomeProgress * codons.length)) : -1;
-  const visibleProteinCount = sequenceIsReading ? Math.min(model.protein, Math.floor(sequenceRibosomeProgress * 12)) : 0;
+  const readableRibosomes = buildRibosomeTracks(cycleProgress, model.ribBound, ribosomeCanRead, transcribedProgress).filter((ribosome) => ribosome.opacity > 0);
+  const leadRibosomeProgress = readableRibosomes[0]?.progress ?? 0;
+  const activeCodonIndex = leadRibosomeProgress > 0 ? Math.min(codons.length - 1, Math.floor(leadRibosomeProgress * codons.length)) : -1;
+  const translatedSignal = readableRibosomes.reduce((sum, ribosome) => sum + ribosome.progress, 0);
+  const visibleProteinCount = model.translationOn ? Math.min(model.protein, Math.floor(translatedSignal * 4)) : 0;
   const integratedMolecules = molecules.filter((molecule) => molecule.type !== "tf" && inBox(molecule, zones[moleculeZone(molecule.type)]));
 
   useEffect(() => {
