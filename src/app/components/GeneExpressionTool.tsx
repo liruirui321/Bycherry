@@ -641,9 +641,15 @@ export function GeneExpressionTool() {
               <text x={344} y={88} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
                 基因区
               </text>
-              {[298, 432].map((x, index) => (
-                <circle key={x} cx={x} cy={44} r={20} fill="none" stroke={model.polBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
-              ))}
+              {[298, 432].map((x, index) =>
+                model.polBound > index ? null : (
+                  <g key={x} opacity={0.42}>
+                    <circle cx={x} cy={44} r={15} fill="none" stroke="rgba(94,68,42,0.18)" strokeWidth={1.6} strokeDasharray="3 5" />
+                    <line x1={x - 9} y1={44} x2={x + 9} y2={44} stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} strokeLinecap="round" />
+                    <line x1={x} y1={35} x2={x} y2={53} stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} strokeLinecap="round" />
+                  </g>
+                )
+              )}
             </g>
 
             <LiveExpressionProcess model={model} progress={cycleProgress} />
@@ -652,9 +658,15 @@ export function GeneExpressionTool() {
             <text x={zones.ribosome.x + 22} y={zones.ribosome.y + 34} fill="var(--cherry-warm-brown)" fontSize={15} fontWeight={900}>
               核糖体入口
             </text>
-            {[406, 520, 634].map((x, index) => (
-              <circle key={x} cx={x} cy={404} r={24} fill="none" stroke={model.ribBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
-            ))}
+            {[406, 520, 634].map((x, index) =>
+              model.ribBound > index ? null : (
+                <g key={x} opacity={0.4}>
+                  <circle cx={x} cy={404} r={17} fill="none" stroke="rgba(94,68,42,0.18)" strokeWidth={1.6} strokeDasharray="3 5" />
+                  <line x1={x - 10} y1={404} x2={x + 10} y2={404} stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} strokeLinecap="round" />
+                  <line x1={x} y1={394} x2={x} y2={414} stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} strokeLinecap="round" />
+                </g>
+              )
+            )}
 
             <ProductBeads count={model.translationOn ? Math.min(model.protein, Math.max(1, Math.floor(cycleProgress * 12))) : 0} animated={!prefersReducedMotion} />
 
