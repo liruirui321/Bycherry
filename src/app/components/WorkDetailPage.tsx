@@ -434,8 +434,8 @@ function PlantEvolutionContent() {
         </div>
         <div style={{ display: "grid", gap: "0.65rem" }}>
           {references.map((reference) => (
-            <a key={reference.key} href={reference.url} target="_blank" rel="noreferrer" style={{ color: "var(--cherry-forest)", textDecoration: "none", lineHeight: 1.6, fontSize: "0.86rem", fontWeight: 800 }}>
-              [{reference.key}] {reference.title}
+            <a key={reference.key} href={reference.url} target="_blank" rel="noreferrer" aria-label={`${reference.title}，新窗口打开`} style={{ color: "var(--cherry-forest)", textDecoration: "none", lineHeight: 1.6, fontSize: "0.86rem", fontWeight: 800 }}>
+              [{reference.key}] {reference.title} <span aria-hidden="true">↗</span>
             </a>
           ))}
         </div>
