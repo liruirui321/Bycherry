@@ -105,15 +105,15 @@ function ProductBeads({ count }: { count: number }) {
         return (
           <circle
             key={index}
-            className={active ? "gene-svg-pop" : ""}
             cx={(index % 4) * 34}
             cy={Math.floor(index / 4) * 34}
             r={13}
             fill={active ? amino.color : "rgba(94,68,42,0.08)"}
             stroke="rgba(94,68,42,0.16)"
             strokeWidth={1.5}
-            style={{ animationDelay: `${index * 0.08}s` }}
-          />
+          >
+            {active ? <animate attributeName="r" values="12;15;13" dur="1.5s" begin={`${index * 0.08}s`} repeatCount="indefinite" /> : null}
+          </circle>
         );
       })}
     </g>
@@ -184,6 +184,11 @@ export function GeneExpressionTool() {
 
     return { tfBound, polBound, ribBound, transcriptionOn, mrna, translationOn, protein };
   }, [molecules, zones.polymerase, zones.promoter, zones.ribosome]);
+  const taskStatuses = [
+    { label: "把 TF 拖到 promoter，观察启动子变亮。", done: model.tfBound > 0 },
+    { label: "把 RNA pol 拖到 gene body，观察 mRNA 出现。", done: model.transcriptionOn },
+    { label: "把 ribosome 拖到 mRNA 附近，观察蛋白质产物增加。", done: model.translationOn },
+  ];
 
   function svgPoint(event: React.PointerEvent<SVGSVGElement | SVGGElement>) {
     const svg = svgRef.current;
@@ -320,7 +325,9 @@ export function GeneExpressionTool() {
                 <circle key={x} cx={x} cy={84} r={24} fill="none" stroke={model.polBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
               ))}
               {model.transcriptionOn ? (
-                <g className="gene-svg-pol-scan" transform="translate(238 80)">
+                <g opacity={0}>
+                  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.12;0.82;1" dur="3.6s" repeatCount="indefinite" />
+                  <animateTransform attributeName="transform" type="translate" values="238 80;522 80" dur="3.6s" repeatCount="indefinite" />
                   <ellipse rx={42} ry={27} fill="var(--cherry-blue-light)" stroke="var(--cherry-blue)" strokeWidth={3} />
                   <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>
                     RNA pol
@@ -332,7 +339,8 @@ export function GeneExpressionTool() {
             {model.transcriptionOn ? (
               <>
                 {Array.from({ length: model.mrna }).map((_, index) => (
-                  <g key={index} className="gene-svg-mrna" transform={`translate(${264 + index * 7} ${350 + index * 12})`} style={{ animationDelay: `${index * 0.12}s` }}>
+                  <g key={index} transform={`translate(${264 + index * 7} ${350 + index * 12})`}>
+                    <animate attributeName="opacity" values={`${index === 0 ? 0.76 : 0.34};${index === 0 ? 1 : 0.56};${index === 0 ? 0.76 : 0.34}`} dur="2.8s" begin={`${index * 0.12}s`} repeatCount="indefinite" />
                     <path d="M0 0 C80 36 170 -34 250 0 C324 32 410 -20 490 8" fill="none" stroke="var(--cherry-red)" strokeWidth={index === 0 ? 9 : 5} strokeLinecap="round" opacity={index === 0 ? 1 : 0.42} />
                     {index === 0 ? <CodonLabels x={74} y={18} /> : null}
                   </g>
@@ -356,7 +364,9 @@ export function GeneExpressionTool() {
             ))}
 
             {model.translationOn ? (
-              <g className="gene-svg-ribosome-scan" transform="translate(348 438)">
+              <g opacity={0}>
+                <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.12;0.82;1" dur="4.2s" repeatCount="indefinite" />
+                <animateTransform attributeName="transform" type="translate" values="348 438;632 438" dur="4.2s" repeatCount="indefinite" />
                 <ellipse rx={48} ry={30} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={3} />
                 <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
                   ribosome
@@ -372,8 +382,9 @@ export function GeneExpressionTool() {
                   amino acid chain
                 </text>
                 {codons.map((codon, index) => (
-                  <g key={codon.amino} className="gene-svg-amino" transform={`translate(${index * 58} 22)`} style={{ animationDelay: `${index * 0.24}s` }}>
+                  <g key={codon.amino} transform={`translate(${index * 58} 22)`}>
                     <circle r={18} fill={codon.color} stroke="rgba(94,68,42,0.16)" strokeWidth={1.5} />
+                    <animate attributeName="opacity" values="0.35;1;1" keyTimes="0;0.42;1" dur="2.2s" begin={`${index * 0.24}s`} repeatCount="indefinite" />
                     <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={10} fontWeight={900}>
                       {codon.amino}
                     </text>
@@ -447,14 +458,12 @@ export function GeneExpressionTool() {
               操作任务
             </div>
             <div style={{ display: "grid", gap: "0.55rem", fontSize: "0.86rem" }}>
-              {[
-                "把 TF 拖到 promoter，观察启动子变亮。",
-                "把 RNA pol 拖到 gene body，观察 mRNA 出现。",
-                "把 ribosome 拖到 mRNA 附近，观察蛋白质产物增加。",
-              ].map((item) => (
-                <div key={item} style={{ display: "flex", gap: 8 }}>
-                  <IconCheck size={16} color="var(--cherry-forest)" />
-                  <span>{item}</span>
+              {taskStatuses.map((item, index) => (
+                <div key={item.label} style={{ display: "flex", gap: 8, alignItems: "flex-start", opacity: item.done ? 1 : 0.72 }}>
+                  <span style={{ width: 18, height: 18, borderRadius: "50%", background: item.done ? "var(--cherry-forest)" : "rgba(250,247,241,0.7)", border: "1.5px solid rgba(94,68,42,0.16)", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2 }}>
+                    {item.done ? <IconCheck size={12} color="#FAF7F1" /> : <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900 }}>{index + 1}</span>}
+                  </span>
+                  <span style={{ color: item.done ? "var(--cherry-warm-brown)" : "var(--cherry-warm-mid)", fontWeight: item.done ? 900 : 700 }}>{item.label}</span>
                 </div>
               ))}
             </div>
@@ -475,55 +484,6 @@ export function GeneExpressionTool() {
 
       <style>
         {`
-          .gene-svg-mrna {
-            animation: geneSvgMrnaPulse 2.8s ease-in-out infinite;
-          }
-
-          .gene-svg-ribosome-scan {
-            animation: geneSvgRibosomeScan 4.2s linear infinite;
-          }
-
-          .gene-svg-pol-scan {
-            animation: geneSvgPolScan 3.6s linear infinite;
-          }
-
-          .gene-svg-pop {
-            animation: geneSvgProteinPop 1.5s ease-in-out infinite;
-          }
-
-          .gene-svg-amino {
-            animation: geneSvgAminoBuild 2.2s ease-in-out infinite;
-          }
-
-          @keyframes geneSvgMrnaPulse {
-            0%, 100% { opacity: 0.78; transform: translate(264px, 350px) scaleX(0.96); }
-            50% { opacity: 1; transform: translate(264px, 350px) scaleX(1.02); }
-          }
-
-          @keyframes geneSvgRibosomeScan {
-            0% { transform: translate(348px, 438px); opacity: 0; }
-            12% { opacity: 1; }
-            78% { opacity: 1; }
-            100% { transform: translate(632px, 438px); opacity: 0; }
-          }
-
-          @keyframes geneSvgPolScan {
-            0% { transform: translate(238px, 80px); opacity: 0; }
-            12% { opacity: 1; }
-            82% { opacity: 1; }
-            100% { transform: translate(522px, 80px); opacity: 0; }
-          }
-
-          @keyframes geneSvgProteinPop {
-            0%, 100% { transform: scale(1); }
-            45% { transform: scale(1.12); }
-          }
-
-          @keyframes geneSvgAminoBuild {
-            0%, 18% { opacity: 0.3; transform: translateY(10px) scale(0.82); }
-            44%, 100% { opacity: 1; transform: translateY(0) scale(1); }
-          }
-
           @media (max-width: 920px) {
             #gene-expression > div:first-child {
               grid-template-columns: 1fr !important;
