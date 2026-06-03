@@ -53,7 +53,7 @@ export const works = [
     id: 6, slug: "crispr-interactive", category: "科学" as Category,
     icon: <IconDNA size={36} color1="var(--cherry-red)" color2="var(--cherry-blue)" />,
     title: "CRISPR 交互讲解",
-    desc: "通过识别、剪切和修复三步，理解 CRISPR 为什么不是简单的“基因剪刀”。",
+    desc: "操作 guide RNA、Cas 蛋白和修复结果，观察 CRISPR 识别、剪切与修复三步。",
     href: "/works/crispr-interactive",
     tags: ["基因编辑", "互动", "CRISPR"],
     color: "var(--cherry-peach-light)", border: "var(--cherry-red)", rotate: "0.5deg",
@@ -199,11 +199,11 @@ export function Works() {
           <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: "0.75rem" }}>
             <IconFlask size={20} color="var(--cherry-warm-mid)" />
             <span style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>
-              贴在桌面上的小作品计划
+              科学、课程和 AI 工具
             </span>
           </div>
           <h2 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
-            可以慢慢落地的作品
+            可打开的作品
           </h2>
         </div>
 

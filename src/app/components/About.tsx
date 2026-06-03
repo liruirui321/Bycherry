@@ -126,15 +126,15 @@ export function About() {
               marginBottom: "1.25rem",
             }}
           >
-            一个把复杂想法
-            <br />整理成<span style={{ color: "var(--cherry-red)" }}>温暖小作品</span>的工作台
+            科学、课程与 AI
+            <br /><span style={{ color: "var(--cherry-red)" }}>内容工作台</span>
           </h2>
 
           <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.8, marginBottom: "1rem", fontSize: "0.95rem" }}>
-            By Cherry 记录一组持续展开的实践：从植物基因组数据到高中生物课堂，从项目制学习课程到 AI 智能测评平台，从科研工作流到多模态内容生产工具。
+            By Cherry 收集科学可视化、生命科学课程、科研工作流和 AI 学习工具。
           </p>
           <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.8, fontSize: "0.95rem" }}>
-            这里保存作品、笔记、实验和方法：真实科研如何进入课堂，AI 如何辅助学习与评价，课程如何从问题走向作品。
+            每个页面都尽量保留可阅读、可操作、可复用的内容：模拟器、时间轴、课程卡片、prompt 和研究笔记。
           </p>
 
           {/* Stats */}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { GeneExpressionTool } from "./GeneExpressionTool";
-import { IconDNA, IconFlask } from "./Icons";
+import { IconDNA } from "./Icons";
 import { works } from "./Works";
 
 type Work = (typeof works)[number];
@@ -40,8 +40,8 @@ function CellBiologyCourseContent() {
           </ContentCard>
         ))}
       </div>
-      <ContentCard title="课堂自测示例">
-        画一张细胞“物流地图”：从核糖体合成蛋白开始，标出内质网、高尔基体、囊泡和细胞膜之间的运输关系，并用一句话解释每个结构的作用。
+      <ContentCard title="细胞物流图">
+        从核糖体合成蛋白开始，标出内质网、高尔基体、囊泡和细胞膜之间的运输关系，并用一句话解释每个结构的作用。
       </ContentCard>
     </section>
   );
@@ -177,7 +177,7 @@ function PlantEvolutionContent() {
   return (
     <div style={{ display: "grid", gap: "1rem" }}>
       <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 18, padding: "1rem", color: "var(--cherry-warm-mid)", lineHeight: 1.75 }}>
-        这条时间轴把“故事”放在左边，把“证据”放在右边。每个节点都对应至少一篇真实文献，方便继续追到原始研究或综述。
+        从淡水绿藻到被子植物，植物演化围绕几个关键问题展开：如何离开水体、如何运输水分、如何长高、如何保护胚和种子、如何借助动物完成繁殖。
       </div>
 
       {chapters.map((chapter) => (
