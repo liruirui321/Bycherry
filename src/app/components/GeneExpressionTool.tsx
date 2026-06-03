@@ -235,24 +235,28 @@ function partialPolylinePath(points: Point[], progress: number) {
   return path.join(" ");
 }
 
-function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: boolean; translationOn: boolean; mrna: number; polBound: number; ribBound: number }; progress: number }) {
+function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: boolean; translationOn: boolean; polBound: number; ribBound: number }; progress: number }) {
   const transcriptionProgress = model.transcriptionOn ? clamp01(progress / 0.78) : 0;
-  const polymeraseX = model.transcriptionOn ? lerp(392, 676, transcriptionProgress) : 392;
-  const mrnaPath = partialPolylinePath(transcriptPath, transcriptionProgress);
-  const mrnaTip = pointOnPolyline(transcriptPath, transcriptionProgress);
   const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
   const polymerases = Array.from({ length: Math.max(1, model.polBound) }).map((_, index) => {
     const phase = (progress + index * 0.18) % 1;
     const localProgress = clamp01(phase / 0.78);
+    const offset = { x: -index * 12, y: index * 14 };
+    const tip = pointOnPolyline(transcriptPath, localProgress);
     return {
       point: { x: lerp(392, 676, localProgress), y: 250 + index * 12 },
+      offset,
+      path: partialPolylinePath(transcriptPath, localProgress),
+      tip: { x: tip.x + offset.x, y: tip.y + offset.y },
+      progress: localProgress,
       opacity: phase < 0.82 ? 1 : Math.max(0, 1 - (phase - 0.82) / 0.12),
     };
   });
+  const maxTranscribedProgress = Math.max(transcriptionProgress, ...polymerases.map((polymerase) => polymerase.progress * polymerase.opacity));
   const ribosomes = Array.from({ length: model.ribBound }).map((_, index) => {
     const phase = (progress + index * 0.16) % 1;
     const localProgress = clamp01((phase - 0.28) / 0.62);
-    const onReadableSegment = ribosomeCanRead && phase >= 0.28 && phase < 0.92 && localProgress <= Math.max(0.12, transcriptionProgress);
+    const onReadableSegment = ribosomeCanRead && phase >= 0.28 && phase < 0.92 && localProgress <= Math.max(0.12, maxTranscribedProgress);
     return {
       point: pointOnPolyline(transcriptPath, localProgress),
       progress: localProgress,
@@ -277,6 +281,17 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
   return (
     <g>
       {polymerases.map((polymerase, index) => (
+        <g key={`moving-transcript-${index}`} opacity={polymerase.opacity}>
+          <g transform={`translate(${polymerase.offset.x} ${polymerase.offset.y})`}>
+            <path d={polymerase.path} fill="none" stroke="rgba(232,121,95,0.2)" strokeWidth={17} strokeLinecap="round" strokeLinejoin="round" />
+            <path d={polymerase.path} fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" strokeLinejoin="round" />
+          </g>
+          <circle cx={polymerase.tip.x} cy={polymerase.tip.y} r={8} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={3} />
+          <line x1={polymerase.point.x - 2} y1={polymerase.point.y + 24} x2={polymerase.tip.x} y2={polymerase.tip.y} stroke="var(--cherry-red)" strokeWidth={4} strokeLinecap="round" opacity={0.48} />
+        </g>
+      ))}
+
+      {polymerases.map((polymerase, index) => (
         <g key={`moving-pol-${index}`} transform={`translate(${polymerase.point.x} ${polymerase.point.y})`} opacity={polymerase.opacity}>
           <ellipse rx={42} ry={27} fill="var(--cherry-blue-light)" stroke="var(--cherry-blue)" strokeWidth={3} />
           <path d="M-18 9 C-6 16 6 16 18 9" fill="none" stroke="var(--cherry-blue)" strokeWidth={3} strokeLinecap="round" opacity={0.58} />
@@ -286,21 +301,16 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
         </g>
       ))}
 
-      <path d={mrnaPath} fill="none" stroke="rgba(232,121,95,0.2)" strokeWidth={17} strokeLinecap="round" strokeLinejoin="round" />
-      <path d={mrnaPath} fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx={mrnaTip.x} cy={mrnaTip.y} r={8} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={3} />
-      <line x1={polymeraseX - 2} y1={274} x2={mrnaTip.x} y2={mrnaTip.y} stroke="var(--cherry-red)" strokeWidth={4} strokeLinecap="round" opacity={0.48} />
-
       <text x={390} y={342} fill="var(--cherry-red)" fontSize={13} fontWeight={900} opacity={transcriptionProgress > 0.08 ? 1 : 0}>
         5' mRNA
       </text>
-      <text x={polymeraseX - 34} y={224} fill="var(--cherry-blue)" fontSize={12} fontWeight={900}>
+      <text x={392 + transcriptionProgress * 210} y={224} fill="var(--cherry-blue)" fontSize={12} fontWeight={900}>
         RNA 聚合酶生成 3' 端
       </text>
 
       {codons.map((codon, index) => {
         const point = pointOnPolyline(transcriptPath, 0.18 + index * 0.2);
-        const visible = transcriptionProgress > 0.22 + index * 0.13;
+        const visible = maxTranscribedProgress > 0.22 + index * 0.13;
         const active = activeCodonIndex === index;
         return (
           <g key={codon.rna} transform={`translate(${point.x - 25} ${point.y + 18})`} opacity={visible ? 1 : 0.16}>
@@ -311,20 +321,6 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
           </g>
         );
       })}
-
-      {Array.from({ length: Math.max(0, model.mrna - 1) }).map((_, index) => (
-        <path
-          key={index}
-          d={partialPolylinePath(transcriptPath, Math.max(0.25, transcriptionProgress - index * 0.08))}
-          fill="none"
-          stroke="var(--cherry-red)"
-          strokeWidth={4}
-          strokeLinecap="round"
-          opacity={0.18}
-          transform={`translate(${-10 - index * 7} ${18 + index * 10})`}
-          strokeDasharray="18 14"
-        />
-      ))}
 
       {model.translationOn ? (
         <>
