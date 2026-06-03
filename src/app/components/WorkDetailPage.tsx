@@ -126,7 +126,7 @@ ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")
             <textarea
               value={material}
               onChange={(event) => setMaterial(event.target.value)}
-              style={{ width: "100%", minHeight: 154, resize: "vertical", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.9rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.9rem", lineHeight: 1.6, outline: "none", boxSizing: "border-box", marginBottom: "0.9rem" }}
+              style={{ width: "100%", minHeight: 154, resize: "vertical", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.9rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.9rem", lineHeight: 1.6, boxSizing: "border-box", marginBottom: "0.9rem" }}
               aria-label="科研材料输入框"
             />
 
