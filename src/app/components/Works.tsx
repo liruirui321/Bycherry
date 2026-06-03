@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { IconMicroscope, IconAI, IconLeaf, IconFlask, IconDNA } from "./Icons";
+import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 type Category = "全部" | "科学" | "课程" | "AI工具";
@@ -84,7 +85,9 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         position: "relative",
         color: "inherit",
         textDecoration: "none",
-        display: "block",
+        display: "grid",
+        gridTemplateRows: "auto auto 1fr auto auto",
+        minHeight: 330,
       }}
     >
       {/* Push pin */}
@@ -99,6 +102,10 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
       <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.84rem", lineHeight: 1.65, marginBottom: "1rem" }}>
         {work.desc}
       </p>
+
+      <div style={{ minHeight: 92, display: "flex", justifyContent: "center", alignItems: "center", background: "rgba(250,247,241,0.46)", border: "1.5px dashed rgba(94,68,42,0.12)", borderRadius: 16, marginBottom: "1rem" }}>
+        <WorkPreviewIllustration slug={work.slug} color={work.border} width={132} height={98} />
+      </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
         {work.tags.map((t) => (
