@@ -26,7 +26,7 @@ export const works = [
     id: 4, slug: "plant-evolution-stories", category: "课程" as Category,
     icon: <IconLeaf size={36} color="var(--cherry-sage)" />,
     title: "植物进化小故事",
-    desc: "用真实文献支撑的时间轴故事，讲述植物从链形绿藻、孢子证据、维管组织、种子到花和果实的演化线索。",
+    desc: "点击演化时间轴，查看植物从淡水绿藻到花和果实的关键创新、证据和课堂提问。",
     href: "/works/plant-evolution-stories",
     tags: ["植物学", "科普", "插画"],
     color: "var(--cherry-sage-light)", border: "var(--cherry-sage)", rotate: "1.8deg",

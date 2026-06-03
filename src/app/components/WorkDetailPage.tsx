@@ -85,12 +85,17 @@ function PromptKitContent() {
 }
 
 function PlantEvolutionContent() {
+  const [activeChapterIndex, setActiveChapterIndex] = useState(0);
   const chapters = [
     {
       time: "约 5.1-4.7 亿年前",
       title: "登陆前：淡水绿藻已经在练习“陆地技能”",
       story: "植物的登陆不是某一天突然发生的。链形植物绿藻中已经出现了一些适应浅水、间歇干燥和强光环境的基因工具，例如植物型光敏色素、激素相关通路、纤维素合成和环境胁迫响应。",
       evidence: "基因组比较显示，早分化链形植物绿藻携带多类与陆地适应相关的基因；分子钟研究也提示陆地植物起源可能早于大型化石记录。",
+      challenge: "间歇干燥、强光和浅水环境让祖先类群先获得一部分陆地适应工具。",
+      innovation: "环境感知、细胞壁和胁迫响应基因工具箱。",
+      prompt: "为什么植物登陆前，淡水浅水环境可能是重要训练场？",
+      certainty: "基因组证据强",
       refs: ["Wang 2019", "Morris 2018"],
     },
     {
@@ -98,6 +103,10 @@ function PlantEvolutionContent() {
       title: "最早的脚印：岩石里留下了孢子",
       story: "最早能可靠指向陆地植物的证据，不是一棵完整植物，而是显微镜下的小孢子。它们有抗分解的孢粉素外壁，能在岩石中保存很久。",
       evidence: "Wellman 等在《Nature》报道，中奥陶世约 4.75 亿年前的微体化石为早期陆地植物提供证据，也解释了为什么孢子记录早于完整植物化石。",
+      challenge: "陆地环境会让生殖细胞暴露在干燥和紫外线下。",
+      innovation: "带孢粉素外壁的孢子，提高保存和传播能力。",
+      prompt: "为什么孢子化石可能早于完整植物体化石？",
+      certainty: "化石证据强",
       refs: ["Wellman 2003", "Kenrick 1997"],
     },
     {
@@ -105,6 +114,10 @@ function PlantEvolutionContent() {
       title: "小身体，大转折：早期陆地植物开始长出轴和孢子囊",
       story: "早期陆地植物体型很小，但已经开始把身体分成能直立的轴、产生孢子的结构，以及帮助贴附地面的组织。它们没有今天树木那样复杂，却改变了陆地生态系统的底层结构。",
       evidence: "Kenrick 与 Crane 的综述把 4.8-3.6 亿年前视为早期陆地植物起源和分化的关键窗口；Morris 等整合化石与分子钟，重建了早期陆地植物演化时间尺度。",
+      challenge: "离开水体后，植物需要把身体抬起来，同时把孢子送到更容易扩散的位置。",
+      innovation: "直立轴、孢子囊和更清晰的孢子体结构。",
+      prompt: "早期植物还很小，为什么直立结构仍然重要？",
+      certainty: "化石与系统发育共同支持",
       refs: ["Kenrick 1997", "Morris 2018"],
     },
     {
@@ -112,6 +125,10 @@ function PlantEvolutionContent() {
       title: "运输系统：植物终于可以长高",
       story: "维管组织让水分和养分能在植物体内长距离运输。植物不再只是贴着地面生活，而是逐渐向上竞争光照，陆地开始出现更复杂的植被结构。",
       evidence: "早期维管植物和多孢子囊植物的化石记录显示，陆地植物在志留纪到泥盆纪期间逐步获得更复杂的孢子体结构和运输能力。",
+      challenge: "要长高就必须解决水分运输、机械支撑和远距离资源分配。",
+      innovation: "维管组织和更复杂的分枝结构。",
+      prompt: "维管组织为什么会改变陆地生态系统的高度结构？",
+      certainty: "形态化石证据强",
       refs: ["Kenrick 1997", "Nature Plants 2018"],
     },
     {
@@ -119,6 +136,10 @@ function PlantEvolutionContent() {
       title: "种子：把下一代装进保护包",
       story: "种子的出现改变了繁殖方式。胚、营养和保护结构被组织在一起，植物可以更好地等待合适环境，也更容易向干燥或不稳定的陆地环境扩展。",
       evidence: "早期种子化石来自晚泥盆世到早石炭世记录；《Nature》关于早期种子的研究显示，原始种子结构为理解种子习性起源提供了关键材料。",
+      challenge: "干燥陆地上，下一代需要保护、营养和等待合适时机的能力。",
+      innovation: "胚、营养组织和保护结构整合成种子习性。",
+      prompt: "种子为什么比裸露孢子更适合不稳定环境？",
+      certainty: "早期种子化石支持",
       refs: ["Pettitt 1981", "Prestianni 2017"],
     },
     {
@@ -126,9 +147,15 @@ function PlantEvolutionContent() {
       title: "花和果实：把动物也写进植物故事",
       story: "被子植物用花、果实和封闭胚珠重组了繁殖方式。传粉者、食草动物和种子传播者都卷入这套系统，陆地生态网络变得更加密集。",
       evidence: "被子植物在早白垩世快速多样化的化石记录较清楚，但其更早起源仍有争议；相关综述提醒我们区分“可靠化石证据”和“分子钟推测”。",
+      challenge: "繁殖不只要产生后代，还要提高传粉和传播效率。",
+      innovation: "花、果实、封闭胚珠以及和动物互动的繁殖系统。",
+      prompt: "花和果实为什么会让动物进入植物演化叙事？",
+      certainty: "早白垩世化石清楚，更早起源仍有争议",
       refs: ["Friis 1994", "Herendeen 2017"],
     },
   ];
+  const activeChapter = chapters[activeChapterIndex];
+  const shortTimes = ["5.1-4.7亿年", "4.75亿年", "志留-泥盆", "泥盆纪", "晚泥盆", "白垩纪"];
 
   const references = [
     {
@@ -179,33 +206,94 @@ function PlantEvolutionContent() {
   ];
 
   return (
-    <div style={{ display: "grid", gap: "1rem" }}>
-      <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 18, padding: "1rem", color: "var(--cherry-warm-mid)", lineHeight: 1.75 }}>
-        从淡水绿藻到被子植物，植物演化围绕几个关键问题展开：如何离开水体、如何运输水分、如何长高、如何保护胚和种子、如何借助动物完成繁殖。
-      </div>
+    <div id="plant-evolution-explorer" style={{ display: "grid", gap: "1rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "1rem", alignItems: "stretch" }}>
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", overflow: "hidden" }}>
+          <svg viewBox="0 0 760 360" role="img" aria-label="植物从淡水绿藻到被子植物的演化时间轴" style={{ width: "100%", display: "block", background: "linear-gradient(180deg, #FFF8EA 0%, #EDF3DF 100%)", borderRadius: 18 }}>
+            <rect x={24} y={26} width={708} height={306} rx={120} fill="rgba(169,201,172,0.2)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
+            <text x={42} y={60} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>plant evolution trail</text>
+            <path d="M88 246 C154 214 202 230 270 194 C340 156 430 170 502 118 C570 70 650 96 704 54" fill="none" stroke="var(--cherry-forest)" strokeWidth={8} strokeLinecap="round" opacity={0.25} />
+            <path d="M88 246 C154 214 202 230 270 194 C340 156 430 170 502 118 C570 70 650 96 704 54" fill="none" stroke="var(--cherry-sage)" strokeWidth={4} strokeLinecap="round" />
+            {chapters.map((chapter, index) => {
+              const points = [
+                { x: 88, y: 246 },
+                { x: 206, y: 218 },
+                { x: 300, y: 180 },
+                { x: 430, y: 152 },
+                { x: 546, y: 104 },
+                { x: 684, y: 66 },
+              ];
+              const point = points[index];
+              const active = activeChapterIndex === index;
+              return (
+                <g key={chapter.title} transform={`translate(${point.x} ${point.y})`} onClick={() => setActiveChapterIndex(index)} style={{ cursor: "pointer" }}>
+                  <circle r={active ? 22 : 16} fill={active ? "var(--cherry-yellow)" : "var(--cherry-sage-light)"} stroke={active ? "var(--cherry-red)" : "var(--cherry-forest)"} strokeWidth={active ? 3 : 2} />
+                  <text y={5} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>{index + 1}</text>
+                  <text x={0} y={active ? 42 : 35} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={900}>{shortTimes[index]}</text>
+                </g>
+              );
+            })}
+            <g transform="translate(74 92)">
+              {["淡水适应", "孢子", "直立轴", "维管组织", "种子", "花果"].map((label, index) => (
+                <g key={label} transform={`translate(${index * 108} 0)`}>
+                  <path d="M10 54 Q18 26 50 10 Q54 38 10 54Z" fill={index <= activeChapterIndex ? "var(--cherry-sage)" : "rgba(93,140,101,0.18)"} />
+                  <path d="M18 48 Q32 32 46 16" stroke="var(--cherry-warm-brown)" strokeWidth={1.6} strokeLinecap="round" opacity={0.28} />
+                  <text x={28} y={76} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={11} fontWeight={800}>{label}</text>
+                </g>
+              ))}
+            </g>
+          </svg>
+        </div>
 
-      {chapters.map((chapter) => (
-        <div key={chapter.title} style={{ display: "grid", gridTemplateColumns: "130px minmax(0, 1fr)", gap: "1rem", alignItems: "start", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "1rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
-          <div style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-red)", fontWeight: 900, fontSize: "1rem" }}>{chapter.time}</div>
-          <div>
-            <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.45rem" }}>{chapter.title}</h3>
-            <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.78, fontSize: "0.9rem", marginBottom: "0.65rem" }}>{chapter.story}</p>
-            <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.75rem", color: "var(--cherry-warm-mid)", fontSize: "0.84rem", lineHeight: 1.65, marginBottom: "0.65rem" }}>
-              <strong style={{ color: "var(--cherry-warm-brown)" }}>证据：</strong>{chapter.evidence}
-            </div>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-              {chapter.refs.map((ref) => (
-                <span key={ref} style={{ background: "rgba(250,247,241,0.78)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.22rem 0.62rem", color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.74rem" }}>
-                  {ref}
-                </span>
+        <aside style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+            <div style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-red)", fontWeight: 900, fontSize: "1.05rem", marginBottom: "0.45rem" }}>{activeChapter.time}</div>
+            <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, lineHeight: 1.35, marginBottom: "0.7rem" }}>{activeChapter.title}</h3>
+            <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.75, fontSize: "0.9rem", marginBottom: "0.8rem" }}>{activeChapter.story}</p>
+            <div style={{ display: "grid", gap: "0.55rem" }}>
+              {[
+                ["生存问题", activeChapter.challenge],
+                ["关键创新", activeChapter.innovation],
+                ["证据状态", activeChapter.certainty],
+              ].map(([label, body]) => (
+                <div key={label} style={{ background: "var(--muted)", borderRadius: 14, padding: "0.68rem", color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.82rem" }}>
+                  <strong style={{ color: "var(--cherry-warm-brown)" }}>{label}：</strong>{body}
+                </div>
               ))}
             </div>
           </div>
-        </div>
-      ))}
+
+          <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1rem", color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.9rem" }}>
+            <strong style={{ color: "var(--cherry-warm-brown)" }}>课堂提问：</strong>{activeChapter.prompt}
+          </div>
+        </aside>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.8rem" }}>
+        {chapters.map((chapter, index) => {
+          const active = activeChapterIndex === index;
+          return (
+            <button key={chapter.title} onClick={() => setActiveChapterIndex(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
+              <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-red)", fontFamily: "'Caveat', cursive", fontSize: "0.95rem", fontWeight: 900, marginBottom: "0.35rem" }}>{chapter.time}</div>
+              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem", lineHeight: 1.45, marginBottom: "0.5rem" }}>{chapter.title}</div>
+              <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.78rem", marginBottom: "0.55rem" }}>{chapter.innovation}</div>
+              <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                {chapter.refs.map((ref) => (
+                  <span key={ref} style={{ background: "rgba(250,247,241,0.78)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.18rem 0.5rem", color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.68rem" }}>
+                    {ref}
+                  </span>
+                ))}
+              </div>
+            </button>
+          );
+        })}
+      </div>
 
       <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "1rem" }}>
-        <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>参考文献</h3>
+        <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>证据与参考文献</h3>
+        <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.8rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.86rem", marginBottom: "0.8rem" }}>
+          <strong style={{ color: "var(--cherry-warm-brown)" }}>当前阶段证据：</strong>{activeChapter.evidence}
+        </div>
         <div style={{ display: "grid", gap: "0.65rem" }}>
           {references.map((reference) => (
             <a key={reference.key} href={reference.url} target="_blank" rel="noreferrer" style={{ color: "var(--cherry-forest)", textDecoration: "none", lineHeight: 1.6, fontSize: "0.86rem", fontWeight: 800 }}>
@@ -214,6 +302,16 @@ function PlantEvolutionContent() {
           ))}
         </div>
       </div>
+
+      <style>
+        {`
+          @media (max-width: 880px) {
+            #plant-evolution-explorer > div:first-child {
+              grid-template-columns: 1fr !important;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 }
