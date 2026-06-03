@@ -48,6 +48,10 @@ function upsertJsonLd(data: Record<string, unknown>) {
   element.textContent = JSON.stringify(data);
 }
 
+function getScrollBehavior(): ScrollBehavior {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+}
+
 export default function App() {
   const [locationKey, setLocationKey] = useState(`${window.location.pathname}${window.location.hash}`);
   const detailSlug = useMemo(() => {
@@ -78,7 +82,7 @@ export default function App() {
 
   useEffect(() => {
     if (detailSlug || noteSlug || researchSlug) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: getScrollBehavior() });
       return;
     }
 
@@ -87,7 +91,7 @@ export default function App() {
 
     window.requestAnimationFrame(() => {
       const target = document.getElementById(id);
-      target?.scrollIntoView({ behavior: "smooth", block: "start" });
+      target?.scrollIntoView({ behavior: getScrollBehavior(), block: "start" });
     });
   }, [detailSlug, noteSlug, researchSlug, locationKey]);
 
