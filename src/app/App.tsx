@@ -68,6 +68,22 @@ function getLocationKey() {
   return `${window.location.pathname}${window.location.search}${window.location.hash}`;
 }
 
+function readRedirectPath() {
+  try {
+    return sessionStorage.getItem("bycherry-redirect-path");
+  } catch {
+    return null;
+  }
+}
+
+function clearRedirectPath() {
+  try {
+    sessionStorage.removeItem("bycherry-redirect-path");
+  } catch {
+    // Storage can be unavailable in some privacy modes; route normally.
+  }
+}
+
 function NotFoundPage() {
   return (
     <main id="main-content" tabIndex={-1} style={{ minHeight: "58vh", padding: "5rem 1.5rem", display: "grid", placeItems: "center", fontFamily: "'Nunito', sans-serif" }}>
@@ -126,10 +142,10 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const redirectPath = sessionStorage.getItem("bycherry-redirect-path");
-    if (!redirectPath) return;
+    const redirectPath = readRedirectPath();
+    if (!redirectPath?.startsWith("/")) return;
 
-    sessionStorage.removeItem("bycherry-redirect-path");
+    clearRedirectPath();
     if (redirectPath === getLocationKey()) return;
 
     window.history.replaceState(null, "", redirectPath);
