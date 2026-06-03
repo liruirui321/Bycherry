@@ -17,7 +17,7 @@ export const works = [
     id: 2, slug: "cell-biology-course", category: "课程" as Category,
     icon: <IconNotebook size={36} color="var(--cherry-yellow)" />,
     title: "细胞生物学入门课",
-    desc: "8 讲细胞生物学入门路径，用系统图、类比和自测题建立整体理解。",
+    desc: "8 个细胞机制模块，串起细胞膜、细胞核、线粒体、内膜系统、骨架、分裂和通信。",
     href: "/works/cell-biology-course",
     tags: ["课程设计", "细胞生物", "自学"],
     color: "var(--cherry-yellow-light)", border: "var(--cherry-yellow)", rotate: "1.2deg",

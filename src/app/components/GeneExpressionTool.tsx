@@ -1,219 +1,174 @@
-import { useMemo, useState } from "react";
-import { IconCheck, IconDNA, IconFlask, IconMicroscope, IconSparkle } from "./Icons";
+import { useMemo, useRef, useState } from "react";
+import { IconCheck, IconDNA, IconMicroscope, IconSparkle } from "./Icons";
 
-const dnaCodons = ["ATG", "GAA", "TTT", "CCG"];
-const rnaCodons = ["AUG", "GAA", "UUU", "CCG"];
-const aminoAcids = [
-  { label: "Met", color: "var(--cherry-peach)" },
-  { label: "Glu", color: "var(--cherry-yellow)" },
-  { label: "Phe", color: "var(--cherry-sage)" },
-  { label: "Pro", color: "var(--cherry-blue)" },
+type MoleculeType = "tf" | "pol" | "ribosome";
+
+type Molecule = {
+  id: string;
+  type: MoleculeType;
+  label: string;
+  x: number;
+  y: number;
+  homeX: number;
+  homeY: number;
+  color: string;
+};
+
+const initialMolecules: Molecule[] = [
+  { id: "tf-1", type: "tf", label: "TF", x: 82, y: 146, homeX: 82, homeY: 146, color: "var(--cherry-yellow)" },
+  { id: "tf-2", type: "tf", label: "TF", x: 136, y: 112, homeX: 136, homeY: 112, color: "var(--cherry-yellow)" },
+  { id: "tf-3", type: "tf", label: "TF", x: 188, y: 146, homeX: 188, homeY: 146, color: "var(--cherry-yellow)" },
+  { id: "pol-1", type: "pol", label: "RNA pol", x: 710, y: 120, homeX: 710, homeY: 120, color: "var(--cherry-blue-light)" },
+  { id: "pol-2", type: "pol", label: "RNA pol", x: 804, y: 156, homeX: 804, homeY: 156, color: "var(--cherry-blue-light)" },
+  { id: "rib-1", type: "ribosome", label: "ribo", x: 90, y: 500, homeX: 90, homeY: 500, color: "var(--cherry-peach-light)" },
+  { id: "rib-2", type: "ribosome", label: "ribo", x: 164, y: 536, homeX: 164, homeY: 536, color: "var(--cherry-peach-light)" },
+  { id: "rib-3", type: "ribosome", label: "ribo", x: 238, y: 500, homeX: 238, homeY: 500, color: "var(--cherry-peach-light)" },
 ];
 
-function SliderControl({
-  label,
-  value,
-  setValue,
-  note,
+const codons = [
+  { rna: "AUG", amino: "Met", color: "var(--cherry-peach)" },
+  { rna: "GAA", amino: "Glu", color: "var(--cherry-yellow)" },
+  { rna: "UUU", amino: "Phe", color: "var(--cherry-sage)" },
+  { rna: "CCG", amino: "Pro", color: "var(--cherry-blue)" },
+];
+
+function inBox(molecule: Molecule, box: { x: number; y: number; w: number; h: number }) {
+  return molecule.x >= box.x && molecule.x <= box.x + box.w && molecule.y >= box.y && molecule.y <= box.y + box.h;
+}
+
+function MoleculeNode({
+  molecule,
+  dragging,
+  onPointerDown,
 }: {
-  label: string;
-  value: number;
-  setValue: (value: number) => void;
-  note: string;
+  molecule: Molecule;
+  dragging: boolean;
+  onPointerDown: (event: React.PointerEvent<SVGGElement>, molecule: Molecule) => void;
 }) {
+  const radius = molecule.type === "pol" ? 44 : molecule.type === "ribosome" ? 38 : 31;
+
   return (
-    <label style={{ display: "grid", gap: "0.45rem" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "baseline" }}>
-        <span style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>{label}</span>
-        <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-red)", fontWeight: 800 }}>{value}</span>
-      </div>
-      <input
-        type="range"
-        min={0}
-        max={5}
-        value={value}
-        onChange={(event) => setValue(Number(event.target.value))}
-        style={{ width: "100%", accentColor: "var(--cherry-red)" }}
+    <g
+      transform={`translate(${molecule.x} ${molecule.y})`}
+      onPointerDown={(event) => onPointerDown(event, molecule)}
+      style={{ cursor: "grab", filter: dragging ? "drop-shadow(5px 8px 0 rgba(94,68,42,0.16))" : "drop-shadow(3px 4px 0 rgba(94,68,42,0.08))" }}
+    >
+      <ellipse
+        rx={radius}
+        ry={molecule.type === "pol" ? 30 : 26}
+        fill={molecule.color}
+        stroke={molecule.type === "pol" ? "var(--cherry-blue)" : "rgba(94,68,42,0.22)"}
+        strokeWidth={molecule.type === "pol" ? 3 : 2}
       />
-      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5 }}>{note}</span>
-    </label>
+      <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={molecule.type === "pol" ? 13 : 14} fontWeight={900}>
+        {molecule.label}
+      </text>
+    </g>
   );
 }
 
-function StageBadge({ number, title, active }: { number: string; title: string; active: boolean }) {
+function CodonLabels({ x, y }: { x: number; y: number }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 8,
-        background: active ? "var(--cherry-sage-light)" : "rgba(250,247,241,0.76)",
-        border: active ? "1.5px solid var(--cherry-sage)" : "1.5px solid var(--border)",
-        borderRadius: 999,
-        padding: "0.42rem 0.75rem",
-        color: "var(--cherry-warm-brown)",
-        fontWeight: 900,
-        fontSize: "0.78rem",
-        whiteSpace: "nowrap",
-      }}
-    >
-      <span
-        style={{
-          width: 22,
-          height: 22,
-          borderRadius: "50%",
-          background: active ? "var(--cherry-forest)" : "var(--muted)",
-          color: active ? "#FAF7F1" : "var(--cherry-warm-mid)",
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "0.72rem",
-        }}
-      >
-        {number}
-      </span>
-      {title}
-    </div>
-  );
-}
-
-function FloatingMolecule({
-  label,
-  left,
-  top,
-  color,
-  delay,
-}: {
-  label: string;
-  left: string;
-  top: string;
-  color: string;
-  delay: number;
-}) {
-  return (
-    <span
-      className="gene-floating-molecule"
-      style={{
-        left,
-        top,
-        background: color,
-        animationDelay: `${delay}s`,
-      }}
-    >
-      {label}
-    </span>
-  );
-}
-
-function CodonStrip({ type }: { type: "dna" | "rna" }) {
-  const source = type === "dna" ? dnaCodons : rnaCodons;
-  return (
-    <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-      {source.map((codon, index) => (
-        <span
-          key={`${type}-${codon}-${index}`}
-          style={{
-            background: type === "dna" ? "rgba(141,190,221,0.28)" : "rgba(232,121,95,0.22)",
-            border: "1.5px solid rgba(94,68,42,0.15)",
-            borderRadius: 10,
-            padding: "0.3rem 0.52rem",
-            color: "var(--cherry-warm-brown)",
-            fontWeight: 900,
-            fontSize: "0.74rem",
-          }}
-        >
-          {codon}
-        </span>
+    <g transform={`translate(${x} ${y})`}>
+      {codons.map((codon, index) => (
+        <g key={codon.rna} transform={`translate(${index * 78} 0)`}>
+          <rect width={62} height={30} rx={10} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.18)" strokeWidth={1.5} />
+          <text x={31} y={20} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
+            {codon.rna}
+          </text>
+        </g>
       ))}
-    </div>
+    </g>
   );
 }
 
-function ProteinChain({ active }: { active: boolean }) {
+function ProductBeads({ count }: { count: number }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
-      {aminoAcids.map((amino, index) => (
-        <span
-          key={amino.label}
-          className={active ? "gene-amino-active" : ""}
-          style={{
-            width: 45,
-            height: 45,
-            borderRadius: "50%",
-            background: amino.color,
-            border: "1.5px solid rgba(94,68,42,0.2)",
-            boxShadow: "3px 4px 0px rgba(94,68,42,0.08)",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "var(--cherry-warm-brown)",
-            fontWeight: 900,
-            fontSize: "0.7rem",
-            opacity: active ? 1 : 0.25,
-            animationDelay: `${index * 0.45}s`,
-          }}
-        >
-          {amino.label}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function ProteinPile({ count }: { count: number }) {
-  const visible = Math.min(12, Math.max(0, count));
-
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 22px)", gap: 7, minHeight: 80, alignContent: "end" }}>
-      {Array.from({ length: 12 }).map((_, index) => (
-        <span
-          key={index}
-          className={index < visible ? "gene-protein-pop" : ""}
-          style={{
-            width: 22,
-            height: 22,
-            borderRadius: "50%",
-            background: index < visible ? aminoAcids[index % aminoAcids.length].color : "rgba(94,68,42,0.08)",
-            border: "1.3px solid rgba(94,68,42,0.15)",
-            boxShadow: index < visible ? "2px 3px 0 rgba(94,68,42,0.08)" : "none",
-            opacity: index < visible ? 1 : 0.34,
-            animationDelay: `${index * 0.08}s`,
-          }}
-        />
-      ))}
-    </div>
+    <g transform="translate(704 442)">
+      <text x={0} y={-18} fill="var(--cherry-warm-brown)" fontSize={16} fontWeight={900}>
+        protein product
+      </text>
+      {Array.from({ length: 12 }).map((_, index) => {
+        const active = index < count;
+        const amino = codons[index % codons.length];
+        return (
+          <circle
+            key={index}
+            className={active ? "gene-svg-pop" : ""}
+            cx={(index % 4) * 34}
+            cy={Math.floor(index / 4) * 34}
+            r={13}
+            fill={active ? amino.color : "rgba(94,68,42,0.08)"}
+            stroke="rgba(94,68,42,0.16)"
+            strokeWidth={1.5}
+            style={{ animationDelay: `${index * 0.08}s` }}
+          />
+        );
+      })}
+    </g>
   );
 }
 
 export function GeneExpressionTool() {
-  const [transcriptionFactors, setTranscriptionFactors] = useState(3);
-  const [polymerase, setPolymerase] = useState(3);
-  const [ribosomes, setRibosomes] = useState(3);
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [molecules, setMolecules] = useState(initialMolecules);
+  const [dragging, setDragging] = useState<{ id: string; dx: number; dy: number } | null>(null);
 
-  const expression = useMemo(() => {
-    const promoterAccess = transcriptionFactors / 5;
-    const transcriptionRate = Math.round(promoterAccess * polymerase * 2);
-    const mrna = Math.max(0, transcriptionRate);
-    const protein = Math.round(mrna * (0.6 + ribosomes / 4));
-    const transcriptionActive = transcriptionFactors > 0 && polymerase > 0;
-    const translationActive = transcriptionActive && ribosomes > 0 && mrna > 0;
-    const polDuration = Math.max(2.4, 7.2 - polymerase * 0.72 - transcriptionFactors * 0.26);
-    const ribosomeDuration = Math.max(2.1, 6.5 - ribosomes * 0.75);
-    const mrnaLanes = Math.min(5, Math.max(0, mrna));
-    const proteinDisplay = Math.min(12, protein);
+  const zones = {
+    promoter: { x: 214, y: 212, w: 160, h: 86 },
+    polymerase: { x: 380, y: 206, w: 330, h: 96 },
+    ribosome: { x: 332, y: 392, w: 358, h: 116 },
+  };
 
-    return {
-      promoterAccess,
-      mrna,
-      protein,
-      transcriptionActive,
-      translationActive,
-      polDuration,
-      ribosomeDuration,
-      mrnaLanes,
-      proteinDisplay,
-    };
-  }, [transcriptionFactors, polymerase, ribosomes]);
+  const model = useMemo(() => {
+    const tfBound = molecules.filter((molecule) => molecule.type === "tf" && inBox(molecule, zones.promoter)).length;
+    const polBound = molecules.filter((molecule) => molecule.type === "pol" && inBox(molecule, zones.polymerase)).length;
+    const ribBound = molecules.filter((molecule) => molecule.type === "ribosome" && inBox(molecule, zones.ribosome)).length;
+    const transcriptionOn = tfBound > 0 && polBound > 0;
+    const mrna = transcriptionOn ? Math.min(5, tfBound + polBound + 1) : 0;
+    const translationOn = mrna > 0 && ribBound > 0;
+    const protein = translationOn ? Math.min(12, mrna * ribBound) : 0;
+
+    return { tfBound, polBound, ribBound, transcriptionOn, mrna, translationOn, protein };
+  }, [molecules, zones.polymerase, zones.promoter, zones.ribosome]);
+
+  function svgPoint(event: React.PointerEvent<SVGSVGElement | SVGGElement>) {
+    const svg = svgRef.current;
+    if (!svg) return { x: 0, y: 0 };
+    const point = svg.createSVGPoint();
+    point.x = event.clientX;
+    point.y = event.clientY;
+    const matrix = svg.getScreenCTM();
+    if (!matrix) return { x: 0, y: 0 };
+    return point.matrixTransform(matrix.inverse());
+  }
+
+  function startDrag(event: React.PointerEvent<SVGGElement>, molecule: Molecule) {
+    event.preventDefault();
+    const point = svgPoint(event);
+    setDragging({ id: molecule.id, dx: point.x - molecule.x, dy: point.y - molecule.y });
+  }
+
+  function moveDrag(event: React.PointerEvent<SVGSVGElement>) {
+    if (!dragging) return;
+    const point = svgPoint(event);
+    setMolecules((items) =>
+      items.map((molecule) =>
+        molecule.id === dragging.id
+          ? {
+              ...molecule,
+              x: Math.max(42, Math.min(936, point.x - dragging.dx)),
+              y: Math.max(72, Math.min(594, point.y - dragging.dy)),
+            }
+          : molecule
+      )
+    );
+  }
+
+  function resetScene() {
+    setMolecules(initialMolecules);
+    setDragging(null);
+  }
 
   return (
     <section
@@ -223,198 +178,139 @@ export function GeneExpressionTool() {
         padding: "2rem 1.5rem 5rem",
         maxWidth: 1180,
         margin: "0 auto",
-        position: "relative",
         scrollMarginTop: 76,
       }}
     >
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(300px, 0.75fr)", gap: "1.2rem", alignItems: "stretch" }}>
-        <div
-          style={{
-            minHeight: 650,
-            background: "linear-gradient(180deg, #FFF8EA 0%, #F4E8D7 100%)",
-            border: "1.5px solid var(--border)",
-            borderRadius: 30,
-            boxShadow: "6px 10px 0px rgba(94,68,42,0.09)",
-            position: "relative",
-            overflow: "hidden",
-            padding: "1.25rem",
-          }}
-        >
-          <div style={{ position: "absolute", inset: 24, borderRadius: "45% 55% 50% 50% / 56% 44% 58% 42%", background: "rgba(169,201,172,0.2)", border: "2px dashed rgba(93,140,101,0.34)" }} />
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.7fr)", gap: "1rem", alignItems: "stretch" }}>
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 28, boxShadow: "6px 10px 0px rgba(94,68,42,0.09)", overflow: "hidden" }}>
+          <svg
+            ref={svgRef}
+            viewBox="0 0 980 660"
+            role="img"
+            aria-label="基因表达互动仿真画布"
+            onPointerMove={moveDrag}
+            onPointerUp={() => setDragging(null)}
+            onPointerLeave={() => setDragging(null)}
+            style={{ width: "100%", display: "block", touchAction: "none", background: "linear-gradient(180deg, #FFF8EA 0%, #F3E8D7 100%)" }}
+          >
+            <defs>
+              <linearGradient id="dnaTop" x1="0" x2="1">
+                <stop offset="0%" stopColor="var(--cherry-blue)" />
+                <stop offset="38%" stopColor="var(--cherry-sage)" />
+                <stop offset="70%" stopColor="var(--cherry-yellow)" />
+                <stop offset="100%" stopColor="var(--cherry-red)" />
+              </linearGradient>
+              <linearGradient id="dnaBottom" x1="0" x2="1">
+                <stop offset="0%" stopColor="var(--cherry-red)" />
+                <stop offset="42%" stopColor="var(--cherry-yellow)" />
+                <stop offset="72%" stopColor="var(--cherry-sage)" />
+                <stop offset="100%" stopColor="var(--cherry-blue)" />
+              </linearGradient>
+            </defs>
 
-          <div style={{ position: "relative", zIndex: 2, display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "var(--cherry-forest)", fontWeight: 900 }}>
-              <IconMicroscope size={20} color="var(--cherry-forest)" />
-              调节分子，观察蛋白质产量
-            </div>
-            <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
-              <StageBadge number="1" title="DNA 转录" active={expression.transcriptionActive} />
-              <StageBadge number="2" title="mRNA 生成" active={expression.mrna > 0} />
-              <StageBadge number="3" title="核糖体翻译" active={expression.translationActive} />
-            </div>
-          </div>
+            <rect x={22} y={26} width={936} height={606} rx={220} fill="rgba(169,201,172,0.2)" stroke="rgba(93,140,101,0.34)" strokeWidth={3} strokeDasharray="9 9" />
 
-          {Array.from({ length: transcriptionFactors }).map((_, index) => (
-            <FloatingMolecule
-              key={`tf-${index}`}
-              label="TF"
-              left={`${8 + index * 8}%`}
-              top={`${17 + (index % 2) * 9}%`}
-              color="var(--cherry-yellow-light)"
-              delay={index * 0.12}
-            />
-          ))}
-          {Array.from({ length: polymerase }).map((_, index) => (
-            <FloatingMolecule
-              key={`pol-${index}`}
-              label="pol"
-              left={`${56 + index * 6}%`}
-              top={`${17 + (index % 2) * 9}%`}
-              color="var(--cherry-blue-light)"
-              delay={index * 0.15}
-            />
-          ))}
-          {Array.from({ length: ribosomes }).map((_, index) => (
-            <FloatingMolecule
-              key={`ribo-${index}`}
-              label="ribo"
-              left={`${12 + index * 11}%`}
-              top={`${79 + (index % 2) * 5}%`}
-              color="var(--cherry-peach-light)"
-              delay={index * 0.14}
-            />
-          ))}
+            <text x={42} y={58} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>
+              Drag molecules into the cell model
+            </text>
 
-          <div className="gene-zone gene-dna-zone">
-            <div className="gene-zone-label">
-              <IconDNA size={18} />
-              DNA
-            </div>
-            <div className="gene-dna-track">
-              <div className="gene-promoter" style={{ opacity: 0.35 + expression.promoterAccess * 0.65 }}>
+            <g transform="translate(154 170)">
+              <rect x={0} y={0} width={668} height={150} rx={34} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.18)" strokeWidth={2} />
+              <text x={24} y={34} fill="var(--cherry-warm-brown)" fontSize={16} fontWeight={900}>
+                DNA
+              </text>
+              <rect x={60} y={64} width={540} height={10} rx={999} fill="url(#dnaTop)" />
+              <rect x={60} y={90} width={540} height={10} rx={999} fill="url(#dnaBottom)" opacity={0.78} />
+              <rect x={66} y={40} width={150} height={80} rx={18} fill={model.tfBound > 0 ? "rgba(221,185,90,0.36)" : "rgba(250,247,241,0.46)"} stroke="var(--cherry-yellow)" strokeWidth={2} strokeDasharray="7 7" />
+              <text x={92} y={88} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
                 promoter
-              </div>
-              <div className="gene-dna-strand gene-dna-top" />
-              <div className="gene-dna-strand gene-dna-bottom" />
-              <div className="gene-codon-row">
-                <CodonStrip type="dna" />
-              </div>
-              {expression.transcriptionActive ? (
-                <div
-                  className="gene-polymerase-runner"
-                  style={{
-                    animationDuration: `${expression.polDuration}s`,
-                  }}
-                >
-                  RNA pol
-                </div>
-              ) : (
-                <div className="gene-polymerase-idle">RNA pol</div>
-              )}
-            </div>
-          </div>
+              </text>
+              <rect x={226} y={42} width={320} height={78} rx={18} fill={model.polBound > 0 ? "rgba(141,190,221,0.26)" : "rgba(250,247,241,0.4)"} stroke="var(--cherry-blue)" strokeWidth={2} strokeDasharray="7 7" />
+              <text x={344} y={88} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
+                gene body
+              </text>
+            </g>
 
-          <div className="gene-arrow gene-arrow-transcription">
-            <span>transcription</span>
-          </div>
+            {model.transcriptionOn ? (
+              <g className="gene-svg-mrna" transform="translate(264 350)">
+                <path d="M0 0 C80 36 170 -34 250 0 C324 32 410 -20 490 8" fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" />
+                <CodonLabels x={74} y={18} />
+              </g>
+            ) : (
+              <g transform="translate(332 382)" opacity={0.35}>
+                <path d="M0 0 C68 26 150 -24 226 0" fill="none" stroke="var(--cherry-red)" strokeWidth={8} strokeLinecap="round" strokeDasharray="10 10" />
+                <text x={250} y={7} fill="var(--cherry-warm-mid)" fontSize={15} fontWeight={800}>
+                  mRNA appears after TF + RNA pol bind
+                </text>
+              </g>
+            )}
 
-          <div className="gene-zone gene-mrna-zone">
-            <div className="gene-zone-label">
-              <IconFlask size={17} />
-              mRNA
-            </div>
-            <div style={{ display: "grid", gap: 9 }}>
-              {Array.from({ length: Math.max(1, expression.mrnaLanes) }).map((_, index) => (
-                <div
-                  key={`mrna-${index}`}
-                  className={expression.mrnaLanes > index ? "gene-mrna-line gene-mrna-active" : "gene-mrna-line"}
-                  style={{ animationDelay: `${index * 0.32}s` }}
-                >
-                  <CodonStrip type="rna" />
-                </div>
-              ))}
-            </div>
-          </div>
+            <rect x={zones.ribosome.x} y={zones.ribosome.y} width={zones.ribosome.w} height={zones.ribosome.h} rx={22} fill={model.ribBound > 0 ? "rgba(232,121,95,0.15)" : "rgba(250,247,241,0.38)"} stroke="var(--cherry-peach)" strokeWidth={2} strokeDasharray="7 7" />
+            <text x={zones.ribosome.x + 22} y={zones.ribosome.y + 34} fill="var(--cherry-warm-brown)" fontSize={15} fontWeight={900}>
+              ribosome dock
+            </text>
 
-          <div className="gene-arrow gene-arrow-translation">
-            <span>translation</span>
-          </div>
+            {model.translationOn ? (
+              <g className="gene-svg-ribosome-scan" transform="translate(348 438)">
+                <ellipse rx={48} ry={30} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={3} />
+                <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
+                  ribosome
+                </text>
+              </g>
+            ) : null}
 
-          <div className="gene-zone gene-ribosome-zone">
-            <div className="gene-zone-label">
-              <IconSparkle size={17} />
-              ribosome
-            </div>
-            <div className="gene-ribosome-stage">
-              <div className="gene-rna-template">
-                <CodonStrip type="rna" />
-                {expression.translationActive ? (
-                  <div className="gene-ribosome-runner" style={{ animationDuration: `${expression.ribosomeDuration}s` }}>
-                    ribosome
-                  </div>
-                ) : null}
-              </div>
-              <div className="gene-chain-card">
-                <ProteinChain active={expression.translationActive} />
-                <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800, marginTop: "0.7rem" }}>
-                  AUG → Met · GAA → Glu · UUU → Phe · CCG → Pro
-                </div>
-              </div>
-            </div>
-          </div>
+            <ProductBeads count={model.protein} />
 
-          <div className="gene-product-card">
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: "0.7rem" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
-                <IconSparkle size={17} color="var(--cherry-peach)" />
-                蛋白质产物
-              </div>
-              <span style={{ color: "var(--cherry-red)", fontWeight: 900, fontSize: "1.28rem" }}>{expression.protein}</span>
-            </div>
-            <ProteinPile count={expression.proteinDisplay} />
-          </div>
+            <g transform="translate(46 86)">
+              <rect width={190} height={28} rx={999} fill="rgba(250,247,241,0.74)" stroke="rgba(94,68,42,0.16)" />
+              <text x={18} y={19} fill="var(--cherry-warm-mid)" fontSize={13} fontWeight={900}>
+                molecule bank
+              </text>
+            </g>
+
+            {molecules.map((molecule) => (
+              <MoleculeNode key={molecule.id} molecule={molecule} dragging={dragging?.id === molecule.id} onPointerDown={startDrag} />
+            ))}
+          </svg>
         </div>
 
         <aside style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.25rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "1rem" }}>
-              <IconDNA size={20} />
-              分子控制台
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.85rem" }}>
+              <IconMicroscope size={19} />
+              仿真读数
             </div>
-            <div style={{ display: "grid", gap: "1rem" }}>
-              <SliderControl label="转录因子" value={transcriptionFactors} setValue={setTranscriptionFactors} note="越高，启动子越容易被 RNA 聚合酶识别。" />
-              <SliderControl label="RNA 聚合酶" value={polymerase} setValue={setPolymerase} note="越高，DNA 到 mRNA 的转录速度越快。" />
-              <SliderControl label="核糖体" value={ribosomes} setValue={setRibosomes} note="越高，同一批 mRNA 被翻译成蛋白质的效率越高。" />
-            </div>
-          </div>
-
-          <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1.25rem" }}>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>实时读数</div>
             <div style={{ display: "grid", gap: 8 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
-                <span>启动子可读性</span>
-                <span>{Math.round(expression.promoterAccess * 100)}%</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
-                <span>mRNA 数量</span>
-                <span>{expression.mrna}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
-                <span>蛋白质产量</span>
-                <span>{expression.protein}</span>
-              </div>
+              {[
+                ["启动子上的转录因子", model.tfBound],
+                ["DNA 上的 RNA 聚合酶", model.polBound],
+                ["mRNA 上的核糖体", model.ribBound],
+                ["mRNA 数量", model.mrna],
+                ["蛋白质产量", model.protein],
+              ].map(([label, value]) => (
+                <div key={label} style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
+                  <span>{label}</span>
+                  <span style={{ color: "var(--cherry-red)", fontWeight: 900 }}>{value}</span>
+                </div>
+              ))}
             </div>
+            <button onClick={resetScene} style={{ marginTop: "1rem", background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+              重置分子
+            </button>
           </div>
 
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.25rem" }}>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>即时小测</div>
-            <div style={{ display: "grid", gap: "0.65rem" }}>
+          <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1.2rem", color: "var(--cherry-warm-mid)", lineHeight: 1.7 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.65rem" }}>
+              <IconSparkle size={18} />
+              操作任务
+            </div>
+            <div style={{ display: "grid", gap: "0.55rem", fontSize: "0.86rem" }}>
               {[
-                "DNA 序列 ATG 转录后会变成 mRNA 的 AUG。",
-                "mRNA 是 DNA 信息进入蛋白质合成流程的中间载体。",
-                "核糖体读取 mRNA 密码子，并连接对应的氨基酸。",
+                "把 TF 拖到 promoter，观察启动子变亮。",
+                "把 RNA pol 拖到 gene body，观察 mRNA 出现。",
+                "把 ribosome 拖到 mRNA 附近，观察蛋白质产物增加。",
               ].map((item) => (
-                <div key={item} style={{ display: "flex", gap: 8, color: "var(--cherry-warm-mid)", lineHeight: 1.6, fontSize: "0.86rem" }}>
+                <div key={item} style={{ display: "flex", gap: 8 }}>
                   <IconCheck size={16} color="var(--cherry-forest)" />
                   <span>{item}</span>
                 </div>
@@ -426,336 +322,38 @@ export function GeneExpressionTool() {
 
       <style>
         {`
-          .gene-zone {
-            position: absolute;
-            z-index: 2;
-            background: rgba(250,247,241,0.82);
-            border: 1.5px solid rgba(94,68,42,0.16);
-            border-radius: 22px;
-            box-shadow: 4px 6px 0 rgba(94,68,42,0.06);
-            padding: 1rem;
+          .gene-svg-mrna {
+            animation: geneSvgMrnaPulse 2.8s ease-in-out infinite;
           }
 
-          .gene-zone-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            color: var(--cherry-warm-brown);
-            font-weight: 900;
-            margin-bottom: 0.8rem;
+          .gene-svg-ribosome-scan {
+            animation: geneSvgRibosomeScan 4.2s linear infinite;
           }
 
-          .gene-dna-zone {
-            left: 7%;
-            right: 7%;
-            top: 16%;
-            min-height: 142px;
+          .gene-svg-pop {
+            animation: geneSvgProteinPop 1.5s ease-in-out infinite;
           }
 
-          .gene-mrna-zone {
-            left: 9%;
-            width: 43%;
-            top: 43%;
-            min-height: 124px;
+          @keyframes geneSvgMrnaPulse {
+            0%, 100% { opacity: 0.78; transform: translate(264px, 350px) scaleX(0.96); }
+            50% { opacity: 1; transform: translate(264px, 350px) scaleX(1.02); }
           }
 
-          .gene-ribosome-zone {
-            right: 7%;
-            width: 44%;
-            top: 43%;
-            min-height: 200px;
-          }
-
-          .gene-dna-track {
-            position: relative;
-            height: 88px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.5);
-            border: 1.5px solid rgba(94,68,42,0.12);
-            overflow: hidden;
-          }
-
-          .gene-dna-strand {
-            position: absolute;
-            left: 8%;
-            right: 6%;
-            height: 8px;
-            border-radius: 999px;
-            box-shadow: 0 2px 0 rgba(94,68,42,0.06);
-          }
-
-          .gene-dna-top {
-            top: 31px;
-            background: linear-gradient(90deg, var(--cherry-blue), var(--cherry-sage), var(--cherry-yellow), var(--cherry-red));
-          }
-
-          .gene-dna-bottom {
-            top: 51px;
-            background: linear-gradient(90deg, var(--cherry-red), var(--cherry-yellow), var(--cherry-sage), var(--cherry-blue));
-            opacity: 0.75;
-          }
-
-          .gene-promoter {
-            position: absolute;
-            left: 4%;
-            top: 11px;
-            z-index: 2;
-            border-radius: 999px;
-            background: var(--cherry-yellow);
-            border: 1.5px solid rgba(94,68,42,0.16);
-            color: var(--cherry-warm-brown);
-            font-weight: 900;
-            font-size: 0.72rem;
-            padding: 0.18rem 0.56rem;
-            transition: opacity 0.25s ease;
-          }
-
-          .gene-codon-row {
-            position: absolute;
-            left: 20%;
-            top: 12px;
-          }
-
-          .gene-polymerase-runner,
-          .gene-polymerase-idle {
-            position: absolute;
-            z-index: 4;
-            top: 22px;
-            width: 72px;
-            height: 54px;
-            border-radius: 45% 55% 48% 52%;
-            background: var(--cherry-blue-light);
-            border: 2px solid var(--cherry-blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--cherry-warm-brown);
-            font-weight: 900;
-            font-size: 0.68rem;
-            box-shadow: 3px 5px 0 rgba(94,68,42,0.1);
-          }
-
-          .gene-polymerase-runner {
-            left: 7%;
-            animation: genePolymeraseScan linear infinite;
-          }
-
-          .gene-polymerase-idle {
-            left: 7%;
-            opacity: 0.42;
-          }
-
-          .gene-floating-molecule {
-            position: absolute;
-            z-index: 3;
-            width: 48px;
-            height: 38px;
-            border-radius: 45% 55% 50% 50% / 55% 40% 60% 45%;
-            border: 1.5px solid rgba(94,68,42,0.18);
-            box-shadow: 3px 4px 0px rgba(94,68,42,0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--cherry-warm-brown);
-            font-weight: 900;
-            font-size: 0.72rem;
-            animation: geneFloat 3.8s ease-in-out infinite;
-          }
-
-          .gene-arrow {
-            position: absolute;
-            z-index: 1;
-            height: 34px;
-            border-radius: 999px;
-            background: linear-gradient(90deg, rgba(232,121,95,0), rgba(232,121,95,0.32), rgba(232,121,95,0));
-            overflow: hidden;
-          }
-
-          .gene-arrow span {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--cherry-red);
-            font-family: 'Caveat', cursive;
-            font-weight: 800;
-            font-size: 1rem;
-          }
-
-          .gene-arrow::after {
-            content: "";
-            position: absolute;
-            top: 14px;
-            left: 8%;
-            width: 84%;
-            height: 6px;
-            border-radius: 999px;
-            background: repeating-linear-gradient(90deg, var(--cherry-red), var(--cherry-red) 16px, transparent 16px, transparent 28px);
-            animation: geneFlow 1.4s linear infinite;
-          }
-
-          .gene-arrow-transcription {
-            left: 22%;
-            top: 37%;
-            width: 30%;
-            transform: rotate(18deg);
-          }
-
-          .gene-arrow-translation {
-            left: 48%;
-            top: 52%;
-            width: 23%;
-            transform: rotate(-2deg);
-          }
-
-          .gene-mrna-line {
-            min-height: 35px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.45);
-            border: 1.5px dashed rgba(94,68,42,0.14);
-            padding: 0.28rem 0.45rem;
-            opacity: 0.24;
-            transform: translateX(-14px);
-          }
-
-          .gene-mrna-active {
-            opacity: 1;
-            animation: geneMrnaGrow 2.4s ease-in-out infinite;
-          }
-
-          .gene-ribosome-stage {
-            display: grid;
-            gap: 0.75rem;
-          }
-
-          .gene-rna-template {
-            position: relative;
-            min-height: 78px;
-            border-radius: 18px;
-            background: var(--cherry-yellow-light);
-            border: 1.5px solid rgba(94,68,42,0.13);
-            padding: 0.75rem;
-            overflow: hidden;
-          }
-
-          .gene-ribosome-runner {
-            position: absolute;
-            top: 38px;
-            left: 8px;
-            width: 88px;
-            height: 44px;
-            border-radius: 45% 55% 50% 50%;
-            background: var(--cherry-peach-light);
-            border: 2px solid var(--cherry-peach);
-            box-shadow: 3px 4px 0 rgba(94,68,42,0.1);
-            color: var(--cherry-warm-brown);
-            font-weight: 900;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: geneRibosomeScan linear infinite;
-          }
-
-          .gene-chain-card {
-            border-radius: 18px;
-            background: rgba(250,247,241,0.78);
-            border: 1.5px solid rgba(94,68,42,0.13);
-            padding: 0.8rem;
-          }
-
-          .gene-amino-active {
-            animation: geneAminoBuild 2.8s ease-in-out infinite;
-          }
-
-          .gene-product-card {
-            position: absolute;
-            z-index: 4;
-            right: 7%;
-            bottom: 5%;
-            width: 230px;
-            min-height: 150px;
-            border-radius: 22px;
-            background: rgba(250,247,241,0.9);
-            border: 1.5px solid var(--border);
-            box-shadow: 4px 7px 0 rgba(94,68,42,0.08);
-            padding: 1rem;
-          }
-
-          .gene-protein-pop {
-            animation: geneProteinPop 1.5s ease-in-out infinite;
-          }
-
-          @keyframes genePolymeraseScan {
-            0% { left: 7%; transform: scale(0.92); opacity: 0; }
+          @keyframes geneSvgRibosomeScan {
+            0% { transform: translate(348px, 438px); opacity: 0; }
             12% { opacity: 1; }
             78% { opacity: 1; }
-            100% { left: calc(100% - 92px); transform: scale(1); opacity: 0; }
+            100% { transform: translate(632px, 438px); opacity: 0; }
           }
 
-          @keyframes geneRibosomeScan {
-            0% { left: 8px; transform: translateY(0) rotate(-2deg); opacity: 0; }
-            10% { opacity: 1; }
-            82% { opacity: 1; }
-            100% { left: calc(100% - 100px); transform: translateY(-3px) rotate(2deg); opacity: 0; }
+          @keyframes geneSvgProteinPop {
+            0%, 100% { transform: scale(1); }
+            45% { transform: scale(1.12); }
           }
 
-          @keyframes geneMrnaGrow {
-            0% { transform: translateX(-12px); box-shadow: 0 0 0 rgba(232,121,95,0); }
-            35% { transform: translateX(0); box-shadow: 0 0 0 rgba(232,121,95,0); }
-            65% { transform: translateX(8px); box-shadow: 4px 0 0 rgba(232,121,95,0.18); }
-            100% { transform: translateX(-12px); box-shadow: 0 0 0 rgba(232,121,95,0); }
-          }
-
-          @keyframes geneAminoBuild {
-            0%, 18% { transform: translateY(8px) scale(0.82); opacity: 0.35; }
-            42%, 100% { transform: translateY(0) scale(1); opacity: 1; }
-          }
-
-          @keyframes geneProteinPop {
-            0%, 100% { transform: translateY(0) scale(1); }
-            45% { transform: translateY(-4px) scale(1.08); }
-          }
-
-          @keyframes geneFloat {
-            0%, 100% { transform: translateY(0) rotate(-2deg); }
-            50% { transform: translateY(-10px) rotate(3deg); }
-          }
-
-          @keyframes geneFlow {
-            from { transform: translateX(-28px); }
-            to { transform: translateX(28px); }
-          }
-
-          @media (max-width: 980px) {
+          @media (max-width: 920px) {
             #gene-expression > div:first-child {
               grid-template-columns: 1fr !important;
-            }
-
-            .gene-dna-zone,
-            .gene-mrna-zone,
-            .gene-ribosome-zone,
-            .gene-product-card {
-              position: relative;
-              left: auto;
-              right: auto;
-              top: auto;
-              bottom: auto;
-              width: auto;
-              margin-top: 1rem;
-            }
-
-            .gene-dna-zone {
-              margin-top: 3.5rem;
-            }
-
-            .gene-arrow {
-              display: none;
-            }
-
-            .gene-product-card {
-              width: auto;
             }
           }
         `}

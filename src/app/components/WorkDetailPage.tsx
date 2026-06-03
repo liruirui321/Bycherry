@@ -21,27 +21,145 @@ function ContentCard({ title, children }: { title: string; children: React.React
 
 function CellBiologyCourseContent() {
   const lessons = [
-    ["01", "细胞是一座会自我维护的微型城市", "建立细胞整体观，区分结构、功能和系统协作。"],
-    ["02", "细胞膜：边界、门禁和交流窗口", "理解选择透过性、物质运输和膜蛋白。"],
-    ["03", "细胞核：遗传信息的档案室", "理解 DNA、基因表达和细胞核的调控角色。"],
-    ["04", "线粒体：能量转换与细胞状态", "从 ATP 进入能量代谢、凋亡和活性氧。"],
-    ["05", "内质网和高尔基体：加工与物流", "理解蛋白质合成后的修饰、分拣和运输。"],
-    ["06", "细胞骨架：支撑、运输和移动", "理解微管、微丝和中间纤维的分工。"],
-    ["07", "细胞分裂：复制一个相似的自己", "理解有丝分裂、细胞周期和检查点。"],
-    ["08", "细胞通信：从一个细胞到一个组织", "理解信号分子、受体和反馈调控。"],
+    {
+      num: "01",
+      title: "细胞是一套开放系统",
+      idea: "细胞不断接收物质和信号，输出能量、产物和行为。结构不是孤立背诵对象，而是服务于输入、处理和输出。",
+      mechanism: "葡萄糖、氨基酸、离子和信号分子从膜进入；细胞核调出遗传信息；细胞器完成合成、修饰、运输、能量转换和废物处理。",
+      terms: ["物质交换", "能量流", "信息流", "稳态"],
+      check: "如果把线粒体移走，受影响的不只是 ATP，还会影响主动运输、运动、分裂和细胞死亡调控。",
+    },
+    {
+      num: "02",
+      title: "细胞膜：边界、门禁和交流窗口",
+      idea: "细胞膜不是一层被动外壳，而是由磷脂双分子层和膜蛋白组成的动态界面。",
+      mechanism: "小分子可以顺浓度梯度扩散；离子和大分子需要通道、载体或囊泡运输；受体蛋白把外界信号转成细胞内响应。",
+      terms: ["磷脂双分子层", "选择透过性", "通道蛋白", "胞吞/胞吐"],
+      check: "氧气能直接穿过膜，钠离子通常需要通道或泵，胰岛素这类信号分子主要通过受体触发反应。",
+    },
+    {
+      num: "03",
+      title: "细胞核：遗传信息的调度中心",
+      idea: "细胞核保存 DNA，但细胞真正改变状态，靠的是哪些基因被读取、哪些蛋白被制造。",
+      mechanism: "染色质开放后，RNA 聚合酶把基因转录成 RNA；mRNA 离开细胞核进入细胞质；核孔控制大分子进出。",
+      terms: ["染色质", "转录", "mRNA", "核孔"],
+      check: "同一个人的神经细胞和肌肉细胞 DNA 基本相同，差异主要来自基因表达模式不同。",
+    },
+    {
+      num: "04",
+      title: "线粒体：能量转换与细胞状态",
+      idea: "线粒体把营养物质中的化学能转成 ATP，也参与钙离子稳态、氧化应激和凋亡信号。",
+      mechanism: "葡萄糖分解产生的丙酮酸进入线粒体，经过三羧酸循环和电子传递链，把能量集中到 ATP 中。",
+      terms: ["ATP", "三羧酸循环", "电子传递链", "细胞凋亡"],
+      check: "耗能越高的细胞通常线粒体越多，例如肌肉细胞和神经元对线粒体功能非常敏感。",
+    },
+    {
+      num: "05",
+      title: "内质网和高尔基体：加工与物流",
+      idea: "很多蛋白质不是合成后立刻可用，而是要进入内膜系统折叠、修饰、分拣和运输。",
+      mechanism: "粗面内质网上的核糖体合成分泌蛋白；内质网完成折叠和质量控制；高尔基体继续修饰并按目的地分装进囊泡。",
+      terms: ["粗面内质网", "蛋白折叠", "高尔基体", "囊泡运输"],
+      check: "抗体、消化酶、膜受体通常会经过内质网和高尔基体；细胞质中的游离酶通常不走这条路线。",
+    },
+    {
+      num: "06",
+      title: "细胞骨架：支撑、运输和移动",
+      idea: "细胞骨架决定细胞形态，也像轨道一样帮助细胞内部运输货物。",
+      mechanism: "微管负责长距离运输和纺锤体；微丝参与细胞运动和收缩；中间纤维提供抗拉强度。",
+      terms: ["微管", "微丝", "中间纤维", "马达蛋白"],
+      check: "囊泡能沿微管移动，是因为驱动蛋白和动力蛋白把化学能转成机械运动。",
+    },
+    {
+      num: "07",
+      title: "细胞分裂：复制一个相似的自己",
+      idea: "分裂不是简单一分为二，而是 DNA 复制、染色体分离和细胞质分配的高风险流程。",
+      mechanism: "间期复制 DNA；有丝分裂把姐妹染色单体分开；检查点阻止带着严重错误的细胞继续分裂。",
+      terms: ["细胞周期", "姐妹染色单体", "纺锤体", "检查点"],
+      check: "如果纺锤体不能正确连接染色体，子细胞可能得到错误数量的染色体。",
+    },
+    {
+      num: "08",
+      title: "细胞通信：从一个细胞到一个组织",
+      idea: "组织不是细胞堆在一起，而是细胞通过信号协调生长、分化、免疫反应和修复。",
+      mechanism: "信号分子结合受体后，细胞内级联反应会放大信号，并改变酶活性、基因表达或细胞行为。",
+      terms: ["受体", "信号转导", "反馈调节", "细胞分化"],
+      check: "激素可以作用于远处细胞，神经递质通常作用于突触附近，旁分泌信号影响邻近细胞。",
+    },
+  ];
+
+  const systemMap = [
+    ["边界", "细胞膜", "选择进入、排出废物、接收信号"],
+    ["信息", "细胞核", "保存 DNA，决定哪些基因被读取"],
+    ["能量", "线粒体", "把营养物质转成 ATP"],
+    ["生产", "核糖体 / 内质网", "合成并折叠蛋白质"],
+    ["分拣", "高尔基体", "修饰、打包、发送分子"],
+    ["运动", "细胞骨架", "维持形态，运输囊泡，参与分裂"],
+  ];
+
+  const logistics = [
+    ["DNA", "基因被转录成 mRNA"],
+    ["核糖体", "读取 mRNA 并合成多肽"],
+    ["粗面内质网", "折叠蛋白并检查错误结构"],
+    ["高尔基体", "修饰糖基并按目的地分拣"],
+    ["囊泡", "沿细胞骨架移动"],
+    ["细胞膜", "胞吐释放或嵌入膜上"],
   ];
 
   return (
-    <section style={{ display: "grid", gap: "1rem" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "0.9rem" }}>
-        {lessons.map(([num, title, goal]) => (
-          <ContentCard key={num} title={`${num}. ${title}`}>
-            {goal}
+    <section style={{ display: "grid", gap: "1.1rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(245px, 1fr))", gap: "0.9rem" }}>
+        {systemMap.map(([role, organelle, job]) => (
+          <ContentCard key={organelle} title={`${role}：${organelle}`}>
+            {job}
           </ContentCard>
         ))}
       </div>
-      <ContentCard title="细胞物流图">
-        从核糖体合成蛋白开始，标出内质网、高尔基体、囊泡和细胞膜之间的运输关系，并用一句话解释每个结构的作用。
+
+      <div style={{ display: "grid", gap: "0.95rem" }}>
+        {lessons.map((lesson) => (
+          <article key={lesson.num} style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 20, padding: "1.15rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
+            <div style={{ display: "flex", gap: "0.8rem", alignItems: "flex-start", marginBottom: "0.7rem" }}>
+              <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-red)", fontWeight: 900, fontSize: "1.18rem", minWidth: 34 }}>{lesson.num}</span>
+              <div>
+                <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "1.05rem", marginBottom: "0.35rem" }}>{lesson.title}</h3>
+                <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.75, fontSize: "0.9rem" }}>{lesson.idea}</p>
+              </div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.5fr) minmax(210px, 0.7fr)", gap: "0.85rem" }}>
+              <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.85rem", color: "var(--cherry-warm-mid)", fontSize: "0.86rem", lineHeight: 1.7 }}>
+                <strong style={{ color: "var(--cherry-warm-brown)" }}>机制：</strong>{lesson.mechanism}
+              </div>
+              <div style={{ display: "grid", gap: "0.55rem" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {lesson.terms.map((term) => (
+                    <span key={term} style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.2rem 0.55rem", color: "var(--cherry-warm-brown)", fontWeight: 800, fontSize: "0.73rem" }}>
+                      {term}
+                    </span>
+                  ))}
+                </div>
+                <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", lineHeight: 1.65 }}>
+                  <strong style={{ color: "var(--cherry-forest)" }}>判断：</strong>{lesson.check}
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <ContentCard title="分泌蛋白物流链">
+        <div style={{ display: "grid", gap: "0.6rem" }}>
+          {logistics.map(([place, event], index) => (
+            <div key={place} style={{ display: "grid", gridTemplateColumns: "36px 130px minmax(0, 1fr)", gap: "0.55rem", alignItems: "center", color: "var(--cherry-warm-mid)" }}>
+              <span style={{ width: 28, height: 28, borderRadius: "50%", background: "var(--cherry-sage-light)", color: "var(--cherry-forest)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 900 }}>{index + 1}</span>
+              <strong style={{ color: "var(--cherry-warm-brown)" }}>{place}</strong>
+              <span>{event}</span>
+            </div>
+          ))}
+        </div>
+      </ContentCard>
+
+      <ContentCard title="诊断题">
+        一个细胞能合成某种分泌蛋白，但细胞外检测不到它。优先检查三处：粗面内质网是否完成折叠，高尔基体是否完成分拣，囊泡是否能沿细胞骨架到达细胞膜。
       </ContentCard>
     </section>
   );
@@ -51,29 +169,61 @@ function PromptKitContent() {
   const prompts = [
     {
       title: "文献精读",
-      text: "请基于我提供的论文摘要和方法部分，按以下结构输出：研究问题、核心假设、样本与数据、关键方法、主要证据、作者结论、局限性、我需要进一步核查的点。不要补充论文中没有出现的信息。",
+      input: "论文摘要、方法、结果图或 DOI",
+      text: "请基于我提供的论文内容，按以下结构输出：研究问题、核心假设、样本与数据、关键方法、主要证据、作者结论、局限性、我需要进一步核查的点。不要补充论文中没有出现的信息；如果缺少证据，请标注“原文未说明”。",
+      checks: ["结论是否只来自原文", "方法和证据是否对应", "局限性是否具体"],
     },
     {
       title: "实验设计检查",
-      text: "请检查这份实验设计是否存在变量混杂、对照不足、重复数不足、统计方法不匹配或安全风险。输出时分为：必须修改、建议修改、可以保留、需要导师确认。",
+      input: "实验目的、分组、样本量、操作步骤、统计方法",
+      text: "请检查这份实验设计是否存在变量混杂、对照不足、重复数不足、统计方法不匹配或安全风险。输出时分为：必须修改、建议修改、可以保留、需要导师确认。每条意见都说明它会影响哪一种结论。",
+      checks: ["阳性/阴性对照是否齐全", "重复数是否支持统计", "变量是否只改变一个核心因素"],
     },
     {
       title: "图表解读",
-      text: "请逐步解释这张图：先说明坐标轴和分组，再描述趋势，最后判断图中证据能支持哪些结论、不能支持哪些结论。请把推测和事实分开。",
+      input: "图片、图注、实验分组和统计标记",
+      text: "请逐步解释这张图：先说明坐标轴、单位和分组，再描述趋势、离散程度和显著性标记，最后判断图中证据能支持哪些结论、不能支持哪些结论。请把观察事实、合理推断和过度推断分开。",
+      checks: ["是否读清坐标轴", "是否区分趋势与因果", "是否遗漏对照组"],
     },
     {
       title: "论文逻辑检查",
-      text: "请检查下面这段论文讨论是否存在结论过度、证据跳跃、术语不一致或引用不足。请给出逐句修改建议，并说明修改理由。",
+      input: "讨论段落、结果摘要、目标期刊风格",
+      text: "请检查下面这段论文讨论是否存在结论过度、证据跳跃、术语不一致、引用不足或重复表达。请逐句给出修改建议，并说明修改理由。不要替我新增未经证实的结论。",
+      checks: ["每个结论是否有结果支持", "术语是否前后一致", "讨论是否区分结果和推测"],
+    },
+    {
+      title: "审稿意见回应",
+      input: "审稿意见、原文段落、已完成的补充分析",
+      text: "请把审稿意见拆成可回应的任务：需要新增实验、需要补充分析、需要改写解释、需要礼貌澄清。为每条意见生成回应结构：感谢、理解、已修改内容、修改位置、仍需说明的限制。",
+      checks: ["回应是否逐条对应", "语气是否克制", "是否标明修改位置"],
+    },
+    {
+      title: "术语一致性检查",
+      input: "论文全文或章节草稿",
+      text: "请列出文中同一概念的不同写法、缩写首次出现位置、中文和英文术语是否混用、变量名是否前后一致。输出为三列：术语、发现的问题、建议统一写法。",
+      checks: ["缩写是否首次定义", "同义词是否混用", "图表和正文是否一致"],
     },
   ];
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1rem" }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
       {prompts.map((prompt) => (
         <ContentCard key={prompt.title} title={prompt.title}>
-          <code style={{ display: "block", whiteSpace: "pre-wrap", color: "var(--cherry-warm-brown)", background: "var(--cherry-yellow-light)", borderRadius: 12, padding: "0.85rem", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65 }}>
-            {prompt.text}
-          </code>
+          <div style={{ display: "grid", gap: "0.7rem" }}>
+            <div style={{ background: "var(--muted)", borderRadius: 12, padding: "0.65rem", color: "var(--cherry-warm-mid)", fontSize: "0.82rem" }}>
+              <strong style={{ color: "var(--cherry-warm-brown)" }}>输入材料：</strong>{prompt.input}
+            </div>
+            <code style={{ display: "block", whiteSpace: "pre-wrap", color: "var(--cherry-warm-brown)", background: "var(--cherry-yellow-light)", borderRadius: 12, padding: "0.85rem", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65 }}>
+              {prompt.text}
+            </code>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {prompt.checks.map((check) => (
+                <span key={check} style={{ background: "rgba(250,247,241,0.76)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.2rem 0.55rem", color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 800 }}>
+                  {check}
+                </span>
+              ))}
+            </div>
+          </div>
         </ContentCard>
       ))}
     </div>
@@ -216,11 +366,33 @@ function PlantEvolutionContent() {
 
 function ConceptExplainerContent() {
   const [concept, setConcept] = useState("转录");
-  const explanations: Record<string, string[]> = {
-    转录: ["像把书上的一小段内容抄到便签上。", "细胞以 DNA 的一条链为模板合成 mRNA，RNA 中用 U 替代 T。", "转录涉及启动子识别、RNA 聚合酶延伸、终止以及转录后加工等过程。"],
-    端粒: ["像鞋带末端的保护套，保护染色体末端。", "端粒位于染色体末端，随着细胞分裂逐渐缩短。", "端粒长度、端粒酶活性与细胞衰老、肿瘤发生和干细胞状态有关。"],
-    生态位: ["像一种生物在自然里的生活位置和工作。", "生态位描述生物如何利用资源、生活在什么环境、和其他生物如何相互作用。", "生态位包含资源维度、空间维度和相互作用维度，可用于解释竞争、共存和群落结构。"],
+  const explanations: Record<string, { levels: string[]; terms: string[]; pitfall: string; check: string }> = {
+    转录: {
+      levels: ["像把书上的一小段内容抄到便签上，便签可以被拿到别处继续使用。", "细胞以 DNA 的一条链为模板合成 mRNA，RNA 中用 U 替代 T，mRNA 会把遗传信息带到核糖体。", "转录涉及启动子识别、转录因子调控、RNA 聚合酶延伸、终止以及真核细胞中的剪接和转录后加工。"],
+      terms: ["DNA 模板链", "RNA 聚合酶", "mRNA", "启动子"],
+      pitfall: "转录不是把 DNA 变成 RNA；DNA 仍然保留，RNA 是按模板新合成出来的拷贝。",
+      check: "如果 DNA 片段是 ATG，mRNA 中对应片段通常写作 AUG。",
+    },
+    端粒: {
+      levels: ["像鞋带末端的保护套，保护染色体末端不被磨坏。", "端粒位于染色体末端，随着细胞分裂逐渐缩短，能减少染色体末端被误认为断裂的风险。", "端粒长度、端粒酶活性与细胞衰老、肿瘤发生和干细胞状态有关；端粒维护机制会影响复制潜能。"],
+      terms: ["染色体末端", "端粒酶", "复制末端问题", "细胞衰老"],
+      pitfall: "端粒缩短不是所有衰老现象的唯一原因，它只是细胞衰老机制中的一部分。",
+      check: "频繁分裂的细胞更依赖端粒维护，肿瘤细胞常见端粒酶重新激活。",
+    },
+    生态位: {
+      levels: ["像一种生物在自然里的生活位置和工作。", "生态位描述生物如何利用资源、生活在什么环境、和其他生物如何相互作用。", "生态位包含资源维度、空间维度和相互作用维度，可用于解释竞争、共存、适应辐射和群落结构。"],
+      terms: ["资源利用", "竞争", "共存", "群落"],
+      pitfall: "生态位不等于栖息地。栖息地偏向“住在哪里”，生态位还包含“吃什么、怎样生存、和谁互动”。",
+      check: "两种鸟住在同一片森林，但取食高度和食物不同，它们的生态位可以不同。",
+    },
+    凋亡: {
+      levels: ["像细胞按下自我清理按钮，把自己有序拆开。", "凋亡是一种程序性细胞死亡，细胞会收缩、DNA 断裂，并被免疫细胞清除，通常不引发明显炎症。", "凋亡通过内源性线粒体通路或外源性死亡受体通路激活 caspase 级联反应，在发育、免疫和肿瘤抑制中很关键。"],
+      terms: ["程序性细胞死亡", "caspase", "线粒体通路", "死亡受体"],
+      pitfall: "凋亡不是细胞坏死。坏死常伴随细胞破裂和炎症，凋亡更有序。",
+      check: "胚胎手指分开、免疫细胞清除异常细胞，都和凋亡有关。",
+    },
   };
+  const active = explanations[concept];
 
   return (
     <section style={{ display: "grid", gap: "1rem" }}>
@@ -234,47 +406,138 @@ function ConceptExplainerContent() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
         {["小学版", "高中版", "研究生版"].map((level, index) => (
           <ContentCard key={level} title={level}>
-            {explanations[concept][index]}
+            {active.levels[index]}
           </ContentCard>
         ))}
       </div>
-      <ContentCard title="检查题">
-        请用自己的话解释：如果把“{concept}”讲给一个没有学过生物的人，你会保留哪个核心意思，又会删掉哪些术语？
-      </ContentCard>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1rem" }}>
+        <ContentCard title="关键术语">
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {active.terms.map((term) => (
+              <span key={term} style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.25rem 0.62rem", color: "var(--cherry-warm-brown)", fontWeight: 800, fontSize: "0.76rem" }}>
+                {term}
+              </span>
+            ))}
+          </div>
+        </ContentCard>
+        <ContentCard title="常见误区">
+          {active.pitfall}
+        </ContentCard>
+        <ContentCard title="检查题">
+          {active.check}
+        </ContentCard>
+      </div>
     </section>
   );
 }
 
 function CrisprContent() {
-  const [cut, setCut] = useState(false);
+  const [guideIndex, setGuideIndex] = useState(0);
+  const [repair, setRepair] = useState<"indel" | "replace" | "failed">("indel");
+  const target = "A C T G G A C C T A G G".split(" ");
+  const guides = [
+    { name: "guide A", sequence: "C U G G A", start: 3, score: 100, note: "完全匹配目标片段，Cas 蛋白能稳定定位。" },
+    { name: "guide B", sequence: "C U A G A", start: 3, score: 60, note: "中间有错配，定位效率下降，脱靶风险上升。" },
+    { name: "guide C", sequence: "G A U C C", start: 7, score: 35, note: "匹配弱，Cas 蛋白很难在预期位置工作。" },
+  ];
+  const activeGuide = guides[guideIndex];
+  const cutIndex = activeGuide.start + 2;
+  const repairResults = {
+    indel: {
+      title: "小片段插入/删除",
+      sequence: target.map((base, index) => (index === cutIndex ? "Δ" : base)),
+      result: "阅读框可能改变，目标蛋白容易失活。",
+    },
+    replace: {
+      title: "模板引导替换",
+      sequence: target.map((base, index) => (index === cutIndex ? "T" : base)),
+      result: "如果提供修复模板，细胞可能把指定碱基写入目标位置。",
+    },
+    failed: {
+      title: "未成功编辑",
+      sequence: target,
+      result: "细胞完成原样修复，或者 Cas 蛋白没有稳定切开目标位点。",
+    },
+  };
+  const activeRepair = repairResults[repair];
 
   return (
     <section style={{ display: "grid", gap: "1rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(270px, 0.75fr)", gap: "1rem", alignItems: "stretch" }}>
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>
+            <IconDNA size={22} /> 目标 DNA
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: "1rem" }}>
+            {target.map((base, index) => (
+              <span key={`${base}-${index}`} style={{ background: index === cutIndex ? "var(--cherry-peach-light)" : index >= activeGuide.start && index < activeGuide.start + 5 ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === cutIndex ? "2px solid var(--cherry-red)" : "1.5px solid var(--border)", borderRadius: 10, padding: "0.45rem 0.64rem", color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
+                {base}
+              </span>
+            ))}
+          </div>
+          <div style={{ display: "grid", gap: "0.65rem", marginBottom: "1rem" }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>guide RNA</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {guides.map((guide, index) => (
+                <button key={guide.name} onClick={() => setGuideIndex(index)} style={{ background: guideIndex === index ? "var(--cherry-forest)" : "var(--muted)", color: guideIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.45rem 0.8rem", fontWeight: 900, cursor: "pointer" }}>
+                  {guide.name}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "120px minmax(0, 1fr)", gap: "0.8rem", alignItems: "center", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.85rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65 }}>
+            <strong style={{ color: "var(--cherry-warm-brown)" }}>{activeGuide.sequence}</strong>
+            <span>{activeGuide.note}</span>
+          </div>
+        </div>
+
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>匹配读数</div>
+          <div style={{ height: 14, borderRadius: 999, background: "var(--muted)", overflow: "hidden", marginBottom: "0.6rem" }}>
+            <div style={{ width: `${activeGuide.score}%`, height: "100%", background: activeGuide.score > 80 ? "var(--cherry-sage)" : activeGuide.score > 50 ? "var(--cherry-yellow)" : "var(--cherry-red)", transition: "width 0.25s ease" }} />
+          </div>
+          <div style={{ color: "var(--cherry-red)", fontSize: "1.6rem", fontWeight: 900, marginBottom: "0.8rem" }}>{activeGuide.score}%</div>
+          <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.88rem" }}>
+            剪切位置：第 {cutIndex + 1} 个碱基附近。匹配越高，Cas 蛋白越容易在目标位置形成稳定复合体。
+          </div>
+        </div>
+      </div>
+
       <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>
-          <IconDNA size={22} /> 目标 DNA
+        <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>修复结果</div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: "1rem" }}>
+          {([
+            ["indel", "插入/删除"],
+            ["replace", "模板替换"],
+            ["failed", "未成功编辑"],
+          ] as const).map(([key, label]) => (
+            <button key={key} onClick={() => setRepair(key)} style={{ background: repair === key ? "var(--cherry-forest)" : "var(--muted)", color: repair === key ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.45rem 0.8rem", fontWeight: 900, cursor: "pointer" }}>
+              {label}
+            </button>
+          ))}
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: "0.8rem" }}>
-          {"A C T G G A C C T A G G".split(" ").map((base, index) => (
-            <span key={`${base}-${index}`} style={{ background: cut && index === 5 ? "var(--cherry-peach-light)" : "var(--cherry-yellow-light)", border: "1.5px solid var(--border)", borderRadius: 10, padding: "0.42rem 0.62rem", color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
+          {activeRepair.sequence.map((base, index) => (
+            <span key={`${base}-${index}`} style={{ background: index === cutIndex ? "var(--cherry-peach-light)" : "var(--cherry-yellow-light)", border: index === cutIndex ? "2px solid var(--cherry-red)" : "1.5px solid var(--border)", borderRadius: 10, padding: "0.42rem 0.62rem", color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
               {base}
             </span>
           ))}
         </div>
-        <button onClick={() => setCut((value) => !value)} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.62rem 1rem", fontWeight: 900, cursor: "pointer" }}>
-          {cut ? "复原序列" : "触发剪切"}
-        </button>
+        <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7 }}>
+          <strong style={{ color: "var(--cherry-warm-brown)" }}>{activeRepair.title}：</strong>{activeRepair.result}
+        </div>
       </div>
+
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "1rem" }}>
-        <ContentCard title="识别">
-          guide RNA 先和目标 DNA 序列配对。配对越准确，Cas 蛋白越容易在正确位置工作。
-        </ContentCard>
-        <ContentCard title="剪切">
-          Cas 蛋白在目标位置切开 DNA。剪切不是终点，后续修复方式决定编辑结果。
-        </ContentCard>
-        <ContentCard title="修复">
-          细胞可能删除一小段、插入新片段，也可能修复失败或产生非预期结果。
-        </ContentCard>
+        {[
+          ["识别", "guide RNA 和目标 DNA 序列互补配对。错配越多，稳定结合越困难。"],
+          ["剪切", "Cas 蛋白在 guide RNA 指定的位置附近切开 DNA 双链。"],
+          ["修复", "细胞修复切口时，可能造成插入/删除，也可能按模板完成精确替换。"],
+        ].map(([title, body]) => (
+          <ContentCard key={title} title={title}>
+            {body}
+          </ContentCard>
+        ))}
       </div>
     </section>
   );
