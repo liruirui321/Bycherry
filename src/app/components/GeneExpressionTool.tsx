@@ -405,6 +405,7 @@ export function GeneExpressionTool() {
   const [molecules, setMolecules] = useState(initialMolecules);
   const [dragging, setDragging] = useState<{ id: string; dx: number; dy: number } | null>(null);
   const [cycleProgress, setCycleProgress] = useState(0);
+  const [displayedProteinCount, setDisplayedProteinCount] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [speed, setSpeed] = useState(1);
 
@@ -453,12 +454,21 @@ export function GeneExpressionTool() {
   const leadRibosomeProgress = readableRibosomes[0]?.progress ?? 0;
   const activeCodonIndex = leadRibosomeProgress > 0 ? Math.min(codons.length - 1, Math.floor(leadRibosomeProgress * codons.length)) : -1;
   const translatedSignal = readableRibosomes.reduce((sum, ribosome) => sum + ribosome.progress, 0);
-  const visibleProteinCount = model.translationOn ? Math.min(model.protein, Math.floor(translatedSignal * 4)) : 0;
+  const instantProteinCount = model.translationOn ? Math.min(model.protein, Math.floor(translatedSignal * 4)) : 0;
+  const visibleProteinCount = model.translationOn ? Math.min(model.protein, Math.max(displayedProteinCount, instantProteinCount)) : 0;
   const integratedMolecules = molecules.filter((molecule) => molecule.type !== "tf" && inBox(molecule, zones[moleculeZone(molecule.type)]));
 
   useEffect(() => {
     progressRef.current = cycleProgress;
   }, [cycleProgress]);
+
+  useEffect(() => {
+    if (!model.translationOn) {
+      setDisplayedProteinCount(0);
+      return;
+    }
+    setDisplayedProteinCount((count) => Math.min(model.protein, Math.max(count, instantProteinCount)));
+  }, [instantProteinCount, model.protein, model.translationOn]);
 
   useEffect(() => {
     if (!model.transcriptionOn) {
@@ -545,6 +555,7 @@ export function GeneExpressionTool() {
     setMolecules(initialMolecules);
     setDragging(null);
     setIsPaused(false);
+    setDisplayedProteinCount(0);
   }
 
   function runExpressionPreset() {
@@ -557,6 +568,7 @@ export function GeneExpressionTool() {
     );
     setDragging(null);
     setIsPaused(false);
+    setDisplayedProteinCount(0);
   }
 
   function releaseMolecule(moleculeId: string) {
