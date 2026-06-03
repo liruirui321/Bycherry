@@ -6,9 +6,35 @@ import { Works } from "./components/Works";
 import { WorkDetailPage } from "./components/WorkDetailPage";
 import { ArticleDetailPage } from "./components/ArticleDetailPage";
 import { ResearchEssays } from "./components/ResearchEssays";
+import { essays } from "./components/ResearchEssays";
 import { Notes } from "./components/Notes";
+import { notes } from "./components/Notes";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
+import { works } from "./components/Works";
+
+const siteTitle = "By Cherry";
+const defaultDescription = "A warm illustrated portfolio about science education, AI learning tools, project-based courses, and creative workflows.";
+
+function upsertMeta(selector: string, attributes: Record<string, string>, content: string) {
+  let element = document.head.querySelector<HTMLMetaElement>(selector);
+  if (!element) {
+    element = document.createElement("meta");
+    Object.entries(attributes).forEach(([key, value]) => element?.setAttribute(key, value));
+    document.head.appendChild(element);
+  }
+  element.setAttribute("content", content);
+}
+
+function upsertCanonical(url: string) {
+  let element = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+  if (!element) {
+    element = document.createElement("link");
+    element.setAttribute("rel", "canonical");
+    document.head.appendChild(element);
+  }
+  element.setAttribute("href", url);
+}
 
 export default function App() {
   const [locationKey, setLocationKey] = useState(`${window.location.pathname}${window.location.hash}`);
@@ -51,6 +77,25 @@ export default function App() {
       const target = document.getElementById(id);
       target?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
+  }, [detailSlug, noteSlug, researchSlug, locationKey]);
+
+  useEffect(() => {
+    const work = detailSlug ? works.find((item) => item.slug === detailSlug) : null;
+    const note = noteSlug ? notes.find((item) => item.slug === noteSlug) : null;
+    const essay = researchSlug ? essays.find((item) => item.slug === researchSlug) : null;
+    const title = work?.title ?? note?.title ?? essay?.title ?? "Science, Education & AI";
+    const description = work?.desc ?? note?.excerpt ?? essay?.body ?? defaultDescription;
+    const fullTitle = title === "Science, Education & AI" ? `${siteTitle} | ${title}` : `${title} | ${siteTitle}`;
+    const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
+
+    document.title = fullTitle;
+    upsertMeta('meta[name="description"]', { name: "description" }, description);
+    upsertMeta('meta[property="og:title"]', { property: "og:title" }, fullTitle);
+    upsertMeta('meta[property="og:description"]', { property: "og:description" }, description);
+    upsertMeta('meta[property="og:url"]', { property: "og:url" }, canonicalUrl);
+    upsertMeta('meta[name="twitter:title"]', { name: "twitter:title" }, fullTitle);
+    upsertMeta('meta[name="twitter:description"]', { name: "twitter:description" }, description);
+    upsertCanonical(canonicalUrl);
   }, [detailSlug, noteSlug, researchSlug, locationKey]);
 
   return (
