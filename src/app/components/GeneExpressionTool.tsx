@@ -263,7 +263,9 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
       opacity: onReadableSegment ? 1 : 0,
     };
   });
-  const leadRibosomeProgress = ribosomes.find((ribosome) => ribosome.opacity > 0)?.progress ?? 0;
+  const leadRibosome = ribosomes.find((ribosome) => ribosome.opacity > 0);
+  const leadRibosomeProgress = leadRibosome?.progress ?? 0;
+  const leadRibosomePoint = leadRibosome?.point ?? null;
   const activeCodonIndex = ribosomeCanRead && leadRibosomeProgress > 0 ? Math.min(codons.length - 1, Math.floor(leadRibosomeProgress * codons.length)) : -1;
   const aminoCount = ribosomeCanRead ? Math.min(codons.length, Math.max(0, Math.floor(leadRibosomeProgress * (codons.length + 0.75)))) : 0;
 
@@ -342,14 +344,26 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
             );
           })}
 
-          {codons.map((codon, index) => (
-            <g key={`trna-${codon.rna}`} transform={`translate(${540 + index * 42} ${500 - index * 16})`} opacity={activeCodonIndex === index ? 1 : 0.12}>
-              <path d="M0 0 Q10 -18 20 0 Q10 15 0 0Z" fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
-              <text x={10} y={4} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={8} fontWeight={900}>
-                {codon.anticodon}
-              </text>
-            </g>
-          ))}
+          {codons.map((codon, index) => {
+            const activePoint = activeCodonIndex === index ? leadRibosomePoint : null;
+            const poolX = 540 + index * 42;
+            const poolY = 500 - index * 16;
+            const x = activePoint ? activePoint.x + 38 : poolX;
+            const y = activePoint ? activePoint.y - 42 : poolY;
+            return (
+              <g key={`trna-${codon.rna}`} transform={`translate(${x} ${y})`} opacity={activePoint ? 1 : 0.16}>
+                {activePoint ? <line x1={-24} y1={22} x2={-4} y2={4} stroke="var(--cherry-peach)" strokeWidth={2.2} strokeLinecap="round" strokeDasharray="4 4" /> : null}
+                <path d="M0 0 Q10 -18 20 0 Q10 15 0 0Z" fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
+                <circle cx={10} cy={-18} r={10} fill={codon.color} stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} />
+                <text x={10} y={4} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={8} fontWeight={900}>
+                  {codon.anticodon}
+                </text>
+                <text x={10} y={-15} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={7} fontWeight={900}>
+                  {codon.amino}
+                </text>
+              </g>
+            );
+          })}
 
           <g transform="translate(386 548)">
             <text x={0} y={0} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
