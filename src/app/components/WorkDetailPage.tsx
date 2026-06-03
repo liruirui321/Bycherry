@@ -830,6 +830,7 @@ function WorkHero({ work }: { work: Work }) {
     >
       <div style={{ maxWidth: 1060, margin: "0 auto" }}>
         <a
+          className="work-detail-back-link"
           href="/#works"
           onClick={(event) => {
             if (!shouldUseClientNavigation(event)) return;
@@ -921,6 +922,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
     return (
       <section id="main-content" tabIndex={-1} style={{ padding: "5rem 1.5rem", maxWidth: 720, margin: "0 auto", fontFamily: "'Nunito', sans-serif" }}>
         <a
+          className="work-detail-back-link"
           href="/#works"
           onClick={(event) => {
             if (!shouldUseClientNavigation(event)) return;
@@ -932,6 +934,19 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           ← 回到作品集
         </a>
         <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "2rem", marginTop: "1.5rem" }}>没有找到这个小作品</h1>
+        <style>
+          {`
+            .work-detail-back-link:focus-visible {
+              outline: 3px solid var(--cherry-red);
+              outline-offset: 4px;
+            }
+
+            .work-detail-back-link:hover,
+            .work-detail-back-link:focus-visible {
+              color: var(--cherry-red) !important;
+            }
+          `}
+        </style>
       </section>
     );
   }
@@ -951,6 +966,19 @@ export function WorkDetailPage({ slug }: { slug: string }) {
         <RichWorkContent slug={work.slug} />
       </section>
       {work.slug === "gene-expression" ? <GeneExpressionTool /> : null}
+      <style>
+        {`
+          .work-detail-back-link:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          .work-detail-back-link:hover,
+          .work-detail-back-link:focus-visible {
+            color: var(--cherry-red) !important;
+          }
+        `}
+      </style>
     </main>
   );
 }

@@ -26,6 +26,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     return (
       <main id="main-content" tabIndex={-1} style={{ padding: "5rem 1.5rem", maxWidth: 760, margin: "0 auto", fontFamily: "'Nunito', sans-serif" }}>
         <a
+          className="article-detail-link"
           href={`/${backHash}`}
           onClick={(event) => {
             if (!shouldUseClientNavigation(event)) return;
@@ -37,6 +38,19 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
           ← {backText}
         </a>
         <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "2rem", marginTop: "1.5rem" }}>没有找到这篇内容</h1>
+        <style>
+          {`
+            .article-detail-link:focus-visible {
+              outline: 3px solid var(--cherry-red);
+              outline-offset: 4px;
+            }
+
+            .article-detail-link:hover,
+            .article-detail-link:focus-visible {
+              color: var(--cherry-red) !important;
+            }
+          `}
+        </style>
       </main>
     );
   }
@@ -46,6 +60,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
       <section style={{ padding: "3.9rem 1.5rem 1.4rem" }}>
         <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <a
+            className="article-detail-link"
             href={`/${backHash}`}
             onClick={(event) => {
               if (!shouldUseClientNavigation(event)) return;
@@ -138,6 +153,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
             </div>
 
             <a
+              className="article-detail-link"
               href={`/${backHash}`}
               onClick={(event) => {
                 if (!shouldUseClientNavigation(event)) return;
@@ -161,6 +177,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.8rem", marginTop: "1.2rem" }}>
                 {previousArticle ? (
                   <a
+                    className="article-nav-card"
                     href={previousArticle.href}
                     onClick={(event) => {
                       if (!shouldUseClientNavigation(event)) return;
@@ -175,6 +192,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
                 ) : null}
                 {nextArticle ? (
                   <a
+                    className="article-nav-card"
                     href={nextArticle.href}
                     onClick={(event) => {
                       if (!shouldUseClientNavigation(event)) return;
@@ -196,6 +214,39 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
           </div>
         </div>
       </section>
+
+      <style>
+        {`
+          .article-detail-link:focus-visible,
+          .article-nav-card:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          .article-detail-link:hover,
+          .article-detail-link:focus-visible {
+            color: var(--cherry-red) !important;
+          }
+
+          .article-nav-card {
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+          }
+
+          .article-nav-card:hover,
+          .article-nav-card:focus-visible {
+            transform: translateY(-2px);
+            border-color: var(--cherry-sage) !important;
+            box-shadow: 3px 6px 0 rgba(94,68,42,0.08);
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            .article-nav-card {
+              transition: none !important;
+              transform: none !important;
+            }
+          }
+        `}
+      </style>
     </main>
   );
 }
