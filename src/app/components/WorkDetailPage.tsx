@@ -469,6 +469,10 @@ function ConceptExplainerContent() {
   const [concept, setConcept] = useState("转录");
   const [levelIndex, setLevelIndex] = useState(1);
   const [quizChoice, setQuizChoice] = useState<string | null>(null);
+  const [audience, setAudience] = useState("高中生");
+  const [lessonGoal, setLessonGoal] = useState("把抽象概念讲清楚，并检查学生是否真的理解");
+  const [copiedLesson, setCopiedLesson] = useState(false);
+  const [copyStatus, setCopyStatus] = useState("");
   const explanations: Record<string, { color: string; analogy: string; levels: Array<{ title: string; body: string }>; terms: string[]; mechanism: string[]; compare: string; pitfall: string; quiz: { question: string; options: string[]; answer: string; explain: string } }> = {
     转录: {
       color: "var(--cherry-blue)",
@@ -550,10 +554,52 @@ function ConceptExplainerContent() {
   const active = explanations[concept];
   const selectedLevel = active.levels[levelIndex];
   const quizAnswered = quizChoice !== null;
+  const lessonOutput = `【概念】${concept}
+【对象】${audience}
+【目标】${lessonGoal}
+
+一、先用类比进入
+${active.analogy}
+
+二、${selectedLevel.title}讲解
+${selectedLevel.body}
+
+三、机制步骤
+${active.mechanism.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+四、关键词
+${active.terms.join("、")}
+
+五、辨析
+${active.compare}
+
+六、常见误区
+${active.pitfall}
+
+七、即时小测
+问题：${active.quiz.question}
+选项：${active.quiz.options.join(" / ")}
+答案：${active.quiz.answer}
+解释：${active.quiz.explain}`;
 
   function chooseConcept(name: string) {
     setConcept(name);
     setQuizChoice(null);
+    setCopiedLesson(false);
+    setCopyStatus("");
+  }
+
+  async function copyLessonOutput() {
+    const copiedToClipboard = await copyText(lessonOutput);
+    if (copiedToClipboard) {
+      setCopiedLesson(true);
+      setCopyStatus("讲解稿已复制到剪贴板。");
+      window.setTimeout(() => setCopiedLesson(false), 1400);
+      return;
+    }
+
+    setCopiedLesson(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
   return (
@@ -566,7 +612,24 @@ function ConceptExplainerContent() {
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.25fr) minmax(280px, 0.78fr)", gap: "1rem", alignItems: "stretch" }}>
+      <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(180px, 0.52fr) minmax(0, 1fr) auto", gap: "0.75rem", alignItems: "end", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
+        <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
+          讲给谁
+          <input value={audience} onChange={(event) => { setAudience(event.target.value); setCopiedLesson(false); setCopyStatus(""); }} style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
+        </label>
+        <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
+          讲解目标
+          <input value={lessonGoal} onChange={(event) => { setLessonGoal(event.target.value); setCopiedLesson(false); setCopyStatus(""); }} style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
+        </label>
+        <button type="button" onClick={copyLessonOutput} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.62rem 0.95rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap" }}>
+          {copiedLesson ? "已复制" : "复制讲解稿"}
+        </button>
+        <div id="concept-copy-status" role="status" aria-live="polite" style={{ gridColumn: "1 / -1", minHeight: "1.1rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900 }}>
+          {copyStatus}
+        </div>
+      </div>
+
+      <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.25fr) minmax(280px, 0.78fr)", gap: "1rem", alignItems: "stretch" }}>
         <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", position: "relative", overflow: "hidden" }}>
           <svg style={{ position: "absolute", right: -20, top: -14, opacity: 0.16 }} width="180" height="150" viewBox="0 0 180 150" fill="none">
             <path d="M28 128 Q44 54 146 22 Q150 96 28 128Z" fill={active.color} />
@@ -618,7 +681,7 @@ function ConceptExplainerContent() {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(240px, 0.72fr)", gap: "1rem" }}>
+      <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(240px, 0.72fr)", gap: "1rem" }}>
         <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.9rem" }}>机制步骤</div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.75rem" }}>
@@ -640,11 +703,22 @@ function ConceptExplainerContent() {
         </div>
       </div>
 
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.75rem" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>可复制讲解稿</div>
+          <button type="button" onClick={copyLessonOutput} style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+            {copiedLesson ? "已复制" : "复制"}
+          </button>
+        </div>
+        <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.95rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.68 }}>
+          {lessonOutput}
+        </code>
+      </div>
+
       <style>
         {`
           @media (max-width: 860px) {
-            #concept-explainer-tool > div:nth-of-type(2),
-            #concept-explainer-tool > div:nth-of-type(3) {
+            #concept-explainer-tool .concept-responsive-grid {
               grid-template-columns: 1fr !important;
             }
           }
