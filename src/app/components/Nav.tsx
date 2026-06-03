@@ -32,6 +32,7 @@ export function Nav() {
   useEffect(() => {
     function handleLocationChange() {
       setLocationKey(`${window.location.pathname}${window.location.hash}`);
+      setOpen(false);
     }
 
     window.addEventListener("popstate", handleLocationChange);
@@ -144,7 +145,7 @@ export function Nav() {
           className="sm:hidden"
           onClick={() => setOpen(!open)}
           style={{ background: "none", border: "none", cursor: "pointer", padding: 4, display: "flex" }}
-          aria-label="菜单"
+          aria-label={open ? "关闭菜单" : "打开菜单"}
           aria-expanded={open}
           aria-controls="mobile-navigation"
         >
