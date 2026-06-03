@@ -12,6 +12,7 @@ import { notes } from "./components/Notes";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
 import { works } from "./components/Works";
+import { navigateClient, shouldUseClientNavigation } from "./navigation";
 
 const siteTitle = "By Cherry";
 const homeTitle = "科学、课程与 AI";
@@ -63,8 +64,39 @@ function focusPageTarget(element: HTMLElement | null) {
   }
 }
 
+function getLocationKey() {
+  return `${window.location.pathname}${window.location.search}${window.location.hash}`;
+}
+
+function NotFoundPage() {
+  return (
+    <main id="main-content" tabIndex={-1} style={{ minHeight: "58vh", padding: "5rem 1.5rem", display: "grid", placeItems: "center", fontFamily: "'Nunito', sans-serif" }}>
+      <section style={{ maxWidth: 620, textAlign: "center", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "2rem", boxShadow: "5px 8px 0px rgba(94,68,42,0.08)" }}>
+        <div style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-red)", fontSize: "1.15rem", fontWeight: 900, marginBottom: "0.5rem" }}>404</div>
+        <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.55rem, 4vw, 2.1rem)", fontWeight: 900, lineHeight: 1.25, marginBottom: "0.7rem" }}>
+          没有找到这个页面
+        </h1>
+        <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.75, fontSize: "0.95rem", marginBottom: "1.3rem" }}>
+          这个地址可能写错了，或者内容已经移动。可以回到首页继续打开作品、笔记和科研随笔。
+        </p>
+        <a
+          href="/#top"
+          onClick={(event) => {
+            if (!shouldUseClientNavigation(event)) return;
+            event.preventDefault();
+            navigateClient("/#top");
+          }}
+          style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.62rem 1.1rem", textDecoration: "none", fontWeight: 900, boxShadow: "3px 5px 0px rgba(58,92,62,0.22)" }}
+        >
+          回到首页
+        </a>
+      </section>
+    </main>
+  );
+}
+
 export default function App() {
-  const [locationKey, setLocationKey] = useState(`${window.location.pathname}${window.location.hash}`);
+  const [locationKey, setLocationKey] = useState(getLocationKey());
   const hasNavigated = useRef(false);
   const detailSlug = useMemo(() => {
     const match = window.location.pathname.match(/^\/works\/([^/]+)\/?$/);
@@ -78,10 +110,11 @@ export default function App() {
     const match = window.location.pathname.match(/^\/research\/([^/]+)\/?$/);
     return match?.[1] ?? null;
   }, [locationKey]);
+  const unknownPath = useMemo(() => window.location.pathname !== "/" && !detailSlug && !noteSlug && !researchSlug, [detailSlug, noteSlug, researchSlug, locationKey]);
 
   useEffect(() => {
     function handleLocationChange() {
-      setLocationKey(`${window.location.pathname}${window.location.hash}`);
+      setLocationKey(getLocationKey());
     }
 
     window.addEventListener("popstate", handleLocationChange);
@@ -93,10 +126,21 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const redirectPath = sessionStorage.getItem("bycherry-redirect-path");
+    if (!redirectPath) return;
+
+    sessionStorage.removeItem("bycherry-redirect-path");
+    if (redirectPath === getLocationKey()) return;
+
+    window.history.replaceState(null, "", redirectPath);
+    setLocationKey(getLocationKey());
+  }, []);
+
+  useEffect(() => {
     const shouldMoveFocus = hasNavigated.current;
     hasNavigated.current = true;
 
-    if (detailSlug || noteSlug || researchSlug) {
+    if (detailSlug || noteSlug || researchSlug || unknownPath) {
       window.scrollTo({ top: 0, behavior: getScrollBehavior() });
       if (shouldMoveFocus) {
         window.requestAnimationFrame(() => focusPageTarget(document.getElementById("main-content")));
@@ -112,14 +156,16 @@ export default function App() {
       target?.scrollIntoView({ behavior: getScrollBehavior(), block: "start" });
       if (shouldMoveFocus) focusPageTarget(target);
     });
-  }, [detailSlug, noteSlug, researchSlug, locationKey]);
+  }, [detailSlug, noteSlug, researchSlug, unknownPath, locationKey]);
 
   useEffect(() => {
     const work = detailSlug ? works.find((item) => item.slug === detailSlug) : null;
     const note = noteSlug ? notes.find((item) => item.slug === noteSlug) : null;
     const essay = researchSlug ? essays.find((item) => item.slug === researchSlug) : null;
-    const title = work?.title ?? note?.title ?? essay?.title ?? homeTitle;
-    const description = work?.desc ?? note?.excerpt ?? essay?.body ?? defaultDescription;
+    const missingRoutedItem = Boolean((detailSlug && !work) || (noteSlug && !note) || (researchSlug && !essay));
+    const notFound = unknownPath || missingRoutedItem;
+    const title = notFound ? "没有找到页面" : work?.title ?? note?.title ?? essay?.title ?? homeTitle;
+    const description = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览作品、笔记和科研随笔。" : work?.desc ?? note?.excerpt ?? essay?.body ?? defaultDescription;
     const fullTitle = title === homeTitle ? `${siteTitle} | ${title}` : `${title} | ${siteTitle}`;
     const canonicalPath = window.location.pathname === "/" ? "/" : window.location.pathname.replace(/\/$/, "");
     const canonicalUrl = `${siteUrl}${canonicalPath}`;
@@ -133,7 +179,13 @@ export default function App() {
       name: title,
       description,
     };
-    const jsonLd = work
+    const jsonLd = notFound
+      ? {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          ...jsonLdBase,
+        }
+      : work
       ? {
           "@context": "https://schema.org",
           "@type": "CreativeWork",
@@ -171,9 +223,10 @@ export default function App() {
     upsertMeta('meta[property="og:url"]', { property: "og:url" }, canonicalUrl);
     upsertMeta('meta[name="twitter:title"]', { name: "twitter:title" }, fullTitle);
     upsertMeta('meta[name="twitter:description"]', { name: "twitter:description" }, description);
+    upsertMeta('meta[name="robots"]', { name: "robots" }, notFound ? "noindex" : "index, follow");
     upsertCanonical(canonicalUrl);
     upsertJsonLd(jsonLd);
-  }, [detailSlug, noteSlug, researchSlug, locationKey]);
+  }, [detailSlug, noteSlug, researchSlug, unknownPath, locationKey]);
 
   return (
     <div
@@ -193,6 +246,8 @@ export default function App() {
         <ArticleDetailPage kind="note" slug={noteSlug} />
       ) : researchSlug ? (
         <ArticleDetailPage kind="research" slug={researchSlug} />
+      ) : unknownPath ? (
+        <NotFoundPage />
       ) : (
         <main id="main-content" tabIndex={-1}>
           <Hero />
