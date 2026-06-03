@@ -8,7 +8,7 @@ export const works = [
     id: 1, slug: "gene-expression", category: "科学" as Category,
     icon: <IconMicroscope size={36} color="var(--cherry-blue)" />,
     title: "基因表达可视化",
-    desc: "调节转录因子、RNA 聚合酶和核糖体，观察 mRNA 与蛋白质产量如何变化。",
+    desc: "拖拽 TF、RNA 聚合酶和核糖体，观察转录、翻译和蛋白质产量如何联动。",
     href: "/works/gene-expression",
     tags: ["生物", "可视化", "交互"],
     color: "var(--cherry-blue-light)", border: "var(--cherry-blue)", rotate: "-1.5deg",

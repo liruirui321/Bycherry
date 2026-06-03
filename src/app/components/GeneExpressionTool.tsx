@@ -122,10 +122,10 @@ function ProductBeads({ count }: { count: number }) {
 
 function StageRail({ model }: { model: { tfBound: number; polBound: number; ribBound: number; transcriptionOn: boolean; translationOn: boolean; protein: number } }) {
   const stages = [
-    { label: "TF binds promoter", active: model.tfBound > 0 },
-    { label: "RNA pol transcribes", active: model.transcriptionOn },
-    { label: "ribosome translates", active: model.translationOn },
-    { label: "protein accumulates", active: model.protein > 0 },
+    { label: "TF 结合启动子", active: model.tfBound > 0 },
+    { label: "RNA pol 转录", active: model.transcriptionOn },
+    { label: "核糖体翻译", active: model.translationOn },
+    { label: "蛋白质累积", active: model.protein > 0 },
   ];
 
   return (
@@ -294,7 +294,7 @@ export function GeneExpressionTool() {
             <rect x={22} y={26} width={936} height={606} rx={220} fill="rgba(169,201,172,0.2)" stroke="rgba(93,140,101,0.34)" strokeWidth={3} strokeDasharray="9 9" />
 
             <text x={42} y={58} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>
-              Gene Expression Lab
+              基因表达实验台
             </text>
             <StageRail model={model} />
 
@@ -412,6 +412,22 @@ export function GeneExpressionTool() {
                 <div key={label} style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
                   <span>{label}</span>
                   <span style={{ color: "var(--cherry-red)", fontWeight: 900 }}>{value}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "grid", gap: 8, marginTop: "1rem" }}>
+              {[
+                ["转录速率", `${model.transcriptionOn ? Math.min(100, 28 + model.tfBound * 18 + model.polBound * 16) : 0}%`],
+                ["翻译速率", `${model.translationOn ? Math.min(100, 35 + model.ribBound * 20) : 0}%`],
+              ].map(([label, value]) => (
+                <div key={label}>
+                  <div style={{ display: "flex", justifyContent: "space-between", color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 900, marginBottom: 4 }}>
+                    <span>{label}</span>
+                    <span>{value}</span>
+                  </div>
+                  <div style={{ height: 8, borderRadius: 999, background: "var(--muted)", overflow: "hidden" }}>
+                    <div style={{ width: value, height: "100%", borderRadius: 999, background: label === "转录速率" ? "var(--cherry-blue)" : "var(--cherry-peach)" }} />
+                  </div>
                 </div>
               ))}
             </div>
