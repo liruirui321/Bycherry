@@ -128,24 +128,134 @@ function PromptKitContent() {
 
 function PlantEvolutionContent() {
   const chapters = [
-    ["4.7 亿年前", "从水里来的祖先", "绿藻类祖先已经拥有叶绿素和光合作用能力，但离开水意味着干燥、重力和紫外线。"],
-    ["苔藓时代", "先站稳，再长高", "苔藓没有真正的维管束，适合用来理解陆地植物最早如何解决保水和附着问题。"],
-    ["蕨类扩张", "运输系统出现", "维管束让植物可以长得更高，但孢子繁殖仍然让它们依赖潮湿环境。"],
-    ["种子出现", "把下一代装进保护壳", "种子把胚、营养和保护结构组合在一起，让植物繁殖不再完全依赖水。"],
-    ["花和果实", "请动物帮忙传播", "花吸引传粉者，果实帮助种子扩散，植物和动物之间出现更复杂的协作。"],
+    {
+      time: "约 5.1-4.7 亿年前",
+      title: "登陆前：淡水绿藻已经在练习“陆地技能”",
+      story: "植物的登陆不是某一天突然发生的。链形植物绿藻中已经出现了一些适应浅水、间歇干燥和强光环境的基因工具，例如植物型光敏色素、激素相关通路、纤维素合成和环境胁迫响应。",
+      evidence: "基因组比较显示，早分化链形植物绿藻携带多类与陆地适应相关的基因；分子钟研究也提示陆地植物起源可能早于大型化石记录。",
+      refs: ["Wang 2019", "Morris 2018"],
+    },
+    {
+      time: "约 4.75 亿年前",
+      title: "最早的脚印：岩石里留下了孢子",
+      story: "最早能可靠指向陆地植物的证据，不是一棵完整植物，而是显微镜下的小孢子。它们有抗分解的孢粉素外壁，能在岩石中保存很久。",
+      evidence: "Wellman 等在《Nature》报道，中奥陶世约 4.75 亿年前的微体化石为早期陆地植物提供证据，也解释了为什么孢子记录早于完整植物化石。",
+      refs: ["Wellman 2003", "Kenrick 1997"],
+    },
+    {
+      time: "志留纪-早泥盆世",
+      title: "小身体，大转折：早期陆地植物开始长出轴和孢子囊",
+      story: "早期陆地植物体型很小，但已经开始把身体分成能直立的轴、产生孢子的结构，以及帮助贴附地面的组织。它们没有今天树木那样复杂，却改变了陆地生态系统的底层结构。",
+      evidence: "Kenrick 与 Crane 的综述把 4.8-3.6 亿年前视为早期陆地植物起源和分化的关键窗口；Morris 等整合化石与分子钟，重建了早期陆地植物演化时间尺度。",
+      refs: ["Kenrick 1997", "Morris 2018"],
+    },
+    {
+      time: "泥盆纪",
+      title: "运输系统：植物终于可以长高",
+      story: "维管组织让水分和养分能在植物体内长距离运输。植物不再只是贴着地面生活，而是逐渐向上竞争光照，陆地开始出现更复杂的植被结构。",
+      evidence: "早期维管植物和多孢子囊植物的化石记录显示，陆地植物在志留纪到泥盆纪期间逐步获得更复杂的孢子体结构和运输能力。",
+      refs: ["Kenrick 1997", "Nature Plants 2018"],
+    },
+    {
+      time: "晚泥盆世",
+      title: "种子：把下一代装进保护包",
+      story: "种子的出现改变了繁殖方式。胚、营养和保护结构被组织在一起，植物可以更好地等待合适环境，也更容易向干燥或不稳定的陆地环境扩展。",
+      evidence: "早期种子化石来自晚泥盆世到早石炭世记录；《Nature》关于早期种子的研究显示，原始种子结构为理解种子习性起源提供了关键材料。",
+      refs: ["Pettitt 1981", "Prestianni 2017"],
+    },
+    {
+      time: "白垩纪",
+      title: "花和果实：把动物也写进植物故事",
+      story: "被子植物用花、果实和封闭胚珠重组了繁殖方式。传粉者、食草动物和种子传播者都卷入这套系统，陆地生态网络变得更加密集。",
+      evidence: "被子植物在早白垩世快速多样化的化石记录较清楚，但其更早起源仍有争议；相关综述提醒我们区分“可靠化石证据”和“分子钟推测”。",
+      refs: ["Friis 1994", "Herendeen 2017"],
+    },
+  ];
+
+  const references = [
+    {
+      key: "Wang 2019",
+      title: "Wang et al. Genomes of early-diverging streptophyte algae shed light on plant terrestrialization. Nature Plants.",
+      url: "https://www.nature.com/articles/s41477-019-0560-3",
+    },
+    {
+      key: "Wellman 2003",
+      title: "Wellman, Osterloff & Mohiuddin. Fragments of the earliest land plants. Nature.",
+      url: "https://www.nature.com/articles/nature01884",
+    },
+    {
+      key: "Morris 2018",
+      title: "Morris et al. The timescale of early land plant evolution. PNAS.",
+      url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC5877938/",
+    },
+    {
+      key: "Kenrick 1997",
+      title: "Kenrick & Crane. The origin and early evolution of plants on land. Nature.",
+      url: "https://www.nature.com/articles/37918",
+    },
+    {
+      key: "Nature Plants 2018",
+      title: "Sporophytes of polysporangiate land plants from the early Silurian period may have been photosynthetically autonomous. Nature Plants.",
+      url: "https://www.nature.com/articles/s41477-018-0140-y",
+    },
+    {
+      key: "Pettitt 1981",
+      title: "Pettitt & Beck. The earliest seeds. Nature.",
+      url: "https://www.nature.com/articles/293462a0",
+    },
+    {
+      key: "Prestianni 2017",
+      title: "Further study of Late Devonian seed plant Cosmosperma polyloba. BMC Ecology and Evolution.",
+      url: "https://link.springer.com/article/10.1186/s12862-017-0992-1",
+    },
+    {
+      key: "Friis 1994",
+      title: "Crane, Friis & Pedersen. The origin and early diversification of angiosperms. Nature.",
+      url: "https://www.nature.com/articles/374027a0",
+    },
+    {
+      key: "Herendeen 2017",
+      title: "Herendeen et al. Palaeobotanical redux: revisiting the age of the angiosperms. Nature Plants.",
+      url: "https://www.nature.com/articles/nplants201715",
+    },
   ];
 
   return (
-    <div style={{ display: "grid", gap: "0.9rem" }}>
-      {chapters.map(([time, title, body]) => (
-        <div key={title} style={{ display: "grid", gridTemplateColumns: "120px minmax(0, 1fr)", gap: "1rem", alignItems: "start", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "1rem" }}>
-          <div style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-red)", fontWeight: 900, fontSize: "1rem" }}>{time}</div>
+    <div style={{ display: "grid", gap: "1rem" }}>
+      <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 18, padding: "1rem", color: "var(--cherry-warm-mid)", lineHeight: 1.75 }}>
+        这条时间轴把“故事”放在左边，把“证据”放在右边。每个节点都对应至少一篇真实文献，方便继续追到原始研究或综述。
+      </div>
+
+      {chapters.map((chapter) => (
+        <div key={chapter.title} style={{ display: "grid", gridTemplateColumns: "130px minmax(0, 1fr)", gap: "1rem", alignItems: "start", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "1rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
+          <div style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-red)", fontWeight: 900, fontSize: "1rem" }}>{chapter.time}</div>
           <div>
-            <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>{title}</h3>
-            <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.75, fontSize: "0.9rem" }}>{body}</p>
+            <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.45rem" }}>{chapter.title}</h3>
+            <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.78, fontSize: "0.9rem", marginBottom: "0.65rem" }}>{chapter.story}</p>
+            <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.75rem", color: "var(--cherry-warm-mid)", fontSize: "0.84rem", lineHeight: 1.65, marginBottom: "0.65rem" }}>
+              <strong style={{ color: "var(--cherry-warm-brown)" }}>证据：</strong>{chapter.evidence}
+            </div>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+              {chapter.refs.map((ref) => (
+                <span key={ref} style={{ background: "rgba(250,247,241,0.78)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.22rem 0.62rem", color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.74rem" }}>
+                  {ref}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       ))}
+
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "1rem" }}>
+        <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>参考文献</h3>
+        <div style={{ display: "grid", gap: "0.65rem" }}>
+          {references.map((reference) => (
+            <a key={reference.key} href={reference.url} target="_blank" rel="noreferrer" style={{ color: "var(--cherry-forest)", textDecoration: "none", lineHeight: 1.6, fontSize: "0.86rem", fontWeight: 800 }}>
+              [{reference.key}] {reference.title}
+            </a>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
