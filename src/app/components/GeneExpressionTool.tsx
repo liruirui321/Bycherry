@@ -253,7 +253,7 @@ function fullPolylinePath(points: Point[]) {
 
 function buildNascentMrnaPath(polymerasePoint: Point, progress: number, offset: Point = { x: 0, y: 0 }) {
   const exit = { x: polymerasePoint.x + 10 + offset.x, y: polymerasePoint.y + 31 + offset.y };
-  const tailLength = 52 + clamp01(progress) * 184;
+  const tailLength = 18 + clamp01(progress) * 220;
 
   return [
     { x: exit.x - tailLength, y: exit.y + 82 },
@@ -333,8 +333,8 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
   const aminoCount = ribosomeCanRead ? Math.min(codons.length, Math.max(0, Math.floor(leadRibosomeProgress * (codons.length + 0.75)))) : 0;
   const proteinChainStart = { x: 392, y: 570 };
   const proteinChainGap = 48;
-  const leadRibosomeExit = leadRibosomePoint && aminoCount > 0 ? { x: leadRibosomePoint.x + 28, y: leadRibosomePoint.y + 24 } : null;
-  const livePeptideStart = leadRibosomeExit ? { x: leadRibosomeExit.x + 20, y: leadRibosomeExit.y + 18 } : null;
+  const leadRibosomeExit = leadRibosomePoint && aminoCount > 0 ? { x: leadRibosomePoint.x + 35, y: leadRibosomePoint.y + 17 } : null;
+  const livePeptideStart = leadRibosomeExit ? { x: leadRibosomeExit.x + 10, y: leadRibosomeExit.y + 6 } : null;
   const translationLayer = canTranslate ? (
     <>
       {renderedRibosomes.map((ribosome, index) => {
@@ -344,6 +344,7 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
             <ellipse rx={48} ry={30} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={3} />
             <circle cx={-22} cy={-7} r={9} fill="rgba(250,247,241,0.58)" />
             <circle cx={18} cy={9} r={7} fill="rgba(250,247,241,0.58)" />
+            <circle cx={35} cy={17} r={7} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={2} opacity={0.9} />
             <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
               核糖体
             </text>
@@ -379,25 +380,24 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
       {leadRibosomeExit && livePeptideStart ? (
         <g>
           <path
-            d={`M${leadRibosomeExit.x} ${leadRibosomeExit.y} C${leadRibosomeExit.x + 9} ${leadRibosomeExit.y + 12} ${livePeptideStart.x - 10} ${livePeptideStart.y} ${livePeptideStart.x} ${livePeptideStart.y}`}
+            d={`M${leadRibosomeExit.x} ${leadRibosomeExit.y} C${leadRibosomeExit.x + 4} ${leadRibosomeExit.y + 4} ${livePeptideStart.x - 8} ${livePeptideStart.y} ${livePeptideStart.x} ${livePeptideStart.y}`}
             fill="none"
             stroke="var(--cherry-peach)"
             strokeWidth={4}
             strokeLinecap="round"
-            markerEnd="url(#proteinArrow)"
             opacity={0.9}
           />
-          <text x={livePeptideStart.x - 10} y={livePeptideStart.y - 26} fill="var(--cherry-warm-brown)" fontSize={11} fontWeight={900}>
+          <text x={leadRibosomeExit.x - 34} y={leadRibosomeExit.y - 14} fill="var(--cherry-warm-brown)" fontSize={11} fontWeight={900}>
             核糖体出口
           </text>
           {codons.slice(0, aminoCount).map((codon, index) => {
-            const x = livePeptideStart.x + index * 28;
-            const y = livePeptideStart.y + index * 14;
+            const x = livePeptideStart.x + index * 25;
+            const y = livePeptideStart.y + index * 9;
 
             return (
               <g key={`live-peptide-${codon.amino}`} transform={`translate(${x} ${y})`}>
                 {index > 0 ? (
-                  <line x1={-23} y1={-11} x2={-9} y2={-4} stroke="var(--cherry-forest)" strokeWidth={4} strokeLinecap="round" />
+                  <line x1={-21} y1={-8} x2={-10} y2={-4} stroke="var(--cherry-forest)" strokeWidth={4} strokeLinecap="round" />
                 ) : null}
                 <circle r={12} fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4}>
                   <animate attributeName="r" values="10;13;12" dur="0.7s" begin={`${index * 0.08}s`} repeatCount="1" />
@@ -494,11 +494,20 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
         const nascentPath = buildNascentMrnaPath(polymerase.point, polymerase.progress, polymerase.offset);
         const fiveEnd = nascentPath[0];
         const growthEnd = nascentPath[nascentPath.length - 1];
+        const polymeraseBody = { x: polymerase.point.x + polymerase.offset.x, y: polymerase.point.y + polymerase.offset.y };
 
         return (
           <g key={`moving-transcript-${index}`} opacity={polymerase.opacity}>
             <path d={fullPolylinePath(nascentPath)} fill="none" stroke="rgba(232,121,95,0.2)" strokeWidth={17} strokeLinecap="round" strokeLinejoin="round" />
             <path d={fullPolylinePath(nascentPath)} fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" strokeLinejoin="round" markerEnd="url(#mrnaArrow)" />
+            <path
+              d={`M${polymeraseBody.x + 3} ${polymeraseBody.y + 18} C${polymeraseBody.x + 8} ${polymeraseBody.y + 26} ${growthEnd.x - 3} ${growthEnd.y - 5} ${growthEnd.x} ${growthEnd.y}`}
+              fill="none"
+              stroke="var(--cherry-red)"
+              strokeWidth={4}
+              strokeLinecap="round"
+              opacity={0.72}
+            />
             {polymerase.progress > 0.16 ? (
               <text x={fiveEnd.x - 8} y={fiveEnd.y + 24} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
                 5' 先露出
@@ -519,8 +528,8 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
               );
             })}
             <circle cx={growthEnd.x} cy={growthEnd.y} r={9} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={3} />
-            <text x={growthEnd.x + 14} y={growthEnd.y + 5} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
-              3' 生长端
+            <text x={growthEnd.x + 13} y={growthEnd.y + 4} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
+              3' 端接在聚合酶出口
             </text>
             <text x={growthEnd.x - 76} y={growthEnd.y + 31} fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={800}>
               原核模型：核糖体读取已露出的 5' 端
@@ -530,9 +539,10 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
       })}
 
       {polymerases.map((polymerase, index) => (
-        <g key={`moving-pol-${index}`} transform={`translate(${polymerase.point.x} ${polymerase.point.y})`} opacity={polymerase.opacity}>
+        <g key={`moving-pol-${index}`} transform={`translate(${polymerase.point.x + polymerase.offset.x} ${polymerase.point.y + polymerase.offset.y})`} opacity={polymerase.opacity}>
           <ellipse rx={42} ry={27} fill="var(--cherry-blue-light)" stroke="var(--cherry-blue)" strokeWidth={3} />
           <path d="M-18 9 C-6 16 6 16 18 9" fill="none" stroke="var(--cherry-blue)" strokeWidth={3} strokeLinecap="round" opacity={0.58} />
+          <circle cx={10} cy={31} r={7} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={2.2} />
           <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>
             RNA 聚合酶
           </text>
@@ -828,9 +838,6 @@ export function GeneExpressionTool() {
               </linearGradient>
               <marker id="mrnaArrow" markerWidth={9} markerHeight={9} refX={7.5} refY={4.5} orient="auto" markerUnits="userSpaceOnUse">
                 <path d="M0 0 L9 4.5 L0 9Z" fill="var(--cherry-red)" />
-              </marker>
-              <marker id="proteinArrow" markerWidth={9} markerHeight={9} refX={7.5} refY={4.5} orient="auto" markerUnits="userSpaceOnUse">
-                <path d="M0 0 L9 4.5 L0 9Z" fill="var(--cherry-peach)" />
               </marker>
             </defs>
 
