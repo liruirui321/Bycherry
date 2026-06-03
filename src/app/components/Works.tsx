@@ -65,6 +65,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
 
   return (
     <a
+      className="work-card"
       href={href}
       onClick={openDetail}
       onMouseEnter={() => setHovered(true)}
@@ -195,6 +196,7 @@ export function Works() {
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: "2.5rem" }}>
           {categories.map((cat) => (
             <button
+              className="work-filter-button"
               key={cat}
               onClick={() => setActiveCategory(cat)}
               aria-pressed={activeCategory === cat}
@@ -219,6 +221,24 @@ export function Works() {
       </div>
 
       <WaveDivider flip />
+
+      <style>
+        {`
+          #works .work-card:focus-visible,
+          #works .work-filter-button:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            #works .work-card,
+            #works .work-filter-button {
+              transition: none !important;
+              transform: none !important;
+            }
+          }
+        `}
+      </style>
     </section>
   );
 }

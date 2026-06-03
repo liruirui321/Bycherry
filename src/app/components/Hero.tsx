@@ -4,7 +4,7 @@ import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 function FloatDeco({ children, style }: { children: React.ReactNode; style: React.CSSProperties }) {
   return (
-    <div style={{ position: "absolute", animation: "floatDeco 4.5s ease-in-out infinite", ...style }}>
+    <div className="hero-floating-deco" style={{ position: "absolute", animation: "floatDeco 4.5s ease-in-out infinite", ...style }}>
       {children}
     </div>
   );
@@ -197,6 +197,7 @@ export function Hero() {
         {/* CTAs */}
         <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-start", flexWrap: "wrap" }}>
           <a
+            className="hero-cta"
             href="#works"
             style={{
               display: "inline-flex", alignItems: "center", gap: 8,
@@ -212,6 +213,7 @@ export function Hero() {
             <IconSeedling size={18} color="#FAF7F1" /> 看看小作品
           </a>
           <a
+            className="hero-cta"
             href="#notes"
             style={{
               display: "inline-flex", alignItems: "center", gap: 8,
@@ -237,6 +239,7 @@ export function Hero() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(178px, 1fr))", gap: "0.65rem" }}>
             {works.map((work) => (
               <a
+                className="hero-work-card"
                 key={work.slug}
                 href={work.href}
                 onClick={(event) => openWork(work.href, event)}
@@ -286,6 +289,34 @@ export function Hero() {
         @keyframes floatDeco {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-9px); }
+        }
+
+        .hero-cta:focus-visible,
+        .hero-work-card:focus-visible {
+          outline: 3px solid var(--cherry-red);
+          outline-offset: 4px;
+        }
+
+        .hero-work-card {
+          transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .hero-work-card:hover,
+        .hero-work-card:focus-visible {
+          transform: translateY(-2px);
+          box-shadow: 3px 6px 0 rgba(94,68,42,0.1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .hero-floating-deco {
+            animation: none !important;
+          }
+
+          .hero-cta,
+          .hero-work-card {
+            transition: none !important;
+            transform: none !important;
+          }
         }
       `}</style>
     </section>
