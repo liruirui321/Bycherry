@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IconMicroscope, IconNotebook, IconAI, IconLeaf, IconFlask, IconDNA } from "./Icons";
+import { IconMicroscope, IconAI, IconLeaf, IconFlask, IconDNA } from "./Icons";
 
 type Category = "全部" | "科学" | "课程" | "AI工具";
 
@@ -12,15 +12,6 @@ export const works = [
     href: "/works/gene-expression",
     tags: ["生物", "可视化", "交互"],
     color: "var(--cherry-blue-light)", border: "var(--cherry-blue)", rotate: "-1.5deg",
-  },
-  {
-    id: 2, slug: "cell-biology-course", category: "课程" as Category,
-    icon: <IconNotebook size={36} color="var(--cherry-yellow)" />,
-    title: "细胞生物学入门课",
-    desc: "8 个细胞机制模块，串起细胞膜、细胞核、线粒体、内膜系统、骨架、分裂和通信。",
-    href: "/works/cell-biology-course",
-    tags: ["课程设计", "细胞生物", "自学"],
-    color: "var(--cherry-yellow-light)", border: "var(--cherry-yellow)", rotate: "1.2deg",
   },
   {
     id: 3, slug: "research-prompt-kit", category: "AI工具" as Category,
