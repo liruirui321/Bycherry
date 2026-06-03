@@ -166,6 +166,29 @@ export function Contact() {
             <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.9rem" }}>
               确认内容后在邮件客户端发送，我就能收到你的留言
             </p>
+            <button
+              className="contact-reset"
+              type="button"
+              onClick={() => setSent(false)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                marginTop: "1rem",
+                background: "var(--card)",
+                color: "var(--cherry-forest)",
+                border: "1.5px solid var(--cherry-sage)",
+                borderRadius: 999,
+                padding: "0.58rem 1rem",
+                fontFamily: "'Nunito', sans-serif",
+                fontWeight: 900,
+                fontSize: "0.84rem",
+                cursor: "pointer",
+                transition: "background 0.2s, transform 0.15s",
+              }}
+            >
+              继续修改留言
+            </button>
             <div style={{ display: "flex", justifyContent: "center", marginTop: "0.75rem" }}>
               <IconLeaf size={28} color="var(--cherry-forest)" />
             </div>
@@ -204,14 +227,22 @@ export function Contact() {
           #contact input:focus-visible,
           #contact textarea:focus-visible,
           #contact .contact-submit:focus-visible,
+          #contact .contact-reset:focus-visible,
           #contact .contact-social-link:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
           }
 
           #contact .contact-submit:not(:disabled):hover,
-          #contact .contact-submit:not(:disabled):focus-visible {
+          #contact .contact-submit:not(:disabled):focus-visible,
+          #contact .contact-reset:hover,
+          #contact .contact-reset:focus-visible {
             transform: translateY(-2px);
+          }
+
+          #contact .contact-reset:hover,
+          #contact .contact-reset:focus-visible {
+            background: var(--cherry-yellow-light) !important;
           }
 
           #contact .contact-social-link:hover,
@@ -223,6 +254,7 @@ export function Contact() {
 
           @media (prefers-reduced-motion: reduce) {
             #contact .contact-submit,
+            #contact .contact-reset,
             #contact .contact-social-link {
               transition: none !important;
               transform: none !important;
