@@ -1,9 +1,10 @@
-import { useState } from "react";
 import { IconDNA, IconMicroscope, IconFlask, IconResearch, IconArrowRight, IconLeafSmall, IconStar } from "./Icons";
 
-const essays = [
+export const essays = [
   {
     id: 1,
+    slug: "science-to-classroom-question",
+    href: "/research/science-to-classroom-question",
     icon: <IconDNA size={26} color1="var(--cherry-blue)" color2="var(--cherry-red)" />,
     date: "2026-06-01",
     label: "科研转化",
@@ -13,9 +14,17 @@ const essays = [
     body: "前沿科研不适合被直接搬进课堂。更有效的做法，是从学生已有经验出发，把复杂概念拆成可以观察、比较、推理和表达的小任务……",
     readMin: 6,
     tags: ["科学教育", "课程转化", "真实情境"],
+    paragraphs: [
+      "真实科研进入课堂时，第一步不是删掉难词，而是重建问题。学生需要从一个可以理解的现象开始，逐步看到背后的科学结构。",
+      "比如植物基因组研究可以从“为什么同一种环境里有些植物更耐旱”进入，而不是直接讲测序平台、组装算法和注释流程。",
+      "课程化的关键，是把研究对象、数据证据和解释任务拆成学生能操作的层级。",
+    ],
+    highlights: ["从现象到问题", "从数据到证据", "从解释到表达"],
   },
   {
     id: 2,
+    slug: "genome-assembly-story",
+    href: "/research/genome-assembly-story",
     icon: <IconFlask size={26} color="var(--cherry-sage)" />,
     date: "2026-05-24",
     label: "植物基因组",
@@ -25,9 +34,17 @@ const essays = [
     body: "组装、注释、比较分析和可视化并不是孤立步骤。它们最终需要回答一个问题：这些数据能帮助我们理解植物的什么变化、什么能力和什么历史……",
     readMin: 8,
     tags: ["基因组", "多组学", "科学叙事"],
+    paragraphs: [
+      "基因组组装常被看成技术流程，但一个可讲述的科研故事需要回答：为什么是这个物种？为什么这些基因值得看？为什么这些变化重要？",
+      "从原始 reads 到染色体级组装，再到注释和比较分析，每一步都应该服务同一个科学问题，而不是堆叠图表。",
+      "好的科研转化会保留数据的真实感，同时把证据关系整理到学习者能够跟上的程度。",
+    ],
+    highlights: ["技术流程要服务科学问题", "图表必须有证据关系", "叙事不是美化，而是组织理解"],
   },
   {
     id: 3,
+    slug: "barcoding-evidence-chain",
+    href: "/research/barcoding-evidence-chain",
     icon: <IconMicroscope size={26} color="var(--cherry-peach)" />,
     date: "2026-05-12",
     label: "项目课程",
@@ -37,9 +54,17 @@ const essays = [
     body: "一个好的物种鉴定项目，不只是让学生做完实验。更重要的是让样本、记录、序列、比对结果和系统发育树共同构成一条可解释的证据链。",
     readMin: 7,
     tags: ["Barcoding", "PBL", "证据意识"],
+    paragraphs: [
+      "Barcoding 课程的价值不只是学习 DNA 提取和 BLAST。它真正训练的是学生如何让样本、实验记录、序列结果和分析结论互相支持。",
+      "如果学生只拿到一个“鉴定成功”的结果，却说不清样本是否可靠、序列质量如何、比对结果为什么可信，那么项目还没有完成。",
+      "因此课程需要把证据链显性化：每一步都留下记录，每个结论都能回到数据。",
+    ],
+    highlights: ["样本记录是证据链起点", "序列质量影响解释可信度", "系统发育树是表达，不是装饰"],
   },
   {
     id: 4,
+    slug: "ai-assessment-quality-control",
+    href: "/research/ai-assessment-quality-control",
     icon: <IconResearch size={26} color="#3C2D6E" />,
     date: "2026-05-01",
     label: "AI工具",
@@ -49,16 +74,27 @@ const essays = [
     body: "AI 出题并不等于把题目交给模型。知识点约束、难度约束、答案校验、人工量规和学生实测反馈，才共同决定生成内容是否真的可用。",
     readMin: 10,
     tags: ["LLM", "智能测评", "质量控制"],
+    paragraphs: [
+      "AI 智能测评最容易被误解成自动出题。真正关键的是质量控制：题目是否对齐目标、答案是否稳定、难度是否可解释、反馈是否有帮助。",
+      "知识图谱可以限制生成范围，量规可以帮助人工审核，自动解题脚本可以发现部分错误，学生实测数据则能暴露真实使用中的问题。",
+      "因此平台设计不应追求“全自动”，而应建立生成、校验、审核、反馈和迭代的闭环。",
+    ],
+    highlights: ["生成不是终点", "质量控制需要多层证据", "自动化必须保留人工审核位置"],
   },
 ];
 
-function EssayCard({ essay, expanded, onToggle }: {
+function navigateTo(href: string) {
+  window.history.pushState(null, "", href);
+  window.dispatchEvent(new PopStateEvent("popstate"));
+}
+
+function EssayCard({ essay }: {
   essay: (typeof essays)[0];
-  expanded: boolean;
-  onToggle: () => void;
 }) {
   return (
     <article
+      role="link"
+      tabIndex={0}
       style={{
         background: "var(--card)",
         border: "1.5px solid var(--border)",
@@ -71,7 +107,13 @@ function EssayCard({ essay, expanded, onToggle }: {
       }}
       onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "4px 8px 0px rgba(94,68,42,0.1)"; }}
       onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = ""; }}
-      onClick={onToggle}
+      onClick={() => navigateTo(essay.href)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          navigateTo(essay.href);
+        }
+      }}
     >
       {/* Forest accent bar */}
       <div
@@ -145,18 +187,13 @@ function EssayCard({ essay, expanded, onToggle }: {
         style={{
           marginTop: "0.9rem",
           overflow: "hidden",
-          maxHeight: expanded ? 300 : 60,
+          maxHeight: 76,
           transition: "max-height 0.35s ease",
         }}
       >
         <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.85rem", lineHeight: 1.7 }}>
           {essay.body}
         </p>
-        {expanded && (
-          <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.85rem", lineHeight: 1.7, marginTop: "0.6rem", opacity: 0.7 }}>
-            （展开阅读完整内容，或点击「阅读全文」查看详细版本……）
-          </p>
-        )}
       </div>
 
       {/* Footer */}
@@ -192,8 +229,8 @@ function EssayCard({ essay, expanded, onToggle }: {
               fontSize: "0.8rem",
             }}
           >
-            {expanded ? "收起" : "展开"}
-            <div style={{ transform: expanded ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.25s" }}>
+            阅读全文
+            <div style={{ transition: "transform 0.25s" }}>
               <IconArrowRight size={14} color="var(--cherry-forest)" />
             </div>
           </div>
@@ -204,12 +241,6 @@ function EssayCard({ essay, expanded, onToggle }: {
 }
 
 export function ResearchEssays() {
-  const [expandedId, setExpandedId] = useState<number | null>(null);
-
-  function toggle(id: number) {
-    setExpandedId((prev) => (prev === id ? null : id));
-  }
-
   return (
     <section
       id="research"
@@ -274,8 +305,6 @@ export function ResearchEssays() {
           <EssayCard
             key={essay.id}
             essay={essay}
-            expanded={expandedId === essay.id}
-            onToggle={() => toggle(essay.id)}
           />
         ))}
       </div>
@@ -292,7 +321,7 @@ export function ResearchEssays() {
       >
         <div style={{ width: 40, height: 1.5, background: "var(--border)" }} />
         <span style={{ fontFamily: "'Caveat', cursive", fontSize: "0.88rem", color: "var(--cherry-warm-mid)" }}>
-          点击卡片可展开正文片段
+          点击卡片进入完整随笔
         </span>
         <div style={{ width: 40, height: 1.5, background: "var(--border)" }} />
       </div>

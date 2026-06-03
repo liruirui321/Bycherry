@@ -1,8 +1,10 @@
 import { IconBook, IconAI, IconLeaf, IconResearch, IconArrowRight, IconCoffee } from "./Icons";
 
-const notes = [
+export const notes = [
   {
     id: 1,
+    slug: "ai-course-development",
+    href: "/notes/ai-course-development",
     date: "2026-06-03",
     tag: "AI教育",
     tagColor: "var(--cherry-blue)",
@@ -11,9 +13,17 @@ const notes = [
     title: "AI 可以参与课程开发，但不能替代教学判断",
     excerpt: "从课程目标、任务流程到评价量规，AI 可以加快草稿生成；但真正的学情判断、内容边界和价值取舍，仍然需要人来完成……",
     readTime: "5",
+    paragraphs: [
+      "AI 很适合参与课程开发中的低风险环节：拆解知识点、生成活动草案、整理评价量规、把同一内容改写成不同难度版本。",
+      "但课程真正困难的地方不是生成材料，而是判断材料是否适合学生、是否符合学科逻辑、是否会造成误解，以及它是否真的服务学习目标。",
+      "所以我更愿意把 AI 放在“第二大脑”和“草稿生成器”的位置。它可以帮我更快看见可能性，但最后的教学判断必须由人负责。",
+    ],
+    highlights: ["适合 AI 做：草稿、变体、检查清单", "必须由人做：学情判断、内容边界、价值取舍", "好课程不是生成出来的，而是迭代出来的"],
   },
   {
     id: 2,
+    slug: "plant-genome-to-classroom",
+    href: "/notes/plant-genome-to-classroom",
     date: "2026-05-28",
     tag: "科研转化",
     tagColor: "#4A2D80",
@@ -22,9 +32,17 @@ const notes = [
     title: "从植物基因组到高中生物课堂",
     excerpt: "真实科研进入课堂时，难点不只是降难度，而是找到学生能进入的问题、证据和任务，让前沿知识变成可参与的探究……",
     readTime: "6",
+    paragraphs: [
+      "把植物基因组研究放进课堂，不是把论文摘要翻译成更简单的话。学生需要一个能进入的问题，比如“为什么不同植物会有不同适应能力？”",
+      "课程设计要把真实数据转化成证据材料：基因组图谱、性状差异、样本来源、比对结果和研究结论之间需要有清楚的链条。",
+      "前沿科研的价值不只在知识更新，也在让学生体验科学如何提出问题、组织证据、接受不确定性，并逐步形成解释。",
+    ],
+    highlights: ["从生活问题进入", "用真实数据做证据", "保留科研中的不确定性"],
   },
   {
     id: 3,
+    slug: "pbl-rubric-evidence",
+    href: "/notes/pbl-rubric-evidence",
     date: "2026-05-18",
     tag: "课程设计",
     tagColor: "var(--cherry-forest)",
@@ -33,9 +51,17 @@ const notes = [
     title: "项目制学习中的任务、量规和作品证据",
     excerpt: "一个项目不是把活动串起来，而是把真实问题、学习目标、任务流程、评价量规和学生作品放在同一条线上……",
     readTime: "7",
+    paragraphs: [
+      "项目制学习最容易变成“活动很多，但学习不清楚”。我会先问：学生最终要产出什么作品？这个作品能证明他们学到了什么？",
+      "任务流程需要和评价量规一起设计。没有量规，学生不知道什么算好；没有作品证据，教师也很难判断学生是否真正理解。",
+      "一个完整项目应该能从驱动问题走向任务分解、资料收集、证据组织、作品表达和复盘修改。",
+    ],
+    highlights: ["作品必须能承载证据", "量规要在任务开始前出现", "复盘不是收尾，而是学习的一部分"],
   },
   {
     id: 4,
+    slug: "ai-comic-video-workflow",
+    href: "/notes/ai-comic-video-workflow",
     date: "2026-05-08",
     tag: "创作工具",
     tagColor: "var(--cherry-red)",
@@ -44,8 +70,19 @@ const notes = [
     title: "我的 AI 漫画与视频创作工作流",
     excerpt: "从小说文本到分镜、角色资产、TTS、唇形同步和成片组装，真正困难的不是单点生成，而是让每一步可以复用和质检……",
     readTime: "4",
+    paragraphs: [
+      "AI 创作工作流的难点不在于生成一张好看的图，而在于角色一致、镜头连续、声音稳定、节奏可控，并且每一步都能回溯。",
+      "我把流程拆成剧本、分镜、角色资产、场景资产、TTS、唇形同步、音效约束和成片组装，每一步都需要有输入、输出和坏案例记录。",
+      "这个过程很像课程开发：不是一次生成成品，而是建立一套可以复用、检查和迭代的生产系统。",
+    ],
+    highlights: ["单点生成不等于工作流", "资产锁定比灵感更重要", "坏案例记录是质量控制的核心"],
   },
 ];
+
+function navigateTo(href: string) {
+  window.history.pushState(null, "", href);
+  window.dispatchEvent(new PopStateEvent("popstate"));
+}
 
 export function Notes() {
   return (
@@ -94,6 +131,15 @@ export function Notes() {
           {notes.map((note) => (
             <article
               key={note.id}
+              role="link"
+              tabIndex={0}
+              onClick={() => navigateTo(note.href)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  navigateTo(note.href);
+                }
+              }}
               style={{
                 background: "var(--card)",
                 border: "1.5px solid var(--border)",
@@ -130,7 +176,7 @@ export function Notes() {
                   <IconCoffee size={16} /> 约 {note.readTime} 分钟
                 </span>
                 <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "0.8rem", color: "var(--cherry-forest)", fontWeight: 700 }}>
-                  阅读 <IconArrowRight size={13} color="var(--cherry-forest)" />
+                  阅读全文 <IconArrowRight size={13} color="var(--cherry-forest)" />
                 </span>
               </div>
             </article>

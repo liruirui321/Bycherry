@@ -4,6 +4,7 @@ import { Hero } from "./components/Hero";
 import { About } from "./components/About";
 import { Works } from "./components/Works";
 import { WorkDetailPage } from "./components/WorkDetailPage";
+import { ArticleDetailPage } from "./components/ArticleDetailPage";
 import { ResearchEssays } from "./components/ResearchEssays";
 import { Notes } from "./components/Notes";
 import { Contact } from "./components/Contact";
@@ -13,6 +14,14 @@ export default function App() {
   const [locationKey, setLocationKey] = useState(`${window.location.pathname}${window.location.hash}`);
   const detailSlug = useMemo(() => {
     const match = window.location.pathname.match(/^\/works\/([^/]+)\/?$/);
+    return match?.[1] ?? null;
+  }, [locationKey]);
+  const noteSlug = useMemo(() => {
+    const match = window.location.pathname.match(/^\/notes\/([^/]+)\/?$/);
+    return match?.[1] ?? null;
+  }, [locationKey]);
+  const researchSlug = useMemo(() => {
+    const match = window.location.pathname.match(/^\/research\/([^/]+)\/?$/);
     return match?.[1] ?? null;
   }, [locationKey]);
 
@@ -30,7 +39,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (detailSlug) {
+    if (detailSlug || noteSlug || researchSlug) {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
@@ -42,7 +51,7 @@ export default function App() {
       const target = document.getElementById(id);
       target?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
-  }, [detailSlug, locationKey]);
+  }, [detailSlug, noteSlug, researchSlug, locationKey]);
 
   return (
     <div
@@ -55,6 +64,10 @@ export default function App() {
       <Nav />
       {detailSlug ? (
         <WorkDetailPage slug={detailSlug} />
+      ) : noteSlug ? (
+        <ArticleDetailPage kind="note" slug={noteSlug} />
+      ) : researchSlug ? (
+        <ArticleDetailPage kind="research" slug={researchSlug} />
       ) : (
         <main>
           <Hero />
