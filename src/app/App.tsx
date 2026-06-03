@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
 import { About } from "./components/About";
@@ -53,8 +53,19 @@ function getScrollBehavior(): ScrollBehavior {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 }
 
+function focusPageTarget(element: HTMLElement | null) {
+  if (!element) return;
+  const hadTabIndex = element.hasAttribute("tabindex");
+  if (!hadTabIndex) element.setAttribute("tabindex", "-1");
+  element.focus({ preventScroll: true });
+  if (!hadTabIndex) {
+    element.addEventListener("blur", () => element.removeAttribute("tabindex"), { once: true });
+  }
+}
+
 export default function App() {
   const [locationKey, setLocationKey] = useState(`${window.location.pathname}${window.location.hash}`);
+  const hasNavigated = useRef(false);
   const detailSlug = useMemo(() => {
     const match = window.location.pathname.match(/^\/works\/([^/]+)\/?$/);
     return match?.[1] ?? null;
@@ -82,8 +93,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const shouldMoveFocus = hasNavigated.current;
+    hasNavigated.current = true;
+
     if (detailSlug || noteSlug || researchSlug) {
       window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+      if (shouldMoveFocus) {
+        window.requestAnimationFrame(() => focusPageTarget(document.getElementById("main-content")));
+      }
       return;
     }
 
@@ -93,6 +110,7 @@ export default function App() {
     window.requestAnimationFrame(() => {
       const target = document.getElementById(id);
       target?.scrollIntoView({ behavior: getScrollBehavior(), block: "start" });
+      if (shouldMoveFocus) focusPageTarget(target);
     });
   }, [detailSlug, noteSlug, researchSlug, locationKey]);
 
