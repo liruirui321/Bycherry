@@ -519,12 +519,8 @@ export function GeneExpressionTool() {
   }
 
   function runExpressionPreset() {
-    const starterSet = new Set(["tf-1", "pol-1", "rib-1"]);
     setMolecules((items) =>
       items.map((molecule) => {
-        if (!starterSet.has(molecule.id)) {
-          return { ...molecule, x: molecule.homeX, y: molecule.homeY };
-        }
         const zoneKey = moleculeZone(molecule.type);
         const slot = slots[zoneKey][moleculeSlotIndex(molecule)] ?? slots[zoneKey][0];
         return { ...molecule, x: slot.x, y: slot.y };
