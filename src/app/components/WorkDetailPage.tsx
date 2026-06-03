@@ -50,6 +50,7 @@ function PromptKitContent() {
   const [activePromptIndex, setActivePromptIndex] = useState(0);
   const [material, setMaterial] = useState("研究问题：\n样本/材料：\n已有结果：\n我最担心的问题：");
   const [copied, setCopied] = useState(false);
+  const [copiedPack, setCopiedPack] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const prompts = [
     {
@@ -106,11 +107,29 @@ ${material.trim() || "请在这里粘贴材料。"}
 
 【质量要求】
 ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")}`;
+  const taskPackOutput = `【科研 AI 任务包】
+任务类型：${activePrompt.title}
+适用材料：${activePrompt.input}
+
+一、要交给 AI 的 prompt
+${finalPrompt}
+
+二、输出验收清单
+${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")}
+
+三、需要得到的栏目
+${activePrompt.output.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+四、人工复核提醒
+1. 结论必须能回到原文、数据或实验设计。
+2. 如果模型补充了材料中没有的信息，需要标出并回查来源。
+3. 对会影响实验、投稿或伦理判断的内容，保留人工最终决定。`;
 
   async function copyPrompt() {
     const copiedToClipboard = await copyText(finalPrompt);
     if (copiedToClipboard) {
       setCopied(true);
+      setCopiedPack(false);
       setCopyStatus("Prompt 已复制到剪贴板。");
       window.setTimeout(() => setCopied(false), 1400);
       return;
@@ -120,9 +139,24 @@ ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  async function copyTaskPack() {
+    const copiedToClipboard = await copyText(taskPackOutput);
+    if (copiedToClipboard) {
+      setCopiedPack(true);
+      setCopied(false);
+      setCopyStatus("任务包已复制到剪贴板。");
+      window.setTimeout(() => setCopiedPack(false), 1400);
+      return;
+    }
+
+    setCopiedPack(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
   function updateMaterial(value: string) {
     setMaterial(value);
     setCopied(false);
+    setCopiedPack(false);
     setCopyStatus("");
   }
 
@@ -133,7 +167,7 @@ ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")
           {prompts.map((prompt, index) => {
             const active = activePromptIndex === index;
             return (
-              <button key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
+              <button key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopiedPack(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
                 <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>{prompt.title}</div>
                 <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginBottom: "0.55rem" }}>{prompt.input}</div>
                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
@@ -155,9 +189,14 @@ ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")
                 <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "1.05rem" }}>{activePrompt.title}</div>
                 <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", marginTop: "0.25rem" }}>输入材料：{activePrompt.input}</div>
               </div>
-              <button type="button" onClick={copyPrompt} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
-                {copied ? "已复制" : "复制 prompt"}
-              </button>
+              <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
+                <button type="button" onClick={copyPrompt} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+                  {copied ? "已复制" : "复制 prompt"}
+                </button>
+                <button type="button" onClick={copyTaskPack} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+                  {copiedPack ? "已复制" : "复制任务包"}
+                </button>
+              </div>
             </div>
             <div id="prompt-copy-status" role="status" aria-live="polite" style={{ minHeight: "1.2rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginBottom: "0.65rem" }}>
               {copyStatus}
@@ -197,6 +236,18 @@ ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")
             <ContentCard title="使用提醒">
               先放入原文、图注或实验设计，再把生成的 prompt 发给 AI。涉及论文结论时，要求模型标出“原文未说明”，可以减少凭空补充。
             </ContentCard>
+          </div>
+
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.75rem" }}>
+              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>可复制任务包</div>
+              <button type="button" onClick={copyTaskPack} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
+                {copiedPack ? "已复制" : "复制任务包"}
+              </button>
+            </div>
+            <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.9rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65, maxHeight: 260, overflow: "auto" }}>
+              {taskPackOutput}
+            </code>
           </div>
         </div>
       </div>
