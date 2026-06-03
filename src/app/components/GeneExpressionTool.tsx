@@ -237,29 +237,31 @@ function partialPolylinePath(points: Point[], progress: number) {
 
 function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: boolean; translationOn: boolean; mrna: number; polBound: number; ribBound: number }; progress: number }) {
   const transcriptionProgress = model.transcriptionOn ? clamp01(progress / 0.78) : 0;
-  const translationProgress = model.translationOn ? clamp01((progress - 0.28) / 0.62) : 0;
   const polymeraseX = model.transcriptionOn ? lerp(392, 676, transcriptionProgress) : 392;
   const mrnaPath = partialPolylinePath(transcriptPath, transcriptionProgress);
   const mrnaTip = pointOnPolyline(transcriptPath, transcriptionProgress);
   const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
-  const ribosomeProgress = ribosomeCanRead ? Math.min(translationProgress, Math.max(0, transcriptionProgress - 0.08)) : 0;
   const polymerases = Array.from({ length: Math.max(1, model.polBound) }).map((_, index) => {
-    const localProgress = clamp01(transcriptionProgress - index * 0.22);
+    const phase = (progress + index * 0.18) % 1;
+    const localProgress = clamp01(phase / 0.78);
     return {
       point: { x: lerp(392, 676, localProgress), y: 250 + index * 12 },
-      opacity: localProgress > 0.02 || index === 0 ? 1 : 0,
+      opacity: phase < 0.82 ? 1 : Math.max(0, 1 - (phase - 0.82) / 0.12),
     };
   });
   const ribosomes = Array.from({ length: model.ribBound }).map((_, index) => {
-    const localProgress = clamp01(ribosomeProgress - index * 0.18);
+    const phase = (progress + index * 0.16) % 1;
+    const localProgress = clamp01((phase - 0.28) / 0.62);
+    const onReadableSegment = ribosomeCanRead && phase >= 0.28 && phase < 0.92 && localProgress <= Math.max(0.12, transcriptionProgress);
     return {
       point: pointOnPolyline(transcriptPath, localProgress),
       progress: localProgress,
-      opacity: ribosomeCanRead && (index === 0 || localProgress > 0.04) ? 1 : 0,
+      opacity: onReadableSegment ? 1 : 0,
     };
   });
-  const activeCodonIndex = ribosomeCanRead ? Math.min(codons.length - 1, Math.floor(ribosomeProgress * codons.length)) : -1;
-  const aminoCount = ribosomeCanRead ? Math.min(codons.length, Math.max(0, Math.floor(ribosomeProgress * (codons.length + 0.75)))) : 0;
+  const leadRibosomeProgress = ribosomes.find((ribosome) => ribosome.opacity > 0)?.progress ?? 0;
+  const activeCodonIndex = ribosomeCanRead && leadRibosomeProgress > 0 ? Math.min(codons.length - 1, Math.floor(leadRibosomeProgress * codons.length)) : -1;
+  const aminoCount = ribosomeCanRead ? Math.min(codons.length, Math.max(0, Math.floor(leadRibosomeProgress * (codons.length + 0.75)))) : 0;
 
   if (!model.transcriptionOn) {
     return (
@@ -421,10 +423,12 @@ export function GeneExpressionTool() {
     { label: "把核糖体拖到 mRNA 附近，观察蛋白质产物增加。", done: model.translationOn },
   ];
   const transcriptionProgress = model.transcriptionOn ? clamp01(cycleProgress / 0.78) : 0;
-  const translationProgress = model.translationOn ? clamp01((cycleProgress - 0.28) / 0.62) : 0;
   const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
-  const ribosomeProgress = ribosomeCanRead ? Math.min(translationProgress, Math.max(0, transcriptionProgress - 0.08)) : 0;
-  const activeCodonIndex = ribosomeCanRead ? Math.min(codons.length - 1, Math.floor(ribosomeProgress * codons.length)) : -1;
+  const sequenceRibosomePhase = cycleProgress % 1;
+  const sequenceRibosomeProgress = clamp01((sequenceRibosomePhase - 0.28) / 0.62);
+  const sequenceIsReading = ribosomeCanRead && sequenceRibosomePhase >= 0.28 && sequenceRibosomePhase < 0.92 && sequenceRibosomeProgress <= Math.max(0.12, transcriptionProgress);
+  const activeCodonIndex = sequenceIsReading ? Math.min(codons.length - 1, Math.floor(sequenceRibosomeProgress * codons.length)) : -1;
+  const visibleProteinCount = sequenceIsReading ? Math.min(model.protein, Math.floor(sequenceRibosomeProgress * 12)) : 0;
   const integratedMolecules = molecules.filter((molecule) => molecule.type !== "tf" && inBox(molecule, zones[moleculeZone(molecule.type)]));
 
   useEffect(() => {
@@ -664,7 +668,7 @@ export function GeneExpressionTool() {
               )
             )}
 
-            <ProductBeads count={model.translationOn ? Math.min(model.protein, Math.max(1, Math.floor(cycleProgress * 12))) : 0} animated={!prefersReducedMotion} />
+            <ProductBeads count={visibleProteinCount} animated={!prefersReducedMotion} />
 
             <g transform="translate(46 86)">
               <rect width={190} height={28} rx={999} fill="rgba(250,247,241,0.74)" stroke="rgba(94,68,42,0.16)" />
