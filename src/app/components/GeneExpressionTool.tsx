@@ -565,14 +565,17 @@ export function GeneExpressionTool() {
   }
 
   function resetScene() {
+    progressRef.current = 0;
     setMolecules(initialMolecules);
     setDragging(null);
+    setCycleProgress(0);
     setIsPaused(false);
     setDisplayedMrnaCount(0);
     setDisplayedProteinCount(0);
   }
 
   function runExpressionPreset() {
+    progressRef.current = 0;
     setMolecules((items) =>
       items.map((molecule) => {
         const zoneKey = moleculeZone(molecule.type);
@@ -581,6 +584,7 @@ export function GeneExpressionTool() {
       })
     );
     setDragging(null);
+    setCycleProgress(0);
     setIsPaused(false);
     setDisplayedMrnaCount(0);
     setDisplayedProteinCount(0);
