@@ -17,7 +17,7 @@ export const works = [
     id: 3, slug: "research-prompt-kit", category: "AI工具" as Category,
     icon: <IconAI size={36} color="var(--cherry-blue)" />,
     title: "科研助手 Prompt Kit",
-    desc: "可复制的生命科学科研 prompt，用于文献精读、实验设计、图表解读和论文检查。",
+    desc: "选择科研任务、填写材料，自动组装文献精读、实验设计、图表解读等可复制 prompt。",
     href: "/works/research-prompt-kit",
     tags: ["AI", "Prompt", "科研"],
     color: "var(--cherry-peach-light)", border: "var(--cherry-peach)", rotate: "-0.8deg",

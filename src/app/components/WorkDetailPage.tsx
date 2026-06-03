@@ -20,67 +20,157 @@ function ContentCard({ title, children }: { title: string; children: React.React
 }
 
 function PromptKitContent() {
+  const [activePromptIndex, setActivePromptIndex] = useState(0);
+  const [material, setMaterial] = useState("研究问题：\n样本/材料：\n已有结果：\n我最担心的问题：");
+  const [copied, setCopied] = useState(false);
   const prompts = [
     {
       title: "文献精读",
       input: "论文摘要、方法、结果图或 DOI",
       text: "请基于我提供的论文内容，按以下结构输出：研究问题、核心假设、样本与数据、关键方法、主要证据、作者结论、局限性、我需要进一步核查的点。不要补充论文中没有出现的信息；如果缺少证据，请标注“原文未说明”。",
       checks: ["结论是否只来自原文", "方法和证据是否对应", "局限性是否具体"],
+      output: ["研究问题", "主要证据", "局限性", "待核查点"],
     },
     {
       title: "实验设计检查",
       input: "实验目的、分组、样本量、操作步骤、统计方法",
       text: "请检查这份实验设计是否存在变量混杂、对照不足、重复数不足、统计方法不匹配或安全风险。输出时分为：必须修改、建议修改、可以保留、需要导师确认。每条意见都说明它会影响哪一种结论。",
       checks: ["阳性/阴性对照是否齐全", "重复数是否支持统计", "变量是否只改变一个核心因素"],
+      output: ["必须修改", "建议修改", "可以保留", "导师确认"],
     },
     {
       title: "图表解读",
       input: "图片、图注、实验分组和统计标记",
       text: "请逐步解释这张图：先说明坐标轴、单位和分组，再描述趋势、离散程度和显著性标记，最后判断图中证据能支持哪些结论、不能支持哪些结论。请把观察事实、合理推断和过度推断分开。",
       checks: ["是否读清坐标轴", "是否区分趋势与因果", "是否遗漏对照组"],
+      output: ["观察事实", "合理推断", "不能支持", "下一步检查"],
     },
     {
       title: "论文逻辑检查",
       input: "讨论段落、结果摘要、目标期刊风格",
       text: "请检查下面这段论文讨论是否存在结论过度、证据跳跃、术语不一致、引用不足或重复表达。请逐句给出修改建议，并说明修改理由。不要替我新增未经证实的结论。",
       checks: ["每个结论是否有结果支持", "术语是否前后一致", "讨论是否区分结果和推测"],
+      output: ["逐句问题", "修改建议", "修改理由", "缺失证据"],
     },
     {
       title: "审稿意见回应",
       input: "审稿意见、原文段落、已完成的补充分析",
       text: "请把审稿意见拆成可回应的任务：需要新增实验、需要补充分析、需要改写解释、需要礼貌澄清。为每条意见生成回应结构：感谢、理解、已修改内容、修改位置、仍需说明的限制。",
       checks: ["回应是否逐条对应", "语气是否克制", "是否标明修改位置"],
+      output: ["任务拆解", "回应草稿", "修改位置", "限制说明"],
     },
     {
       title: "术语一致性检查",
       input: "论文全文或章节草稿",
       text: "请列出文中同一概念的不同写法、缩写首次出现位置、中文和英文术语是否混用、变量名是否前后一致。输出为三列：术语、发现的问题、建议统一写法。",
       checks: ["缩写是否首次定义", "同义词是否混用", "图表和正文是否一致"],
+      output: ["术语", "问题", "统一写法", "出现位置"],
     },
   ];
+  const activePrompt = prompts[activePromptIndex];
+  const finalPrompt = `${activePrompt.text}
+
+【我的材料】
+${material.trim() || "请在这里粘贴材料。"}
+
+【输出格式】
+请使用清晰小标题，并包含：${activePrompt.output.join("、")}。
+
+【质量要求】
+${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")}`;
+
+  async function copyPrompt() {
+    try {
+      await navigator.clipboard.writeText(finalPrompt);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1400);
+    } catch {
+      setCopied(false);
+    }
+  }
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
-      {prompts.map((prompt) => (
-        <ContentCard key={prompt.title} title={prompt.title}>
-          <div style={{ display: "grid", gap: "0.7rem" }}>
-            <div style={{ background: "var(--muted)", borderRadius: 12, padding: "0.65rem", color: "var(--cherry-warm-mid)", fontSize: "0.82rem" }}>
-              <strong style={{ color: "var(--cherry-warm-brown)" }}>输入材料：</strong>{prompt.input}
+    <section id="prompt-kit-builder" style={{ display: "grid", gap: "1rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(230px, 0.78fr) minmax(0, 1.3fr)", gap: "1rem", alignItems: "start" }}>
+        <aside style={{ display: "grid", gap: "0.7rem" }}>
+          {prompts.map((prompt, index) => {
+            const active = activePromptIndex === index;
+            return (
+              <button key={prompt.title} onClick={() => { setActivePromptIndex(index); setCopied(false); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
+                <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>{prompt.title}</div>
+                <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginBottom: "0.55rem" }}>{prompt.input}</div>
+                <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                  {prompt.output.slice(0, 2).map((item) => (
+                    <span key={item} style={{ background: "rgba(250,247,241,0.78)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.16rem 0.48rem", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </button>
+            );
+          })}
+        </aside>
+
+        <div style={{ display: "grid", gap: "1rem" }}>
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.8rem" }}>
+              <div>
+                <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "1.05rem" }}>{activePrompt.title}</div>
+                <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", marginTop: "0.25rem" }}>输入材料：{activePrompt.input}</div>
+              </div>
+              <button onClick={copyPrompt} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+                {copied ? "已复制" : "复制 prompt"}
+              </button>
             </div>
-            <code style={{ display: "block", whiteSpace: "pre-wrap", color: "var(--cherry-warm-brown)", background: "var(--cherry-yellow-light)", borderRadius: 12, padding: "0.85rem", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65 }}>
-              {prompt.text}
-            </code>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-              {prompt.checks.map((check) => (
-                <span key={check} style={{ background: "rgba(250,247,241,0.76)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.2rem 0.55rem", color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 800 }}>
-                  {check}
-                </span>
+
+            <textarea
+              value={material}
+              onChange={(event) => setMaterial(event.target.value)}
+              style={{ width: "100%", minHeight: 154, resize: "vertical", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.9rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.9rem", lineHeight: 1.6, outline: "none", boxSizing: "border-box", marginBottom: "0.9rem" }}
+              aria-label="科研材料输入框"
+            />
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.7rem", marginBottom: "0.9rem" }}>
+              {activePrompt.output.map((item, index) => (
+                <div key={item} style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 14, padding: "0.65rem", color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.78rem" }}>
+                  {index + 1}. {item}
+                </div>
               ))}
             </div>
+
+            <code style={{ display: "block", whiteSpace: "pre-wrap", color: "var(--cherry-warm-brown)", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.9rem", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65 }}>
+              {finalPrompt}
+            </code>
           </div>
-        </ContentCard>
-      ))}
-    </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.8rem" }}>
+            <ContentCard title="质控清单">
+              <div style={{ display: "grid", gap: "0.45rem" }}>
+                {activePrompt.checks.map((check, index) => (
+                  <div key={check} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                    <span style={{ width: 20, height: 20, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900, flexShrink: 0 }}>{index + 1}</span>
+                    <span>{check}</span>
+                  </div>
+                ))}
+              </div>
+            </ContentCard>
+            <ContentCard title="使用提醒">
+              先放入原文、图注或实验设计，再把生成的 prompt 发给 AI。涉及论文结论时，要求模型标出“原文未说明”，可以减少凭空补充。
+            </ContentCard>
+          </div>
+        </div>
+      </div>
+
+      <style>
+        {`
+          @media (max-width: 880px) {
+            #prompt-kit-builder > div:first-child {
+              grid-template-columns: 1fr !important;
+            }
+          }
+        `}
+      </style>
+    </section>
   );
 }
 
