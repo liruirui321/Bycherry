@@ -501,7 +501,7 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
         {chapters.map((chapter, index) => {
           const active = activeChapterIndex === index;
           return (
-            <button key={chapter.title} aria-pressed={active} onClick={() => choosePlantChapter(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
+            <button key={chapter.title} type="button" aria-pressed={active} onClick={() => choosePlantChapter(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
               <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-red)", fontFamily: "'Caveat', cursive", fontSize: "0.95rem", fontWeight: 900, marginBottom: "0.35rem" }}>{chapter.time}</div>
               <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem", lineHeight: 1.45, marginBottom: "0.5rem" }}>{chapter.title}</div>
               <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.78rem", marginBottom: "0.55rem" }}>{chapter.innovation}</div>
@@ -690,7 +690,7 @@ ${active.pitfall}
     <section id="concept-explainer-tool" style={{ display: "grid", gap: "1rem" }}>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
         {Object.keys(explanations).map((name) => (
-          <button key={name} aria-pressed={concept === name} onClick={() => chooseConcept(name)} style={{ border: concept === name ? `1.5px solid ${active.color}` : "1.5px solid var(--border)", background: concept === name ? "var(--cherry-yellow-light)" : "var(--card)", borderRadius: 999, padding: "0.45rem 0.9rem", color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>
+          <button key={name} type="button" aria-pressed={concept === name} onClick={() => chooseConcept(name)} style={{ border: concept === name ? `1.5px solid ${active.color}` : "1.5px solid var(--border)", background: concept === name ? "var(--cherry-yellow-light)" : "var(--card)", borderRadius: 999, padding: "0.45rem 0.9rem", color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>
             {name}
           </button>
         ))}
@@ -715,14 +715,14 @@ ${active.pitfall}
 
       <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.25fr) minmax(280px, 0.78fr)", gap: "1rem", alignItems: "stretch" }}>
         <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", position: "relative", overflow: "hidden" }}>
-          <svg style={{ position: "absolute", right: -20, top: -14, opacity: 0.16 }} width="180" height="150" viewBox="0 0 180 150" fill="none">
+          <svg style={{ position: "absolute", right: -20, top: -14, opacity: 0.16 }} width="180" height="150" viewBox="0 0 180 150" fill="none" aria-hidden="true" focusable="false">
             <path d="M28 128 Q44 54 146 22 Q150 96 28 128Z" fill={active.color} />
             <path d="M48 112 Q86 76 134 32" stroke="var(--cherry-warm-brown)" strokeWidth="3" strokeLinecap="round" opacity="0.28" />
           </svg>
           <div style={{ position: "relative", zIndex: 1 }}>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: "0.9rem" }}>
               {active.levels.map((level, index) => (
-                <button key={level.title} aria-pressed={levelIndex === index} onClick={() => setLevelIndex(index)} style={{ background: levelIndex === index ? active.color : "var(--muted)", color: levelIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
+                <button key={level.title} type="button" aria-pressed={levelIndex === index} onClick={() => setLevelIndex(index)} style={{ background: levelIndex === index ? active.color : "var(--muted)", color: levelIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
                   {level.title}
                 </button>
               ))}
@@ -751,7 +751,7 @@ ${active.pitfall}
               const correct = option === active.quiz.answer;
               const selected = quizChoice === option;
               return (
-                <button key={option} aria-pressed={selected} onClick={() => setQuizChoice(option)} style={{ textAlign: "left", background: selected ? (correct ? "var(--cherry-sage-light)" : "var(--cherry-peach-light)") : "var(--muted)", border: selected ? `1.5px solid ${correct ? "var(--cherry-forest)" : "var(--cherry-red)"}` : "1.5px solid var(--border)", borderRadius: 14, padding: "0.58rem 0.72rem", color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>
+                <button key={option} type="button" aria-pressed={selected} onClick={() => setQuizChoice(option)} style={{ textAlign: "left", background: selected ? (correct ? "var(--cherry-sage-light)" : "var(--cherry-peach-light)") : "var(--muted)", border: selected ? `1.5px solid ${correct ? "var(--cherry-forest)" : "var(--cherry-red)"}` : "1.5px solid var(--border)", borderRadius: 14, padding: "0.58rem 0.72rem", color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>
                   {option}
                 </button>
               );
@@ -1036,7 +1036,7 @@ ${effectiveRepair.title}
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>流程控制</div>
             <div style={{ display: "grid", gap: 7 }}>
               {stages.map((item, index) => (
-                <button key={item.key} aria-pressed={step === item.key} onClick={() => chooseCrisprStep(item.key)} style={{ display: "grid", gridTemplateColumns: "26px 1fr", gap: 8, alignItems: "start", textAlign: "left", background: step === item.key ? "var(--cherry-sage-light)" : "var(--muted)", border: step === item.key ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.62rem", cursor: "pointer" }}>
+                <button key={item.key} type="button" aria-pressed={step === item.key} onClick={() => chooseCrisprStep(item.key)} style={{ display: "grid", gridTemplateColumns: "26px 1fr", gap: 8, alignItems: "start", textAlign: "left", background: step === item.key ? "var(--cherry-sage-light)" : "var(--muted)", border: step === item.key ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.62rem", cursor: "pointer" }}>
                   <span style={{ width: 24, height: 24, borderRadius: "50%", background: stepIndex >= index ? "var(--cherry-forest)" : "rgba(250,247,241,0.9)", color: stepIndex >= index ? "#FAF7F1" : "var(--cherry-warm-mid)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 900 }}>{index + 1}</span>
                   <span>
                     <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>{item.label}</strong>
@@ -1051,7 +1051,7 @@ ${effectiveRepair.title}
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>向导 RNA</div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: "0.75rem" }}>
               {guides.map((guide, index) => (
-                <button key={guide.name} aria-pressed={guideIndex === index} onClick={() => chooseCrisprGuide(index)} style={{ background: guideIndex === index ? "var(--cherry-forest)" : "var(--muted)", color: guideIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.4rem 0.74rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                <button key={guide.name} type="button" aria-pressed={guideIndex === index} onClick={() => chooseCrisprGuide(index)} style={{ background: guideIndex === index ? "var(--cherry-forest)" : "var(--muted)", color: guideIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.4rem 0.74rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                   {guide.name}
                 </button>
               ))}
@@ -1094,7 +1094,7 @@ ${effectiveRepair.title}
               ["replace", "模板替换"],
               ["failed", "未成功编辑"],
             ] as const).map(([key, label]) => (
-              <button key={key} aria-pressed={repair === key} onClick={() => chooseCrisprRepair(key)} style={{ background: repair === key ? "var(--cherry-forest)" : "var(--muted)", color: repair === key ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
+              <button key={key} type="button" aria-pressed={repair === key} onClick={() => chooseCrisprRepair(key)} style={{ background: repair === key ? "var(--cherry-forest)" : "var(--muted)", color: repair === key ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
                 {label}
               </button>
             ))}
