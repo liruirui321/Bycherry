@@ -1,438 +1,334 @@
 import { useMemo, useState } from "react";
-import { IconAI, IconArrowRight, IconBook, IconCheck, IconDNA, IconFlask, IconMicroscope, IconSparkle } from "./Icons";
-
-const steps = [
-  {
-    label: "看见 DNA",
-    title: "基因是一段可以被读取的 DNA",
-    text: "这段 DNA 像一小段说明书。细胞不会直接把整本说明书拿去做蛋白质，而是先读取其中需要的一段。",
-  },
-  {
-    label: "转录",
-    title: "DNA 模板被转录成 mRNA",
-    text: "转录时，细胞根据 DNA 模板生成一条 mRNA。这里把 T 换成 U，是 RNA 和 DNA 的一个重要区别。",
-  },
-  {
-    label: "进入核糖体",
-    title: "mRNA 把信息带到核糖体",
-    text: "mRNA 像一张临时抄写的小纸条，把基因信息带到负责合成蛋白质的核糖体附近。",
-  },
-  {
-    label: "翻译",
-    title: "核糖体每三个碱基读取一次",
-    text: "mRNA 上每三个碱基组成一个密码子。核糖体按密码子顺序连接对应的氨基酸。",
-  },
-  {
-    label: "形成蛋白质",
-    title: "氨基酸链折叠成蛋白质",
-    text: "多个氨基酸连接成链，之后会进一步折叠，形成具有特定功能的蛋白质。",
-  },
-];
+import { IconBook, IconCheck, IconDNA, IconFlask, IconMicroscope, IconSparkle } from "./Icons";
 
 const codons = [
-  { dna: "ATG", rna: "AUG", amino: "Met" },
-  { dna: "GAA", rna: "GAA", amino: "Glu" },
-  { dna: "TTT", rna: "UUU", amino: "Phe" },
-  { dna: "CCG", rna: "CCG", amino: "Pro" },
+  { rna: "AUG", amino: "Met", color: "var(--cherry-peach)" },
+  { rna: "GAA", amino: "Glu", color: "var(--cherry-yellow)" },
+  { rna: "UUU", amino: "Phe", color: "var(--cherry-sage)" },
+  { rna: "CCG", amino: "Pro", color: "var(--cherry-blue)" },
 ];
 
-const quiz = [
-  {
-    question: "mRNA 主要由哪个过程产生？",
-    options: ["转录", "翻译", "光合作用"],
-    answer: "转录",
-  },
-  {
-    question: "mRNA 中每几个碱基通常组成一个密码子？",
-    options: ["1 个", "3 个", "6 个"],
-    answer: "3 个",
-  },
-  {
-    question: "翻译主要发生在哪里？",
-    options: ["核糖体", "细胞壁", "叶绿体基质"],
-    answer: "核糖体",
-  },
-  {
-    question: "蛋白质的基本组成单位是什么？",
-    options: ["氨基酸", "葡萄糖", "脂肪酸"],
-    answer: "氨基酸",
-  },
-  {
-    question: "RNA 中通常用哪个碱基替代 DNA 里的 T？",
-    options: ["U", "C", "G"],
-    answer: "U",
-  },
+const checks = [
+  "转录因子越多，RNA 聚合酶越容易启动转录。",
+  "mRNA 越多，核糖体越有机会读取密码子。",
+  "核糖体越多，蛋白质合成速度越快。",
 ];
 
-function SequencePill({ text, active, muted = false }: { text: string; active: boolean; muted?: boolean }) {
+function SliderControl({
+  label,
+  value,
+  setValue,
+  note,
+}: {
+  label: string;
+  value: number;
+  setValue: (value: number) => void;
+  note: string;
+}) {
   return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minWidth: 48,
-        padding: "0.38rem 0.62rem",
-        borderRadius: 999,
-        background: active ? "var(--cherry-yellow-light)" : muted ? "rgba(250,247,241,0.5)" : "var(--card)",
-        border: active ? "1.5px solid var(--cherry-yellow)" : "1.5px solid var(--border)",
-        color: active ? "var(--cherry-bark)" : "var(--cherry-warm-mid)",
-        fontWeight: 800,
-        fontSize: "0.8rem",
-        transition: "all 0.25s ease",
-      }}
-    >
-      {text}
-    </span>
+    <label style={{ display: "grid", gap: "0.45rem" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "baseline" }}>
+        <span style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>{label}</span>
+        <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-red)", fontWeight: 800 }}>{value}</span>
+      </div>
+      <input
+        type="range"
+        min={0}
+        max={5}
+        value={value}
+        onChange={(event) => setValue(Number(event.target.value))}
+        style={{ width: "100%", accentColor: "var(--cherry-red)" }}
+      />
+      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5 }}>{note}</span>
+    </label>
   );
 }
 
-function ProteinBead({ amino, index, visible }: { amino: string; index: number; visible: boolean }) {
-  const colors = ["var(--cherry-peach)", "var(--cherry-yellow)", "var(--cherry-sage)", "var(--cherry-blue)"];
-
+function Molecule({
+  left,
+  top,
+  label,
+  color,
+  delay = 0,
+}: {
+  left: string;
+  top: string;
+  label: string;
+  color: string;
+  delay?: number;
+}) {
   return (
     <div
+      className="gene-molecule"
       style={{
-        width: 58,
-        height: 58,
-        borderRadius: "50%",
-        background: colors[index % colors.length],
-        border: "2px solid rgba(94,68,42,0.18)",
+        position: "absolute",
+        left,
+        top,
+        width: 48,
+        height: 38,
+        borderRadius: "45% 55% 50% 50% / 55% 40% 60% 45%",
+        background: color,
+        border: "1.5px solid rgba(94,68,42,0.18)",
+        boxShadow: "3px 4px 0px rgba(94,68,42,0.08)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         color: "var(--cherry-warm-brown)",
         fontWeight: 900,
-        fontSize: "0.78rem",
-        boxShadow: "3px 5px 0px rgba(94,68,42,0.1)",
-        opacity: visible ? 1 : 0.18,
-        transform: visible ? "translateY(0) scale(1)" : "translateY(10px) scale(0.9)",
-        transition: "all 0.3s ease",
+        fontSize: "0.72rem",
+        animationDelay: `${delay}s`,
       }}
     >
-      {amino}
+      {label}
+    </div>
+  );
+}
+
+function ProteinChain({ activeCount }: { activeCount: number }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+      {codons.map((codon, index) => (
+        <div
+          key={codon.amino}
+          style={{
+            width: 48,
+            height: 48,
+            borderRadius: "50%",
+            background: codon.color,
+            border: "1.5px solid rgba(94,68,42,0.2)",
+            boxShadow: "3px 4px 0px rgba(94,68,42,0.1)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "var(--cherry-warm-brown)",
+            fontWeight: 900,
+            fontSize: "0.72rem",
+            opacity: index < activeCount ? 1 : 0.25,
+            transform: index < activeCount ? "translateY(0) scale(1)" : "translateY(8px) scale(0.92)",
+            transition: "all 0.25s ease",
+          }}
+        >
+          {codon.amino}
+        </div>
+      ))}
     </div>
   );
 }
 
 export function GeneExpressionTool() {
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [transcriptionFactors, setTranscriptionFactors] = useState(3);
+  const [polymerase, setPolymerase] = useState(3);
+  const [ribosomes, setRibosomes] = useState(3);
 
-  const activeCodonIndex = useMemo(() => {
-    if (step < 3) return -1;
-    if (step === 3) return 1;
-    return 3;
-  }, [step]);
+  const expression = useMemo(() => {
+    const promoterAccess = transcriptionFactors / 5;
+    const transcriptionRate = Math.round(promoterAccess * polymerase * 2);
+    const mrna = Math.max(0, transcriptionRate);
+    const protein = Math.round(mrna * (0.6 + ribosomes / 4));
+    const chainProgress = Math.min(4, Math.max(1, Math.ceil((protein / 12) * 4)));
 
-  const correctCount = quiz.reduce((count, item, index) => {
-    return count + (answers[index] === item.answer ? 1 : 0);
-  }, 0);
+    return { promoterAccess, transcriptionRate, mrna, protein, chainProgress };
+  }, [transcriptionFactors, polymerase, ribosomes]);
 
   return (
     <section
       id="gene-expression"
       style={{
         fontFamily: "'Nunito', sans-serif",
-        padding: "5rem 1.5rem",
+        padding: "4.5rem 1.5rem 5rem",
         maxWidth: 1120,
         margin: "0 auto",
         position: "relative",
         scrollMarginTop: 76,
       }}
     >
-      <div style={{ position: "absolute", top: 46, right: 8, opacity: 0.16, pointerEvents: "none" }}>
-        <IconDNA size={88} color1="var(--cherry-blue)" color2="var(--cherry-red)" />
-      </div>
-
-      <div style={{ marginBottom: "2.2rem", maxWidth: 720 }}>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: "0.75rem" }}>
-          <IconMicroscope size={20} color="var(--cherry-warm-mid)" />
-          <span style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 700 }}>
-            第一个落地小工具
-          </span>
+      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap", marginBottom: "1.5rem" }}>
+        <div>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: "0.65rem" }}>
+            <IconMicroscope size={20} color="var(--cherry-warm-mid)" />
+            <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-warm-mid)", fontWeight: 800 }}>可操作学习模拟</span>
+          </div>
+          <h2 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.7rem, 4vw, 2.45rem)", fontWeight: 900, lineHeight: 1.2 }}>
+            调节分子，观察蛋白质产量
+          </h2>
         </div>
-        <h2
-          style={{
-            color: "var(--cherry-warm-brown)",
-            fontSize: "clamp(1.7rem, 3.6vw, 2.35rem)",
-            fontWeight: 900,
-            lineHeight: 1.25,
-            marginBottom: "0.8rem",
-          }}
-        >
-          基因表达可视化
-        </h2>
-        <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.75, fontSize: "0.95rem" }}>
-          拖动步骤，看 DNA 如何经过转录和翻译，变成一条由氨基酸连接起来的蛋白质小链。
-        </p>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {["转录因子", "RNA 聚合酶", "核糖体"].map((item) => (
+            <span key={item} style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.32rem 0.78rem", color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800 }}>
+              {item}
+            </span>
+          ))}
+        </div>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.65fr)",
-          gap: "1.5rem",
-          alignItems: "stretch",
-        }}
-      >
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(290px, 0.65fr)", gap: "1.25rem", alignItems: "stretch" }}>
         <div
           style={{
-            background: "var(--card)",
+            minHeight: 520,
+            background: "linear-gradient(180deg, #FDF9EF 0%, #F3E7D6 100%)",
             border: "1.5px solid var(--border)",
-            borderRadius: 22,
-            padding: "1.4rem",
-            boxShadow: "5px 8px 0px rgba(94,68,42,0.08)",
+            borderRadius: 28,
+            boxShadow: "6px 10px 0px rgba(94,68,42,0.09)",
+            position: "relative",
             overflow: "hidden",
+            padding: "1.2rem",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap", marginBottom: "1.1rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <IconFlask size={22} color="var(--cherry-sage)" />
-              <strong style={{ color: "var(--cherry-warm-brown)" }}>互动流程图</strong>
-            </div>
-            <span
-              style={{
-                background: "var(--cherry-peach-light)",
-                color: "var(--cherry-red)",
-                borderRadius: 999,
-                padding: "0.25rem 0.75rem",
-                fontSize: "0.76rem",
-                fontWeight: 800,
-              }}
-            >
-              Step {step + 1} / {steps.length}
-            </span>
-          </div>
-
-          <input
-            aria-label="基因表达步骤"
-            type="range"
-            min={0}
-            max={steps.length - 1}
-            value={step}
-            onChange={(event) => setStep(Number(event.target.value))}
-            style={{ width: "100%", accentColor: "var(--cherry-red)", marginBottom: "0.9rem" }}
-          />
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 7, marginBottom: "1.4rem" }}>
-            {steps.map((item, index) => (
-              <button
-                key={item.label}
-                onClick={() => setStep(index)}
-                style={{
-                  minHeight: 42,
-                  borderRadius: 12,
-                  border: index === step ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)",
-                  background: index === step ? "var(--cherry-sage-light)" : "rgba(250,247,241,0.75)",
-                  color: index === step ? "var(--cherry-forest)" : "var(--cherry-warm-mid)",
-                  fontWeight: 800,
-                  fontSize: "0.74rem",
-                  cursor: "pointer",
-                }}
-              >
-                {item.label}
-              </button>
-            ))}
+          <div style={{ position: "absolute", inset: 22, borderRadius: "44% 56% 48% 52% / 56% 42% 58% 44%", background: "rgba(169,201,172,0.22)", border: "2px dashed rgba(93,140,101,0.34)" }} />
+          <div style={{ position: "absolute", top: 24, left: 28, display: "flex", alignItems: "center", gap: 8, color: "var(--cherry-forest)", fontWeight: 900 }}>
+            <IconFlask size={18} color="var(--cherry-forest)" />
+            cell view
           </div>
 
           <div
             style={{
-              background: "linear-gradient(180deg, rgba(245,237,204,0.65), rgba(250,247,241,0.9))",
-              border: "1.5px dashed rgba(94,68,42,0.2)",
-              borderRadius: 18,
+              position: "absolute",
+              left: "8%",
+              right: "8%",
+              top: "38%",
+              height: 92,
+              borderRadius: 999,
+              background: "rgba(250,247,241,0.72)",
+              border: "1.5px solid rgba(94,68,42,0.16)",
+              boxShadow: "inset 0 2px 0 rgba(255,255,255,0.65)",
+            }}
+          >
+            <div style={{ position: "absolute", left: "5%", right: "5%", top: 30, height: 8, borderRadius: 999, background: "linear-gradient(90deg, var(--cherry-blue), var(--cherry-sage), var(--cherry-yellow), var(--cherry-red))" }} />
+            <div style={{ position: "absolute", left: "5%", right: "5%", top: 50, height: 8, borderRadius: 999, background: "linear-gradient(90deg, var(--cherry-red), var(--cherry-yellow), var(--cherry-sage), var(--cherry-blue))", opacity: 0.75 }} />
+            <span style={{ position: "absolute", left: "10%", top: 8, color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.76rem" }}>promoter</span>
+            <span style={{ position: "absolute", right: "14%", top: 8, color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.76rem" }}>gene</span>
+            <div style={{ position: "absolute", left: "12%", top: 26, width: 44, height: 22, borderRadius: 999, background: expression.promoterAccess > 0.5 ? "var(--cherry-yellow)" : "rgba(221,185,90,0.35)", border: "1.5px solid rgba(94,68,42,0.16)" }} />
+            <div
+              style={{
+                position: "absolute",
+                left: `${18 + polymerase * 9}%`,
+                top: 18,
+                width: 66,
+                height: 54,
+                borderRadius: "45% 55% 48% 52%",
+                background: "var(--cherry-blue-light)",
+                border: "2px solid var(--cherry-blue)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "var(--cherry-warm-brown)",
+                fontWeight: 900,
+                fontSize: "0.68rem",
+                transition: "left 0.35s ease",
+              }}
+            >
+              RNA pol
+            </div>
+          </div>
+
+          {Array.from({ length: transcriptionFactors }).map((_, index) => (
+            <Molecule key={`tf-${index}`} left={`${14 + index * 8}%`} top={`${18 + (index % 2) * 9}%`} label="TF" color="var(--cherry-yellow-light)" delay={index * 0.12} />
+          ))}
+          {Array.from({ length: polymerase }).map((_, index) => (
+            <Molecule key={`pol-${index}`} left={`${54 + index * 6}%`} top={`${17 + (index % 2) * 10}%`} label="pol" color="var(--cherry-blue-light)" delay={index * 0.16} />
+          ))}
+          {Array.from({ length: ribosomes }).map((_, index) => (
+            <Molecule key={`rib-${index}`} left={`${20 + index * 11}%`} top={`${68 + (index % 2) * 7}%`} label="ribo" color="var(--cherry-peach-light)" delay={index * 0.14} />
+          ))}
+
+          <div
+            style={{
+              position: "absolute",
+              left: "18%",
+              top: "54%",
+              width: `${Math.max(80, expression.mrna * 18)}px`,
+              maxWidth: "58%",
+              height: 12,
+              borderRadius: 999,
+              background: "repeating-linear-gradient(90deg, var(--cherry-red), var(--cherry-red) 16px, var(--cherry-peach) 16px, var(--cherry-peach) 32px)",
+              opacity: expression.mrna > 0 ? 1 : 0.18,
+              transition: "all 0.35s ease",
+              boxShadow: "0 3px 0 rgba(94,68,42,0.08)",
+            }}
+          />
+          <span style={{ position: "absolute", left: "18%", top: "58%", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", fontWeight: 800 }}>mRNA x {expression.mrna}</span>
+
+          <div
+            style={{
+              position: "absolute",
+              right: "8%",
+              bottom: "9%",
+              width: 210,
+              minHeight: 148,
+              borderRadius: 22,
+              background: "rgba(250,247,241,0.82)",
+              border: "1.5px solid var(--border)",
               padding: "1rem",
             }}
           >
-            <div style={{ display: "grid", gap: "1rem" }}>
-              <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: "0.55rem", color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
-                  <IconDNA size={22} /> DNA
-                </div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                  {codons.map((item, index) => (
-                    <SequencePill key={item.dna} text={item.dna} active={step === 0 || activeCodonIndex === index} muted={step > 1} />
-                  ))}
-                </div>
-              </div>
-
-              <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--cherry-warm-mid)", fontWeight: 800, opacity: step >= 1 ? 1 : 0.35, transition: "opacity 0.25s" }}>
-                <IconArrowRight size={16} color="var(--cherry-red)" />
-                转录：T 变成 U，生成 mRNA
-              </div>
-
-              <div style={{ opacity: step >= 1 ? 1 : 0.25, transform: step >= 1 ? "translateX(0)" : "translateX(-10px)", transition: "all 0.3s ease" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: "0.55rem", color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
-                  <IconBook size={21} /> mRNA
-                </div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                  {codons.map((item, index) => (
-                    <SequencePill key={item.rna} text={item.rna} active={step >= 3 && activeCodonIndex >= index} muted={step < 1} />
-                  ))}
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "minmax(130px, 190px) minmax(0, 1fr)",
-                  gap: "1rem",
-                  alignItems: "center",
-                  marginTop: "0.2rem",
-                }}
-              >
-                <div
-                  style={{
-                    minHeight: 108,
-                    borderRadius: "48% 52% 45% 55% / 55% 45% 55% 45%",
-                    background: step >= 2 ? "var(--cherry-blue-light)" : "rgba(194,220,233,0.28)",
-                    border: "2px solid rgba(122,175,200,0.6)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    textAlign: "center",
-                    color: "var(--cherry-warm-brown)",
-                    fontWeight: 900,
-                    transition: "all 0.25s ease",
-                  }}
-                >
-                  核糖体
-                  <br />
-                  ribosome
-                </div>
-
-                <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: "0.7rem", color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
-                    <IconSparkle size={17} color="var(--cherry-peach)" /> 蛋白质小链
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                    {codons.map((item, index) => (
-                      <ProteinBead key={item.amino} amino={item.amino} index={index} visible={step >= 4 || (step >= 3 && index <= activeCodonIndex)} />
-                    ))}
-                  </div>
-                </div>
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>
+              <IconSparkle size={16} color="var(--cherry-peach)" />
+              protein product
+            </div>
+            <ProteinChain activeCount={expression.chainProgress} />
+            <div style={{ marginTop: "0.8rem", color: "var(--cherry-red)", fontWeight: 900, fontSize: "1.2rem" }}>
+              {expression.protein} molecules
             </div>
           </div>
         </div>
 
-        <aside
-          style={{
-            display: "grid",
-            gap: "1rem",
-            alignContent: "start",
-          }}
-        >
-          <div
-            style={{
-              background: "var(--cherry-yellow-light)",
-              border: "1.5px solid var(--cherry-yellow)",
-              borderRadius: 20,
-              padding: "1.25rem",
-              boxShadow: "4px 7px 0px rgba(94,68,42,0.08)",
-            }}
-          >
-            <div style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 700, marginBottom: "0.4rem" }}>
-              这一幕在讲
+        <aside style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.25rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "1rem" }}>
+              <IconDNA size={20} />
+              分子控制台
             </div>
-            <h3 style={{ color: "var(--cherry-warm-brown)", fontSize: "1.05rem", fontWeight: 900, lineHeight: 1.45, marginBottom: "0.55rem" }}>
-              {steps[step].title}
-            </h3>
-            <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.88rem", lineHeight: 1.75 }}>
-              {steps[step].text}
-            </p>
+            <div style={{ display: "grid", gap: "1rem" }}>
+              <SliderControl label="转录因子" value={transcriptionFactors} setValue={setTranscriptionFactors} note="帮助 RNA 聚合酶识别启动子区域。" />
+              <SliderControl label="RNA 聚合酶" value={polymerase} setValue={setPolymerase} note="负责根据 DNA 模板合成 mRNA。" />
+              <SliderControl label="核糖体" value={ribosomes} setValue={setRibosomes} note="读取 mRNA 密码子并连接氨基酸。" />
+            </div>
           </div>
 
-          <div
-            style={{
-              background: "var(--card)",
-              border: "1.5px solid var(--border)",
-              borderRadius: 20,
-              padding: "1.25rem",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: "1rem" }}>
-              <strong style={{ color: "var(--cherry-warm-brown)" }}>即时小测</strong>
-              <span style={{ color: "var(--cherry-red)", fontWeight: 900, fontSize: "0.82rem" }}>
-                {correctCount} / {quiz.length}
-              </span>
+          <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1.25rem" }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>实时读数</div>
+            <div style={{ display: "grid", gap: 8 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", color: "var(--cherry-warm-mid)", fontWeight: 800 }}><span>启动子可读性</span><span>{Math.round(expression.promoterAccess * 100)}%</span></div>
+              <div style={{ display: "flex", justifyContent: "space-between", color: "var(--cherry-warm-mid)", fontWeight: 800 }}><span>mRNA 生成</span><span>{expression.mrna}</span></div>
+              <div style={{ display: "flex", justifyContent: "space-between", color: "var(--cherry-warm-mid)", fontWeight: 800 }}><span>蛋白质产量</span><span>{expression.protein}</span></div>
             </div>
+          </div>
 
-            <div style={{ display: "grid", gap: "0.9rem" }}>
-              {quiz.map((item, index) => {
-                const chosen = answers[index];
-                const isCorrect = chosen === item.answer;
-
-                return (
-                  <div key={item.question}>
-                    <p style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 800, lineHeight: 1.45, marginBottom: "0.45rem" }}>
-                      {index + 1}. {item.question}
-                    </p>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                      {item.options.map((option) => {
-                        const selected = chosen === option;
-
-                        return (
-                          <button
-                            key={option}
-                            onClick={() => setAnswers((prev) => ({ ...prev, [index]: option }))}
-                            style={{
-                              border: selected ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)",
-                              background: selected ? (isCorrect ? "var(--cherry-sage-light)" : "var(--cherry-peach-light)") : "rgba(250,247,241,0.75)",
-                              color: selected ? "var(--cherry-warm-brown)" : "var(--cherry-warm-mid)",
-                              borderRadius: 999,
-                              padding: "0.28rem 0.62rem",
-                              fontSize: "0.75rem",
-                              fontWeight: 800,
-                              cursor: "pointer",
-                            }}
-                          >
-                            {selected && isCorrect ? <IconCheck size={12} color="var(--cherry-forest)" /> : null} {option}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.25rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.85rem" }}>
+              <IconBook size={18} />
+              观察提示
             </div>
-
-            <button
-              onClick={() => setAnswers({})}
-              style={{
-                marginTop: "1rem",
-                border: "1.5px solid var(--border)",
-                background: "transparent",
-                color: "var(--cherry-warm-mid)",
-                borderRadius: 999,
-                padding: "0.42rem 0.85rem",
-                fontWeight: 800,
-                fontSize: "0.78rem",
-                cursor: "pointer",
-              }}
-            >
-              重新作答
-            </button>
+            <div style={{ display: "grid", gap: "0.65rem" }}>
+              {checks.map((item) => (
+                <div key={item} style={{ display: "flex", gap: 8, color: "var(--cherry-warm-mid)", lineHeight: 1.6, fontSize: "0.86rem" }}>
+                  <IconCheck size={16} color="var(--cherry-forest)" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </aside>
       </div>
 
+      <div style={{ marginTop: "1.1rem", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "1rem", color: "var(--cherry-warm-mid)", lineHeight: 1.75, fontSize: "0.9rem" }}>
+        这个模型做了教学简化：把基因表达压缩到一个细胞视图中，重点观察“转录调控 → mRNA 数量 → 翻译效率 → 蛋白质产量”的关系。
+      </div>
+
       <style>
         {`
-          @media (max-width: 860px) {
-            #gene-expression > div:nth-of-type(2) {
-              grid-template-columns: 1fr !important;
-            }
+          .gene-molecule {
+            animation: geneFloat 3.8s ease-in-out infinite;
           }
 
-          @media (max-width: 560px) {
-            #gene-expression {
-              padding-left: 1rem !important;
-              padding-right: 1rem !important;
-            }
+          @keyframes geneFloat {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-10px) rotate(3deg); }
+          }
 
-            #gene-expression button {
-              min-width: 0;
+          @media (max-width: 880px) {
+            #gene-expression > div:nth-of-type(2) {
+              grid-template-columns: 1fr !important;
             }
           }
         `}
