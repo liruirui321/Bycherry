@@ -1,4 +1,4 @@
-import { IconArrowRight, IconBook, IconCheck, IconCoffee, IconLeafSmall } from "./Icons";
+import { IconBook, IconCheck, IconCoffee, IconLeafSmall } from "./Icons";
 import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
@@ -170,7 +170,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
                 textDecoration: "none",
               }}
             >
-              {backText} <IconArrowRight size={14} color="var(--cherry-forest)" />
+              ← {backText}
             </a>
 
             {(previousArticle || nextArticle) ? (
@@ -186,7 +186,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
                     }}
                     style={{ display: "grid", gap: "0.35rem", background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.85rem", color: "var(--cherry-warm-mid)", textDecoration: "none" }}
                   >
-                    <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-forest)", fontWeight: 900 }}>上一篇</span>
+                    <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-forest)", fontWeight: 900 }}>← 上一篇</span>
                     <strong style={{ color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.9rem" }}>{previousArticle.title}</strong>
                   </a>
                 ) : null}
@@ -201,7 +201,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
                     }}
                     style={{ display: "grid", gap: "0.35rem", background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.85rem", color: "var(--cherry-warm-mid)", textDecoration: "none" }}
                   >
-                    <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-forest)", fontWeight: 900 }}>下一篇</span>
+                    <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-forest)", fontWeight: 900 }}>下一篇 →</span>
                     <strong style={{ color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.9rem" }}>{nextArticle.title}</strong>
                   </a>
                 ) : null}
