@@ -803,9 +803,10 @@ function WorkHero({ work }: { work: Work }) {
   return (
     <section
       style={{
-        padding: "3.8rem 1.5rem 1.2rem",
+        padding: "1.15rem 1.5rem 0.75rem",
         background: "var(--background)",
         fontFamily: "'Nunito', sans-serif",
+        borderBottom: "1px solid rgba(94,68,42,0.1)",
       }}
     >
       <div style={{ maxWidth: 1060, margin: "0 auto" }}>
@@ -823,7 +824,7 @@ function WorkHero({ work }: { work: Work }) {
             textDecoration: "none",
             fontWeight: 900,
             fontSize: "0.86rem",
-            marginBottom: "1.6rem",
+            marginBottom: "0.65rem",
           }}
         >
           ← 回到作品集
@@ -831,53 +832,61 @@ function WorkHero({ work }: { work: Work }) {
 
         <div
           style={{
-            background: work.color,
-            border: `1.5px solid ${work.border}`,
-            borderRadius: 20,
-            padding: "1.2rem 1.35rem",
-            boxShadow: "6px 10px 0px rgba(94,68,42,0.1)",
-            position: "relative",
-            overflow: "hidden",
+            display: "grid",
+            gridTemplateColumns: "auto minmax(0, 1fr)",
+            alignItems: "center",
+            gap: "0.75rem",
           }}
         >
-          <div style={{ position: "absolute", top: -14, right: 26, width: 82, height: 22, background: "rgba(250,247,241,0.58)", borderRadius: 5, transform: "rotate(4deg)" }} />
-          <svg style={{ position: "absolute", right: 18, bottom: 10, opacity: 0.24 }} width="120" height="92" viewBox="0 0 120 92" fill="none">
-            <path d="M18 80 Q30 42 94 12 Q98 55 18 80Z" fill={work.border} />
-            <path d="M28 72 Q54 52 88 22" stroke="var(--cherry-warm-brown)" strokeWidth="2" strokeLinecap="round" opacity="0.35" />
-            <circle cx="35" cy="34" r="8" fill="var(--cherry-yellow)" opacity="0.8" />
-          </svg>
-          <div style={{ marginBottom: "0.55rem", transform: "scale(0.82)", transformOrigin: "left center" }}>{work.icon}</div>
-          <h1
+          <div
             style={{
-              color: "var(--cherry-warm-brown)",
-              fontSize: "clamp(1.55rem, 4vw, 2.3rem)",
-              fontWeight: 900,
-              lineHeight: 1.18,
-              marginBottom: "0.5rem",
-              maxWidth: 700,
+              width: 50,
+              height: 50,
+              borderRadius: 16,
+              background: work.color,
+              border: `1.5px solid ${work.border}`,
+              display: "grid",
+              placeItems: "center",
+              boxShadow: "3px 5px 0px rgba(94,68,42,0.08)",
             }}
           >
-            {work.title}
-          </h1>
-          <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.92rem", lineHeight: 1.65, maxWidth: 720, marginBottom: "0.7rem" }}>
-            {work.desc}
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {work.tags.map((tag) => (
-              <span
-                key={tag}
+            <div style={{ transform: "scale(0.72)" }}>{work.icon}</div>
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: "0.2rem" }}>
+              <h1
                 style={{
-                  background: "rgba(250,247,241,0.72)",
-                  color: "var(--cherry-warm-mid)",
-                  borderRadius: 999,
-                  padding: "0.22rem 0.65rem",
-                  fontSize: "0.74rem",
-                  fontWeight: 800,
+                  color: "var(--cherry-warm-brown)",
+                  fontSize: "clamp(1.35rem, 3vw, 1.85rem)",
+                  fontWeight: 900,
+                  lineHeight: 1.18,
+                  margin: 0,
                 }}
               >
-                {tag}
-              </span>
-            ))}
+                {work.title}
+              </h1>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+                {work.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    style={{
+                      background: "rgba(250,247,241,0.78)",
+                      color: "var(--cherry-warm-mid)",
+                      border: "1px solid rgba(94,68,42,0.1)",
+                      borderRadius: 999,
+                      padding: "0.16rem 0.55rem",
+                      fontSize: "0.7rem",
+                      fontWeight: 900,
+                    }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.85rem", lineHeight: 1.5, maxWidth: 780, margin: 0 }}>
+              {work.desc}
+            </p>
           </div>
         </div>
       </div>

@@ -503,7 +503,7 @@ export function GeneExpressionTool() {
       id="gene-expression"
       style={{
         fontFamily: "'Nunito', sans-serif",
-        padding: "2rem 1.5rem 5rem",
+        padding: "1rem 1.5rem 5rem",
         maxWidth: 1180,
         margin: "0 auto",
         scrollMarginTop: 76,
