@@ -287,112 +287,196 @@ function ConceptExplainerContent() {
 
 function CrisprContent() {
   const [guideIndex, setGuideIndex] = useState(0);
+  const [step, setStep] = useState<"scan" | "bind" | "cut" | "repair">("scan");
   const [repair, setRepair] = useState<"indel" | "replace" | "failed">("indel");
-  const target = "A C T G G A C C T A G G".split(" ");
+  const target = "T A C G A T T A C C G T A G G".split(" ");
+  const targetStart = 4;
+  const targetLength = 8;
+  const pamStart = 12;
   const guides = [
-    { name: "guide A", sequence: "C U G G A", start: 3, score: 100, note: "完全匹配目标片段，Cas 蛋白能稳定定位。" },
-    { name: "guide B", sequence: "C U A G A", start: 3, score: 60, note: "中间有错配，定位效率下降，脱靶风险上升。" },
-    { name: "guide C", sequence: "G A U C C", start: 7, score: 35, note: "匹配弱，Cas 蛋白很难在预期位置工作。" },
+    { name: "guide A", sequence: "U A A U G G C A", start: targetStart, score: 96, mismatches: [] as number[], note: "目标区互补，旁边有 AGG PAM，Cas9 能稳定定位。" },
+    { name: "guide B", sequence: "U A A C G G C A", start: targetStart, score: 68, mismatches: [3], note: "seed 区有 1 个错配，Cas9 仍可能结合，但剪切效率下降。" },
+    { name: "guide C", sequence: "G C A U U A C G", start: 1, score: 32, mismatches: [1, 2, 5], note: "目标弱匹配且离 PAM 较远，Cas9 很难在预期位点剪切。" },
   ];
+  const stages = [
+    { key: "scan", label: "找 PAM", text: "Cas9 先扫到 NGG 这类 PAM，才会检查旁边的 DNA 序列。" },
+    { key: "bind", label: "配对", text: "guide RNA 和目标 DNA 形成互补配对，错配会降低稳定性。" },
+    { key: "cut", label: "剪切", text: "匹配足够时，Cas9 在 PAM 上游附近切开两条 DNA 链。" },
+    { key: "repair", label: "修复", text: "细胞修复切口，结果可能是插入/删除、模板替换或未编辑。" },
+  ] as const;
   const activeGuide = guides[guideIndex];
-  const cutIndex = activeGuide.start + 2;
+  const guideRange = Array.from({ length: targetLength }).map((_, index) => activeGuide.start + index);
+  const cutIndex = Math.min(target.length - 1, activeGuide.start + 5);
+  const stepIndex = stages.findIndex((item) => item.key === step);
+  const canCut = activeGuide.score >= 60 && stepIndex >= 2;
+  const repairActive = step === "repair";
   const repairResults = {
     indel: {
       title: "小片段插入/删除",
       sequence: target.map((base, index) => (index === cutIndex ? "Δ" : base)),
       result: "阅读框可能改变，目标蛋白容易失活。",
+      color: "var(--cherry-red)",
     },
     replace: {
       title: "模板引导替换",
-      sequence: target.map((base, index) => (index === cutIndex ? "T" : base)),
+      sequence: target.map((base, index) => (index === cutIndex ? "G" : base)),
       result: "如果提供修复模板，细胞可能把指定碱基写入目标位置。",
+      color: "var(--cherry-blue)",
     },
     failed: {
       title: "未成功编辑",
       sequence: target,
       result: "细胞完成原样修复，或者 Cas 蛋白没有稳定切开目标位点。",
+      color: "var(--cherry-sage)",
     },
   };
   const activeRepair = repairResults[repair];
+  const effectiveRepair = activeGuide.score < 60 ? repairResults.failed : activeRepair;
+  const baseX = (index: number) => 72 + index * 44;
+  const casX = canCut ? baseX(cutIndex) : stepIndex >= 1 ? baseX(activeGuide.start + 3) : baseX(pamStart + 1);
 
   return (
-    <section style={{ display: "grid", gap: "1rem" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(270px, 0.75fr)", gap: "1rem", alignItems: "stretch" }}>
-        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>
-            <IconDNA size={22} /> 目标 DNA
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: "1rem" }}>
-            {target.map((base, index) => (
-              <span key={`${base}-${index}`} style={{ background: index === cutIndex ? "var(--cherry-peach-light)" : index >= activeGuide.start && index < activeGuide.start + 5 ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === cutIndex ? "2px solid var(--cherry-red)" : "1.5px solid var(--border)", borderRadius: 10, padding: "0.45rem 0.64rem", color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
-                {base}
-              </span>
-            ))}
-          </div>
-          <div style={{ display: "grid", gap: "0.65rem", marginBottom: "1rem" }}>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>guide RNA</div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {guides.map((guide, index) => (
-                <button key={guide.name} onClick={() => setGuideIndex(index)} style={{ background: guideIndex === index ? "var(--cherry-forest)" : "var(--muted)", color: guideIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.45rem 0.8rem", fontWeight: 900, cursor: "pointer" }}>
-                  {guide.name}
+    <section id="crispr-simulator" style={{ display: "grid", gap: "1rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.72fr)", gap: "1rem", alignItems: "stretch" }}>
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, overflow: "hidden", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+          <svg viewBox="0 0 760 430" role="img" aria-label="CRISPR Cas9 识别、剪切和修复示意图" style={{ width: "100%", display: "block", background: "linear-gradient(180deg, #FFF8EA 0%, #F2E9DB 100%)" }}>
+            <rect x={24} y={26} width={708} height={382} rx={90} fill="rgba(169,201,172,0.18)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
+            <text x={42} y={60} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>
+              Cas9 editing bench
+            </text>
+            <line x1={60} y1={166} x2={704} y2={166} stroke="url(#crisprStrandA)" strokeWidth={10} strokeLinecap="round" />
+            <line x1={60} y1={206} x2={704} y2={206} stroke="url(#crisprStrandB)" strokeWidth={10} strokeLinecap="round" opacity={0.82} />
+            <defs>
+              <linearGradient id="crisprStrandA" x1="0" x2="1">
+                <stop offset="0%" stopColor="var(--cherry-blue)" />
+                <stop offset="46%" stopColor="var(--cherry-sage)" />
+                <stop offset="100%" stopColor="var(--cherry-red)" />
+              </linearGradient>
+              <linearGradient id="crisprStrandB" x1="0" x2="1">
+                <stop offset="0%" stopColor="var(--cherry-red)" />
+                <stop offset="46%" stopColor="var(--cherry-yellow)" />
+                <stop offset="100%" stopColor="var(--cherry-blue)" />
+              </linearGradient>
+            </defs>
+
+            {target.map((base, index) => {
+              const inGuide = guideRange.includes(index);
+              const inPam = index >= pamStart;
+              const mismatch = activeGuide.mismatches.includes(index - activeGuide.start);
+              return (
+                <g key={`${base}-${index}`} transform={`translate(${baseX(index)} 0)`}>
+                  <rect x={-15} y={126} width={30} height={30} rx={9} fill={inPam ? "var(--cherry-peach-light)" : inGuide ? "var(--cherry-yellow-light)" : "rgba(250,247,241,0.8)"} stroke={mismatch ? "var(--cherry-red)" : "rgba(94,68,42,0.16)"} strokeWidth={mismatch ? 2.3 : 1.4} />
+                  <text x={0} y={146} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>{base}</text>
+                  <line x1={0} y1={160} x2={0} y2={211} stroke="rgba(94,68,42,0.2)" strokeWidth={1.4} />
+                </g>
+              );
+            })}
+
+            <rect x={baseX(pamStart) - 20} y={222} width={122} height={28} rx={999} fill="var(--cherry-peach-light)" stroke="var(--cherry-red)" strokeWidth={1.8} opacity={stepIndex >= 0 ? 1 : 0.4} />
+            <text x={baseX(pamStart) + 41} y={241} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>
+              PAM: AGG
+            </text>
+
+            <g transform={`translate(${casX} 106)`} style={{ transition: "transform 0.28s ease" }}>
+              <path d="M-56 8 C-60 -28 -20 -44 18 -36 C54 -28 66 8 42 34 C20 58 -44 48 -56 8Z" fill={canCut ? "var(--cherry-peach-light)" : "var(--cherry-blue-light)"} stroke={canCut ? "var(--cherry-red)" : "var(--cherry-blue)"} strokeWidth={3} />
+              <text x={0} y={10} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={15} fontWeight={900}>Cas9</text>
+            </g>
+
+            <g opacity={stepIndex >= 1 ? 1 : 0.22}>
+              <path d={`M${baseX(activeGuide.start)} 94 C${baseX(activeGuide.start + 2)} 76 ${baseX(activeGuide.start + 5)} 78 ${baseX(activeGuide.start + 7)} 94`} fill="none" stroke="var(--cherry-red)" strokeWidth={7} strokeLinecap="round" />
+              {activeGuide.sequence.split(" ").map((base, index) => (
+                <g key={`${base}-${index}`} transform={`translate(${baseX(activeGuide.start + index)} 70)`}>
+                  <circle r={14} fill={activeGuide.mismatches.includes(index) ? "var(--cherry-peach-light)" : "var(--cherry-red)"} stroke="rgba(94,68,42,0.14)" strokeWidth={1.4} />
+                  <text y={4} textAnchor="middle" fill={activeGuide.mismatches.includes(index) ? "var(--cherry-warm-brown)" : "#FAF7F1"} fontSize={11} fontWeight={900}>{base}</text>
+                </g>
+              ))}
+            </g>
+
+            {canCut ? (
+              <g transform={`translate(${baseX(cutIndex)} 184)`}>
+                <path d="M-22 -28 L22 28 M22 -28 L-22 28" stroke="var(--cherry-red)" strokeWidth={4} strokeLinecap="round" />
+                <circle r={30} fill="none" stroke="var(--cherry-red)" strokeWidth={2} strokeDasharray="5 5" />
+                <text x={0} y={52} textAnchor="middle" fill="var(--cherry-red)" fontSize={12} fontWeight={900}>cut</text>
+              </g>
+            ) : null}
+
+            <g transform="translate(72 310)" opacity={repairActive ? 1 : 0.35}>
+              <text x={0} y={-18} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>repair product</text>
+              {effectiveRepair.sequence.map((base, index) => (
+                <g key={`${base}-${index}`} transform={`translate(${index * 38} 0)`}>
+                  <rect x={-14} y={-14} width={28} height={28} rx={8} fill={index === cutIndex ? "var(--cherry-yellow-light)" : "rgba(250,247,241,0.86)"} stroke={index === cutIndex ? effectiveRepair.color : "rgba(94,68,42,0.14)"} strokeWidth={index === cutIndex ? 2.4 : 1.4} />
+                  <text y={5} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>{base}</text>
+                </g>
+              ))}
+            </g>
+          </svg>
+        </div>
+
+        <aside style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>流程控制</div>
+            <div style={{ display: "grid", gap: 7 }}>
+              {stages.map((item, index) => (
+                <button key={item.key} onClick={() => setStep(item.key)} style={{ display: "grid", gridTemplateColumns: "26px 1fr", gap: 8, alignItems: "start", textAlign: "left", background: step === item.key ? "var(--cherry-sage-light)" : "var(--muted)", border: step === item.key ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.62rem", cursor: "pointer" }}>
+                  <span style={{ width: 24, height: 24, borderRadius: "50%", background: stepIndex >= index ? "var(--cherry-forest)" : "rgba(250,247,241,0.9)", color: stepIndex >= index ? "#FAF7F1" : "var(--cherry-warm-mid)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 900 }}>{index + 1}</span>
+                  <span>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>{item.label}</strong>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55 }}>{item.text}</span>
+                  </span>
                 </button>
               ))}
             </div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "120px minmax(0, 1fr)", gap: "0.8rem", alignItems: "center", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.85rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65 }}>
-            <strong style={{ color: "var(--cherry-warm-brown)" }}>{activeGuide.sequence}</strong>
-            <span>{activeGuide.note}</span>
+
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>guide RNA</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: "0.75rem" }}>
+              {guides.map((guide, index) => (
+                <button key={guide.name} onClick={() => setGuideIndex(index)} style={{ background: guideIndex === index ? "var(--cherry-forest)" : "var(--muted)", color: guideIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.4rem 0.74rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                  {guide.name}
+                </button>
+              ))}
+            </div>
+            <code style={{ display: "block", background: "var(--cherry-yellow-light)", borderRadius: 12, padding: "0.65rem", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900, whiteSpace: "pre-wrap", marginBottom: "0.7rem" }}>{activeGuide.sequence}</code>
+            <div style={{ height: 10, borderRadius: 999, background: "var(--muted)", overflow: "hidden", marginBottom: "0.55rem" }}>
+              <div style={{ width: `${activeGuide.score}%`, height: "100%", background: activeGuide.score > 80 ? "var(--cherry-sage)" : activeGuide.score > 50 ? "var(--cherry-yellow)" : "var(--cherry-red)", transition: "width 0.25s ease" }} />
+            </div>
+            <div style={{ color: "var(--cherry-red)", fontSize: "1.35rem", fontWeight: 900, marginBottom: "0.45rem" }}>{activeGuide.score}%</div>
+            <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.82rem" }}>{activeGuide.note}</div>
+          </div>
+        </aside>
+      </div>
+
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.85rem" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>修复结果</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
+            {([
+              ["indel", "插入/删除"],
+              ["replace", "模板替换"],
+              ["failed", "未成功编辑"],
+            ] as const).map(([key, label]) => (
+              <button key={key} onClick={() => { setRepair(key); setStep("repair"); }} style={{ background: repair === key ? "var(--cherry-forest)" : "var(--muted)", color: repair === key ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
+                {label}
+              </button>
+            ))}
           </div>
         </div>
-
-        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>匹配读数</div>
-          <div style={{ height: 14, borderRadius: 999, background: "var(--muted)", overflow: "hidden", marginBottom: "0.6rem" }}>
-            <div style={{ width: `${activeGuide.score}%`, height: "100%", background: activeGuide.score > 80 ? "var(--cherry-sage)" : activeGuide.score > 50 ? "var(--cherry-yellow)" : "var(--cherry-red)", transition: "width 0.25s ease" }} />
-          </div>
-          <div style={{ color: "var(--cherry-red)", fontSize: "1.6rem", fontWeight: 900, marginBottom: "0.8rem" }}>{activeGuide.score}%</div>
-          <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.88rem" }}>
-            剪切位置：第 {cutIndex + 1} 个碱基附近。匹配越高，Cas 蛋白越容易在目标位置形成稳定复合体。
-          </div>
+        <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.9rem" }}>
+          <strong style={{ color: effectiveRepair.color }}>{effectiveRepair.title}：</strong>
+          {activeGuide.score < 60 ? "guide 匹配不足，Cas9 不稳定定位，本轮按未成功编辑处理。" : activeRepair.result}
         </div>
       </div>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem" }}>
-        <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>修复结果</div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: "1rem" }}>
-          {([
-            ["indel", "插入/删除"],
-            ["replace", "模板替换"],
-            ["failed", "未成功编辑"],
-          ] as const).map(([key, label]) => (
-            <button key={key} onClick={() => setRepair(key)} style={{ background: repair === key ? "var(--cherry-forest)" : "var(--muted)", color: repair === key ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.45rem 0.8rem", fontWeight: 900, cursor: "pointer" }}>
-              {label}
-            </button>
-          ))}
-        </div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: "0.8rem" }}>
-          {activeRepair.sequence.map((base, index) => (
-            <span key={`${base}-${index}`} style={{ background: index === cutIndex ? "var(--cherry-peach-light)" : "var(--cherry-yellow-light)", border: index === cutIndex ? "2px solid var(--cherry-red)" : "1.5px solid var(--border)", borderRadius: 10, padding: "0.42rem 0.62rem", color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
-              {base}
-            </span>
-          ))}
-        </div>
-        <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7 }}>
-          <strong style={{ color: "var(--cherry-warm-brown)" }}>{activeRepair.title}：</strong>{activeRepair.result}
-        </div>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "1rem" }}>
-        {[
-          ["识别", "guide RNA 和目标 DNA 序列互补配对。错配越多，稳定结合越困难。"],
-          ["剪切", "Cas 蛋白在 guide RNA 指定的位置附近切开 DNA 双链。"],
-          ["修复", "细胞修复切口时，可能造成插入/删除，也可能按模板完成精确替换。"],
-        ].map(([title, body]) => (
-          <ContentCard key={title} title={title}>
-            {body}
-          </ContentCard>
-        ))}
-      </div>
+      <style>
+        {`
+          @media (max-width: 880px) {
+            #crispr-simulator > div:first-child {
+              grid-template-columns: 1fr !important;
+            }
+          }
+        `}
+      </style>
     </section>
   );
 }
