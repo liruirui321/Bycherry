@@ -44,7 +44,7 @@ export function Nav() {
 
   function isActiveLink(href: string) {
     const { pathname, hash } = window.location;
-    if (href === "/works/gene-expression") return pathname === href;
+    if (pathname === "/works/gene-expression") return href === "/works/gene-expression";
     if (pathname.startsWith("/works/")) return href === "/#works";
     if (pathname.startsWith("/notes/")) return href === "/#notes";
     if (pathname.startsWith("/research/")) return href === "/#research";
@@ -121,7 +121,7 @@ export function Nav() {
             const active = isActiveLink(l.href);
             return (
               <a
-                key={`${l.label}-${locationKey}`}
+                key={l.label}
                 href={l.href}
                 aria-current={active ? "page" : undefined}
                 onClick={(event) => {
@@ -158,7 +158,7 @@ export function Nav() {
             const active = isActiveLink(l.href);
             return (
               <a
-                key={`${l.label}-${locationKey}`}
+                key={l.label}
                 href={l.href}
                 aria-current={active ? "page" : undefined}
                 onClick={(event) => {
