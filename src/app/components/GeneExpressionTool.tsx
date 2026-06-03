@@ -32,6 +32,8 @@ const initialMolecules: Molecule[] = [
   { id: "rib-3", type: "ribosome", label: "核糖体", x: 238, y: 500, homeX: 238, homeY: 500, color: "var(--cherry-peach-light)" },
 ];
 
+const defaultDockedMoleculeIds = new Set(["tf-1", "pol-1", "rib-1"]);
+
 const codons = [
   { dna: "ATG", template: "TAC", rna: "AUG", amino: "Met", anticodon: "UAC", color: "var(--cherry-peach)" },
   { dna: "GAA", template: "CTT", rna: "GAA", amino: "Glu", anticodon: "CUU", color: "var(--cherry-yellow)" },
@@ -572,14 +574,6 @@ export function GeneExpressionTool() {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const progressRef = useRef(0);
   const prefersReducedMotion = usePrefersReducedMotion();
-  const [molecules, setMolecules] = useState(initialMolecules);
-  const [dragging, setDragging] = useState<{ id: string; dx: number; dy: number } | null>(null);
-  const [cycleProgress, setCycleProgress] = useState(0);
-  const [displayedMrnaCount, setDisplayedMrnaCount] = useState(0);
-  const [displayedProteinCount, setDisplayedProteinCount] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [speed, setSpeed] = useState(1);
-
   const zones = {
     promoter: { x: 214, y: 212, w: 160, h: 86 },
     polymerase: { x: 380, y: 206, w: 330, h: 96 },
@@ -601,6 +595,23 @@ export function GeneExpressionTool() {
       { x: 634, y: 404 },
     ],
   };
+
+  function dockDefaultMolecules() {
+    return initialMolecules.map((molecule) => {
+      if (!defaultDockedMoleculeIds.has(molecule.id)) return molecule;
+      const zoneKey = moleculeZone(molecule.type);
+      const slot = slots[zoneKey][moleculeSlotIndex(molecule)] ?? slots[zoneKey][0];
+      return { ...molecule, x: slot.x, y: slot.y };
+    });
+  }
+
+  const [molecules, setMolecules] = useState<Molecule[]>(dockDefaultMolecules);
+  const [dragging, setDragging] = useState<{ id: string; dx: number; dy: number } | null>(null);
+  const [cycleProgress, setCycleProgress] = useState(0);
+  const [displayedMrnaCount, setDisplayedMrnaCount] = useState(0);
+  const [displayedProteinCount, setDisplayedProteinCount] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [speed, setSpeed] = useState(1);
 
   const model = useMemo(() => {
     const tfBound = molecules.filter((molecule) => molecule.type === "tf" && inBox(molecule, zones.promoter)).length;

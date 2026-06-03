@@ -916,11 +916,11 @@ function hasRichWorkContent(slug: string) {
   return richWorkSlugs.includes(slug);
 }
 
-function WorkHero({ work }: { work: Work }) {
+function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) {
   return (
     <section
       style={{
-        padding: "1.15rem 1.5rem 0.75rem",
+        padding: compact ? "0.65rem 1.5rem 0.45rem" : "1.15rem 1.5rem 0.75rem",
         background: "var(--background)",
         fontFamily: "'Nunito', sans-serif",
         borderBottom: "1px solid rgba(94,68,42,0.1)",
@@ -942,8 +942,8 @@ function WorkHero({ work }: { work: Work }) {
             color: "var(--cherry-forest)",
             textDecoration: "none",
             fontWeight: 900,
-            fontSize: "0.86rem",
-            marginBottom: "0.65rem",
+            fontSize: compact ? "0.78rem" : "0.86rem",
+            marginBottom: compact ? "0.35rem" : "0.65rem",
           }}
         >
           ← 回到作品集
@@ -959,9 +959,9 @@ function WorkHero({ work }: { work: Work }) {
         >
           <div
             style={{
-              width: 50,
-              height: 50,
-              borderRadius: 16,
+              width: compact ? 38 : 50,
+              height: compact ? 38 : 50,
+              borderRadius: compact ? 12 : 16,
               background: work.color,
               border: `1.5px solid ${work.border}`,
               display: "grid",
@@ -976,7 +976,7 @@ function WorkHero({ work }: { work: Work }) {
               <h1
                 style={{
                   color: "var(--cherry-warm-brown)",
-                  fontSize: "clamp(1.35rem, 3vw, 1.85rem)",
+                  fontSize: compact ? "clamp(1.05rem, 2.4vw, 1.35rem)" : "clamp(1.35rem, 3vw, 1.85rem)",
                   fontWeight: 900,
                   lineHeight: 1.18,
                   margin: 0,
@@ -1003,9 +1003,11 @@ function WorkHero({ work }: { work: Work }) {
                 ))}
               </div>
             </div>
-            <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.85rem", lineHeight: 1.5, maxWidth: 780, margin: 0 }}>
-              {work.desc}
-            </p>
+            {compact ? null : (
+              <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.85rem", lineHeight: 1.5, maxWidth: 780, margin: 0 }}>
+                {work.desc}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -1051,7 +1053,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
   return (
     <main id="main-content" tabIndex={-1}>
-      <WorkHero work={work} />
+      <WorkHero work={work} compact={work.slug === "gene-expression"} />
 
       {hasRichWorkContent(work.slug) ? (
         <section
