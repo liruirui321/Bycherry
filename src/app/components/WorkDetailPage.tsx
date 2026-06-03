@@ -890,7 +890,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
   if (!work) {
     return (
-      <section style={{ padding: "5rem 1.5rem", maxWidth: 720, margin: "0 auto", fontFamily: "'Nunito', sans-serif" }}>
+      <section id="main-content" tabIndex={-1} style={{ padding: "5rem 1.5rem", maxWidth: 720, margin: "0 auto", fontFamily: "'Nunito', sans-serif" }}>
         <a
           href="/#works"
           onClick={(event) => {
@@ -907,7 +907,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
   }
 
   return (
-    <main>
+    <main id="main-content" tabIndex={-1}>
       <WorkHero work={work} />
 
       <section

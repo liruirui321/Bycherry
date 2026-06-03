@@ -146,6 +146,34 @@
     @apply bg-background text-foreground;
   }
 
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    transform: translateY(-150%);
+    background: var(--cherry-forest);
+    color: #FAF7F1;
+    border-radius: 999px;
+    padding: 0.55rem 0.9rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.86rem;
+    font-weight: 900;
+    text-decoration: none;
+    box-shadow: 3px 5px 0 rgba(58, 92, 62, 0.22);
+    transition: transform 0.16s ease;
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+    outline: 2px solid var(--cherry-yellow);
+    outline-offset: 3px;
+  }
+
+  #main-content:focus {
+    outline: none;
+  }
+
   /**
   * Default typography styles for HTML elements (h1-h4, p, label, button, input).
   * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.

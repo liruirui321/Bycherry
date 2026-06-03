@@ -25,7 +25,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
 
   if (!article) {
     return (
-      <main style={{ padding: "5rem 1.5rem", maxWidth: 760, margin: "0 auto", fontFamily: "'Nunito', sans-serif" }}>
+      <main id="main-content" tabIndex={-1} style={{ padding: "5rem 1.5rem", maxWidth: 760, margin: "0 auto", fontFamily: "'Nunito', sans-serif" }}>
         <a
           href={`/${backHash}`}
           onClick={(event) => {
@@ -42,7 +42,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   }
 
   return (
-    <main style={{ fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
+    <main id="main-content" tabIndex={-1} style={{ fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
       <section style={{ padding: "3.9rem 1.5rem 1.4rem" }}>
         <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <a

@@ -92,13 +92,15 @@ export function Nav() {
           onClick={() => setOpen(!open)}
           style={{ background: "none", border: "none", cursor: "pointer", padding: 4, display: "flex" }}
           aria-label="菜单"
+          aria-expanded={open}
+          aria-controls="mobile-navigation"
         >
           {open ? <IconClose size={22} /> : <IconMenu size={22} />}
         </button>
       </div>
 
       {open && (
-        <div style={{ background: "var(--cherry-cream)", borderTop: "1.5px solid var(--border)", padding: "1rem 1.5rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+        <div id="mobile-navigation" style={{ background: "var(--cherry-cream)", borderTop: "1.5px solid var(--border)", padding: "1rem 1.5rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
           {links.map((l) => (
             <a
               key={l.label}

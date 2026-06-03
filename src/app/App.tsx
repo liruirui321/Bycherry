@@ -106,6 +106,9 @@ export default function App() {
         fontFamily: "'Nunito', sans-serif",
       }}
     >
+      <a className="skip-link" href="#main-content">
+        跳到正文
+      </a>
       <Nav />
       {detailSlug ? (
         <WorkDetailPage slug={detailSlug} />
@@ -114,7 +117,7 @@ export default function App() {
       ) : researchSlug ? (
         <ArticleDetailPage kind="research" slug={researchSlug} />
       ) : (
-        <main>
+        <main id="main-content" tabIndex={-1}>
           <Hero />
           <Works />
           <About />
