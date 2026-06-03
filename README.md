@@ -28,3 +28,4 @@ npm run build
 The app uses client-side routes such as `/works/gene-expression`.
 Vercel rewrites are configured in `vercel.json`; Netlify fallback is in `public/_redirects`.
 `public/404.html` also preserves direct deep links for static hosts such as GitHub Pages with a custom domain.
+Search crawler hints live in `public/robots.txt` and `public/sitemap.xml`.
