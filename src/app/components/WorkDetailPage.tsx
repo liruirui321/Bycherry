@@ -120,6 +120,12 @@ ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  function updateMaterial(value: string) {
+    setMaterial(value);
+    setCopied(false);
+    setCopyStatus("");
+  }
+
   return (
     <section id="prompt-kit-builder" style={{ display: "grid", gap: "1rem" }}>
       <div style={{ display: "grid", gridTemplateColumns: "minmax(230px, 0.78fr) minmax(0, 1.3fr)", gap: "1rem", alignItems: "start" }}>
@@ -127,7 +133,7 @@ ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")
           {prompts.map((prompt, index) => {
             const active = activePromptIndex === index;
             return (
-              <button key={prompt.title} aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
+              <button key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
                 <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>{prompt.title}</div>
                 <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginBottom: "0.55rem" }}>{prompt.input}</div>
                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
@@ -149,7 +155,7 @@ ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")
                 <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "1.05rem" }}>{activePrompt.title}</div>
                 <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", marginTop: "0.25rem" }}>输入材料：{activePrompt.input}</div>
               </div>
-              <button onClick={copyPrompt} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+              <button type="button" onClick={copyPrompt} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
                 {copied ? "已复制" : "复制 prompt"}
               </button>
             </div>
@@ -159,7 +165,7 @@ ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")
 
             <textarea
               value={material}
-              onChange={(event) => setMaterial(event.target.value)}
+              onChange={(event) => updateMaterial(event.target.value)}
               style={{ width: "100%", minHeight: 154, resize: "vertical", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.9rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.9rem", lineHeight: 1.6, boxSizing: "border-box", marginBottom: "0.9rem" }}
               aria-label="科研材料输入框"
             />
