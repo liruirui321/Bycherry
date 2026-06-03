@@ -15,15 +15,21 @@ type Molecule = {
   color: string;
 };
 
+const moleculeNames: Record<MoleculeType, string> = {
+  tf: "转录因子",
+  pol: "RNA 聚合酶",
+  ribosome: "核糖体",
+};
+
 const initialMolecules: Molecule[] = [
   { id: "tf-1", type: "tf", label: "TF", x: 82, y: 146, homeX: 82, homeY: 146, color: "var(--cherry-yellow)" },
   { id: "tf-2", type: "tf", label: "TF", x: 136, y: 112, homeX: 136, homeY: 112, color: "var(--cherry-yellow)" },
   { id: "tf-3", type: "tf", label: "TF", x: 188, y: 146, homeX: 188, homeY: 146, color: "var(--cherry-yellow)" },
   { id: "pol-1", type: "pol", label: "RNA pol", x: 710, y: 120, homeX: 710, homeY: 120, color: "var(--cherry-blue-light)" },
   { id: "pol-2", type: "pol", label: "RNA pol", x: 804, y: 156, homeX: 804, homeY: 156, color: "var(--cherry-blue-light)" },
-  { id: "rib-1", type: "ribosome", label: "ribo", x: 90, y: 500, homeX: 90, homeY: 500, color: "var(--cherry-peach-light)" },
-  { id: "rib-2", type: "ribosome", label: "ribo", x: 164, y: 536, homeX: 164, homeY: 536, color: "var(--cherry-peach-light)" },
-  { id: "rib-3", type: "ribosome", label: "ribo", x: 238, y: 500, homeX: 238, homeY: 500, color: "var(--cherry-peach-light)" },
+  { id: "rib-1", type: "ribosome", label: "核糖体", x: 90, y: 500, homeX: 90, homeY: 500, color: "var(--cherry-peach-light)" },
+  { id: "rib-2", type: "ribosome", label: "核糖体", x: 164, y: 536, homeX: 164, homeY: 536, color: "var(--cherry-peach-light)" },
+  { id: "rib-3", type: "ribosome", label: "核糖体", x: 238, y: 500, homeX: 238, homeY: 500, color: "var(--cherry-peach-light)" },
 ];
 
 const codons = [
@@ -59,7 +65,7 @@ function MoleculeNode({
   onPointerDown: (event: React.PointerEvent<SVGGElement>, molecule: Molecule) => void;
 }) {
   const radius = docked ? (molecule.type === "pol" ? 30 : molecule.type === "ribosome" ? 27 : 24) : molecule.type === "pol" ? 44 : molecule.type === "ribosome" ? 38 : 31;
-  const shortLabel = molecule.type === "pol" ? "RNA pol" : molecule.type === "ribosome" ? "ribo" : "TF";
+  const shortLabel = molecule.type === "pol" ? "RNA pol" : molecule.type === "ribosome" ? "核糖体" : "TF";
 
   return (
     <g
@@ -87,7 +93,7 @@ function ProductBeads({ count, animated = true }: { count: number; animated?: bo
   return (
     <g transform="translate(704 442)">
       <text x={0} y={-18} fill="var(--cherry-warm-brown)" fontSize={16} fontWeight={900}>
-        protein product
+        蛋白质产物
       </text>
       {Array.from({ length: 12 }).map((_, index) => {
         const active = index < count;
@@ -128,7 +134,7 @@ function usePrefersReducedMotion() {
 function StageRail({ model }: { model: { tfBound: number; polBound: number; ribBound: number; transcriptionOn: boolean; translationOn: boolean; protein: number } }) {
   const stages = [
     { label: "TF 结合启动子", active: model.tfBound > 0 },
-    { label: "RNA pol 转录", active: model.transcriptionOn },
+    { label: "RNA 聚合酶转录", active: model.transcriptionOn },
     { label: "核糖体翻译", active: model.translationOn },
     { label: "蛋白质累积", active: model.protein > 0 },
   ];
@@ -250,7 +256,7 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
       <g opacity={0.4}>
         <path d="M392 270 C396 312 424 324 462 330" fill="none" stroke="var(--cherry-red)" strokeWidth={8} strokeLinecap="round" strokeDasharray="12 14" />
         <text x={418} y={362} fill="var(--cherry-warm-mid)" fontSize={15} fontWeight={800}>
-          RNA pol 结合后，新生 mRNA 会从 DNA 旁边延伸出来
+          RNA 聚合酶结合后，新生 mRNA 会从 DNA 旁边延伸出来
         </text>
       </g>
     );
@@ -263,7 +269,7 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
           <ellipse rx={42} ry={27} fill="var(--cherry-blue-light)" stroke="var(--cherry-blue)" strokeWidth={3} />
           <path d="M-18 9 C-6 16 6 16 18 9" fill="none" stroke="var(--cherry-blue)" strokeWidth={3} strokeLinecap="round" opacity={0.58} />
           <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>
-            RNA pol
+            RNA 聚合酶
           </text>
         </g>
       ))}
@@ -277,7 +283,7 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
         5' mRNA
       </text>
       <text x={polymeraseX - 34} y={224} fill="var(--cherry-blue)" fontSize={12} fontWeight={900}>
-        RNA pol 生成 3' 端
+        RNA 聚合酶生成 3' 端
       </text>
 
       {codons.map((codon, index) => {
@@ -318,7 +324,7 @@ function LiveExpressionProcess({ model, progress }: { model: { transcriptionOn: 
                 <circle cx={-22} cy={-7} r={9} fill="rgba(250,247,241,0.58)" />
                 <circle cx={18} cy={9} r={7} fill="rgba(250,247,241,0.58)" />
                 <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
-                  ribosome
+                  核糖体
                 </text>
                 <rect x={-28} y={24} width={56} height={24} rx={8} fill="rgba(250,247,241,0.92)" stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
                 <text x={0} y={40} textAnchor="middle" fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
@@ -400,15 +406,16 @@ export function GeneExpressionTool() {
     return { tfBound, polBound, ribBound, transcriptionOn, mrna, translationOn, protein };
   }, [molecules, zones.polymerase, zones.promoter, zones.ribosome]);
   const taskStatuses = [
-    { label: "把 TF 拖到 promoter，观察启动子变亮。", done: model.tfBound > 0 },
-    { label: "把 RNA pol 拖到 gene body，观察 mRNA 出现。", done: model.transcriptionOn },
-    { label: "把 ribosome 拖到 mRNA 附近，观察蛋白质产物增加。", done: model.translationOn },
+    { label: "把 TF 拖到启动子，观察启动子变亮。", done: model.tfBound > 0 },
+    { label: "把 RNA 聚合酶拖到基因区，观察 mRNA 出现。", done: model.transcriptionOn },
+    { label: "把核糖体拖到 mRNA 附近，观察蛋白质产物增加。", done: model.translationOn },
   ];
   const transcriptionProgress = model.transcriptionOn ? clamp01(cycleProgress / 0.78) : 0;
   const translationProgress = model.translationOn ? clamp01((cycleProgress - 0.28) / 0.62) : 0;
   const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
   const ribosomeProgress = ribosomeCanRead ? Math.min(translationProgress, Math.max(0, transcriptionProgress - 0.08)) : 0;
   const activeCodonIndex = ribosomeCanRead ? Math.min(codons.length - 1, Math.floor(ribosomeProgress * codons.length)) : -1;
+  const integratedMolecules = molecules.filter((molecule) => molecule.type !== "tf" && inBox(molecule, zones[moleculeZone(molecule.type)]));
 
   useEffect(() => {
     progressRef.current = cycleProgress;
@@ -517,6 +524,16 @@ export function GeneExpressionTool() {
     setIsPaused(false);
   }
 
+  function releaseMolecule(moleculeId: string) {
+    setMolecules((items) =>
+      items.map((molecule) =>
+        molecule.id === moleculeId
+          ? { ...molecule, x: molecule.homeX, y: molecule.homeY }
+          : molecule
+      )
+    );
+  }
+
   function isMoleculeDocked(molecule: Molecule) {
     if (dragging?.id === molecule.id) return false;
     return inBox(molecule, zones[moleculeZone(molecule.type)]);
@@ -588,14 +605,14 @@ export function GeneExpressionTool() {
               </g>
               <rect x={66} y={40} width={150} height={80} rx={18} fill={model.tfBound > 0 ? "rgba(221,185,90,0.36)" : "rgba(250,247,241,0.46)"} stroke="var(--cherry-yellow)" strokeWidth={2} strokeDasharray="7 7" />
               <text x={92} y={88} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
-                promoter
+                启动子
               </text>
               {[90, 148, 206].map((x, index) => (
                 <circle key={x} cx={x} cy={84} r={18} fill="none" stroke={model.tfBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
               ))}
               <rect x={226} y={42} width={320} height={78} rx={18} fill={model.polBound > 0 ? "rgba(141,190,221,0.26)" : "rgba(250,247,241,0.4)"} stroke="var(--cherry-blue)" strokeWidth={2} strokeDasharray="7 7" />
               <text x={344} y={88} fill="var(--cherry-warm-brown)" fontSize={14} fontWeight={900}>
-                gene body
+                基因区
               </text>
               {[298, 432].map((x, index) => (
                 <circle key={x} cx={x} cy={44} r={20} fill="none" stroke={model.polBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
@@ -606,7 +623,7 @@ export function GeneExpressionTool() {
 
             <rect x={zones.ribosome.x} y={zones.ribosome.y} width={zones.ribosome.w} height={zones.ribosome.h} rx={22} fill={model.ribBound > 0 ? "rgba(232,121,95,0.15)" : "rgba(250,247,241,0.38)"} stroke="var(--cherry-peach)" strokeWidth={2} strokeDasharray="7 7" />
             <text x={zones.ribosome.x + 22} y={zones.ribosome.y + 34} fill="var(--cherry-warm-brown)" fontSize={15} fontWeight={900}>
-              ribosome dock
+              核糖体入口
             </text>
             {[406, 520, 634].map((x, index) => (
               <circle key={x} cx={x} cy={404} r={24} fill="none" stroke={model.ribBound > index ? "var(--cherry-forest)" : "rgba(94,68,42,0.18)"} strokeWidth={2} strokeDasharray="4 5" />
@@ -617,7 +634,7 @@ export function GeneExpressionTool() {
             <g transform="translate(46 86)">
               <rect width={190} height={28} rx={999} fill="rgba(250,247,241,0.74)" stroke="rgba(94,68,42,0.16)" />
               <text x={18} y={19} fill="var(--cherry-warm-mid)" fontSize={13} fontWeight={900}>
-                molecule bank
+                分子库
               </text>
             </g>
 
@@ -636,7 +653,7 @@ export function GeneExpressionTool() {
             <div style={{ display: "grid", gap: 8 }}>
               {[
                 ["启动子上的转录因子", model.tfBound],
-                ["DNA 上的 RNA 聚合酶", model.polBound],
+                ["参与转录的 RNA 聚合酶", model.polBound],
                 ["mRNA 上的核糖体", model.ribBound],
                 ["mRNA 数量", model.mrna],
                 ["蛋白质产量", model.protein],
@@ -681,6 +698,19 @@ export function GeneExpressionTool() {
                 </button>
               ))}
             </div>
+            {integratedMolecules.length > 0 ? (
+              <div style={{ marginTop: "1rem", display: "grid", gap: 7 }}>
+                <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>已加入反应</div>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {integratedMolecules.map((molecule) => (
+                    <button key={molecule.id} onClick={() => releaseMolecule(molecule.id)} aria-label={`移回${moleculeNames[molecule.type]}`} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: molecule.type === "pol" ? "rgba(141,190,221,0.22)" : "rgba(232,121,95,0.18)", color: "var(--cherry-warm-brown)", border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem" }}>
+                      <span>{moleculeNames[molecule.type]}</span>
+                      <span aria-hidden="true" style={{ color: "var(--cherry-red)" }}>移回</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
 
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
