@@ -575,6 +575,7 @@ export function GeneExpressionTool() {
   const activeRibosomeCount = readableRibosomes.length;
   const leadRibosomeProgress = readableRibosomes[0]?.progress ?? 0;
   const activeCodonIndex = leadRibosomeProgress > 0 ? Math.min(codons.length - 1, Math.floor(leadRibosomeProgress * codons.length)) : -1;
+  const activeCodon = activeCodonIndex >= 0 ? codons[activeCodonIndex] : null;
   const translatedSignal = readableRibosomes.reduce((sum, ribosome) => sum + ribosome.progress, 0);
   const proteinCapacity = canTranslate ? Math.min(12, visibleMrnaCount * model.ribBound) : 0;
   const instantProteinCount = canTranslate ? Math.min(proteinCapacity, Math.floor(translatedSignal * 4)) : 0;
@@ -583,8 +584,8 @@ export function GeneExpressionTool() {
   const translationRate = activeRibosomeCount > 0 ? Math.min(100, 35 + activeRibosomeCount * 20) : 0;
   const taskStatuses = [
     { label: "把 TF 拖到启动子，观察启动子变亮。", done: model.tfBound > 0 },
-    { label: "把 RNA 聚合酶拖到基因区，观察 mRNA 出现。", done: visibleMrnaCount > 0 },
-    { label: "把核糖体拖到 mRNA 附近，观察蛋白质产物增加。", done: visibleProteinCount > 0 },
+    { label: "把 RNA 聚合酶拖到基因区，观察 mRNA 从 5' 端到 3' 生长端延伸。", done: visibleMrnaCount > 0 },
+    { label: "把核糖体拖到 mRNA 附近，观察多肽链小圆逐颗接上。", done: visibleProteinCount > 0 },
   ];
   const integratedMolecules = molecules.filter((molecule) => molecule.type !== "tf" && inBox(molecule, zones[moleculeZone(molecule.type)]));
 
@@ -874,8 +875,9 @@ export function GeneExpressionTool() {
                 ["启动子上的转录因子", model.tfBound],
                 ["参与转录的 RNA 聚合酶", model.polBound],
                 ["正在读取的核糖体", `${activeRibosomeCount}/${model.ribBound}`],
+                ["当前密码子", activeCodon ? `${activeCodon.rna} → ${activeCodon.amino}` : "等待读取"],
                 ["mRNA 数量", `${visibleMrnaCount}/${mrnaReadoutMax}`],
-                ["蛋白质产量", `${visibleProteinCount}/${proteinReadoutMax}`],
+                ["已完成蛋白质", `${visibleProteinCount}/${proteinReadoutMax}`],
               ].map(([label, value]) => (
                 <div key={label} style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
                   <span>{label}</span>
@@ -976,7 +978,7 @@ export function GeneExpressionTool() {
             <div style={{ fontSize: "0.88rem" }}>
               {!model.transcriptionOn
                 ? activeRibosomeCount > 0
-                  ? "转录已经停止，核糖体正在读取保留的 mRNA，蛋白质产物仍会继续累积。"
+                  ? "转录已经停止，核糖体正在读取保留的 mRNA，多肽链仍会按密码子继续延伸。"
                   : visibleProteinCount > 0
                     ? "转录已经停止，已有蛋白质产物会保留；重新加入 TF 和 RNA 聚合酶可以继续表达。"
                     : canTranslate
@@ -985,7 +987,7 @@ export function GeneExpressionTool() {
                         ? "转录已经停止，已有 mRNA 片段会保留；重新加入 TF 和 RNA 聚合酶可以继续产生新 mRNA。"
                         : "转录尚未启动：启动子需要 TF，基因区域需要 RNA 聚合酶。"
                 : visibleMrnaCount === 0
-                  ? "RNA 聚合酶正在沿基因区移动，新生 mRNA 正从后方延伸出来。"
+                  ? "RNA 聚合酶正在沿基因区移动，新生 mRNA 的 3' 生长端正跟着聚合酶延伸。"
                   : !canTranslate
                     ? "mRNA 已经开始积累：把核糖体放到 mRNA 附近可以开始翻译。"
                     : activeRibosomeCount === 0 && visibleProteinCount === 0
@@ -993,8 +995,8 @@ export function GeneExpressionTool() {
                       : activeRibosomeCount === 0
                         ? "蛋白质产物已经累积，下一批核糖体正在等待新的可读片段。"
                       : visibleProteinCount === 0
-                        ? "核糖体正在读取密码子，tRNA 正在配对，蛋白质产物即将出现。"
-                        : "转录和翻译正在连续发生：mRNA 边延伸，核糖体边读取密码子，蛋白质产物持续累积。"}
+                        ? `核糖体正在读取 ${activeCodon?.rna ?? "密码子"}，tRNA 正在配对，第一颗氨基酸小圆即将接入多肽链。`
+                        : `核糖体正在读取 ${activeCodon?.rna ?? "密码子"}，多肽链正按 ${activeCodon?.amino ?? "氨基酸"} 继续延伸。`}
             </div>
           </div>
         </aside>
