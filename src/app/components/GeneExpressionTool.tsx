@@ -405,6 +405,7 @@ export function GeneExpressionTool() {
   const [molecules, setMolecules] = useState(initialMolecules);
   const [dragging, setDragging] = useState<{ id: string; dx: number; dy: number } | null>(null);
   const [cycleProgress, setCycleProgress] = useState(0);
+  const [displayedMrnaCount, setDisplayedMrnaCount] = useState(0);
   const [displayedProteinCount, setDisplayedProteinCount] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [speed, setSpeed] = useState(1);
@@ -449,6 +450,8 @@ export function GeneExpressionTool() {
   ];
   const transcriptionProgress = model.transcriptionOn ? clamp01(cycleProgress / 0.78) : 0;
   const transcribedProgress = model.transcriptionOn ? maxVisibleTranscribedProgress(cycleProgress, model.polBound) : 0;
+  const instantMrnaCount = model.transcriptionOn ? Math.min(model.mrna, Math.floor(transcribedProgress * (model.mrna + 0.75))) : 0;
+  const visibleMrnaCount = model.transcriptionOn ? Math.min(model.mrna, Math.max(displayedMrnaCount, instantMrnaCount)) : 0;
   const ribosomeCanRead = model.translationOn && transcriptionProgress > 0.28;
   const readableRibosomes = buildRibosomeTracks(cycleProgress, model.ribBound, ribosomeCanRead, transcribedProgress).filter((ribosome) => ribosome.opacity > 0);
   const leadRibosomeProgress = readableRibosomes[0]?.progress ?? 0;
@@ -461,6 +464,14 @@ export function GeneExpressionTool() {
   useEffect(() => {
     progressRef.current = cycleProgress;
   }, [cycleProgress]);
+
+  useEffect(() => {
+    if (!model.transcriptionOn) {
+      setDisplayedMrnaCount(0);
+      return;
+    }
+    setDisplayedMrnaCount((count) => Math.min(model.mrna, Math.max(count, instantMrnaCount)));
+  }, [instantMrnaCount, model.mrna, model.transcriptionOn]);
 
   useEffect(() => {
     if (!model.translationOn) {
@@ -555,6 +566,7 @@ export function GeneExpressionTool() {
     setMolecules(initialMolecules);
     setDragging(null);
     setIsPaused(false);
+    setDisplayedMrnaCount(0);
     setDisplayedProteinCount(0);
   }
 
@@ -568,6 +580,7 @@ export function GeneExpressionTool() {
     );
     setDragging(null);
     setIsPaused(false);
+    setDisplayedMrnaCount(0);
     setDisplayedProteinCount(0);
   }
 
@@ -731,7 +744,7 @@ export function GeneExpressionTool() {
                 ["启动子上的转录因子", model.tfBound],
                 ["参与转录的 RNA 聚合酶", model.polBound],
                 ["mRNA 上的核糖体", model.ribBound],
-                ["mRNA 数量", model.mrna],
+                ["mRNA 数量", `${visibleMrnaCount}/${model.mrna}`],
                 ["蛋白质产量", `${visibleProteinCount}/${model.protein}`],
               ].map(([label, value]) => (
                 <div key={label} style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
