@@ -58,11 +58,13 @@ function MoleculeNode({
   docked,
   dragging,
   onPointerDown,
+  onKeyToggle,
 }: {
   molecule: Molecule;
   docked: boolean;
   dragging: boolean;
   onPointerDown: (event: React.PointerEvent<SVGGElement>, molecule: Molecule) => void;
+  onKeyToggle: (molecule: Molecule) => void;
 }) {
   const radius = docked ? (molecule.type === "pol" ? 30 : molecule.type === "ribosome" ? 27 : 24) : molecule.type === "pol" ? 44 : molecule.type === "ribosome" ? 38 : 31;
   const shortLabel = molecule.type === "pol" ? "RNA pol" : molecule.type === "ribosome" ? "核糖体" : "TF";
@@ -70,7 +72,15 @@ function MoleculeNode({
   return (
     <g
       transform={`translate(${molecule.x} ${molecule.y})`}
+      role="button"
+      tabIndex={0}
+      aria-label={`${moleculeNames[molecule.type]}${docked ? "已加入反应区域，按 Enter 移回分子库" : "在分子库，按 Enter 加入反应区域"}`}
       onPointerDown={(event) => onPointerDown(event, molecule)}
+      onKeyDown={(event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        onKeyToggle(molecule);
+      }}
       opacity={docked && !dragging ? 0.7 : 1}
       style={{ cursor: "grab", filter: dragging ? "drop-shadow(5px 8px 0 rgba(94,68,42,0.16))" : docked ? "drop-shadow(1px 2px 0 rgba(94,68,42,0.07))" : "drop-shadow(3px 4px 0 rgba(94,68,42,0.08))" }}
     >
@@ -534,6 +544,23 @@ export function GeneExpressionTool() {
     );
   }
 
+  function toggleMoleculeDocking(molecule: Molecule) {
+    if (isMoleculeDocked(molecule)) {
+      releaseMolecule(molecule.id);
+      return;
+    }
+
+    const zoneKey = moleculeZone(molecule.type);
+    const slot = slots[zoneKey][moleculeSlotIndex(molecule)] ?? slots[zoneKey][0];
+    setMolecules((items) =>
+      items.map((item) =>
+        item.id === molecule.id
+          ? { ...item, x: slot.x, y: slot.y }
+          : item
+      )
+    );
+  }
+
   function isMoleculeDocked(molecule: Molecule) {
     if (dragging?.id === molecule.id) return false;
     return inBox(molecule, zones[moleculeZone(molecule.type)]);
@@ -639,7 +666,7 @@ export function GeneExpressionTool() {
             </g>
 
             {molecules.filter((molecule) => !isIntegratedIntoProcess(molecule)).map((molecule) => (
-              <MoleculeNode key={molecule.id} molecule={molecule} docked={isMoleculeDocked(molecule)} dragging={dragging?.id === molecule.id} onPointerDown={startDrag} />
+              <MoleculeNode key={molecule.id} molecule={molecule} docked={isMoleculeDocked(molecule)} dragging={dragging?.id === molecule.id} onPointerDown={startDrag} onKeyToggle={toggleMoleculeDocking} />
             ))}
           </svg>
         </div>
@@ -771,6 +798,15 @@ export function GeneExpressionTool() {
             #gene-expression > div:first-child {
               grid-template-columns: 1fr !important;
             }
+          }
+
+          #gene-expression svg [role="button"]:focus-visible ellipse {
+            stroke: var(--cherry-red);
+            stroke-width: 4;
+          }
+
+          #gene-expression svg [role="button"]:focus-visible text {
+            fill: var(--cherry-red);
           }
         `}
       </style>
