@@ -1,22 +1,66 @@
 import { type FormEvent, useState } from "react";
 import { IconMail, IconSend, IconGithub, IconLeaf, IconCheck } from "./Icons";
 
+const emailAddress = "liruirui321@gmail.com";
+
+async function copyText(text: string) {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // Fall back for browsers that expose Clipboard API but deny the call.
+    }
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  textarea.style.top = "0";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
+  try {
+    return document.execCommand("copy");
+  } finally {
+    document.body.removeChild(textarea);
+  }
+}
+
 export function Contact() {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copyStatus, setCopyStatus] = useState("");
 
   function sendMail(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!name.trim() || !message.trim()) return;
     const subject = encodeURIComponent(`By Cherry 留言 - ${name.trim()}`);
     const body = encodeURIComponent(`${message.trim()}\n\n来自：${name.trim()}`);
-    window.location.href = `mailto:liruirui321@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
     setSent(true);
   }
 
+  async function copyEmail() {
+    const copiedToClipboard = await copyText(emailAddress);
+    if (copiedToClipboard) {
+      setCopiedEmail(true);
+      setCopyStatus("邮箱已复制。");
+      window.setTimeout(() => setCopiedEmail(false), 1400);
+      return;
+    }
+
+    setCopiedEmail(false);
+    setCopyStatus("复制失败，请手动复制邮箱。");
+  }
+
   const socials = [
-    { icon: <IconMail size={17} />, label: "Email", href: "mailto:liruirui321@gmail.com" },
+    { icon: <IconMail size={17} />, label: "Email", href: `mailto:${emailAddress}` },
     { icon: <IconGithub size={17} />, label: "GitHub", href: "https://github.com/liruirui321" },
   ];
 
@@ -59,6 +103,16 @@ export function Contact() {
         <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.95rem", maxWidth: 480, margin: "0 auto 2.5rem" }}>
           如果你想聊聊科学、课程、AI 工具，或者只是想说一声「你好」，都欢迎给我留言~ 我会认真读每一条。
         </p>
+
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.52rem 0.42rem 0.9rem", marginBottom: "1.4rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
+          <span style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.84rem" }}>{emailAddress}</span>
+          <button type="button" onClick={copyEmail} aria-describedby="contact-copy-status" style={{ background: copiedEmail ? "var(--cherry-sage-light)" : "var(--cherry-forest)", color: copiedEmail ? "var(--cherry-forest)" : "#FAF7F1", border: copiedEmail ? "1.5px solid var(--cherry-sage)" : "none", borderRadius: 999, padding: "0.38rem 0.78rem", fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: "0.78rem", cursor: "pointer" }}>
+            {copiedEmail ? "已复制" : "复制邮箱"}
+          </button>
+        </div>
+        <div id="contact-copy-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginTop: "-1rem", marginBottom: "0.9rem" }}>
+          {copyStatus}
+        </div>
 
         {/* Note form card */}
         {!sent ? (
@@ -226,6 +280,7 @@ export function Contact() {
         {`
           #contact input:focus-visible,
           #contact textarea:focus-visible,
+          #contact button:focus-visible,
           #contact .contact-submit:focus-visible,
           #contact .contact-reset:focus-visible,
           #contact .contact-social-link:focus-visible {
