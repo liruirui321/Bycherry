@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IconMail, IconSend, IconTwitter, IconGithub, IconZhihu, IconBilibili, IconLeaf, IconCheck } from "./Icons";
+import { IconMail, IconSend, IconGithub, IconLeaf, IconCheck } from "./Icons";
 
 export function Contact() {
   const [name, setName] = useState("");
@@ -15,10 +15,8 @@ export function Contact() {
   }
 
   const socials = [
-    { icon: <IconTwitter size={17} />, label: "Twitter" },
-    { icon: <IconZhihu size={17} />, label: "知乎" },
-    { icon: <IconBilibili size={17} />, label: "Bilibili" },
-    { icon: <IconGithub size={17} />, label: "GitHub" },
+    { icon: <IconMail size={17} />, label: "Email", href: "mailto:liruirui321@gmail.com" },
+    { icon: <IconGithub size={17} />, label: "GitHub", href: "https://github.com/liruirui321" },
   ];
 
   return (
@@ -156,10 +154,10 @@ export function Contact() {
               <IconCheck size={40} color="var(--cherry-forest)" />
             </div>
             <h3 style={{ fontFamily: "'Caveat', cursive", fontSize: "1.45rem", color: "var(--cherry-warm-brown)", fontWeight: 700, marginBottom: "0.5rem" }}>
-              收到了！谢谢 {name} ~
+              邮件草稿已打开，谢谢 {name} ~
             </h3>
             <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.9rem" }}>
-              我会认真读你的留言，有空就回复你
+              确认内容后在邮件客户端发送，我就能收到你的留言
             </p>
             <div style={{ display: "flex", justifyContent: "center", marginTop: "0.75rem" }}>
               <IconLeaf size={28} color="var(--cherry-forest)" />
@@ -172,7 +170,9 @@ export function Contact() {
           {socials.map((s) => (
             <a
               key={s.label}
-              href="#"
+              href={s.href}
+              target={s.href.startsWith("https://") ? "_blank" : undefined}
+              rel={s.href.startsWith("https://") ? "noreferrer" : undefined}
               style={{
                 display: "flex", alignItems: "center", gap: 6,
                 color: "var(--cherry-warm-mid)",
