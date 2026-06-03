@@ -9,9 +9,17 @@ function navigateHome(hash: string) {
   window.dispatchEvent(new PopStateEvent("popstate"));
 }
 
+function navigateToPath(href: string) {
+  window.history.pushState(null, "", href);
+  window.dispatchEvent(new PopStateEvent("popstate"));
+}
+
 export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: string }) {
   const collection = kind === "note" ? notes : essays;
   const article = collection.find((item) => item.slug === slug);
+  const articleIndex = collection.findIndex((item) => item.slug === slug);
+  const previousArticle = articleIndex > 0 ? collection[articleIndex - 1] : null;
+  const nextArticle = articleIndex >= 0 && articleIndex < collection.length - 1 ? collection[articleIndex + 1] : null;
   const backHash = kind === "note" ? "#notes" : "#research";
   const backText = kind === "note" ? "回到笔记" : "回到科研随笔";
 
@@ -146,6 +154,37 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
             >
               {backText} <IconArrowRight size={14} color="var(--cherry-forest)" />
             </a>
+
+            {(previousArticle || nextArticle) ? (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.8rem", marginTop: "1.2rem" }}>
+                {previousArticle ? (
+                  <a
+                    href={previousArticle.href}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      navigateToPath(previousArticle.href);
+                    }}
+                    style={{ display: "grid", gap: "0.35rem", background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.85rem", color: "var(--cherry-warm-mid)", textDecoration: "none" }}
+                  >
+                    <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-forest)", fontWeight: 900 }}>上一篇</span>
+                    <strong style={{ color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.9rem" }}>{previousArticle.title}</strong>
+                  </a>
+                ) : null}
+                {nextArticle ? (
+                  <a
+                    href={nextArticle.href}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      navigateToPath(nextArticle.href);
+                    }}
+                    style={{ display: "grid", gap: "0.35rem", background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.85rem", color: "var(--cherry-warm-mid)", textDecoration: "none" }}
+                  >
+                    <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-forest)", fontWeight: 900 }}>下一篇</span>
+                    <strong style={{ color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.9rem" }}>{nextArticle.title}</strong>
+                  </a>
+                ) : null}
+              </div>
+            ) : null}
           </article>
 
           <div style={{ display: "flex", justifyContent: "center", marginTop: "1.5rem", opacity: 0.55 }}>
