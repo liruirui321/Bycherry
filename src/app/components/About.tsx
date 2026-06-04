@@ -170,7 +170,7 @@ export function About() {
 
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginTop: "1.35rem" }}>
             <a href="#works" onClick={(event) => navigateHomeSection("#works", event)} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.58rem 1rem", textDecoration: "none", fontWeight: 900, fontSize: "0.86rem", boxShadow: "3px 5px 0px rgba(58,92,62,0.2)" }}>
-              打开作品
+              打开主题作品
             </a>
             <a href="#contact" onClick={(event) => navigateHomeSection("#contact", event)} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.58rem 1rem", textDecoration: "none", fontWeight: 900, fontSize: "0.86rem" }}>
               联系 Cherry

@@ -2,7 +2,7 @@ import { IconCherry, IconLeafSmall } from "./Icons";
 import { navigateHomeSection } from "../navigation";
 
 const footerLinks = [
-  { label: "作品", href: "#works" },
+  { label: "主题作品", href: "#works" },
   { label: "科研", href: "#research" },
   { label: "笔记", href: "#notes" },
   { label: "联系", href: "#contact" },
@@ -71,7 +71,7 @@ export function Footer() {
       </div>
 
       <p style={{ fontSize: "0.8rem", margin: 0 }}>
-        科学、课程和 AI 作品 · © 2026 By Cherry
+        科学、课程和 AI 主题作品 · © 2026 By Cherry
       </p>
       <style>
         {`

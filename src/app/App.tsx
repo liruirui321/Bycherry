@@ -96,7 +96,7 @@ function buildHomeJsonLd() {
         "@type": "ItemList",
         "@id": worksListId,
         name: "By Cherry 主题作品",
-        description: "科学教育、AI 工具和课程设计作品。",
+        description: "科学教育、AI 工具和课程设计主题作品。",
         numberOfItems: works.length,
         itemListElement: works.map((work, index) => ({
           "@type": "ListItem",

@@ -1735,13 +1735,13 @@ function WorkSequenceLinks({ work }: { work: Work }) {
   }
 
   const navItems = [
-    previousWork ? { label: "上一个作品", direction: "←", work: previousWork, align: "left" as const } : null,
-    nextWork ? { label: "下一个作品", direction: "→", work: nextWork, align: "right" as const } : null,
+    previousWork ? { label: "上一个主题作品", direction: "←", work: previousWork, align: "left" as const } : null,
+    nextWork ? { label: "下一个主题作品", direction: "→", work: nextWork, align: "right" as const } : null,
   ].filter((item): item is { label: string; direction: string; work: Work; align: "left" | "right" } => Boolean(item));
 
   return (
     <section style={{ padding: "0 1.5rem 1rem", fontFamily: "'Nunito', sans-serif" }}>
-      <nav aria-label="作品前后导航" style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.85rem" }}>
+      <nav aria-label="主题作品前后导航" style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.85rem" }}>
         {navItems.map((item) => (
           <a
             className="work-sequence-card"
@@ -1785,8 +1785,8 @@ export function WorkDetailPage({ slug }: { slug: string }) {
       <section id="main-content" tabIndex={-1} style={{ minHeight: "58vh", padding: "5rem 1.5rem", display: "grid", placeItems: "center", fontFamily: "'Nunito', sans-serif" }}>
         <EmptyStateCard
           eyebrow="主题作品"
-          title="没有找到这个作品"
-          body="这个作品地址可能已经移动。可以回到主题作品区，继续浏览科学模拟、课程卡片和 AI 工具。"
+          title="没有找到这个主题作品"
+          body="这个主题作品地址可能已经移动。可以回到主题作品区，继续浏览科学模拟、课程卡片和 AI 工具。"
           href="/#works"
           linkText="回到主题作品"
           onNavigate={(event) => {
