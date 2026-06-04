@@ -207,6 +207,29 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
 
   if (slug === "crispr-interactive") {
     return (
+      <img
+        src="/illustrations/crispr-editing-flow.webp"
+        width={width}
+        height={height}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        style={{
+          width,
+          height,
+          display: "block",
+          objectFit: "cover",
+          borderRadius: 16,
+          border: "1.5px solid rgba(214,91,74,0.2)",
+          boxShadow: "0 10px 20px rgba(94,68,42,0.08)",
+          background: "rgba(250,247,241,0.72)",
+        }}
+      />
+    );
+  }
+
+  if (slug === "crispr-interactive-vector-fallback") {
+    return (
       <svg width={width} height={height} viewBox="0 0 96 72" fill="none" aria-hidden="true">
         <rect x="8" y="14" width="80" height="44" rx="18" fill="rgba(250,247,241,0.66)" stroke="rgba(94,68,42,0.12)" strokeWidth="1.2" />
         <path d="M14 31 H86" stroke="var(--cherry-blue)" strokeWidth="5" strokeLinecap="round" />
