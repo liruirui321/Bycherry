@@ -26,7 +26,7 @@ npm run dev
 npm run build
 ```
 
-`npm run build` runs four verification steps before Vite builds:
+`npm run build` regenerates `public/sitemap.xml`, then runs four verification steps before Vite builds:
 
 - `verify:public` checks the custom domain, host fallbacks, robots file, manifest, favicon, social preview image, and static index metadata fallback.
 - `verify:links` checks static internal links, public routes, home anchors, and static public asset links.
@@ -40,6 +40,7 @@ npm run verify:public
 npm run verify:links
 npm run verify:a11y
 npm run verify:sitemap
+npm run generate:sitemap
 ```
 
 ## Deployment
@@ -55,7 +56,7 @@ Search crawler hints live in `public/robots.txt` and `public/sitemap.xml`.
 When adding or removing public content:
 
 - Add the route to the matching data source in `src/app/components/Works.tsx`, `Notes.tsx`, or `ResearchEssays.tsx`.
-- Update `public/sitemap.xml` with the same route.
+- Run `npm run generate:sitemap` or `npm run build` to update `public/sitemap.xml`.
 - For works, keep sitemap `lastmod` equal to the item `updated` in `Works.tsx`.
 - For notes and research essays, keep sitemap `lastmod` equal to the item `date`.
 - Make sure any new static links point to an existing route, home anchor, or public asset.
