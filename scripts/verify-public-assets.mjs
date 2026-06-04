@@ -104,13 +104,19 @@ const indexHtml = readRoot("index.html");
 const contentHrefs = getContentHrefs();
 expect(indexHtml.includes('<html lang="zh-CN">'), "index.html must declare zh-CN language.");
 expect(indexHtml.includes(`<meta name="theme-color" content="${appThemeColor}" />`), "index.html theme-color must match the app theme color.");
+expect(indexHtml.includes('<meta name="application-name" content="By Cherry" />'), "index.html must include the PWA application name.");
+expect(indexHtml.includes('<meta name="apple-mobile-web-app-title" content="By Cherry" />'), "index.html must include the Apple mobile web app title.");
+expect(indexHtml.includes('<meta name="mobile-web-app-capable" content="yes" />'), "index.html must declare mobile web app capability.");
 expect(indexHtml.includes('<link rel="canonical" href="https://bycherry.me/" />'), "index.html must include the home canonical URL.");
+expect(indexHtml.includes('<meta property="og:url" content="https://bycherry.me/" />'), "index.html must include the home OG URL.");
 expect(indexHtml.includes(`<meta property="og:description" content="${shareDescription}" />`), "index.html must include the current OG description.");
 expect(indexHtml.includes(`<meta name="twitter:description" content="${shareDescription}" />`), "index.html must include the current Twitter description.");
 expect(indexHtml.includes(`<meta property="og:image:alt" content="${shareImageAlt}" />`), "index.html must include the current OG image alt text.");
 expect(indexHtml.includes(`<meta name="twitter:image:alt" content="${shareImageAlt}" />`), "index.html must include the current Twitter image alt text.");
 expect(!indexHtml.includes(retiredShareCopy), "index.html must not include retired share copy.");
+expect(indexHtml.includes('<meta property="og:image" content="https://bycherry.me/social-preview.png" />'), "index.html must include the current OG image URL.");
 expect(indexHtml.includes('<meta property="og:image:secure_url" content="https://bycherry.me/social-preview.png" />'), "index.html must include og:image:secure_url.");
+expect(indexHtml.includes('<meta name="twitter:image" content="https://bycherry.me/social-preview.png" />'), "index.html must include the current Twitter image URL.");
 expect(indexHtml.includes('<link rel="preconnect" href="https://fonts.googleapis.com" />'), "index.html must preconnect to Google Fonts.");
 expect(indexHtml.includes("<noscript>"), "index.html must include a noscript content index.");
 for (const href of contentHrefs) {
@@ -147,4 +153,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log("Public assets verified: domain, host fallbacks, robots, manifest, favicon, social preview, and index metadata.");
+console.log("Public assets verified: domain, host fallbacks, robots, manifest, favicon, PWA titles, social preview metadata, and index metadata.");
