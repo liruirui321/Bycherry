@@ -7,6 +7,52 @@ import { useState } from "react";
 
 type ArticleKind = "note" | "research";
 
+function ArticleIllustration({ slug, color }: { slug: string; color: string }) {
+  const isAi = slug.includes("ai") || slug.includes("workflow") || slug.includes("assessment");
+  const isPlant = slug.includes("plant") || slug.includes("genome") || slug.includes("science");
+
+  if (isAi) {
+    return (
+      <svg width="144" height="108" viewBox="0 0 144 108" fill="none" aria-hidden="true" focusable="false">
+        <rect x="18" y="29" width="82" height="52" rx="14" fill="rgba(250,247,241,0.86)" stroke={color} strokeWidth="2.4" />
+        <rect x="29" y="40" width="47" height="7" rx="3.5" fill="var(--cherry-blue-light)" />
+        <path d="M30 56 H82 M30 66 H72" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.45" />
+        <path d="M42 82 H94" stroke="var(--cherry-warm-brown)" strokeWidth="4" strokeLinecap="round" opacity="0.18" />
+        <path d="M103 24 L108 35 L120 39 L109 45 L105 57 L99 46 L87 42 L98 36Z" fill="var(--cherry-yellow)" stroke="rgba(94,68,42,0.16)" strokeWidth="1.4" />
+        <path d="M113 63 C125 56 138 63 136 77 C134 91 113 94 106 81 C102 73 105 67 113 63Z" fill="var(--cherry-peach-light)" stroke="var(--cherry-red)" strokeWidth="2.2" />
+        <circle cx="116" cy="76" r="3.4" fill="var(--cherry-red)" />
+        <circle cx="127" cy="77" r="3.4" fill="var(--cherry-red)" />
+        <path d="M118 85 C123 89 128 88 132 84" stroke="var(--cherry-warm-brown)" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (isPlant) {
+    return (
+      <svg width="144" height="108" viewBox="0 0 144 108" fill="none" aria-hidden="true" focusable="false">
+        <path d="M15 88 C34 72 55 76 71 65 C93 50 111 61 132 43 V102 H15Z" fill="var(--cherry-sage-light)" opacity="0.72" />
+        <path d="M23 91 C43 98 98 98 125 88" stroke="rgba(58,92,62,0.2)" strokeWidth="5" strokeLinecap="round" />
+        <path d="M47 90 C43 65 50 45 65 25" stroke="var(--cherry-forest)" strokeWidth="5" strokeLinecap="round" />
+        <path d="M59 34 C75 17 101 22 109 42 C85 53 68 49 59 34Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
+        <path d="M50 58 C31 49 18 58 16 77 C34 82 46 75 50 58Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
+        <circle cx="96" cy="39" r="8" fill="var(--cherry-red)" opacity="0.84" />
+        <path d="M88 18 C99 10 113 12 121 22" stroke="var(--cherry-yellow)" strokeWidth="6" strokeLinecap="round" opacity="0.75" />
+        <path d="M24 31 C35 20 48 20 60 32" stroke="var(--cherry-blue)" strokeWidth="5" strokeLinecap="round" opacity="0.28" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg width="144" height="108" viewBox="0 0 144 108" fill="none" aria-hidden="true" focusable="false">
+      <rect x="24" y="22" width="74" height="66" rx="16" fill="rgba(250,247,241,0.88)" stroke={color} strokeWidth="2.4" />
+      <path d="M38 42 H82 M38 55 H78 M38 68 H70" stroke="var(--cherry-warm-mid)" strokeWidth="3.4" strokeLinecap="round" opacity="0.42" />
+      <circle cx="101" cy="34" r="15" fill="var(--cherry-yellow)" opacity="0.78" />
+      <path d="M92 70 C105 57 125 61 132 77 C113 89 99 84 92 70Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
+      <path d="M108 25 L113 33 L122 35 L115 41 L113 50 L108 42 L99 39 L106 34Z" fill="var(--cherry-peach)" />
+    </svg>
+  );
+}
+
 function navigateHome(hash: string) {
   navigateClient(`/${hash}`);
 }
@@ -98,6 +144,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       <section style={{ padding: "0.45rem 1.5rem 1.2rem" }}>
         <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <article
+            className="article-detail-card"
             style={{
               background: "var(--card)",
               border: "1.5px solid var(--border)",
@@ -109,13 +156,11 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             }}
           >
             <div style={{ position: "absolute", top: -10, right: 28, width: 68, height: 17, background: article.tagBg ?? article.labelBg, opacity: 0.72, borderRadius: 4, transform: "rotate(4deg)" }} />
-            <svg style={{ position: "absolute", right: 14, top: 38, opacity: 0.13 }} width="76" height="64" viewBox="0 0 98 82" fill="none" aria-hidden="true" focusable="false">
-              <path d="M16 72 Q24 42 72 13 Q75 50 16 72Z" fill={article.tagColor ?? article.labelColor} />
-              <path d="M22 67 Q43 51 68 22" stroke="var(--cherry-warm-brown)" strokeWidth="2" strokeLinecap="round" opacity="0.35" />
-              <circle cx="27" cy="31" r="7" fill="var(--cherry-yellow)" opacity="0.8" />
-            </svg>
+            <div className="article-illustration-stamp" style={{ background: article.tagBg ?? article.labelBg, borderColor: article.tagColor ?? article.labelColor }}>
+              <ArticleIllustration slug={article.slug} color={article.tagColor ?? article.labelColor} />
+            </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: "0.38rem", paddingRight: 70 }}>
+            <div className="article-meta-row" style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: "0.38rem", paddingRight: 162 }}>
               <a
                 className="article-detail-link article-back-chip"
                 href={`/${backHash}`}
@@ -288,6 +333,38 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             outline-offset: 4px;
           }
 
+          .article-illustration-stamp {
+            position: absolute;
+            top: 2.7rem;
+            right: 1.05rem;
+            width: 144px;
+            height: 108px;
+            border: 1.5px dashed;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 3px 6px 0 rgba(94,68,42,0.07);
+            transform: rotate(1.5deg);
+            overflow: hidden;
+          }
+
+          .article-illustration-stamp svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+          }
+
+          @media (min-width: 760px) {
+            .article-detail-card {
+              padding-right: 10.5rem !important;
+            }
+
+            .article-meta-row {
+              padding-right: 0 !important;
+            }
+          }
+
           .article-detail-link:hover,
           .article-detail-link:focus-visible {
             color: var(--cherry-red) !important;
@@ -311,9 +388,29 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           }
 
           @media (prefers-reduced-motion: reduce) {
+            .article-illustration-stamp {
+              transform: none !important;
+            }
+
             .article-nav-card {
               transition: none !important;
               transform: none !important;
+            }
+          }
+
+          @media (max-width: 759px) {
+            .article-illustration-stamp {
+              position: relative;
+              top: auto;
+              right: auto;
+              width: min(100%, 178px);
+              height: 88px;
+              margin: 0 0 0.48rem auto;
+              transform: rotate(0.8deg);
+            }
+
+            .article-meta-row {
+              padding-right: 0 !important;
             }
           }
         `}
