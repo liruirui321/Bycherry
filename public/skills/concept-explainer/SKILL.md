@@ -20,6 +20,8 @@ Ask for or infer these fields:
 
 If the concept is too broad, narrow it to one chapter, phenomenon, problem type, or use case before explaining.
 
+If any field is missing, ask at most two short questions. If the learner wants to continue without answering, make the smallest safe assumption, label it as "assumption", and keep the source boundary as "unknown".
+
 ## Workflow
 
 1. Identify the subject, learning stage, and use context.
@@ -30,6 +32,14 @@ If the concept is too broad, narrow it to one chapter, phenomenon, problem type,
 6. Give one practice situation that requires the learner to produce an explanation, not just recognize an answer.
 7. Add an understanding audit with observable pass criteria.
 8. Finish with one quick check and an evidence boundary.
+
+## Visual Mode Selection
+
+- Use a flow diagram for processes, sequences, synthesis, decomposition, or transformations.
+- Use a comparison table for differences, categories, similar terms, or common confusions.
+- Use a causal chain for regulation, effects, mechanisms, causes, or consequences.
+- Use a cycle map for loops, cycles, feedback, rhythms, or repeated states.
+- Use a three-column concept map when the concept is broad and needs definition, example, mechanism, and boundary.
 
 ## Visual Structure Rules
 
@@ -58,12 +68,24 @@ If the concept is too broad, narrow it to one chapter, phenomenon, problem type,
 13. Quick check: one multiple-choice question with answer and explanation.
 14. Evidence boundary: what needs to be checked in source material.
 
+## Completion Gate
+
+Before finishing, make sure the answer gives the learner a minimum usable output:
+
+- A one-sentence explanation in the learner's own words.
+- A mechanism retelling in 1-4 steps.
+- One transfer example where the concept is applied to a new case.
+- One boundary statement saying what the concept cannot directly prove.
+
+If any of these are missing, add them before the final answer.
+
 ## Quality Rules
 
 - Speak directly to the learner with "you".
 - Keep the structure stable so the result can become a study card.
 - Mark uncertain or source-dependent content as "to verify".
 - Do not fabricate facts, values, species, diseases, formulas, or research conclusions.
+- If source boundary is unknown, separate general explanation from source-dependent facts.
 - Separate definition, example, mechanism, evidence, and boundary.
 - Add pass criteria so the learner can judge whether the output is usable.
 - Make the final task observable: the learner should know what to write, draw, compare, or check.

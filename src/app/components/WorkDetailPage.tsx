@@ -2359,12 +2359,13 @@ function ConceptExplainerContent() {
   ];
   const conceptSkillSteps = [
     "先判断概念所属学科、学习阶段和使用场景。",
+    "如果缺少学习阶段、目标或来源，最多问 2 个短问题；若继续生成，就把假设写明。",
     "再生成一个诊断问题，暴露我可能卡住的地方。",
     "再给出一个低门槛类比，但明确类比不能推出什么。",
-    "再选择一种可视化解释：流程图、对照表、三栏概念图或因果链。",
+    "再选择一种可视化解释：流程图、对照表、三栏概念图、因果链或循环图。",
     "再拆成 4 个以内的机制步骤，避免堆术语。",
     "再给出一个情境练习，让我产出一句解释或一张小表。",
-    "最后生成即时小测和证据边界，提醒哪些内容需要查教材或资料。",
+    "最后生成即时小测、证据边界和完成门槛，提醒哪些内容需要查教材或资料。",
   ];
   const visualMode = /循环|周期|轮回|代谢/.test(concept)
     ? "循环图"
@@ -2554,9 +2555,19 @@ Ask for or infer these fields:
 
 If the concept is too broad, narrow it to one chapter, phenomenon, problem type, or use case before explaining.
 
+If any field is missing, ask at most two short questions. If the learner wants to continue without answering, make the smallest safe assumption, label it as "assumption", and keep the source boundary as "unknown".
+
 ## Workflow
 
 ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+## Visual Mode Selection
+
+- Use a flow diagram for processes, sequences, synthesis, decomposition, or transformations.
+- Use a comparison table for differences, categories, similar terms, or common confusions.
+- Use a causal chain for regulation, effects, mechanisms, causes, or consequences.
+- Use a cycle map for loops, cycles, feedback, rhythms, or repeated states.
+- Use a three-column concept map when the concept is broad and needs definition, example, mechanism, and boundary.
 
 ## Output Format
 
@@ -2576,12 +2587,24 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 13. Quick check: one multiple-choice question with answer and explanation.
 14. Evidence boundary: what needs to be checked in source material.
 
+## Completion Gate
+
+Before finishing, make sure the answer gives the learner a minimum usable output:
+
+- A one-sentence explanation in the learner's own words.
+- A mechanism retelling in 1-4 steps.
+- One transfer example where the concept is applied to a new case.
+- One boundary statement saying what the concept cannot directly prove.
+
+If any of these are missing, add them before the final answer.
+
 ## Quality Rules
 
 - Speak directly to the learner with "you".
 - Keep the structure stable so the result can become a study card.
 - Mark uncertain or source-dependent content as "to verify".
 - 不编造具体事实、数据、物种、疾病、公式或研究结论。
+- If source boundary is unknown, separate general explanation from source-dependent facts.
 - Separate definition, example, mechanism, evidence, and boundary.
 - Add pass criteria so the learner can judge whether the output is usable.
 - Make the final task observable: the learner should know what to write, draw, compare, or check.`;
