@@ -96,6 +96,26 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const checklist = article && "checklist" in article ? article.checklist : [];
   const starterTemplate = article && "starterTemplate" in article ? article.starterTemplate : [];
   const pitfalls = article && "pitfalls" in article ? article.pitfalls : [];
+  const platformUrl = article && "platformUrl" in article ? article.platformUrl : null;
+  const platformUsePlans = platformUrl
+    ? [
+        {
+          title: "预习诊断",
+          fields: ["用途：预习诊断", "题量：3-5 题", "目标：判断自己有没有进入新主题的基础"],
+          output: "先看错题类型，再决定要不要补先修概念。",
+        },
+        {
+          title: "概念检查",
+          fields: ["用途：概念检查", "题量：1-2 道辨析题", "目标：暴露刚学完的混淆点"],
+          output: "重点审核干扰项是否来自真实误解。",
+        },
+        {
+          title: "复习巩固",
+          fields: ["用途：复习巩固", "题量：6-10 题", "目标：把概念、过程和证据串起来"],
+          output: "完成后记录高频错因，并回到学习卡修改。",
+        },
+      ]
+    : [];
   const starterTemplateText = starterTemplate.map((item) => `- ${item}`).join("\n");
   const actionPackText = article
     ? `【行动包】${article.title}
@@ -290,7 +310,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             {"platformUrl" in article ? (
               <a
                 className="article-detail-link"
-                href={article.platformUrl}
+                href={platformUrl ?? "#"}
                 target="_blank"
                 rel="noreferrer"
                 style={{
@@ -309,6 +329,35 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               >
                 打开平台：scifuion.top
               </a>
+            ) : null}
+
+            {platformUsePlans.length ? (
+              <div style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>平台速用卡</div>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginTop: "0.18rem", fontWeight: 800 }}>
+                      先选一个用途，把字段照填进平台，再用检查清单审核生成结果。
+                    </div>
+                  </div>
+                  <a className="article-detail-link" href={platformUrl ?? "#"} target="_blank" rel="noreferrer" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.36rem 0.72rem", textDecoration: "none", fontWeight: 900, fontSize: "0.74rem" }}>
+                    进入 scifuion.top
+                  </a>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
+                  {platformUsePlans.map((plan) => (
+                    <div key={plan.title} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem", display: "grid", gap: "0.48rem" }}>
+                      <strong style={{ color: "var(--cherry-forest)", fontSize: "0.8rem" }}>{plan.title}</strong>
+                      <div style={{ display: "grid", gap: "0.3rem" }}>
+                        {plan.fields.map((field) => (
+                          <span key={field} style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.48, fontWeight: 800 }}>{field}</span>
+                        ))}
+                      </div>
+                      <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.5, fontWeight: 900 }}>{plan.output}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ) : null}
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.6rem", marginBottom: "0.9rem" }}>
