@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { IconCheck, IconDNA, IconMicroscope, IconSparkle } from "./Icons";
+import { copyText } from "../clipboard";
 
 type MoleculeType = "tf" | "pol" | "ribosome";
 type ZoneKey = "promoter" | "polymerase" | "ribosome";
@@ -671,6 +672,8 @@ export function GeneExpressionTool() {
   const [speed, setSpeed] = useState(1);
   const [activeQuizIndex, setActiveQuizIndex] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState<Record<string, string>>({});
+  const [copiedProcessRecord, setCopiedProcessRecord] = useState(false);
+  const [processRecordStatus, setProcessRecordStatus] = useState("");
 
   const model = useMemo(() => {
     const tfBound = molecules.filter((molecule) => molecule.type === "tf" && inBox(molecule, zones.promoter)).length;
@@ -756,6 +759,37 @@ export function GeneExpressionTool() {
   ];
   const activeProcessFocus = processFocusCards.find((item) => item.active)?.title ?? "等待启动";
   const accessibleSummary = `基因表达仿真。启动子上有 ${model.tfBound} 个转录因子，基因区有 ${model.polBound} 个 RNA 聚合酶，核糖体入口有 ${model.ribBound} 个核糖体。当前 mRNA 数量 ${visibleMrnaCount}，已接入氨基酸 ${visibleProteinCount}。当前过程焦点：${activeProcessFocus}。当前状态：${currentStatus} 下一步：${nextTask}`;
+  const expressionProcessRecord = `【基因表达过程记录】
+当前状态：${currentStatus}
+下一步：${nextTask}
+
+一、分子状态
+启动子上的转录因子：${model.tfBound}
+参与转录的 RNA 聚合酶：${model.polBound}
+核糖体入口：${model.ribBound}
+正在读取的核糖体：${activeRibosomeCount}
+
+二、过程焦点
+${processFocusCards.map((item, index) => `${index + 1}. ${item.title}：${item.active ? "正在发生" : "等待条件"}。${item.body}`).join("\n")}
+
+三、翻译放大镜
+当前密码子：${focusedCodon?.rna ?? "等待 mRNA 片段"}
+tRNA 反密码子：${focusedCodon?.anticodon ?? "等待核糖体读取"}
+氨基酸：${focusedCodon?.amino ?? "等待多肽延伸"}
+出口处多肽片段：${peptidePreview}
+
+四、读数
+mRNA 数量：${visibleMrnaCount}/${mrnaReadoutMax}
+已接入氨基酸：${visibleProteinCount}/${proteinReadoutMax}
+转录速率：${model.transcriptionOn ? Math.min(100, 28 + model.tfBound * 18 + model.polBound * 16) : 0}%
+翻译速率：${translationRate}%
+
+五、操作任务
+${taskStatuses.map((item, index) => `${index + 1}. ${item.done ? "已完成" : "待完成"}：${item.label}`).join("\n")}
+
+六、小测进度
+已作答：${quizAnsweredCount}/${geneQuizItems.length}
+答对：${quizCorrectCount}/${geneQuizItems.length}`;
 
   useEffect(() => {
     progressRef.current = cycleProgress;
@@ -857,6 +891,8 @@ export function GeneExpressionTool() {
     setIsPaused(false);
     setDisplayedMrnaCount(0);
     setDisplayedProteinCount(0);
+    setCopiedProcessRecord(false);
+    setProcessRecordStatus("");
   }
 
   function resetScene() {
@@ -867,6 +903,8 @@ export function GeneExpressionTool() {
 
   function chooseQuizAnswer(option: string) {
     setQuizAnswers((answers) => ({ ...answers, [activeQuiz.id]: option }));
+    setCopiedProcessRecord(false);
+    setProcessRecordStatus("");
   }
 
   function nextQuiz() {
@@ -893,6 +931,8 @@ export function GeneExpressionTool() {
           : molecule
       )
     );
+    setCopiedProcessRecord(false);
+    setProcessRecordStatus("");
   }
 
   function toggleMoleculeDocking(molecule: Molecule) {
@@ -910,6 +950,21 @@ export function GeneExpressionTool() {
           : item
       )
     );
+    setCopiedProcessRecord(false);
+    setProcessRecordStatus("");
+  }
+
+  async function copyExpressionProcessRecord() {
+    const copiedToClipboard = await copyText(expressionProcessRecord);
+    if (copiedToClipboard) {
+      setCopiedProcessRecord(true);
+      setProcessRecordStatus("表达过程记录已复制到剪贴板。");
+      window.setTimeout(() => setCopiedProcessRecord(false), 1400);
+      return;
+    }
+
+    setCopiedProcessRecord(false);
+    setProcessRecordStatus("复制失败，请手动选中文本复制。");
   }
 
   function isMoleculeDocked(molecule: Molecule) {
@@ -1136,6 +1191,28 @@ export function GeneExpressionTool() {
                 </div>
               ))}
             </div>
+          </div>
+
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.75rem" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
+                <IconDNA size={18} />
+                表达过程记录
+              </div>
+              <button type="button" onClick={copyExpressionProcessRecord} aria-describedby="gene-process-record-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                {copiedProcessRecord ? "已复制" : "复制记录"}
+              </button>
+            </div>
+            <div id="gene-process-record-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 900 }}>
+              {processRecordStatus}
+            </div>
+            <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.2)", borderRadius: 16, padding: "0.72rem", color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.58, fontWeight: 800 }}>
+              <strong style={{ color: "var(--cherry-warm-brown)" }}>当前焦点：</strong>{activeProcessFocus}
+              <div style={{ marginTop: "0.34rem" }}>{currentStatus}</div>
+            </div>
+            <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.72rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.68rem", lineHeight: 1.55, maxHeight: 220, overflow: "auto" }}>
+              {expressionProcessRecord}
+            </code>
           </div>
 
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>

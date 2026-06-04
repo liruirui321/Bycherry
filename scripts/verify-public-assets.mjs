@@ -245,7 +245,7 @@ if (jsonLdMatch) {
     expect(jsonLdText.includes("拖拽 TF、RNA 聚合酶和核糖体"), "Static JSON-LD must include work descriptions.");
     expect(jsonLdText.includes("用 AI 做学习材料质检"), "Static JSON-LD must include article descriptions.");
     expect(jsonLdText.includes('"teaches"'), "Static JSON-LD work items must include teaches learning outcomes.");
-    expect(jsonLdText.includes("观察转录翻译"), "Static JSON-LD work items must include learning path steps.");
+    expect(workRoutes.every((route) => route.pathSteps.every((step) => jsonLdText.includes(step))), "Static JSON-LD work items must include learning path steps.");
     for (const route of articleRoutes) {
       expect(jsonLdText.includes(route.firstAction), `Static JSON-LD article item must include first action for ${route.path}.`);
       expect(jsonLdText.includes(route.firstCheck), `Static JSON-LD article item must include completion check for ${route.path}.`);

@@ -397,6 +397,7 @@ function verifyConceptExplainerAgentContract() {
 
 function verifyGeneExpressionLearnerContract() {
   const geneSource = read("src/app/components/GeneExpressionTool.tsx");
+  const worksSource = read("src/app/components/Works.tsx");
   const requiredGeneFeatures = [
     { label: "process tracking panel", text: "过程追踪" },
     { label: "process focus state", text: "processFocusCards" },
@@ -407,6 +408,10 @@ function verifyGeneExpressionLearnerContract() {
     { label: "5 prime free-end explanation", text: "5' 自由端露出后" },
     { label: "bead-chain explanation", text: "氨基酸小圆" },
     { label: "accessible process focus", text: "当前过程焦点" },
+    { label: "process record output", text: "expressionProcessRecord" },
+    { label: "copy process record handler", text: "copyExpressionProcessRecord" },
+    { label: "visible process record card", text: "表达过程记录" },
+    { label: "copy process record button", text: "复制记录" },
   ];
   const retiredGenePatterns = [
     { label: "teacher/classroom framing", pattern: /课堂|教师|老师|教案|授课|教学/ },
@@ -421,6 +426,9 @@ function verifyGeneExpressionLearnerContract() {
   for (const item of retiredGenePatterns) {
     expect(!item.pattern.test(geneSource), `Gene expression tool must avoid retired or incorrect copy: ${item.label}`);
   }
+
+  expect(worksSource.includes('outputs: ["表达读数", "过程记录", "即时小测"]'), "Gene expression work card outputs must include the copyable process record.");
+  expect(worksSource.includes('path: ["调节分子", "观察过程", "复制记录"]'), "Gene expression work card path must describe the learner action flow.");
 }
 
 function verifyPlantEvolutionLearnerContract() {
