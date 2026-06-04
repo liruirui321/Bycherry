@@ -183,8 +183,8 @@ expect(indexHtml.includes('<meta name="mobile-web-app-capable" content="yes" />'
 expect(indexHtml.includes(`<meta name="description" content="${siteDescription}" />`), "index.html must include the current site description.");
 expect(appMetadataSource.includes(siteDescription), "Runtime metadata module must include the current site description.");
 expect(appMetadataSource.includes(shareImageAlt), "Runtime metadata module must include the current share image alt text.");
-expect(indexHtml.includes('<link rel="canonical" href="https://bycherry.me/" />'), "index.html must include the home canonical URL.");
-expect(indexHtml.includes('<meta property="og:url" content="https://bycherry.me/" />'), "index.html must include the home OG URL.");
+expect(indexHtml.includes(`<link rel="canonical" href="${siteUrl}/" />`), "index.html must include the home canonical URL.");
+expect(indexHtml.includes(`<meta property="og:url" content="${siteUrl}/" />`), "index.html must include the home OG URL.");
 expect(indexHtml.includes(`<meta property="og:description" content="${shareDescription}" />`), "index.html must include the current OG description.");
 expect(indexHtml.includes(`<meta name="twitter:description" content="${shareDescription}" />`), "index.html must include the current Twitter description.");
 expect(indexHtml.includes(`<meta property="og:image:alt" content="${shareImageAlt}" />`), "index.html must include the current OG image alt text.");
@@ -192,9 +192,9 @@ expect(indexHtml.includes(`<meta name="twitter:image:alt" content="${shareImageA
 expect(!indexHtml.includes(retiredShareCopy), "index.html must not include retired share copy.");
 expect(!indexHtml.includes(retiredSiteDescription), "index.html must not include the retired personal-site description.");
 expect(!indexHtml.includes(retiredSharePositioning), "index.html must not include the retired share positioning.");
-expect(indexHtml.includes('<meta property="og:image" content="https://bycherry.me/social-preview.png" />'), "index.html must include the current OG image URL.");
-expect(indexHtml.includes('<meta property="og:image:secure_url" content="https://bycherry.me/social-preview.png" />'), "index.html must include og:image:secure_url.");
-expect(indexHtml.includes('<meta name="twitter:image" content="https://bycherry.me/social-preview.png" />'), "index.html must include the current Twitter image URL.");
+expect(indexHtml.includes(`<meta property="og:image" content="${siteUrl}/social-preview.png" />`), "index.html must include the current OG image URL.");
+expect(indexHtml.includes(`<meta property="og:image:secure_url" content="${siteUrl}/social-preview.png" />`), "index.html must include og:image:secure_url.");
+expect(indexHtml.includes(`<meta name="twitter:image" content="${siteUrl}/social-preview.png" />`), "index.html must include the current Twitter image URL.");
 expect(indexHtml.includes('<link rel="preconnect" href="https://fonts.googleapis.com" />'), "index.html must preconnect to Google Fonts.");
 expect(indexHtml.includes("<noscript>"), "index.html must include a noscript content index.");
 expect(indexHtml.includes("学习路径："), "index.html noscript content index must include work learning paths.");

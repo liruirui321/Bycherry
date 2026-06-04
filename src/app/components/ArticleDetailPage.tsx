@@ -79,11 +79,17 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     nextArticle ? { label: "下一篇", arrow: "→", article: nextArticle, align: "right" as const } : null,
   ].filter((item): item is { label: string; arrow: string; article: NonNullable<typeof article>; align: "left" | "right" } => Boolean(item));
   const readingPath = article
-    ? [
-        { label: "进入点", body: article.highlights[0] ?? "先找到这篇文章要解决的问题。" },
-        { label: "证据链", body: article.highlights[1] ?? "再看作者如何组织证据和判断边界。" },
-        { label: "可迁移方法", body: article.highlights[2] ?? "最后提炼可以复用到自己项目里的方法。" },
-      ]
+    ? "platformUrl" in article
+      ? [
+          { label: "平台入口", body: article.highlights[0] ?? "先打开平台，确认要使用的工具入口。" },
+          { label: "填写参数", body: article.highlights[1] ?? "再填写对象、目标、范围和生成要求。" },
+          { label: "审核投放", body: article.highlights[2] ?? "最后人工审核题目质量，再投放和复盘。" },
+        ]
+      : [
+          { label: "进入点", body: article.highlights[0] ?? "先找到这篇文章要解决的问题。" },
+          { label: "证据链", body: article.highlights[1] ?? "再看作者如何组织证据和判断边界。" },
+          { label: "可迁移方法", body: article.highlights[2] ?? "最后提炼可以复用到自己项目里的方法。" },
+        ]
     : [];
   const actionSteps = article && "actionSteps" in article ? article.actionSteps : [];
   const checklist = article && "checklist" in article ? article.checklist : [];
