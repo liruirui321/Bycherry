@@ -25,6 +25,10 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const nextArticle = articleIndex >= 0 && articleIndex < collection.length - 1 ? collection[articleIndex + 1] : null;
   const backHash = kind === "note" ? "#notes" : "#research";
   const backText = kind === "note" ? "回到笔记" : "回到科研随笔";
+  const navArticles = [
+    previousArticle ? { label: "上一篇", arrow: "←", article: previousArticle, align: "left" as const } : null,
+    nextArticle ? { label: "下一篇", arrow: "→", article: nextArticle, align: "right" as const } : null,
+  ].filter((item): item is { label: string; arrow: string; article: NonNullable<typeof article>; align: "left" | "right" } => Boolean(item));
   const summaryText = article
     ? `【阅读摘要】
 标题：${article.title}
@@ -228,38 +232,38 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               ← {backText}
             </a>
 
-            {(previousArticle || nextArticle) ? (
+            {navArticles.length > 0 ? (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.8rem", marginTop: "1.2rem" }}>
-                {previousArticle ? (
-                  <a
-                    className="article-nav-card"
-                    href={previousArticle.href}
-                    onClick={(event) => {
-                      if (!shouldUseClientNavigation(event)) return;
-                      event.preventDefault();
-                      navigateToPath(previousArticle.href);
-                    }}
-                    style={{ display: "grid", gap: "0.35rem", background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.85rem", color: "var(--cherry-warm-mid)", textDecoration: "none" }}
-                  >
-                    <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-forest)", fontWeight: 900 }}>← 上一篇</span>
-                    <strong style={{ color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.9rem" }}>{previousArticle.title}</strong>
-                  </a>
-                ) : null}
-                {nextArticle ? (
-                  <a
-                    className="article-nav-card"
-                    href={nextArticle.href}
-                    onClick={(event) => {
-                      if (!shouldUseClientNavigation(event)) return;
-                      event.preventDefault();
-                      navigateToPath(nextArticle.href);
-                    }}
-                    style={{ display: "grid", gap: "0.35rem", background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.85rem", color: "var(--cherry-warm-mid)", textDecoration: "none" }}
-                  >
-                    <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-forest)", fontWeight: 900 }}>下一篇 →</span>
-                    <strong style={{ color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.9rem" }}>{nextArticle.title}</strong>
-                  </a>
-                ) : null}
+                {navArticles.map((item) => {
+                  const itemType = "tag" in item.article ? item.article.tag : item.article.label;
+                  const itemReadTime = "readTime" in item.article ? item.article.readTime : item.article.readMin;
+                  const itemColor = "tagColor" in item.article ? item.article.tagColor : item.article.labelColor;
+                  const itemBg = "tagBg" in item.article ? item.article.tagBg : item.article.labelBg;
+
+                  return (
+                    <a
+                      className="article-nav-card"
+                      key={item.article.slug}
+                      href={item.article.href}
+                      onClick={(event) => {
+                        if (!shouldUseClientNavigation(event)) return;
+                        event.preventDefault();
+                        navigateToPath(item.article.href);
+                      }}
+                      style={{ display: "grid", gap: "0.48rem", justifyItems: item.align === "right" ? "end" : "start", textAlign: item.align, background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.85rem", color: "var(--cherry-warm-mid)", textDecoration: "none" }}
+                    >
+                      <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-forest)", fontWeight: 900 }}>
+                        {item.align === "left" ? `${item.arrow} ` : ""}{item.label}{item.align === "right" ? ` ${item.arrow}` : ""}
+                      </span>
+                      <strong style={{ color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.9rem" }}>{item.article.title}</strong>
+                      <span style={{ display: "flex", alignItems: "center", justifyContent: item.align === "right" ? "flex-end" : "flex-start", gap: 6, flexWrap: "wrap" }}>
+                        <span style={{ background: itemBg, color: itemColor, borderRadius: 999, padding: "0.13rem 0.5rem", fontSize: "0.68rem", fontWeight: 900 }}>{itemType}</span>
+                        <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-warm-mid)", fontSize: "0.78rem" }}>约 {itemReadTime} 分钟</span>
+                      </span>
+                      <span style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.52, fontSize: "0.76rem" }}>{item.article.highlights[0]}</span>
+                    </a>
+                  );
+                })}
               </div>
             ) : null}
           </article>
