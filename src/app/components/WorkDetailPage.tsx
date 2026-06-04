@@ -105,6 +105,7 @@ function PromptKitContent() {
   const activeMode = promptModes[activeModeIndex];
   const materialText = material.trim();
   const materialLines = materialText.split("\n").map((line) => line.trim()).filter(Boolean);
+  const apiOutputFields = ["task", "material_summary", "evidence_items", "inference_items", "missing_fields", "risk_flags", "reviewer_questions", "final_report"];
   const materialChecks = [
     {
       label: "材料量",
@@ -131,6 +132,7 @@ function PromptKitContent() {
     审稿意见回应: ["先把审稿意见拆成可执行任务。", "区分已完成修改、需要补充分析和无法补做的限制。", "逐条生成回应结构。"],
     术语一致性检查: ["先列出核心术语、缩写和变量名。", "检查首次定义、图文一致性和同义词混用。", "给出建议统一写法。"],
   };
+  const activeTaskActions = taskActions[activePrompt.title] ?? activePrompt.output;
   const localPreviewOutput = `【本地 Agent 预览】
 任务：${activePrompt.title}
 工作模式：${activeMode.title}
@@ -140,17 +142,43 @@ function PromptKitContent() {
 ${materialChecks.map((item) => `${item.label}：${item.value}。${item.detail}`).join("\n")}
 
 二、任务执行顺序
-${(taskActions[activePrompt.title] ?? activePrompt.output).map((item, index) => `${index + 1}. ${item}`).join("\n")}
+${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
 三、当前证据边界
 ${missingFields.length ? `需要补充：${missingFields.join("、")}。` : "材料具备进入模型分析的基本线索，仍需人工确认原文来源。"}
 
 四、API Agent 输出字段建议
-task, material_summary, evidence_items, inference_items, missing_fields, risk_flags, reviewer_questions, final_report`;
+${apiOutputFields.join(", ")}`;
+  const marketNeeds = [
+    {
+      title: "科研新人",
+      body: "读完论文却不知道结论从哪来，需要把研究问题、方法、结果和局限拆成可核查条目。",
+    },
+    {
+      title: "实验与投稿",
+      body: "实验设计、讨论段落和审稿回复需要先找风险，再决定哪些内容能写、哪些必须回查。",
+    },
+    {
+      title: "科研转译",
+      body: "教师和创作者需要把真实材料改写成课堂问题、图表讲解和可复用的知识卡。",
+    },
+  ];
+  const productModules = [
+    { title: "任务路由", body: "识别当前材料适合文献精读、实验设计检查、图表解读还是审稿回应。" },
+    { title: "证据表", body: "把原文证据、合理推断、缺失信息和风险提醒拆开，避免一段话糊在一起。" },
+    { title: "报告框架", body: "生成可复制的导师汇报、论文修改建议、图表解读报告或审稿回复结构。" },
+    { title: "API 执行层", body: "后续接模型和文献数据源，把任务包送入 API，并要求返回结构化 JSON 字段。" },
+  ];
+  const boundaryItems = [
+    "不保证论文结论正确，只整理材料和证据关系。",
+    "不编造引用、DOI、样本量或统计结果；材料没有就标为待补充。",
+    "不替代导师判断、统计分析、伦理审批或临床/高风险决策。",
+    "API 版也要保留人工确认，最终结论由用户复核后使用。",
+  ];
   const agentCards = [
     {
       title: "当前版本",
-      body: "本地生成模型指令、任务包和验收清单；材料只在浏览器里编辑，不上传，也不调用 API。",
+      body: "本地生成模型指令、任务包、证据边界和验收清单；材料只在浏览器里编辑，不上传，也不调用 API。",
     },
     {
       title: "API 版目标",
@@ -270,7 +298,7 @@ ${localPreviewOutput}`;
         <div>
           <div style={{ color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.78rem", marginBottom: "0.3rem" }}>科研 Agent 工作台</div>
           <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.88rem", margin: 0 }}>
-            这个页面先落地科研 Agent 的任务编排层：你选择任务、材料和工作模式，页面生成可交给模型执行的结构化指令。真正调用 API 的版本会把下方任务包直接送入模型并返回报告。
+            这个页面先落地科研 Agent 的任务编排层：你选择任务、材料和工作模式，页面生成可交给模型执行的结构化指令、证据边界和报告框架。真正调用 API 的版本会把下方任务包直接送入模型并返回可复核报告。
           </p>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.65rem" }}>
@@ -281,8 +309,40 @@ ${localPreviewOutput}`;
             </div>
           ))}
         </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.75rem" }}>
+          <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.55rem" }}>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>市场需求</strong>
+            <div style={{ display: "grid", gap: "0.5rem" }}>
+              {marketNeeds.map((item) => (
+                <div key={item.title} style={{ display: "grid", gridTemplateColumns: "72px minmax(0, 1fr)", gap: "0.55rem", alignItems: "start" }}>
+                  <span style={{ color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.74rem" }}>{item.title}</span>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800 }}>{item.body}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.55rem" }}>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>能力边界</strong>
+            <div style={{ display: "grid", gap: "0.42rem" }}>
+              {boundaryItems.map((item, index) => (
+                <div key={item} style={{ display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.46rem", alignItems: "start" }}>
+                  <span style={{ width: 18, height: 18, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800 }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.6rem" }}>
+          {productModules.map((item) => (
+            <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem" }}>
+              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.24rem" }}>{item.title}</strong>
+              <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{item.body}</span>
+            </div>
+          ))}
+        </div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(230px, 0.78fr) minmax(0, 1.3fr)", gap: "1rem", alignItems: "start" }}>
+      <div className="prompt-builder-layout" style={{ display: "grid", gridTemplateColumns: "minmax(230px, 0.78fr) minmax(0, 1.3fr)", gap: "1rem", alignItems: "start" }}>
         <aside style={{ display: "grid", gap: "0.7rem" }}>
           {prompts.map((prompt, index) => {
             const active = activePromptIndex === index;
@@ -409,13 +469,44 @@ ${localPreviewOutput}`;
                 </div>
               </div>
               {hasRunPreview ? (
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.55rem" }}>
-                  {materialChecks.map((item) => (
-                    <div key={item.label} style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
-                      <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", marginBottom: "0.2rem" }}>{item.label} · {item.value}</strong>
-                      <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{item.detail}</span>
+                <div style={{ display: "grid", gap: "0.62rem" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.55rem" }}>
+                    {materialChecks.map((item) => (
+                      <div key={item.label} style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+                        <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", marginBottom: "0.2rem" }}>{item.label} · {item.value}</strong>
+                        <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{item.detail}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.55rem" }}>
+                    <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem" }}>
+                      <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>执行顺序</strong>
+                      <div style={{ display: "grid", gap: "0.36rem" }}>
+                        {activeTaskActions.map((item, index) => (
+                          <div key={item} style={{ display: "grid", gridTemplateColumns: "20px minmax(0, 1fr)", gap: "0.42rem", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>
+                            <span style={{ color: "var(--cherry-forest)", fontWeight: 900 }}>{index + 1}</span>
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
+                    <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem" }}>
+                      <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>证据边界</strong>
+                      <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.55, fontWeight: 800 }}>
+                        {missingFields.length ? `当前还缺少 ${missingFields.join("、")}，Agent 只能给出任务框架，不能直接生成强结论。` : "材料已具备进入模型分析的基本线索，但输出仍需要逐条回查原文、图表和实验设计。"}
+                      </p>
+                    </div>
+                  </div>
+                  <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem" }}>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>API 输出字段</strong>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.36rem" }}>
+                      {apiOutputFields.map((field) => (
+                        <span key={field} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.16rem 0.44rem", color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>
+                          {field}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.6 }}>
@@ -484,7 +575,7 @@ ${localPreviewOutput}`;
           }
 
           @media (max-width: 880px) {
-            #prompt-kit-builder > div:first-child {
+            #prompt-kit-builder .prompt-builder-layout {
               grid-template-columns: 1fr !important;
             }
 
