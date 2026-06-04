@@ -2,6 +2,7 @@ import { useState } from "react";
 import { GeneExpressionTool } from "./GeneExpressionTool";
 import { IconDNA } from "./Icons";
 import { works } from "./Works";
+import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { copyText } from "../clipboard";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
@@ -1658,42 +1659,61 @@ function WorkContinueLinks({ work }: { work: Work }) {
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.85rem" }}>
-          {relatedWorks.map((item) => (
-            <a
-              className="work-next-card"
-              key={item.slug}
-              href={item.href}
-              onClick={(event) => openWork(item.href, event)}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "auto minmax(0, 1fr)",
-                gap: "0.75rem",
-                alignItems: "start",
-                background: item.color,
-                border: `1.5px solid ${item.border}`,
-                borderRadius: 18,
-                padding: "0.95rem",
-                color: "inherit",
-                textDecoration: "none",
-                boxShadow: "3px 5px 0px rgba(94,68,42,0.07)",
-              }}
-            >
-              <span style={{ width: 40, height: 40, borderRadius: 14, background: "rgba(250,247,241,0.58)", display: "grid", placeItems: "center", flexShrink: 0 }}>
-                <span style={{ transform: "scale(0.68)", display: "inline-flex" }}>{item.icon}</span>
-              </span>
-              <span style={{ minWidth: 0 }}>
-                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.35, marginBottom: "0.34rem" }}>{item.title}</strong>
-                <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginBottom: "0.5rem" }}>{item.desc}</span>
-                <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                  {item.outputs.map((output) => (
-                    <span key={output} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.13rem 0.46rem", color: "var(--cherry-warm-brown)", fontSize: "0.66rem", fontWeight: 900 }}>
-                      {output}
-                    </span>
-                  ))}
+          {relatedWorks.map((item) => {
+            const isPlantEvolution = item.slug === "plant-evolution-stories";
+
+            return (
+              <a
+                className="work-next-card"
+                key={item.slug}
+                href={item.href}
+                onClick={(event) => openWork(item.href, event)}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: isPlantEvolution ? "92px minmax(0, 1fr)" : "118px minmax(0, 1fr)",
+                  gap: "0.85rem",
+                  alignItems: "center",
+                  background: item.color,
+                  border: `1.5px solid ${item.border}`,
+                  borderRadius: 18,
+                  padding: "0.9rem",
+                  color: "inherit",
+                  textDecoration: "none",
+                  boxShadow: "3px 5px 0px rgba(94,68,42,0.07)",
+                  minWidth: 0,
+                }}
+              >
+                <span
+                  aria-hidden="true"
+                  style={{
+                    minHeight: isPlantEvolution ? 142 : 94,
+                    borderRadius: 16,
+                    background: "rgba(250,247,241,0.56)",
+                    border: "1.5px dashed rgba(94,68,42,0.12)",
+                    display: "grid",
+                    placeItems: "center",
+                    overflow: "hidden",
+                  }}
+                >
+                  <WorkPreviewIllustration slug={item.slug} color={item.border} width={isPlantEvolution ? 78 : 112} height={isPlantEvolution ? 130 : 84} />
                 </span>
-              </span>
-            </a>
-          ))}
+                <span style={{ minWidth: 0 }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 28, height: 28, borderRadius: 10, background: "rgba(250,247,241,0.64)", marginBottom: "0.42rem" }}>
+                    <span style={{ transform: "scale(0.54)", display: "inline-flex" }}>{item.icon}</span>
+                  </span>
+                  <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.35, marginBottom: "0.34rem" }}>{item.title}</strong>
+                  <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginBottom: "0.5rem" }}>{item.desc}</span>
+                  <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                    {item.outputs.map((output) => (
+                      <span key={output} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.13rem 0.46rem", color: "var(--cherry-warm-brown)", fontSize: "0.66rem", fontWeight: 900 }}>
+                        {output}
+                      </span>
+                    ))}
+                  </span>
+                </span>
+              </a>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -1848,6 +1868,12 @@ export function WorkDetailPage({ slug }: { slug: string }) {
             .work-next-card {
               transition: none !important;
               transform: none !important;
+            }
+          }
+
+          @media (max-width: 560px) {
+            .work-next-card {
+              grid-template-columns: 1fr !important;
             }
           }
         `}
