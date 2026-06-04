@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { IconMicroscope, IconAI, IconLeaf, IconFlask, IconDNA } from "./Icons";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
+import { copyText } from "../clipboard";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
@@ -231,9 +232,42 @@ function WaveDivider({ flip = false }: { flip?: boolean }) {
 
 export function Works() {
   const [activeCategory, setActiveCategory] = useState<Category>("全部");
+  const [copiedModuleChecklist, setCopiedModuleChecklist] = useState(false);
+  const [moduleChecklistStatus, setModuleChecklistStatus] = useState("");
   const categories: Category[] = ["全部", "科学", "学习项目", "AI工具"];
   const filtered = activeCategory === "全部" ? works : works.filter((w) => w.category === activeCategory);
   const recommendedWork = works.find((work) => work.slug === "gene-expression") ?? works[0];
+  const filteredOutputCount = filtered.reduce((count, work) => count + work.outputs.length, 0);
+  const moduleChecklistText = `【By Cherry 学习模块清单】
+当前范围：${activeCategory === "全部" ? "全部学习模块" : activeCategory}
+模块数量：${filtered.length}
+可保存产出：${filteredOutputCount} 项
+
+${filtered.map((work, index) => `${index + 1}. ${work.title}
+入口：${work.href}
+立即任务：${work.task}
+先做这个：${work.starter}
+学习路径：${work.path.join(" → ")}
+可保存产出：${work.outputs.join(" / ")}
+完成标准：${work.success}`).join("\n\n")}
+
+使用方式
+1. 先选 1 个模块，不要同时打开全部。
+2. 完成后复制模块页里的记录或报告。
+3. 回到这张清单，勾掉已经保存产出的模块。`;
+
+  async function copyModuleChecklist() {
+    const copiedToClipboard = await copyText(moduleChecklistText);
+    if (copiedToClipboard) {
+      setCopiedModuleChecklist(true);
+      setModuleChecklistStatus("学习模块清单已复制到剪贴板。");
+      window.setTimeout(() => setCopiedModuleChecklist(false), 1400);
+      return;
+    }
+
+    setCopiedModuleChecklist(false);
+    setModuleChecklistStatus("复制失败，请手动选中文本复制。");
+  }
 
   return (
     <section
@@ -295,11 +329,11 @@ export function Works() {
         {/* Filter */}
         <div role="group" aria-label="按学习模块类型筛选" style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: "0.85rem" }}>
           {categories.map((cat) => (
-            <button
+              <button
               className="work-filter-button"
               key={cat}
               type="button"
-              onClick={() => setActiveCategory(cat)}
+              onClick={() => { setActiveCategory(cat); setCopiedModuleChecklist(false); setModuleChecklistStatus(""); }}
               aria-pressed={activeCategory === cat}
               style={{
                 background: activeCategory === cat ? "var(--cherry-forest)" : "var(--card)",
@@ -318,6 +352,21 @@ export function Works() {
           当前显示 {filtered.length} 个{activeCategory === "全部" ? "学习模块" : activeCategory}
         </div>
 
+        <div className="work-module-checklist-panel" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.85rem 0.95rem", marginBottom: "1.1rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.8rem", alignItems: "center" }}>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.9rem", fontWeight: 900, marginBottom: "0.2rem" }}>学习模块清单</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, fontWeight: 800 }}>
+              当前范围包含 {filtered.length} 个模块、{filteredOutputCount} 项可保存产出。复制后可以当作本次学习待办。
+            </div>
+            <div id="work-module-checklist-status" role="status" aria-live="polite" style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900, marginTop: "0.34rem" }}>
+              {moduleChecklistStatus}
+            </div>
+          </div>
+          <button type="button" className="work-module-checklist-button" onClick={copyModuleChecklist} aria-describedby="work-module-checklist-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.46rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem", whiteSpace: "nowrap" }}>
+            {copiedModuleChecklist ? "已复制" : "复制清单"}
+          </button>
+        </div>
+
         {/* Grid */}
         <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1.25rem", listStyle: "none", margin: 0, padding: 0 }}>
           {filtered.map((work) => (
@@ -334,6 +383,7 @@ export function Works() {
         {`
           #works .work-card:focus-visible,
           #works .work-recommended-start:focus-visible,
+          #works .work-module-checklist-button:focus-visible,
           #works .work-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
@@ -341,9 +391,20 @@ export function Works() {
 
           @media (prefers-reduced-motion: reduce) {
             #works .work-card,
+            #works .work-module-checklist-button,
             #works .work-filter-button {
               transition: none !important;
               transform: none !important;
+            }
+          }
+
+          @media (max-width: 640px) {
+            #works .work-module-checklist-panel {
+              grid-template-columns: 1fr !important;
+            }
+
+            #works .work-module-checklist-button {
+              width: 100%;
             }
           }
         `}

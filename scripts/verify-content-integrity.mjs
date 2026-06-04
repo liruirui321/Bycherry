@@ -196,6 +196,12 @@ function verifyWorkCardActions() {
   expect(copyActionMatches.length === 0, `Work card entry actions should open or start the tool, not imply direct copy behavior: ${copyActionMatches.join(", ")}`);
   expect(worksSource.includes('title: "科研 Agent 工作台"'), "Research AI work card should be titled 科研 Agent 工作台.");
   expect(!worksSource.includes("科研助手 Prompt Kit"), "Visible work card title must not use the old Prompt Kit naming.");
+  expect(worksSource.includes("moduleChecklistText"), "Works section must provide a copyable learning module checklist.");
+  expect(worksSource.includes("copyModuleChecklist"), "Works section must expose a checklist copy action.");
+  expect(worksSource.includes("学习模块清单"), "Works section must show the learning module checklist panel.");
+  expect(worksSource.includes("复制清单"), "Works section must expose the checklist copy button.");
+  expect(worksSource.includes("filteredOutputCount"), "Works section checklist must summarize saved output counts.");
+  expect(worksSource.includes("work-module-checklist-status"), "Works section checklist must expose copy status.");
 }
 
 function verifyWorkDetailCardsStayCompact() {
