@@ -85,6 +85,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     : [];
   const actionSteps = article && "actionSteps" in article ? article.actionSteps : [];
   const checklist = article && "checklist" in article ? article.checklist : [];
+  const starterTemplate = article && "starterTemplate" in article ? article.starterTemplate : [];
   const summaryText = article
     ? `【阅读摘要】
 标题：${article.title}
@@ -105,7 +106,10 @@ ${actionSteps.map((step, index) => `${index + 1}. ${step}`).join("\n")}
 四、检查清单
 ${checklist.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-五、可以带走的想法
+五、可套用模板
+${starterTemplate.map((item) => `- ${item}`).join("\n")}
+
+六、可以带走的想法
 ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).join("\n")}`
     : "";
 
@@ -287,6 +291,15 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     </div>
                   ))}
                 </div>
+              </div>
+            ) : null}
+
+            {starterTemplate.length ? (
+              <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
+                <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem", marginBottom: "0.65rem" }}>可套用模板</div>
+                <code style={{ display: "block", whiteSpace: "pre-wrap", background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.72rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.7 }}>
+                  {starterTemplate.map((item) => `- ${item}`).join("\n")}
+                </code>
               </div>
             ) : null}
 
