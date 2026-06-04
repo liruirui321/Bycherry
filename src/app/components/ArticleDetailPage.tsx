@@ -115,6 +115,30 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
         `用检查清单核对：${articleQuickStart?.check ?? checklist[0] ?? "确认自己留下了可检查结果"}`,
       ]
     : [];
+  const articleCompletionChecks = article
+    ? [
+        {
+          title: "上手动作",
+          body: articleQuickStart?.step ?? actionSteps[0] ?? "先读正文，圈出一个要解决的问题。",
+          output: "我已经做了，而不是只看过。",
+        },
+        {
+          title: "可保存产出",
+          body: starterTemplate[0] ?? articleEvidenceItems[1] ?? "留下 1 份学习记录或证据卡。",
+          output: "我能把这份产出复制到自己的笔记里继续用。",
+        },
+        {
+          title: "完成检查",
+          body: articleQuickStart?.check ?? checklist[0] ?? "确认自己留下了可检查结果。",
+          output: "我能用一句话说出产出是否合格。",
+        },
+        {
+          title: "边界提醒",
+          body: articleQuickStart?.pitfall ?? pitfalls[0] ?? "不要把看过内容误当成已经掌握。",
+          output: "我知道这篇内容不能直接推出什么，或下一步还要核查什么。",
+        },
+      ]
+    : [];
   const articlePracticePlan = article
     ? [
         { label: "5 分钟", body: articleQuickStart?.step ?? "先读摘要，圈出一个问题。" },
@@ -275,7 +299,11 @@ ${checklist.map((item, index) => `${index + 1}. ${item}：`).join("\n")}
 五、我需要避开的误区
 ${pitfalls.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-六、下一步回看
+六、完成验收
+${articleCompletionChecks.map((item, index) => `${index + 1}. ${item.title}：${item.body}
+验收：${item.output}`).join("\n\n")}
+
+七、下一步回看
 我还需要补充或重做：`
     : "";
   const summaryText = article
@@ -830,6 +858,26 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                 ))}
               </div>
             </div>
+
+            {articleCompletionChecks.length ? (
+              <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.9rem", marginTop: "0.9rem" }}>
+                <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem", marginBottom: "0.62rem" }}>完成验收卡</div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
+                  {articleCompletionChecks.map((item, index) => (
+                    <div key={item.title} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.5rem", alignItems: "start" }}>
+                      <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: index === 3 ? "var(--cherry-red)" : "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>
+                        {index + 1}
+                      </span>
+                      <span>
+                        <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.24rem" }}>{item.title}</strong>
+                        <span style={{ display: "block", color: "var(--cherry-warm-mid)", lineHeight: 1.52, fontSize: "0.76rem", fontWeight: 800, marginBottom: "0.32rem" }}>{item.body}</span>
+                        <span style={{ display: "block", color: "var(--cherry-warm-brown)", lineHeight: 1.48, fontSize: "0.72rem", fontWeight: 900 }}>验收：{item.output}</span>
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
 
             {articleEvidenceItems.length ? (
               <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 16, padding: "0.9rem", marginTop: "0.9rem" }}>

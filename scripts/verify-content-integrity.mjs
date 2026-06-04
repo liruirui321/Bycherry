@@ -701,6 +701,10 @@ function verifyLearnerFacingArticleCopy() {
 
   expect(articleDetailSource.includes("const articleQuickStart"), "Article detail pages must derive a first learner action.");
   expect(articleDetailSource.includes("const articleEvidenceItems"), "Article detail pages must derive concrete reading completion evidence.");
+  expect(articleDetailSource.includes("const articleCompletionChecks"), "Article detail pages must derive completion checks.");
+  expect(articleDetailSource.includes("完成验收卡"), "Article detail pages must expose a completion card.");
+  expect(articleDetailSource.includes("六、完成验收"), "Article learning records must include completion checks.");
+  expect(articleDetailSource.includes("验收：${item.output}"), "Article completion cards must show observable pass criteria.");
   expect(articleDetailSource.includes("const articlePracticePlan"), "Article detail pages must derive a short execution plan.");
   expect(articleDetailSource.includes("const learningRecordText"), "Article detail pages must include a copyable learning record.");
   expect(articleDetailSource.includes("copyLearningRecord"), "Article detail pages must provide a learning record copy action.");
