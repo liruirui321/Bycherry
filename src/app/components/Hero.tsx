@@ -49,7 +49,7 @@ export function Hero() {
         >
           <IconMicroscope size={15} color="var(--cherry-forest)" />
           <span style={{ fontSize: "0.78rem", color: "var(--cherry-warm-mid)", fontWeight: 900, letterSpacing: 0 }}>
-            By Cherry · science education lab
+            By Cherry · science learning lab
           </span>
         </div>
 

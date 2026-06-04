@@ -244,7 +244,7 @@ function verifyConceptExplainerAgentContract() {
     { label: "visible skill protocol", text: "概念解释 skill 协议" },
     { label: "arbitrary concept copy", text: "输入任意概念" },
     { label: "learner-facing agent role", text: "面向学习者" },
-    { label: "anti-teacher-plan boundary", text: "不要把输出写成教师教案" },
+    { label: "anti-shortcut boundary", text: "不要替我跳过判断过程" },
     { label: "anti-fabrication boundary", text: "不编造具体事实" },
     { label: "stable output card", text: "生成学习卡" },
   ];
@@ -253,7 +253,7 @@ function verifyConceptExplainerAgentContract() {
     { label: "teacher prompt label", pattern: /教师追问/ },
     { label: "teacher output field", pattern: /teacherMove/ },
     { label: "student output field", pattern: /studentOutput/ },
-    { label: "lecture copy", pattern: /讲给谁|讲解目标|讲解稿/ },
+    { label: "lecture copy", pattern: /教师教案|讲给谁|讲解目标|讲解稿/ },
     { label: "classroom flow heading", pattern: /课堂流程/ },
   ];
 
@@ -381,6 +381,7 @@ function verifyLearnerProductPositioning() {
     "CRISPR 编辑模拟器",
     '"学习项目"',
     "科学学习和 AI 工具",
+    "science learning lab",
   ];
   const retiredProductPatterns = [
     { label: "course-heavy home title", pattern: /科学、课程/ },
@@ -389,6 +390,9 @@ function verifyLearnerProductPositioning() {
     { label: "lecture-style CRISPR title", pattern: /CRISPR 交互讲解/ },
     { label: "course category literal", pattern: /category:\s*"课程"/ },
     { label: "course filter literal", pattern: /\["全部",\s*"科学",\s*"课程"/ },
+    { label: "generic education positioning", pattern: /science education|AI教育|生命科学教育/ },
+    { label: "display-style plant tags", pattern: /科普|插画/ },
+    { label: "course resource copy", pattern: /课程资料/ },
   ];
 
   for (const text of requiredProductCopy) {

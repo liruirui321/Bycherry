@@ -109,7 +109,7 @@ export function About() {
               Cherry
             </h3>
             <p style={{ color: "var(--cherry-warm-mid)", fontSize: "1rem", marginBottom: "1.25rem" }}>
-              生命科学教育与 AI 工具创作者
+              生命科学学习与 AI 工具创作者
             </p>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>

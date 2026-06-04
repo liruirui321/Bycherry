@@ -1302,7 +1302,7 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
       <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "1rem", alignItems: "start" }}>
         <div style={{ display: "grid", gap: "0.85rem", alignContent: "start" }}>
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", overflow: "hidden" }}>
-            <svg viewBox="0 0 520 760" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化插画时间轴" style={{ width: "100%", display: "block", borderRadius: 18 }}>
+            <svg viewBox="0 0 520 760" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化证据时间轴" style={{ width: "100%", display: "block", borderRadius: 18 }}>
               <defs>
                 <linearGradient id="plant-evolution-bg" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0" stopColor="#FFF8EA" />
@@ -1697,7 +1697,7 @@ function ConceptExplainerContent() {
       analogy: "不只是住址，更像一份生活档案：住在哪里、吃什么、什么时候活动、和谁竞争。",
       prerequisite: ["物种会利用环境资源", "不同物种之间可能竞争或共生", "栖息地只描述生活地点的一部分"],
       diagnostic: "先自测：两种动物住在同一片森林，它们的生态位一定相同吗？如果你回答“相同”，说明还没有区分栖息地和资源利用方式。",
-      evidenceBoundary: "这个页面用资源、空间和相互作用解释生态位，不涉及完整数学生态位模型或复杂群落网络建模。",
+      evidenceBoundary: "这个页面用资源、空间和相互作用解释生态位，不涉及完整的生态位数学模型或复杂群落网络建模。",
       transferTask: "给出两种鸟的取食高度、食物类型和活动时间，请你判断哪些维度说明生态位分化。",
       workedExample: {
         title: "同一森林里的两种鸟",
@@ -1759,7 +1759,7 @@ function ConceptExplainerContent() {
       analogy: `${displayName} 可以先当作一个“待拆解的科学模型”：不要急着背定义，先看它解决什么问题、由哪些组成部分构成、会在哪些条件下发生变化。`,
       prerequisite: ["先确认这个概念属于哪个学科或章节", "先找 2-3 个教材关键词", "先区分定义、机制、例子和适用边界"],
       diagnostic: `先自测：你能不能不用背诵定义，用自己的话说出“${displayName} 解释了什么现象”？如果只能复述名词，说明还需要补充例子和机制。`,
-      evidenceBoundary: `这是基于稳定解释流程生成的学习卡，不会替你编造 ${displayName} 的专属事实；涉及具体数据、公式、物种、疾病或实验结论时，需要回到教材、论文或课程资料核查。`,
+      evidenceBoundary: `这是基于稳定解释流程生成的学习卡，不会替你编造 ${displayName} 的专属事实；涉及具体数据、公式、物种、疾病或实验结论时，需要回到教材、论文或学习资料核查。`,
       transferTask: `找一个你见过的 ${displayName} 例子，按“现象是什么、概念如何解释、还有什么不能解释”三句话写下来。`,
       workedExample: {
         title: `${displayName} 三步拆解`,
@@ -1870,7 +1870,7 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 选项：${active.quiz.options.join(" / ")}
 答案：${active.quiz.answer}
 解释：${active.quiz.explain}`;
-  const conceptSkillPrompt = `你是一个面向学习者的“概念解释 Agent”。请帮助我学习一个概念，不要把输出写成教师教案，也不要只给定义。
+  const conceptSkillPrompt = `你是一个面向学习者的“概念解释 Agent”。请帮助我学习一个概念，不要只给定义，也不要替我跳过判断过程。
 
 【我要学习的概念】
 ${concept}
@@ -1896,7 +1896,7 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 9. 落地示例：给情境材料、引导问题、我的学习产出。
 10. 迁移任务：让我把概念用到一个新例子。
 11. 即时小测：1 道选择题，给答案和解释。
-12. 证据边界：哪些内容需要查教材、论文或课程资料确认。
+12. 证据边界：哪些内容需要查教材、论文或学习资料确认。
 
 【质量要求】
 - 面向学习者，用“你可以……”表达。
