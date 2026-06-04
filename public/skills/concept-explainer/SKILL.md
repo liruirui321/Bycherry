@@ -25,11 +25,21 @@ If the concept is too broad, narrow it to one chapter, phenomenon, problem type,
 1. Identify the subject, learning stage, and use context.
 2. Ask one diagnostic question that exposes the likely confusion.
 3. Give one low-barrier analogy, then state what the analogy cannot prove.
-4. Choose one visual structure: flow diagram, comparison table, three-column concept map, or causal chain.
+4. Choose one visual structure: flow diagram, comparison table, three-column concept map, causal chain, or cycle map.
 5. Explain the mechanism in at most four steps.
 6. Give one practice situation that requires the learner to produce an explanation, not just recognize an answer.
 7. Add an understanding audit with observable pass criteria.
 8. Finish with one quick check and an evidence boundary.
+
+## Visual Structure Rules
+
+- Flow diagram: show start, middle step, next step, and result or boundary.
+- Comparison table: show what it is, what it is often confused with, judgment evidence, and what cannot be inferred.
+- Three-column concept map: show definition, example, mechanism, and boundary.
+- Causal chain: show trigger, mechanism, visible result, and evidence boundary.
+- Cycle map: show starting state, key change, feedback loop, and boundary condition.
+- Every visual node needs a short label and a sentence the learner can retell.
+- Do not draw a decorative diagram. The visual structure must help the learner decide, explain, compare, or check.
 
 ## Output Format
 
@@ -37,7 +47,7 @@ If the concept is too broad, narrow it to one chapter, phenomenon, problem type,
 2. Diagnostic question: 1 question that checks real understanding.
 3. Analogy: 1 analogy plus its limitation.
 4. Layered explanation: beginner, basic, and advanced versions.
-5. Visual explanation: name the chosen structure and list its nodes.
+5. Visual explanation: name the chosen structure and list at least 4 labeled nodes.
 6. Mechanism steps: at most 4 steps, one sentence each.
 7. Key terms: 4-6 terms.
 8. Distinction: one concept it is often confused with.

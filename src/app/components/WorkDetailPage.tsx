@@ -2358,6 +2358,40 @@ function ConceptExplainerContent() {
         : /原因|影响|调控|效应|机制/.test(concept)
           ? "因果链"
           : "三栏概念图";
+  const visualStructureItems = visualMode === "循环图"
+    ? [
+        { title: "起始状态", body: active.mechanism[0] ?? `${concept} 从一个可观察状态开始。`, tone: "var(--cherry-yellow-light)" },
+        { title: "关键变化", body: active.mechanism[1] ?? "找出推动变化的变量或条件。", tone: "var(--cherry-blue-light)" },
+        { title: "反馈回路", body: active.mechanism[2] ?? "观察结果如何影响下一轮变化。", tone: "var(--cherry-sage-light)" },
+        { title: "边界条件", body: active.evidenceBoundary, tone: "var(--cherry-peach-light)" },
+      ]
+    : visualMode === "对照表"
+      ? [
+          { title: "它是什么", body: selectedLevel.body, tone: "var(--cherry-yellow-light)" },
+          { title: "常混概念", body: active.compare, tone: "var(--cherry-blue-light)" },
+          { title: "判断证据", body: active.workedExample.guideQuestion, tone: "var(--cherry-sage-light)" },
+          { title: "不能推出", body: active.pitfall, tone: "var(--cherry-peach-light)" },
+        ]
+      : visualMode === "因果链"
+        ? [
+            { title: "触发条件", body: active.mechanism[0] ?? `${concept} 先由某个条件或变量启动。`, tone: "var(--cherry-yellow-light)" },
+            { title: "中间机制", body: active.mechanism[1] ?? "中间过程需要拆成可检查的关系。", tone: "var(--cherry-blue-light)" },
+            { title: "可见结果", body: active.mechanism[2] ?? "结果必须能回到现象或例子。", tone: "var(--cherry-sage-light)" },
+            { title: "证据边界", body: active.evidenceBoundary, tone: "var(--cherry-peach-light)" },
+          ]
+        : visualMode === "流程箭头图"
+          ? [
+              { title: "步骤 1", body: active.mechanism[0] ?? `${concept} 先发生第一步变化。`, tone: "var(--cherry-yellow-light)" },
+              { title: "步骤 2", body: active.mechanism[1] ?? "第二步连接对象、条件或变量。", tone: "var(--cherry-blue-light)" },
+              { title: "步骤 3", body: active.mechanism[2] ?? "第三步解释中间产物或关系。", tone: "var(--cherry-sage-light)" },
+              { title: "步骤 4", body: active.mechanism[3] ?? "最后写清结果和边界。", tone: "var(--cherry-peach-light)" },
+            ]
+          : [
+              { title: "定义", body: selectedLevel.body, tone: "var(--cherry-yellow-light)" },
+              { title: "例子", body: active.workedExample.situation, tone: "var(--cherry-blue-light)" },
+              { title: "机制", body: active.mechanism.slice(0, 2).join("；"), tone: "var(--cherry-sage-light)" },
+              { title: "边界", body: active.evidenceBoundary, tone: "var(--cherry-peach-light)" },
+            ];
   const conceptAgentCards = [
     {
       title: "收窄范围",
@@ -2436,7 +2470,8 @@ ${active.analogy}
 ${selectedLevel.body}
 
 六、可视化解释
-${visualMode}：${conceptFlow.map((item) => `${item.label}=${item.value}`).join("；")}
+${visualMode}
+${visualStructureItems.map((item, index) => `${index + 1}. ${item.title}：${item.body}`).join("\n")}
 
 七、机制步骤
 ${active.mechanism.map((item, index) => `${index + 1}. ${item}`).join("\n")}
@@ -2513,6 +2548,7 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 3. Analogy: 1 analogy plus its limitation.
 4. Layered explanation: beginner, basic, and advanced versions.
 5. Visual explanation: name the chosen structure and list its nodes.
+   Current visual structure nodes: ${visualStructureItems.map((item) => `${item.title}=${item.body}`).join(" | ")}
 6. Mechanism steps: at most 4 steps, one sentence each.
 7. Key terms: 4-6 terms.
 8. Distinction: one concept it is often confused with.
@@ -2643,6 +2679,35 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
               <span style={{ width: 22, height: 22, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900, marginBottom: "0.46rem" }}>{index + 1}</span>
               <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.3rem" }}>{item.title}</strong>
               <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800 }}>{item.body}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.75rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>可视化解释图</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.2rem", fontWeight: 800 }}>
+              先把概念画成 {visualMode}，再读文字解释。每个节点都对应一条可复述的判断。
+            </div>
+          </div>
+          <span style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.28rem 0.68rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+            {visualStructureItems.length} 个节点
+          </span>
+        </div>
+        <div className="concept-visual-structure" role="group" aria-label={`${concept} 的${visualMode}可视化解释`} style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.65rem", alignItems: "stretch" }}>
+          {visualStructureItems.map((item, index) => (
+            <div key={`${item.title}-${index}`} style={{ background: item.tone, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.76rem", minHeight: 142, position: "relative", overflow: "hidden" }}>
+              <div aria-hidden="true" style={{ position: "absolute", right: 10, top: 10, width: 42, height: 42, borderRadius: "50%", background: "rgba(250,247,241,0.64)", border: `2px solid ${active.color}`, opacity: 0.68 }} />
+              <div style={{ width: 24, height: 24, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.48rem", position: "relative", zIndex: 1 }}>{index + 1}</div>
+              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.34rem", position: "relative", zIndex: 1 }}>{item.title}</strong>
+              <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800, position: "relative", zIndex: 1 }}>{item.body}</span>
+              {index < visualStructureItems.length - 1 ? (
+                <span className="concept-visual-connector" aria-hidden="true" style={{ position: "absolute", right: -14, top: "50%", width: 28, height: 28, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 900, transform: "translateY(-50%)", zIndex: 2 }}>
+                  {visualMode === "对照表" ? "=" : visualMode === "循环图" && index === visualStructureItems.length - 2 ? "↺" : ">"}
+                </span>
+              ) : null}
             </div>
           ))}
         </div>
@@ -2945,11 +3010,23 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             #concept-explainer-tool .concept-flow-map {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
+
+            #concept-explainer-tool .concept-visual-structure {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
           }
 
           @media (max-width: 520px) {
             #concept-explainer-tool .concept-flow-map {
               grid-template-columns: 1fr !important;
+            }
+
+            #concept-explainer-tool .concept-visual-structure {
+              grid-template-columns: 1fr !important;
+            }
+
+            #concept-explainer-tool .concept-visual-connector {
+              display: none !important;
             }
           }
 
