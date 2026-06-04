@@ -319,15 +319,15 @@ function aminoCountForRibosome(progress: number) {
 }
 
 function ribosomePeptideExitPoint(ribosomeCenter: Point) {
-  return { x: ribosomeCenter.x + 38, y: ribosomeCenter.y + 16 };
+  return { x: ribosomeCenter.x + 36, y: ribosomeCenter.y - 16 };
 }
 
 function peptideBeadPoint(exit: Point, index: number) {
   const points = [
-    { x: exit.x + 3, y: exit.y + 1 },
-    { x: exit.x + 17, y: exit.y + 12 },
-    { x: exit.x + 33, y: exit.y + 5 },
-    { x: exit.x + 49, y: exit.y + 18 },
+    { x: exit.x + 6, y: exit.y - 5 },
+    { x: exit.x + 19, y: exit.y - 17 },
+    { x: exit.x + 35, y: exit.y - 9 },
+    { x: exit.x + 50, y: exit.y - 23 },
   ];
   return points[index] ?? points[points.length - 1];
 }
@@ -379,6 +379,8 @@ function LiveExpressionProcess({
             <circle cx={13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
             <path d="M10 -2 C21 2 27 10 35 17" fill="none" stroke="var(--cherry-warm-brown)" strokeWidth={3.2} strokeLinecap="round" opacity={0.28} />
             <path d="M17 7 C29 12 37 17 43 19" fill="none" stroke="var(--cherry-forest)" strokeWidth={5.2} strokeLinecap="round" opacity={0.28} />
+            <path d="M8 -8 C18 -15 27 -18 36 -16" fill="none" stroke="var(--cherry-forest)" strokeWidth={5} strokeLinecap="round" opacity={0.46} />
+            <circle cx={36} cy={-16} r={6.5} fill="var(--cherry-forest)" stroke="#FAF7F1" strokeWidth={2.2} />
             <text x={-39} y={28} fill="var(--cherry-red)" fontSize={7} fontWeight={900}>
               5'
             </text>
@@ -408,21 +410,21 @@ function LiveExpressionProcess({
 
         const exit = ribosomePeptideExitPoint(ribosome.renderPoint);
         const beadPoints = codons.slice(0, aminoCount).map((_, aminoIndex) => peptideBeadPoint(exit, aminoIndex));
-        const chainPath = beadPoints.map((point, aminoIndex) => `${aminoIndex === 0 ? "M" : "L"}${point.x} ${point.y}`).join(" ");
+        const chainPath = [exit, ...beadPoints].map((point, aminoIndex) => `${aminoIndex === 0 ? "M" : "L"}${point.x} ${point.y}`).join(" ");
 
         return (
           <g key={`live-peptide-chain-${ribosomeIndex}`} opacity={ribosome.opacity}>
             <path
-              d={`M${exit.x - 23} ${exit.y - 9} C${exit.x - 15} ${exit.y - 3} ${exit.x - 7} ${exit.y} ${exit.x + 2} ${exit.y + 1}`}
+              d={`M${exit.x - 28} ${exit.y + 6} C${exit.x - 18} ${exit.y + 2} ${exit.x - 8} ${exit.y - 2} ${exit.x + 4} ${exit.y - 4}`}
               fill="none"
               stroke="var(--cherry-forest)"
               strokeWidth={6}
               strokeLinecap="round"
               opacity={0.46}
             />
-            {beadPoints.length > 1 ? <path d={chainPath} fill="none" stroke="var(--cherry-forest)" strokeWidth={4.2} strokeLinecap="round" strokeLinejoin="round" opacity={0.78} /> : null}
+            {beadPoints.length > 0 ? <path d={chainPath} fill="none" stroke="var(--cherry-forest)" strokeWidth={4.2} strokeLinecap="round" strokeLinejoin="round" opacity={0.78} /> : null}
             {ribosomeIndex === 0 ? (
-              <text x={exit.x + 24} y={exit.y + 36} fill="var(--cherry-forest)" fontSize={11} fontWeight={900}>
+              <text x={exit.x + 24} y={exit.y - 34} fill="var(--cherry-forest)" fontSize={11} fontWeight={900}>
                 多肽链
               </text>
             ) : null}
