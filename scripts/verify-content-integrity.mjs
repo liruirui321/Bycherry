@@ -102,7 +102,7 @@ function verifyWorkBlocks() {
   }
 }
 
-function verifyVisibleThemeWorkCopy() {
+function verifyVisibleLearningModuleCopy() {
   const visibleShellSources = [
     "src/app/App.tsx",
     "src/app/components/About.tsx",
@@ -114,14 +114,15 @@ function verifyVisibleThemeWorkCopy() {
   ].map((relativePath) => [relativePath, read(relativePath)]);
 
   const requiredCopy = [
-    "主题作品",
-    "浏览主题作品",
-    "打开主题作品",
-    "全部主题作品",
-    "主题作品前后导航",
+    "学习模块",
+    "浏览学习模块",
+    "打开学习模块",
+    "全部学习模块",
+    "学习模块前后导航",
   ];
 
   const retiredCopyPatterns = [
+    { label: "portfolio-like theme work copy", pattern: /主题作品/ },
     { label: "打开作品", pattern: />\s*打开作品\s*</ },
     { label: "查看作品", pattern: />\s*查看作品\s*</ },
     { label: "浏览作品", pattern: /浏览作品/ },
@@ -444,7 +445,7 @@ verifyArticleBlocks({
 });
 
 verifyWorkBlocks();
-verifyVisibleThemeWorkCopy();
+verifyVisibleLearningModuleCopy();
 verifyNoLowQualityVisibleContent();
 verifyWorkCardActions();
 verifyWorkDetailCardsStayCompact();

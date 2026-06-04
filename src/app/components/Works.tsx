@@ -235,12 +235,12 @@ export function Works() {
             </span>
           </div>
           <h2 id="works-heading" style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
-            主题作品
+            学习模块
           </h2>
         </div>
 
         {/* Filter */}
-        <div role="group" aria-label="按主题作品类型筛选" style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: "0.85rem" }}>
+        <div role="group" aria-label="按学习模块类型筛选" style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: "0.85rem" }}>
           {categories.map((cat) => (
             <button
               className="work-filter-button"
@@ -262,7 +262,7 @@ export function Works() {
           ))}
         </div>
         <div role="status" aria-live="polite" style={{ color: "var(--cherry-warm-mid)", textAlign: "center", fontSize: "0.78rem", fontWeight: 800, marginBottom: "1.4rem" }}>
-          当前显示 {filtered.length} 个{activeCategory === "全部" ? "主题作品" : activeCategory}
+          当前显示 {filtered.length} 个{activeCategory === "全部" ? "学习模块" : activeCategory}
         </div>
 
         {/* Grid */}

@@ -90,8 +90,8 @@ function buildHomeJsonLd() {
       {
         "@type": "ItemList",
         "@id": worksListId,
-        name: "By Cherry 主题作品",
-        description: "科学学习、AI 工具和学习项目主题作品。",
+        name: "By Cherry 学习模块",
+        description: "科学学习、AI 工具和学习项目模块。",
         numberOfItems: works.length,
         itemListElement: works.map((work, index) => ({
           "@type": "ListItem",
@@ -176,7 +176,7 @@ function NotFoundPage() {
       <EmptyStateCard
         eyebrow="404"
         title="没有找到这个页面"
-        body="这个地址可能写错了，或者内容已经移动。可以回到首页继续浏览主题作品、笔记和科研随笔。"
+        body="这个地址可能写错了，或者内容已经移动。可以回到首页继续浏览学习模块、笔记和科研随笔。"
         href="/#top"
         linkText="回到首页"
         onNavigate={(event) => {
@@ -259,7 +259,7 @@ export default function App() {
     const missingRoutedItem = Boolean((detailSlug && !work) || (noteSlug && !note) || (researchSlug && !essay));
     const notFound = unknownPath || missingRoutedItem;
     const title = notFound ? "没有找到页面" : work?.title ?? note?.title ?? essay?.title ?? homeTitle;
-    const description = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览主题作品、笔记和科研随笔。" : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
+    const description = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览学习模块、笔记和科研随笔。" : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
     const isArticle = Boolean(note || essay);
     const publishedDate = note?.date ?? essay?.date ?? null;
     const workUpdatedDate = work?.updated ?? null;

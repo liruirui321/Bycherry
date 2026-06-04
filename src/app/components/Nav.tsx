@@ -9,7 +9,7 @@ export function Nav() {
   const firstMobileLinkRef = useRef<HTMLAnchorElement | null>(null);
 
   const links = [
-    { label: "主题作品", href: "/#works" },
+    { label: "学习模块", href: "/#works" },
     { label: "科学模拟", href: "/works/gene-expression" },
     { label: "科研", href: "/#research" },
     { label: "笔记", href: "/#notes" },

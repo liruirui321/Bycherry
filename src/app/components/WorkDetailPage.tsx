@@ -2832,7 +2832,7 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
               marginBottom: "0.65rem",
             }}
           >
-            ← 回到主题作品
+            ← 回到学习模块
           </a>
         ) : null}
 
@@ -2854,7 +2854,7 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
                 event.preventDefault();
                 navigateHome("#works");
               }}
-              aria-label="回到主题作品"
+              aria-label="回到学习模块"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -2973,7 +2973,7 @@ function WorkContinueLinks({ work }: { work: Work }) {
             }}
             style={{ color: "var(--cherry-forest)", textDecoration: "none", fontWeight: 900, fontSize: "0.84rem" }}
           >
-            全部主题作品 →
+            全部学习模块 →
           </a>
         </div>
 
@@ -3040,13 +3040,13 @@ function WorkSequenceLinks({ work }: { work: Work }) {
   }
 
   const navItems = [
-    previousWork ? { label: "上一个主题作品", direction: "←", work: previousWork, align: "left" as const } : null,
-    nextWork ? { label: "下一个主题作品", direction: "→", work: nextWork, align: "right" as const } : null,
+    previousWork ? { label: "上一个学习模块", direction: "←", work: previousWork, align: "left" as const } : null,
+    nextWork ? { label: "下一个学习模块", direction: "→", work: nextWork, align: "right" as const } : null,
   ].filter((item): item is { label: string; direction: string; work: Work; align: "left" | "right" } => Boolean(item));
 
   return (
     <section style={{ padding: "0 1.5rem 1rem", fontFamily: "'Nunito', sans-serif" }}>
-      <nav aria-label="主题作品前后导航" style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.85rem" }}>
+      <nav aria-label="学习模块前后导航" style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.85rem" }}>
         {navItems.map((item) => (
           <a
             className="work-sequence-card"
@@ -3090,11 +3090,11 @@ export function WorkDetailPage({ slug }: { slug: string }) {
     return (
       <section id="main-content" tabIndex={-1} style={{ minHeight: "58vh", padding: "5rem 1.5rem", display: "grid", placeItems: "center", fontFamily: "'Nunito', sans-serif" }}>
         <EmptyStateCard
-          eyebrow="主题作品"
-          title="没有找到这个主题作品"
-          body="这个主题作品地址可能已经移动。可以回到主题作品区，继续浏览科学模拟、学习项目和 AI 工具。"
+          eyebrow="学习模块"
+          title="没有找到这个学习模块"
+          body="这个学习模块地址可能已经移动。可以回到学习模块区，继续浏览科学模拟、学习项目和 AI 工具。"
           href="/#works"
-          linkText="回到主题作品"
+          linkText="回到学习模块"
           onNavigate={(event) => {
             if (!shouldUseClientNavigation(event)) return;
             event.preventDefault();
