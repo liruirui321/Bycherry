@@ -144,7 +144,9 @@ export function Notes() {
                   transition: "transform 0.2s, box-shadow 0.2s",
                   cursor: "pointer",
                   color: "inherit",
-                  display: "block",
+                  display: "grid",
+                  gridTemplateRows: "auto auto auto 1fr auto",
+                  height: "100%",
                   textDecoration: "none",
                 }}
               >
@@ -167,7 +169,7 @@ export function Notes() {
                   {note.excerpt}
                 </p>
 
-                <div style={{ display: "grid", gap: 6, marginBottom: "1rem" }}>
+                <div style={{ display: "grid", alignContent: "start", gap: 6, marginBottom: "1rem" }}>
                   {note.highlights.slice(0, 2).map((highlight) => (
                     <span key={highlight} style={{ display: "grid", gridTemplateColumns: "12px minmax(0, 1fr)", alignItems: "start", gap: 7, color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 800, lineHeight: 1.48 }}>
                       <span aria-hidden="true" style={{ width: 7, height: 7, borderRadius: "50%", background: note.tagColor, marginTop: "0.38rem", opacity: 0.78 }} />
@@ -176,7 +178,7 @@ export function Notes() {
                   ))}
                 </div>
 
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", alignSelf: "end", gap: "0.7rem", flexWrap: "wrap" }}>
                   <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.78rem", color: "var(--cherry-warm-mid)", fontFamily: "'Caveat', cursive" }}>
                     <IconCoffee size={16} /> 约 {note.readTime} 分钟
                   </span>
