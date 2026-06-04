@@ -23,9 +23,17 @@ function walkFiles(directory, extensions, files = []) {
   return files;
 }
 
-function extractLiteralHrefs(filePath) {
+function extractStaticInternalLinks(filePath) {
   const source = readFileSync(filePath, "utf8");
-  return Array.from(source.matchAll(/\bhref\s*=\s*"([^"]+)"/g), (match) => match[1])
+  const patterns = [
+    /\bhref\s*=\s*"([^"]+)"/g,
+    /\bhref:\s*"([^"]+)"/g,
+    /\bnavigateClient\(\s*"([^"]+)"/g,
+    /\bnavigateHome\(\s*"([^"]+)"/g,
+    /\bnavigateHomeSection\(\s*"([^"]+)"/g,
+  ];
+
+  return patterns.flatMap((pattern) => Array.from(source.matchAll(pattern), (match) => match[1]))
     .filter((href) => href.startsWith("/") || href.startsWith("#"))
     .map((href) => ({ href, filePath }));
 }
@@ -50,8 +58,8 @@ const homeAnchors = new Set([
 ]);
 
 const internalLinks = [
-  ...walkFiles(sourceRoot, [".tsx", ".ts"]).flatMap(extractLiteralHrefs),
-  ...walkFiles(publicRoot, [".html"]).flatMap(extractLiteralHrefs),
+  ...walkFiles(sourceRoot, [".tsx", ".ts"]).flatMap(extractStaticInternalLinks),
+  ...walkFiles(publicRoot, [".html"]).flatMap(extractStaticInternalLinks),
 ];
 
 const failures = [];
@@ -100,4 +108,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Internal links verified: ${internalLinks.length} literal links, ${publicRoutes.size} public routes, ${homeAnchors.size} home anchors.`);
+console.log(`Internal links verified: ${internalLinks.length} static internal links, ${publicRoutes.size} public routes, ${homeAnchors.size} home anchors.`);
