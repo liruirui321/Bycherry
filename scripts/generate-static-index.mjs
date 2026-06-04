@@ -16,7 +16,7 @@ function listItemObject(route) {
       genre: route.category,
       keywords: route.tags.join(", "),
       learningResourceType: route.category,
-      teaches: [route.task, route.starter, ...route.pathSteps, ...route.outputs].filter(Boolean),
+      teaches: [route.task, route.starter, route.success, ...route.pathSteps, ...route.outputs].filter(Boolean),
       dateModified: route.lastmod,
       creator: { "@id": `${siteUrl}/#person` },
     };
@@ -107,6 +107,9 @@ function listItems(routes) {
     const starter = route.starter
       ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">先做这个：${escapeHtml(route.starter)}</div>`
       : "";
+    const success = route.success
+      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">完成标准：${escapeHtml(route.success)}</div>`
+      : "";
 
     return [
       `            <li style="margin-bottom: 0.9rem;">`,
@@ -114,6 +117,7 @@ function listItems(routes) {
       `              <p style="margin: 0.2rem 0 0; color: #73583b;">${escapeHtml(route.description)}</p>`,
       task,
       starter,
+      success,
       pathSteps,
       "            </li>",
     ].filter(Boolean).join("\n");

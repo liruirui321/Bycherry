@@ -3127,7 +3127,7 @@ function WorkQuickStart({ work }: { work: Work }) {
             {work.task}
           </p>
         </div>
-        <div className="work-quick-start-meta" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.55rem" }}>
+        <div className="work-quick-start-meta" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.55rem" }}>
           <div style={{ background: "var(--cherry-yellow-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem" }}>
             <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>先做这个</span>
             <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.35, fontWeight: 900 }}>
@@ -3143,6 +3143,12 @@ function WorkQuickStart({ work }: { work: Work }) {
                 </span>
               ))}
             </div>
+          </div>
+          <div style={{ background: "var(--cherry-peach-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem" }}>
+            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>做到这样算完成</span>
+            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.35, fontWeight: 900 }}>
+              {work.success}
+            </span>
           </div>
           <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem" }}>
             <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>你会得到</span>
