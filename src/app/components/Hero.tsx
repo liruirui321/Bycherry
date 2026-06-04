@@ -5,6 +5,12 @@ import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "
 import { preloadRouteForHref } from "../routePrefetch";
 
 export function Hero() {
+  const goalRoutes = [
+    { label: "看懂一个生命过程", href: "/works/gene-expression", workTitle: "基因表达可视化" },
+    { label: "拆清一个卡住概念", href: "/works/concept-explainer", workTitle: "概念解释生成器" },
+    { label: "整理一段科研材料", href: "/works/research-prompt-kit", workTitle: "科研 Agent 工作台" },
+  ];
+
   function openWork(href: string, event: React.MouseEvent<HTMLAnchorElement>) {
     if (!shouldUseClientNavigation(event)) return;
     event.preventDefault();
@@ -81,6 +87,41 @@ export function Hero() {
         >
           整理可直接打开的科学模拟、演化时间轴和 AI 工具。首页先给内容入口，详情页承载真实交互、资料和参考证据。
         </p>
+
+        <div style={{ display: "grid", gap: "0.5rem", marginBottom: "1rem" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>按目标选入口</div>
+          <div style={{ display: "flex", gap: "0.45rem", flexWrap: "wrap" }}>
+            {goalRoutes.map((route) => (
+              <a
+                key={route.href}
+                className="hero-goal-link"
+                href={route.href}
+                aria-label={`${route.label}：打开${route.workTitle}`}
+                onClick={(event) => openWork(route.href, event)}
+                onMouseEnter={() => preloadRouteForHref(route.href)}
+                onFocus={() => preloadRouteForHref(route.href)}
+                onPointerDown={() => preloadRouteForHref(route.href)}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  background: "rgba(250,247,241,0.82)",
+                  border: "1.5px solid rgba(94,68,42,0.12)",
+                  borderRadius: 999,
+                  padding: "0.36rem 0.68rem",
+                  color: "var(--cherry-warm-brown)",
+                  textDecoration: "none",
+                  fontSize: "0.76rem",
+                  fontWeight: 900,
+                  lineHeight: 1.25,
+                }}
+              >
+                <span>{route.label}</span>
+                <span aria-hidden="true" style={{ color: "var(--cherry-forest)" }}>→</span>
+              </a>
+            ))}
+          </div>
+        </div>
 
         {/* CTAs */}
         <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-start", flexWrap: "wrap" }}>
@@ -241,9 +282,21 @@ export function Hero() {
         }
 
         .hero-cta:focus-visible,
+        .hero-goal-link:focus-visible,
         .hero-work-card:focus-visible {
           outline: 3px solid var(--cherry-red);
           outline-offset: 4px;
+        }
+
+        .hero-goal-link {
+          transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+        }
+
+        .hero-goal-link:hover,
+        .hero-goal-link:focus-visible {
+          transform: translateY(-2px);
+          background: var(--cherry-yellow-light);
+          border-color: var(--cherry-yellow);
         }
 
         .hero-work-card {
@@ -258,6 +311,7 @@ export function Hero() {
 
         @media (prefers-reduced-motion: reduce) {
           .hero-cta,
+          .hero-goal-link,
           .hero-work-card {
             transition: none !important;
             transform: none !important;

@@ -565,6 +565,10 @@ function verifyLearnerProductPositioning() {
     "科学学习和 AI 工具",
     "science learning lab",
     "先从基因表达可视化开始",
+    "按目标选入口",
+    "看懂一个生命过程",
+    "拆清一个卡住概念",
+    "整理一段科研材料",
   ];
   const retiredProductPatterns = [
     { label: "course-heavy home title", pattern: /科学、课程/ },
