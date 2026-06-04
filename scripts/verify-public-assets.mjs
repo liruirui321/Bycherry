@@ -16,11 +16,11 @@ const articlesListDescription = "课程开发、科学传播、AI 创作和科�
 const retiredShareCopy = "可打开、可阅读、可操作";
 const appThemeColor = "#F5F1EA";
 const generatedIllustrationsBySlug = {
-  "concept-explainer": "illustrations/concept-explainer-map.webp",
-  "crispr-interactive": "illustrations/crispr-editing-flow.webp",
-  "gene-expression": "illustrations/gene-expression-flow.webp",
-  "plant-evolution-stories": "illustrations/plant-evolution-story.webp",
-  "research-prompt-kit": "illustrations/research-prompt-workflow.webp",
+  "concept-explainer": { path: "illustrations/concept-explainer-map.webp", width: 1448, height: 1086 },
+  "crispr-interactive": { path: "illustrations/crispr-editing-flow.webp", width: 1448, height: 1086 },
+  "gene-expression": { path: "illustrations/gene-expression-flow.webp", width: 1448, height: 1086 },
+  "plant-evolution-stories": { path: "illustrations/plant-evolution-story.webp", width: 941, height: 1672 },
+  "research-prompt-kit": { path: "illustrations/research-prompt-workflow.webp", width: 1448, height: 1086 },
 };
 const generatedIllustrations = Object.values(generatedIllustrationsBySlug);
 
@@ -58,6 +58,24 @@ function isWebp(relativePath) {
   return bytes.subarray(0, 4).toString("ascii") === "RIFF" && bytes.subarray(8, 12).toString("ascii") === "WEBP";
 }
 
+function readVp8WebpSize(relativePath) {
+  const bytes = readFileSync(resolve(publicRoot, relativePath));
+  if (bytes.subarray(0, 4).toString("ascii") !== "RIFF" || bytes.subarray(8, 12).toString("ascii") !== "WEBP") {
+    throw new Error(`${relativePath} is not a WebP file.`);
+  }
+  if (bytes.subarray(12, 16).toString("ascii") !== "VP8 ") {
+    throw new Error(`${relativePath} must use VP8 lossy WebP encoding.`);
+  }
+  if (bytes[23] !== 0x9d || bytes[24] !== 0x01 || bytes[25] !== 0x2a) {
+    throw new Error(`${relativePath} has an invalid VP8 start code.`);
+  }
+
+  return {
+    width: bytes.readUInt16LE(26) & 0x3fff,
+    height: bytes.readUInt16LE(28) & 0x3fff,
+  };
+}
+
 const failures = [];
 
 function expect(condition, message) {
@@ -73,8 +91,8 @@ expect(robots.includes("User-agent: *"), "robots.txt must declare the default cr
 expect(publicExists("favicon.svg"), "favicon.svg is missing.");
 expect(publicExists("social-preview.png"), "social-preview.png is missing.");
 expect(publicExists("social-preview.svg"), "social-preview.svg is missing.");
-for (const illustrationPath of generatedIllustrations) {
-  expect(publicExists(illustrationPath), `${illustrationPath} is missing.`);
+for (const illustration of generatedIllustrations) {
+  expect(publicExists(illustration.path), `${illustration.path} is missing.`);
 }
 expect(publicExists("site.webmanifest"), "site.webmanifest is missing.");
 expect(publicExists("_redirects"), "Netlify _redirects fallback is missing.");
@@ -115,19 +133,21 @@ expect(socialPreview.width === 1200 && socialPreview.height === 630, "social-pre
 const socialPreviewSvg = readPublic("social-preview.svg");
 expect(socialPreviewSvg.includes(shareTagline), "social-preview.svg must include the current share tagline.");
 expect(!socialPreviewSvg.includes(retiredShareCopy), "social-preview.svg must not include retired share copy.");
-for (const illustrationPath of generatedIllustrations) {
-  if (!publicExists(illustrationPath)) continue;
-  const illustrationSize = statSync(resolve(publicRoot, illustrationPath)).size;
-  expect(isWebp(illustrationPath), `${illustrationPath} must be a WebP file.`);
-  expect(illustrationSize > 100_000 && illustrationSize < 500_000, `${illustrationPath} should stay detailed but lightweight.`);
+for (const illustration of generatedIllustrations) {
+  if (!publicExists(illustration.path)) continue;
+  const illustrationSize = statSync(resolve(publicRoot, illustration.path)).size;
+  const illustrationDimensions = readVp8WebpSize(illustration.path);
+  expect(isWebp(illustration.path), `${illustration.path} must be a WebP file.`);
+  expect(illustrationSize > 100_000 && illustrationSize < 500_000, `${illustration.path} should stay detailed but lightweight.`);
+  expect(illustrationDimensions.width === illustration.width && illustrationDimensions.height === illustration.height, `${illustration.path} must be ${illustration.width}x${illustration.height}.`);
 }
 
 const indexHtml = readRoot("index.html");
 const workPreviewSource = readRoot("src/app/components/WorkPreviewIllustration.tsx");
 const contentHrefs = getContentHrefs();
-for (const [slug, illustrationPath] of Object.entries(generatedIllustrationsBySlug)) {
+for (const [slug, illustration] of Object.entries(generatedIllustrationsBySlug)) {
   expect(workPreviewSource.includes(`slug === "${slug}"`), `WorkPreviewIllustration must define a preview branch for ${slug}.`);
-  expect(workPreviewSource.includes(`src="/${illustrationPath}"`), `WorkPreviewIllustration must use /${illustrationPath} for ${slug}.`);
+  expect(workPreviewSource.includes(`src="/${illustration.path}"`), `WorkPreviewIllustration must use /${illustration.path} for ${slug}.`);
 }
 expect(indexHtml.includes('<html lang="zh-CN">'), "index.html must declare zh-CN language.");
 expect(indexHtml.includes(`<meta name="theme-color" content="${appThemeColor}" />`), "index.html theme-color must match the app theme color.");

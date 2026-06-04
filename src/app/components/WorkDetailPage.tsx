@@ -341,6 +341,8 @@ ${activePrompt.output.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
 function PlantEvolutionContent() {
   const [activeChapterIndex, setActiveChapterIndex] = useState(0);
+  const [activePlantLens, setActivePlantLens] = useState("story");
+  const [activePlantTaskIndex, setActivePlantTaskIndex] = useState(0);
   const [copiedStudyCard, setCopiedStudyCard] = useState(false);
   const [studyCardStatus, setStudyCardStatus] = useState("");
   const chapters = [
@@ -483,6 +485,27 @@ function PlantEvolutionContent() {
     },
   ];
   const activeReferences = references.filter((reference) => activeChapter.refs.includes(reference.key));
+  const plantLenses = [
+    { key: "story", label: "故事" },
+    { key: "evidence", label: "证据" },
+    { key: "classroom", label: "课堂" },
+    { key: "extend", label: "延伸" },
+  ];
+  const extensionTasks = [
+    {
+      title: "结构定位",
+      body: `在时间轴图里找到和“${activeChapter.innovation}”对应的结构或过程，再用一句话说明它解决了哪个生存限制。`,
+    },
+    {
+      title: "证据判断",
+      body: `判断这一阶段更依赖化石、基因组、分子钟还是系统发育证据，并指出“${activeChapter.certainty}”为什么还需要这样表述。`,
+    },
+    {
+      title: "比较追问",
+      body: `把这一阶段和上一个阶段比较：新出现的能力是什么，代价可能是什么，为什么它会改变后续演化空间？`,
+    },
+  ];
+  const activeExtensionTask = extensionTasks[activePlantTaskIndex] ?? extensionTasks[0];
   const studyCardOutput = `【植物演化学习卡】
 阶段：${activeChapter.title}
 时间：${activeChapter.time}
@@ -523,6 +546,8 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
 
   function choosePlantChapter(index: number) {
     setActiveChapterIndex(index);
+    setActivePlantLens("story");
+    setActivePlantTaskIndex(0);
     setCopiedStudyCard(false);
     setStudyCardStatus("");
   }
@@ -763,32 +788,80 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
             <div style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-red)", fontWeight: 900, fontSize: "1.05rem", marginBottom: "0.45rem" }}>{activeChapter.time}</div>
             <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, lineHeight: 1.35, marginBottom: "0.7rem" }}>{activeChapter.title}</h3>
-            <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.75, fontSize: "0.9rem", marginBottom: "0.8rem" }}>{activeChapter.story}</p>
-            <div style={{ display: "grid", gap: "0.55rem" }}>
-              {[
-                ["生存问题", activeChapter.challenge],
-                ["关键创新", activeChapter.innovation],
-                ["证据状态", activeChapter.certainty],
-              ].map(([label, body]) => (
-                <div key={label} style={{ background: "var(--muted)", borderRadius: 14, padding: "0.68rem", color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.82rem" }}>
-                  <strong style={{ color: "var(--cherry-warm-brown)" }}>{label}：</strong>{body}
+            <div role="tablist" aria-label="植物演化内容层级" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem", marginBottom: "0.85rem" }}>
+              {plantLenses.map((lens) => {
+                const active = activePlantLens === lens.key;
+                return (
+                  <button key={lens.key} type="button" role="tab" aria-selected={active} onClick={() => setActivePlantLens(lens.key)} style={{ background: active ? "var(--cherry-forest)" : "var(--muted)", color: active ? "#FAF7F1" : "var(--cherry-warm-mid)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.34rem", fontSize: "0.76rem", fontWeight: 900, cursor: "pointer" }}>
+                    {lens.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {activePlantLens === "story" ? (
+              <div role="tabpanel" style={{ display: "grid", gap: "0.62rem" }}>
+                <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.88rem" }}>{activeChapter.story}</p>
+                <div style={{ display: "grid", gap: "0.5rem" }}>
+                  {[
+                    ["生存问题", activeChapter.challenge],
+                    ["关键创新", activeChapter.innovation],
+                  ].map(([label, body]) => (
+                    <div key={label} style={{ background: "var(--muted)", borderRadius: 14, padding: "0.68rem", color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.82rem" }}>
+                      <strong style={{ color: "var(--cherry-warm-brown)" }}>{label}：</strong>{body}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            ) : null}
 
-          <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1rem", color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.9rem" }}>
-            <strong style={{ color: "var(--cherry-warm-brown)" }}>课堂提问：</strong>{activeChapter.prompt}
-          </div>
+            {activePlantLens === "evidence" ? (
+              <div role="tabpanel" style={{ display: "grid", gap: "0.62rem" }}>
+                <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
+                  <strong style={{ color: "var(--cherry-warm-brown)" }}>证据状态：</strong>{activeChapter.certainty}
+                </div>
+                <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.86rem" }}>{activeChapter.evidence}</p>
+                <div style={{ display: "grid", gap: "0.45rem" }}>
+                  {activeReferences.map((reference) => (
+                    <a key={reference.key} href={reference.url} target="_blank" rel="noreferrer" aria-label={`${reference.title}，新窗口打开`} style={{ color: "var(--cherry-forest)", textDecoration: "none", lineHeight: 1.45, fontSize: "0.78rem", fontWeight: 900 }}>
+                      [{reference.key}] {reference.title} <span aria-hidden="true">↗</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : null}
 
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.65rem" }}>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>讨论引导</div>
-            <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
-              <strong style={{ color: "var(--cherry-warm-brown)" }}>作答提示：</strong>{activeChapter.answerHint}
-            </div>
-            <div style={{ background: "rgba(169,201,172,0.18)", border: "1.5px solid rgba(93,140,101,0.18)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
-              <strong style={{ color: "var(--cherry-warm-brown)" }}>教师追问：</strong>{activeChapter.teacherMove}
-            </div>
+            {activePlantLens === "classroom" ? (
+              <div role="tabpanel" style={{ display: "grid", gap: "0.62rem" }}>
+                <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
+                  <strong style={{ color: "var(--cherry-warm-brown)" }}>课堂提问：</strong>{activeChapter.prompt}
+                </div>
+                <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
+                  <strong style={{ color: "var(--cherry-warm-brown)" }}>作答提示：</strong>{activeChapter.answerHint}
+                </div>
+                <div style={{ background: "rgba(169,201,172,0.18)", border: "1.5px solid rgba(93,140,101,0.18)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
+                  <strong style={{ color: "var(--cherry-warm-brown)" }}>教师追问：</strong>{activeChapter.teacherMove}
+                </div>
+              </div>
+            ) : null}
+
+            {activePlantLens === "extend" ? (
+              <div role="tabpanel" style={{ display: "grid", gap: "0.72rem" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(86px, 1fr))", gap: "0.42rem" }}>
+                  {extensionTasks.map((task, index) => {
+                    const active = activePlantTaskIndex === index;
+                    return (
+                      <button key={task.title} type="button" aria-pressed={active} onClick={() => setActivePlantTaskIndex(index)} style={{ background: active ? "rgba(214,91,74,0.13)" : "var(--muted)", color: active ? "var(--cherry-red)" : "var(--cherry-warm-mid)", border: active ? "1.5px solid rgba(214,91,74,0.38)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.54rem 0.5rem", fontSize: "0.75rem", fontWeight: 900, cursor: "pointer" }}>
+                        {task.title}
+                      </button>
+                    );
+                  })}
+                </div>
+                <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.78rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
+                  <strong style={{ color: "var(--cherry-warm-brown)" }}>{activeExtensionTask.title}：</strong>{activeExtensionTask.body}
+                </div>
+              </div>
+            ) : null}
           </div>
 
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>

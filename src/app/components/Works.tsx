@@ -71,7 +71,6 @@ export const works = [
 function WorkCard({ work }: { work: (typeof works)[0] }) {
   const [hovered, setHovered] = useState(false);
   const href = "href" in work ? work.href : undefined;
-  const isPlantEvolution = work.slug === "plant-evolution-stories";
 
   function openDetail(event?: React.MouseEvent<HTMLAnchorElement>) {
     if (!href) return;
@@ -94,7 +93,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         background: work.color,
         border: `1.5px solid ${work.border}`,
         borderRadius: 20,
-        padding: "1.6rem 1.6rem 1.4rem",
+        padding: "1.28rem 1.28rem 1.18rem",
         transform: hovered ? "rotate(0deg) translateY(-5px)" : `rotate(${work.rotate})`,
         transition: "transform 0.25s, box-shadow 0.25s",
         boxShadow: hovered ? "5px 12px 0px rgba(94,68,42,0.12)" : "3px 5px 0px rgba(94,68,42,0.08)",
@@ -103,26 +102,26 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         color: "inherit",
         textDecoration: "none",
         display: "grid",
-        gridTemplateRows: isPlantEvolution ? "auto auto auto auto auto auto" : "auto auto 1fr auto auto auto",
+        gridTemplateRows: "auto auto auto auto auto auto",
         alignContent: "start",
-        minHeight: isPlantEvolution ? 560 : 366,
+        minHeight: 384,
       }}
     >
       {/* Push pin */}
       <div style={{ position: "absolute", top: -7, left: "50%", transform: "translateX(-50%)", width: 14, height: 14, borderRadius: "50%", background: "var(--cherry-red)", opacity: 0.65, boxShadow: "0 2px 4px rgba(0,0,0,0.12)" }} />
 
-      <div style={{ marginBottom: "0.8rem" }}>{work.icon}</div>
+      <div style={{ marginBottom: "0.46rem" }}>{work.icon}</div>
 
-      <h3 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "1.02rem", marginBottom: "0.5rem", lineHeight: 1.3 }}>
+      <h3 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "1rem", marginBottom: "0.42rem", lineHeight: 1.25 }}>
         {work.title}
       </h3>
 
-      <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.84rem", lineHeight: 1.65, marginBottom: "1rem" }}>
+      <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.79rem", lineHeight: 1.48, marginBottom: "0.64rem" }}>
         {work.desc}
       </p>
 
-      <div style={{ minHeight: isPlantEvolution ? 372 : 92, display: "flex", justifyContent: "center", alignItems: "center", background: isPlantEvolution ? "rgba(250,247,241,0.62)" : "rgba(250,247,241,0.46)", border: "1.5px dashed rgba(94,68,42,0.12)", borderRadius: 16, marginBottom: "0.82rem", padding: isPlantEvolution ? "0.18rem 0.12rem" : 0, overflow: "hidden" }}>
-        <WorkPreviewIllustration slug={work.slug} color={work.border} width={isPlantEvolution ? 190 : 132} height={isPlantEvolution ? 372 : 98} />
+      <div style={{ height: 122, minHeight: 122, display: "flex", justifyContent: "center", alignItems: "center", background: "rgba(250,247,241,0.52)", border: "1.5px dashed rgba(94,68,42,0.12)", borderRadius: 16, marginBottom: "0.68rem", padding: "0.16rem", overflow: "hidden" }}>
+        <WorkPreviewIllustration slug={work.slug} color={work.border} width={214} height={122} />
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
@@ -133,9 +132,9 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         ))}
       </div>
 
-      <div style={{ display: "grid", gap: 5, marginTop: "0.85rem" }}>
+      <div style={{ display: "grid", gap: 4, marginTop: "0.72rem" }}>
         {work.outputs.map((output) => (
-          <span key={output} style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 900 }}>
+          <span key={output} style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-warm-brown)", fontSize: "0.73rem", fontWeight: 900 }}>
             <span aria-hidden="true" style={{ width: 7, height: 7, borderRadius: "50%", background: work.border, flexShrink: 0 }} />
             {output}
           </span>
@@ -149,14 +148,14 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
           alignItems: "center",
           justifyContent: "center",
           gap: 6,
-          marginTop: "0.95rem",
+          marginTop: "0.78rem",
           background: "rgba(250,247,241,0.82)",
           border: "1.5px solid rgba(58,92,62,0.28)",
           borderRadius: 999,
-          padding: "0.42rem 0.85rem",
+          padding: "0.38rem 0.78rem",
           color: "var(--cherry-forest)",
           fontWeight: 900,
-          fontSize: "0.82rem",
+          fontSize: "0.78rem",
           textDecoration: "none",
         }}
       >
@@ -199,7 +198,7 @@ export function Works() {
       aria-labelledby="works-heading"
       style={{
         fontFamily: "'Nunito', sans-serif",
-        padding: "5rem 1.5rem",
+        padding: "4rem 1.5rem",
         background: "var(--muted)",
         position: "relative",
         overflow: "hidden",
@@ -251,12 +250,12 @@ export function Works() {
             </button>
           ))}
         </div>
-        <div role="status" aria-live="polite" style={{ color: "var(--cherry-warm-mid)", textAlign: "center", fontSize: "0.78rem", fontWeight: 800, marginBottom: "2rem" }}>
+        <div role="status" aria-live="polite" style={{ color: "var(--cherry-warm-mid)", textAlign: "center", fontSize: "0.78rem", fontWeight: 800, marginBottom: "1.4rem" }}>
           当前显示 {filtered.length} 个{activeCategory === "全部" ? "主题作品" : activeCategory}
         </div>
 
         {/* Grid */}
-        <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(278px, 1fr))", gap: "2rem", listStyle: "none", margin: 0, padding: 0 }}>
+        <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1.25rem", listStyle: "none", margin: 0, padding: 0 }}>
           {filtered.map((work) => (
             <li key={work.id} style={{ display: "grid" }}>
               <WorkCard work={work} />
