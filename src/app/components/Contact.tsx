@@ -1,8 +1,38 @@
 import { type FormEvent, useState } from "react";
-import { IconMail, IconSend, IconGithub, IconLeaf, IconCheck } from "./Icons";
+import { IconMail, IconSend, IconGithub, IconLeaf } from "./Icons";
 import { copyText } from "../clipboard";
 
 const emailAddress = "liruirui321@gmail.com";
+
+function ContactNoteIllustration() {
+  return (
+    <svg width="198" height="112" viewBox="0 0 198 112" fill="none" aria-hidden="true" focusable="false">
+      <path d="M19 85 C48 66 77 80 104 61 C136 38 160 54 185 31 V106 H19Z" fill="var(--cherry-sage-light)" opacity="0.62" />
+      <path d="M35 92 C66 102 146 100 174 88" stroke="rgba(94,68,42,0.15)" strokeWidth="6" strokeLinecap="round" />
+      <rect x="48" y="26" width="92" height="58" rx="14" fill="rgba(250,247,241,0.94)" stroke="var(--cherry-peach)" strokeWidth="2.4" />
+      <path d="M50 38 L94 62 L138 38" stroke="var(--cherry-peach)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M63 65 H111 M63 74 H97" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.42" />
+      <path d="M132 21 L138 31 L150 34 L140 41 L137 53 L131 43 L119 39 L129 32Z" fill="var(--cherry-yellow)" stroke="rgba(94,68,42,0.14)" strokeWidth="1.2" />
+      <path d="M35 43 C46 32 60 33 70 45" stroke="var(--cherry-blue)" strokeWidth="5" strokeLinecap="round" opacity="0.36" />
+      <path d="M149 74 C158 61 174 64 181 78 C166 87 155 84 149 74Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="1.8" />
+      <circle cx="60" cy="28" r="6" fill="var(--cherry-red)" opacity="0.72" />
+    </svg>
+  );
+}
+
+function DeliveredNoteIllustration() {
+  return (
+    <svg width="118" height="86" viewBox="0 0 118 86" fill="none" aria-hidden="true" focusable="false">
+      <rect x="22" y="26" width="66" height="42" rx="12" fill="rgba(250,247,241,0.92)" stroke="var(--cherry-forest)" strokeWidth="2.3" />
+      <path d="M24 36 L55 55 L86 36" stroke="var(--cherry-forest)" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="82" cy="29" r="14" fill="var(--cherry-yellow)" opacity="0.9" />
+      <path d="M76 29 L81 34 L91 22" stroke="var(--cherry-forest)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M14 64 C32 76 80 76 103 61" stroke="rgba(58,92,62,0.2)" strokeWidth="5" strokeLinecap="round" />
+      <path d="M29 22 C39 12 52 14 60 25" stroke="var(--cherry-blue)" strokeWidth="4.6" strokeLinecap="round" opacity="0.32" />
+      <path d="M88 67 C96 56 108 59 113 70 C102 76 93 75 88 67Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="1.6" />
+    </svg>
+  );
+}
 
 export function Contact() {
   const [name, setName] = useState("");
@@ -109,6 +139,10 @@ export function Contact() {
         <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.95rem", maxWidth: 480, margin: "0 auto 2.5rem" }}>
           如果你想聊聊科学、课程、AI 工具，或者只是想说一声「你好」，都欢迎给我留言~ 我会认真读每一条。
         </p>
+
+        <div className="contact-note-illustration">
+          <ContactNoteIllustration />
+        </div>
 
         <div className="contact-email-chip" style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.52rem 0.42rem 0.9rem", marginBottom: "1.4rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", maxWidth: "100%", boxSizing: "border-box" }}>
           <span style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.84rem", overflowWrap: "anywhere" }}>{emailAddress}</span>
@@ -252,8 +286,8 @@ export function Contact() {
               boxShadow: "5px 8px 0px rgba(94,68,42,0.08)",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem" }}>
-              <IconCheck size={40} color="var(--cherry-forest)" />
+            <div style={{ display: "flex", justifyContent: "center", margin: "-0.55rem 0 0.55rem" }}>
+              <DeliveredNoteIllustration />
             </div>
             <h3 style={{ fontFamily: "'Caveat', cursive", fontSize: "1.45rem", color: "var(--cherry-warm-brown)", fontWeight: 700, marginBottom: "0.5rem" }}>
               邮件草稿已打开，谢谢 {name} ~
@@ -379,6 +413,26 @@ export function Contact() {
             color: var(--cherry-forest) !important;
             border-color: var(--cherry-sage) !important;
             background: var(--cherry-sage-light) !important;
+          }
+
+          #contact .contact-note-illustration {
+            width: min(100%, 238px);
+            min-height: 116px;
+            margin: -1.15rem auto 1.15rem;
+            border: 1.5px dashed rgba(94,68,42,0.12);
+            border-radius: 20px;
+            background: rgba(250,247,241,0.52);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 3px 5px 0 rgba(94,68,42,0.05);
+          }
+
+          #contact .contact-note-illustration svg {
+            width: 100%;
+            max-width: 218px;
+            height: auto;
+            display: block;
           }
 
           @media (prefers-reduced-motion: reduce) {
