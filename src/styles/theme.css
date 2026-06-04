@@ -164,6 +164,10 @@
     scroll-padding-top: 76px;
   }
 
+  :where(#top, #works, #about, #research, #notes, #contact, #main-content) {
+    scroll-margin-top: 76px;
+  }
+
   body {
     @apply bg-background text-foreground;
     margin: 0;
@@ -221,6 +225,14 @@
 
   #main-content:focus {
     outline: none;
+  }
+
+  :where(#top, #works, #about, #research, #notes, #contact):focus {
+    outline: none;
+  }
+
+  :where(#top, #works, #about, #research, #notes, #contact):focus-visible {
+    box-shadow: inset 0 0 0 3px rgba(184, 68, 51, 0.18);
   }
 
   @media (prefers-reduced-motion: reduce) {
