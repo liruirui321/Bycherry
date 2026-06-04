@@ -243,6 +243,7 @@ export function ResearchEssays() {
   return (
     <section
       id="research"
+      aria-labelledby="research-heading"
       style={{
         fontFamily: "'Nunito', sans-serif",
         padding: "5rem 1.5rem",
@@ -269,7 +270,7 @@ export function ResearchEssays() {
         </div>
 
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
-          <h2 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
+          <h2 id="research-heading" style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
             科研随笔
           </h2>
         </div>

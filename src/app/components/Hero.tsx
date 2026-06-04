@@ -67,6 +67,7 @@ export function Hero() {
   return (
     <section
       id="top"
+      aria-labelledby="hero-heading"
       style={{
         fontFamily: "'Nunito', sans-serif",
         minHeight: "auto",
@@ -158,6 +159,7 @@ export function Hero() {
 
         {/* Headline */}
         <h1
+          id="hero-heading"
           style={{
             fontFamily: "'Nunito', sans-serif",
             fontSize: "clamp(1.85rem, 4.4vw, 3rem)",

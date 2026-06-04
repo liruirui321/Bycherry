@@ -35,6 +35,7 @@ export function About() {
   return (
     <section
       id="about"
+      aria-labelledby="about-heading"
       style={{
         fontFamily: "'Nunito', sans-serif",
         padding: "5rem 1.5rem",
@@ -90,9 +91,9 @@ export function About() {
               </svg>
             </div>
 
-            <h2 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "1.5rem", marginBottom: "0.2rem" }}>
+            <h3 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "1.5rem", marginBottom: "0.2rem" }}>
               Cherry
-            </h2>
+            </h3>
             <p style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-warm-mid)", fontSize: "1rem", marginBottom: "1.25rem" }}>
               生物 × 教育 × AI 创作者
             </p>
@@ -128,6 +129,7 @@ export function About() {
           </div>
 
           <h2
+            id="about-heading"
             style={{
               fontFamily: "'Nunito', sans-serif",
               fontWeight: 800,

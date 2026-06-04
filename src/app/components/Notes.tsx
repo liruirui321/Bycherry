@@ -90,6 +90,7 @@ export function Notes() {
   return (
     <section
       id="notes"
+      aria-labelledby="notes-heading"
       style={{
         fontFamily: "'Nunito', sans-serif",
         padding: "5rem 1.5rem",
@@ -119,7 +120,7 @@ export function Notes() {
               <IconBook size={20} color="var(--cherry-warm-mid)" />
               <span style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>手账目录</span>
             </div>
-            <h2 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
+            <h2 id="notes-heading" style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
               最近在想的事
             </h2>
           </div>
