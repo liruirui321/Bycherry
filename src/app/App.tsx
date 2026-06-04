@@ -18,6 +18,7 @@ const siteTitle = "By Cherry";
 const homeTitle = "科学、课程与 AI";
 const defaultDescription = "By Cherry 是一个可爱插画风的个人网站，收录科学教育、AI 学习工具、项目制课程和创作工作流。";
 const siteUrl = "https://bycherry.me";
+const socialImageUrl = `${siteUrl}/social-preview.png`;
 
 function upsertMeta(selector: string, attributes: Record<string, string>, content: string) {
   let element = document.head.querySelector<HTMLMetaElement>(selector);
@@ -238,9 +239,16 @@ export default function App() {
     upsertMeta('meta[property="og:locale"]', { property: "og:locale" }, "zh_CN");
     upsertMeta('meta[property="og:site_name"]', { property: "og:site_name" }, siteTitle);
     upsertMeta('meta[property="og:url"]', { property: "og:url" }, canonicalUrl);
-    upsertMeta('meta[name="twitter:card"]', { name: "twitter:card" }, "summary");
+    upsertMeta('meta[property="og:image"]', { property: "og:image" }, socialImageUrl);
+    upsertMeta('meta[property="og:image:width"]', { property: "og:image:width" }, "1200");
+    upsertMeta('meta[property="og:image:height"]', { property: "og:image:height" }, "630");
+    upsertMeta('meta[property="og:image:type"]', { property: "og:image:type" }, "image/png");
+    upsertMeta('meta[property="og:image:alt"]', { property: "og:image:alt" }, "By Cherry 科学、课程与 AI 作品集预览图");
+    upsertMeta('meta[name="twitter:card"]', { name: "twitter:card" }, "summary_large_image");
     upsertMeta('meta[name="twitter:title"]', { name: "twitter:title" }, fullTitle);
     upsertMeta('meta[name="twitter:description"]', { name: "twitter:description" }, description);
+    upsertMeta('meta[name="twitter:image"]', { name: "twitter:image" }, socialImageUrl);
+    upsertMeta('meta[name="twitter:image:alt"]', { name: "twitter:image:alt" }, "By Cherry 科学、课程与 AI 作品集预览图");
     upsertMeta('meta[name="robots"]', { name: "robots" }, notFound ? "noindex" : "index, follow");
     upsertCanonical(canonicalUrl);
     upsertJsonLd(jsonLd);

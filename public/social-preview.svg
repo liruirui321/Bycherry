@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#F5F1EA"/>
+  <ellipse cx="1010" cy="286" rx="250" ry="190" fill="#DDE8D6"/>
+  <ellipse cx="176" cy="430" rx="220" ry="150" fill="#FFF2C9"/>
+  <ellipse cx="252" cy="222" rx="190" ry="120" fill="#F9D7CB"/>
+  <circle cx="872" cy="164" r="8" fill="#E9C553"/>
+  <path d="M80 542 Q102 438 246 354 Q246 492 80 542Z" fill="#5D8C65" opacity=".5"/>
+  <path d="M984 506 Q1006 408 1146 326 Q1146 462 984 506Z" fill="#5D8C65" opacity=".35"/>
+  <g opacity=".18">
+    <circle cx="58" cy="126" r="3" fill="#3A5C3E"/>
+    <circle cx="82" cy="126" r="3" fill="#3A5C3E"/>
+    <circle cx="106" cy="126" r="3" fill="#3A5C3E"/>
+    <circle cx="130" cy="126" r="3" fill="#3A5C3E"/>
+    <circle cx="58" cy="150" r="3" fill="#3A5C3E"/>
+    <circle cx="82" cy="150" r="3" fill="#3A5C3E"/>
+    <circle cx="106" cy="150" r="3" fill="#3A5C3E"/>
+    <circle cx="130" cy="150" r="3" fill="#3A5C3E"/>
+    <circle cx="58" cy="174" r="3" fill="#3A5C3E"/>
+    <circle cx="82" cy="174" r="3" fill="#3A5C3E"/>
+    <circle cx="106" cy="174" r="3" fill="#3A5C3E"/>
+    <circle cx="130" cy="174" r="3" fill="#3A5C3E"/>
+  </g>
+  <g transform="translate(112 86)">
+    <circle cx="28" cy="40" r="18" fill="#C94D3F"/>
+    <circle cx="62" cy="45" r="16" fill="#C94D3F" opacity=".82"/>
+    <path d="M28 22 C32 8 44 -4 62 0 C74 2 82 10 82 22" stroke="#5D8C65" stroke-width="5" stroke-linecap="round"/>
+    <path d="M28 22 C38 16 50 14 62 18" stroke="#5D8C65" stroke-width="4" stroke-linecap="round" opacity=".58"/>
+    <circle cx="82" cy="22" r="7" fill="#5D8C65"/>
+  </g>
+  <text x="112" y="205" fill="#3B2B22" font-family="Nunito, Arial, sans-serif" font-size="76" font-weight="900">By Cherry</text>
+  <text x="114" y="278" fill="#C94D3F" font-family="Nunito, Arial, sans-serif" font-size="44" font-weight="900">science, learning &amp; AI</text>
+  <text x="116" y="338" fill="#6D5645" font-family="Arial, sans-serif" font-size="28" font-weight="700">可打开、可阅读、可操作的科学教育作品集</text>
+  <g transform="translate(116 394)">
+    <rect width="205" height="54" rx="27" fill="#3A5C3E"/>
+    <text x="102" y="35" text-anchor="middle" fill="#FAF7F1" font-family="Arial, sans-serif" font-size="22" font-weight="900">基因表达仿真</text>
+  </g>
+  <g transform="translate(342 394)">
+    <rect width="176" height="54" rx="27" fill="#FFF8EA" stroke="#D8CFC1" stroke-width="2"/>
+    <text x="88" y="35" text-anchor="middle" fill="#5E442A" font-family="Arial, sans-serif" font-size="22" font-weight="900">课程卡片</text>
+  </g>
+  <g transform="translate(538 394)">
+    <rect width="156" height="54" rx="27" fill="#FFF8EA" stroke="#D8CFC1" stroke-width="2"/>
+    <text x="78" y="35" text-anchor="middle" fill="#5E442A" font-family="Arial, sans-serif" font-size="22" font-weight="900">AI 工具</text>
+  </g>
+  <g transform="translate(770 150)">
+    <rect x="0" y="0" width="280" height="180" rx="28" fill="#C8E1EC" stroke="#78B7D8" stroke-width="3"/>
+    <path d="M42 62 C82 28 122 82 162 62 C202 28 240 78 260 52" stroke="#78B7D8" stroke-width="10" stroke-linecap="round"/>
+    <path d="M42 96 C82 126 122 72 162 96 C202 126 240 80 260 104" stroke="#C94D3F" stroke-width="10" stroke-linecap="round"/>
+    <ellipse cx="152" cy="66" rx="34" ry="23" fill="#E7F6FC" stroke="#78B7D8" stroke-width="4"/>
+    <text x="152" y="73" text-anchor="middle" fill="#3B2B22" font-family="Arial, sans-serif" font-size="16" font-weight="900">pol</text>
+    <ellipse cx="116" cy="120" rx="40" ry="26" fill="#F9D7CB" stroke="#E8907C" stroke-width="4"/>
+    <path d="M156 124 C180 136 202 150 234 144" stroke="#3A5C3E" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="174" cy="134" r="12" fill="#E8907C"/>
+    <circle cx="196" cy="145" r="12" fill="#E9C553"/>
+    <circle cx="220" cy="144" r="12" fill="#5D8C65"/>
+  </g>
+  <g transform="translate(760 382)">
+    <rect x="0" y="0" width="290" height="110" rx="26" fill="#B9D9BD" stroke="#5D8C65" stroke-width="3"/>
+    <path d="M36 78 C74 46 100 68 136 44 C174 20 220 34 258 16" stroke="#3A5C3E" stroke-width="6" stroke-linecap="round" opacity=".62"/>
+    <circle cx="48" cy="76" r="17" fill="#E9C553" stroke="#C94D3F" stroke-width="3"/>
+    <circle cx="106" cy="56" r="13" fill="#B9D9BD" stroke="#3A5C3E" stroke-width="3"/>
+    <circle cx="164" cy="34" r="13" fill="#B9D9BD" stroke="#3A5C3E" stroke-width="3"/>
+    <path d="M210 64 Q220 36 252 26 Q250 56 210 64Z" fill="#5D8C65" opacity=".68"/>
+  </g>
+</svg>
