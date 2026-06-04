@@ -8,6 +8,98 @@
     <meta name="color-scheme" content="light" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>By Cherry | 正在返回</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --cream: #F5F1EA;
+        --card: #FAF7F1;
+        --forest: #3A5C3E;
+        --sage: #A9C9AC;
+        --peach: #E8907C;
+        --yellow: #DDB95A;
+        --brown: #3E2A1A;
+        --mid: #7A5C44;
+        --border: rgba(94, 68, 42, 0.16);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 1.5rem;
+        background: var(--cream);
+        color: var(--mid);
+        font-family: ui-rounded, "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.65;
+      }
+
+      main {
+        width: min(100%, 520px);
+        position: relative;
+        text-align: center;
+        background: var(--card);
+        border: 1.5px solid var(--border);
+        border-radius: 24px;
+        padding: 2rem 1.5rem;
+        box-shadow: 5px 8px 0 rgba(94, 68, 42, 0.08);
+        overflow: hidden;
+      }
+
+      .tape {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        width: 82px;
+        height: 20px;
+        border-radius: 4px;
+        background: var(--yellow);
+        opacity: 0.7;
+        transform: translateX(-50%) rotate(-3deg);
+      }
+
+      h1 {
+        margin: 0 0 0.55rem;
+        color: var(--brown);
+        font-size: clamp(1.7rem, 6vw, 2.35rem);
+        line-height: 1.15;
+      }
+
+      p {
+        margin: 0 auto 1rem;
+        max-width: 390px;
+      }
+
+      a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 0.25rem;
+        border-radius: 999px;
+        padding: 0.62rem 1.05rem;
+        background: var(--forest);
+        color: #FAF7F1;
+        font-weight: 900;
+        text-decoration: none;
+        box-shadow: 3px 5px 0 rgba(58, 92, 62, 0.2);
+      }
+
+      a:focus-visible {
+        outline: 3px solid var(--peach);
+        outline-offset: 4px;
+      }
+
+      svg {
+        display: block;
+        width: min(100%, 210px);
+        height: auto;
+        margin: 0 auto 0.9rem;
+      }
+    </style>
     <script>
       try {
         sessionStorage.setItem(
@@ -21,7 +113,21 @@
     </script>
   </head>
   <body>
-    <p>正在返回 By Cherry...</p>
-    <p><a href="/">如果页面没有自动跳转，请返回首页。</a></p>
+    <main>
+      <div class="tape" aria-hidden="true"></div>
+      <svg viewBox="0 0 210 118" fill="none" aria-hidden="true" focusable="false">
+        <path d="M20 90 C48 69 78 82 104 63 C136 40 162 56 193 29 V112 H20Z" fill="var(--sage)" opacity="0.56" />
+        <path d="M38 96 C72 106 152 104 180 90" stroke="rgba(94,68,42,0.15)" stroke-width="6" stroke-linecap="round" />
+        <rect x="57" y="29" width="96" height="62" rx="16" fill="#FFF8EA" stroke="var(--peach)" stroke-width="2.5" />
+        <path d="M59 42 L105 67 L151 42" stroke="var(--peach)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M132 20 L138 31 L151 35 L140 42 L137 55 L131 44 L118 40 L129 33Z" fill="var(--yellow)" stroke="rgba(94,68,42,0.14)" stroke-width="1.2" />
+        <path d="M34 47 C46 35 60 36 71 48" stroke="#7AAFC8" stroke-width="5" stroke-linecap="round" opacity="0.36" />
+        <path d="M153 78 C162 64 179 67 186 82 C170 91 159 88 153 78Z" fill="#5D8C65" stroke="var(--forest)" stroke-width="1.8" />
+        <circle cx="70" cy="31" r="6" fill="#B84433" opacity="0.74" />
+      </svg>
+      <h1>正在返回 By Cherry</h1>
+      <p>正在把这个地址交回主页应用处理，稍后会恢复你刚才打开的内容。</p>
+      <a href="/">如果没有自动跳转，请返回首页</a>
+    </main>
   </body>
 </html>
