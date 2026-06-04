@@ -105,7 +105,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         display: "grid",
         gridTemplateRows: isPlantEvolution ? "auto auto auto auto auto auto" : "auto auto 1fr auto auto auto",
         alignContent: "start",
-        minHeight: isPlantEvolution ? 542 : 366,
+        minHeight: isPlantEvolution ? 568 : 366,
       }}
     >
       {/* Push pin */}
@@ -121,8 +121,8 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         {work.desc}
       </p>
 
-      <div style={{ minHeight: isPlantEvolution ? 334 : 92, display: "flex", justifyContent: "center", alignItems: "center", background: isPlantEvolution ? "rgba(250,247,241,0.62)" : "rgba(250,247,241,0.46)", border: "1.5px dashed rgba(94,68,42,0.12)", borderRadius: 16, marginBottom: "1rem", padding: isPlantEvolution ? "0.35rem 0.25rem" : 0, overflow: "hidden" }}>
-        <WorkPreviewIllustration slug={work.slug} color={work.border} width={isPlantEvolution ? 178 : 132} height={isPlantEvolution ? 334 : 98} />
+      <div style={{ minHeight: isPlantEvolution ? 364 : 92, display: "flex", justifyContent: "center", alignItems: "center", background: isPlantEvolution ? "rgba(250,247,241,0.62)" : "rgba(250,247,241,0.46)", border: "1.5px dashed rgba(94,68,42,0.12)", borderRadius: 16, marginBottom: "1rem", padding: isPlantEvolution ? "0.24rem 0.18rem" : 0, overflow: "hidden" }}>
+        <WorkPreviewIllustration slug={work.slug} color={work.border} width={isPlantEvolution ? 194 : 132} height={isPlantEvolution ? 366 : 98} />
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
