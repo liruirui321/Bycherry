@@ -233,6 +233,36 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes("<WorkQuickStart work={work} />"), "Work detail pages must render the quick-start entry before deep content.");
 }
 
+function verifyResearchAgentWorkbenchContract() {
+  const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
+  const promptKitMatch = workDetailSource.match(/const promptPracticeCases = \[([\s\S]*?)\nfunction PromptKitContent\(\) \{([\s\S]*?)\nfunction PlantEvolutionContent\(\)/);
+
+  expect(Boolean(promptKitMatch), "WorkDetailPage must define promptPracticeCases before PromptKitContent and before PlantEvolutionContent.");
+
+  if (!promptKitMatch) return;
+
+  const practiceCasesSource = promptKitMatch[1];
+  const promptKitSource = promptKitMatch[2];
+  const requiredWorkbenchFeatures = [
+    { label: "practice cases", text: "promptPracticeCases" },
+    { label: "practice case loader", text: "loadPracticeCase" },
+    { label: "active practice state", text: "activePracticeCase" },
+    { label: "visible practice case section", text: "练习案例" },
+    { label: "paper reading case", text: "读论文练习" },
+    { label: "chart reading case", text: "讲图表练习" },
+    { label: "experiment design case", text: "查实验设计练习" },
+    { label: "material source boundary", text: "材料来源：练习材料，用于学习证据拆解" },
+    { label: "direct local preview cue", text: "可以直接运行本地预览" },
+  ];
+
+  for (const item of requiredWorkbenchFeatures) {
+    expect(`${practiceCasesSource}\n${promptKitSource}`.includes(item.text), `Research Agent workbench is missing ${item.label}: ${item.text}`);
+  }
+
+  expect(Array.from(practiceCasesSource.matchAll(/\btask:\s*"/g)).length >= 3, "Research Agent workbench should expose at least three practice cases tied to tasks.");
+  expect(!promptKitSource.includes('useState("研究问题：\\n样本/材料：\\n已有结果：\\n我最担心的问题：")'), "Research Agent workbench should not open on an empty field-only starter.");
+}
+
 function verifyConceptExplainerAgentContract() {
   const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
   const worksSource = read("src/app/components/Works.tsx");
@@ -487,6 +517,7 @@ verifyWorkCardActions();
 verifyWorkDetailCardsStayCompact();
 verifyArticleCardsStayStructured();
 verifyWorkJsonLdLearningOutcomes();
+verifyResearchAgentWorkbenchContract();
 verifyConceptExplainerAgentContract();
 verifyPlantEvolutionLearnerContract();
 verifyLearnerFacingArticleCopy();

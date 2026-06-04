@@ -23,10 +23,50 @@ function ContentCard({ title, children }: { title: string; children: React.React
   );
 }
 
+const promptPracticeCases = [
+  {
+    title: "读论文练习",
+    task: "文献精读",
+    material: `材料来源：练习材料，用于学习证据拆解，不当作真实论文引用
+论文题目：干旱胁迫下拟南芥根系响应的转录组分析
+摘要：研究比较正常供水和干旱处理 24 小时后的拟南芥根系 RNA-seq 数据，目标是寻找可能参与干旱响应的转录因子。
+方法关键词：RNA-seq、差异表达分析、GO 富集、qPCR 验证
+样本/分组：对照组 n=3，干旱处理组 n=3
+已有结果：Figure 2 显示 132 个基因上调、87 个基因下调；一个 NAC 转录因子在干旱组表达升高，qPCR 趋势一致。
+我想重点看：这份材料能支持“参与干旱响应”到哪一步，不能直接推出什么因果结论。
+我最担心的问题：样本量较小，缺少敲除或过表达验证。`,
+  },
+  {
+    title: "讲图表练习",
+    task: "图表解读",
+    material: `材料来源：练习材料，用于学习图表解读，不当作真实论文引用
+图号：Figure 2
+图注：干旱处理 24 小时后，根系中部分胁迫响应基因表达变化。
+坐标轴/单位：横轴为基因编号，纵轴为 log2 fold change。
+分组：对照组 n=3，干旱处理组 n=3
+显著性标记：FDR < 0.05；误差线为标准误。
+已有结果：NAC-like gene A 上调，log2FC = 2.1；WRKY-like gene B 上调，log2FC = 1.4。
+我想确认：这张图能支持哪些观察事实，哪些机制解释还不能直接成立。`,
+  },
+  {
+    title: "查实验设计练习",
+    task: "实验设计检查",
+    material: `材料来源：练习材料，用于学习实验设计检查，不当作真实实验方案
+实验目的：判断候选 NAC 转录因子是否可能影响植物干旱耐受。
+实验对象/材料：拟南芥野生型与候选基因过表达株系。
+分组：正常供水对照、干旱处理；每组计划 6 株。
+核心变量：基因型与水分处理。
+检测指标：存活率、叶片失水率、根长、候选基因表达量。
+统计方法：计划使用 t 检验比较两组均值。
+我担心的问题：是否需要加入空载体对照、是否需要独立株系、统计方法是否能同时处理基因型和处理因素。`,
+  },
+];
+
 function PromptKitContent() {
   const [activePromptIndex, setActivePromptIndex] = useState(0);
   const [activeModeIndex, setActiveModeIndex] = useState(0);
-  const [material, setMaterial] = useState("研究问题：\n样本/材料：\n已有结果：\n我最担心的问题：");
+  const [material, setMaterial] = useState(promptPracticeCases[0].material);
+  const [activePracticeCase, setActivePracticeCase] = useState(promptPracticeCases[0].title);
   const [copied, setCopied] = useState(false);
   const [copiedPack, setCopiedPack] = useState(false);
   const [copiedPreview, setCopiedPreview] = useState(false);
@@ -544,6 +584,7 @@ ${localPreviewOutput}`;
 
   function updateMaterial(value: string) {
     setMaterial(value);
+    setActivePracticeCase("");
     setCopied(false);
     setCopiedPack(false);
     setCopiedPreview(false);
@@ -551,6 +592,20 @@ ${localPreviewOutput}`;
     setCopiedResponseJson(false);
     setHasRunPreview(false);
     setCopyStatus("");
+  }
+
+  function loadPracticeCase(caseItem: (typeof promptPracticeCases)[number]) {
+    const nextPromptIndex = prompts.findIndex((prompt) => prompt.title === caseItem.task);
+    if (nextPromptIndex >= 0) setActivePromptIndex(nextPromptIndex);
+    setMaterial(caseItem.material);
+    setActivePracticeCase(caseItem.title);
+    setCopied(false);
+    setCopiedPack(false);
+    setCopiedPreview(false);
+    setCopiedJson(false);
+    setCopiedResponseJson(false);
+    setHasRunPreview(false);
+    setCopyStatus(`已载入${caseItem.title}，可以直接运行本地预览。`);
   }
 
   function fillMaterialTemplate() {
@@ -768,6 +823,30 @@ ${localPreviewOutput}`;
                   <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 800, position: "relative", zIndex: 1, paddingRight: 26 }}>{item.body}</div>
                 </div>
               ))}
+            </div>
+
+            <div style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.78rem", marginBottom: "0.9rem", display: "grid", gap: "0.62rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: "0.7rem", alignItems: "center", flexWrap: "wrap" }}>
+                <div>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>练习案例</div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem" }}>
+                    先载入一份完整材料，观察 Agent 如何判断任务、证据边界和返回字段。
+                  </div>
+                </div>
+                <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900 }}>
+                  {activePracticeCase ? `当前：${activePracticeCase}` : "当前：自定义材料"}
+                </span>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.48rem" }}>
+                {promptPracticeCases.map((caseItem) => {
+                  const active = activePracticeCase === caseItem.title;
+                  return (
+                    <button key={caseItem.title} type="button" aria-pressed={active} onClick={() => loadPracticeCase(caseItem)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.62rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem" }}>
+                      {caseItem.title}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <textarea
