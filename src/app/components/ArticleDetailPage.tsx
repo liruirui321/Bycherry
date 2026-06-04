@@ -91,7 +91,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
   return (
     <main id="main-content" tabIndex={-1} style={{ fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
-      <section style={{ padding: "3.9rem 1.5rem 1.4rem" }}>
+      <section style={{ padding: "0.75rem 1.5rem 1.4rem" }}>
         <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <a
             className="article-detail-link"
@@ -101,7 +101,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               event.preventDefault();
               navigateHome(backHash);
             }}
-            style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-forest)", textDecoration: "none", fontWeight: 900, fontSize: "0.82rem", marginBottom: "0.8rem" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-forest)", textDecoration: "none", fontWeight: 900, fontSize: "0.8rem", marginBottom: "0.45rem" }}
           >
             ← {backText}
           </a>
@@ -110,21 +110,21 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             style={{
               background: "var(--card)",
               border: "1.5px solid var(--border)",
-              borderRadius: 20,
-              padding: "1.25rem",
-              boxShadow: "6px 10px 0px rgba(94,68,42,0.08)",
+              borderRadius: 18,
+              padding: "0.95rem 1.05rem 1.1rem",
+              boxShadow: "4px 7px 0px rgba(94,68,42,0.07)",
               position: "relative",
               overflow: "hidden",
             }}
           >
-            <div style={{ position: "absolute", top: -12, right: 34, width: 78, height: 20, background: article.tagBg ?? article.labelBg, opacity: 0.75, borderRadius: 4, transform: "rotate(4deg)" }} />
-            <svg style={{ position: "absolute", right: 18, top: 50, opacity: 0.16 }} width="98" height="82" viewBox="0 0 98 82" fill="none" aria-hidden="true" focusable="false">
+            <div style={{ position: "absolute", top: -10, right: 28, width: 68, height: 17, background: article.tagBg ?? article.labelBg, opacity: 0.72, borderRadius: 4, transform: "rotate(4deg)" }} />
+            <svg style={{ position: "absolute", right: 14, top: 38, opacity: 0.13 }} width="76" height="64" viewBox="0 0 98 82" fill="none" aria-hidden="true" focusable="false">
               <path d="M16 72 Q24 42 72 13 Q75 50 16 72Z" fill={article.tagColor ?? article.labelColor} />
               <path d="M22 67 Q43 51 68 22" stroke="var(--cherry-warm-brown)" strokeWidth="2" strokeLinecap="round" opacity="0.35" />
               <circle cx="27" cy="31" r="7" fill="var(--cherry-yellow)" opacity="0.8" />
             </svg>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: "0.65rem", paddingRight: 84 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: "0.45rem", paddingRight: 70 }}>
               <span
                 style={{
                   display: "inline-flex",
@@ -133,8 +133,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   background: article.tagBg ?? article.labelBg,
                   color: article.tagColor ?? article.labelColor,
                   borderRadius: 999,
-                  padding: "0.22rem 0.7rem",
-                  fontSize: "0.78rem",
+                  padding: "0.18rem 0.62rem",
+                  fontSize: "0.74rem",
                   fontWeight: 900,
                 }}
               >
@@ -148,17 +148,17 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </span>
             </div>
 
-            <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.45rem, 4vw, 2.15rem)", fontWeight: 900, lineHeight: 1.2, marginBottom: "0.65rem", maxWidth: 680 }}>
+            <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.24rem, 3vw, 1.72rem)", fontWeight: 900, lineHeight: 1.22, marginBottom: "0.45rem", maxWidth: 720 }}>
               {article.title}
             </h1>
 
-            <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.92rem", lineHeight: 1.75, marginBottom: "0.9rem", maxWidth: 720 }}>
+            <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.88rem", lineHeight: 1.65, margin: "0 0 0.65rem", maxWidth: 760 }}>
               {article.excerpt ?? article.body}
             </p>
 
-            <div style={{ display: "grid", gap: "0.85rem", marginBottom: "1.1rem" }}>
+            <div style={{ display: "grid", gap: "0.62rem", marginBottom: "0.9rem" }}>
               {article.paragraphs.map((paragraph) => (
-                <p key={paragraph} style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.9, fontSize: "0.96rem" }}>
+                <p key={paragraph} style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.78, fontSize: "0.93rem", margin: 0 }}>
                   {paragraph}
                 </p>
               ))}
@@ -168,25 +168,25 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               style={{
                 background: "var(--cherry-yellow-light)",
                 border: "1.5px solid var(--cherry-yellow)",
-                borderRadius: 18,
-                padding: "1.15rem",
+                borderRadius: 16,
+                padding: "0.9rem",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.75rem" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.55rem" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
                   <IconBook size={18} />
                   可以带走的想法
                 </div>
-                <button type="button" onClick={copyArticleSummary} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
+                <button type="button" onClick={copyArticleSummary} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.4rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                   {copiedSummary ? "已复制" : "复制摘要"}
                 </button>
               </div>
-              <div id="article-summary-copy-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 900, marginBottom: "0.5rem" }}>
+              <div id="article-summary-copy-status" role="status" aria-live="polite" style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900, marginBottom: "0.42rem" }}>
                 {copyStatus}
               </div>
               <div style={{ display: "grid", gap: "0.65rem" }}>
                 {article.highlights.map((highlight) => (
-                  <div key={highlight} style={{ display: "flex", alignItems: "flex-start", gap: 8, color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.9rem" }}>
+                  <div key={highlight} style={{ display: "flex", alignItems: "flex-start", gap: 8, color: "var(--cherry-warm-mid)", lineHeight: 1.58, fontSize: "0.86rem" }}>
                     <IconCheck size={16} color="var(--cherry-forest)" />
                     <span>{highlight}</span>
                   </div>
