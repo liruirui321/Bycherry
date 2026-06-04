@@ -106,7 +106,7 @@ function buildHomeJsonLd() {
             genre: work.category,
             keywords: work.tags.join(", "),
             learningResourceType: work.category,
-            teaches: [work.task, ...work.path, ...work.outputs],
+            teaches: [work.task, work.starter, ...work.path, ...work.outputs],
             dateModified: work.updated,
             creator: { "@id": personId },
           },
@@ -308,7 +308,7 @@ export default function App() {
           genre: work.category,
           keywords: work.tags.join(", "),
           learningResourceType: work.category,
-          teaches: [work.task, ...work.path, ...work.outputs],
+          teaches: [work.task, work.starter, ...work.path, ...work.outputs],
           dateModified: work.updated,
         }
       : note || essay
