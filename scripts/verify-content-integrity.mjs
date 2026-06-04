@@ -341,6 +341,9 @@ function verifyLearnerFacingArticleCopy() {
     "学习资料库",
     "学习方法库",
     "科研证据库",
+    "推荐起点",
+    "先读 AI 学习材料质检",
+    "先读真实科研如何变成问题",
     "按学习方法主题筛选",
     "按科研证据主题筛选",
     "当前显示",
@@ -392,6 +395,7 @@ function verifyLearnerProductPositioning() {
     '"学习项目"',
     "科学学习和 AI 工具",
     "science learning lab",
+    "先从基因表达可视化开始",
   ];
   const retiredProductPatterns = [
     { label: "course-heavy home title", pattern: /科学、课程/ },

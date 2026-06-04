@@ -182,6 +182,7 @@ export function Notes() {
   const [activeTag, setActiveTag] = useState("全部");
   const noteTags = ["全部", ...Array.from(new Set(notes.map((note) => note.tag)))];
   const filteredNotes = activeTag === "全部" ? notes : notes.filter((note) => note.tag === activeTag);
+  const recommendedNote = notes.find((note) => note.slug === "ai-course-development") ?? notes[0];
 
   return (
     <section
@@ -221,6 +222,23 @@ export function Notes() {
             </h2>
           </div>
         </div>
+
+        <a
+          className="note-recommended-start"
+          href={recommendedNote.href}
+          aria-label={`推荐起点：${recommendedNote.title}`}
+          onMouseEnter={() => preloadRouteForHref(recommendedNote.href)}
+          onFocus={() => preloadRouteForHref(recommendedNote.href)}
+          onPointerDown={() => preloadRouteForHref(recommendedNote.href)}
+          onClick={(event) => navigateTo(recommendedNote.href, event)}
+          style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.75rem", alignItems: "center", background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderLeft: `4px solid ${recommendedNote.tagColor}`, borderRadius: 8, padding: "0.82rem 0.95rem", color: "inherit", textDecoration: "none", boxShadow: "0 8px 18px rgba(94,68,42,0.06)", marginBottom: "1rem" }}
+        >
+          <span style={{ display: "grid", gap: "0.24rem", minWidth: 0 }}>
+            <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900 }}>推荐起点</span>
+            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.88rem", lineHeight: 1.45, fontWeight: 900 }}>先读 AI 学习材料质检：学会把 AI 输出拆成目标、误解、证据和复盘。</span>
+          </span>
+          <span style={{ background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.32rem 0.68rem", fontSize: "0.74rem", fontWeight: 900, whiteSpace: "nowrap" }}>打开方法 →</span>
+        </a>
 
         <div role="group" aria-label="按学习方法主题筛选" style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: "0.75rem" }}>
           {noteTags.map((tag) => (
@@ -336,6 +354,7 @@ export function Notes() {
             outline-offset: 4px;
           }
 
+          #notes .note-recommended-start:focus-visible,
           #notes .note-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;

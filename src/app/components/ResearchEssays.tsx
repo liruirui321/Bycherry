@@ -351,6 +351,7 @@ export function ResearchEssays() {
   const [activeLabel, setActiveLabel] = useState("全部");
   const researchLabels = ["全部", ...Array.from(new Set(essays.map((essay) => essay.label)))];
   const filteredEssays = activeLabel === "全部" ? essays : essays.filter((essay) => essay.label === activeLabel);
+  const recommendedEssay = essays.find((essay) => essay.slug === "science-to-classroom-question") ?? essays[0];
 
   return (
     <section
@@ -394,6 +395,23 @@ export function ResearchEssays() {
           <div style={{ flex: 1, height: 1.5, background: "var(--border)", borderRadius: 1 }} />
         </div>
       </div>
+
+      <a
+        className="research-recommended-start"
+        href={recommendedEssay.href}
+        aria-label={`推荐起点：${recommendedEssay.title}`}
+        onMouseEnter={() => preloadRouteForHref(recommendedEssay.href)}
+        onFocus={() => preloadRouteForHref(recommendedEssay.href)}
+        onPointerDown={() => preloadRouteForHref(recommendedEssay.href)}
+        onClick={(event) => navigateTo(recommendedEssay.href, event)}
+        style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.75rem", alignItems: "center", background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderLeft: `4px solid ${recommendedEssay.labelColor}`, borderRadius: 8, padding: "0.82rem 0.95rem", color: "inherit", textDecoration: "none", boxShadow: "0 8px 18px rgba(94,68,42,0.06)", marginBottom: "1rem" }}
+      >
+        <span style={{ display: "grid", gap: "0.24rem", minWidth: 0 }}>
+          <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900 }}>推荐起点</span>
+          <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.88rem", lineHeight: 1.45, fontWeight: 900 }}>先读真实科研如何变成问题：练习从现象、证据和限制进入科研材料。</span>
+        </span>
+        <span style={{ background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.32rem 0.68rem", fontSize: "0.74rem", fontWeight: 900, whiteSpace: "nowrap" }}>查看证据 →</span>
+      </a>
 
       <div role="group" aria-label="按科研证据主题筛选" style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: "0.75rem" }}>
         {researchLabels.map((label) => (
@@ -445,6 +463,7 @@ export function ResearchEssays() {
             outline-offset: 4px;
           }
 
+          #research .research-recommended-start:focus-visible,
           #research .research-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;

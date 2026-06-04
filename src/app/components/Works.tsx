@@ -219,6 +219,7 @@ export function Works() {
   const [activeCategory, setActiveCategory] = useState<Category>("全部");
   const categories: Category[] = ["全部", "科学", "学习项目", "AI工具"];
   const filtered = activeCategory === "全部" ? works : works.filter((w) => w.category === activeCategory);
+  const recommendedWork = works.find((work) => work.slug === "gene-expression") ?? works[0];
 
   return (
     <section
@@ -255,6 +256,27 @@ export function Works() {
             学习模块
           </h2>
         </div>
+
+        <a
+          className="work-recommended-start"
+          href={recommendedWork.href}
+          aria-label={`推荐起点：${recommendedWork.title}`}
+          onMouseEnter={() => preloadRouteForHref(recommendedWork.href)}
+          onFocus={() => preloadRouteForHref(recommendedWork.href)}
+          onPointerDown={() => preloadRouteForHref(recommendedWork.href)}
+          onClick={(event) => {
+            if (!shouldUseClientNavigation(event)) return;
+            event.preventDefault();
+            navigateClient(recommendedWork.href);
+          }}
+          style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.75rem", alignItems: "center", background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderLeft: `4px solid ${recommendedWork.border}`, borderRadius: 8, padding: "0.82rem 0.95rem", color: "inherit", textDecoration: "none", boxShadow: "0 8px 18px rgba(94,68,42,0.06)", marginBottom: "1rem" }}
+        >
+          <span style={{ display: "grid", gap: "0.24rem", minWidth: 0 }}>
+            <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900 }}>推荐起点</span>
+            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.88rem", lineHeight: 1.45, fontWeight: 900 }}>先从基因表达可视化开始：拖动分子，看见 DNA 信息如何变成蛋白链。</span>
+          </span>
+          <span style={{ background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.32rem 0.68rem", fontSize: "0.74rem", fontWeight: 900, whiteSpace: "nowrap" }}>启动仿真 →</span>
+        </a>
 
         {/* Filter */}
         <div role="group" aria-label="按学习模块类型筛选" style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: "0.85rem" }}>
@@ -297,6 +319,7 @@ export function Works() {
       <style>
         {`
           #works .work-card:focus-visible,
+          #works .work-recommended-start:focus-visible,
           #works .work-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
