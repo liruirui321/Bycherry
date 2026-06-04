@@ -84,6 +84,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
       ]
     : [];
   const actionSteps = article && "actionSteps" in article ? article.actionSteps : [];
+  const checklist = article && "checklist" in article ? article.checklist : [];
   const summaryText = article
     ? `【阅读摘要】
 标题：${article.title}
@@ -101,7 +102,10 @@ ${article.paragraphs.map((paragraph, index) => `${index + 1}. ${paragraph}`).joi
 三、上手步骤
 ${actionSteps.map((step, index) => `${index + 1}. ${step}`).join("\n")}
 
-四、可以带走的想法
+四、检查清单
+${checklist.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+五、可以带走的想法
 ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).join("\n")}`
     : "";
 
@@ -266,6 +270,20 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                         {index + 1}
                       </span>
                       <span style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.62, fontSize: "0.86rem", fontWeight: 800 }}>{step}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {checklist.length ? (
+              <div style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.08)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
+                <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem", marginBottom: "0.65rem" }}>检查清单</div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.55rem" }}>
+                  {checklist.map((item) => (
+                    <div key={item} style={{ display: "grid", gridTemplateColumns: "20px minmax(0, 1fr)", gap: 8, alignItems: "start", background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+                      <IconCheck size={16} color="var(--cherry-forest)" />
+                      <span style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.8rem", fontWeight: 800 }}>{item}</span>
                     </div>
                   ))}
                 </div>
