@@ -167,7 +167,7 @@ export function Hero() {
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.95rem" }}>精选内容</div>
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800 }}>{works.length} 个学习模块</div>
           </div>
-          <div className="hero-work-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(178px, 1fr))", gap: "0.65rem", minWidth: 0, maxWidth: "100%" }}>
+          <nav className="hero-work-grid" aria-label="首屏学习模块目录" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(154px, 1fr))", gap: "0.55rem", minWidth: 0, maxWidth: "100%" }}>
             {works.map((work) => (
                 <a
                   className="hero-work-card"
@@ -182,21 +182,21 @@ export function Hero() {
                     background: work.color,
                     border: `1.5px solid ${work.border}`,
                     borderRadius: 10,
-                    padding: "0.68rem 0.72rem 0.66rem",
+                    padding: "0.62rem",
                     color: "var(--cherry-warm-brown)",
                     textDecoration: "none",
                     textAlign: "left",
-                    minHeight: 216,
+                    minHeight: 152,
                     display: "grid",
-                    gridTemplateRows: "auto auto auto 1fr auto",
-                    gap: "0.34rem",
+                    gridTemplateRows: "auto auto 1fr auto",
+                    gap: "0.32rem",
                     position: "relative",
                     overflow: "hidden",
                     minWidth: 0,
                     maxWidth: "100%",
                   }}
                 >
-                  <div aria-hidden="true" style={{ position: "absolute", right: -10, bottom: -10, width: 106, height: 82, borderRadius: 10, background: "rgba(250,247,241,0.42)", border: "1px solid rgba(94,68,42,0.1)" }} />
+                  <div aria-hidden="true" style={{ position: "absolute", right: -8, bottom: -8, width: 74, height: 58, borderRadius: 10, background: "rgba(250,247,241,0.42)", border: "1px solid rgba(94,68,42,0.1)" }} />
                   <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0, position: "relative", zIndex: 1 }}>
                     <span style={{ width: 28, height: 28, display: "inline-flex", alignItems: "center", justifyContent: "center", transform: "scale(0.68)", transformOrigin: "center" }}>{work.icon}</span>
                     <strong style={{ fontSize: "0.88rem", lineHeight: 1.35, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
@@ -209,31 +209,26 @@ export function Hero() {
                       {work.updated}
                     </span>
                   </div>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.4, position: "relative", zIndex: 1, display: "block", minWidth: 0, overflowWrap: "anywhere", wordBreak: "break-word", paddingRight: 54 }}>{work.desc}</span>
-                  <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.42rem 0.48rem", position: "relative", zIndex: 1, marginRight: 46 }}>
+                  <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.4rem 0.45rem", position: "relative", zIndex: 1, marginRight: 34 }}>
                     <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.6rem", fontWeight: 900, marginBottom: "0.12rem" }}>立即任务</span>
-                    <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.66rem", lineHeight: 1.35, fontWeight: 800, overflowWrap: "anywhere" }}>{work.task}</span>
-                    <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.6rem", fontWeight: 900, marginTop: "0.3rem", marginBottom: "0.1rem" }}>先做这个</span>
-                    <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.64rem", lineHeight: 1.32, fontWeight: 800, overflowWrap: "anywhere" }}>{work.starter}</span>
-                    <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.6rem", fontWeight: 900, marginTop: "0.3rem", marginBottom: "0.1rem" }}>完成标准</span>
-                    <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.62rem", lineHeight: 1.3, fontWeight: 800, overflowWrap: "anywhere" }}>{work.success}</span>
+                    <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.65rem", lineHeight: 1.34, fontWeight: 800, overflowWrap: "anywhere" }}>{work.task}</span>
                   </div>
-                  <div role="list" aria-label={`${work.title}学习路径`} style={{ display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center", paddingRight: 76, position: "relative", zIndex: 1 }}>
+                  <div role="list" aria-label={`${work.title}学习路径`} style={{ display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center", paddingRight: 54, position: "relative", zIndex: 1 }}>
                     {work.path.map((step, index) => (
-                      <span role="listitem" key={step} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.12rem 0.42rem", color: "var(--cherry-warm-brown)", fontSize: "0.62rem", fontWeight: 900 }}>
+                      <span role="listitem" key={step} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.12rem 0.36rem", color: "var(--cherry-warm-brown)", fontSize: "0.6rem", fontWeight: 900 }}>
                         {index + 1}. {step}
                       </span>
                     ))}
-                    <span style={{ background: "var(--cherry-forest)", border: "1px solid var(--cherry-forest)", borderRadius: 999, padding: "0.12rem 0.42rem", color: "#FAF7F1", fontSize: "0.64rem", fontWeight: 900 }}>
+                    <span style={{ background: "var(--cherry-forest)", border: "1px solid var(--cherry-forest)", borderRadius: 999, padding: "0.12rem 0.38rem", color: "#FAF7F1", fontSize: "0.62rem", fontWeight: 900 }}>
                       {work.action}
                     </span>
                   </div>
                   <div className="hero-work-preview" style={{ position: "absolute", right: 2, bottom: 0, display: "flex", justifyContent: "flex-end", opacity: 0.9, zIndex: 0 }}>
-                    <WorkPreviewIllustration slug={work.slug} color={work.border} width={108} height={82} />
+                    <WorkPreviewIllustration slug={work.slug} color={work.border} width={78} height={58} />
                   </div>
                 </a>
             ))}
-          </div>
+          </nav>
         </div>
         </div>
       </div>
@@ -259,14 +254,21 @@ export function Hero() {
           }
 
           .hero-work-grid {
-            grid-template-columns: 1fr !important;
+            display: flex !important;
+            grid-template-columns: none !important;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+            scroll-snap-type: x proximity;
+            padding-bottom: 0.25rem;
             width: 100% !important;
             max-width: 100% !important;
           }
 
           .hero-work-card {
-            width: calc(100vw - 3rem) !important;
-            max-width: calc(100vw - 3rem) !important;
+            width: min(76vw, 320px) !important;
+            min-width: min(76vw, 320px) !important;
+            max-width: min(76vw, 320px) !important;
+            scroll-snap-align: start;
           }
 
           .hero-work-card strong,

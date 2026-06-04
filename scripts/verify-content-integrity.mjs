@@ -240,6 +240,10 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("{work.starter}"), "Homepage hero work cards must expose first concrete starter actions.");
   expect(heroSource.includes("{work.success}"), "Homepage hero work cards must expose concrete completion standards.");
   expect(heroSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage hero work cards must include starter and completion standard in accessible labels.");
+  expect(heroSource.includes('aria-label="首屏学习模块目录"'), "Homepage hero must label the first-screen module directory.");
+  expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(154px, 1fr))"'), "Homepage hero module cards must stay compact enough to reveal multiple modules in the first screen.");
+  expect(heroSource.includes("minHeight: 152"), "Homepage hero module cards must use compact fixed heights.");
+  expect(heroSource.includes("scroll-snap-type: x proximity"), "Homepage hero mobile module directory must support horizontal scanning.");
   expect(worksSource.includes("先做这个"), "Homepage work cards must expose a first concrete starter action.");
   expect(worksSource.includes("{work.success}"), "Homepage work cards must expose each work completion standard.");
   expect(worksSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage work cards must include starter and completion standard in accessible labels.");
