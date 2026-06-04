@@ -79,6 +79,12 @@ function PromptKitContent() {
     },
   ];
   const activePrompt = prompts[activePromptIndex];
+  const workflowSteps = [
+    { label: "材料", body: activePrompt.input, color: "var(--cherry-blue-light)" },
+    { label: "Prompt", body: activePrompt.title, color: "var(--cherry-yellow-light)" },
+    { label: "质控", body: `${activePrompt.checks.length} 项检查`, color: "var(--cherry-sage-light)" },
+    { label: "任务包", body: `${activePrompt.output.length} 个栏目`, color: "var(--cherry-peach-light)" },
+  ];
   const finalPrompt = `${activePrompt.text}
 
 【我的材料】
@@ -192,6 +198,44 @@ ${activePrompt.output.map((item, index) => `${index + 1}. ${item}`).join("\n")}
               {copyStatus}
             </div>
 
+            <div className="prompt-workflow-grid" aria-label="科研助手任务流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.62rem", marginBottom: "0.9rem" }}>
+              {workflowSteps.map((item, index) => (
+                <div key={item.label} style={{ background: item.color, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.72rem", minHeight: 104, position: "relative", overflow: "hidden" }}>
+                  <svg width="72" height="58" viewBox="0 0 72 58" fill="none" aria-hidden="true" focusable="false" style={{ position: "absolute", right: -8, bottom: -8, opacity: 0.72 }}>
+                    {index === 0 ? (
+                      <>
+                        <rect x="14" y="8" width="34" height="44" rx="8" fill="rgba(250,247,241,0.9)" stroke="rgba(94,68,42,0.18)" strokeWidth="1.8" />
+                        <path d="M22 20 H42 M22 30 H39 M22 40 H34" stroke="var(--cherry-blue)" strokeWidth="3" strokeLinecap="round" opacity="0.72" />
+                        <circle cx="52" cy="17" r="7" fill="var(--cherry-yellow)" />
+                      </>
+                    ) : index === 1 ? (
+                      <>
+                        <path d="M15 39 C24 12 47 8 58 25 C46 44 29 48 15 39Z" fill="rgba(250,247,241,0.86)" stroke="rgba(94,68,42,0.16)" strokeWidth="1.8" />
+                        <path d="M24 36 C35 29 43 22 53 17" stroke="var(--cherry-warm-brown)" strokeWidth="2.5" strokeLinecap="round" opacity="0.42" />
+                        <circle cx="25" cy="35" r="4" fill="var(--cherry-red)" />
+                        <circle cx="39" cy="27" r="4" fill="var(--cherry-sage)" />
+                      </>
+                    ) : index === 2 ? (
+                      <>
+                        <rect x="13" y="13" width="46" height="36" rx="12" fill="rgba(250,247,241,0.88)" stroke="rgba(94,68,42,0.16)" strokeWidth="1.8" />
+                        <path d="M24 30 L31 37 L47 21" stroke="var(--cherry-forest)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+                        <circle cx="55" cy="40" r="5" fill="var(--cherry-yellow)" />
+                      </>
+                    ) : (
+                      <>
+                        <rect x="17" y="10" width="38" height="42" rx="9" fill="rgba(250,247,241,0.9)" stroke="rgba(94,68,42,0.16)" strokeWidth="1.8" />
+                        <path d="M26 23 H46 M26 32 H43 M26 41 H39" stroke="var(--cherry-red)" strokeWidth="2.8" strokeLinecap="round" opacity="0.72" />
+                        <path d="M50 16 L54 22 L61 23 L56 28 L57 35 L50 31 L44 35 L45 28 L40 23 L47 22Z" fill="var(--cherry-yellow)" />
+                      </>
+                    )}
+                  </svg>
+                  <div style={{ width: 24, height: 24, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.7rem", fontWeight: 900, marginBottom: "0.5rem", position: "relative", zIndex: 1 }}>{index + 1}</div>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem", marginBottom: "0.25rem", position: "relative", zIndex: 1 }}>{item.label}</div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 800, position: "relative", zIndex: 1, paddingRight: 26 }}>{item.body}</div>
+                </div>
+              ))}
+            </div>
+
             <textarea
               value={material}
               onChange={(event) => updateMaterial(event.target.value)}
@@ -269,6 +313,16 @@ ${activePrompt.output.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
           @media (max-width: 880px) {
             #prompt-kit-builder > div:first-child {
+              grid-template-columns: 1fr !important;
+            }
+
+            #prompt-kit-builder .prompt-workflow-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+          }
+
+          @media (max-width: 520px) {
+            #prompt-kit-builder .prompt-workflow-grid {
               grid-template-columns: 1fr !important;
             }
           }
