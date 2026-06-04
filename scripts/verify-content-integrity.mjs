@@ -847,6 +847,26 @@ function verifyLearnerProductPositioning() {
   }
 }
 
+function verifyContactFeedbackContract() {
+  const contactSource = read("src/app/components/Contact.tsx");
+  const requiredContactFeatures = [
+    { label: "feedback type state", text: "feedbackType" },
+    { label: "related page state", text: "relatedPage" },
+    { label: "stuck point state", text: "stuckPoint" },
+    { label: "feedback type field", text: "反馈类型" },
+    { label: "related page field", text: "相关页面" },
+    { label: "current stuck point field", text: "当前卡点" },
+    { label: "structured draft body", text: "反馈类型：${feedbackType}" },
+    { label: "structured draft page", text: "相关页面：${trimmedRelatedPage" },
+    { label: "structured draft stuck point", text: "当前卡点：${trimmedStuckPoint" },
+    { label: "structured draft status", text: "结构化邮件草稿已准备好" },
+  ];
+
+  for (const item of requiredContactFeatures) {
+    expect(contactSource.includes(item.text), `Contact feedback flow is missing ${item.label}: ${item.text}`);
+  }
+}
+
 const routes = getContentRoutes();
 const workSlugs = new Set(routes.filter((route) => route.type === "work").map((route) => route.path.replace(/^\/works\//, "")));
 const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
@@ -916,6 +936,7 @@ verifyPlantEvolutionLearnerContract();
 verifyCrisprLearnerScenarios();
 verifyLearnerFacingArticleCopy();
 verifyLearnerProductPositioning();
+verifyContactFeedbackContract();
 
 if (failures.length) {
   console.error("Content integrity verification failed.");

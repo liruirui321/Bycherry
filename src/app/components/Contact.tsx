@@ -6,6 +6,9 @@ const emailAddress = "liruirui321@gmail.com";
 
 export function Contact() {
   const [name, setName] = useState("");
+  const [feedbackType, setFeedbackType] = useState("内容卡住");
+  const [relatedPage, setRelatedPage] = useState("/works/gene-expression");
+  const [stuckPoint, setStuckPoint] = useState("");
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -14,16 +17,26 @@ export function Contact() {
   const [draftStatus, setDraftStatus] = useState("");
 
   const trimmedName = name.trim();
+  const trimmedRelatedPage = relatedPage.trim();
+  const trimmedStuckPoint = stuckPoint.trim();
   const trimmedMessage = message.trim();
   const canUseDraft = Boolean(trimmedName && trimmedMessage);
-  const draftSubject = `By Cherry 联系 - ${trimmedName || "未署名"}`;
-  const draftBody = `${trimmedMessage || "（未填写内容）"}\n\n来自：${trimmedName || "（未填写名字）"}`;
+  const feedbackTypes = ["内容卡住", "页面问题", "工具建议", "资料补充", "合作讨论"];
+  const draftSubject = `By Cherry ${feedbackType} - ${trimmedName || "未署名"}`;
+  const draftBody = `反馈类型：${feedbackType}
+相关页面：${trimmedRelatedPage || "未填写"}
+当前卡点：${trimmedStuckPoint || "未填写"}
+
+具体内容：
+${trimmedMessage || "（未填写内容）"}
+
+来自：${trimmedName || "（未填写名字）"}`;
   const draftText = `收件人：${emailAddress}\n主题：${draftSubject}\n\n${draftBody}`;
   const emailCopyStatusId = "contact-email-copy-status";
   const formReadinessId = "contact-form-readiness";
   const formDraftCopyStatusId = "contact-form-draft-copy-status";
   const sentDraftCopyStatusId = "contact-sent-draft-copy-status";
-  const formReadinessText = canUseDraft ? "邮件草稿已准备好，也可以先复制一份备份。" : "写下名字和内容后，就可以打开邮件草稿。";
+  const formReadinessText = canUseDraft ? "结构化邮件草稿已准备好，也可以先复制一份备份。" : "写下名字和具体内容后，就可以打开邮件草稿。";
 
   function clearDraftStatus() {
     setCopiedDraft(false);
@@ -116,7 +129,7 @@ export function Contact() {
         </h2>
 
         <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.95rem", maxWidth: 480, margin: "0 auto 2.5rem" }}>
-          如果你想讨论科学内容、学习设计、AI 工具或网站反馈，可以直接发来信息。我会认真阅读并回复可继续推进的问题。
+          如果你在某个页面卡住、发现问题或想补充资料，可以把页面、卡点和建议一起发来，方便继续改进内容。
         </p>
 
         <div className="contact-email-chip" style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.52rem 0.42rem 0.9rem", marginBottom: "1.4rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", maxWidth: "100%", boxSizing: "border-box" }}>
@@ -167,9 +180,78 @@ export function Contact() {
               }}
             />
 
+            <div className="contact-feedback-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 0.72fr) minmax(0, 1fr)", gap: "0.8rem", marginBottom: "1.25rem" }}>
+              <label htmlFor="contact-feedback-type" style={{ fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "grid", gap: "0.4rem" }}>
+                反馈类型
+                <select
+                  id="contact-feedback-type"
+                  name="feedback-type"
+                  value={feedbackType}
+                  onChange={(e) => {
+                    setFeedbackType(e.target.value);
+                    clearDraftStatus();
+                  }}
+                  style={{
+                    width: "100%", background: "rgba(250,247,241,0.85)",
+                    border: "1.5px solid var(--border)", borderRadius: 8,
+                    padding: "0.65rem 1rem", fontSize: "0.9rem",
+                    fontFamily: "'Nunito', sans-serif", color: "var(--cherry-warm-brown)",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {feedbackTypes.map((type) => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
+              </label>
+              <label htmlFor="contact-related-page" style={{ fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "grid", gap: "0.4rem" }}>
+                相关页面
+                <input
+                  id="contact-related-page"
+                  name="related-page"
+                  type="text"
+                  value={relatedPage}
+                  onChange={(e) => {
+                    setRelatedPage(e.target.value);
+                    clearDraftStatus();
+                  }}
+                  placeholder="/works/gene-expression"
+                  style={{
+                    width: "100%", background: "rgba(250,247,241,0.85)",
+                    border: "1.5px solid var(--border)", borderRadius: 8,
+                    padding: "0.65rem 1rem", fontSize: "0.9rem",
+                    fontFamily: "'Nunito', sans-serif", color: "var(--cherry-warm-brown)",
+                    boxSizing: "border-box",
+                  }}
+                />
+              </label>
+            </div>
+
+            <label htmlFor="contact-stuck-point" style={{ fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>
+              当前卡点
+            </label>
+            <input
+              id="contact-stuck-point"
+              name="stuck-point"
+              type="text"
+              value={stuckPoint}
+              onChange={(e) => {
+                setStuckPoint(e.target.value);
+                clearDraftStatus();
+              }}
+              placeholder="例如：mRNA 和核糖体的关系还是没看懂"
+              style={{
+                width: "100%", background: "rgba(250,247,241,0.85)",
+                border: "1.5px solid var(--border)", borderRadius: 8,
+                padding: "0.65rem 1rem", fontSize: "0.9rem",
+                fontFamily: "'Nunito', sans-serif", color: "var(--cherry-warm-brown)",
+                marginBottom: "1.25rem", boxSizing: "border-box",
+              }}
+            />
+
             {/* Message */}
             <label htmlFor="contact-message" style={{ fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>
-              你想说什么
+              具体内容
             </label>
             <textarea
               id="contact-message"
@@ -180,7 +262,7 @@ export function Contact() {
                 clearDraftStatus();
               }}
               rows={4}
-              placeholder="写下你想讨论的问题、反馈或合作方向"
+              placeholder="写下你遇到的问题、希望补充的内容，或希望我优先改进的地方"
               required
               style={{
                 width: "100%", background: "rgba(250,247,241,0.85)",
@@ -353,6 +435,7 @@ export function Contact() {
       <style>
         {`
           #contact input:focus-visible,
+          #contact select:focus-visible,
           #contact textarea:focus-visible,
           #contact button:focus-visible,
           #contact .contact-submit:focus-visible,
@@ -395,6 +478,10 @@ export function Contact() {
           }
 
           @media (max-width: 560px) {
+            #contact .contact-feedback-grid {
+              grid-template-columns: 1fr !important;
+            }
+
             #contact .contact-email-chip {
               border-radius: 18px !important;
               width: 100% !important;
