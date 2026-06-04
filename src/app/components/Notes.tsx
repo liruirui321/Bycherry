@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { IconBook, IconAI, IconLeaf, IconResearch, IconArrowRight, IconCoffee } from "./Icons";
+import { copyText } from "../clipboard";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
@@ -180,9 +181,40 @@ function NoteCardIllustration({ slug, color }: { slug: string; color: string }) 
 
 export function Notes() {
   const [activeTag, setActiveTag] = useState("全部");
+  const [copiedMethodChecklist, setCopiedMethodChecklist] = useState(false);
+  const [methodChecklistStatus, setMethodChecklistStatus] = useState("");
   const noteTags = ["全部", ...Array.from(new Set(notes.map((note) => note.tag)))];
   const filteredNotes = activeTag === "全部" ? notes : notes.filter((note) => note.tag === activeTag);
   const recommendedNote = notes.find((note) => note.slug === "ai-course-development") ?? notes[0];
+  const methodChecklistText = `【By Cherry 方法执行清单】
+当前范围：${activeTag === "全部" ? "全部学习方法" : activeTag}
+文章数量：${filteredNotes.length}
+
+${filteredNotes.map((note, index) => `${index + 1}. ${note.title}
+入口：${note.href}
+先做这个：${note.actionSteps[0]}
+完成后检查：${note.checklist[0]}
+可套用模板：
+${note.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
+避坑提醒：${note.pitfalls[0]}`).join("\n\n")}
+
+使用方式
+1. 先选 1 篇方法，不要一次执行全部。
+2. 做完后复制文章页里的学习记录。
+3. 回到这张清单，记录哪个方法已经形成可复用材料。`;
+
+  async function copyMethodChecklist() {
+    const copiedToClipboard = await copyText(methodChecklistText);
+    if (copiedToClipboard) {
+      setCopiedMethodChecklist(true);
+      setMethodChecklistStatus("方法执行清单已复制到剪贴板。");
+      window.setTimeout(() => setCopiedMethodChecklist(false), 1400);
+      return;
+    }
+
+    setCopiedMethodChecklist(false);
+    setMethodChecklistStatus("复制失败，请手动选中文本复制。");
+  }
 
   return (
     <section
@@ -246,7 +278,7 @@ export function Notes() {
               className="note-filter-button"
               key={tag}
               type="button"
-              onClick={() => setActiveTag(tag)}
+              onClick={() => { setActiveTag(tag); setCopiedMethodChecklist(false); setMethodChecklistStatus(""); }}
               aria-pressed={activeTag === tag}
               style={{
                 background: activeTag === tag ? "var(--cherry-forest)" : "var(--card)",
@@ -266,6 +298,21 @@ export function Notes() {
         </div>
         <div role="status" aria-live="polite" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800, marginBottom: "1.2rem" }}>
           当前显示 {filteredNotes.length} 篇{activeTag === "全部" ? "学习方法" : activeTag}
+        </div>
+
+        <div className="note-method-checklist-panel" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.85rem 0.95rem", marginBottom: "1.15rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.8rem", alignItems: "center" }}>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.9rem", fontWeight: 900, marginBottom: "0.2rem" }}>方法执行清单</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, fontWeight: 800 }}>
+              当前范围包含 {filteredNotes.length} 篇方法。复制后会带出先做动作、完成检查、模板和避坑提醒。
+            </div>
+            <div id="note-method-checklist-status" role="status" aria-live="polite" style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900, marginTop: "0.34rem" }}>
+              {methodChecklistStatus}
+            </div>
+          </div>
+          <button type="button" className="note-method-checklist-button" onClick={copyMethodChecklist} aria-describedby="note-method-checklist-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.46rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem", whiteSpace: "nowrap" }}>
+            {copiedMethodChecklist ? "已复制" : "复制清单"}
+          </button>
         </div>
 
         {/* Notes grid */}
@@ -360,6 +407,7 @@ export function Notes() {
           }
 
           #notes .note-recommended-start:focus-visible,
+          #notes .note-method-checklist-button:focus-visible,
           #notes .note-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
@@ -381,6 +429,16 @@ export function Notes() {
             width: min(100%, 150px);
             height: 86px;
             display: block;
+          }
+
+          @media (max-width: 640px) {
+            #notes .note-method-checklist-panel {
+              grid-template-columns: 1fr !important;
+            }
+
+            #notes .note-method-checklist-button {
+              width: 100%;
+            }
           }
 
           @media (prefers-reduced-motion: reduce) {

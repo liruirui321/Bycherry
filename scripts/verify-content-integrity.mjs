@@ -626,6 +626,7 @@ function verifyLearnerFacingArticleCopy() {
     "按学习方法主题筛选",
     "按科研证据主题筛选",
     "当前显示",
+    "方法执行清单",
     "查看证据",
     "学习方法、科研证据、AI 创作和科研转译资料",
     "先做这个",
@@ -688,6 +689,11 @@ function verifyLearnerFacingArticleCopy() {
   expect(notesSource.includes("note.actionSteps[0]"), "Learning method cards must expose each article's first action step.");
   expect(researchSource.includes("essay.actionSteps[0]"), "Research evidence cards must expose each article's first action step.");
   expect(notesSource.includes("aria-label={`打开学习方法：${note.title}。先做这个，${note.actionSteps[0]}。完成后检查，${note.checklist[0]}`}"), "Learning method cards must include first action and completion check in accessible labels.");
+  expect(notesSource.includes("methodChecklistText"), "Learning method library must provide a copyable method execution checklist.");
+  expect(notesSource.includes("copyMethodChecklist"), "Learning method library must expose a method checklist copy action.");
+  expect(notesSource.includes("note-method-checklist-status"), "Learning method library must expose method checklist copy status.");
+  expect(notesSource.includes("note.starterTemplate.slice(0, 4)"), "Learning method checklist must include reusable starter templates.");
+  expect(notesSource.includes("note.pitfalls[0]"), "Learning method checklist must include first pitfall reminders.");
   expect(researchSource.includes("aria-label={`打开科研证据：${essay.title}。先做这个，${essay.actionSteps[0]}。完成后检查，${essay.checklist[0]}`}"), "Research evidence cards must include first action and completion check in accessible labels.");
 }
 
