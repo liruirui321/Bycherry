@@ -3,8 +3,8 @@ import { navigateHomeSection } from "../navigation";
 
 const footerLinks = [
   { label: "学习模块", href: "#works" },
-  { label: "科研", href: "#research" },
-  { label: "笔记", href: "#notes" },
+  { label: "证据库", href: "#research" },
+  { label: "方法库", href: "#notes" },
   { label: "联系", href: "#contact" },
 ];
 

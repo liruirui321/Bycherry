@@ -115,7 +115,7 @@ export function Hero() {
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--cherry-yellow-light)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--cherry-yellow)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "var(--border)"; }}
           >
-            <IconNotebook size={18} /> 阅读笔记
+            <IconNotebook size={18} /> 打开方法库
           </a>
         </div>
           </div>

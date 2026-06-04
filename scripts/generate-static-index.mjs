@@ -28,7 +28,7 @@ function listItemObject(route) {
     description: route.description,
     url: `${siteUrl}${route.path}`,
     datePublished: route.lastmod,
-    articleSection: route.type === "research" ? "科研随笔" : "创作笔记",
+    articleSection: route.type === "research" ? "科研证据" : "学习方法",
     author: { "@id": `${siteUrl}/#person` },
   };
 }
@@ -91,7 +91,7 @@ function buildJsonLd(routes) {
         publisher: { "@id": `${siteUrl}/#person` },
       },
       itemList("works", "By Cherry 学习模块", worksListDescription, works),
-      itemList("articles", "By Cherry 笔记与科研随笔", articlesListDescription, articles),
+      itemList("articles", "By Cherry 学习资料库", articlesListDescription, articles),
     ],
   };
 }
@@ -120,12 +120,12 @@ function buildNoscript(routes) {
     "      <noscript>",
     "        <main style=\"font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 760px; margin: 0 auto; padding: 2rem 1.25rem; color: #5e442a; line-height: 1.7;\">",
     "          <h1 style=\"font-size: 2rem; line-height: 1.2; margin: 0 0 0.75rem;\">By Cherry</h1>",
-    `          <p>${escapeHtml(siteDescription)}当前浏览器没有启用 JavaScript，下面保留了学习模块、笔记和科研随笔目录。</p>`,
+    `          <p>${escapeHtml(siteDescription)}当前浏览器没有启用 JavaScript，下面保留了学习模块、方法库和证据库目录。</p>`,
     "          <h2 style=\"font-size: 1.2rem; margin-top: 1.5rem;\">学习模块</h2>",
     "          <ul>",
     listItems(works),
     "          </ul>",
-    "          <h2 style=\"font-size: 1.2rem; margin-top: 1.5rem;\">笔记与科研随笔</h2>",
+    "          <h2 style=\"font-size: 1.2rem; margin-top: 1.5rem;\">学习资料库</h2>",
     "          <ul>",
     listItems(articles),
     "          </ul>",

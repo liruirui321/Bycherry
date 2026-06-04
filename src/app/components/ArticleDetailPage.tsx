@@ -73,7 +73,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const previousArticle = articleIndex > 0 ? collection[articleIndex - 1] : null;
   const nextArticle = articleIndex >= 0 && articleIndex < collection.length - 1 ? collection[articleIndex + 1] : null;
   const backHash = kind === "note" ? "#notes" : "#research";
-  const backText = kind === "note" ? "回到笔记" : "回到科研随笔";
+  const backText = kind === "note" ? "回到方法库" : "回到证据库";
   const navArticles = [
     previousArticle ? { label: "上一篇", arrow: "←", article: previousArticle, align: "left" as const } : null,
     nextArticle ? { label: "下一篇", arrow: "→", article: nextArticle, align: "right" as const } : null,
@@ -193,9 +193,9 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     return (
       <main id="main-content" tabIndex={-1} style={{ minHeight: "58vh", padding: "5rem 1.5rem", display: "grid", placeItems: "center", fontFamily: "'Nunito', sans-serif" }}>
         <EmptyStateCard
-          eyebrow={kind === "note" ? "笔记" : "科研随笔"}
+          eyebrow={kind === "note" ? "学习方法" : "科研证据"}
           title="没有找到这篇内容"
-          body={`这篇内容可能已经移动。可以回到${kind === "note" ? "笔记" : "科研随笔"}目录，继续浏览最近更新。`}
+          body={`这篇内容可能已经移动。可以回到${kind === "note" ? "学习方法库" : "科研证据库"}，继续浏览最近更新。`}
           href={`/${backHash}`}
           linkText={backText}
           onNavigate={(event) => {

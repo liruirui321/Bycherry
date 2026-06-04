@@ -62,8 +62,8 @@ function buildHomeJsonLd() {
   const worksListId = `${siteUrl}/#works`;
   const articlesListId = `${siteUrl}/#articles`;
   const articles = [
-    ...essays.map((item) => ({ ...item, kind: "科研随笔" })),
-    ...notes.map((item) => ({ ...item, kind: "创作笔记" })),
+    ...essays.map((item) => ({ ...item, kind: "科研证据" })),
+    ...notes.map((item) => ({ ...item, kind: "学习方法" })),
   ];
 
   return {
@@ -114,8 +114,8 @@ function buildHomeJsonLd() {
       {
         "@type": "ItemList",
         "@id": articlesListId,
-        name: "By Cherry 笔记与科研随笔",
-        description: "科学学习、证据阅读、AI 创作和科研转译记录。",
+        name: "By Cherry 学习资料库",
+        description: "学习方法、科研证据、AI 创作和科研转译资料。",
         numberOfItems: articles.length,
         itemListElement: articles.map((article, index) => ({
           "@type": "ListItem",
@@ -176,7 +176,7 @@ function NotFoundPage() {
       <EmptyStateCard
         eyebrow="404"
         title="没有找到这个页面"
-        body="这个地址可能写错了，或者内容已经移动。可以回到首页继续浏览学习模块、笔记和科研随笔。"
+        body="这个地址可能写错了，或者内容已经移动。可以回到首页继续浏览学习模块、方法库和证据库。"
         href="/#top"
         linkText="回到首页"
         onNavigate={(event) => {
@@ -259,7 +259,7 @@ export default function App() {
     const missingRoutedItem = Boolean((detailSlug && !work) || (noteSlug && !note) || (researchSlug && !essay));
     const notFound = unknownPath || missingRoutedItem;
     const title = notFound ? "没有找到页面" : work?.title ?? note?.title ?? essay?.title ?? homeTitle;
-    const description = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览学习模块、笔记和科研随笔。" : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
+    const description = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览学习模块、方法库和证据库。" : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
     const isArticle = Boolean(note || essay);
     const publishedDate = note?.date ?? essay?.date ?? null;
     const workUpdatedDate = work?.updated ?? null;

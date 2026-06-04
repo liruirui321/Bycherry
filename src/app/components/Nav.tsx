@@ -11,8 +11,8 @@ export function Nav() {
   const links = [
     { label: "学习模块", href: "/#works" },
     { label: "科学模拟", href: "/works/gene-expression" },
-    { label: "科研", href: "/#research" },
-    { label: "笔记", href: "/#notes" },
+    { label: "证据库", href: "/#research" },
+    { label: "方法库", href: "/#notes" },
     { label: "关于", href: "/#about" },
     { label: "联系", href: "/#contact" },
   ];

@@ -185,7 +185,7 @@ function EssayCard({ essay }: {
     <a
       className="research-essay-card"
       href={essay.href}
-      aria-label={`阅读科研随笔：${essay.title}`}
+      aria-label={`打开科研证据：${essay.title}`}
       style={{
         background: "var(--card)",
         border: "1.5px solid var(--border)",
@@ -368,13 +368,13 @@ export function ResearchEssays() {
         <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: "0.75rem" }}>
           <IconLeafSmall size={18} color="var(--cherry-warm-mid)" />
           <span style={{ fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>
-            在实验室和文献里想到的事
+            文献、数据和证据边界
           </span>
         </div>
 
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
           <h2 id="research-heading" style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
-            科研随笔
+            科研证据库
           </h2>
         </div>
 
@@ -455,7 +455,7 @@ export function ResearchEssays() {
       >
         <div style={{ width: 40, height: 1.5, background: "var(--border)" }} />
         <span style={{ fontSize: "0.88rem", color: "var(--cherry-warm-mid)" }}>
-          科研转译和学习项目持续更新
+          科研证据和学习项目持续更新
         </span>
         <div style={{ width: 40, height: 1.5, background: "var(--border)" }} />
       </div>

@@ -66,7 +66,7 @@ export function About() {
   const reusableOutputs = works.reduce((count, work) => count + work.outputs.length, 0);
   const stats = [
     { num: String(works.length), label: "个学习模块" },
-    { num: String(notes.length + essays.length), label: "篇笔记和随笔" },
+    { num: String(notes.length + essays.length), label: "篇学习资料" },
     { num: String(reusableOutputs), label: "类可复用产物" },
   ];
 
@@ -161,7 +161,7 @@ export function About() {
             By Cherry 收集科学可视化、生命科学学习项目、科研工作流和 AI 学习工具。
           </p>
           <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.8, fontSize: "0.95rem" }}>
-            每个页面都尽量保留可阅读、可操作、可复用的内容：模拟器、时间轴、学习卡、prompt 和研究笔记。
+            每个页面都尽量保留可阅读、可操作、可复用的内容：模拟器、时间轴、学习卡、prompt 和证据资料。
           </p>
 
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginTop: "1.35rem" }}>

@@ -204,10 +204,10 @@ export function Notes() {
           <div>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: "0.75rem" }}>
               <IconBook size={20} color="var(--cherry-warm-mid)" />
-              <span style={{ fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>文章目录</span>
+              <span style={{ fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>可复用的学习流程</span>
             </div>
             <h2 id="notes-heading" style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
-              最近在想的事
+              学习方法库
             </h2>
           </div>
         </div>
@@ -219,7 +219,7 @@ export function Notes() {
               <a
                 className="note-card"
                 href={note.href}
-                aria-label={`阅读笔记：${note.title}`}
+                aria-label={`打开学习方法：${note.title}`}
                 onClick={(event) => navigateTo(note.href, event)}
                 style={{
                   background: "var(--card)",
@@ -273,7 +273,7 @@ export function Notes() {
                     <IconCoffee size={16} /> 约 {note.readTime} 分钟
                   </span>
                   <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "0.8rem", color: "var(--cherry-forest)", fontWeight: 700 }}>
-                    阅读全文 <IconArrowRight size={13} color="var(--cherry-forest)" />
+                    打开方法 <IconArrowRight size={13} color="var(--cherry-forest)" />
                   </span>
                 </div>
               </a>
