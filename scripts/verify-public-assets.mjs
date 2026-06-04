@@ -166,6 +166,8 @@ expect(indexHtml.includes('<meta property="og:image:secure_url" content="https:/
 expect(indexHtml.includes('<meta name="twitter:image" content="https://bycherry.me/social-preview.png" />'), "index.html must include the current Twitter image URL.");
 expect(indexHtml.includes('<link rel="preconnect" href="https://fonts.googleapis.com" />'), "index.html must preconnect to Google Fonts.");
 expect(indexHtml.includes("<noscript>"), "index.html must include a noscript content index.");
+expect(indexHtml.includes("学习路径："), "index.html noscript content index must include work learning paths.");
+expect(indexHtml.includes("拖拽 TF、RNA 聚合酶和核糖体"), "index.html noscript content index must include work descriptions.");
 for (const href of contentHrefs) {
   expect(indexHtml.includes(`href="${href}"`), `index.html noscript content index must link to ${href}.`);
 }

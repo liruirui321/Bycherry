@@ -73,7 +73,19 @@ function buildJsonLd(routes) {
 }
 
 function listItems(routes) {
-  return routes.map((route) => `            <li><a href="${escapeHtml(route.path)}">${escapeHtml(route.title)}</a></li>`).join("\n");
+  return routes.map((route) => {
+    const pathSteps = route.pathSteps?.length
+      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">学习路径：${route.pathSteps.map(escapeHtml).join(" → ")}</div>`
+      : "";
+
+    return [
+      `            <li style="margin-bottom: 0.9rem;">`,
+      `              <a href="${escapeHtml(route.path)}">${escapeHtml(route.title)}</a>`,
+      `              <p style="margin: 0.2rem 0 0; color: #73583b;">${escapeHtml(route.description)}</p>`,
+      pathSteps,
+      "            </li>",
+    ].filter(Boolean).join("\n");
+  }).join("\n");
 }
 
 function buildNoscript(routes) {

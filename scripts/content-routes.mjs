@@ -5,9 +5,9 @@ import { resolve } from "node:path";
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 
 const contentSources = [
-  { relativePath: "src/app/components/Works.tsx", dateField: "updated", prefix: "/works", type: "work" },
-  { relativePath: "src/app/components/Notes.tsx", dateField: "date", prefix: "/notes", type: "note" },
-  { relativePath: "src/app/components/ResearchEssays.tsx", dateField: "date", prefix: "/research", type: "research" },
+  { relativePath: "src/app/components/Works.tsx", dateField: "updated", prefix: "/works", type: "work", summaryField: "desc" },
+  { relativePath: "src/app/components/Notes.tsx", dateField: "date", prefix: "/notes", type: "note", summaryField: "excerpt" },
+  { relativePath: "src/app/components/ResearchEssays.tsx", dateField: "date", prefix: "/research", type: "research", summaryField: "body" },
 ];
 
 function read(relativePath) {
@@ -27,6 +27,12 @@ function extractExportedArray(source, relativePath) {
 
 function extractField(block, fieldName) {
   return block.match(new RegExp(`\\b${fieldName}:\\s*"([^"]+)"`))?.[1] ?? null;
+}
+
+function extractStringArray(block, fieldName) {
+  const match = block.match(new RegExp(`\\b${fieldName}:\\s*\\[([\\s\\S]*?)\\]`));
+  if (!match) return [];
+  return Array.from(match[1].matchAll(/"([^"]+)"/g), (item) => item[1]);
 }
 
 function extractBlocks(arraySource) {
@@ -52,11 +58,14 @@ export function getContentRoutes() {
       const path = extractField(block, "href");
       const lastmod = extractField(block, source.dateField);
       const title = extractField(block, "title");
+      const description = extractField(block, source.summaryField);
+      const pathSteps = source.type === "work" ? extractStringArray(block, "path") : [];
 
       if (!slug) failures.push(`${label} is missing slug.`);
       if (!path) failures.push(`${label} is missing href.`);
       if (!lastmod) failures.push(`${label} is missing ${source.dateField}.`);
       if (!title) failures.push(`${label} is missing title.`);
+      if (!description) failures.push(`${label} is missing ${source.summaryField}.`);
 
       if (path && !path.startsWith(`${source.prefix}/`)) {
         failures.push(`${label} href must start with ${source.prefix}/.`);
@@ -70,8 +79,8 @@ export function getContentRoutes() {
         failures.push(`${label} ${source.dateField} must use YYYY-MM-DD.`);
       }
 
-      if (path && lastmod && title) {
-        routes.push({ path, lastmod, title, source: source.relativePath, type: source.type });
+      if (path && lastmod && title && description) {
+        routes.push({ path, lastmod, title, description, pathSteps, source: source.relativePath, type: source.type });
       }
     });
   }
