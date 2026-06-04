@@ -203,7 +203,7 @@ function EssayCard({ essay }: {
         overflow: "hidden",
         color: "inherit",
         display: "grid",
-        gridTemplateRows: "auto auto auto 1fr auto auto",
+        gridTemplateRows: "auto auto auto 1fr auto auto auto auto",
         height: "100%",
         textDecoration: "none",
       }}
@@ -306,6 +306,16 @@ function EssayCard({ essay }: {
       <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem 0.65rem", marginTop: "0.9rem" }}>
         <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.16rem" }}>先做这个</span>
         <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>{essay.actionSteps[0]}</span>
+      </div>
+
+      <div className="research-card-completion" style={{ display: "grid", gap: "0.22rem", borderLeft: `3px solid ${essay.labelColor}`, paddingLeft: "0.64rem", marginTop: "0.75rem" }}>
+        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900 }}>完成后检查</span>
+        <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>{essay.checklist[0]}</span>
+      </div>
+
+      <div className="research-card-output" style={{ background: "rgba(250,247,241,0.72)", border: "1px dashed rgba(94,68,42,0.18)", borderRadius: 8, padding: "0.5rem 0.62rem", marginTop: "0.75rem" }}>
+        <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.14rem" }}>读完产出</span>
+        <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.75rem", lineHeight: 1.5, fontWeight: 800 }}>{essay.starterTemplate[0]}</span>
       </div>
 
       {/* Footer */}

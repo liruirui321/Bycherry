@@ -337,7 +337,7 @@ ${note.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
                   cursor: "pointer",
                   color: "inherit",
                   display: "grid",
-                  gridTemplateRows: "auto auto auto auto 1fr auto",
+                  gridTemplateRows: "auto auto auto auto 1fr auto auto auto",
                   height: "100%",
                   textDecoration: "none",
                 }}
@@ -377,6 +377,16 @@ ${note.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
                 <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem 0.65rem", marginBottom: "1rem" }}>
                   <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.16rem" }}>先做这个</span>
                   <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>{note.actionSteps[0]}</span>
+                </div>
+
+                <div className="note-card-completion" style={{ display: "grid", gap: "0.22rem", borderLeft: `3px solid ${note.tagColor}`, paddingLeft: "0.64rem", marginBottom: "0.7rem" }}>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900 }}>完成后检查</span>
+                  <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>{note.checklist[0]}</span>
+                </div>
+
+                <div className="note-card-output" style={{ background: "rgba(250,247,241,0.72)", border: "1px dashed rgba(94,68,42,0.18)", borderRadius: 8, padding: "0.5rem 0.62rem", marginBottom: "1rem" }}>
+                  <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.14rem" }}>读完产出</span>
+                  <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.75rem", lineHeight: 1.5, fontWeight: 800 }}>{note.starterTemplate[0]}</span>
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", alignSelf: "end", gap: "0.7rem", flexWrap: "wrap" }}>

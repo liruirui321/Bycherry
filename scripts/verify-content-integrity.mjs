@@ -761,7 +761,11 @@ function verifyLearnerFacingArticleCopy() {
   expect(staticIndexSource.includes("teaches: [route.firstAction, route.firstCheck].filter(Boolean)"), "Static article JSON-LD must include first action and completion check.");
   expect(staticIndexSource.includes("完成后检查："), "Static index fallback must expose article completion checks.");
   expect(notesSource.includes("note.actionSteps[0]"), "Learning method cards must expose each article's first action step.");
+  expect(notesSource.includes("note-card-completion") && notesSource.includes("{note.checklist[0]}"), "Learning method cards must visibly expose each article's first completion check.");
+  expect(notesSource.includes("note-card-output") && notesSource.includes("{note.starterTemplate[0]}"), "Learning method cards must visibly expose each article's first learner output.");
   expect(researchSource.includes("essay.actionSteps[0]"), "Research evidence cards must expose each article's first action step.");
+  expect(researchSource.includes("research-card-completion") && researchSource.includes("{essay.checklist[0]}"), "Research evidence cards must visibly expose each article's first completion check.");
+  expect(researchSource.includes("research-card-output") && researchSource.includes("{essay.starterTemplate[0]}"), "Research evidence cards must visibly expose each article's first learner output.");
   expect(notesSource.includes("aria-label={`打开学习方法：${note.title}。先做这个，${note.actionSteps[0]}。完成后检查，${note.checklist[0]}`}"), "Learning method cards must include first action and completion check in accessible labels.");
   expect(notesSource.includes("methodChecklistText"), "Learning method library must provide a copyable method execution checklist.");
   expect(notesSource.includes("copyMethodChecklist"), "Learning method library must expose a method checklist copy action.");
