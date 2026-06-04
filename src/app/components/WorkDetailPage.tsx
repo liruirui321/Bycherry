@@ -212,7 +212,7 @@ function PromptKitContent() {
     "不保证论文结论正确，只整理材料和证据关系。",
     "不编造引用、DOI、样本量或统计结果；材料没有就标为待补充。",
     "不替代导师判断、统计分析、伦理审批或临床/高风险决策。",
-    "API 版也要保留人工确认，最终结论由用户复核后使用。",
+    "接入外部模型时也要保留人工确认，最终结论由用户复核后使用。",
   ];
   const agentRequestPayload = {
     version: "research-agent-local-v1",
@@ -349,7 +349,7 @@ ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
     },
     {
       title: "引用和参考文献需要单独核查",
-      body: "AI 写作容易出现引用错配或凭空引用，因此 API 版要保留 citation_check 和 reviewer_questions，而不是直接输出终稿。",
+      body: "AI 写作容易出现引用错配或凭空引用，因此外部模型返回也要保留 citation_check 和 reviewer_questions，而不是直接输出终稿。",
     },
     {
       title: "多步 Agent 适合做研究助理，不适合替代作者",

@@ -160,7 +160,7 @@ function verifyNoLowQualityVisibleContent() {
     { label: "设计想法", pattern: /设计想法/ },
     { label: "可以带走的想法", pattern: /可以带走的想法/ },
     { label: "为什么做", pattern: /为什么做/ },
-    { label: "future API copy", pattern: /真正调用 API 的版本|API 版目标/ },
+    { label: "future API copy", pattern: /真正调用 API 的版本|API 版目标|API 版/ },
     { label: "roadmap framing", pattern: /迭代路线/ },
     { label: "继续打开", pattern: /继续打开/ },
     { label: "自动生成花粉", pattern: /自动生成花粉/ },
