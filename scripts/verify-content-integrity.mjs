@@ -140,6 +140,7 @@ function verifyNoLowQualityVisibleContent() {
     { label: "手账", pattern: /手账/ },
     { label: "小纸条", pattern: /小纸条/ },
     { label: "overly cute copy", pattern: /可爱|绘本|打个招呼|只是想说|Cherry 会怎么叫你/ },
+    { label: "note-style contact illustration", pattern: /ContactNote|DeliveredNote|contact-note|Washi|\bwashi\b|\btape\b/i },
   ];
 
   for (const relativePath of sourceFiles) {

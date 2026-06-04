@@ -88,19 +88,14 @@ export function About() {
           alignItems: "center",
         }}
       >
-        {/* Card side */}
         <div style={{ position: "relative" }}>
-          {/* Washi tape */}
-          <div style={{ position: "absolute", top: -14, left: "28%", width: 76, height: 20, background: "var(--cherry-yellow)", opacity: 0.65, borderRadius: 4, transform: "rotate(-3deg)", zIndex: 2 }} />
-          <div style={{ position: "absolute", top: -8, right: "22%", width: 50, height: 14, background: "var(--cherry-sage-light)", opacity: 0.7, borderRadius: 3, transform: "rotate(4deg)", zIndex: 2 }} />
-
           <div
             style={{
               background: "var(--card)",
               border: "1.5px solid var(--border)",
-              borderRadius: 22,
+              borderRadius: 8,
               padding: "1.25rem 1.35rem 1.45rem",
-              boxShadow: "5px 8px 0px rgba(94,68,42,0.08)",
+              boxShadow: "0 8px 18px rgba(94,68,42,0.06)",
               position: "relative",
               overflow: "hidden",
             }}

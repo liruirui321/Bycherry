@@ -1,38 +1,8 @@
 import { type FormEvent, useState } from "react";
-import { IconMail, IconSend, IconGithub, IconLeaf } from "./Icons";
+import { IconMail, IconSend, IconGithub } from "./Icons";
 import { copyText } from "../clipboard";
 
 const emailAddress = "liruirui321@gmail.com";
-
-function ContactNoteIllustration() {
-  return (
-    <svg width="198" height="112" viewBox="0 0 198 112" fill="none" aria-hidden="true" focusable="false">
-      <path d="M19 85 C48 66 77 80 104 61 C136 38 160 54 185 31 V106 H19Z" fill="var(--cherry-sage-light)" opacity="0.62" />
-      <path d="M35 92 C66 102 146 100 174 88" stroke="rgba(94,68,42,0.15)" strokeWidth="6" strokeLinecap="round" />
-      <rect x="48" y="26" width="92" height="58" rx="14" fill="rgba(250,247,241,0.94)" stroke="var(--cherry-peach)" strokeWidth="2.4" />
-      <path d="M50 38 L94 62 L138 38" stroke="var(--cherry-peach)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M63 65 H111 M63 74 H97" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.42" />
-      <path d="M132 21 L138 31 L150 34 L140 41 L137 53 L131 43 L119 39 L129 32Z" fill="var(--cherry-yellow)" stroke="rgba(94,68,42,0.14)" strokeWidth="1.2" />
-      <path d="M35 43 C46 32 60 33 70 45" stroke="var(--cherry-blue)" strokeWidth="5" strokeLinecap="round" opacity="0.36" />
-      <path d="M149 74 C158 61 174 64 181 78 C166 87 155 84 149 74Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="1.8" />
-      <circle cx="60" cy="28" r="6" fill="var(--cherry-red)" opacity="0.72" />
-    </svg>
-  );
-}
-
-function DeliveredNoteIllustration() {
-  return (
-    <svg width="118" height="86" viewBox="0 0 118 86" fill="none" aria-hidden="true" focusable="false">
-      <rect x="22" y="26" width="66" height="42" rx="12" fill="rgba(250,247,241,0.92)" stroke="var(--cherry-forest)" strokeWidth="2.3" />
-      <path d="M24 36 L55 55 L86 36" stroke="var(--cherry-forest)" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="82" cy="29" r="14" fill="var(--cherry-yellow)" opacity="0.9" />
-      <path d="M76 29 L81 34 L91 22" stroke="var(--cherry-forest)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M14 64 C32 76 80 76 103 61" stroke="rgba(58,92,62,0.2)" strokeWidth="5" strokeLinecap="round" />
-      <path d="M29 22 C39 12 52 14 60 25" stroke="var(--cherry-blue)" strokeWidth="4.6" strokeLinecap="round" opacity="0.32" />
-      <path d="M88 67 C96 56 108 59 113 70 C102 76 93 75 88 67Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="1.6" />
-    </svg>
-  );
-}
 
 export function Contact() {
   const [name, setName] = useState("");
@@ -46,14 +16,14 @@ export function Contact() {
   const trimmedName = name.trim();
   const trimmedMessage = message.trim();
   const canUseDraft = Boolean(trimmedName && trimmedMessage);
-  const draftSubject = `By Cherry 留言 - ${trimmedName || "未署名"}`;
-  const draftBody = `${trimmedMessage || "（未填写留言）"}\n\n来自：${trimmedName || "（未填写名字）"}`;
+  const draftSubject = `By Cherry 联系 - ${trimmedName || "未署名"}`;
+  const draftBody = `${trimmedMessage || "（未填写内容）"}\n\n来自：${trimmedName || "（未填写名字）"}`;
   const draftText = `收件人：${emailAddress}\n主题：${draftSubject}\n\n${draftBody}`;
   const emailCopyStatusId = "contact-email-copy-status";
   const formReadinessId = "contact-form-readiness";
   const formDraftCopyStatusId = "contact-form-draft-copy-status";
   const sentDraftCopyStatusId = "contact-sent-draft-copy-status";
-  const formReadinessText = canUseDraft ? "邮件草稿已准备好，也可以先复制一份备份。" : "写下名字和留言后，就可以打开邮件草稿。";
+  const formReadinessText = canUseDraft ? "邮件草稿已准备好，也可以先复制一份备份。" : "写下名字和内容后，就可以打开邮件草稿。";
 
   function clearDraftStatus() {
     setCopiedDraft(false);
@@ -94,13 +64,13 @@ export function Contact() {
     const copiedToClipboard = await copyText(draftText);
     if (copiedToClipboard) {
       setCopiedDraft(true);
-      setDraftStatus("留言内容已复制。");
+      setDraftStatus("信息内容已复制。");
       window.setTimeout(() => setCopiedDraft(false), 1400);
       return;
     }
 
     setCopiedDraft(false);
-    setDraftStatus("复制失败，请手动复制留言内容。");
+    setDraftStatus("复制失败，请手动复制信息内容。");
   }
 
   const socials = [
@@ -149,10 +119,6 @@ export function Contact() {
           如果你想讨论科学内容、课程设计、AI 工具或网站反馈，可以直接发来信息。我会认真阅读并回复可继续推进的问题。
         </p>
 
-        <div className="contact-note-illustration">
-          <ContactNoteIllustration />
-        </div>
-
         <div className="contact-email-chip" style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.52rem 0.42rem 0.9rem", marginBottom: "1.4rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", maxWidth: "100%", boxSizing: "border-box" }}>
           <span style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.84rem", overflowWrap: "anywhere" }}>{emailAddress}</span>
           <button type="button" onClick={copyEmail} aria-describedby={emailCopyStatusId} style={{ background: copiedEmail ? "var(--cherry-sage-light)" : "var(--cherry-forest)", color: copiedEmail ? "var(--cherry-forest)" : "#FAF7F1", border: copiedEmail ? "1.5px solid var(--cherry-sage)" : "none", borderRadius: 999, padding: "0.38rem 0.78rem", fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: "0.78rem", cursor: "pointer" }}>
@@ -168,11 +134,11 @@ export function Contact() {
           <form
             onSubmit={sendMail}
             style={{
-              background: "var(--cherry-yellow-light)",
-              border: "1.5px solid var(--cherry-yellow)",
-              borderRadius: 22,
-              padding: "2rem",
-              boxShadow: "5px 8px 0px rgba(94,68,42,0.08)",
+              background: "var(--card)",
+              border: "1.5px solid var(--border)",
+              borderRadius: 8,
+              padding: "1.45rem",
+              boxShadow: "0 8px 18px rgba(94,68,42,0.06)",
               textAlign: "left",
               position: "relative",
             }}
@@ -194,7 +160,7 @@ export function Contact() {
               required
               style={{
                 width: "100%", background: "rgba(250,247,241,0.85)",
-                border: "1.5px solid var(--cherry-yellow)", borderRadius: 10,
+                border: "1.5px solid var(--border)", borderRadius: 8,
                 padding: "0.65rem 1rem", fontSize: "0.9rem",
                 fontFamily: "'Nunito', sans-serif", color: "var(--cherry-warm-brown)",
                 marginBottom: "1.25rem", boxSizing: "border-box",
@@ -218,7 +184,7 @@ export function Contact() {
               required
               style={{
                 width: "100%", background: "rgba(250,247,241,0.85)",
-                border: "1.5px solid var(--cherry-yellow)", borderRadius: 10,
+                border: "1.5px solid var(--border)", borderRadius: 8,
                 padding: "0.65rem 1rem", fontSize: "0.9rem",
                 fontFamily: "'Nunito', sans-serif", color: "var(--cherry-warm-brown)",
                 resize: "none", marginBottom: "1.5rem",
@@ -274,7 +240,7 @@ export function Contact() {
                   transition: "background 0.2s, transform 0.15s",
                 }}
               >
-                {copiedDraft ? "已复制留言" : "复制留言内容"}
+                {copiedDraft ? "已复制内容" : "复制信息内容"}
               </button>
             </div>
             <div id={formReadinessId} role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: canUseDraft ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 900, marginTop: "0.65rem" }}>
@@ -289,20 +255,20 @@ export function Contact() {
             style={{
               background: "var(--cherry-sage-light)",
               border: "1.5px solid var(--cherry-sage)",
-              borderRadius: 22,
-              padding: "2.5rem",
+              borderRadius: 8,
+              padding: "2rem",
               textAlign: "center",
-              boxShadow: "5px 8px 0px rgba(94,68,42,0.08)",
+              boxShadow: "0 8px 18px rgba(94,68,42,0.06)",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "center", margin: "-0.55rem 0 0.55rem" }}>
-              <DeliveredNoteIllustration />
+            <div aria-hidden="true" style={{ width: 42, height: 42, borderRadius: 999, background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "1.4rem", fontWeight: 900, marginBottom: "0.8rem" }}>
+              ✓
             </div>
             <h3 style={{ fontSize: "1.45rem", color: "var(--cherry-warm-brown)", fontWeight: 700, marginBottom: "0.5rem" }}>
               邮件草稿已打开，谢谢 {name}
             </h3>
             <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.9rem" }}>
-              确认内容后在邮件客户端发送，我就能收到你的留言
+              确认内容后在邮件客户端发送，我就能收到你的信息。
             </p>
             <button
               className="contact-reset"
@@ -325,7 +291,7 @@ export function Contact() {
                 transition: "background 0.2s, transform 0.15s",
               }}
             >
-              继续修改留言
+              继续修改内容
             </button>
             <button
               className="contact-copy-draft"
@@ -349,13 +315,10 @@ export function Contact() {
                 transition: "background 0.2s, transform 0.15s",
               }}
             >
-              {copiedDraft ? "已复制留言" : "复制留言内容"}
+              {copiedDraft ? "已复制内容" : "复制信息内容"}
             </button>
             <div id={sentDraftCopyStatusId} role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginTop: "0.55rem" }}>
               {draftStatus}
-            </div>
-            <div style={{ display: "flex", justifyContent: "center", marginTop: "0.75rem" }}>
-              <IconLeaf size={28} color="var(--cherry-forest)" />
             </div>
           </div>
         )}
@@ -419,26 +382,6 @@ export function Contact() {
             color: var(--cherry-forest) !important;
             border-color: var(--cherry-sage) !important;
             background: var(--cherry-sage-light) !important;
-          }
-
-          #contact .contact-note-illustration {
-            width: min(100%, 238px);
-            min-height: 116px;
-            margin: -1.15rem auto 1.15rem;
-            border: 1.5px dashed rgba(94,68,42,0.12);
-            border-radius: 20px;
-            background: rgba(250,247,241,0.52);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 3px 5px 0 rgba(94,68,42,0.05);
-          }
-
-          #contact .contact-note-illustration svg {
-            width: 100%;
-            max-width: 218px;
-            height: auto;
-            display: block;
           }
 
           @media (prefers-reduced-motion: reduce) {
