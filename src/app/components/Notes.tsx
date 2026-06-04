@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { IconBook, IconAI, IconLeaf, IconResearch, IconArrowRight, IconCoffee } from "./Icons";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
+import { preloadRouteForHref } from "../routePrefetch";
 
 export const notes = [
   {
@@ -258,6 +259,8 @@ export function Notes() {
                 href={note.href}
                 aria-label={`打开学习方法：${note.title}`}
                 onClick={(event) => navigateTo(note.href, event)}
+                onMouseEnter={() => preloadRouteForHref(note.href)}
+                onFocus={() => preloadRouteForHref(note.href)}
                 style={{
                   background: "var(--card)",
                   border: "1.5px solid var(--border)",

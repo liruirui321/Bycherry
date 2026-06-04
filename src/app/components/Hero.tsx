@@ -2,6 +2,7 @@ import { IconMicroscope, IconNotebook, IconSeedling } from "./Icons";
 import { works } from "./Works";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
+import { preloadRouteForHref } from "../routePrefetch";
 
 export function Hero() {
   function openWork(href: string, event: React.MouseEvent<HTMLAnchorElement>) {
@@ -132,6 +133,8 @@ export function Hero() {
                   key={work.slug}
                   href={work.href}
                   onClick={(event) => openWork(work.href, event)}
+                  onMouseEnter={() => preloadRouteForHref(work.href)}
+                  onFocus={() => preloadRouteForHref(work.href)}
                   style={{
                     background: work.color,
                     border: `1.5px solid ${work.border}`,

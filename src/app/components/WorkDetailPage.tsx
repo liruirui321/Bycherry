@@ -6,6 +6,7 @@ import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { EmptyStateCard } from "./EmptyStateCard";
 import { copyText } from "../clipboard";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
+import { preloadRouteForHref } from "../routePrefetch";
 
 type Work = (typeof works)[number];
 
@@ -3045,6 +3046,8 @@ function WorkContinueLinks({ work }: { work: Work }) {
                 href={item.href}
                 aria-label={`继续探索${item.title}：${item.desc}`}
                 onClick={(event) => openWork(item.href, event)}
+                onMouseEnter={() => preloadRouteForHref(item.href)}
+                onFocus={() => preloadRouteForHref(item.href)}
                 style={{
                   display: "grid",
                   gridTemplateColumns: "112px minmax(0, 1fr)",
@@ -3114,6 +3117,8 @@ function WorkSequenceLinks({ work }: { work: Work }) {
             href={item.work.href}
             aria-label={`${item.label}：${item.work.title}`}
             onClick={(event) => openWork(item.work.href, event)}
+            onMouseEnter={() => preloadRouteForHref(item.work.href)}
+            onFocus={() => preloadRouteForHref(item.work.href)}
             style={{
               display: "grid",
               gap: "0.45rem",

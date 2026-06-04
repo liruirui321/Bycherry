@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { IconDNA, IconMicroscope, IconFlask, IconResearch, IconArrowRight, IconLeafSmall, IconStar } from "./Icons";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
+import { preloadRouteForHref } from "../routePrefetch";
 
 export const essays = [
   {
@@ -187,6 +188,8 @@ function EssayCard({ essay }: {
       className="research-essay-card"
       href={essay.href}
       aria-label={`打开科研证据：${essay.title}`}
+      onMouseEnter={() => preloadRouteForHref(essay.href)}
+      onFocus={() => preloadRouteForHref(essay.href)}
       style={{
         background: "var(--card)",
         border: "1.5px solid var(--border)",

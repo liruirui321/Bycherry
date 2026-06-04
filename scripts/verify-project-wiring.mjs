@@ -12,6 +12,11 @@ const packageJson = JSON.parse(read("package.json"));
 const packageLock = JSON.parse(read("package-lock.json"));
 const mainSource = read("src/main.tsx");
 const appSource = read("src/app/App.tsx");
+const routePrefetchSource = read("src/app/routePrefetch.ts");
+const workCardsSource = read("src/app/components/Works.tsx");
+const heroSource = read("src/app/components/Hero.tsx");
+const noteCardsSource = read("src/app/components/Notes.tsx");
+const researchCardsSource = read("src/app/components/ResearchEssays.tsx");
 const indexCss = read("src/styles/index.css");
 const tailwindCss = read("src/styles/tailwind.css");
 const viteConfig = read("vite.config.ts");
@@ -73,6 +78,13 @@ expect(appSource.includes('lazy(() => import("./components/WorkDetailPage")'), "
 expect(appSource.includes('lazy(() => import("./components/ArticleDetailPage")'), "Article detail pages must be loaded lazily.");
 expect(!appSource.includes('import { WorkDetailPage } from "./components/WorkDetailPage";'), "WorkDetailPage must not be statically imported into the home bundle.");
 expect(!appSource.includes('import { ArticleDetailPage } from "./components/ArticleDetailPage";'), "ArticleDetailPage must not be statically imported into the home bundle.");
+expect(routePrefetchSource.includes('import("./components/WorkDetailPage")'), "Route prefetch must warm the work detail chunk.");
+expect(routePrefetchSource.includes('import("./components/ArticleDetailPage")'), "Route prefetch must warm the article detail chunk.");
+expect(routePrefetchSource.includes("prefetchedRouteKinds"), "Route prefetch must dedupe repeated hover/focus requests.");
+expect(workCardsSource.includes("preloadRouteForHref(href)"), "Work cards must prefetch detail routes on preview.");
+expect(heroSource.includes("preloadRouteForHref(work.href)"), "Hero work cards must prefetch detail routes on hover or focus.");
+expect(noteCardsSource.includes("preloadRouteForHref(note.href)"), "Note cards must prefetch article routes on hover or focus.");
+expect(researchCardsSource.includes("preloadRouteForHref(essay.href)"), "Research cards must prefetch article routes on hover or focus.");
 
 expect(indexCss.includes("@import './fonts.css';"), "src/styles/index.css must import fonts.css.");
 expect(indexCss.includes("@import './tailwind.css';"), "src/styles/index.css must import tailwind.css.");

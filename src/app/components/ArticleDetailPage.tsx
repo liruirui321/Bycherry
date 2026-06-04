@@ -4,6 +4,7 @@ import { essays } from "./ResearchEssays";
 import { EmptyStateCard } from "./EmptyStateCard";
 import { copyText } from "../clipboard";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
+import { preloadRouteForHref } from "../routePrefetch";
 import { useState } from "react";
 
 type ArticleKind = "note" | "research";
@@ -470,6 +471,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                       key={item.article.slug}
                       href={item.article.href}
                       aria-label={`${item.label}：${item.article.title}`}
+                      onMouseEnter={() => preloadRouteForHref(item.article.href)}
+                      onFocus={() => preloadRouteForHref(item.article.href)}
                       onClick={(event) => {
                         if (!shouldUseClientNavigation(event)) return;
                         event.preventDefault();

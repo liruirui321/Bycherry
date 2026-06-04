@@ -2,6 +2,7 @@ import { useState } from "react";
 import { IconMicroscope, IconAI, IconLeaf, IconFlask, IconDNA } from "./Icons";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
+import { preloadRouteForHref } from "../routePrefetch";
 
 type Category = "全部" | "科学" | "学习项目" | "AI工具";
 
@@ -89,15 +90,20 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
     navigateClient(href);
   }
 
+  function previewDetail() {
+    setHovered(true);
+    preloadRouteForHref(href);
+  }
+
   return (
     <a
       className="work-card"
       href={href}
       aria-label={`打开${work.title}：${work.desc}`}
       onClick={openDetail}
-      onMouseEnter={() => setHovered(true)}
+      onMouseEnter={previewDetail}
       onMouseLeave={() => setHovered(false)}
-      onFocus={() => setHovered(true)}
+      onFocus={previewDetail}
       onBlur={() => setHovered(false)}
       style={{
         background: "var(--card)",
