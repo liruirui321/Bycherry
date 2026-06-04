@@ -88,6 +88,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const actionSteps = article && "actionSteps" in article ? article.actionSteps : [];
   const checklist = article && "checklist" in article ? article.checklist : [];
   const starterTemplate = article && "starterTemplate" in article ? article.starterTemplate : [];
+  const pitfalls = article && "pitfalls" in article ? article.pitfalls : [];
   const starterTemplateText = starterTemplate.map((item) => `- ${item}`).join("\n");
   const actionPackText = article
     ? `【行动包】${article.title}
@@ -98,7 +99,10 @@ ${actionSteps.map((step, index) => `${index + 1}. ${step}`).join("\n")}
 二、检查清单
 ${checklist.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-三、可套用模板
+三、避坑提醒
+${pitfalls.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+四、可套用模板
 ${starterTemplateText}`
     : "";
   const summaryText = article
@@ -121,10 +125,13 @@ ${actionSteps.map((step, index) => `${index + 1}. ${step}`).join("\n")}
 四、检查清单
 ${checklist.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-五、可套用模板
+五、避坑提醒
+${pitfalls.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+六、可套用模板
 ${starterTemplateText}
 
-六、可以带走的想法
+七、可以带走的想法
 ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).join("\n")}`
     : "";
 
@@ -341,6 +348,22 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   {checklist.map((item) => (
                     <div key={item} style={{ display: "grid", gridTemplateColumns: "20px minmax(0, 1fr)", gap: 8, alignItems: "start", background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
                       <IconCheck size={16} color="var(--cherry-forest)" />
+                      <span style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.8rem", fontWeight: 800 }}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {pitfalls.length ? (
+              <div style={{ background: "var(--cherry-peach-light)", border: "1.5px solid rgba(181,80,51,0.18)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
+                <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem", marginBottom: "0.65rem" }}>避坑提醒</div>
+                <div style={{ display: "grid", gap: "0.55rem" }}>
+                  {pitfalls.map((item, index) => (
+                    <div key={item} style={{ display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: 9, alignItems: "start", background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+                      <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: "var(--cherry-red)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>
+                        {index + 1}
+                      </span>
                       <span style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.8rem", fontWeight: 800 }}>{item}</span>
                     </div>
                   ))}
