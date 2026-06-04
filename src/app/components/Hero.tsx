@@ -76,6 +76,8 @@ export function Hero() {
         position: "relative",
         overflow: "hidden",
         padding: "4.6rem 1.5rem 2.2rem",
+        width: "100%",
+        maxWidth: "100%",
       }}
     >
       {/* Forest atmosphere blobs */}
@@ -131,9 +133,9 @@ export function Hero() {
       </FloatDeco>
 
       {/* Main content */}
-      <div style={{ position: "relative", zIndex: 2, textAlign: "left", maxWidth: 1120, width: "100%" }}>
-        <div className="hero-content-grid" style={{ display: "grid", gridTemplateColumns: "minmax(260px, 0.72fr) minmax(0, 1.28fr)", gap: "1.2rem", alignItems: "start" }}>
-          <div className="hero-intro">
+      <div className="hero-inner" style={{ position: "relative", zIndex: 2, textAlign: "left", maxWidth: 1120, width: "100%", minWidth: 0 }}>
+        <div className="hero-content-grid" style={{ display: "grid", gridTemplateColumns: "minmax(260px, 0.72fr) minmax(0, 1.28fr)", gap: "1.2rem", alignItems: "start", minWidth: 0, maxWidth: "100%" }}>
+          <div className="hero-intro" style={{ minWidth: 0 }}>
         {/* Tag */}
         <div
           style={{
@@ -234,12 +236,12 @@ export function Hero() {
         </div>
           </div>
 
-        <div className="hero-work-list" style={{ background: "transparent", border: "none", borderRadius: 0, padding: 0, boxShadow: "none" }}>
+        <div className="hero-work-list" style={{ background: "transparent", border: "none", borderRadius: 0, padding: 0, boxShadow: "none", minWidth: 0, maxWidth: "100%" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: "0.75rem", flexWrap: "wrap" }}>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.95rem" }}>当前可打开的内容</div>
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800 }}>{works.length} 个作品入口</div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(178px, 1fr))", gap: "0.65rem" }}>
+          <div className="hero-work-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(178px, 1fr))", gap: "0.65rem", minWidth: 0, maxWidth: "100%" }}>
             {works.map((work) => (
               <a
                 className="hero-work-card"
@@ -260,13 +262,15 @@ export function Hero() {
                   gap: "0.42rem",
                   position: "relative",
                   overflow: "hidden",
+                  minWidth: 0,
+                  maxWidth: "100%",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
                   <span style={{ width: 28, height: 28, display: "inline-flex", alignItems: "center", justifyContent: "center", transform: "scale(0.68)", transformOrigin: "center" }}>{work.icon}</span>
-                  <strong style={{ fontSize: "0.88rem", lineHeight: 1.35 }}>{work.title}</strong>
+                  <strong style={{ fontSize: "0.88rem", lineHeight: 1.35, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
                 </div>
-                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.45, position: "relative", zIndex: 1 }}>{work.desc}</span>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.45, position: "relative", zIndex: 1, display: "block", minWidth: 0, overflowWrap: "anywhere", wordBreak: "break-word" }}>{work.desc}</span>
                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap", position: "relative", zIndex: 1 }}>
                   {work.outputs.map((output) => (
                     <span key={output} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.12rem 0.42rem", color: "var(--cherry-warm-brown)", fontSize: "0.64rem", fontWeight: 900 }}>
@@ -274,7 +278,7 @@ export function Hero() {
                     </span>
                   ))}
                 </div>
-                <div style={{ display: "flex", justifyContent: "flex-end", minHeight: 54, marginTop: "-0.15rem", opacity: 0.92 }}>
+                <div className="hero-work-preview" style={{ display: "flex", justifyContent: "flex-end", minHeight: 54, marginTop: "-0.15rem", opacity: 0.92 }}>
                   <WorkPreviewIllustration slug={work.slug} color={work.border} />
                 </div>
               </a>
@@ -286,12 +290,41 @@ export function Hero() {
 
       <style>{`
         @media (max-width: 860px) {
+          #top {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+          }
+
+          .hero-inner,
           .hero-content-grid {
+            width: 100% !important;
+            max-width: calc(100vw - 2rem) !important;
             grid-template-columns: 1fr !important;
           }
 
           .hero-work-list {
             order: -1;
+          }
+
+          .hero-work-grid {
+            grid-template-columns: 1fr !important;
+            width: 100% !important;
+            max-width: 100% !important;
+          }
+
+          .hero-work-card {
+            width: calc(100vw - 3rem) !important;
+            max-width: calc(100vw - 3rem) !important;
+          }
+
+          .hero-work-card strong,
+          .hero-work-card span {
+            overflow-wrap: anywhere;
+          }
+
+          .hero-work-preview {
+            transform: scale(0.82);
+            transform-origin: right bottom;
           }
         }
 

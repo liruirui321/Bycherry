@@ -801,7 +801,6 @@ export function GeneExpressionTool() {
         width: "100%",
         maxWidth: 1180,
         margin: "0 auto",
-        boxSizing: "border-box",
         overflowX: "hidden",
         scrollMarginTop: 76,
       }}
@@ -1066,11 +1065,6 @@ export function GeneExpressionTool() {
 
       <style>
         {`
-          #gene-expression,
-          #gene-expression * {
-            box-sizing: border-box;
-          }
-
           @media (max-width: 920px) {
             #gene-expression > div:first-child {
               grid-template-columns: 1fr !important;
