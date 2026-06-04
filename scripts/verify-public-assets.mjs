@@ -2,18 +2,20 @@ import { existsSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getContentHrefs } from "./content-routes.mjs";
+import {
+  articlesListDescription,
+  expectedDomain,
+  manifestDescription,
+  shareDescription,
+  shareImageAlt,
+  shareTagline,
+  siteDescription,
+  siteUrl,
+  worksListDescription,
+} from "./site-metadata.mjs";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const publicRoot = resolve(root, "public");
-const siteUrl = "https://bycherry.me";
-const expectedDomain = "bycherry.me";
-const shareTagline = "科学与 AI 学习工作台";
-const siteDescription = "By Cherry 是一个可直接使用的科学与 AI 学习工作台，提供科学模拟、课程卡片、科研 Agent 和学习笔记。";
-const manifestDescription = `${shareTagline}。`;
-const shareDescription = "可直接使用的科学与 AI 学习工作台，提供科学模拟、课程卡片、科研 Agent 和学习笔记。";
-const shareImageAlt = "By Cherry 科学与 AI 学习工作台预览图";
-const worksListDescription = "科学教育、AI 工具和课程设计主题作品。";
-const articlesListDescription = "课程开发、科学传播、AI 创作和科研转译记录。";
 const retiredShareCopy = "可打开、可阅读、可操作";
 const retiredSiteDescription = "清爽科普风的个人网站";
 const retiredSharePositioning = "主题作品集";
@@ -147,6 +149,7 @@ for (const illustration of generatedIllustrations) {
 }
 
 const indexHtml = readRoot("index.html");
+const appSource = readRoot("src/app/App.tsx");
 const workPreviewSource = readRoot("src/app/components/WorkPreviewIllustration.tsx");
 const contentHrefs = getContentHrefs();
 for (const [slug, illustration] of Object.entries(generatedIllustrationsBySlug)) {
@@ -159,6 +162,8 @@ expect(indexHtml.includes('<meta name="application-name" content="By Cherry" />'
 expect(indexHtml.includes('<meta name="apple-mobile-web-app-title" content="By Cherry" />'), "index.html must include the Apple mobile web app title.");
 expect(indexHtml.includes('<meta name="mobile-web-app-capable" content="yes" />'), "index.html must declare mobile web app capability.");
 expect(indexHtml.includes(`<meta name="description" content="${siteDescription}" />`), "index.html must include the current site description.");
+expect(appSource.includes(siteDescription), "App.tsx runtime metadata must include the current site description.");
+expect(appSource.includes(shareImageAlt), "App.tsx runtime metadata must include the current share image alt text.");
 expect(indexHtml.includes('<link rel="canonical" href="https://bycherry.me/" />'), "index.html must include the home canonical URL.");
 expect(indexHtml.includes('<meta property="og:url" content="https://bycherry.me/" />'), "index.html must include the home OG URL.");
 expect(indexHtml.includes(`<meta property="og:description" content="${shareDescription}" />`), "index.html must include the current OG description.");
