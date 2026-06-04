@@ -260,6 +260,16 @@ function verifyPlatformGuideConfigBuilder() {
   expect(articleSource.includes("测后复盘表"), "Platform guide must keep a copyable post-assessment review table.");
 }
 
+function verifyArticleOutcomeSnapshot() {
+  const articleSource = read("src/app/components/ArticleDetailPage.tsx");
+
+  expect(articleSource.includes("articleOutcomeSnapshot"), "Article detail pages must derive a read-before-output snapshot.");
+  expect(articleSource.includes("读完带走"), "Article detail pages must visibly tell learners what they will take away.");
+  expect(articleSource.includes("article-outcome-snapshot"), "Article detail output snapshot must have a stable class for focus and layout checks.");
+  expect(articleSource.includes("copyActionPack") && articleSource.includes("copyLearningRecord"), "Article detail output snapshot must expose action pack and learning record copy actions.");
+  expect(articleSource.includes("目标是带走可执行材料，而不是只浏览"), "Article detail output snapshot must frame reading as producing reusable material.");
+}
+
 function verifyWorkJsonLdLearningOutcomes() {
   const appSource = read("src/app/App.tsx");
   const staticIndexSource = read("scripts/generate-static-index.mjs");
@@ -960,6 +970,7 @@ verifyWorkCardActions();
 verifyWorkDetailCardsStayCompact();
 verifyArticleCardsStayStructured();
 verifyPlatformGuideConfigBuilder();
+verifyArticleOutcomeSnapshot();
 verifyWorkJsonLdLearningOutcomes();
 verifyResearchAgentWorkbenchContract();
 verifyConceptExplainerAgentContract();

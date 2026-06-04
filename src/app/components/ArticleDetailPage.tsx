@@ -120,6 +120,25 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
         `用检查清单核对：${articleQuickStart?.check ?? checklist[0] ?? "确认自己留下了可检查结果"}`,
       ]
     : [];
+  const articleOutcomeSnapshot = article
+    ? [
+        {
+          label: "行动包",
+          body: actionSteps[0] ?? "先完成一个可观察动作。",
+          result: "复制后直接按步骤执行。",
+        },
+        {
+          label: "可保存材料",
+          body: starterTemplate[0] ?? "保存一份学习记录或证据卡。",
+          result: "读完后能放进自己的笔记继续用。",
+        },
+        {
+          label: "完成检查",
+          body: checklist[0] ?? "确认自己留下了可检查结果。",
+          result: "能判断这篇内容是否真的被用上。",
+        },
+      ]
+    : [];
   const articleCompletionChecks = article
     ? [
         {
@@ -620,6 +639,39 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </a>
             ) : null}
 
+            {articleOutcomeSnapshot.length ? (
+              <div className="article-outcome-snapshot" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.76rem", marginBottom: "0.85rem", display: "grid", gap: "0.62rem" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.88rem" }}>读完带走</div>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.16rem", fontWeight: 800 }}>
+                      先看本篇要留下什么，再进入正文。目标是带走可执行材料，而不是只浏览。
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", gap: "0.46rem", flexWrap: "wrap" }}>
+                    <button type="button" onClick={copyActionPack} aria-label={`复制${article.title}的行动包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.36rem 0.7rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                      {copiedActionPack ? "已复制行动包" : "复制行动包"}
+                    </button>
+                    <button type="button" onClick={copyLearningRecord} aria-label={`复制${article.title}的学习记录`} aria-describedby="article-summary-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.22)", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                      {copiedLearningRecord ? "已复制记录" : "复制学习记录"}
+                    </button>
+                  </div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.52rem" }}>
+                  {articleOutcomeSnapshot.map((item, index) => (
+                    <div key={item.label} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", display: "grid", gap: "0.34rem", minHeight: 122 }}>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: index === 0 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.7rem", fontWeight: 900 }}>
+                        <span aria-hidden="true" style={{ width: 18, height: 18, borderRadius: "50%", background: index === 0 ? "var(--cherry-red)" : "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+                        {item.label}
+                      </span>
+                      <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.76rem", lineHeight: 1.46, fontWeight: 900 }}>{item.body}</span>
+                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.71rem", lineHeight: 1.45, fontWeight: 800 }}>{item.result}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
             {articleQuickStart ? (
               <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.72rem", marginBottom: "0.85rem", display: "grid", gap: "0.58rem" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
@@ -1053,6 +1105,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
         {`
           .article-detail-link:focus-visible,
           .article-nav-card:focus-visible,
+          .article-outcome-snapshot button:focus-visible,
           .platform-custom-config-grid input:focus-visible,
           .platform-custom-config-grid textarea:focus-visible,
           .platform-plan-button:focus-visible {
