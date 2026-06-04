@@ -60,6 +60,13 @@ export function Contact() {
     setDraftStatus("");
   }
 
+  function resetContactForm() {
+    setSent(false);
+    setCopiedEmail(false);
+    setCopyStatus("");
+    clearDraftStatus();
+  }
+
   function sendMail(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!canUseDraft) return;
@@ -304,10 +311,7 @@ export function Contact() {
             <button
               className="contact-reset"
               type="button"
-              onClick={() => {
-                setSent(false);
-                clearDraftStatus();
-              }}
+              onClick={resetContactForm}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
