@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { getContentHrefs } from "./content-routes.mjs";
+import { getContentHrefs, getContentRoutes } from "./content-routes.mjs";
 import {
   articlesListDescription,
   expectedDomain,
@@ -159,7 +159,9 @@ const sitemapGeneratorSource = readRoot("scripts/generate-sitemap.mjs");
 const sitemapVerifierSource = readRoot("scripts/verify-sitemap.mjs");
 const siteMetadataSource = readRoot("scripts/site-metadata.mjs");
 const workPreviewSource = readRoot("src/app/components/WorkPreviewIllustration.tsx");
+const contentRoutes = getContentRoutes();
 const contentHrefs = getContentHrefs();
+const articleRoutes = contentRoutes.filter((route) => route.type !== "work");
 expect(appSource.includes('from "./siteMetadata"'), "App.tsx must import runtime metadata from src/app/siteMetadata.ts.");
 for (const exportName of ["siteTitle", "homeTitle", "siteDescription", "siteUrl", "socialImageUrl", "shareImageAlt"]) {
   expect(appMetadataSource.includes(`export const ${exportName}`), `src/app/siteMetadata.ts must export ${exportName}.`);
@@ -205,8 +207,13 @@ expect(indexHtml.includes('<link rel="preconnect" href="https://fonts.googleapis
 expect(indexHtml.includes("<noscript>"), "index.html must include a noscript content index.");
 expect(indexHtml.includes("学习路径："), "index.html noscript content index must include work learning paths.");
 expect(indexHtml.includes("拖拽 TF、RNA 聚合酶和核糖体"), "index.html noscript content index must include work descriptions.");
+expect(indexHtml.includes("完成后检查："), "index.html noscript content index must include article completion checks.");
 for (const href of contentHrefs) {
   expect(indexHtml.includes(`href="${href}"`), `index.html noscript content index must link to ${href}.`);
+}
+for (const route of articleRoutes) {
+  expect(indexHtml.includes(`先做这个：${route.firstAction}`), `index.html noscript content index must include first action for ${route.path}.`);
+  expect(indexHtml.includes(`完成后检查：${route.firstCheck}`), `index.html noscript content index must include completion check for ${route.path}.`);
 }
 
 const jsonLdMatch = indexHtml.match(/<script type="application\/ld\+json" data-schema="bycherry-page">\s*([\s\S]*?)\s*<\/script>/);
@@ -232,6 +239,10 @@ if (jsonLdMatch) {
     expect(jsonLdText.includes("用 AI 做学习材料质检"), "Static JSON-LD must include article descriptions.");
     expect(jsonLdText.includes('"teaches"'), "Static JSON-LD work items must include teaches learning outcomes.");
     expect(jsonLdText.includes("观察转录翻译"), "Static JSON-LD work items must include learning path steps.");
+    for (const route of articleRoutes) {
+      expect(jsonLdText.includes(route.firstAction), `Static JSON-LD article item must include first action for ${route.path}.`);
+      expect(jsonLdText.includes(route.firstCheck), `Static JSON-LD article item must include completion check for ${route.path}.`);
+    }
     for (const href of contentHrefs) {
       expect(jsonLdText.includes(`${siteUrl}${href}`), `Static JSON-LD must include ${href}.`);
     }
