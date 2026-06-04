@@ -9,13 +9,27 @@ export function Contact() {
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedDraft, setCopiedDraft] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
+  const [draftStatus, setDraftStatus] = useState("");
+
+  const trimmedName = name.trim();
+  const trimmedMessage = message.trim();
+  const canUseDraft = Boolean(trimmedName && trimmedMessage);
+  const draftSubject = `By Cherry 留言 - ${trimmedName || "未署名"}`;
+  const draftBody = `${trimmedMessage || "（未填写留言）"}\n\n来自：${trimmedName || "（未填写名字）"}`;
+  const draftText = `收件人：${emailAddress}\n主题：${draftSubject}\n\n${draftBody}`;
+
+  function clearDraftStatus() {
+    setCopiedDraft(false);
+    setDraftStatus("");
+  }
 
   function sendMail(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!name.trim() || !message.trim()) return;
-    const subject = encodeURIComponent(`By Cherry 留言 - ${name.trim()}`);
-    const body = encodeURIComponent(`${message.trim()}\n\n来自：${name.trim()}`);
+    if (!canUseDraft) return;
+    const subject = encodeURIComponent(draftSubject);
+    const body = encodeURIComponent(draftBody);
     window.location.href = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
     setSent(true);
   }
@@ -31,6 +45,20 @@ export function Contact() {
 
     setCopiedEmail(false);
     setCopyStatus("复制失败，请手动复制邮箱。");
+  }
+
+  async function copyDraft() {
+    if (!canUseDraft) return;
+    const copiedToClipboard = await copyText(draftText);
+    if (copiedToClipboard) {
+      setCopiedDraft(true);
+      setDraftStatus("留言内容已复制。");
+      window.setTimeout(() => setCopiedDraft(false), 1400);
+      return;
+    }
+
+    setCopiedDraft(false);
+    setDraftStatus("复制失败，请手动复制留言内容。");
   }
 
   const socials = [
@@ -115,7 +143,10 @@ export function Contact() {
               name="name"
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                setName(e.target.value);
+                clearDraftStatus();
+              }}
               placeholder="Cherry 会怎么叫你？"
               required
               style={{
@@ -135,7 +166,10 @@ export function Contact() {
               id="contact-message"
               name="message"
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => {
+                setMessage(e.target.value);
+                clearDraftStatus();
+              }}
               rows={4}
               placeholder="聊聊你感兴趣的话题、反馈，或者只是打个招呼都好~"
               required
@@ -149,30 +183,59 @@ export function Contact() {
               }}
             />
 
-            <button
-              className="contact-submit"
-              type="submit"
-              disabled={!name.trim() || !message.trim()}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                background: name.trim() && message.trim() ? "var(--cherry-forest)" : "var(--border)",
-                color: name.trim() && message.trim() ? "#FAF7F1" : "var(--cherry-warm-mid)",
-                border: "none",
-                borderRadius: 999,
-                padding: "0.7rem 2rem",
-                fontFamily: "'Nunito', sans-serif",
-                fontWeight: 700,
-                fontSize: "0.93rem",
-                cursor: name.trim() && message.trim() ? "pointer" : "not-allowed",
-                transition: "background 0.2s, transform 0.15s",
-                boxShadow: name.trim() && message.trim() ? "3px 4px 0px rgba(58,92,62,0.22)" : "none",
-              }}
-            >
-              <IconSend size={18} color={name.trim() && message.trim() ? "#FAF7F1" : "var(--cherry-warm-mid)"} />
-              发送小纸条
-            </button>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+              <button
+                className="contact-submit"
+                type="submit"
+                disabled={!canUseDraft}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  background: canUseDraft ? "var(--cherry-forest)" : "var(--border)",
+                  color: canUseDraft ? "#FAF7F1" : "var(--cherry-warm-mid)",
+                  border: "none",
+                  borderRadius: 999,
+                  padding: "0.7rem 2rem",
+                  fontFamily: "'Nunito', sans-serif",
+                  fontWeight: 700,
+                  fontSize: "0.93rem",
+                  cursor: canUseDraft ? "pointer" : "not-allowed",
+                  transition: "background 0.2s, transform 0.15s",
+                  boxShadow: canUseDraft ? "3px 4px 0px rgba(58,92,62,0.22)" : "none",
+                }}
+              >
+                <IconSend size={18} color={canUseDraft ? "#FAF7F1" : "var(--cherry-warm-mid)"} />
+                发送小纸条
+              </button>
+              <button
+                className="contact-copy-draft"
+                type="button"
+                onClick={copyDraft}
+                disabled={!canUseDraft}
+                aria-describedby="contact-draft-copy-status"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  background: copiedDraft ? "var(--cherry-sage-light)" : "var(--card)",
+                  color: canUseDraft ? "var(--cherry-forest)" : "var(--cherry-warm-mid)",
+                  border: copiedDraft ? "1.5px solid var(--cherry-sage)" : "1.5px solid var(--border)",
+                  borderRadius: 999,
+                  padding: "0.68rem 1rem",
+                  fontFamily: "'Nunito', sans-serif",
+                  fontWeight: 900,
+                  fontSize: "0.86rem",
+                  cursor: canUseDraft ? "pointer" : "not-allowed",
+                  transition: "background 0.2s, transform 0.15s",
+                }}
+              >
+                {copiedDraft ? "已复制留言" : "复制留言内容"}
+              </button>
+            </div>
+            <div id="contact-draft-copy-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginTop: "0.65rem" }}>
+              {draftStatus}
+            </div>
           </form>
         ) : (
           <div
@@ -197,7 +260,10 @@ export function Contact() {
             <button
               className="contact-reset"
               type="button"
-              onClick={() => setSent(false)}
+              onClick={() => {
+                setSent(false);
+                clearDraftStatus();
+              }}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -217,6 +283,33 @@ export function Contact() {
             >
               继续修改留言
             </button>
+            <button
+              className="contact-copy-draft"
+              type="button"
+              onClick={copyDraft}
+              aria-describedby="contact-draft-copy-status"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                marginTop: "0.7rem",
+                background: copiedDraft ? "var(--cherry-sage-light)" : "var(--card)",
+                color: "var(--cherry-forest)",
+                border: copiedDraft ? "1.5px solid var(--cherry-sage)" : "1.5px solid var(--border)",
+                borderRadius: 999,
+                padding: "0.58rem 1rem",
+                fontFamily: "'Nunito', sans-serif",
+                fontWeight: 900,
+                fontSize: "0.84rem",
+                cursor: "pointer",
+                transition: "background 0.2s, transform 0.15s",
+              }}
+            >
+              {copiedDraft ? "已复制留言" : "复制留言内容"}
+            </button>
+            <div id="contact-draft-copy-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginTop: "0.55rem" }}>
+              {draftStatus}
+            </div>
             <div style={{ display: "flex", justifyContent: "center", marginTop: "0.75rem" }}>
               <IconLeaf size={28} color="var(--cherry-forest)" />
             </div>
@@ -257,6 +350,7 @@ export function Contact() {
           #contact button:focus-visible,
           #contact .contact-submit:focus-visible,
           #contact .contact-reset:focus-visible,
+          #contact .contact-copy-draft:focus-visible,
           #contact .contact-social-link:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
@@ -265,7 +359,9 @@ export function Contact() {
           #contact .contact-submit:not(:disabled):hover,
           #contact .contact-submit:not(:disabled):focus-visible,
           #contact .contact-reset:hover,
-          #contact .contact-reset:focus-visible {
+          #contact .contact-reset:focus-visible,
+          #contact .contact-copy-draft:not(:disabled):hover,
+          #contact .contact-copy-draft:not(:disabled):focus-visible {
             transform: translateY(-2px);
           }
 
@@ -284,6 +380,7 @@ export function Contact() {
           @media (prefers-reduced-motion: reduce) {
             #contact .contact-submit,
             #contact .contact-reset,
+            #contact .contact-copy-draft,
             #contact .contact-social-link {
               transition: none !important;
               transform: none !important;
