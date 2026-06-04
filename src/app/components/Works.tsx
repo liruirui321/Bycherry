@@ -259,12 +259,25 @@ export function Works() {
       article: notes.find((note) => note.slug === "plant-genome-evidence-chain"),
       note: "先沿时间轴定位创新，再用证据链方法判断材料支持到哪一步。",
     },
+    {
+      goal: "解释卡住概念",
+      work: works.find((work) => work.slug === "concept-explainer"),
+      article: essays.find((essay) => essay.slug === "ai-assessment-quality-control"),
+      note: "先用概念解释器生成学习卡，再用测评平台配置器做小测和错因复盘。",
+    },
+    {
+      goal: "判断 DNA 证据",
+      work: works.find((work) => work.slug === "crispr-interactive"),
+      article: essays.find((essay) => essay.slug === "barcoding-evidence-chain"),
+      note: "先在 CRISPR 模拟器里判 guide 和风险，再读 Barcoding 证据链训练证据追溯。",
+    },
   ].filter((bundle): bundle is {
     goal: string;
     work: (typeof works)[number];
     article: (typeof notes)[number] | (typeof essays)[number];
     note: string;
   } => Boolean(bundle.work && bundle.article));
+  const pairedWorkCount = new Set(learningPathBundles.map((bundle) => bundle.work.slug)).size;
   const moduleChecklistText = `【By Cherry 学习模块清单】
 当前范围：${activeCategory === "全部" ? "全部学习模块" : activeCategory}
 模块数量：${filtered.length}
@@ -398,7 +411,7 @@ ${filtered.map((work, index) => `${index + 1}. ${work.title}
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.92rem", fontWeight: 900, marginBottom: "0.18rem" }}>配套阅读路径</div>
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, fontWeight: 800 }}>
-              不确定先做工具还是先读文章时，可以按下面的组合走：一个模块配一篇方法或证据文章。
+              不确定先做工具还是先读文章时，可以按下面的组合走：{pairedWorkCount}/{works.length} 个模块都配好了一篇方法或证据文章。
             </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "0.72rem" }}>

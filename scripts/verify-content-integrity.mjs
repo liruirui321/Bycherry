@@ -211,6 +211,10 @@ function verifyWorkCardActions() {
   expect(worksSource.includes("配套阅读路径"), "Works section must visibly expose paired module and article routes.");
   expect(worksSource.includes("work-reading-path-link"), "Works section paired reading links must be keyboard focusable.");
   expect(worksSource.includes("bundle.article.actionSteps[0]") && worksSource.includes("bundle.article.checklist[0]"), "Works section paired reading links must expose article action and completion checks.");
+  expect(worksSource.includes("pairedWorkCount") && worksSource.includes("{pairedWorkCount}/{works.length}"), "Works section paired reading paths must show full module coverage.");
+  for (const slug of ["gene-expression", "research-prompt-kit", "plant-evolution-stories", "concept-explainer", "crispr-interactive"]) {
+    expect(worksSource.includes(`work.slug === "${slug}"`), `Works paired reading paths must include ${slug}.`);
+  }
 }
 
 function verifyWorkDetailCardsStayCompact() {
