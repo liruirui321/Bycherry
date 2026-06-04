@@ -84,6 +84,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
     <a
       className="work-card"
       href={href}
+      aria-label={`打开${work.title}：${work.desc}`}
       onClick={openDetail}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -194,6 +195,7 @@ export function Works() {
   return (
     <section
       id="works"
+      aria-labelledby="works-heading"
       style={{
         fontFamily: "'Nunito', sans-serif",
         padding: "5rem 1.5rem",
@@ -221,13 +223,13 @@ export function Works() {
               科学、课程和 AI 工具
             </span>
           </div>
-          <h2 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
+          <h2 id="works-heading" style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
             可打开的作品
           </h2>
         </div>
 
         {/* Filter */}
-        <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: "2.5rem" }}>
+        <div role="group" aria-label="按作品类型筛选" style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: "0.85rem" }}>
           {categories.map((cat) => (
             <button
               className="work-filter-button"
@@ -248,11 +250,18 @@ export function Works() {
             </button>
           ))}
         </div>
+        <div role="status" aria-live="polite" style={{ color: "var(--cherry-warm-mid)", textAlign: "center", fontSize: "0.78rem", fontWeight: 800, marginBottom: "2rem" }}>
+          当前显示 {filtered.length} 个{activeCategory === "全部" ? "作品" : activeCategory}
+        </div>
 
         {/* Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(278px, 1fr))", gap: "2rem" }}>
-          {filtered.map((work) => <WorkCard key={work.id} work={work} />)}
-        </div>
+        <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(278px, 1fr))", gap: "2rem", listStyle: "none", margin: 0, padding: 0 }}>
+          {filtered.map((work) => (
+            <li key={work.id} style={{ display: "grid" }}>
+              <WorkCard work={work} />
+            </li>
+          ))}
+        </ul>
       </div>
 
       <WaveDivider flip />
