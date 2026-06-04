@@ -30,6 +30,7 @@ function PromptKitContent() {
     {
       title: "文献精读",
       input: "论文摘要、方法、结果图或 DOI",
+      materialTemplate: "论文题目：\n摘要：\n方法关键词：\n我想重点看：研究问题 / 主要证据 / 局限性\n需要避免：不要把摘要外的信息当成论文结论",
       text: "请基于我提供的论文内容，按以下结构输出：研究问题、核心假设、样本与数据、关键方法、主要证据、作者结论、局限性、我需要进一步核查的点。不要补充论文中没有出现的信息；如果缺少证据，请标注“原文未说明”。",
       checks: ["结论是否只来自原文", "方法和证据是否对应", "局限性是否具体"],
       output: ["研究问题", "主要证据", "局限性", "待核查点"],
@@ -37,6 +38,7 @@ function PromptKitContent() {
     {
       title: "实验设计检查",
       input: "实验目的、分组、样本量、操作步骤、统计方法",
+      materialTemplate: "实验目的：\n实验对象/材料：\n分组：对照组 / 处理组\n每组样本量：\n核心变量：\n检测指标：\n统计方法：\n我担心的问题：对照是否足够、重复数是否合理",
       text: "请检查这份实验设计是否存在变量混杂、对照不足、重复数不足、统计方法不匹配或安全风险。输出时分为：必须修改、建议修改、可以保留、需要导师确认。每条意见都说明它会影响哪一种结论。",
       checks: ["阳性/阴性对照是否齐全", "重复数是否支持统计", "变量是否只改变一个核心因素"],
       output: ["必须修改", "建议修改", "可以保留", "导师确认"],
@@ -44,6 +46,7 @@ function PromptKitContent() {
     {
       title: "图表解读",
       input: "图片、图注、实验分组和统计标记",
+      materialTemplate: "图号：Figure \n图注：\n坐标轴/单位：\n分组：\n显著性标记：\n我想确认：这张图能支持什么结论，不能支持什么结论",
       text: "请逐步解释这张图：先说明坐标轴、单位和分组，再描述趋势、离散程度和显著性标记，最后判断图中证据能支持哪些结论、不能支持哪些结论。请把观察事实、合理推断和过度推断分开。",
       checks: ["是否读清坐标轴", "是否区分趋势与因果", "是否遗漏对照组"],
       output: ["观察事实", "合理推断", "不能支持", "下一步检查"],
@@ -51,6 +54,7 @@ function PromptKitContent() {
     {
       title: "论文逻辑检查",
       input: "讨论段落、结果摘要、目标期刊风格",
+      materialTemplate: "目标期刊/风格：\n结果摘要：\n讨论段落：\n我想检查：结论是否过度、引用是否不足、术语是否一致",
       text: "请检查下面这段论文讨论是否存在结论过度、证据跳跃、术语不一致、引用不足或重复表达。请逐句给出修改建议，并说明修改理由。不要替我新增未经证实的结论。",
       checks: ["每个结论是否有结果支持", "术语是否前后一致", "讨论是否区分结果和推测"],
       output: ["逐句问题", "修改建议", "修改理由", "缺失证据"],
@@ -58,6 +62,7 @@ function PromptKitContent() {
     {
       title: "审稿意见回应",
       input: "审稿意见、原文段落、已完成的补充分析",
+      materialTemplate: "审稿人意见：\n原文位置：\n已完成修改/补充分析：\n还不能补做的内容：\n希望语气：克制、礼貌、逐条回应",
       text: "请把审稿意见拆成可回应的任务：需要新增实验、需要补充分析、需要改写解释、需要礼貌澄清。为每条意见生成回应结构：感谢、理解、已修改内容、修改位置、仍需说明的限制。",
       checks: ["回应是否逐条对应", "语气是否克制", "是否标明修改位置"],
       output: ["任务拆解", "回应草稿", "修改位置", "限制说明"],
@@ -65,6 +70,7 @@ function PromptKitContent() {
     {
       title: "术语一致性检查",
       input: "论文全文或章节草稿",
+      materialTemplate: "章节/全文：\n重点术语：\n已有缩写表：\n需要统一的写法：中文 / 英文 / 缩写 / 变量名",
       text: "请列出文中同一概念的不同写法、缩写首次出现位置、中文和英文术语是否混用、变量名是否前后一致。输出为三列：术语、发现的问题、建议统一写法。",
       checks: ["缩写是否首次定义", "同义词是否混用", "图表和正文是否一致"],
       output: ["术语", "问题", "统一写法", "出现位置"],
@@ -134,6 +140,14 @@ ${activePrompt.output.map((item, index) => `${index + 1}. ${item}`).join("\n")}
     setCopyStatus("");
   }
 
+  function fillMaterialTemplate() {
+    updateMaterial(activePrompt.materialTemplate);
+  }
+
+  function clearMaterial() {
+    updateMaterial("");
+  }
+
   return (
     <section id="prompt-kit-builder" style={{ display: "grid", gap: "1rem" }}>
       <div style={{ display: "grid", gridTemplateColumns: "minmax(230px, 0.78fr) minmax(0, 1.3fr)", gap: "1rem", alignItems: "start" }}>
@@ -182,6 +196,15 @@ ${activePrompt.output.map((item, index) => `${index + 1}. ${item}`).join("\n")}
               style={{ width: "100%", minHeight: 154, resize: "vertical", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.9rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.9rem", lineHeight: 1.6, boxSizing: "border-box", marginBottom: "0.9rem" }}
               aria-label="科研材料输入框"
             />
+
+            <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: "0.9rem" }}>
+              <button type="button" onClick={fillMaterialTemplate} style={{ background: "var(--cherry-sage-light)", color: "var(--cherry-forest)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                填入示例材料
+              </button>
+              <button type="button" onClick={clearMaterial} style={{ background: "var(--muted)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                清空材料
+              </button>
+            </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.7rem", marginBottom: "0.9rem" }}>
               {activePrompt.output.map((item, index) => (
