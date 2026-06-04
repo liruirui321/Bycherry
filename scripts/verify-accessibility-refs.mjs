@@ -83,23 +83,41 @@ function collectAriaReferences(source, stringConstants) {
   return references;
 }
 
+function isIllustrationComponentFile(source) {
+  return /\b(?:export\s+)?function\s+[A-Za-z_$][\w$]*Illustration\b/.test(source);
+}
+
+function collectStaticSvgDefinitionIds(source) {
+  return Array.from(
+    source.matchAll(/<(linearGradient|radialGradient|clipPath|filter|mask|marker)\b[^>]*\bid="([^"]+)"/g),
+    (match) => ({ tag: match[1], id: match[2] })
+  );
+}
+
 const failures = [];
 const duplicateIdAllowlist = new Set(["main-content"]);
 let checkedReferences = 0;
 let checkedIds = 0;
+let checkedReusableSvgDefinitions = 0;
 
 for (const filePath of walkFiles(sourceRoot, [".tsx", ".ts"])) {
   const source = readFileSync(filePath, "utf8");
   const stringConstants = extractStringConstants(source);
   const { ids, counts } = collectIds(source, stringConstants);
   const references = collectAriaReferences(source, stringConstants);
+  const staticSvgDefinitionIds = isIllustrationComponentFile(source) ? collectStaticSvgDefinitionIds(source) : [];
   checkedIds += ids.size;
   checkedReferences += references.length;
+  checkedReusableSvgDefinitions += staticSvgDefinitionIds.length;
 
   for (const [id, count] of counts) {
     if (count > 1 && !duplicateIdAllowlist.has(id)) {
       failures.push(`${sourceLabel(filePath)} declares static id="${id}" ${count} times.`);
     }
+  }
+
+  for (const definition of staticSvgDefinitionIds) {
+    failures.push(`${sourceLabel(filePath)} declares reusable SVG <${definition.tag}> id="${definition.id}". Use an instance-scoped id such as React useId().`);
   }
 
   for (const reference of references) {
@@ -115,4 +133,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Accessibility refs verified: ${checkedReferences} static aria references and ${checkedIds} static ids.`);
+console.log(`Accessibility refs verified: ${checkedReferences} static aria references, ${checkedIds} static ids, and ${checkedReusableSvgDefinitions} reusable SVG definition ids.`);

@@ -31,7 +31,7 @@ npm run build
 - `verify:generated` checks that generated public metadata is committed and up to date.
 - `verify:public` checks the custom domain, host fallbacks, robots file, manifest, favicon, social preview image, and static index metadata fallback.
 - `verify:links` checks static internal links, public routes, home anchors, and static public asset links.
-- `verify:a11y` checks static `aria-labelledby`, `aria-describedby`, `aria-controls`, and duplicate static ids.
+- `verify:a11y` checks static `aria-labelledby`, `aria-describedby`, `aria-controls`, duplicate static ids, and fixed SVG definition ids in reusable illustration components.
 - `verify:sitemap` compares public routes with `public/sitemap.xml`, including `lastmod` dates.
 
 You can run the checks on their own:
