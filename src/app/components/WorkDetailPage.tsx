@@ -370,12 +370,12 @@ function PlantEvolutionContent() {
   const activeChapter = chapters[activeChapterIndex];
   const shortTimes = ["5.1-4.7亿年", "4.75亿年", "志留-泥盆", "泥盆纪", "晚泥盆", "白垩纪"];
   const plantTimelinePoints = [
-    { x: 252, y: 628 },
-    { x: 236, y: 522 },
-    { x: 266, y: 418 },
-    { x: 236, y: 312 },
+    { x: 252, y: 668 },
+    { x: 236, y: 552 },
+    { x: 266, y: 436 },
+    { x: 236, y: 320 },
     { x: 266, y: 204 },
-    { x: 252, y: 96 },
+    { x: 252, y: 88 },
   ];
   const plantStageLabels = ["浅水绿藻", "孢子外壁", "直立小轴", "维管分枝", "种子保护包", "花和果实"];
 
@@ -471,17 +471,92 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
     setStudyCardStatus("");
   }
 
+  function renderPlantStageIcon(index: number, visible: boolean) {
+    const opacity = visible ? 1 : 0.25;
+
+    if (index === 0) {
+      return (
+        <g opacity={opacity}>
+          <path d="M-34 18 C-22 3 -8 7 0 18 C10 2 28 6 36 20" fill="none" stroke="var(--cherry-sage)" strokeWidth={5} strokeLinecap="round" />
+          <circle cx={-22} cy={10} r={10} fill="var(--cherry-blue-light)" stroke="var(--cherry-sage)" strokeWidth={2.2} />
+          <circle cx={2} cy={14} r={13} fill="var(--cherry-sage-light)" stroke="var(--cherry-sage)" strokeWidth={2.2} />
+          <circle cx={25} cy={9} r={8} fill="rgba(132,184,204,0.52)" stroke="var(--cherry-sage)" strokeWidth={2} />
+          <path d="M-2 12 C6 7 12 9 18 14" stroke="var(--cherry-forest)" strokeWidth={2.2} strokeLinecap="round" opacity={0.45} />
+        </g>
+      );
+    }
+
+    if (index === 1) {
+      return (
+        <g opacity={opacity}>
+          {[[-28, 6], [-14, -10], [2, -4], [18, -12], [30, 4], [-1, 18]].map(([cx, cy]) => (
+            <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={8} fill="var(--cherry-yellow)" stroke="var(--cherry-warm-brown)" strokeWidth={1.4} opacity={0.9} />
+          ))}
+          <path d="M-34 23 C-13 30 14 31 36 22" stroke="var(--cherry-forest)" strokeWidth={3} strokeLinecap="round" opacity={0.32} />
+          <path d="M-22 5 L-16 10 M-2 -4 L5 1 M21 -12 L28 -7" stroke="var(--cherry-warm-brown)" strokeWidth={1.8} strokeLinecap="round" opacity={0.42} />
+        </g>
+      );
+    }
+
+    if (index === 2) {
+      return (
+        <g opacity={opacity}>
+          <path d="M-4 34 C-4 16 -2 1 6 -18" fill="none" stroke="var(--cherry-forest)" strokeWidth={6} strokeLinecap="round" />
+          <path d="M5 -7 C18 -18 33 -15 39 0" fill="none" stroke="var(--cherry-forest)" strokeWidth={4} strokeLinecap="round" />
+          <ellipse cx={40} cy={3} rx={9} ry={12} fill="var(--cherry-yellow)" stroke="var(--cherry-warm-brown)" strokeWidth={1.7} />
+          <path d="M-26 31 C-10 23 8 24 27 31" stroke="var(--cherry-sage)" strokeWidth={4} strokeLinecap="round" />
+        </g>
+      );
+    }
+
+    if (index === 3) {
+      return (
+        <g opacity={opacity}>
+          <path d="M0 36 C0 12 5 -9 15 -31" fill="none" stroke="var(--cherry-forest)" strokeWidth={8} strokeLinecap="round" />
+          <path d="M8 -1 C28 -14 43 -7 48 11 M7 9 C-18 4 -30 13 -36 29 M14 -17 C0 -27 -13 -25 -24 -12" fill="none" stroke="var(--cherry-forest)" strokeWidth={4.3} strokeLinecap="round" />
+          <path d="M18 -30 Q31 -48 49 -36 Q40 -21 18 -30Z M-36 28 Q-52 15 -43 -2 Q-26 6 -36 28Z M49 11 Q62 1 74 14 Q59 25 49 11Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth={1.8} />
+          <path d="M-7 30 H17" stroke="var(--cherry-yellow)" strokeWidth={3} strokeLinecap="round" opacity={0.7} />
+        </g>
+      );
+    }
+
+    if (index === 4) {
+      return (
+        <g opacity={opacity}>
+          <ellipse cx={2} cy={2} rx={23} ry={30} fill="var(--cherry-yellow)" stroke="var(--cherry-warm-brown)" strokeWidth={2.5} />
+          <path d="M2 -19 C14 -35 32 -34 39 -20 C29 -8 14 -7 2 -19Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth={2} />
+          <path d="M2 -20 C8 -10 8 8 1 21" stroke="rgba(94,68,42,0.34)" strokeWidth={2.5} strokeLinecap="round" />
+          <circle cx={-4} cy={5} r={5} fill="rgba(250,247,241,0.6)" />
+        </g>
+      );
+    }
+
+    return (
+      <g opacity={opacity}>
+        {[[-18, 2], [0, -16], [18, 2], [0, 20]].map(([cx, cy]) => (
+          <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={15} fill="var(--cherry-peach)" stroke="rgba(94,68,42,0.12)" strokeWidth={2} />
+        ))}
+        <circle cx={0} cy={2} r={12} fill="var(--cherry-yellow)" stroke="var(--cherry-warm-brown)" strokeWidth={2} />
+        <circle cx={34} cy={24} r={13} fill="var(--cherry-red)" opacity={0.86} />
+        <path d="M27 13 C34 2 47 2 54 12 C47 21 35 23 27 13Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth={1.8} />
+      </g>
+    );
+  }
+
   return (
     <div id="plant-evolution-explorer" style={{ display: "grid", gap: "1rem" }}>
       <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "1rem", alignItems: "start" }}>
         <div style={{ display: "grid", gap: "0.85rem", alignContent: "start" }}>
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", overflow: "hidden" }}>
-            <svg viewBox="0 0 520 720" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化插画时间轴" style={{ width: "100%", display: "block", background: "linear-gradient(180deg, #FFF8EA 0%, #EDF3DF 58%, #E6D7BE 100%)", borderRadius: 18 }}>
-              <rect x={24} y={24} width={468} height={672} rx={90} fill="rgba(169,201,172,0.18)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
+            <svg viewBox="0 0 520 760" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化插画时间轴" style={{ width: "100%", display: "block", background: "linear-gradient(180deg, #FFF8EA 0%, #EDF3DF 56%, #E6D7BE 100%)", borderRadius: 18 }}>
+              <rect x={24} y={24} width={468} height={712} rx={94} fill="rgba(169,201,172,0.16)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
               <circle cx={420} cy={82} r={34} fill="var(--cherry-yellow)" opacity={0.52} />
-              <path d="M52 648 C108 622 152 642 214 612 C286 578 352 600 462 548" fill="none" stroke="rgba(93,140,101,0.18)" strokeWidth={28} strokeLinecap="round" />
-              <path d="M252 628 C196 574 304 514 252 458 C196 398 304 344 252 286 C196 224 304 162 252 96" fill="none" stroke="var(--cherry-forest)" strokeWidth={9} strokeLinecap="round" opacity={0.18} />
-              <path d="M252 628 C196 574 304 514 252 458 C196 398 304 344 252 286 C196 224 304 162 252 96" fill="none" stroke="var(--cherry-sage)" strokeWidth={4.5} strokeLinecap="round" />
+              <path d="M58 618 C116 588 162 629 223 590 C294 545 348 580 466 518" fill="none" stroke="rgba(93,140,101,0.16)" strokeWidth={34} strokeLinecap="round" />
+              <path d="M52 675 C130 706 230 670 305 695 C372 716 431 694 474 660 V736 H52Z" fill="rgba(132,184,204,0.16)" />
+              <path d="M52 692 C103 667 157 682 213 664 C291 640 349 661 462 620" fill="none" stroke="rgba(58,92,62,0.16)" strokeWidth={26} strokeLinecap="round" />
+              <path d="M112 146 C139 128 173 128 202 147 M364 156 C389 136 424 139 450 158" fill="none" stroke="rgba(132,184,204,0.32)" strokeWidth={10} strokeLinecap="round" />
+              <path d="M252 668 C192 607 312 552 252 494 C190 435 312 374 252 318 C192 257 312 201 252 88" fill="none" stroke="var(--cherry-forest)" strokeWidth={10} strokeLinecap="round" opacity={0.16} />
+              <path d="M252 668 C192 607 312 552 252 494 C190 435 312 374 252 318 C192 257 312 201 252 88" fill="none" stroke="var(--cherry-sage)" strokeWidth={4.8} strokeLinecap="round" />
               <text x={54} y={64} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>植物演化竖向图</text>
               <text x={54} y={86} fill="var(--cherry-warm-mid)" fontSize={11} fontWeight={800}>从水边工具箱，到花和果实</text>
               {chapters.map((chapter, index) => {
@@ -506,13 +581,9 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
                     }}
                     style={{ cursor: "pointer" }}
                   >
-                    <path d={`M0 0 C${branchX * 0.25} -18 ${branchX * 0.58} -18 ${branchX} -34`} fill="none" stroke={index <= activeChapterIndex ? "var(--cherry-forest)" : "rgba(93,140,101,0.28)"} strokeWidth={3.2} strokeLinecap="round" />
+                    <path d={`M0 0 C${branchX * 0.25} -22 ${branchX * 0.58} -24 ${branchX} -42`} fill="none" stroke={index <= activeChapterIndex ? "var(--cherry-forest)" : "rgba(93,140,101,0.28)"} strokeWidth={3.2} strokeLinecap="round" />
                     <g transform={`translate(${branchX} -34)`}>
-                      <path d="M-18 26 Q-10 -8 28 -24 Q31 18 -18 26Z" fill={index <= activeChapterIndex ? "var(--cherry-sage)" : "rgba(93,140,101,0.18)"} stroke={active ? "var(--cherry-red)" : "rgba(93,140,101,0.26)"} strokeWidth={active ? 2.4 : 1.2} />
-                      <path d="M-8 18 Q8 2 22 -16" stroke="var(--cherry-warm-brown)" strokeWidth={1.5} strokeLinecap="round" opacity={0.28} />
-                      {index >= 2 ? <path d="M0 28 C0 12 2 -2 10 -16" fill="none" stroke="var(--cherry-forest)" strokeWidth={index >= 3 ? 4 : 2.8} strokeLinecap="round" opacity={index <= activeChapterIndex ? 0.76 : 0.24} /> : null}
-                      {index >= 4 ? <circle cx={20} cy={-20} r={8} fill="var(--cherry-yellow)" stroke="var(--cherry-warm-brown)" strokeWidth={1.2} opacity={index <= activeChapterIndex ? 0.9 : 0.25} /> : null}
-                      {index >= 5 ? <g opacity={index <= activeChapterIndex ? 1 : 0.25}><circle cx={4} cy={-24} r={6} fill="var(--cherry-peach)" /><circle cx={16} cy={-30} r={6} fill="var(--cherry-peach)" /><circle cx={16} cy={-18} r={6} fill="var(--cherry-peach)" /><circle cx={28} cy={-24} r={6} fill="var(--cherry-peach)" /></g> : null}
+                      {renderPlantStageIcon(index, index <= activeChapterIndex)}
                     </g>
                     <circle r={active ? 23 : 17} fill={active ? "var(--cherry-yellow)" : "var(--cherry-sage-light)"} stroke={active ? "var(--cherry-red)" : "var(--cherry-forest)"} strokeWidth={active ? 3 : 2} />
                     <text y={5} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>{index + 1}</text>

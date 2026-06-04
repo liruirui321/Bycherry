@@ -71,6 +71,7 @@ export const works = [
 function WorkCard({ work }: { work: (typeof works)[0] }) {
   const [hovered, setHovered] = useState(false);
   const href = "href" in work ? work.href : undefined;
+  const isPlantEvolution = work.slug === "plant-evolution-stories";
 
   function openDetail(event?: React.MouseEvent<HTMLAnchorElement>) {
     if (!href) return;
@@ -118,8 +119,8 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         {work.desc}
       </p>
 
-      <div style={{ minHeight: 92, display: "flex", justifyContent: "center", alignItems: "center", background: "rgba(250,247,241,0.46)", border: "1.5px dashed rgba(94,68,42,0.12)", borderRadius: 16, marginBottom: "1rem" }}>
-        <WorkPreviewIllustration slug={work.slug} color={work.border} width={132} height={98} />
+      <div style={{ minHeight: isPlantEvolution ? 158 : 92, display: "flex", justifyContent: "center", alignItems: "center", background: "rgba(250,247,241,0.46)", border: "1.5px dashed rgba(94,68,42,0.12)", borderRadius: 16, marginBottom: "1rem", padding: isPlantEvolution ? "0.42rem 0" : 0 }}>
+        <WorkPreviewIllustration slug={work.slug} color={work.border} width={isPlantEvolution ? 108 : 132} height={isPlantEvolution ? 162 : 98} />
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>

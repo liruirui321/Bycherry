@@ -1,0 +1,19 @@
+{
+  "name": "By Cherry",
+  "short_name": "By Cherry",
+  "description": "科学教育、AI 工具和课程设计作品集。",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F5F1EA",
+  "theme_color": "#F5F1EA",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
