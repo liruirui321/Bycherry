@@ -251,9 +251,30 @@ ${activePrompt.output.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
       <style>
         {`
+          #prompt-kit-builder button:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          #prompt-kit-builder button {
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+          }
+
+          #prompt-kit-builder button:hover,
+          #prompt-kit-builder button:focus-visible {
+            transform: translateY(-2px);
+          }
+
           @media (max-width: 880px) {
             #prompt-kit-builder > div:first-child {
               grid-template-columns: 1fr !important;
+            }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            #prompt-kit-builder button {
+              transition: none !important;
+              transform: none !important;
             }
           }
         `}
@@ -592,6 +613,21 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
 
       <style>
         {`
+          #plant-evolution-explorer button:focus-visible,
+          #plant-evolution-explorer a:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          #plant-evolution-explorer button {
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+          }
+
+          #plant-evolution-explorer button:hover,
+          #plant-evolution-explorer button:focus-visible {
+            transform: translateY(-2px);
+          }
+
           @media (max-width: 880px) {
             #plant-evolution-explorer > div:first-child {
               grid-template-columns: 1fr !important;
@@ -601,6 +637,13 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
           #plant-evolution-explorer svg [role="button"]:focus-visible circle {
             stroke: var(--cherry-red);
             stroke-width: 4;
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            #plant-evolution-explorer button {
+              transition: none !important;
+              transform: none !important;
+            }
           }
         `}
       </style>
@@ -838,7 +881,7 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
             })}
           </div>
           {quizAnswered ? (
-            <div style={{ marginTop: "0.85rem", background: quizChoice === active.quiz.answer ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
+            <div role="status" aria-live="polite" style={{ marginTop: "0.85rem", background: quizChoice === active.quiz.answer ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
               <strong style={{ color: "var(--cherry-warm-brown)" }}>{quizChoice === active.quiz.answer ? "答对了：" : "再看一遍："}</strong>{active.quiz.explain}
             </div>
           ) : null}
@@ -893,9 +936,30 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 
       <style>
         {`
+          #concept-explainer-tool button:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          #concept-explainer-tool button {
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+          }
+
+          #concept-explainer-tool button:hover,
+          #concept-explainer-tool button:focus-visible {
+            transform: translateY(-2px);
+          }
+
           @media (max-width: 860px) {
             #concept-explainer-tool .concept-responsive-grid {
               grid-template-columns: 1fr !important;
+            }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            #concept-explainer-tool button {
+              transition: none !important;
+              transform: none !important;
             }
           }
         `}
@@ -1248,9 +1312,30 @@ ${effectiveRepair.title}
 
       <style>
         {`
+          #crispr-simulator button:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          #crispr-simulator button {
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+          }
+
+          #crispr-simulator button:hover,
+          #crispr-simulator button:focus-visible {
+            transform: translateY(-2px);
+          }
+
           @media (max-width: 880px) {
             #crispr-simulator > div:first-child {
               grid-template-columns: 1fr !important;
+            }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            #crispr-simulator button {
+              transition: none !important;
+              transform: none !important;
             }
           }
         `}
