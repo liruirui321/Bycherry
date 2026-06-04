@@ -27,17 +27,18 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
     const waterId = `${svgId}-plant-card-water`;
     const pathId = `${svgId}-plant-card-path`;
     const clipId = `${svgId}-plant-card-clip`;
+    const glowId = `${svgId}-plant-card-glow`;
     const stages = [
-      { x: 90, y: 280, branch: -48, fill: "var(--cherry-blue-light)", accent: "var(--cherry-blue)" },
-      { x: 101, y: 231, branch: 48, fill: "var(--cherry-yellow-light)", accent: "var(--cherry-yellow)" },
-      { x: 79, y: 184, branch: -48, fill: "var(--cherry-sage-light)", accent: "var(--cherry-forest)" },
-      { x: 103, y: 136, branch: 48, fill: "var(--cherry-sage-light)", accent: "var(--cherry-sage)" },
-      { x: 81, y: 87, branch: -48, fill: "var(--cherry-yellow)", accent: "var(--cherry-warm-brown)" },
-      { x: 104, y: 39, branch: 42, fill: "var(--cherry-peach-light)", accent: "var(--cherry-red)" },
+      { x: 90, y: 312, branch: -50, fill: "var(--cherry-blue-light)", accent: "var(--cherry-blue)" },
+      { x: 102, y: 257, branch: 49, fill: "var(--cherry-yellow-light)", accent: "var(--cherry-yellow)" },
+      { x: 80, y: 204, branch: -50, fill: "var(--cherry-sage-light)", accent: "var(--cherry-forest)" },
+      { x: 104, y: 151, branch: 50, fill: "var(--cherry-sage-light)", accent: "var(--cherry-sage)" },
+      { x: 81, y: 98, branch: -50, fill: "var(--cherry-yellow)", accent: "var(--cherry-warm-brown)" },
+      { x: 106, y: 45, branch: 40, fill: "var(--cherry-peach-light)", accent: "var(--cherry-red)" },
     ];
 
     return (
-      <svg width={width} height={height} viewBox="0 0 180 316" fill="none" aria-hidden="true" focusable="false">
+      <svg width={width} height={height} viewBox="0 0 180 352" fill="none" aria-hidden="true" focusable="false">
         <defs>
           <linearGradient id={skyId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#FFF4DE" />
@@ -55,27 +56,37 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
             <stop offset="0.55" stopColor="#5D8C65" />
             <stop offset="1" stopColor="#E5A3A0" />
           </linearGradient>
+          <radialGradient id={glowId} cx="0.5" cy="0.18" r="0.72">
+            <stop offset="0" stopColor="#FFF9E9" stopOpacity="0.94" />
+            <stop offset="0.52" stopColor="#FAF7F1" stopOpacity="0.34" />
+            <stop offset="1" stopColor="#FAF7F1" stopOpacity="0" />
+          </radialGradient>
           <clipPath id={clipId}>
-            <rect x="8" y="6" width="164" height="304" rx="32" />
+            <rect x="8" y="6" width="164" height="340" rx="34" />
           </clipPath>
         </defs>
-        <rect x="8" y="6" width="164" height="304" rx="32" fill={`url(#${skyId})`} stroke="rgba(93,140,101,0.3)" strokeWidth="1.8" />
+        <rect x="8" y="6" width="164" height="340" rx="34" fill={`url(#${skyId})`} stroke="rgba(93,140,101,0.3)" strokeWidth="1.8" />
+        <rect x="15" y="14" width="150" height="326" rx="29" fill={`url(#${glowId})`} opacity="0.72" />
         <g clipPath={`url(#${clipId})`}>
           <circle cx="132" cy="37" r="20" fill="var(--cherry-yellow)" opacity="0.78" />
           <circle cx="132" cy="37" r="30" fill="var(--cherry-yellow)" opacity="0.12" />
           <path d="M17 57 C38 41 63 45 76 66 C55 76 34 75 17 57Z M105 78 C123 62 149 66 163 86 C142 97 120 95 105 78Z" fill="#FAF7F1" opacity="0.72" />
-          <path d="M0 112 C32 89 63 106 94 78 C125 50 148 62 180 34 V310 H0Z" fill="rgba(169,201,172,0.15)" />
-          <path d="M0 169 C31 145 57 162 88 136 C123 107 151 119 180 91 V310 H0Z" fill="rgba(169,201,172,0.26)" />
-          <path d="M0 236 C29 218 63 234 95 213 C127 191 151 198 180 177 V310 H0Z" fill="rgba(216,199,168,0.54)" />
-          <path d="M0 267 C33 281 60 262 94 276 C123 289 151 264 180 276 V310 H0Z" fill={`url(#${waterId})`} />
-          <path d="M11 299 C39 285 65 294 93 283 C122 270 149 281 171 262 V310 H11Z" fill="rgba(216,199,168,0.7)" />
-          <path d="M18 298 C47 306 118 304 158 288" stroke="rgba(58,92,62,0.18)" strokeWidth="5.5" strokeLinecap="round" />
-          <path d="M21 302 C35 288 53 289 66 302 M113 302 C123 284 145 285 159 302" stroke="var(--cherry-forest)" strokeWidth="3" strokeLinecap="round" opacity="0.46" />
-          <path d="M33 298 C27 276 35 259 50 248 M43 274 C59 262 74 273 77 294 M131 300 C122 275 132 253 149 242 M145 264 C160 254 174 261 178 279" stroke="var(--cherry-sage)" strokeWidth="2.7" strokeLinecap="round" fill="none" opacity="0.72" />
-          <path d="M90 280 C28 235 126 212 79 174 C36 139 132 121 87 84 C68 68 73 41 108 22" stroke="var(--cherry-forest)" strokeWidth="17" strokeLinecap="round" opacity="0.09" />
-          <path d="M90 280 C28 235 126 212 79 174 C36 139 132 121 87 84 C68 68 73 41 108 22" stroke={`url(#${pathId})`} strokeWidth="6.2" strokeLinecap="round" />
-          {[31, 151, 42, 137, 60].map((x, index) => (
-            <path key={x} d={`M${x} ${94 + index * 37} C${x - 7} ${83 + index * 37} ${x - 4} ${74 + index * 37} ${x + 7} ${67 + index * 37} M${x + 7} ${67 + index * 37} C${x + 17} ${76 + index * 37} ${x + 11} ${88 + index * 37} ${x} ${94 + index * 37}`} stroke="rgba(58,92,62,0.2)" strokeWidth="1.8" strokeLinecap="round" fill="rgba(169,201,172,0.18)" />
+          <path d="M0 118 C32 92 63 108 94 80 C125 52 148 62 180 34 V346 H0Z" fill="rgba(169,201,172,0.15)" />
+          <path d="M0 181 C31 151 57 164 88 138 C123 109 151 119 180 91 V346 H0Z" fill="rgba(169,201,172,0.26)" />
+          <path d="M0 253 C29 222 63 235 95 215 C127 193 151 197 180 178 V346 H0Z" fill="rgba(216,199,168,0.52)" />
+          <path d="M0 291 C33 303 60 283 94 297 C123 310 151 285 180 297 V346 H0Z" fill={`url(#${waterId})`} />
+          <path d="M9 330 C36 309 65 317 93 301 C123 283 149 303 171 278 V346 H9Z" fill="rgba(216,199,168,0.74)" />
+          <path d="M18 327 C47 337 118 335 158 316" stroke="rgba(58,92,62,0.18)" strokeWidth="5.8" strokeLinecap="round" />
+          <path d="M19 336 C31 318 53 316 67 334 M110 337 C121 314 147 315 161 335" stroke="var(--cherry-forest)" strokeWidth="3.2" strokeLinecap="round" opacity="0.5" />
+          <path d="M31 331 C25 301 36 279 54 266 M45 297 C62 281 78 293 80 323 M126 333 C118 304 133 278 151 263 M146 287 C162 274 175 284 178 303" stroke="var(--cherry-sage)" strokeWidth="2.9" strokeLinecap="round" fill="none" opacity="0.78" />
+          <path d="M20 308 C32 302 45 304 55 313 M64 321 C79 312 96 314 108 325 M128 310 C140 303 153 305 162 315" stroke="rgba(132,184,204,0.42)" strokeWidth="2.4" strokeLinecap="round" />
+          <path d="M90 312 C28 258 126 237 79 198 C36 163 132 139 87 98 C67 78 72 43 108 22" stroke="var(--cherry-forest)" strokeWidth="18" strokeLinecap="round" opacity="0.09" />
+          <path d="M90 312 C28 258 126 237 79 198 C36 163 132 139 87 98 C67 78 72 43 108 22" stroke={`url(#${pathId})`} strokeWidth="6.4" strokeLinecap="round" />
+          {[31, 151, 42, 137, 58, 150].map((x, index) => (
+            <path key={`${x}-${index}`} d={`M${x} ${96 + index * 38} C${x - 8} ${84 + index * 38} ${x - 4} ${74 + index * 38} ${x + 8} ${67 + index * 38} M${x + 8} ${67 + index * 38} C${x + 18} ${77 + index * 38} ${x + 11} ${90 + index * 38} ${x} ${96 + index * 38}`} stroke="rgba(58,92,62,0.2)" strokeWidth="1.8" strokeLinecap="round" fill="rgba(169,201,172,0.18)" />
+          ))}
+          {[24, 56, 122, 154].map((x, index) => (
+            <circle key={x} cx={x} cy={325 + (index % 2) * 8} r={index === 1 ? 4.2 : 3.4} fill={index % 2 ? "var(--cherry-blue-light)" : "var(--cherry-yellow)"} opacity="0.72" />
           ))}
         </g>
         {stages.map((stage, index) => {
@@ -143,7 +154,7 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
             </g>
           );
         })}
-        <path d="M22 306 C52 314 127 313 160 296" stroke="var(--cherry-forest)" strokeWidth="2.6" strokeLinecap="round" opacity="0.34" />
+        <path d="M22 340 C52 348 127 347 160 329" stroke="var(--cherry-forest)" strokeWidth="2.7" strokeLinecap="round" opacity="0.36" />
       </svg>
     );
   }

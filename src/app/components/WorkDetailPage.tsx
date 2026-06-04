@@ -624,8 +624,14 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
               <rect x={0} y={0} width={520} height={760} fill="url(#plant-evolution-bg)" />
               <rect x={24} y={24} width={468} height={712} rx={94} fill="rgba(250,247,241,0.26)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
               <circle cx={420} cy={82} r={34} fill="var(--cherry-yellow)" opacity={0.62} />
+              <circle cx={420} cy={82} r={55} fill="var(--cherry-yellow)" opacity={0.12} />
+              {[54, 82, 454, 482].map((x, index) => (
+                <path key={x} d={`M${x} ${188 + index * 62} C${x - 12} ${165 + index * 62} ${x - 5} ${145 + index * 62} ${x + 18} ${132 + index * 62} M${x + 17} ${132 + index * 62} C${x + 39} ${149 + index * 62} ${x + 29} ${177 + index * 62} ${x} ${188 + index * 62}`} fill="rgba(169,201,172,0.2)" stroke="rgba(58,92,62,0.22)" strokeWidth={2.4} strokeLinecap="round" />
+              ))}
               <path d="M94 103 C127 80 166 86 188 113 C151 127 118 124 94 103Z M340 137 C371 114 413 119 439 148 C400 161 365 158 340 137Z" fill="#FAF7F1" opacity={0.62} />
               <path d="M72 190 C122 164 171 177 212 202 C263 231 317 219 367 185 C401 162 438 158 472 177" fill="none" stroke="rgba(132,184,204,0.24)" strokeWidth={12} strokeLinecap="round" />
+              <path d="M59 244 C113 214 164 232 214 254 C266 277 320 262 370 229 C410 203 448 204 481 225" fill="none" stroke="rgba(132,184,204,0.14)" strokeWidth={18} strokeLinecap="round" />
+              <path d="M48 393 C96 360 150 372 202 403 C267 443 319 410 370 371 C409 341 451 346 484 367" fill="none" stroke="rgba(238,199,103,0.16)" strokeWidth={20} strokeLinecap="round" />
               <path d="M54 585 C113 553 159 600 222 558 C296 507 348 553 469 492" fill="none" stroke="rgba(93,140,101,0.18)" strokeWidth={44} strokeLinecap="round" />
               <path d="M52 624 C116 584 186 626 247 588 C323 543 393 563 474 512 V736 H52Z" fill="rgba(169,201,172,0.2)" />
               <path d="M52 654 C130 697 230 655 305 688 C372 717 431 690 474 648 V736 H52Z" fill="url(#plant-water)" />
@@ -649,6 +655,17 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
                 <path d="M287 716 C302 699 327 699 343 715" stroke="var(--cherry-forest)" strokeWidth={4} strokeLinecap="round" />
                 <path d="M315 712 C312 691 321 675 335 663 M331 678 C348 666 366 672 372 689 M323 696 C303 689 287 697 280 713" stroke="var(--cherry-forest)" strokeWidth={3.5} strokeLinecap="round" fill="none" />
               </g>
+              <g opacity={0.76}>
+                {[76, 128, 408, 454].map((x, index) => (
+                  <g key={x}>
+                    <path d={`M${x} ${532 + index * 15} C${x - 9} ${510 + index * 15} ${x - 3} ${489 + index * 15} ${x + 15} ${475 + index * 15}`} stroke="var(--cherry-forest)" strokeWidth={3.2} strokeLinecap="round" fill="none" />
+                    <path d={`M${x + 12} ${482 + index * 15} C${x + 28} ${466 + index * 15} ${x + 48} ${472 + index * 15} ${x + 55} ${491 + index * 15} C${x + 36} ${502 + index * 15} ${x + 19} ${499 + index * 15} ${x + 12} ${482 + index * 15}Z`} fill={index % 2 ? "var(--cherry-sage-light)" : "var(--cherry-sage)"} stroke="var(--cherry-forest)" strokeWidth={1.7} />
+                  </g>
+                ))}
+                {[68, 452, 104, 418].map((x, index) => (
+                  <circle key={x} cx={x} cy={612 + (index % 2) * 28} r={5 + index} fill={index % 2 ? "var(--cherry-peach)" : "var(--cherry-yellow)"} opacity={0.7} />
+                ))}
+              </g>
               {[96, 152, 398, 446].map((x) => (
                 <path key={x} d={`M${x} 134 C${x + 16} 122 ${x + 34} 123 ${x + 48} 137`} fill="none" stroke="rgba(132,184,204,0.3)" strokeWidth={9} strokeLinecap="round" />
               ))}
@@ -664,7 +681,7 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
               </g>
               <path d="M252 668 C192 607 312 552 252 494 C190 435 312 374 252 318 C192 257 312 201 252 88" fill="none" stroke="var(--cherry-forest)" strokeWidth={10} strokeLinecap="round" opacity={0.16} />
               <path d="M252 668 C192 607 312 552 252 494 C190 435 312 374 252 318 C192 257 312 201 252 88" fill="none" stroke="var(--cherry-sage)" strokeWidth={4.8} strokeLinecap="round" />
-              <text x={54} y={64} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>植物演化竖向图</text>
+              <text x={54} y={64} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>植物演化图鉴</text>
               <text x={54} y={86} fill="var(--cherry-warm-mid)" fontSize={11} fontWeight={800}>从水边工具箱，到花和果实</text>
               {chapters.map((chapter, index) => {
                 const point = plantTimelinePoints[index];
