@@ -64,6 +64,7 @@ function navigateToPath(href: string) {
 
 export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: string }) {
   const [copiedSummary, setCopiedSummary] = useState(false);
+  const [copiedTemplate, setCopiedTemplate] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const collection = kind === "note" ? notes : essays;
   const article = collection.find((item) => item.slug === slug);
@@ -86,6 +87,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const actionSteps = article && "actionSteps" in article ? article.actionSteps : [];
   const checklist = article && "checklist" in article ? article.checklist : [];
   const starterTemplate = article && "starterTemplate" in article ? article.starterTemplate : [];
+  const starterTemplateText = starterTemplate.map((item) => `- ${item}`).join("\n");
   const summaryText = article
     ? `【阅读摘要】
 标题：${article.title}
@@ -107,7 +109,7 @@ ${actionSteps.map((step, index) => `${index + 1}. ${step}`).join("\n")}
 ${checklist.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
 五、可套用模板
-${starterTemplate.map((item) => `- ${item}`).join("\n")}
+${starterTemplateText}
 
 六、可以带走的想法
 ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).join("\n")}`
@@ -118,12 +120,28 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     const copiedToClipboard = await copyText(summaryText);
     if (copiedToClipboard) {
       setCopiedSummary(true);
+      setCopiedTemplate(false);
       setCopyStatus("阅读摘要已复制到剪贴板。");
       window.setTimeout(() => setCopiedSummary(false), 1400);
       return;
     }
 
     setCopiedSummary(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyTemplateText() {
+    if (!starterTemplateText) return;
+    const copiedToClipboard = await copyText(starterTemplateText);
+    if (copiedToClipboard) {
+      setCopiedTemplate(true);
+      setCopiedSummary(false);
+      setCopyStatus("可套用模板已复制到剪贴板。");
+      window.setTimeout(() => setCopiedTemplate(false), 1400);
+      return;
+    }
+
+    setCopiedTemplate(false);
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -296,9 +314,14 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {starterTemplate.length ? (
               <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
-                <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem", marginBottom: "0.65rem" }}>可套用模板</div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>可套用模板</div>
+                  <button type="button" onClick={copyTemplateText} aria-label={`复制${article.title}的可套用模板`} aria-describedby="article-summary-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                    {copiedTemplate ? "已复制" : "复制模板"}
+                  </button>
+                </div>
                 <code style={{ display: "block", whiteSpace: "pre-wrap", background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.72rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.7 }}>
-                  {starterTemplate.map((item) => `- ${item}`).join("\n")}
+                  {starterTemplateText}
                 </code>
               </div>
             ) : null}
