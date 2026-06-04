@@ -3185,6 +3185,12 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
 }
 
 function WorkQuickStart({ work }: { work: Work }) {
+  const evidenceItems = [
+    `保存 1 份${work.outputs[0] ?? "学习产出"}`,
+    `用自己的话写下：${work.success}`,
+    `标记下一步要回看的环节：${work.path[work.path.length - 1] ?? work.path[0]}`,
+  ];
+
   return (
     <section
       aria-labelledby="work-quick-start-heading"
@@ -3246,6 +3252,16 @@ function WorkQuickStart({ work }: { work: Work }) {
               {work.outputs.map((output) => (
                 <span key={output} role="listitem" style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.13rem 0.42rem", color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>
                   {output}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(93,140,101,0.18)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem", gridColumn: "1 / -1" }}>
+            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>完成证据</span>
+            <div role="list" aria-label={`${work.title}完成后需要留下的学习证据`} style={{ display: "grid", gap: "0.26rem" }}>
+              {evidenceItems.map((item, index) => (
+                <span key={item} role="listitem" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.4, fontWeight: 900 }}>
+                  {index + 1}. {item}
                 </span>
               ))}
             </div>

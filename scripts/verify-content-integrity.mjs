@@ -245,6 +245,9 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(worksSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage work cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("{work.starter}"), "Work detail quick start must expose each work starter action.");
   expect(workDetailSource.includes("{work.success}"), "Work detail quick start must expose each work completion standard.");
+  expect(workDetailSource.includes("完成证据"), "Work detail quick start must ask learners to leave completion evidence.");
+  expect(workDetailSource.includes("evidenceItems"), "Work detail quick start must derive completion evidence from work outputs, success, and path.");
+  expect(workDetailSource.includes("保存 1 份${work.outputs[0]"), "Work detail completion evidence must include a concrete saved output.");
   expect(workDetailSource.includes("aria-label={`继续探索${item.title}：先做这个，${item.starter}。完成标准，${item.success}`}"), "Work detail related cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("先做这个：{item.work.starter}"), "Work detail previous/next cards must expose each adjacent module starter action.");
   expect(workDetailSource.includes("aria-label={`${item.label}：${item.work.title}。先做这个，${item.work.starter}。完成标准，${item.work.success}`}"), "Work detail previous/next cards must include starter and completion standard in accessible labels.");
