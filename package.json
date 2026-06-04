@@ -11,7 +11,8 @@
   "author": "Cherry",
   "type": "module",
   "scripts": {
-    "build": "npm run generate:sitemap && npm run verify:public && npm run verify:links && npm run verify:a11y && npm run verify:sitemap && vite build",
+    "build": "npm run generate:sitemap && npm run generate:index && npm run verify:public && npm run verify:links && npm run verify:a11y && npm run verify:sitemap && vite build",
+    "generate:index": "node scripts/generate-static-index.mjs",
     "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "verify:a11y": "node scripts/verify-accessibility-refs.mjs",
     "verify:links": "node scripts/verify-internal-links.mjs",
