@@ -28,6 +28,8 @@ function PromptKitContent() {
   const [material, setMaterial] = useState("研究问题：\n样本/材料：\n已有结果：\n我最担心的问题：");
   const [copied, setCopied] = useState(false);
   const [copiedPack, setCopiedPack] = useState(false);
+  const [copiedPreview, setCopiedPreview] = useState(false);
+  const [hasRunPreview, setHasRunPreview] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const prompts = [
     {
@@ -101,6 +103,50 @@ function PromptKitContent() {
     },
   ];
   const activeMode = promptModes[activeModeIndex];
+  const materialText = material.trim();
+  const materialLines = materialText.split("\n").map((line) => line.trim()).filter(Boolean);
+  const materialChecks = [
+    {
+      label: "材料量",
+      value: materialText.length >= 180 ? "可做初步分析" : "偏少",
+      detail: materialText.length >= 180 ? "可以进入结构化核查；仍建议补充原文、图注或方法信息。" : "当前更适合生成任务框架，正式分析前需要补充材料。",
+    },
+    {
+      label: "样本/分组",
+      value: /样本|sample|n\s*=|分组|对照|control|重复|replicate/i.test(materialText) ? "已出现" : "待补充",
+      detail: /样本|sample|n\s*=|分组|对照|control|重复|replicate/i.test(materialText) ? "材料中已有样本、分组或对照线索。" : "缺少样本量、分组、对照或重复数，结论边界会很弱。",
+    },
+    {
+      label: "结果证据",
+      value: /结果|figure|fig\.|图|p\s*[<=>]|显著|统计|差异|fold|表达/i.test(materialText) ? "已出现" : "待补充",
+      detail: /结果|figure|fig\.|图|p\s*[<=>]|显著|统计|差异|fold|表达/i.test(materialText) ? "材料中已有结果、图表或统计线索。" : "缺少结果描述、图注或统计标记，不能判断证据强度。",
+    },
+  ];
+  const missingFields = materialChecks.filter((item) => item.value === "待补充" || item.value === "偏少").map((item) => item.label);
+  const taskActions: Record<string, string[]> = {
+    文献精读: ["先抽取研究问题、核心假设和主要证据。", "把作者结论和材料外推断分开。", "优先标注原文未说明的信息。"],
+    实验设计检查: ["先检查变量、对照、重复数和统计方法是否匹配。", "把必须修改项和导师确认项分开。", "说明每个风险会影响哪一种结论。"],
+    图表解读: ["先读取坐标轴、单位、分组和统计标记。", "把观察事实、合理推断和不能支持的结论分开。", "标出需要回看图注或方法的点。"],
+    论文逻辑检查: ["先逐句找结论和证据的对应关系。", "标出证据跳跃、术语不一致和过度表达。", "给出可替换的克制表述。"],
+    审稿意见回应: ["先把审稿意见拆成可执行任务。", "区分已完成修改、需要补充分析和无法补做的限制。", "逐条生成回应结构。"],
+    术语一致性检查: ["先列出核心术语、缩写和变量名。", "检查首次定义、图文一致性和同义词混用。", "给出建议统一写法。"],
+  };
+  const localPreviewOutput = `【本地 Agent 预览】
+任务：${activePrompt.title}
+工作模式：${activeMode.title}
+材料状态：${materialText ? `${materialLines.length} 行，${materialText.length} 字符` : "未填写材料"}
+
+一、材料核查
+${materialChecks.map((item) => `${item.label}：${item.value}。${item.detail}`).join("\n")}
+
+二、任务执行顺序
+${(taskActions[activePrompt.title] ?? activePrompt.output).map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+三、当前证据边界
+${missingFields.length ? `需要补充：${missingFields.join("、")}。` : "材料具备进入模型分析的基本线索，仍需人工确认原文来源。"}
+
+四、API Agent 输出字段建议
+task, material_summary, evidence_items, inference_items, missing_fields, risk_flags, reviewer_questions, final_report`;
   const agentCards = [
     {
       title: "当前版本",
@@ -151,13 +197,17 @@ ${[...activePrompt.output, ...activeMode.outputs].map((item, index) => `${index 
 四、人工复核提醒
 1. 结论必须能回到原文、数据或实验设计。
 2. 如果模型补充了材料中没有的信息，需要标出并回查来源。
-3. 对会影响实验、投稿或伦理判断的内容，保留人工最终决定。`;
+3. 对会影响实验、投稿或伦理判断的内容，保留人工最终决定。
+
+五、本地预览
+${localPreviewOutput}`;
 
   async function copyPrompt() {
     const copiedToClipboard = await copyText(finalPrompt);
     if (copiedToClipboard) {
       setCopied(true);
       setCopiedPack(false);
+      setCopiedPreview(false);
       setCopyStatus("模型指令已复制到剪贴板。");
       window.setTimeout(() => setCopied(false), 1400);
       return;
@@ -172,6 +222,7 @@ ${[...activePrompt.output, ...activeMode.outputs].map((item, index) => `${index 
     if (copiedToClipboard) {
       setCopiedPack(true);
       setCopied(false);
+      setCopiedPreview(false);
       setCopyStatus("任务包已复制到剪贴板。");
       window.setTimeout(() => setCopiedPack(false), 1400);
       return;
@@ -181,10 +232,27 @@ ${[...activePrompt.output, ...activeMode.outputs].map((item, index) => `${index 
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  async function copyLocalPreview() {
+    const copiedToClipboard = await copyText(localPreviewOutput);
+    if (copiedToClipboard) {
+      setCopiedPreview(true);
+      setCopied(false);
+      setCopiedPack(false);
+      setCopyStatus("本地预览已复制到剪贴板。");
+      window.setTimeout(() => setCopiedPreview(false), 1400);
+      return;
+    }
+
+    setCopiedPreview(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
   function updateMaterial(value: string) {
     setMaterial(value);
     setCopied(false);
     setCopiedPack(false);
+    setCopiedPreview(false);
+    setHasRunPreview(false);
     setCopyStatus("");
   }
 
@@ -219,7 +287,7 @@ ${[...activePrompt.output, ...activeMode.outputs].map((item, index) => `${index 
           {prompts.map((prompt, index) => {
             const active = activePromptIndex === index;
             return (
-              <button key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopiedPack(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
+              <button key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
                 <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>{prompt.title}</div>
                 <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginBottom: "0.55rem" }}>{prompt.input}</div>
                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
@@ -260,7 +328,7 @@ ${[...activePrompt.output, ...activeMode.outputs].map((item, index) => `${index 
                 {promptModes.map((mode, index) => {
                   const active = activeModeIndex === index;
                   return (
-                    <button key={mode.title} type="button" aria-pressed={active} onClick={() => { setActiveModeIndex(index); setCopied(false); setCopiedPack(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.68rem", cursor: "pointer" }}>
+                    <button key={mode.title} type="button" aria-pressed={active} onClick={() => { setActiveModeIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.68rem", cursor: "pointer" }}>
                       <strong style={{ display: "block", color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.24rem" }}>{mode.title}</strong>
                       <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>{mode.description}</span>
                     </button>
@@ -321,6 +389,39 @@ ${[...activePrompt.output, ...activeMode.outputs].map((item, index) => `${index 
               <button type="button" onClick={clearMaterial} style={{ background: "var(--muted)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                 清空材料
               </button>
+            </div>
+
+            <div style={{ background: hasRunPreview ? "var(--cherry-sage-light)" : "var(--muted)", border: hasRunPreview ? "1.5px solid rgba(93,140,101,0.32)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
+                <div>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>本地 Agent 预览</div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem" }}>
+                    不调用 API，只根据当前材料做任务路由和证据边界预判。
+                  </div>
+                </div>
+                <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
+                  <button type="button" onClick={() => setHasRunPreview(true)} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                    运行本地预览
+                  </button>
+                  <button type="button" onClick={copyLocalPreview} style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                    {copiedPreview ? "已复制" : "复制预览"}
+                  </button>
+                </div>
+              </div>
+              {hasRunPreview ? (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.55rem" }}>
+                  {materialChecks.map((item) => (
+                    <div key={item.label} style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+                      <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", marginBottom: "0.2rem" }}>{item.label} · {item.value}</strong>
+                      <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{item.detail}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.6 }}>
+                  点击运行后，这里会显示材料状态、证据边界和下一步分析顺序。
+                </div>
+              )}
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.7rem", marginBottom: "0.9rem" }}>
