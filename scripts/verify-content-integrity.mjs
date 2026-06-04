@@ -123,6 +123,7 @@ function verifyVisibleThemeWorkCopy() {
 
   const retiredCopyPatterns = [
     { label: "打开作品", pattern: />\s*打开作品\s*</ },
+    { label: "查看作品", pattern: />\s*查看作品\s*</ },
     { label: "浏览作品", pattern: /浏览作品/ },
     { label: "全部作品", pattern: /全部作品/ },
     { label: "上一个作品", pattern: /label:\s*"上一个作品"/ },

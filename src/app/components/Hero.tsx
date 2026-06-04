@@ -98,7 +98,7 @@ export function Hero() {
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLElement).style.boxShadow = "3px 8px 0px rgba(58,92,62,0.25)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.boxShadow = "3px 5px 0px rgba(58,92,62,0.25)"; }}
           >
-              <IconSeedling size={18} color="#FAF7F1" /> 查看作品
+              <IconSeedling size={18} color="#FAF7F1" /> 浏览主题作品
           </a>
           <a
             className="hero-cta"
