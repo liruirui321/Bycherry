@@ -23,6 +23,14 @@ function extractDatedHrefs(relativePath) {
   })).filter((item) => item.path.startsWith("/"));
 }
 
+function extractUpdatedHrefs(relativePath) {
+  const source = read(relativePath);
+  return Array.from(source.matchAll(/href:\s*"([^"]+)"[\s\S]*?updated:\s*"([^"]+)"/g), (match) => ({
+    path: match[1],
+    date: match[2],
+  })).filter((item) => item.path.startsWith("/"));
+}
+
 const expectedPaths = new Set([
   "/",
   ...extractHrefs("src/app/components/Works.tsx"),
@@ -30,6 +38,7 @@ const expectedPaths = new Set([
   ...extractHrefs("src/app/components/ResearchEssays.tsx"),
 ]);
 const expectedLastmods = new Map([
+  ...extractUpdatedHrefs("src/app/components/Works.tsx").map((item) => [item.path, item.date]),
   ...extractDatedHrefs("src/app/components/Notes.tsx").map((item) => [item.path, item.date]),
   ...extractDatedHrefs("src/app/components/ResearchEssays.tsx").map((item) => [item.path, item.date]),
 ]);
