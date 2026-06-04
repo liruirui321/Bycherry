@@ -52,7 +52,7 @@ const geneQuizItems = [
   {
     id: "growth-end",
     question: "mRNA 的 3' 生长端在动画里为什么贴着 RNA 聚合酶？",
-    options: ["新碱基在聚合酶出口附近接上", "核糖体把 mRNA 拉长", "DNA 聚合酶在合成 RNA"],
+    options: ["新碱基在聚合酶出口附近接上", "核糖体把 mRNA 拉长", "mRNA 自己从尾端复制出来"],
     answer: "新碱基在聚合酶出口附近接上",
     explain: "转录时 RNA 聚合酶沿 DNA 移动，并在出口附近持续延长 RNA 的 3' 端。",
   },
@@ -737,7 +737,25 @@ export function GeneExpressionTool() {
     if (visibleProteinCount === 0) return `核糖体正在读取 ${activeCodon?.rna ?? "密码子"}，tRNA 对准 A/P 位点，第一颗氨基酸小圆即将从出口出现。`;
     return `原核式耦合表达正在发生：RNA 聚合酶延伸 mRNA，核糖体读取 ${activeCodon?.rna ?? "密码子"}，多肽链正按 ${activeCodon?.amino ?? "氨基酸"} 紧贴出口长出。`;
   })();
-  const accessibleSummary = `基因表达仿真。启动子上有 ${model.tfBound} 个转录因子，基因区有 ${model.polBound} 个 RNA 聚合酶，核糖体入口有 ${model.ribBound} 个核糖体。当前 mRNA 数量 ${visibleMrnaCount}，已接入氨基酸 ${visibleProteinCount}。当前状态：${currentStatus} 下一步：${nextTask}`;
+  const processFocusCards = [
+    {
+      title: "mRNA 生长端",
+      active: model.transcriptionOn,
+      body: model.transcriptionOn ? "3' 生长端贴着 RNA 聚合酶出口，RNA 聚合酶往前走时曲线继续变长。" : "转录未启动时不会产生新的 3' 生长端；先放入 TF 和 RNA 聚合酶。",
+    },
+    {
+      title: "核糖体读带",
+      active: activeRibosomeCount > 0,
+      body: activeRibosomeCount > 0 ? `核糖体正在读 ${activeCodon?.rna ?? "已露出的密码子"}，它只沿已经转录出来的 mRNA 片段移动。` : "mRNA 的 5' 自由端露出后，把核糖体放到入口，才会开始读密码子。",
+    },
+    {
+      title: "多肽出口",
+      active: visibleProteinCount > 0,
+      body: visibleProteinCount > 0 ? `多肽链从核糖体右上出口长出，当前片段是 ${peptidePreview}。` : "没有看到氨基酸小圆时，说明核糖体还没读到足够的密码子或还没有加入核糖体。",
+    },
+  ];
+  const activeProcessFocus = processFocusCards.find((item) => item.active)?.title ?? "等待启动";
+  const accessibleSummary = `基因表达仿真。启动子上有 ${model.tfBound} 个转录因子，基因区有 ${model.polBound} 个 RNA 聚合酶，核糖体入口有 ${model.ribBound} 个核糖体。当前 mRNA 数量 ${visibleMrnaCount}，已接入氨基酸 ${visibleProteinCount}。当前过程焦点：${activeProcessFocus}。当前状态：${currentStatus} 下一步：${nextTask}`;
 
   useEffect(() => {
     progressRef.current = cycleProgress;
@@ -1098,6 +1116,26 @@ export function GeneExpressionTool() {
                 </div>
               </div>
             ) : null}
+          </div>
+
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.85rem" }}>
+              <IconSparkle size={18} />
+              过程追踪
+            </div>
+            <div style={{ display: "grid", gap: "0.58rem" }}>
+              {processFocusCards.map((item, index) => (
+                <div key={item.title} style={{ display: "grid", gridTemplateColumns: "28px minmax(0, 1fr)", gap: "0.58rem", alignItems: "start", background: item.active ? (index === 0 ? "var(--cherry-blue-light)" : index === 1 ? "var(--cherry-yellow-light)" : "var(--cherry-sage-light)") : "var(--muted)", border: item.active ? "1.5px solid rgba(94,68,42,0.18)" : "1.5px solid rgba(94,68,42,0.08)", borderRadius: 16, padding: "0.72rem" }}>
+                  <span style={{ width: 24, height: 24, borderRadius: "50%", background: item.active ? "var(--cherry-forest)" : "rgba(250,247,241,0.8)", border: "1.5px solid rgba(94,68,42,0.14)", color: item.active ? "#FAF7F1" : "var(--cherry-warm-mid)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>
+                    {index + 1}
+                  </span>
+                  <span>
+                    <strong style={{ display: "block", color: item.active ? "var(--cherry-warm-brown)" : "var(--cherry-warm-mid)", fontSize: "0.8rem", marginBottom: "0.28rem" }}>{item.title}</strong>
+                    <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.58, fontWeight: 800 }}>{item.body}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>

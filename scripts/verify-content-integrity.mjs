@@ -332,6 +332,34 @@ function verifyConceptExplainerAgentContract() {
   expect(worksSource.includes('path: ["输入概念", "看诊断边界", "生成学习卡"]'), "Concept explainer work card path must describe the learner-facing agent flow.");
 }
 
+function verifyGeneExpressionLearnerContract() {
+  const geneSource = read("src/app/components/GeneExpressionTool.tsx");
+  const requiredGeneFeatures = [
+    { label: "process tracking panel", text: "过程追踪" },
+    { label: "process focus state", text: "processFocusCards" },
+    { label: "mRNA growth end card", text: "mRNA 生长端" },
+    { label: "ribosome reading card", text: "核糖体读带" },
+    { label: "polypeptide exit card", text: "多肽出口" },
+    { label: "3 prime growth-end explanation", text: "3' 生长端贴着 RNA 聚合酶出口" },
+    { label: "5 prime free-end explanation", text: "5' 自由端露出后" },
+    { label: "bead-chain explanation", text: "氨基酸小圆" },
+    { label: "accessible process focus", text: "当前过程焦点" },
+  ];
+  const retiredGenePatterns = [
+    { label: "teacher/classroom framing", pattern: /课堂|教师|老师|教案|授课|教学/ },
+    { label: "placeholder framing", pattern: /\bdemo\b|设计想法/ },
+    { label: "incorrect DNA polymerase label", pattern: /DNA 聚合酶/ },
+  ];
+
+  for (const item of requiredGeneFeatures) {
+    expect(geneSource.includes(item.text), `Gene expression learner contract is missing ${item.label}: ${item.text}`);
+  }
+
+  for (const item of retiredGenePatterns) {
+    expect(!item.pattern.test(geneSource), `Gene expression tool must avoid retired or incorrect copy: ${item.label}`);
+  }
+}
+
 function verifyPlantEvolutionLearnerContract() {
   const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
   const worksSource = read("src/app/components/Works.tsx");
@@ -612,6 +640,7 @@ verifyArticleCardsStayStructured();
 verifyWorkJsonLdLearningOutcomes();
 verifyResearchAgentWorkbenchContract();
 verifyConceptExplainerAgentContract();
+verifyGeneExpressionLearnerContract();
 verifyPlantEvolutionLearnerContract();
 verifyCrisprLearnerScenarios();
 verifyLearnerFacingArticleCopy();
