@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IconCherry, IconMenu, IconClose } from "./Icons";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 export function Nav() {
   const [open, setOpen] = useState(false);
   const [locationKey, setLocationKey] = useState(`${window.location.pathname}${window.location.hash}`);
+  const toggleRef = useRef<HTMLButtonElement | null>(null);
+  const firstMobileLinkRef = useRef<HTMLAnchorElement | null>(null);
 
   const links = [
     { label: "作品", href: "/#works" },
@@ -48,13 +50,17 @@ export function Nav() {
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const focusFrame = window.requestAnimationFrame(() => firstMobileLinkRef.current?.focus());
 
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      window.requestAnimationFrame(() => toggleRef.current?.focus());
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
+      window.cancelAnimationFrame(focusFrame);
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
@@ -162,6 +168,8 @@ export function Nav() {
 
         {/* Mobile toggle */}
         <button
+          ref={toggleRef}
+          type="button"
           className="nav-mobile-toggle"
           onClick={() => setOpen(!open)}
           style={{
@@ -187,11 +195,12 @@ export function Nav() {
       </div>
 
       {open && (
-        <div id="mobile-navigation" style={{ background: "var(--cherry-cream)", borderTop: "1.5px solid var(--border)", padding: "1rem 1.5rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-          {links.map((l) => {
+        <div id="mobile-navigation" aria-label="移动端导航菜单" style={{ background: "var(--cherry-cream)", borderTop: "1.5px solid var(--border)", padding: "1rem 1.5rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem", maxHeight: "calc(100vh - 62px)", overflowY: "auto" }}>
+          {links.map((l, index) => {
             const active = isActiveLink(l.href);
             return (
               <a
+                ref={index === 0 ? firstMobileLinkRef : undefined}
                 className="mobile-nav-link"
                 key={l.label}
                 href={l.href}
