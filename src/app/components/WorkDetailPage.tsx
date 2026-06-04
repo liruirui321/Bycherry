@@ -1267,48 +1267,79 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
   return (
     <section
       style={{
-        padding: compact ? "0.65rem 1.5rem 0.45rem" : "1.15rem 1.5rem 0.75rem",
+        padding: compact ? "0.48rem 1.5rem" : "1.15rem 1.5rem 0.75rem",
         background: "var(--background)",
         fontFamily: "'Nunito', sans-serif",
         borderBottom: "1px solid rgba(94,68,42,0.1)",
       }}
     >
       <div style={{ maxWidth: 1060, margin: "0 auto" }}>
-        <a
-          className="work-detail-back-link"
-          href="/#works"
-          onClick={(event) => {
-            if (!shouldUseClientNavigation(event)) return;
-            event.preventDefault();
-            navigateHome("#works");
-          }}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            color: "var(--cherry-forest)",
-            textDecoration: "none",
-            fontWeight: 900,
-            fontSize: compact ? "0.78rem" : "0.86rem",
-            marginBottom: compact ? "0.35rem" : "0.65rem",
-          }}
-        >
-          ← 回到作品集
-        </a>
+        {!compact ? (
+          <a
+            className="work-detail-back-link"
+            href="/#works"
+            onClick={(event) => {
+              if (!shouldUseClientNavigation(event)) return;
+              event.preventDefault();
+              navigateHome("#works");
+            }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              color: "var(--cherry-forest)",
+              textDecoration: "none",
+              fontWeight: 900,
+              fontSize: "0.86rem",
+              marginBottom: "0.65rem",
+            }}
+          >
+            ← 回到作品集
+          </a>
+        ) : null}
 
         <div
+          className="work-detail-hero-row"
           style={{
             display: "grid",
-            gridTemplateColumns: "auto minmax(0, 1fr)",
+            gridTemplateColumns: compact ? "auto auto minmax(0, 1fr)" : "auto minmax(0, 1fr)",
             alignItems: "center",
-            gap: "0.75rem",
+            gap: compact ? "0.58rem" : "0.75rem",
           }}
         >
+          {compact ? (
+            <a
+              className="work-detail-back-link"
+              href="/#works"
+              onClick={(event) => {
+                if (!shouldUseClientNavigation(event)) return;
+                event.preventDefault();
+                navigateHome("#works");
+              }}
+              aria-label="回到作品集"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 32,
+                height: 32,
+                color: "var(--cherry-forest)",
+                background: "var(--card)",
+                border: "1.5px solid var(--border)",
+                borderRadius: 999,
+                textDecoration: "none",
+                fontWeight: 900,
+                fontSize: "1rem",
+              }}
+            >
+              ←
+            </a>
+          ) : null}
           <div
             style={{
-              width: compact ? 38 : 50,
-              height: compact ? 38 : 50,
-              borderRadius: compact ? 12 : 16,
+              width: compact ? 34 : 50,
+              height: compact ? 34 : 50,
+              borderRadius: compact ? 11 : 16,
               background: work.color,
               border: `1.5px solid ${work.border}`,
               display: "grid",
@@ -1319,11 +1350,11 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
             <div style={{ transform: "scale(0.72)" }}>{work.icon}</div>
           </div>
           <div style={{ minWidth: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: "0.2rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: compact ? 8 : 10, flexWrap: "wrap", marginBottom: compact ? 0 : "0.2rem" }}>
               <h1
                 style={{
                   color: "var(--cherry-warm-brown)",
-                  fontSize: compact ? "clamp(1.05rem, 2.4vw, 1.35rem)" : "clamp(1.35rem, 3vw, 1.85rem)",
+                  fontSize: compact ? "clamp(1rem, 2.2vw, 1.22rem)" : "clamp(1.35rem, 3vw, 1.85rem)",
                   fontWeight: 900,
                   lineHeight: 1.18,
                   margin: 0,
@@ -1332,7 +1363,20 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
                 {work.title}
               </h1>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-                {work.tags.map((tag) => (
+                <span
+                  style={{
+                    background: work.color,
+                    color: "var(--cherry-forest)",
+                    border: `1px solid ${work.border}`,
+                    borderRadius: 999,
+                    padding: compact ? "0.11rem 0.48rem" : "0.16rem 0.55rem",
+                    fontSize: compact ? "0.66rem" : "0.7rem",
+                    fontWeight: 900,
+                  }}
+                >
+                  {work.category}
+                </span>
+                {work.tags.slice(0, compact ? 2 : work.tags.length).map((tag) => (
                   <span
                     key={tag}
                     style={{
@@ -1340,8 +1384,8 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
                       color: "var(--cherry-warm-mid)",
                       border: "1px solid rgba(94,68,42,0.1)",
                       borderRadius: 999,
-                      padding: "0.16rem 0.55rem",
-                      fontSize: "0.7rem",
+                      padding: compact ? "0.11rem 0.48rem" : "0.16rem 0.55rem",
+                      fontSize: compact ? "0.66rem" : "0.7rem",
                       fontWeight: 900,
                     }}
                   >
