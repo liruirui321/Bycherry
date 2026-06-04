@@ -235,6 +235,7 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(staticIndexSource.includes("完成标准："), "Static index fallback must expose concrete completion standards.");
   expect(heroSource.includes("{work.task}"), "Homepage hero work cards must expose immediate learner tasks.");
   expect(heroSource.includes("{work.starter}"), "Homepage hero work cards must expose first concrete starter actions.");
+  expect(heroSource.includes("{work.success}"), "Homepage hero work cards must expose concrete completion standards.");
   expect(worksSource.includes("先做这个"), "Homepage work cards must expose a first concrete starter action.");
   expect(worksSource.includes("{work.success}"), "Homepage work cards must expose each work completion standard.");
   expect(workDetailSource.includes("{work.starter}"), "Work detail quick start must expose each work starter action.");

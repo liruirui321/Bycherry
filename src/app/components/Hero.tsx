@@ -144,7 +144,7 @@ export function Hero() {
                     color: "var(--cherry-warm-brown)",
                     textDecoration: "none",
                     textAlign: "left",
-                    minHeight: 184,
+                    minHeight: 216,
                     display: "grid",
                     gridTemplateRows: "auto auto auto 1fr auto",
                     gap: "0.34rem",
@@ -173,6 +173,8 @@ export function Hero() {
                     <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.66rem", lineHeight: 1.35, fontWeight: 800, overflowWrap: "anywhere" }}>{work.task}</span>
                     <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.6rem", fontWeight: 900, marginTop: "0.3rem", marginBottom: "0.1rem" }}>先做这个</span>
                     <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.64rem", lineHeight: 1.32, fontWeight: 800, overflowWrap: "anywhere" }}>{work.starter}</span>
+                    <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.6rem", fontWeight: 900, marginTop: "0.3rem", marginBottom: "0.1rem" }}>完成标准</span>
+                    <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.62rem", lineHeight: 1.3, fontWeight: 800, overflowWrap: "anywhere" }}>{work.success}</span>
                   </div>
                   <div role="list" aria-label={`${work.title}学习路径`} style={{ display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center", paddingRight: 76, position: "relative", zIndex: 1 }}>
                     {work.path.map((step, index) => (
