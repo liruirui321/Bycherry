@@ -2972,6 +2972,7 @@ function CrisprContent() {
   const [activeScenarioIndex, setActiveScenarioIndex] = useState<number | null>(0);
   const [copiedDecisionCard, setCopiedDecisionCard] = useState(false);
   const [copiedReport, setCopiedReport] = useState(false);
+  const [copiedRiskAudit, setCopiedRiskAudit] = useState(false);
   const [reportStatus, setReportStatus] = useState("");
   const [quizIndex, setQuizIndex] = useState(0);
   const [quizChoice, setQuizChoice] = useState<string | null>(null);
@@ -3149,6 +3150,30 @@ function CrisprContent() {
     "结论必须同时说明 PAM、guide 匹配、剪切位点和修复边界。",
     "真实研究前仍需脱靶搜索、递送条件、细胞类型和实验验证。",
   ];
+  const riskAuditItems = [
+    {
+      label: "PAM 与邻近序列",
+      status: pamSequence === "AGG" ? "入口成立" : "入口待核查",
+      detail: `当前 PAM 为 ${pamSequence}，只说明 Cas9 有进入邻近序列检查的条件，不等于一定完成编辑。`,
+    },
+    {
+      label: "guide 错配与脱靶",
+      status: computedMismatches.length === 0 ? "本段无错配" : `${computedMismatches.length} 个错配`,
+      detail: computedMismatches.length === 0
+        ? "当前目标片段内互补关系清楚，但真实判断仍需要全基因组相似位点搜索。"
+        : `错配位置：${computedMismatches.map((index) => index + 1).join("、")}。错配会降低目标位点可信度，也提醒你检查相似序列脱靶风险。`,
+    },
+    {
+      label: "剪切可信度",
+      status: activeGuide.score >= 60 ? "可进入剪切讨论" : "不进入剪切讨论",
+      detail: activeGuide.score >= 60 ? `可讨论 PAM 上游 ${cutDistanceFromPam} nt 附近剪切，但仍要把评分 ${activeGuide.score}% 写进结论。` : "匹配不足时不应继续解释修复产物，应先更换 guide。",
+    },
+    {
+      label: "修复不确定性",
+      status: effectiveRepair.title,
+      detail: "插入/删除、模板替换和未编辑都是判读结果，不是承诺；真实结果需要测序或其他实验验证。",
+    },
+  ];
   const decisionCardOutput = `【CRISPR 编辑决策卡】
 练习场景：${activeScenario ? activeScenario.title : "自定义判读"}
 目标：${activeScenario ? activeScenario.goal : "自行组合 guide、流程步骤和修复结果，完成一次编辑判读。"}
@@ -3161,6 +3186,24 @@ ${decisionRows.map((item, index) => `${index + 1}. ${item.label}：${item.value}
 
 Go / No-Go
 ${goNoGoCriteria.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
+  const riskAuditOutput = `【CRISPR 风险核查记录】
+练习场景：${activeScenario ? activeScenario.title : "自定义判读"}
+当前 guide：${activeGuide.name}
+总判定：${guideDecision.level}
+
+一、风险核查
+${riskAuditItems.map((item, index) => `${index + 1}. ${item.label}：${item.status}
+${item.detail}`).join("\n\n")}
+
+二、我需要保留的边界
+${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+三、下一步
+${guideDecision.nextAction}
+
+四、我的判读句
+我会把这次编辑写成：
+我不能直接推出的是：`;
   const crisprReport = `【CRISPR 模拟报告】
 练习场景：${activeScenario ? activeScenario.title : "自定义判读"}
 学习目标：${activeScenario ? activeScenario.goal : "自行组合 guide、流程步骤和修复结果，完成一次编辑判读。"}
@@ -3197,18 +3240,22 @@ ${effectiveRepair.title}
 ${decisionRows.map((item, index) => `${index + 1}. ${item.label}：${item.value}｜${item.detail}`).join("\n")}
 ${goNoGoCriteria.map((item, index) => `Go/No-Go ${index + 1}：${item}`).join("\n")}
 
-6. 判读顺序
+6. 风险核查
+${riskAuditItems.map((item, index) => `${index + 1}. ${item.label}：${item.status}｜${item.detail}`).join("\n")}
+
+7. 判读顺序
 ${interpretationSteps.map((item, index) => `${index + 1}. ${item.title}：${item.body}`).join("\n")}
 
-7. 质控检查
+8. 质控检查
 ${qualityChecks.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-8. 边界说明
+9. 边界说明
 ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
 
   function clearCrisprCopyStatus() {
     setCopiedDecisionCard(false);
     setCopiedReport(false);
+    setCopiedRiskAudit(false);
     setReportStatus("");
   }
 
@@ -3256,6 +3303,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
     if (copiedToClipboard) {
       setCopiedReport(true);
       setCopiedDecisionCard(false);
+      setCopiedRiskAudit(false);
       setReportStatus("模拟报告已复制到剪贴板。");
       window.setTimeout(() => setCopiedReport(false), 1400);
       return;
@@ -3270,12 +3318,28 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
     if (copiedToClipboard) {
       setCopiedDecisionCard(true);
       setCopiedReport(false);
+      setCopiedRiskAudit(false);
       setReportStatus("编辑决策卡已复制到剪贴板。");
       window.setTimeout(() => setCopiedDecisionCard(false), 1400);
       return;
     }
 
     setCopiedDecisionCard(false);
+    setReportStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyRiskAudit() {
+    const copiedToClipboard = await copyText(riskAuditOutput);
+    if (copiedToClipboard) {
+      setCopiedRiskAudit(true);
+      setCopiedDecisionCard(false);
+      setCopiedReport(false);
+      setReportStatus("风险核查记录已复制到剪贴板。");
+      window.setTimeout(() => setCopiedRiskAudit(false), 1400);
+      return;
+    }
+
+    setCopiedRiskAudit(false);
     setReportStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -3521,6 +3585,31 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
             <div key={item} style={{ display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.5rem", alignItems: "start", color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, fontWeight: 800 }}>
               <span style={{ width: 22, height: 22, borderRadius: "50%", background: index === 0 ? guideDecision.color : "var(--cherry-warm-brown)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>{index + 1}</span>
               <span>{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.9rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>风险核查记录</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>
+              把 PAM、错配、剪切和修复边界逐项拆开，避免把“能切”直接写成“编辑可靠”。
+            </div>
+          </div>
+          <button type="button" onClick={copyRiskAudit} aria-describedby="crispr-report-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.46rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
+            {copiedRiskAudit ? "已复制" : "复制风险核查"}
+          </button>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.62rem" }}>
+          {riskAuditItems.map((item, index) => (
+            <div key={item.label} style={{ background: index === 1 ? "var(--cherry-peach-light)" : "var(--muted)", border: index === 1 ? "1.5px solid rgba(214,91,74,0.26)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.72rem", display: "grid", gap: "0.42rem", minHeight: 132 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.55rem", flexWrap: "wrap" }}>
+                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{item.label}</strong>
+                <span style={{ color: index === 1 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.7rem", fontWeight: 900 }}>{item.status}</span>
+              </div>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.58, fontWeight: 800 }}>{item.detail}</span>
             </div>
           ))}
         </div>

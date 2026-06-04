@@ -517,6 +517,13 @@ function verifyCrisprLearnerScenarios() {
     { label: "copy decision card handler", text: "copyDecisionCard" },
     { label: "visible decision card", text: "编辑决策卡" },
     { label: "copy decision card button", text: "复制决策卡" },
+    { label: "risk audit items", text: "riskAuditItems" },
+    { label: "risk audit output", text: "riskAuditOutput" },
+    { label: "copy risk audit handler", text: "copyRiskAudit" },
+    { label: "visible risk audit card", text: "风险核查记录" },
+    { label: "copy risk audit button", text: "复制风险核查" },
+    { label: "off-target audit copy", text: "guide 错配与脱靶" },
+    { label: "risk audit report section", text: "6. 风险核查" },
   ];
 
   for (const item of requiredCrisprFeatures) {
@@ -524,7 +531,9 @@ function verifyCrisprLearnerScenarios() {
   }
 
   expect(Array.from(crisprSource.matchAll(/\bgoal:\s*"/g)).length >= 3, "CRISPR simulator should expose at least three learner scenario goals.");
-  expect(worksSource.includes('outputs: ["guide 判定", "编辑结果", "模拟报告"]'), "CRISPR work card outputs must stay aligned with simulator report.");
+  expect(worksSource.includes("查看匹配评分、编辑判定、风险核查和模拟报告。"), "CRISPR work card must describe risk audit output.");
+  expect(worksSource.includes('outputs: ["guide 判定", "风险核查", "模拟报告"]'), "CRISPR work card outputs must stay aligned with simulator report.");
+  expect(worksSource.includes('path: ["找 PAM", "判 guide", "核查风险"]'), "CRISPR work card path must describe a learner action flow.");
 }
 
 function verifyLearnerFacingArticleCopy() {
