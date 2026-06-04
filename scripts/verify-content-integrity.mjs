@@ -300,6 +300,7 @@ function verifyResearchAgentWorkbenchContract() {
 function verifyConceptExplainerAgentContract() {
   const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
   const worksSource = read("src/app/components/Works.tsx");
+  const conceptSkillSource = read("public/skills/concept-explainer/SKILL.md");
   const conceptMatch = workDetailSource.match(/function ConceptExplainerContent\(\) \{([\s\S]*?)\nfunction CrisprContent\(\)/);
 
   expect(Boolean(conceptMatch), "WorkDetailPage must include ConceptExplainerContent before CrisprContent.");
@@ -323,6 +324,9 @@ function verifyConceptExplainerAgentContract() {
     { label: "visual explanation output", text: "可视化解释" },
     { label: "visual selection card", text: "可视化选择" },
     { label: "completion standard card", text: "合格标准" },
+    { label: "public skill document link", text: "/skills/concept-explainer/SKILL.md" },
+    { label: "full skill copy button", text: "复制完整 Skill" },
+    { label: "skill markdown frontmatter", text: "name: concept-explainer" },
   ];
 
   const retiredConceptPatterns = [
@@ -345,6 +349,22 @@ function verifyConceptExplainerAgentContract() {
   expect(worksSource.includes("输入任意概念或选择样例"), "Concept explainer work card must advertise arbitrary concept input.");
   expect(worksSource.includes('outputs: ["学习卡", "可视化流程", "即时小测"]'), "Concept explainer work card outputs must match the learner-facing agent output.");
   expect(worksSource.includes('path: ["输入概念", "看诊断边界", "生成学习卡"]'), "Concept explainer work card path must describe the learner-facing agent flow.");
+
+  for (const text of [
+    "name: concept-explainer",
+    "description: Use when a learner wants to understand any concept",
+    "## Role",
+    "## Input",
+    "## Workflow",
+    "## Output Format",
+    "## Quality Rules",
+    "Do not only give a definition",
+    "Do not fabricate facts",
+    "Practice situation",
+    "Evidence boundary",
+  ]) {
+    expect(conceptSkillSource.includes(text), `Public concept explainer SKILL.md is missing required content: ${text}`);
+  }
 }
 
 function verifyGeneExpressionLearnerContract() {

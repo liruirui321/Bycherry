@@ -1996,7 +1996,7 @@ ${active.compare}
 十、常见误区
 ${active.pitfall}
 
-十一、落地示例
+十一、练习情境
 ${active.workedExample.title}
 情境：${active.workedExample.situation}
 引导问题：${active.workedExample.guideQuestion}
@@ -2016,41 +2016,63 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 选项：${active.quiz.options.join(" / ")}
 答案：${active.quiz.answer}
 解释：${active.quiz.explain}`;
-  const conceptSkillPrompt = `你是一个陪我学习的“概念解释 Agent”。请帮助我学习一个概念，不要只给定义，也不要替我跳过判断过程。
+  const conceptSkillPrompt = `---
+name: concept-explainer
+description: Use when a learner wants to understand any concept through diagnosis, analogy, mechanism steps, visual structure, transfer practice, and a quick check without skipping the reasoning process.
+---
 
-【我要学习的概念】
-${concept}
+# Concept Explainer
 
-【学习阶段】
-${audience}
+## Role
 
-【学习目标】
-${lessonGoal}
+You are a concept explainer for an adult learner. You are here 陪我学习 one concept at a time. Do not only give a definition, 不要替我跳过判断过程.
 
-【固定流程】
+## Current Run Input
+
+- Concept: ${concept}
+- Learning stage: ${audience}
+- Learning goal: ${lessonGoal}
+- Source boundary: unknown until the learner provides textbook, notes, paper, article, or another source.
+
+## Input
+
+Ask for or infer these fields:
+
+- Concept: the exact concept to learn.
+- Learning stage: the learner's current level or context.
+- Learning goal: what the learner wants to be able to explain, judge, or apply.
+- Source boundary: textbook, notes, paper, article, or unknown.
+
+If the concept is too broad, narrow it to one chapter, phenomenon, problem type, or use case before explaining.
+
+## Workflow
+
 ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-【输出格式】
-1. 先修知识：列出 3 个学习前需要确认的基础点。
-2. 诊断问题：用 1 个问题检查我是否真的理解。
-3. 类比：给一个帮助进入的类比，并说明类比边界。
-4. 分层解释：入门版 / 基础版 / 进阶版各 1 段。
-5. 可视化解释：选择流程图、对照表、三栏概念图或因果链，并写出图中节点。
-6. 机制步骤：最多 4 步，每步一句话。
-7. 关键词：列出 4-6 个术语。
-8. 辨析：说明它容易和哪个概念混淆。
-9. 常见误区：指出 1 个最容易错的理解。
-10. 落地示例：给情境材料、引导问题、我的学习产出。
-11. 迁移任务：让我把概念用到一个新例子。
-12. 即时小测：1 道选择题，给答案和解释。
-13. 证据边界：哪些内容需要查教材、论文或学习资料确认。
+## Output Format
 
-【质量要求】
-- 直接对我说话，用“你可以……”表达。
-- 不编造具体事实、数据、物种、疾病或实验结论。
-- 如果概念太宽，先帮我缩小学习范围。
-- 如果资料不足，明确标为“待核查”，不要强行下结论。
-- 保持结构稳定，方便我复制成学习卡。`;
+1. Prerequisites: 3 points the learner should confirm first.
+2. Diagnostic question: 1 question that checks real understanding.
+3. Analogy: 1 analogy plus its limitation.
+4. Layered explanation: beginner, basic, and advanced versions.
+5. Visual explanation: name the chosen structure and list its nodes.
+6. Mechanism steps: at most 4 steps, one sentence each.
+7. Key terms: 4-6 terms.
+8. Distinction: one concept it is often confused with.
+9. Common pitfall: one likely wrong understanding.
+10. Practice situation: context, guide question, and expected learner output.
+11. Transfer task: a new example where the learner must apply the concept.
+12. Quick check: one multiple-choice question with answer and explanation.
+13. Evidence boundary: what needs to be checked in source material.
+
+## Quality Rules
+
+- Speak directly to the learner with "you".
+- Keep the structure stable so the result can become a study card.
+- Mark uncertain or source-dependent content as "to verify".
+- 不编造具体事实、数据、物种、疾病、公式或研究结论。
+- Separate definition, example, mechanism, evidence, and boundary.
+- Make the final task observable: the learner should know what to write, draw, compare, or check.`;
 
   function chooseConcept(name: string) {
     setConcept(name);
@@ -2184,12 +2206,17 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>概念解释 skill 协议</div>
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.22rem", fontWeight: 800 }}>
-              这套协议用于保持输出稳定：先诊断，再类比，再机制，再练习，最后补小测和证据边界。
+              这套协议已落成公开 SKILL.md：先诊断，再类比，再机制，再练习，最后补小测和证据边界。
             </div>
           </div>
-          <button type="button" onClick={copyConceptSkillPrompt} aria-describedby="concept-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-            {copiedSkill ? "已复制" : "复制 skill 指令"}
-          </button>
+          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", alignItems: "center" }}>
+            <a href="/skills/concept-explainer/SKILL.md" className="work-detail-link" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", textDecoration: "none" }}>
+              查看 SKILL.md
+            </a>
+            <button type="button" onClick={copyConceptSkillPrompt} aria-describedby="concept-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+              {copiedSkill ? "已复制" : "复制完整 Skill"}
+            </button>
+          </div>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.55rem" }}>
           {conceptSkillSteps.map((item, index) => (
@@ -2337,7 +2364,7 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
       <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.85rem" }}>
           <div>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>落地示例</div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>练习情境</div>
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.2rem", fontWeight: 800 }}>{active.workedExample.title}</div>
           </div>
           <span style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.24rem 0.62rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
