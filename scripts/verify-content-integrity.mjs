@@ -77,6 +77,27 @@ function verifyArticleBlocks({ relativePath, type, summaryField, readingTimeFiel
   }
 }
 
+function verifyWorkBlocks() {
+  const relativePath = "src/app/components/Works.tsx";
+  const arraySource = extractExportedArray(read(relativePath), relativePath);
+  const blocks = extractBlocks(arraySource);
+
+  expect(blocks.length > 0, `${relativePath} must include at least one theme work item.`);
+
+  for (const [index, block] of blocks.entries()) {
+    const slug = getField(block, "slug") ?? `item ${index + 1}`;
+    const label = `${relativePath} ${slug}`;
+
+    for (const fieldName of ["id", "slug", "category", "title", "desc", "href", "updated", "tags", "outputs", "path", "action"]) {
+      expect(hasField(block, fieldName), `${label} is missing ${fieldName}.`);
+    }
+
+    expect(countStringItemsInArray(block, "tags") >= 3, `${label} needs at least 3 tags for scanning and filtering context.`);
+    expect(countStringItemsInArray(block, "outputs") >= 3, `${label} needs at least 3 visible outputs.`);
+    expect(countStringItemsInArray(block, "path") === 3, `${label} needs exactly 3 learning path steps for homepage and work card entry clarity.`);
+  }
+}
+
 function verifyVisibleThemeWorkCopy() {
   const visibleShellSources = [
     "src/app/App.tsx",
@@ -238,6 +259,7 @@ verifyArticleBlocks({
   labelField: "label",
 });
 
+verifyWorkBlocks();
 verifyVisibleThemeWorkCopy();
 verifyNoLowQualityVisibleContent();
 verifyWorkCardActions();
