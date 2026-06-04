@@ -1197,6 +1197,7 @@ function PlantEvolutionContent() {
   const [activeChapterIndex, setActiveChapterIndex] = useState(0);
   const [activePlantLens, setActivePlantLens] = useState("story");
   const [activePlantTaskIndex, setActivePlantTaskIndex] = useState(0);
+  const [activePlantQuestIndex, setActivePlantQuestIndex] = useState(0);
   const [copiedStudyCard, setCopiedStudyCard] = useState(false);
   const [studyCardStatus, setStudyCardStatus] = useState("");
   const chapters = [
@@ -1360,6 +1361,30 @@ function PlantEvolutionContent() {
     },
   ];
   const activeExtensionTask = extensionTasks[activePlantTaskIndex] ?? extensionTasks[0];
+  const stageQuestCards = [
+    {
+      title: "结构定位",
+      badge: "看图",
+      task: `在竖向图鉴中找到“${plantStageLabels[activeChapterIndex]}”，圈出它和“${activeChapter.innovation}”有关的结构。`,
+      output: "产出：画 1 个结构箭头，并写出它解决的生存限制。",
+      check: `检查：这句话必须同时包含“${activeChapter.challenge}”和“${activeChapter.innovation}”。`,
+    },
+    {
+      title: "证据判断",
+      badge: "读证据",
+      task: `回到证据页签，判断这一阶段主要依赖哪类证据：化石、基因组、系统发育、分子钟或组合证据。`,
+      output: `产出：写下“我相信到哪一步”，并保留证据状态：${activeChapter.certainty}。`,
+      check: "检查：不要把可靠化石记录、真实起源时间和分子钟推测混成同一句结论。",
+    },
+    {
+      title: "迁移表达",
+      badge: "写解释",
+      task: activeChapter.learnerTask,
+      output: "产出：用 3 句话解释问题、创新、证据边界。",
+      check: `检查：最后一句要回答自测问题：${activeChapter.prompt}`,
+    },
+  ];
+  const activeStageQuest = stageQuestCards[activePlantQuestIndex] ?? stageQuestCards[0];
   const studyCardOutput = `【植物演化学习卡】
 阶段：${activeChapter.title}
 时间：${activeChapter.time}
@@ -1382,7 +1407,13 @@ ${activeChapter.prompt}
 作答提示：${activeChapter.answerHint}
 延伸练习：${activeChapter.learnerTask}
 
-6. 参考文献
+6. 当前小关卡
+${activeStageQuest.title}
+${activeStageQuest.task}
+${activeStageQuest.output}
+${activeStageQuest.check}
+
+7. 参考文献
 ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).join("\n")}`;
 
   async function copyStudyCard() {
@@ -1402,6 +1433,7 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
     setActiveChapterIndex(index);
     setActivePlantLens("story");
     setActivePlantTaskIndex(0);
+    setActivePlantQuestIndex(0);
     setCopiedStudyCard(false);
     setStudyCardStatus("");
   }
@@ -1713,6 +1745,31 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
                 </div>
                 <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.78rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
                   <strong style={{ color: "var(--cherry-warm-brown)" }}>{activeExtensionTask.title}：</strong>{activeExtensionTask.body}
+                </div>
+                <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 14, padding: "0.72rem", display: "grid", gap: "0.58rem" }}>
+                  <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>阶段小关卡</strong>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(92px, 1fr))", gap: "0.42rem" }}>
+                    {stageQuestCards.map((quest, index) => {
+                      const active = activePlantQuestIndex === index;
+                      return (
+                        <button key={quest.title} type="button" aria-pressed={active} onClick={() => setActivePlantQuestIndex(index)} style={{ background: active ? "var(--cherry-forest)" : "rgba(250,247,241,0.74)", color: active ? "#FAF7F1" : "var(--cherry-warm-brown)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 14, padding: "0.52rem 0.48rem", cursor: "pointer", display: "grid", gap: "0.16rem", justifyItems: "start" }}>
+                          <span style={{ fontSize: "0.64rem", fontWeight: 900 }}>{quest.badge}</span>
+                          <span style={{ fontSize: "0.74rem", fontWeight: 900 }}>{quest.title}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div style={{ background: "rgba(250,247,241,0.78)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.68rem", display: "grid", gap: "0.42rem" }}>
+                    <strong style={{ color: "var(--cherry-forest)", fontSize: "0.8rem" }}>{activeStageQuest.title}</strong>
+                    {[activeStageQuest.task, activeStageQuest.output, activeStageQuest.check].map((line, index) => (
+                      <div key={line} style={{ display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.42rem", color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.78rem", fontWeight: 800 }}>
+                        <span aria-hidden="true" style={{ width: 18, height: 18, borderRadius: "50%", background: index === 0 ? "var(--cherry-forest)" : index === 1 ? "var(--cherry-yellow)" : "var(--cherry-red)", color: index === 1 ? "var(--cherry-warm-brown)" : "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>
+                          {index + 1}
+                        </span>
+                        <span>{line}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             ) : null}

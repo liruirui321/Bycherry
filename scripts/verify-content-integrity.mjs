@@ -422,6 +422,12 @@ function verifyPlantEvolutionLearnerContract() {
     { label: "self-check question label", text: "自测问题" },
     { label: "extension practice label", text: "延伸练习" },
     { label: "copyable learner study card", text: "植物演化学习卡" },
+    { label: "stage quest cards", text: "stageQuestCards" },
+    { label: "stage quest heading", text: "阶段小关卡" },
+    { label: "structure quest", text: "结构定位" },
+    { label: "evidence quest", text: "证据判断" },
+    { label: "transfer quest", text: "迁移表达" },
+    { label: "active quest in study card", text: "6. 当前小关卡" },
   ];
 
   const retiredPlantPatterns = [
