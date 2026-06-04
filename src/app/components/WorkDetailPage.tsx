@@ -320,35 +320,99 @@ ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
   const marketNeeds = [
     {
       title: "科研新人",
-      body: "读完论文却不知道结论从哪来，需要把研究问题、方法、结果和局限拆成可核查条目。",
+      body: "读完论文却不知道结论从哪来，需要把研究问题、方法、结果和局限拆成可核查条目，而不是得到一段看似完整的总结。",
     },
     {
       title: "实验与投稿",
-      body: "实验设计、讨论段落和审稿回复需要先找风险，再决定哪些内容能写、哪些必须回查。",
+      body: "实验设计、讨论段落和审稿回复需要先找风险，再决定哪些内容能写、哪些必须回查，避免把 AI 当成自动定稿工具。",
     },
     {
       title: "科研转译",
-      body: "教师和创作者需要把真实材料改写成课堂问题、图表讲解和可复用的知识卡。",
+      body: "教师和创作者需要把真实材料改写成课堂问题、图表讲解和可复用的知识卡，保留证据边界和不确定性。",
     },
   ];
   const productModules = [
-    { title: "任务路由", body: "识别当前材料适合文献精读、实验设计检查、图表解读还是审稿回应。" },
-    { title: "证据表", body: "把原文证据、合理推断、缺失信息和风险提醒拆开，避免一段话糊在一起。" },
-    { title: "报告框架", body: "生成可复制的导师汇报、论文修改建议、图表解读报告或审稿回复结构。" },
-    { title: "API 执行层", body: "后续接模型和文献数据源，把任务包送入 API，并要求返回结构化 JSON 字段。" },
+    { title: "任务路由", body: "识别当前材料更适合文献精读、实验设计检查、图表解读、论文逻辑检查、审稿回应还是术语一致性检查。" },
+    { title: "证据表", body: "把原文证据、合理推断、缺失信息和风险提醒拆开，要求每个结论都能回到材料行。" },
+    { title: "质控闸门", body: "在生成报告前先检查样本、分组、结果证据、统计和人工复核问题，材料不足时不输出强结论。" },
+    { title: "报告框架", body: "生成可复制的导师汇报、论文修改建议、图表解读报告、审稿回复结构或术语统一表。" },
+    { title: "API 契约", body: "定义请求 JSON、返回字段和验收条件，后续接模型时仍保持可追踪、可复核、可拒绝。" },
+  ];
+  const marketSignals = [
+    {
+      title: "文献综述工具正在做流程化",
+      body: "检索、筛选、数据抽取和报告生成是主流科研 AI 工具的核心方向，所以这个工作台优先把任务拆成可执行流程。",
+    },
+    {
+      title: "证据表比长总结更可靠",
+      body: "科研用户真正需要的是材料来源、证据字段、缺失信息和引用边界，而不是一段无法回查的流畅总结。",
+    },
+    {
+      title: "引用和参考文献需要单独核查",
+      body: "AI 写作容易出现引用错配或凭空引用，因此 API 版要保留 citation_check 和 reviewer_questions，而不是直接输出终稿。",
+    },
+    {
+      title: "多步 Agent 适合做研究助理，不适合替代作者",
+      body: "任务规划、阅读、分析和报告可以自动化一部分，但研究判断、实验伦理、统计解释和最终署名仍必须由人负责。",
+    },
+  ];
+  const useCaseBlueprints = [
+    {
+      title: "读论文",
+      input: "粘贴摘要、方法和结果图注",
+      agent: "抽取研究问题、核心证据、作者结论和原文未说明的内容",
+      output: "一张可复核的精读卡和待核查清单",
+    },
+    {
+      title: "改实验设计",
+      input: "粘贴分组、样本量、变量和统计方法",
+      agent: "检查对照、重复数、变量混杂和统计方法匹配",
+      output: "必须修改、建议修改、可以保留、导师确认四栏",
+    },
+    {
+      title: "讲图表",
+      input: "粘贴图号、图注、坐标轴、分组和显著性标记",
+      agent: "区分观察事实、合理推断和不能支持的结论",
+      output: "可用于汇报或课堂讲解的图表解读稿",
+    },
+    {
+      title: "回审稿",
+      input: "粘贴审稿意见、原文位置和已完成修改",
+      agent: "把意见拆成补实验、补分析、改写解释和礼貌澄清",
+      output: "逐条回应结构、修改位置和限制说明",
+    },
+  ];
+  const roadmapItems = [
+    {
+      title: "V1 本地编排",
+      body: "当前已落地：任务选择、材料模板、模式切换、路由建议、本地预览、任务包复制和 API JSON 契约。",
+    },
+    {
+      title: "V2 模型执行",
+      body: "接入模型 API 后，把任务包发送给模型，要求返回 evidence_items、missing_fields、risk_flags 和 final_report。",
+    },
+    {
+      title: "V3 文献与引用核查",
+      body: "接入文献检索、DOI/引用检查和参考文献核查，把模型生成的引用与真实文献记录分开验证。",
+    },
+  ];
+  const productReferences = [
+    { title: "Elicit systematic review / API", href: "https://docs.elicit.com/" },
+    { title: "Consensus search best practices", href: "https://help.consensus.app/en/articles/9922660-how-to-search-best-practices" },
+    { title: "scite API reference check", href: "https://api.scite.ai/docs" },
   ];
   const agentCards = [
     {
       title: "当前版本",
-      body: "本地生成模型指令、任务包、证据边界和验收清单；材料只在浏览器里编辑，不上传，也不调用 API。",
+      body: "能直接使用：本地生成模型指令、任务包、证据边界、验收清单和 API 契约；材料只在浏览器里编辑，不上传，也不调用 API。",
     },
     {
       title: "API 版目标",
-      body: "接入模型后，点击运行即可返回结构化分析：证据、推断、风险、待核查点和汇报摘要。",
+      body: "接入模型后，点击运行返回结构化分析：证据、推断、风险、待核查点和汇报摘要，并保留人工复核问题。",
     },
     {
-      title: "适合任务",
-      body: "文献精读、实验设计检查、图表判读、讨论段落修改、审稿回复和术语一致性检查。",
+      title: "不做什么",
+      body: "不替你判断论文一定正确，不编造引用，不代替统计分析、导师判断、伦理审批或最终署名责任。",
     },
   ];
   const workflowSteps = [
@@ -524,6 +588,21 @@ ${localPreviewOutput}`;
             </div>
           ))}
         </div>
+        <div style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(93,140,101,0.2)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.65rem" }}>
+          <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>能直接完成什么</strong>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.58rem" }}>
+            {useCaseBlueprints.map((item) => (
+              <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.65rem" }}>
+                <strong style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.78rem", marginBottom: "0.34rem" }}>{item.title}</strong>
+                <div style={{ display: "grid", gap: "0.32rem", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>
+                  <span><strong style={{ color: "var(--cherry-warm-brown)" }}>输入：</strong>{item.input}</span>
+                  <span><strong style={{ color: "var(--cherry-warm-brown)" }}>处理：</strong>{item.agent}</span>
+                  <span><strong style={{ color: "var(--cherry-warm-brown)" }}>产出：</strong>{item.output}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.75rem" }}>
           <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.55rem" }}>
             <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>市场需求</strong>
@@ -555,6 +634,40 @@ ${localPreviewOutput}`;
               <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{item.body}</span>
             </div>
           ))}
+        </div>
+        <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.62rem" }}>
+          <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>产品判断</strong>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.58rem" }}>
+            {marketSignals.map((item) => (
+              <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.65rem" }}>
+                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", marginBottom: "0.28rem" }}>{item.title}</strong>
+                <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{item.body}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.25fr) minmax(220px, 0.75fr)", gap: "0.75rem" }}>
+          <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.55rem" }}>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>迭代路线</strong>
+            <div style={{ display: "grid", gap: "0.48rem" }}>
+              {roadmapItems.map((item, index) => (
+                <div key={item.title} style={{ display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.48rem", alignItems: "start" }}>
+                  <span style={{ width: 20, height: 20, borderRadius: "50%", background: index === 0 ? "var(--cherry-forest)" : "var(--card)", color: index === 0 ? "#FAF7F1" : "var(--cherry-forest)", border: index === 0 ? "none" : "1px solid rgba(58,92,62,0.24)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800 }}>
+                    <strong style={{ color: "var(--cherry-warm-brown)" }}>{item.title}：</strong>{item.body}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.55rem", alignContent: "start" }}>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>参考工具</strong>
+            {productReferences.map((item) => (
+              <a key={item.href} href={item.href} target="_blank" rel="noreferrer" style={{ color: "var(--cherry-forest)", fontSize: "0.74rem", lineHeight: 1.45, fontWeight: 900, textDecoration: "none" }}>
+                {item.title} →
+              </a>
+            ))}
+          </div>
         </div>
       </div>
       <div className="prompt-builder-layout" style={{ display: "grid", gridTemplateColumns: "minmax(230px, 0.78fr) minmax(0, 1.3fr)", gap: "1rem", alignItems: "start" }}>
