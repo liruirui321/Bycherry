@@ -38,6 +38,11 @@ function extractStaticInternalLinks(filePath) {
     .map((href) => ({ href, filePath }));
 }
 
+function extractTargetBlankAnchors(filePath) {
+  const source = readFileSync(filePath, "utf8");
+  return Array.from(source.matchAll(/<a\b[\s\S]*?>/g), (match) => ({ tag: match[0], filePath }));
+}
+
 function extractStaticIds(relativePath) {
   return Array.from(readFileSync(resolve(root, relativePath), "utf8").matchAll(/\bid="([^"]+)"/g), (match) => match[1]);
 }
@@ -61,6 +66,10 @@ const internalLinks = [
   ...walkFiles(sourceRoot, [".tsx", ".ts"]).flatMap(extractStaticInternalLinks),
   ...walkFiles(publicRoot, [".html"]).flatMap(extractStaticInternalLinks),
 ];
+const targetBlankAnchors = [
+  ...walkFiles(sourceRoot, [".tsx", ".ts"]).flatMap(extractTargetBlankAnchors),
+  ...walkFiles(publicRoot, [".html"]).flatMap(extractTargetBlankAnchors),
+];
 
 const failures = [];
 
@@ -78,6 +87,18 @@ function splitHref(href) {
 
 function isPublicAssetPath(path) {
   return /\.[a-z0-9]+$/i.test(path);
+}
+
+function hasTargetBlank(tag) {
+  return /\btarget\s*=\s*"_blank"/.test(tag) || /\btarget\s*=\s*\{[^}]*"_blank"[^}]*\}/.test(tag);
+}
+
+function hasSafeExternalRel(tag) {
+  const literalRel = tag.match(/\brel\s*=\s*"([^"]+)"/)?.[1];
+  if (literalRel?.split(/\s+/).some((value) => value === "noreferrer" || value === "noopener")) return true;
+
+  const expressionRel = tag.match(/\brel\s*=\s*\{([^}]+)\}/)?.[1];
+  return Boolean(expressionRel && /["'](?:noreferrer|noopener)["']/.test(expressionRel));
 }
 
 for (const { href, filePath } of internalLinks) {
@@ -102,10 +123,20 @@ for (const { href, filePath } of internalLinks) {
   }
 }
 
+let checkedTargetBlankLinks = 0;
+for (const { tag, filePath } of targetBlankAnchors) {
+  if (!hasTargetBlank(tag)) continue;
+  checkedTargetBlankLinks += 1;
+
+  if (!hasSafeExternalRel(tag)) {
+    failures.push(`${sourceLabel(filePath)} opens a link in a new tab without rel="noreferrer" or rel="noopener".`);
+  }
+}
+
 if (failures.length) {
   console.error("Internal link verification failed.");
   console.error(failures.map((failure) => `  - ${failure}`).join("\n"));
   process.exit(1);
 }
 
-console.log(`Internal links verified: ${internalLinks.length} static internal links, ${publicRoutes.size} public routes, ${homeAnchors.size} home anchors.`);
+console.log(`Internal links verified: ${internalLinks.length} static internal links, ${publicRoutes.size} public routes, ${homeAnchors.size} home anchors, and ${checkedTargetBlankLinks} safe new-tab links.`);
