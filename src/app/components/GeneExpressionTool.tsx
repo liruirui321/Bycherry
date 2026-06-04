@@ -294,7 +294,19 @@ function peptideBeadPoint(exit: Point, index: number) {
   return points[index] ?? points[points.length - 1];
 }
 
-function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslate }: { model: { transcriptionOn: boolean; polBound: number; ribBound: number }; progress: number; retainedMrnaCount: number; canTranslate: boolean }) {
+function LiveExpressionProcess({
+  model,
+  progress,
+  retainedMrnaCount,
+  canTranslate,
+  prefersReducedMotion,
+}: {
+  model: { transcriptionOn: boolean; polBound: number; ribBound: number };
+  progress: number;
+  retainedMrnaCount: number;
+  canTranslate: boolean;
+  prefersReducedMotion: boolean;
+}) {
   const transcriptionProgress = model.transcriptionOn ? clamp01(progress / 0.78) : 0;
   const ribosomeCanRead = canTranslate && (model.transcriptionOn ? transcriptionProgress > 0.28 : retainedMrnaCount > 0);
   const polymerases = buildPolymeraseTracks(progress, model.polBound);
@@ -324,11 +336,17 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
             <circle cx={-22} cy={-7} r={9} fill="rgba(250,247,241,0.58)" />
             <circle cx={18} cy={9} r={7} fill="rgba(250,247,241,0.58)" />
             <rect x={-42} y={7} width={84} height={20} rx={9} fill="rgba(250,247,241,0.92)" stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} />
-            <path d="M-51 17 C-28 11 -14 24 0 17 S28 11 51 17" fill="none" stroke="var(--cherry-red)" strokeWidth={4.4} strokeLinecap="round" />
+            <path d="M-51 17 C-28 11 -14 24 0 17 S28 11 51 17" fill="none" stroke="var(--cherry-red)" strokeWidth={4.4} strokeLinecap="round" markerEnd="url(#mrnaArrow)" />
             <circle cx={-13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
             <circle cx={13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
             <path d="M10 -2 C21 2 27 10 35 17" fill="none" stroke="var(--cherry-warm-brown)" strokeWidth={3.2} strokeLinecap="round" opacity={0.28} />
             <path d="M17 7 C29 12 37 17 43 19" fill="none" stroke="var(--cherry-forest)" strokeWidth={5.2} strokeLinecap="round" opacity={0.28} />
+            <text x={-39} y={28} fill="var(--cherry-red)" fontSize={7} fontWeight={900}>
+              5'
+            </text>
+            <text x={34} y={28} fill="var(--cherry-red)" fontSize={7} fontWeight={900}>
+              3'
+            </text>
             <text x={-13} y={0} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={7} fontWeight={900}>
               P
             </text>
@@ -376,7 +394,7 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
               return (
                 <g key={`live-peptide-${ribosomeIndex}-${codon.amino}`} transform={`translate(${point.x} ${point.y})`}>
                   <circle r={10.5} fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4}>
-                    <animate attributeName="r" values="8;12;10.5" dur="0.7s" begin={`${aminoIndex * 0.08}s`} repeatCount="1" />
+                    {prefersReducedMotion ? null : <animate attributeName="r" values="8;12;10.5" dur="0.7s" begin={`${aminoIndex * 0.08}s`} repeatCount="1" />}
                   </circle>
                   <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={7} fontWeight={900}>
                     {codon.amino}
@@ -468,9 +486,16 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
               strokeLinecap="round"
               opacity={0.72}
             />
+            <g transform={`translate(${fiveEnd.x} ${fiveEnd.y})`} opacity={polymerase.progress > 0.12 ? 1 : 0}>
+              <circle r={8} fill="#FAF7F1" stroke="var(--cherry-red)" strokeWidth={2.4} />
+              <path d="M-15 -6 C-22 -10 -26 -4 -22 1" fill="none" stroke="var(--cherry-red)" strokeWidth={2.2} strokeLinecap="round" opacity={0.62} />
+              <text x={-12} y={24} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
+                5' 自由端
+              </text>
+            </g>
             {polymerase.progress > 0.16 ? (
-              <text x={fiveEnd.x - 8} y={fiveEnd.y + 24} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
-                5' 先露出
+              <text x={fiveEnd.x - 14} y={fiveEnd.y + 39} fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={800}>
+                核糖体从这里开始读
               </text>
             ) : null}
             {codons.map((codon, baseIndex) => {
@@ -487,9 +512,17 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
                 </g>
               );
             })}
-            <circle cx={growthEnd.x} cy={growthEnd.y} r={9} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={3} />
-            <text x={growthEnd.x + 13} y={growthEnd.y + 4} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
-              3' 端接在聚合酶出口
+            <g transform={`translate(${growthEnd.x} ${growthEnd.y})`}>
+              <circle r={13} fill="rgba(232,121,95,0.18)" />
+              <circle r={8.5} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={3}>
+                {prefersReducedMotion ? null : <animate attributeName="r" values="7;11;8.5" dur="0.9s" repeatCount="indefinite" />}
+              </circle>
+              <text x={14} y={4} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
+                3' 生长端
+              </text>
+            </g>
+            <text x={growthEnd.x + 14} y={growthEnd.y + 19} fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={800}>
+              贴着 RNA 聚合酶出口
             </text>
             <text x={growthEnd.x - 76} y={growthEnd.y + 31} fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={800}>
               原核模型：核糖体读取已露出的 5' 端
@@ -888,7 +921,7 @@ export function GeneExpressionTool() {
               )}
             </g>
 
-            <LiveExpressionProcess model={model} progress={cycleProgress} retainedMrnaCount={visibleMrnaCount} canTranslate={canTranslate} />
+            <LiveExpressionProcess model={model} progress={cycleProgress} retainedMrnaCount={visibleMrnaCount} canTranslate={canTranslate} prefersReducedMotion={prefersReducedMotion} />
 
             <rect x={zones.ribosome.x} y={zones.ribosome.y} width={zones.ribosome.w} height={zones.ribosome.h} rx={22} fill={model.ribBound > 0 ? "rgba(232,121,95,0.15)" : "rgba(250,247,241,0.38)"} stroke="var(--cherry-peach)" strokeWidth={2} strokeDasharray="7 7" />
             <text x={zones.ribosome.x + 22} y={zones.ribosome.y + 34} fill="var(--cherry-warm-brown)" fontSize={15} fontWeight={900}>
