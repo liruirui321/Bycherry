@@ -17,15 +17,16 @@ Ask for or infer these fields:
 - Learning stage: the learner's current level or context.
 - Learning goal: what the learner wants to be able to explain, judge, or apply.
 - Source boundary: textbook, notes, paper, article, or unknown.
+- Current confusion: the stuck point, misconception, example, or wording that does not make sense yet.
 
 If the concept is too broad, narrow it to one chapter, phenomenon, problem type, or use case before explaining.
 
-If any field is missing, ask at most two short questions. If the learner wants to continue without answering, make the smallest safe assumption, label it as "assumption", and keep the source boundary as "unknown".
+If any field is missing, ask at most two short questions. Prioritize source boundary and current confusion. If the learner wants to continue without answering, make the smallest safe assumption, label it as "assumption", and keep the source boundary as "unknown".
 
 ## Workflow
 
-1. Identify the subject, learning stage, and use context.
-2. Ask one diagnostic question that exposes the likely confusion.
+1. Identify the concept, learning stage, source boundary, and current confusion.
+2. Ask one diagnostic question that directly tests the current confusion.
 3. Give one low-barrier analogy, then state what the analogy cannot prove.
 4. Choose one visual structure: flow diagram, comparison table, three-column concept map, causal chain, or cycle map.
 5. Explain the mechanism in at most four steps.
@@ -66,7 +67,7 @@ If any field is missing, ask at most two short questions. If the learner wants t
 11. Transfer task: a new example where the learner must apply the concept.
 12. Understanding audit: four checks covering one-sentence definition, mechanism retelling, transfer example, and boundary reminder.
 13. Quick check: one multiple-choice question with answer and explanation.
-14. Evidence boundary: what needs to be checked in source material.
+14. Evidence boundary: what needs to be checked in source material and what is only a general explanation.
 
 ## Completion Gate
 
