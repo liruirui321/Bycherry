@@ -106,6 +106,11 @@ function PromptKitContent() {
   const materialText = material.trim();
   const materialLines = materialText.split("\n").map((line) => line.trim()).filter(Boolean);
   const apiOutputFields = ["task", "material_summary", "evidence_items", "inference_items", "missing_fields", "risk_flags", "reviewer_questions", "final_report"];
+  const evidenceCandidateLines = materialLines
+    .filter((line) => /摘要|方法|结果|figure|fig\.|图|分组|样本|对照|统计|显著|审稿|修改|讨论|术语|变量|结论|p\s*[<=>]|n\s*=/i.test(line))
+    .slice(0, 3);
+  const visibleEvidenceLines = (evidenceCandidateLines.length ? evidenceCandidateLines : materialLines.slice(0, 3)).filter(Boolean);
+  const evidenceSummary = visibleEvidenceLines.length ? visibleEvidenceLines.join(" / ") : "当前没有可引用的材料行。";
   const materialChecks = [
     {
       label: "材料量",
@@ -133,6 +138,53 @@ function PromptKitContent() {
     术语一致性检查: ["先列出核心术语、缩写和变量名。", "检查首次定义、图文一致性和同义词混用。", "给出建议统一写法。"],
   };
   const activeTaskActions = taskActions[activePrompt.title] ?? activePrompt.output;
+  const reportDrafts: Record<string, string[]> = {
+    文献精读: [
+      materialText ? "从题目、摘要和方法段落抽取研究问题；没有原文时只保留为待核查项。" : "等待论文题目、摘要或 DOI。",
+      `可作为证据候选：${evidenceSummary}`,
+      missingFields.length ? `当前局限主要来自 ${missingFields.join("、")} 不足。` : "局限性仍需从作者原文、方法限制和结果覆盖范围中抽取。",
+      "优先回查样本量、方法细节、统计标记和作者是否承认局限。",
+    ],
+    实验设计检查: [
+      /对照|control|分组/i.test(materialText) ? "已有对照或分组线索，下一步检查每组是否只改变一个核心变量。" : "需要先补充对照组、处理组和变量设置。",
+      /n\s*=|样本|重复|replicate/i.test(materialText) ? "已有样本或重复线索，下一步判断是否支持统计检验。" : "重复数和样本量缺失，不能判断统计可靠性。",
+      /统计|p\s*[<=>]|显著/i.test(materialText) ? "已有统计线索，需确认方法是否匹配数据类型。" : "统计方法缺失，建议列为导师确认项。",
+      "把会影响核心结论的风险放入必须修改，把表达和记录问题放入建议修改。",
+    ],
+    图表解读: [
+      /图|figure|fig\./i.test(materialText) ? "材料中已有图表线索，先读取图号、坐标轴、单位和分组。" : "需要补充图号、图注、坐标轴和单位。",
+      `观察事实只来自图注或结果描述：${evidenceSummary}`,
+      "因果关系、机制解释和外推结论先列为不能支持，除非材料明确给出实验设计证据。",
+      "下一步回看图注、方法、统计标记和原始分组定义。",
+    ],
+    论文逻辑检查: [
+      "先把讨论段落中的每个结论拆成一句话，并对应到结果摘要。",
+      `可先核查的材料行：${evidenceSummary}`,
+      "如果结论没有结果支持，改成更克制的推测或移入局限性。",
+      "重点检查术语一致、引用位置、结果与讨论边界。",
+    ],
+    审稿意见回应: [
+      /审稿|reviewer|意见/i.test(materialText) ? "已有审稿意见线索，可拆成实验、分析、改写、澄清四类任务。" : "需要粘贴审稿意见原文。",
+      "每条回应保留感谢、理解、修改内容、修改位置和限制说明。",
+      "不能补做的内容不要硬答，改为解释限制并说明已有证据能覆盖到哪里。",
+      "下一步补充原文位置、已完成修改和无法补做的原因。",
+    ],
+    术语一致性检查: [
+      "先列出术语、缩写、变量名和图表标签中的不同写法。",
+      `可扫描的材料行：${evidenceSummary}`,
+      "缩写首次出现、中文英文混用、变量名前后变化都标为风险。",
+      "输出统一写法前，需要用户确认目标期刊或团队约定。",
+    ],
+  };
+  const previewReportRows = activePrompt.output.map((label, index) => ({
+    label,
+    body: (reportDrafts[activePrompt.title] ?? [])[index] ?? "根据材料生成对应栏目，缺少证据时标注待补充。",
+  }));
+  const reviewerQuestions = [
+    missingFields.length ? `需要先补充 ${missingFields.join("、")} 吗？` : "这些材料行是否就是你希望 Agent 重点引用的证据？",
+    activePrompt.checks[0],
+    activeMode.outputs.includes("待确认问题") ? "哪些问题需要放到导师会议里确认？" : "哪些结论必须保持保守表述？",
+  ];
   const localPreviewOutput = `【本地 Agent 预览】
 任务：${activePrompt.title}
 工作模式：${activeMode.title}
@@ -148,7 +200,13 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 ${missingFields.length ? `需要补充：${missingFields.join("、")}。` : "材料具备进入模型分析的基本线索，仍需人工确认原文来源。"}
 
 四、API Agent 输出字段建议
-${apiOutputFields.join(", ")}`;
+${apiOutputFields.join(", ")}
+
+五、分析报告草稿
+${previewReportRows.map((item) => `${item.label}：${item.body}`).join("\n")}
+
+六、复核问题
+${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
   const marketNeeds = [
     {
       title: "科研新人",
@@ -504,6 +562,28 @@ ${localPreviewOutput}`;
                         <span key={field} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.16rem 0.44rem", color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>
                           {field}
                         </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.55rem" }}>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>分析报告草稿</strong>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.5rem" }}>
+                      {previewReportRows.map((item) => (
+                        <div key={item.label} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.58rem" }}>
+                          <strong style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.72rem", marginBottom: "0.24rem" }}>{item.label}</strong>
+                          <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.5, fontWeight: 800 }}>{item.body}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem" }}>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>人工复核问题</strong>
+                    <div style={{ display: "grid", gap: "0.34rem" }}>
+                      {reviewerQuestions.map((question, index) => (
+                        <div key={question} style={{ display: "grid", gridTemplateColumns: "20px minmax(0, 1fr)", gap: "0.42rem", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>
+                          <span style={{ color: "var(--cherry-forest)", fontWeight: 900 }}>{index + 1}</span>
+                          <span>{question}</span>
+                        </div>
                       ))}
                     </div>
                   </div>
