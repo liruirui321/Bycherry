@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { getContentHrefs } from "./content-routes.mjs";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const publicRoot = resolve(root, "public");
@@ -34,11 +35,6 @@ function readPngSize(relativePath) {
     width: bytes.readUInt32BE(16),
     height: bytes.readUInt32BE(20),
   };
-}
-
-function extractContentHrefs(relativePath) {
-  return Array.from(readRoot(relativePath).matchAll(/href:\s*"([^"]+)"/g), (match) => match[1])
-    .filter((href) => href.startsWith("/"));
 }
 
 const failures = [];
@@ -89,11 +85,7 @@ const socialPreview = readPngSize("social-preview.png");
 expect(socialPreview.width === 1200 && socialPreview.height === 630, "social-preview.png must be 1200x630 for OG/Twitter cards.");
 
 const indexHtml = readRoot("index.html");
-const contentHrefs = [
-  ...extractContentHrefs("src/app/components/Works.tsx"),
-  ...extractContentHrefs("src/app/components/Notes.tsx"),
-  ...extractContentHrefs("src/app/components/ResearchEssays.tsx"),
-];
+const contentHrefs = getContentHrefs();
 expect(indexHtml.includes('<html lang="zh-CN">'), "index.html must declare zh-CN language.");
 expect(indexHtml.includes('<link rel="canonical" href="https://bycherry.me/" />'), "index.html must include the home canonical URL.");
 expect(indexHtml.includes('<meta property="og:image:secure_url" content="https://bycherry.me/social-preview.png" />'), "index.html must include og:image:secure_url.");

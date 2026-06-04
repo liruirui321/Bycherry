@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
+import { getContentRoutes } from "./content-routes.mjs";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const siteUrl = "https://bycherry.me";
@@ -9,38 +10,13 @@ function read(relativePath) {
   return readFileSync(resolve(root, relativePath), "utf8");
 }
 
-function extractHrefs(relativePath) {
-  const source = read(relativePath);
-  return Array.from(source.matchAll(/href:\s*"([^"]+)"/g), (match) => match[1])
-    .filter((href) => href.startsWith("/"));
-}
-
-function extractDatedHrefs(relativePath) {
-  const source = read(relativePath);
-  return Array.from(source.matchAll(/href:\s*"([^"]+)"[\s\S]*?date:\s*"([^"]+)"/g), (match) => ({
-    path: match[1],
-    date: match[2],
-  })).filter((item) => item.path.startsWith("/"));
-}
-
-function extractUpdatedHrefs(relativePath) {
-  const source = read(relativePath);
-  return Array.from(source.matchAll(/href:\s*"([^"]+)"[\s\S]*?updated:\s*"([^"]+)"/g), (match) => ({
-    path: match[1],
-    date: match[2],
-  })).filter((item) => item.path.startsWith("/"));
-}
-
+const contentRoutes = getContentRoutes();
 const expectedPaths = new Set([
   "/",
-  ...extractHrefs("src/app/components/Works.tsx"),
-  ...extractHrefs("src/app/components/Notes.tsx"),
-  ...extractHrefs("src/app/components/ResearchEssays.tsx"),
+  ...contentRoutes.map((route) => route.path),
 ]);
 const expectedLastmods = new Map([
-  ...extractUpdatedHrefs("src/app/components/Works.tsx").map((item) => [item.path, item.date]),
-  ...extractDatedHrefs("src/app/components/Notes.tsx").map((item) => [item.path, item.date]),
-  ...extractDatedHrefs("src/app/components/ResearchEssays.tsx").map((item) => [item.path, item.date]),
+  ...contentRoutes.map((route) => [route.path, route.lastmod]),
 ]);
 
 const sitemap = read("public/sitemap.xml");

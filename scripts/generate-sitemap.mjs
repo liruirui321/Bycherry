@@ -1,22 +1,10 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
+import { getContentRoutes } from "./content-routes.mjs";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const siteUrl = "https://bycherry.me";
-
-function read(relativePath) {
-  return readFileSync(resolve(root, relativePath), "utf8");
-}
-
-function extractDatedRoutes(relativePath, dateField) {
-  const source = read(relativePath);
-  const pattern = new RegExp(`href:\\s*"([^"]+)"[\\s\\S]*?${dateField}:\\s*"([^"]+)"`, "g");
-  return Array.from(source.matchAll(pattern), (match) => ({
-    path: match[1],
-    lastmod: match[2],
-  })).filter((item) => item.path.startsWith("/"));
-}
 
 function maxDate(routes) {
   return routes.reduce((latest, route) => route.lastmod > latest ? route.lastmod : latest, "1970-01-01");
@@ -42,11 +30,7 @@ function xmlEntry(route) {
   ].join("\n");
 }
 
-const contentRoutes = [
-  ...extractDatedRoutes("src/app/components/Works.tsx", "updated"),
-  ...extractDatedRoutes("src/app/components/Notes.tsx", "date"),
-  ...extractDatedRoutes("src/app/components/ResearchEssays.tsx", "date"),
-];
+const contentRoutes = getContentRoutes();
 const routes = [
   { path: "/", lastmod: maxDate(contentRoutes) },
   ...contentRoutes,
