@@ -31,7 +31,7 @@ npm run build
 - `verify:generated` checks that generated public metadata is committed and up to date.
 - `verify:public` checks the custom domain, host fallbacks, robots file, manifest, favicon, app theme color, social preview image, and static index metadata fallback.
 - `verify:links` checks static internal links and route strings, public routes, home anchors, static public asset links, and safe `target="_blank"` rel attributes.
-- `verify:content` checks that every theme work route has detail content coverage in `WorkDetailPage`, every article route has enough detail-page content, and visible shell copy keeps the theme-work naming.
+- `verify:content` checks that every theme work route has detail content coverage in `WorkDetailPage`, every article route has enough detail-page content, visible shell copy keeps the theme-work naming, and retired low-quality page copy cannot reappear.
 - `verify:a11y` checks static `aria-labelledby`, `aria-describedby`, `aria-controls`, duplicate static ids, and fixed SVG definition ids in reusable illustration components.
 - `verify:sitemap` compares public routes with `public/sitemap.xml`, including `lastmod`, `changefreq`, and `priority` metadata.
 
@@ -67,5 +67,6 @@ When adding or removing public content:
 - Make sure any new static links point to an existing route, home anchor, or public asset.
 - Make sure any new static `aria-*` references point to an existing id.
 - Make sure generated files are committed after changing content routes.
+- Keep public page text product-facing; avoid restoring placeholder, demo, MVP, or design-idea copy.
 - Keep dependencies aligned with actual imports; avoid committing unused generated UI component sets.
 - Run `npm run build` before pushing.

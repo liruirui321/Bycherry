@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getContentRoutes } from "./content-routes.mjs";
@@ -7,6 +7,16 @@ const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 
 function read(relativePath) {
   return readFileSync(resolve(root, relativePath), "utf8");
+}
+
+function collectSourceFiles(relativeDirectory) {
+  const absoluteDirectory = resolve(root, relativeDirectory);
+  return readdirSync(absoluteDirectory, { withFileTypes: true }).flatMap((entry) => {
+    const relativePath = `${relativeDirectory}/${entry.name}`;
+    if (entry.isDirectory()) return collectSourceFiles(relativePath);
+    if (!/\.(ts|tsx)$/.test(entry.name)) return [];
+    return [relativePath];
+  });
 }
 
 function extractQuotedArray(source, arrayName) {
@@ -112,6 +122,29 @@ function verifyVisibleThemeWorkCopy() {
   }
 }
 
+function verifyNoLowQualityVisibleContent() {
+  const sourceFiles = collectSourceFiles("src/app");
+  const retiredContentPatterns = [
+    { label: "demo", pattern: /\bdemo\b/i },
+    { label: "TODO", pattern: /\bTODO\b/ },
+    { label: "MVP", pattern: /\bMVP\b/ },
+    { label: "coming soon", pattern: /coming soon/i },
+    { label: "lorem ipsum", pattern: /lorem ipsum/i },
+    { label: "示例作品", pattern: /示例作品/ },
+    { label: "占位文案", pattern: /占位文案|占位内容|占位页面/ },
+    { label: "设计想法", pattern: /设计想法/ },
+    { label: "为什么做", pattern: /为什么做/ },
+    { label: "自动生成花粉", pattern: /自动生成花粉/ },
+  ];
+
+  for (const relativePath of sourceFiles) {
+    const source = read(relativePath);
+    for (const item of retiredContentPatterns) {
+      expect(!item.pattern.test(source), `${relativePath} contains low-quality or retired visible content: ${item.label}`);
+    }
+  }
+}
+
 const routes = getContentRoutes();
 const workSlugs = new Set(routes.filter((route) => route.type === "work").map((route) => route.path.replace(/^\/works\//, "")));
 const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
@@ -168,6 +201,7 @@ verifyArticleBlocks({
 });
 
 verifyVisibleThemeWorkCopy();
+verifyNoLowQualityVisibleContent();
 
 if (failures.length) {
   console.error("Content integrity verification failed.");
