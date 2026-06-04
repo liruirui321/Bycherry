@@ -97,6 +97,7 @@ function EssayCard({ essay }: {
     <a
       className="research-essay-card"
       href={essay.href}
+      aria-label={`阅读科研随笔：${essay.title}`}
       style={{
         background: "var(--card)",
         border: "1.5px solid var(--border)",
@@ -284,14 +285,13 @@ export function ResearchEssays() {
       </div>
 
       {/* Two-column grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem" }}>
+      <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem", listStyle: "none", margin: 0, padding: 0 }}>
         {essays.map((essay) => (
-          <EssayCard
-            key={essay.id}
-            essay={essay}
-          />
+          <li key={essay.id} style={{ display: "grid" }}>
+            <EssayCard essay={essay} />
+          </li>
         ))}
-      </div>
+      </ul>
 
       <style>
         {`

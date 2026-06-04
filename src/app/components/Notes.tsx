@@ -127,56 +127,58 @@ export function Notes() {
         </div>
 
         {/* Notes grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem" }}>
+        <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem", listStyle: "none", margin: 0, padding: 0 }}>
           {notes.map((note) => (
-            <a
-              className="note-card"
-              key={note.id}
-              href={note.href}
-              onClick={(event) => navigateTo(note.href, event)}
-              style={{
-                background: "var(--card)",
-                border: "1.5px solid var(--border)",
-                borderRadius: 16,
-                padding: "1.5rem",
-                position: "relative",
-                transition: "transform 0.2s, box-shadow 0.2s",
-                cursor: "pointer",
-                color: "inherit",
-                display: "block",
-                textDecoration: "none",
-              }}
-            >
-              {/* Left color bar */}
-              <div style={{ position: "absolute", top: 16, left: 0, width: 4, height: "calc(100% - 32px)", background: note.tagColor, borderRadius: "0 2px 2px 0", opacity: 0.65 }} />
+            <li key={note.id} style={{ display: "grid" }}>
+              <a
+                className="note-card"
+                href={note.href}
+                aria-label={`阅读笔记：${note.title}`}
+                onClick={(event) => navigateTo(note.href, event)}
+                style={{
+                  background: "var(--card)",
+                  border: "1.5px solid var(--border)",
+                  borderRadius: 16,
+                  padding: "1.5rem",
+                  position: "relative",
+                  transition: "transform 0.2s, box-shadow 0.2s",
+                  cursor: "pointer",
+                  color: "inherit",
+                  display: "block",
+                  textDecoration: "none",
+                }}
+              >
+                {/* Left color bar */}
+                <div style={{ position: "absolute", top: 16, left: 0, width: 4, height: "calc(100% - 32px)", background: note.tagColor, borderRadius: "0 2px 2px 0", opacity: 0.65 }} />
 
-              {/* Date + tag */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
-                <span style={{ fontFamily: "'Caveat', cursive", fontSize: "0.84rem", color: "var(--cherry-warm-mid)" }}>{note.date}</span>
-                <span style={{ background: note.tagBg, color: note.tagColor, borderRadius: 999, padding: "0.18rem 0.62rem", fontSize: "0.74rem", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 4 }}>
-                  {note.icon} {note.tag}
-                </span>
-              </div>
+                {/* Date + tag */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+                  <span style={{ fontFamily: "'Caveat', cursive", fontSize: "0.84rem", color: "var(--cherry-warm-mid)" }}>{note.date}</span>
+                  <span style={{ background: note.tagBg, color: note.tagColor, borderRadius: 999, padding: "0.18rem 0.62rem", fontSize: "0.74rem", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 4 }}>
+                    {note.icon} {note.tag}
+                  </span>
+                </div>
 
-              <h3 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "1rem", lineHeight: 1.4, marginBottom: "0.6rem" }}>
-                {note.title}
-              </h3>
+                <h3 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "1rem", lineHeight: 1.4, marginBottom: "0.6rem" }}>
+                  {note.title}
+                </h3>
 
-              <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.84rem", lineHeight: 1.65, marginBottom: "1rem" }}>
-                {note.excerpt}
-              </p>
+                <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.84rem", lineHeight: 1.65, marginBottom: "1rem" }}>
+                  {note.excerpt}
+                </p>
 
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.78rem", color: "var(--cherry-warm-mid)", fontFamily: "'Caveat', cursive" }}>
-                  <IconCoffee size={16} /> 约 {note.readTime} 分钟
-                </span>
-                <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "0.8rem", color: "var(--cherry-forest)", fontWeight: 700 }}>
-                  阅读全文 <IconArrowRight size={13} color="var(--cherry-forest)" />
-                </span>
-              </div>
-            </a>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.78rem", color: "var(--cherry-warm-mid)", fontFamily: "'Caveat', cursive" }}>
+                    <IconCoffee size={16} /> 约 {note.readTime} 分钟
+                  </span>
+                  <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "0.8rem", color: "var(--cherry-forest)", fontWeight: 700 }}>
+                    阅读全文 <IconArrowRight size={13} color="var(--cherry-forest)" />
+                  </span>
+                </div>
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
 
       <style>
