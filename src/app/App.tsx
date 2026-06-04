@@ -91,7 +91,7 @@ function buildHomeJsonLd() {
         "@type": "ItemList",
         "@id": worksListId,
         name: "By Cherry 主题作品",
-        description: "科学教育、AI 工具和课程设计主题作品。",
+        description: "科学学习、AI 工具和学习项目主题作品。",
         numberOfItems: works.length,
         itemListElement: works.map((work, index) => ({
           "@type": "ListItem",
@@ -115,7 +115,7 @@ function buildHomeJsonLd() {
         "@type": "ItemList",
         "@id": articlesListId,
         name: "By Cherry 笔记与科研随笔",
-        description: "课程开发、科学传播、AI 创作和科研转译记录。",
+        description: "科学学习、证据阅读、AI 创作和科研转译记录。",
         numberOfItems: articles.length,
         itemListElement: articles.map((article, index) => ({
           "@type": "ListItem",

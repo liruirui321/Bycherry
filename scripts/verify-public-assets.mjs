@@ -223,7 +223,7 @@ if (jsonLdMatch) {
     expect(jsonLdText.includes('"@type":"CreativeWork"'), "Static JSON-LD works ListItems must include CreativeWork item objects.");
     expect(jsonLdText.includes('"@type":"Article"'), "Static JSON-LD article ListItems must include Article item objects.");
     expect(jsonLdText.includes("拖拽 TF、RNA 聚合酶和核糖体"), "Static JSON-LD must include work descriptions.");
-    expect(jsonLdText.includes("AI 可以参与课程开发"), "Static JSON-LD must include article descriptions.");
+    expect(jsonLdText.includes("用 AI 做学习材料质检"), "Static JSON-LD must include article descriptions.");
     expect(jsonLdText.includes('"teaches"'), "Static JSON-LD work items must include teaches learning outcomes.");
     expect(jsonLdText.includes("观察转录翻译"), "Static JSON-LD work items must include learning path steps.");
     for (const href of contentHrefs) {

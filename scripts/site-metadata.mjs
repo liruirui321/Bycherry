@@ -5,5 +5,5 @@ export const siteDescription = "By Cherry 是一个可直接使用的科学与 A
 export const manifestDescription = `${shareTagline}。`;
 export const shareDescription = "可直接使用的科学与 AI 学习工作台，提供科学模拟、课程卡片、科研 Agent 和学习笔记。";
 export const shareImageAlt = "By Cherry 科学与 AI 学习工作台预览图";
-export const worksListDescription = "科学教育、AI 工具和课程设计主题作品。";
-export const articlesListDescription = "课程开发、科学传播、AI 创作和科研转译记录。";
+export const worksListDescription = "科学学习、AI 工具和学习项目主题作品。";
+export const articlesListDescription = "科学学习、证据阅读、AI 创作和科研转译记录。";

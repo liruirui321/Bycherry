@@ -6,9 +6,9 @@ import { navigateHomeSection } from "../navigation";
 
 const tags = [
   { label: "生命科学", icon: <IconMicroscope size={15} color="#1a5680" />, bg: "var(--cherry-blue-light)", color: "#1a5680" },
-  { label: "教育设计", icon: <IconBook size={15} color="#5A3E00" />, bg: "var(--cherry-yellow-light)", color: "#5A3E00" },
+  { label: "学习设计", icon: <IconBook size={15} color="#5A3E00" />, bg: "var(--cherry-yellow-light)", color: "#5A3E00" },
   { label: "AI 工具", icon: <IconAI size={15} color="#7D2A18" />, bg: "var(--cherry-peach-light)", color: "#7D2A18" },
-  { label: "课程开发", icon: <IconLeaf size={15} color="#1E4D22" />, bg: "var(--cherry-sage-light)", color: "#1E4D22" },
+  { label: "学习项目", icon: <IconLeaf size={15} color="#1E4D22" />, bg: "var(--cherry-sage-light)", color: "#1E4D22" },
   { label: "科学传播", icon: <IconResearch size={15} color="#3C2D6E" />, bg: "#E8E3F5", color: "#3C2D6E" },
 ];
 

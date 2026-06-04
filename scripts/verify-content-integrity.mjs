@@ -307,6 +307,46 @@ function verifyPlantEvolutionLearnerContract() {
   expect(worksSource.includes('path: ["选择阶段", "读证据", "完成练习"]'), "Plant evolution work card path must describe a learner action flow.");
 }
 
+function verifyLearnerFacingArticleCopy() {
+  const learnerArticleSources = [
+    "src/app/App.tsx",
+    "src/app/components/About.tsx",
+    "src/app/components/ArticleDetailPage.tsx",
+    "src/app/components/Contact.tsx",
+    "src/app/components/Notes.tsx",
+    "src/app/components/ResearchEssays.tsx",
+    "scripts/site-metadata.mjs",
+  ].map((relativePath) => [relativePath, read(relativePath)]);
+
+  const combinedSource = learnerArticleSources.map(([relativePath, source]) => `\n/* ${relativePath} */\n${source}`).join("\n");
+  const requiredLearnerCopy = [
+    "用 AI 做学习材料质检",
+    "从植物基因组读懂一条证据链",
+    "真实科研如何变成学习者能进入的问题",
+    "预习诊断、概念检查或复习巩固",
+    "审核使用",
+    "科学学习、证据阅读、AI 创作和科研转译记录",
+  ];
+  const retiredLearnerArticlePatterns = [
+    { label: "old AI course title", pattern: /AI 可以参与课程开发/ },
+    { label: "old plant classroom title", pattern: /从植物基因组到高中生物课堂/ },
+    { label: "classroom framing", pattern: /课堂|教师|老师|教案|授课|教学/ },
+    { label: "course design framing", pattern: /课程开发|课程设计|课程转化/ },
+    { label: "assessment publishing framing", pattern: /审核投放|投放复盘|投放给|发布或导出方式/ },
+    { label: "student-as-third-person framing", pattern: /学生基础|学生任务|学生能|学生作品|学生可以/ },
+  ];
+
+  for (const text of requiredLearnerCopy) {
+    expect(combinedSource.includes(text), `Learner-facing article copy should include: ${text}`);
+  }
+
+  for (const [relativePath, source] of learnerArticleSources) {
+    for (const item of retiredLearnerArticlePatterns) {
+      expect(!item.pattern.test(source), `${relativePath} contains retired teacher/classroom-facing article copy: ${item.label}`);
+    }
+  }
+}
+
 const routes = getContentRoutes();
 const workSlugs = new Set(routes.filter((route) => route.type === "work").map((route) => route.path.replace(/^\/works\//, "")));
 const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
@@ -371,6 +411,7 @@ verifyArticleCardsStayStructured();
 verifyWorkJsonLdLearningOutcomes();
 verifyConceptExplainerAgentContract();
 verifyPlantEvolutionLearnerContract();
+verifyLearnerFacingArticleCopy();
 
 if (failures.length) {
   console.error("Content integrity verification failed.");

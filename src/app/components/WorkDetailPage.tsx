@@ -328,7 +328,7 @@ ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
     },
     {
       title: "科研转译",
-      body: "教师和创作者需要把真实材料改写成课堂问题、图表讲解和可复用的知识卡，保留证据边界和不确定性。",
+      body: "学习者和创作者需要把真实材料改写成进入问题、图表解读和可复用的知识卡，保留证据边界和不确定性。",
     },
   ];
   const productModules = [
@@ -373,7 +373,7 @@ ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
       title: "讲图表",
       input: "粘贴图号、图注、坐标轴、分组和显著性标记",
       agent: "区分观察事实、合理推断和不能支持的结论",
-      output: "可用于汇报或课堂讲解的图表解读稿",
+      output: "可用于自学复述或汇报的图表解读稿",
     },
     {
       title: "回审稿",
@@ -1759,7 +1759,7 @@ function ConceptExplainerContent() {
       analogy: `${displayName} 可以先当作一个“待拆解的科学模型”：不要急着背定义，先看它解决什么问题、由哪些组成部分构成、会在哪些条件下发生变化。`,
       prerequisite: ["先确认这个概念属于哪个学科或章节", "先找 2-3 个教材关键词", "先区分定义、机制、例子和适用边界"],
       diagnostic: `先自测：你能不能不用背诵定义，用自己的话说出“${displayName} 解释了什么现象”？如果只能复述名词，说明还需要补充例子和机制。`,
-      evidenceBoundary: `这是基于稳定解释流程生成的学习卡，不会替你编造 ${displayName} 的专属事实；涉及具体数据、公式、物种、疾病或实验结论时，需要回到教材、论文或课堂材料核查。`,
+      evidenceBoundary: `这是基于稳定解释流程生成的学习卡，不会替你编造 ${displayName} 的专属事实；涉及具体数据、公式、物种、疾病或实验结论时，需要回到教材、论文或课程资料核查。`,
       transferTask: `找一个你见过的 ${displayName} 例子，按“现象是什么、概念如何解释、还有什么不能解释”三句话写下来。`,
       workedExample: {
         title: `${displayName} 三步拆解`,
@@ -1896,7 +1896,7 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 9. 落地示例：给情境材料、引导问题、我的学习产出。
 10. 迁移任务：让我把概念用到一个新例子。
 11. 即时小测：1 道选择题，给答案和解释。
-12. 证据边界：哪些内容需要查教材、论文或课堂材料确认。
+12. 证据边界：哪些内容需要查教材、论文或课程资料确认。
 
 【质量要求】
 - 面向学习者，用“你可以……”表达。
@@ -2292,7 +2292,7 @@ function CrisprContent() {
   ];
   const boundaryItems = [
     "这是概念模拟，不是实验操作流程；页面不提供真实实验参数、递送方案或临床建议。",
-    "匹配评分只用于课堂判读，真实 guide 设计还需要全基因组脱靶搜索、PAM 类型、细胞类型和实验验证。",
+    "匹配评分只用于学习判读，真实 guide 设计还需要全基因组脱靶搜索、PAM 类型、细胞类型和实验验证。",
     "模板替换需要额外修复模板和实验条件，不能因为页面选择了替换就认为真实细胞一定按模板修复。",
   ];
   const qualityChecks = [
@@ -2376,7 +2376,7 @@ function CrisprContent() {
       ? {
           level: "谨慎使用",
           risk: "存在错配或效率下降风险，剪切可能发生但不够理想。",
-          nextAction: "先让学生找出错配位置，再比较换用向导 A 后结果如何变化。",
+          nextAction: "先找出错配位置，再比较换用向导 A 后结果如何变化。",
           color: "var(--cherry-yellow)",
           bg: "var(--cherry-yellow-light)",
         }

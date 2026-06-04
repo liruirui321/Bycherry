@@ -116,7 +116,7 @@ export function Contact() {
         </h2>
 
         <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.95rem", maxWidth: 480, margin: "0 auto 2.5rem" }}>
-          如果你想讨论科学内容、课程设计、AI 工具或网站反馈，可以直接发来信息。我会认真阅读并回复可继续推进的问题。
+          如果你想讨论科学内容、学习设计、AI 工具或网站反馈，可以直接发来信息。我会认真阅读并回复可继续推进的问题。
         </p>
 
         <div className="contact-email-chip" style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.52rem 0.42rem 0.9rem", marginBottom: "1.4rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", maxWidth: "100%", boxSizing: "border-box" }}>

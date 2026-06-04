@@ -83,7 +83,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
       ? [
           { label: "平台入口", body: article.highlights[0] ?? "先打开平台，确认要使用的工具入口。" },
           { label: "填写参数", body: article.highlights[1] ?? "再填写对象、目标、范围和生成要求。" },
-          { label: "审核投放", body: article.highlights[2] ?? "最后人工审核题目质量，再投放和复盘。" },
+          { label: "审核使用", body: article.highlights[2] ?? "最后人工审核题目质量，再作答和复盘。" },
         ]
       : [
           { label: "进入点", body: article.highlights[0] ?? "先找到这篇文章要解决的问题。" },
