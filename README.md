@@ -23,7 +23,7 @@ npm run dev
 npm run build
 ```
 
-`npm run build` runs `npm run verify:sitemap` before Vite builds. The sitemap check compares the public routes in `Works.tsx`, `Notes.tsx`, and `ResearchEssays.tsx` with `public/sitemap.xml`, including `lastmod` dates for notes and research essays.
+`npm run build` runs `npm run verify:sitemap` before Vite builds. The sitemap check compares the public routes in `Works.tsx`, `Notes.tsx`, and `ResearchEssays.tsx` with `public/sitemap.xml`, including `lastmod` dates for works, notes, and research essays.
 
 You can run the check on its own:
 
@@ -45,5 +45,6 @@ When adding or removing public content:
 
 - Add the route to the matching data source in `src/app/components/Works.tsx`, `Notes.tsx`, or `ResearchEssays.tsx`.
 - Update `public/sitemap.xml` with the same route.
+- For works, keep sitemap `lastmod` equal to the item `updated` in `Works.tsx`.
 - For notes and research essays, keep sitemap `lastmod` equal to the item `date`.
 - Run `npm run verify:sitemap` before pushing.
