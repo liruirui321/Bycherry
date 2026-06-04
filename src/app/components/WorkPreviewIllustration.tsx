@@ -1,4 +1,8 @@
+import { useId } from "react";
+
 export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }: { slug: string; color: string; width?: number; height?: number }) {
+  const svgId = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+
   if (slug === "gene-expression") {
     return (
       <svg width={width} height={height} viewBox="0 0 96 72" fill="none" aria-hidden="true">
@@ -19,6 +23,10 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
   }
 
   if (slug === "plant-evolution-stories") {
+    const skyId = `${svgId}-plant-card-sky`;
+    const waterId = `${svgId}-plant-card-water`;
+    const pathId = `${svgId}-plant-card-path`;
+    const clipId = `${svgId}-plant-card-clip`;
     const stages = [
       { x: 89, y: 304, branch: -52, fill: "var(--cherry-blue-light)", accent: "var(--cherry-sage)" },
       { x: 97, y: 253, branch: 52, fill: "var(--cherry-yellow-light)", accent: "var(--cherry-yellow)" },
@@ -31,41 +39,41 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
     return (
       <svg width={width} height={height} viewBox="0 0 180 340" fill="none" aria-hidden="true" focusable="false">
         <defs>
-          <linearGradient id="plant-card-sky" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id={skyId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#FFF4DE" />
             <stop offset="0.34" stopColor="#EEF8E8" />
             <stop offset="0.66" stopColor="#DDEFCF" />
             <stop offset="1" stopColor="#D3E8D7" />
           </linearGradient>
-          <linearGradient id="plant-card-water" x1="0" y1="0" x2="1" y2="0">
+          <linearGradient id={waterId} x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stopColor="#84B8CC" stopOpacity="0.2" />
             <stop offset="0.52" stopColor="#84B8CC" stopOpacity="0.48" />
             <stop offset="1" stopColor="#84B8CC" stopOpacity="0.24" />
           </linearGradient>
-          <linearGradient id="plant-card-path" x1="0" y1="1" x2="1" y2="0">
+          <linearGradient id={pathId} x1="0" y1="1" x2="1" y2="0">
             <stop offset="0" stopColor="#8BBE9A" />
             <stop offset="0.55" stopColor="#5D8C65" />
             <stop offset="1" stopColor="#E5A3A0" />
           </linearGradient>
-          <clipPath id="plant-card-clip">
+          <clipPath id={clipId}>
             <rect x="8" y="6" width="164" height="328" rx="34" />
           </clipPath>
         </defs>
-        <rect x="8" y="6" width="164" height="328" rx="34" fill="url(#plant-card-sky)" stroke="rgba(93,140,101,0.28)" strokeWidth="1.8" />
-        <g clipPath="url(#plant-card-clip)">
+        <rect x="8" y="6" width="164" height="328" rx="34" fill={`url(#${skyId})`} stroke="rgba(93,140,101,0.28)" strokeWidth="1.8" />
+        <g clipPath={`url(#${clipId})`}>
           <circle cx="133" cy="38" r="22" fill="var(--cherry-yellow)" opacity="0.72" />
           <circle cx="132" cy="38" r="29" fill="var(--cherry-yellow)" opacity="0.13" />
           <path d="M18 65 C40 45 63 50 78 71 C58 82 35 82 18 65Z M102 86 C122 68 149 73 163 94 C142 105 118 103 102 86Z" fill="#FAF7F1" opacity="0.68" />
           <path d="M2 130 C36 101 70 128 103 96 C131 69 151 78 179 55 V335 H2Z" fill="rgba(169,201,172,0.16)" />
           <path d="M1 185 C34 160 59 181 91 152 C124 122 147 138 180 108 V335 H1Z" fill="rgba(169,201,172,0.25)" />
           <path d="M0 253 C31 232 63 250 95 226 C128 201 153 211 180 187 V335 H0Z" fill="rgba(216,199,168,0.52)" />
-          <path d="M0 285 C34 302 62 279 95 295 C123 309 149 281 180 294 V335 H0Z" fill="url(#plant-card-water)" />
+          <path d="M0 285 C34 302 62 279 95 295 C123 309 149 281 180 294 V335 H0Z" fill={`url(#${waterId})`} />
           <path d="M8 315 C40 296 63 310 92 297 C124 283 148 296 174 276 V335 H8Z" fill="rgba(216,199,168,0.66)" />
           <path d="M17 316 C45 326 122 323 159 304" stroke="rgba(58,92,62,0.18)" strokeWidth="5.5" strokeLinecap="round" />
           <path d="M22 322 C35 306 54 306 68 323 M112 321 C123 301 146 302 160 321" stroke="var(--cherry-forest)" strokeWidth="3" strokeLinecap="round" opacity="0.48" />
           <path d="M33 318 C27 294 35 277 50 265 M42 294 C60 282 75 292 78 312 M131 319 C123 292 132 270 150 258 M145 281 C159 272 173 279 178 296" stroke="var(--cherry-sage)" strokeWidth="2.7" strokeLinecap="round" fill="none" opacity="0.72" />
           <path d="M89 304 C25 251 128 227 81 187 C34 146 132 128 88 92 C70 77 70 47 106 25" stroke="var(--cherry-forest)" strokeWidth="17" strokeLinecap="round" opacity="0.09" />
-          <path d="M89 304 C25 251 128 227 81 187 C34 146 132 128 88 92 C70 77 70 47 106 25" stroke="url(#plant-card-path)" strokeWidth="6" strokeLinecap="round" />
+          <path d="M89 304 C25 251 128 227 81 187 C34 146 132 128 88 92 C70 77 70 47 106 25" stroke={`url(#${pathId})`} strokeWidth="6" strokeLinecap="round" />
           {[34, 56, 125, 151].map((x, index) => (
             <path key={x} d={`M${x} ${118 + index * 36} C${x - 7} ${106 + index * 36} ${x - 6} ${96 + index * 36} ${x + 5} ${89 + index * 36} M${x + 5} ${89 + index * 36} C${x + 16} ${98 + index * 36} ${x + 12} ${109 + index * 36} ${x} ${118 + index * 36}`} stroke="rgba(58,92,62,0.22)" strokeWidth="1.7" strokeLinecap="round" fill="rgba(169,201,172,0.18)" />
           ))}
