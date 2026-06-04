@@ -384,16 +384,16 @@ ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
   ];
   const roadmapItems = [
     {
-      title: "V1 本地编排",
+      title: "本地编排",
       body: "当前已落地：任务选择、材料模板、模式切换、路由建议、本地预览、任务包复制和 API JSON 契约。",
     },
     {
-      title: "V2 模型执行",
-      body: "接入模型 API 后，把任务包发送给模型，要求返回 evidence_items、missing_fields、risk_flags 和 final_report。",
+      title: "API 接入契约",
+      body: "复制 API JSON 后可以接入外部模型，返回字段必须包含 evidence_items、missing_fields、risk_flags 和 final_report。",
     },
     {
-      title: "V3 文献与引用核查",
-      body: "接入文献检索、DOI/引用检查和参考文献核查，把模型生成的引用与真实文献记录分开验证。",
+      title: "引用核查清单",
+      body: "对 DOI、参考文献、图表编号和材料来源单独核查，把模型生成内容与真实文献记录分开验证。",
     },
   ];
   const productReferences = [
@@ -407,8 +407,8 @@ ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
       body: "能直接使用：本地生成模型指令、任务包、证据边界、验收清单和 API 契约；材料只在浏览器里编辑，不上传，也不调用 API。",
     },
     {
-      title: "API 版目标",
-      body: "接入模型后，点击运行返回结构化分析：证据、推断、风险、待核查点和汇报摘要，并保留人工复核问题。",
+      title: "API 接入方式",
+      body: "复制 API JSON 交给外部模型执行，返回内容必须按契约拆成证据、推断、风险、待核查点和汇报摘要。",
     },
     {
       title: "不做什么",
@@ -577,7 +577,7 @@ ${localPreviewOutput}`;
         <div>
           <div style={{ color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.78rem", marginBottom: "0.3rem" }}>科研 Agent 工作台</div>
           <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.88rem", margin: 0 }}>
-            这个页面先落地科研 Agent 的任务编排层：你选择任务、材料和工作模式，页面生成可交给模型执行的结构化指令、证据边界和报告框架。真正调用 API 的版本会把下方任务包直接送入模型并返回可复核报告。
+            这个工作台直接提供科研任务编排：选择任务、材料和工作模式后，页面会生成结构化指令、证据边界、质控清单、报告框架和 API JSON 契约。当前可用于本地整理材料，也可把复制的任务包交给外部模型执行。
           </p>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.65rem" }}>
@@ -648,7 +648,7 @@ ${localPreviewOutput}`;
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.25fr) minmax(220px, 0.75fr)", gap: "0.75rem" }}>
           <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.55rem" }}>
-            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>迭代路线</strong>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>落地层级</strong>
             <div style={{ display: "grid", gap: "0.48rem" }}>
               {roadmapItems.map((item, index) => (
                 <div key={item.title} style={{ display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.48rem", alignItems: "start" }}>

@@ -131,7 +131,7 @@ ${pitfalls.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 六、可套用模板
 ${starterTemplateText}
 
-七、可以带走的想法
+七、可带走的方法
 ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).join("\n")}`
     : "";
 
@@ -410,7 +410,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.55rem" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
                   <IconBook size={18} />
-                  可以带走的想法
+                  可带走的方法
                 </div>
                 <button type="button" onClick={copyArticleSummary} aria-label={`复制${article.title}的阅读摘要`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.4rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                   {copiedSummary ? "已复制" : "复制摘要"}
