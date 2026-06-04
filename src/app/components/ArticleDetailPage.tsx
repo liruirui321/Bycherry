@@ -83,6 +83,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
         { label: "可迁移方法", body: article.highlights[2] ?? "最后提炼可以复用到自己项目里的方法。" },
       ]
     : [];
+  const actionSteps = article && "actionSteps" in article ? article.actionSteps : [];
   const summaryText = article
     ? `【阅读摘要】
 标题：${article.title}
@@ -97,7 +98,10 @@ ${article.excerpt ?? article.body}
 二、正文要点
 ${article.paragraphs.map((paragraph, index) => `${index + 1}. ${paragraph}`).join("\n")}
 
-三、可以带走的想法
+三、上手步骤
+${actionSteps.map((step, index) => `${index + 1}. ${step}`).join("\n")}
+
+四、可以带走的想法
 ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).join("\n")}`
     : "";
 
@@ -251,6 +255,22 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                 </div>
               ))}
             </div>
+
+            {actionSteps.length ? (
+              <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
+                <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem", marginBottom: "0.65rem" }}>上手步骤</div>
+                <div style={{ display: "grid", gap: "0.55rem" }}>
+                  {actionSteps.map((step, index) => (
+                    <div key={step} style={{ display: "grid", gridTemplateColumns: "26px minmax(0, 1fr)", gap: 9, alignItems: "start" }}>
+                      <span aria-hidden="true" style={{ width: 22, height: 22, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.7rem", fontWeight: 900 }}>
+                        {index + 1}
+                      </span>
+                      <span style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.62, fontSize: "0.86rem", fontWeight: 800 }}>{step}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
 
             <div style={{ display: "grid", gap: "0.62rem", marginBottom: "0.9rem" }}>
               <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>正文要点</div>
