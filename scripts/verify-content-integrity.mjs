@@ -473,6 +473,10 @@ function verifyLearnerFacingArticleCopy() {
     "用途：预习诊断",
     "用途：概念检查",
     "用途：复习巩固",
+    "照填配置",
+    "平台照填配置",
+    "审核重点",
+    "题型：选择题 + 图表题 + 简答题",
     "审核使用",
     "学习资料库",
     "学习方法库",
@@ -516,6 +520,7 @@ function verifyLearnerFacingArticleCopy() {
   }
 
   expect(articleDetailSource.includes("const articleQuickStart"), "Article detail pages must derive a first learner action.");
+  expect(articleDetailSource.includes("const platformUsePlansText"), "Platform article summaries must include copyable fill-in assessment configurations.");
   expect(articleDetailSource.includes("actionSteps[0]"), "Article quick start must use the first concrete article action.");
   expect(articleDetailSource.includes("checklist[0]"), "Article quick start must expose the first completion check.");
   expect(articleDetailSource.includes("pitfalls[0]"), "Article quick start must expose the first pitfall to avoid.");

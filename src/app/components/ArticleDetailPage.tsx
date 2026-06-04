@@ -108,21 +108,22 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     ? [
         {
           title: "预习诊断",
-          fields: ["用途：预习诊断", "题量：3-5 题", "目标：判断自己有没有进入新主题的基础"],
-          output: "先看错题类型，再决定要不要补先修概念。",
+          fields: ["用途：预习诊断", "学习阶段：刚进入新主题", "知识点：只填 1 个章节或 2-3 个核心概念", "题型：选择题 + 判断题", "难度：基础", "题量：3-5 题，预计 5 分钟"],
+          output: "审核重点：题目要能暴露先修缺口，做完后先看错题类型，再决定要不要补先修概念。",
         },
         {
           title: "概念检查",
-          fields: ["用途：概念检查", "题量：1-2 道辨析题", "目标：暴露刚学完的混淆点"],
-          output: "重点审核干扰项是否来自真实误解。",
+          fields: ["用途：概念检查", "学习阶段：刚学完一个概念", "知识点：一个容易混淆的概念对", "题型：辨析题 + 简答题", "难度：中等", "题量：2-4 题，预计 6 分钟"],
+          output: "审核重点：干扰项必须来自真实误解，解析要说明为什么错，而不是只给正确答案。",
         },
         {
           title: "复习巩固",
-          fields: ["用途：复习巩固", "题量：6-10 题", "目标：把概念、过程和证据串起来"],
-          output: "完成后记录高频错因，并回到学习卡修改。",
+          fields: ["用途：复习巩固", "学习阶段：学完一组相关知识", "知识点：概念 + 过程 + 证据材料", "题型：选择题 + 图表题 + 简答题", "难度：中等到进阶", "题量：6-10 题，预计 10 分钟"],
+          output: "审核重点：题目要能串起多个知识点，完成后记录高频错因，并回到学习卡修改。",
         },
       ]
     : [];
+  const platformUsePlansText = platformUsePlans.map((plan) => `${plan.title}\n${plan.fields.map((field) => `- ${field}`).join("\n")}\n- ${plan.output}`).join("\n\n");
   const starterTemplateText = starterTemplate.map((item) => `- ${item}`).join("\n");
   const actionPackText = article
     ? `【行动包】${article.title}
@@ -136,7 +137,10 @@ ${checklist.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 三、避坑提醒
 ${pitfalls.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-四、可套用模板
+四、平台照填配置
+${platformUsePlansText || "这篇内容不需要平台配置。"}
+
+五、可套用模板
 ${starterTemplateText}`
     : "";
   const summaryText = article
@@ -162,10 +166,13 @@ ${checklist.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 五、避坑提醒
 ${pitfalls.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-六、可套用模板
+六、平台照填配置
+${platformUsePlansText || "这篇内容不需要平台配置。"}
+
+七、可套用模板
 ${starterTemplateText}
 
-七、可带走的方法
+八、可带走的方法
 ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).join("\n")}`
     : "";
 
@@ -363,7 +370,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>平台速用卡</div>
                     <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginTop: "0.18rem", fontWeight: 800 }}>
-                      先选一个用途，把字段照填进平台，再用检查清单审核生成结果。
+                      先选一个用途，把字段照填进平台，再用审核重点检查生成结果。
                     </div>
                   </div>
                   <a className="article-detail-link" href={platformUrl ?? "#"} target="_blank" rel="noreferrer" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.36rem 0.72rem", textDecoration: "none", fontWeight: 900, fontSize: "0.74rem" }}>
@@ -374,6 +381,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   {platformUsePlans.map((plan) => (
                     <div key={plan.title} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem", display: "grid", gap: "0.48rem" }}>
                       <strong style={{ color: "var(--cherry-forest)", fontSize: "0.8rem" }}>{plan.title}</strong>
+                      <span style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>照填配置</span>
                       <div style={{ display: "grid", gap: "0.3rem" }}>
                         {plan.fields.map((field) => (
                           <span key={field} style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.48, fontWeight: 800 }}>{field}</span>
