@@ -90,13 +90,14 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
       onFocus={() => setHovered(true)}
       onBlur={() => setHovered(false)}
       style={{
-        background: work.color,
-        border: `1.5px solid ${work.border}`,
-        borderRadius: 20,
+        background: "var(--card)",
+        border: "1.5px solid rgba(94,68,42,0.12)",
+        borderTop: `4px solid ${work.border}`,
+        borderRadius: 8,
         padding: "1.28rem 1.28rem 1.18rem",
-        transform: hovered ? "rotate(0deg) translateY(-5px)" : `rotate(${work.rotate})`,
+        transform: hovered ? "translateY(-4px)" : "none",
         transition: "transform 0.25s, box-shadow 0.25s",
-        boxShadow: hovered ? "5px 12px 0px rgba(94,68,42,0.12)" : "3px 5px 0px rgba(94,68,42,0.08)",
+        boxShadow: hovered ? "0 14px 28px rgba(58,92,62,0.12)" : "0 8px 18px rgba(94,68,42,0.06)",
         cursor: href ? "pointer" : "default",
         position: "relative",
         color: "inherit",
@@ -107,9 +108,6 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         minHeight: 384,
       }}
     >
-      {/* Push pin */}
-      <div style={{ position: "absolute", top: -7, left: "50%", transform: "translateX(-50%)", width: 14, height: 14, borderRadius: "50%", background: "var(--cherry-red)", opacity: 0.65, boxShadow: "0 2px 4px rgba(0,0,0,0.12)" }} />
-
       <div style={{ marginBottom: "0.46rem" }}>{work.icon}</div>
 
       <h3 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "1rem", marginBottom: "0.42rem", lineHeight: 1.25 }}>
@@ -120,7 +118,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         {work.desc}
       </p>
 
-      <div style={{ height: 122, minHeight: 122, display: "flex", justifyContent: "center", alignItems: "center", background: "rgba(250,247,241,0.52)", border: "1.5px dashed rgba(94,68,42,0.12)", borderRadius: 16, marginBottom: "0.68rem", padding: "0.16rem", overflow: "hidden" }}>
+      <div style={{ height: 122, minHeight: 122, display: "flex", justifyContent: "center", alignItems: "center", background: work.color, border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, marginBottom: "0.68rem", padding: "0.16rem", overflow: "hidden" }}>
         <WorkPreviewIllustration slug={work.slug} color={work.border} width={214} height={122} />
       </div>
 
@@ -151,7 +149,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
           marginTop: "0.78rem",
           background: "rgba(250,247,241,0.82)",
           border: "1.5px solid rgba(58,92,62,0.28)",
-          borderRadius: 999,
+          borderRadius: 8,
           padding: "0.38rem 0.78rem",
           color: "var(--cherry-forest)",
           fontWeight: 900,

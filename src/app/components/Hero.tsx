@@ -1,61 +1,7 @@
-import { IconMicroscope, IconTestTube, IconDNA, IconLeaf, IconLeafSmall, IconNotebook, IconStar, IconMushroom, IconBranch, IconSparkle, IconSeedling } from "./Icons";
+import { IconMicroscope, IconNotebook, IconSeedling } from "./Icons";
 import { works } from "./Works";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
-
-function FloatDeco({ children, style }: { children: React.ReactNode; style: React.CSSProperties }) {
-  return (
-    <div className="hero-floating-deco" style={{ position: "absolute", animation: "floatDeco 4.5s ease-in-out infinite", ...style }}>
-      {children}
-    </div>
-  );
-}
-
-function ForestBlob({ color, style }: { color: string; style: React.CSSProperties }) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        borderRadius: "58% 42% 52% 48% / 46% 58% 42% 54%",
-        background: color,
-        opacity: 0.28,
-        filter: "blur(1px)",
-        ...style,
-      }}
-    />
-  );
-}
-
-/* Fern/plant decorative SVG */
-function FernDeco({ style }: { style: React.CSSProperties }) {
-  return (
-    <svg width="70" height="80" viewBox="0 0 70 80" fill="none" aria-hidden="true" focusable="false" style={{ position: "absolute", ...style }}>
-      <path d="M35 78 Q35 50 35 30" stroke="var(--cherry-forest)" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-      <path d="M35 55 Q22 45 18 32 Q28 33 35 45" fill="var(--cherry-sage)" opacity="0.55" />
-      <path d="M35 45 Q48 35 52 22 Q42 23 35 35" fill="var(--cherry-sage)" opacity="0.45" />
-      <path d="M35 65 Q24 58 21 48 Q30 49 35 58" fill="var(--cherry-moss)" opacity="0.4" />
-    </svg>
-  );
-}
-
-/* Scattered dots texture */
-function DotTexture({ style }: { style: React.CSSProperties }) {
-  return (
-    <svg width="120" height="120" viewBox="0 0 120 120" fill="none" aria-hidden="true" focusable="false" style={{ position: "absolute", ...style, opacity: 0.18 }}>
-      {Array.from({ length: 6 }).map((_, row) =>
-        Array.from({ length: 6 }).map((_, col) => (
-          <circle
-            key={`${row}-${col}`}
-            cx={10 + col * 20}
-            cy={10 + row * 20}
-            r="2"
-            fill="var(--cherry-forest)"
-          />
-        ))
-      )}
-    </svg>
-  );
-}
 
 export function Hero() {
   function openWork(href: string, event: React.MouseEvent<HTMLAnchorElement>) {
@@ -76,63 +22,14 @@ export function Hero() {
         justifyContent: "center",
         position: "relative",
         overflow: "hidden",
-        padding: "2.8rem 1.5rem 1.7rem",
+        padding: "1.75rem 1.5rem 1.45rem",
         width: "100%",
         maxWidth: "100%",
+        background:
+          "linear-gradient(180deg, rgba(250,247,241,0.98) 0%, rgba(245,241,234,0.95) 100%), linear-gradient(rgba(58,92,62,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(58,92,62,0.05) 1px, transparent 1px)",
+        backgroundSize: "auto, 42px 42px, 42px 42px",
       }}
     >
-      {/* Forest atmosphere blobs */}
-      <ForestBlob color="var(--cherry-sage-light)" style={{ width: 380, height: 300, top: "5%", right: "2%", borderRadius: "50% 50% 45% 55% / 42% 58% 42% 58%" }} />
-      <ForestBlob color="var(--cherry-yellow-light)" style={{ width: 300, height: 240, bottom: "8%", left: "0%", borderRadius: "45% 55% 52% 48% / 55% 45% 58% 42%" }} />
-      <ForestBlob color="var(--cherry-blue-light)" style={{ width: 220, height: 180, top: "50%", right: "12%", borderRadius: "55% 45% 40% 60% / 40% 60% 48% 52%" }} />
-      <ForestBlob color="var(--cherry-peach-light)" style={{ width: 180, height: 150, top: "18%", left: "4%", borderRadius: "50% 50% 55% 45% / 52% 48% 56% 44%" }} />
-
-      {/* Texture dots */}
-      <DotTexture style={{ top: "10%", left: "2%" }} />
-      <DotTexture style={{ bottom: "12%", right: "5%" }} />
-
-      {/* Fern decorations */}
-      <FernDeco style={{ bottom: "0%", left: "2%", transformOrigin: "bottom center" }} />
-      <FernDeco style={{ bottom: "0%", right: "3%", transform: "scaleX(-1)", transformOrigin: "bottom right" }} />
-
-      {/* Floating icons */}
-      <FloatDeco style={{ top: "14%", right: "18%", animationDelay: "0s" }}>
-        <IconStar size={22} color="var(--cherry-yellow)" />
-      </FloatDeco>
-      <FloatDeco style={{ top: "22%", left: "10%", animationDelay: "0.7s" }}>
-        <IconMicroscope size={46} />
-      </FloatDeco>
-      <FloatDeco style={{ top: "10%", left: "32%", animationDelay: "1.3s" }}>
-        <IconSparkle size={16} color="var(--cherry-peach)" />
-      </FloatDeco>
-      <FloatDeco style={{ bottom: "28%", right: "11%", animationDelay: "0.5s" }}>
-        <IconTestTube size={36} />
-      </FloatDeco>
-      <FloatDeco style={{ bottom: "22%", left: "18%", animationDelay: "1.1s" }}>
-        <IconDNA size={42} />
-      </FloatDeco>
-      <FloatDeco style={{ top: "58%", left: "5%", animationDelay: "0.3s" }}>
-        <IconLeaf color="var(--cherry-sage)" size={38} />
-      </FloatDeco>
-      <FloatDeco style={{ top: "28%", right: "7%", animationDelay: "1.9s" }}>
-        <IconLeafSmall color="var(--cherry-moss)" size={30} />
-      </FloatDeco>
-      <FloatDeco style={{ bottom: "38%", right: "28%", animationDelay: "2.2s" }}>
-        <IconNotebook size={34} />
-      </FloatDeco>
-      <FloatDeco style={{ top: "18%", right: "40%", animationDelay: "0.6s" }}>
-        <IconStar size={13} color="var(--cherry-red)" />
-      </FloatDeco>
-      <FloatDeco style={{ bottom: "42%", left: "28%", animationDelay: "1.7s" }}>
-        <IconMushroom size={28} />
-      </FloatDeco>
-      <FloatDeco style={{ top: "38%", right: "4%", animationDelay: "3s" }}>
-        <IconBranch size={44} color="var(--cherry-forest)" />
-      </FloatDeco>
-      <FloatDeco style={{ top: "6%", left: "52%", animationDelay: "2.5s" }}>
-        <IconSeedling size={26} color="var(--cherry-forest)" />
-      </FloatDeco>
-
       {/* Main content */}
       <div className="hero-inner" style={{ position: "relative", zIndex: 2, textAlign: "left", maxWidth: 1120, width: "100%", minWidth: 0 }}>
         <div className="hero-content-grid" style={{ display: "grid", gridTemplateColumns: "minmax(260px, 0.72fr) minmax(0, 1.28fr)", gap: "1.2rem", alignItems: "start", minWidth: 0, maxWidth: "100%" }}>
@@ -143,18 +40,17 @@ export function Hero() {
             display: "inline-flex",
             alignItems: "center",
             gap: 8,
-            background: "var(--cherry-yellow-light)",
-            border: "1.5px dashed var(--cherry-yellow)",
+            background: "rgba(250,247,241,0.82)",
+            border: "1px solid rgba(58,92,62,0.18)",
             borderRadius: 999,
-            padding: "0.35rem 1.1rem",
-            marginBottom: "1rem",
+            padding: "0.34rem 0.86rem",
+            marginBottom: "0.85rem",
           }}
         >
-          <IconSparkle size={13} color="var(--cherry-bark)" />
-          <span style={{ fontFamily: "'Caveat', cursive", fontSize: "0.98rem", color: "var(--cherry-warm-brown)", fontWeight: 600 }}>
-            By Cherry
+          <IconMicroscope size={15} color="var(--cherry-forest)" />
+          <span style={{ fontSize: "0.78rem", color: "var(--cherry-warm-mid)", fontWeight: 900, letterSpacing: 0 }}>
+            By Cherry · science education lab
           </span>
-          <IconSparkle size={13} color="var(--cherry-bark)" />
         </div>
 
         {/* Headline */}
@@ -162,41 +58,27 @@ export function Hero() {
           id="hero-heading"
           style={{
             fontFamily: "'Nunito', sans-serif",
-            fontSize: "clamp(1.85rem, 4.4vw, 3rem)",
+            fontSize: "clamp(1.72rem, 3.9vw, 2.75rem)",
             fontWeight: 800,
-            lineHeight: 1.15,
+            lineHeight: 1.14,
             color: "var(--cherry-warm-brown)",
-            marginBottom: "0.8rem",
+            marginBottom: "0.72rem",
             letterSpacing: 0,
           }}
         >
-          A tiny studio for{" "}
-          <span style={{ color: "var(--cherry-red)", position: "relative", display: "inline-block" }}>
-            science
-            <svg style={{ position: "absolute", bottom: -5, left: 0, width: "100%" }} viewBox="0 0 120 8" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
-              <path d="M2 5 Q20 1 40 5 Q60 9 80 5 Q100 1 118 5" stroke="var(--cherry-peach)" strokeWidth="2.8" strokeLinecap="round" />
-            </svg>
-          </span>
-          ,{" "}
-          <span style={{ color: "var(--cherry-sage)" }}>learning</span>
-          {" & "}
-          <span style={{ color: "var(--cherry-blue)" }}>AI</span>
+          By Cherry 科学与 AI 学习工作台
         </h1>
 
-        {/* Subtitle — handwriting style */}
         <p
           style={{
-            fontFamily: "'Caveat', cursive",
-            fontSize: "clamp(1.1rem, 2.5vw, 1.35rem)",
+            fontSize: "clamp(0.96rem, 1.8vw, 1.08rem)",
             color: "var(--cherry-warm-mid)",
-            lineHeight: 1.65,
-            marginBottom: "1.1rem",
-            fontWeight: 500,
+            lineHeight: 1.72,
+            marginBottom: "1rem",
+            fontWeight: 700,
           }}
         >
-          科学模拟、课程卡片和 AI 工具，
-          <br />
-          打开后就能阅读、操作和学习。
+          整理可直接打开的科学模拟、课程材料和 AI 工具。首页先给内容入口，详情页承载真实交互、资料和参考证据。
         </p>
 
         {/* CTAs */}
@@ -216,7 +98,7 @@ export function Hero() {
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLElement).style.boxShadow = "3px 8px 0px rgba(58,92,62,0.25)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.boxShadow = "3px 5px 0px rgba(58,92,62,0.25)"; }}
           >
-            <IconSeedling size={18} color="#FAF7F1" /> 浏览主题作品
+              <IconSeedling size={18} color="#FAF7F1" /> 查看作品
           </a>
           <a
             className="hero-cta"
@@ -233,7 +115,7 @@ export function Hero() {
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--cherry-yellow-light)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--cherry-yellow)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "var(--border)"; }}
           >
-            <IconNotebook size={18} /> 读读笔记
+            <IconNotebook size={18} /> 阅读笔记
           </a>
         </div>
           </div>
@@ -244,10 +126,7 @@ export function Hero() {
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800 }}>{works.length} 个主题作品</div>
           </div>
           <div className="hero-work-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(178px, 1fr))", gap: "0.65rem", minWidth: 0, maxWidth: "100%" }}>
-            {works.map((work) => {
-              const isPlantEvolution = work.slug === "plant-evolution-stories";
-
-              return (
+            {works.map((work) => (
                 <a
                   className="hero-work-card"
                   key={work.slug}
@@ -256,22 +135,22 @@ export function Hero() {
                   style={{
                     background: work.color,
                     border: `1.5px solid ${work.border}`,
-                    borderRadius: 16,
-                    padding: "0.72rem 0.78rem 0.7rem",
+                    borderRadius: 10,
+                    padding: "0.68rem 0.72rem 0.66rem",
                     color: "var(--cherry-warm-brown)",
                     textDecoration: "none",
                     textAlign: "left",
-                    minHeight: isPlantEvolution ? 184 : 150,
+                    minHeight: 138,
                     display: "grid",
                     gridTemplateRows: "auto auto 1fr auto",
-                    gap: "0.38rem",
+                    gap: "0.34rem",
                     position: "relative",
                     overflow: "hidden",
                     minWidth: 0,
                     maxWidth: "100%",
                   }}
                 >
-                  <div aria-hidden="true" style={{ position: "absolute", right: isPlantEvolution ? -8 : -18, bottom: isPlantEvolution ? -10 : -20, width: isPlantEvolution ? 100 : 114, height: isPlantEvolution ? 158 : 92, borderRadius: isPlantEvolution ? "46% 54% 42% 58% / 55% 44% 56% 45%" : "54% 46% 48% 52% / 44% 55% 45% 56%", background: "rgba(250,247,241,0.42)", border: "1.5px dashed rgba(94,68,42,0.12)" }} />
+                  <div aria-hidden="true" style={{ position: "absolute", right: -10, bottom: -10, width: 106, height: 82, borderRadius: 10, background: "rgba(250,247,241,0.42)", border: "1px solid rgba(94,68,42,0.1)" }} />
                   <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0, position: "relative", zIndex: 1 }}>
                     <span style={{ width: 28, height: 28, display: "inline-flex", alignItems: "center", justifyContent: "center", transform: "scale(0.68)", transformOrigin: "center" }}>{work.icon}</span>
                     <strong style={{ fontSize: "0.88rem", lineHeight: 1.35, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
@@ -284,8 +163,8 @@ export function Hero() {
                       {work.updated}
                     </span>
                   </div>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.45, position: "relative", zIndex: 1, display: "block", minWidth: 0, overflowWrap: "anywhere", wordBreak: "break-word", paddingRight: isPlantEvolution ? 38 : 0 }}>{work.desc}</span>
-                  <div style={{ display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center", paddingRight: isPlantEvolution ? 92 : 82, position: "relative", zIndex: 1 }}>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.4, position: "relative", zIndex: 1, display: "block", minWidth: 0, overflowWrap: "anywhere", wordBreak: "break-word", paddingRight: 54 }}>{work.desc}</span>
+                  <div style={{ display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center", paddingRight: 76, position: "relative", zIndex: 1 }}>
                     {work.outputs.slice(0, 2).map((output) => (
                       <span key={output} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.12rem 0.42rem", color: "var(--cherry-warm-brown)", fontSize: "0.64rem", fontWeight: 900 }}>
                         {output}
@@ -295,12 +174,11 @@ export function Hero() {
                       {work.action}
                     </span>
                   </div>
-                  <div className="hero-work-preview" style={{ position: "absolute", right: isPlantEvolution ? 10 : 2, bottom: isPlantEvolution ? 2 : 0, display: "flex", justifyContent: "flex-end", opacity: 0.96, zIndex: 0 }}>
-                    <WorkPreviewIllustration slug={work.slug} color={work.border} width={isPlantEvolution ? 74 : 118} height={isPlantEvolution ? 130 : 88} />
+                  <div className="hero-work-preview" style={{ position: "absolute", right: 2, bottom: 0, display: "flex", justifyContent: "flex-end", opacity: 0.9, zIndex: 0 }}>
+                    <WorkPreviewIllustration slug={work.slug} color={work.border} width={108} height={82} />
                   </div>
                 </a>
-              );
-            })}
+            ))}
           </div>
         </div>
         </div>
@@ -347,14 +225,6 @@ export function Hero() {
             transform-origin: right bottom;
           }
 
-          .hero-floating-deco {
-            display: none !important;
-          }
-        }
-
-        @keyframes floatDeco {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-9px); }
         }
 
         .hero-cta:focus-visible,
@@ -374,10 +244,6 @@ export function Hero() {
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .hero-floating-deco {
-            animation: none !important;
-          }
-
           .hero-cta,
           .hero-work-card {
             transition: none !important;

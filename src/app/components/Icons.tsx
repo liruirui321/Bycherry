@@ -73,18 +73,6 @@ export function IconLeafSmall({ size = 22, color = "var(--cherry-sage)" }: IconP
   );
 }
 
-export function IconMushroom({ size = 30, color = "var(--cherry-peach)" }: IconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 30 30" fill="none">
-      <path d="M5 18 Q5 8 15 8 Q25 8 25 18Z" fill={color} opacity="0.9" />
-      <circle cx="10" cy="14" r="2" fill="white" opacity="0.6" />
-      <circle cx="18" cy="12" r="1.5" fill="white" opacity="0.5" />
-      <circle cx="21" cy="16" r="1.2" fill="white" opacity="0.45" />
-      <rect x="12" y="18" width="6" height="8" rx="3" fill="var(--cherry-yellow-light)" stroke={color} strokeWidth="1" />
-    </svg>
-  );
-}
-
 export function IconNotebook({ size = 32, color = "var(--cherry-yellow)" }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none">
