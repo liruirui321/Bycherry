@@ -2350,6 +2350,7 @@ function CrisprContent() {
   const [guideIndex, setGuideIndex] = useState(0);
   const [step, setStep] = useState<"scan" | "bind" | "cut" | "repair">("scan");
   const [repair, setRepair] = useState<"indel" | "replace" | "failed">("indel");
+  const [activeScenarioIndex, setActiveScenarioIndex] = useState<number | null>(0);
   const [copiedReport, setCopiedReport] = useState(false);
   const [reportStatus, setReportStatus] = useState("");
   const [quizIndex, setQuizIndex] = useState(0);
@@ -2388,6 +2389,32 @@ function CrisprContent() {
     { key: "cut", label: "剪切", text: "匹配足够时，Cas9 在 PAM 上游附近切开两条 DNA 链。" },
     { key: "repair", label: "修复", text: "细胞修复切口，结果可能是插入/删除、模板替换或未编辑。" },
   ] as const;
+  const practiceScenarios = [
+    {
+      title: "高匹配敲除",
+      guideIndex: 0,
+      step: "repair" as const,
+      repair: "indel" as const,
+      goal: "判断高匹配 guide 为什么可以进入剪切和插入/删除结果讨论。",
+      check: "报告里应同时说明 PAM、匹配评分、剪切位点和阅读框风险。",
+    },
+    {
+      title: "错配比较",
+      guideIndex: 1,
+      step: "bind" as const,
+      repair: "indel" as const,
+      goal: "比较 1 个错配如何降低结合稳定性，但不一定完全阻断剪切。",
+      check: "先在图中找到红色虚线，再解释为什么判定是谨慎使用。",
+    },
+    {
+      title: "低匹配失败",
+      guideIndex: 2,
+      step: "repair" as const,
+      repair: "failed" as const,
+      goal: "判断低匹配 guide 为什么应按未成功编辑处理。",
+      check: "报告里应保留不执行剪切、匹配不足和需要换 guide 的建议。",
+    },
+  ];
   const quizItems = [
     {
       question: "Cas9 在这张图里为什么先看 PAM？",
@@ -2410,6 +2437,7 @@ function CrisprContent() {
   ];
   const activeGuide = guides[guideIndex];
   const activeQuiz = quizItems[quizIndex];
+  const activeScenario = activeScenarioIndex === null ? null : practiceScenarios[activeScenarioIndex];
   const guideRange = Array.from({ length: targetLength }).map((_, index) => activeGuide.start + index);
   const guideBases = activeGuide.sequence.split(" ");
   const expectedGuideBases = guideRange.map((index) => rnaComplement[target[index]] ?? "?");
@@ -2471,6 +2499,10 @@ function CrisprContent() {
   const casX = canCut ? baseX(cutIndex) : stepIndex >= 1 ? baseX(activeGuide.start + 3) : baseX(pamStart + 1);
   const reportResult = activeGuide.score < 60 ? "guide 匹配不足，Cas9 不稳定定位，本轮按未成功编辑处理。" : activeRepair.result;
   const crisprReport = `【CRISPR 模拟报告】
+练习场景：${activeScenario ? activeScenario.title : "自定义判读"}
+学习目标：${activeScenario ? activeScenario.goal : "自行组合 guide、流程步骤和修复结果，完成一次编辑判读。"}
+检查重点：${activeScenario ? activeScenario.check : "先说明 PAM，再说明 guide 匹配、剪切判断和修复边界。"}
+
 目标 DNA：${target.join(" ")}
 PAM：${pamSequence}
 
@@ -2512,6 +2544,15 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
     setReportStatus("");
   }
 
+  function chooseCrisprScenario(index: number) {
+    const scenario = practiceScenarios[index];
+    setActiveScenarioIndex(index);
+    setGuideIndex(scenario.guideIndex);
+    setStep(scenario.step);
+    setRepair(scenario.repair);
+    clearCrisprCopyStatus();
+  }
+
   function chooseCrisprQuiz(index: number) {
     setQuizIndex(index);
     setQuizChoice(null);
@@ -2524,16 +2565,19 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
   }
 
   function chooseCrisprStep(nextStep: typeof step) {
+    setActiveScenarioIndex(null);
     setStep(nextStep);
     clearCrisprCopyStatus();
   }
 
   function chooseCrisprGuide(index: number) {
+    setActiveScenarioIndex(null);
     setGuideIndex(index);
     clearCrisprCopyStatus();
   }
 
   function chooseCrisprRepair(nextRepair: typeof repair) {
+    setActiveScenarioIndex(null);
     setRepair(nextRepair);
     setStep("repair");
     clearCrisprCopyStatus();
@@ -2577,6 +2621,32 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.72rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>练习场景</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>
+              先选一个判读任务，页面会自动切到对应 guide、步骤和修复结果。
+            </div>
+          </div>
+          <span style={{ color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900 }}>
+            {activeScenario ? `当前：${activeScenario.title}` : "当前：自定义判读"}
+          </span>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.62rem" }}>
+          {practiceScenarios.map((scenario, index) => {
+            const active = activeScenarioIndex === index;
+            return (
+              <button key={scenario.title} type="button" aria-pressed={active} onClick={() => chooseCrisprScenario(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 16, padding: "0.72rem", cursor: "pointer", display: "grid", gap: "0.36rem" }}>
+                <strong style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{scenario.title}</strong>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{scenario.goal}</span>
+                <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.48, fontWeight: 900 }}>{scenario.check}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 

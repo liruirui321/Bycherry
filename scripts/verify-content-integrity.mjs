@@ -345,6 +345,37 @@ function verifyPlantEvolutionLearnerContract() {
   expect(worksSource.includes('path: ["选择阶段", "读证据", "完成练习"]'), "Plant evolution work card path must describe a learner action flow.");
 }
 
+function verifyCrisprLearnerScenarios() {
+  const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
+  const worksSource = read("src/app/components/Works.tsx");
+  const crisprMatch = workDetailSource.match(/function CrisprContent\(\) \{([\s\S]*?)\nfunction RichWorkContent\(/);
+
+  expect(Boolean(crisprMatch), "WorkDetailPage must include CrisprContent before RichWorkContent.");
+
+  if (!crisprMatch) return;
+
+  const crisprSource = crisprMatch[1];
+  const requiredCrisprFeatures = [
+    { label: "scenario state", text: "activeScenarioIndex" },
+    { label: "practice scenario list", text: "practiceScenarios" },
+    { label: "scenario chooser", text: "chooseCrisprScenario" },
+    { label: "visible scenario section", text: "练习场景" },
+    { label: "high-match knockout scenario", text: "高匹配敲除" },
+    { label: "mismatch comparison scenario", text: "错配比较" },
+    { label: "low-match failure scenario", text: "低匹配失败" },
+    { label: "report scenario field", text: "练习场景：" },
+    { label: "report learning goal field", text: "学习目标：" },
+    { label: "report check field", text: "检查重点：" },
+  ];
+
+  for (const item of requiredCrisprFeatures) {
+    expect(crisprSource.includes(item.text), `CRISPR simulator learner scenario contract is missing ${item.label}: ${item.text}`);
+  }
+
+  expect(Array.from(crisprSource.matchAll(/\bgoal:\s*"/g)).length >= 3, "CRISPR simulator should expose at least three learner scenario goals.");
+  expect(worksSource.includes('outputs: ["guide 判定", "编辑结果", "模拟报告"]'), "CRISPR work card outputs must stay aligned with simulator report.");
+}
+
 function verifyLearnerFacingArticleCopy() {
   const learnerArticleSources = [
     "src/app/App.tsx",
@@ -520,6 +551,7 @@ verifyWorkJsonLdLearningOutcomes();
 verifyResearchAgentWorkbenchContract();
 verifyConceptExplainerAgentContract();
 verifyPlantEvolutionLearnerContract();
+verifyCrisprLearnerScenarios();
 verifyLearnerFacingArticleCopy();
 verifyLearnerProductPositioning();
 
