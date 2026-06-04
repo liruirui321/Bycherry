@@ -101,12 +101,20 @@ function collectLabeledNonsemanticContainers(source) {
   );
 }
 
+function collectUnlabeledNavigationCards(source) {
+  return Array.from(
+    source.matchAll(/<a\b(?=[^>]*\bclassName="[^"]*(?:article-nav-card|work-sequence-card)[^"]*")(?![^>]*\baria-label=)[^>]*>/g),
+    (match) => match[0].replace(/\s+/g, " ").slice(0, 180)
+  );
+}
+
 const failures = [];
 const duplicateIdAllowlist = new Set(["main-content"]);
 let checkedReferences = 0;
 let checkedIds = 0;
 let checkedReusableSvgDefinitions = 0;
 let checkedLabeledContainers = 0;
+let checkedUnlabeledNavigationCards = 0;
 
 for (const filePath of walkFiles(sourceRoot, [".tsx", ".ts"])) {
   const source = readFileSync(filePath, "utf8");
@@ -115,10 +123,12 @@ for (const filePath of walkFiles(sourceRoot, [".tsx", ".ts"])) {
   const references = collectAriaReferences(source, stringConstants);
   const staticSvgDefinitionIds = isIllustrationComponentFile(source) ? collectStaticSvgDefinitionIds(source) : [];
   const labeledNonsemanticContainers = collectLabeledNonsemanticContainers(source);
+  const unlabeledNavigationCards = collectUnlabeledNavigationCards(source);
   checkedIds += ids.size;
   checkedReferences += references.length;
   checkedReusableSvgDefinitions += staticSvgDefinitionIds.length;
   checkedLabeledContainers += labeledNonsemanticContainers.length;
+  checkedUnlabeledNavigationCards += unlabeledNavigationCards.length;
 
   for (const [id, count] of counts) {
     if (count > 1 && !duplicateIdAllowlist.has(id)) {
@@ -139,6 +149,10 @@ for (const filePath of walkFiles(sourceRoot, [".tsx", ".ts"])) {
   for (const container of labeledNonsemanticContainers) {
     failures.push(`${sourceLabel(filePath)} has <${container.tag}> with aria-label but no role: ${container.snippet}`);
   }
+
+  for (const navigationCard of unlabeledNavigationCards) {
+    failures.push(`${sourceLabel(filePath)} has a previous/next navigation card without aria-label: ${navigationCard}`);
+  }
 }
 
 if (failures.length) {
@@ -147,4 +161,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Accessibility refs verified: ${checkedReferences} static aria references, ${checkedIds} static ids, ${checkedReusableSvgDefinitions} reusable SVG definition ids, and ${checkedLabeledContainers} labeled nonsemantic containers without roles.`);
+console.log(`Accessibility refs verified: ${checkedReferences} static aria references, ${checkedIds} static ids, ${checkedReusableSvgDefinitions} reusable SVG definition ids, ${checkedLabeledContainers} labeled nonsemantic containers without roles, and ${checkedUnlabeledNavigationCards} unlabeled navigation cards.`);
