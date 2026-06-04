@@ -19,6 +19,9 @@ export function Contact() {
   const draftSubject = `By Cherry 留言 - ${trimmedName || "未署名"}`;
   const draftBody = `${trimmedMessage || "（未填写留言）"}\n\n来自：${trimmedName || "（未填写名字）"}`;
   const draftText = `收件人：${emailAddress}\n主题：${draftSubject}\n\n${draftBody}`;
+  const emailCopyStatusId = "contact-email-copy-status";
+  const formDraftCopyStatusId = "contact-form-draft-copy-status";
+  const sentDraftCopyStatusId = "contact-sent-draft-copy-status";
 
   function clearDraftStatus() {
     setCopiedDraft(false);
@@ -69,6 +72,7 @@ export function Contact() {
   return (
     <section
       id="contact"
+      aria-labelledby="contact-heading"
       style={{
         fontFamily: "'Nunito', sans-serif",
         padding: "5rem 1.5rem 4rem",
@@ -98,7 +102,7 @@ export function Contact() {
           <span style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>留言小纸条</span>
         </div>
 
-        <h2 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3, marginBottom: "0.75rem" }}>
+        <h2 id="contact-heading" style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3, marginBottom: "0.75rem" }}>
           说声 Hi 吧
         </h2>
 
@@ -108,11 +112,11 @@ export function Contact() {
 
         <div style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.52rem 0.42rem 0.9rem", marginBottom: "1.4rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
           <span style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.84rem" }}>{emailAddress}</span>
-          <button type="button" onClick={copyEmail} aria-describedby="contact-copy-status" style={{ background: copiedEmail ? "var(--cherry-sage-light)" : "var(--cherry-forest)", color: copiedEmail ? "var(--cherry-forest)" : "#FAF7F1", border: copiedEmail ? "1.5px solid var(--cherry-sage)" : "none", borderRadius: 999, padding: "0.38rem 0.78rem", fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: "0.78rem", cursor: "pointer" }}>
+          <button type="button" onClick={copyEmail} aria-describedby={emailCopyStatusId} style={{ background: copiedEmail ? "var(--cherry-sage-light)" : "var(--cherry-forest)", color: copiedEmail ? "var(--cherry-forest)" : "#FAF7F1", border: copiedEmail ? "1.5px solid var(--cherry-sage)" : "none", borderRadius: 999, padding: "0.38rem 0.78rem", fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: "0.78rem", cursor: "pointer" }}>
             {copiedEmail ? "已复制" : "复制邮箱"}
           </button>
         </div>
-        <div id="contact-copy-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginTop: "-1rem", marginBottom: "0.9rem" }}>
+        <div id={emailCopyStatusId} role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginTop: "-1rem", marginBottom: "0.9rem" }}>
           {copyStatus}
         </div>
 
@@ -213,7 +217,7 @@ export function Contact() {
                 type="button"
                 onClick={copyDraft}
                 disabled={!canUseDraft}
-                aria-describedby="contact-draft-copy-status"
+                aria-describedby={formDraftCopyStatusId}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -233,7 +237,7 @@ export function Contact() {
                 {copiedDraft ? "已复制留言" : "复制留言内容"}
               </button>
             </div>
-            <div id="contact-draft-copy-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginTop: "0.65rem" }}>
+            <div id={formDraftCopyStatusId} role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginTop: "0.65rem" }}>
               {draftStatus}
             </div>
           </form>
@@ -287,7 +291,7 @@ export function Contact() {
               className="contact-copy-draft"
               type="button"
               onClick={copyDraft}
-              aria-describedby="contact-draft-copy-status"
+              aria-describedby={sentDraftCopyStatusId}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -307,7 +311,7 @@ export function Contact() {
             >
               {copiedDraft ? "已复制留言" : "复制留言内容"}
             </button>
-            <div id="contact-draft-copy-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginTop: "0.55rem" }}>
+            <div id={sentDraftCopyStatusId} role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginTop: "0.55rem" }}>
               {draftStatus}
             </div>
             <div style={{ display: "flex", justifyContent: "center", marginTop: "0.75rem" }}>
