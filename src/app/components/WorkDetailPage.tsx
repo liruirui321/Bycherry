@@ -2594,6 +2594,7 @@ function CrisprContent() {
   const [step, setStep] = useState<"scan" | "bind" | "cut" | "repair">("scan");
   const [repair, setRepair] = useState<"indel" | "replace" | "failed">("indel");
   const [activeScenarioIndex, setActiveScenarioIndex] = useState<number | null>(0);
+  const [copiedDecisionCard, setCopiedDecisionCard] = useState(false);
   const [copiedReport, setCopiedReport] = useState(false);
   const [reportStatus, setReportStatus] = useState("");
   const [quizIndex, setQuizIndex] = useState(0);
@@ -2741,6 +2742,49 @@ function CrisprContent() {
   const baseX = (index: number) => 72 + index * 44;
   const casX = canCut ? baseX(cutIndex) : stepIndex >= 1 ? baseX(activeGuide.start + 3) : baseX(pamStart + 1);
   const reportResult = activeGuide.score < 60 ? "guide 匹配不足，Cas9 不稳定定位，本轮按未成功编辑处理。" : activeRepair.result;
+  const decisionRows = [
+    {
+      label: "PAM 入口",
+      value: pamSequence === "AGG" ? "通过" : "待确认",
+      detail: `目标邻近序列显示 PAM：${pamSequence}。SpCas9 需要先识别 NGG 入口，才继续检查旁边 DNA。`,
+    },
+    {
+      label: "guide 匹配",
+      value: activeGuide.score >= 80 ? "高匹配" : activeGuide.score >= 60 ? "有错配" : "低匹配",
+      detail: `${activeGuide.name} 匹配评分 ${activeGuide.score}%，错配数 ${computedMismatches.length} 个。错配越多，定位越不稳定。`,
+    },
+    {
+      label: "剪切可信度",
+      value: activeGuide.score >= 60 ? "可讨论剪切" : "不进入剪切",
+      detail: activeGuide.score >= 60 ? `可讨论第 ${cutIndex + 1} 个碱基附近剪切，位置在 PAM 上游 ${cutDistanceFromPam} nt。` : "guide 匹配不足，本轮不把剪切当作可靠事件。",
+    },
+    {
+      label: "修复边界",
+      value: effectiveRepair.title,
+      detail: reportResult,
+    },
+  ];
+  const goNoGoCriteria = [
+    activeGuide.score >= 80
+      ? "继续：可比较插入/删除和模板替换两类产物。"
+      : activeGuide.score >= 60
+        ? "谨慎：先定位错配，再比较更高匹配 guide。"
+        : "停止：先更换 guide，不直接讨论编辑产物。",
+    "结论必须同时说明 PAM、guide 匹配、剪切位点和修复边界。",
+    "真实研究前仍需脱靶搜索、递送条件、细胞类型和实验验证。",
+  ];
+  const decisionCardOutput = `【CRISPR 编辑决策卡】
+练习场景：${activeScenario ? activeScenario.title : "自定义判读"}
+目标：${activeScenario ? activeScenario.goal : "自行组合 guide、流程步骤和修复结果，完成一次编辑判读。"}
+总判定：${guideDecision.level}
+风险说明：${guideDecision.risk}
+下一步：${guideDecision.nextAction}
+
+判定矩阵
+${decisionRows.map((item, index) => `${index + 1}. ${item.label}：${item.value}｜${item.detail}`).join("\n")}
+
+Go / No-Go
+${goNoGoCriteria.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
   const crisprReport = `【CRISPR 模拟报告】
 练习场景：${activeScenario ? activeScenario.title : "自定义判读"}
 学习目标：${activeScenario ? activeScenario.goal : "自行组合 guide、流程步骤和修复结果，完成一次编辑判读。"}
@@ -2773,16 +2817,21 @@ ${effectiveRepair.title}
 产物序列：${effectiveRepair.sequence.join(" ")}
 结果解释：${reportResult}
 
-5. 判读顺序
+5. 编辑决策卡
+${decisionRows.map((item, index) => `${index + 1}. ${item.label}：${item.value}｜${item.detail}`).join("\n")}
+${goNoGoCriteria.map((item, index) => `Go/No-Go ${index + 1}：${item}`).join("\n")}
+
+6. 判读顺序
 ${interpretationSteps.map((item, index) => `${index + 1}. ${item.title}：${item.body}`).join("\n")}
 
-6. 质控检查
+7. 质控检查
 ${qualityChecks.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-7. 边界说明
+8. 边界说明
 ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
 
   function clearCrisprCopyStatus() {
+    setCopiedDecisionCard(false);
     setCopiedReport(false);
     setReportStatus("");
   }
@@ -2830,12 +2879,27 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
     const copiedToClipboard = await copyText(crisprReport);
     if (copiedToClipboard) {
       setCopiedReport(true);
+      setCopiedDecisionCard(false);
       setReportStatus("模拟报告已复制到剪贴板。");
       window.setTimeout(() => setCopiedReport(false), 1400);
       return;
     }
 
     setCopiedReport(false);
+    setReportStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyDecisionCard() {
+    const copiedToClipboard = await copyText(decisionCardOutput);
+    if (copiedToClipboard) {
+      setCopiedDecisionCard(true);
+      setCopiedReport(false);
+      setReportStatus("编辑决策卡已复制到剪贴板。");
+      window.setTimeout(() => setCopiedDecisionCard(false), 1400);
+      return;
+    }
+
+    setCopiedDecisionCard(false);
     setReportStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -3050,6 +3114,40 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
             <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.82rem" }}>{activeGuide.note}</div>
           </div>
         </aside>
+      </div>
+
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.9rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>编辑决策卡</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>
+              把当前选择压缩成一次可保存的 go/no-go 判定。
+            </div>
+          </div>
+          <button type="button" onClick={copyDecisionCard} aria-describedby="crispr-report-status" style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.46rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
+            {copiedDecisionCard ? "已复制" : "复制决策卡"}
+          </button>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.62rem" }}>
+          {decisionRows.map((item, index) => (
+            <div key={item.label} style={{ background: index === 0 ? "var(--cherry-sage-light)" : "var(--muted)", border: index === 0 ? "1.5px solid var(--cherry-forest)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.72rem", minHeight: 126 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: "0.55rem", alignItems: "start", marginBottom: "0.42rem" }}>
+                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{item.label}</strong>
+                <span style={{ color: index === 0 ? "var(--cherry-forest)" : guideDecision.color, fontSize: "0.72rem", fontWeight: 900, whiteSpace: "nowrap" }}>{item.value}</span>
+              </div>
+              <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.6, fontWeight: 800 }}>{item.detail}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.82rem", display: "grid", gap: "0.48rem" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem" }}>下一步判定</div>
+          {goNoGoCriteria.map((item, index) => (
+            <div key={item} style={{ display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.5rem", alignItems: "start", color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, fontWeight: 800 }}>
+              <span style={{ width: 22, height: 22, borderRadius: "50%", background: index === 0 ? guideDecision.color : "var(--cherry-warm-brown)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>{index + 1}</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>

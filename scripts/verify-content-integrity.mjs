@@ -471,6 +471,12 @@ function verifyCrisprLearnerScenarios() {
     { label: "report scenario field", text: "练习场景：" },
     { label: "report learning goal field", text: "学习目标：" },
     { label: "report check field", text: "检查重点：" },
+    { label: "decision rows", text: "decisionRows" },
+    { label: "go/no-go criteria", text: "goNoGoCriteria" },
+    { label: "decision card output", text: "decisionCardOutput" },
+    { label: "copy decision card handler", text: "copyDecisionCard" },
+    { label: "visible decision card", text: "编辑决策卡" },
+    { label: "copy decision card button", text: "复制决策卡" },
   ];
 
   for (const item of requiredCrisprFeatures) {
