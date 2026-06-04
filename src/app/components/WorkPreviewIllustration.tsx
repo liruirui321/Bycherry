@@ -287,6 +287,29 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
 
   if (slug === "concept-explainer") {
     return (
+      <img
+        src="/illustrations/concept-explainer-map.webp"
+        width={width}
+        height={height}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        style={{
+          width,
+          height,
+          display: "block",
+          objectFit: "cover",
+          borderRadius: 16,
+          border: "1.5px solid rgba(181,174,221,0.28)",
+          boxShadow: "0 10px 20px rgba(94,68,42,0.08)",
+          background: "rgba(250,247,241,0.72)",
+        }}
+      />
+    );
+  }
+
+  if (slug === "concept-explainer-vector-fallback") {
+    return (
       <svg width={width} height={height} viewBox="0 0 96 72" fill="none" aria-hidden="true">
         <rect x="11" y="12" width="74" height="48" rx="18" fill="rgba(250,247,241,0.72)" stroke={color} strokeWidth="2.2" />
         <circle cx="31" cy="34" r="16" fill="#EDE9F5" stroke="#B5AEDD" strokeWidth="2.2" />

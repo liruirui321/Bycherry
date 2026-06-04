@@ -16,6 +16,7 @@ const articlesListDescription = "课程开发、科学传播、AI 创作和科�
 const retiredShareCopy = "可打开、可阅读、可操作";
 const appThemeColor = "#F5F1EA";
 const generatedIllustrations = [
+  "illustrations/concept-explainer-map.webp",
   "illustrations/crispr-editing-flow.webp",
   "illustrations/gene-expression-flow.webp",
   "illustrations/plant-evolution-story.webp",
