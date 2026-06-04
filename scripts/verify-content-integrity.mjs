@@ -126,6 +126,9 @@ function verifyVisibleLearningModuleCopy() {
     "首屏学习模块总览",
     "可保存产出",
     "复制路径",
+    "页尾继续学习入口",
+    "footerWorkLinks",
+    "footer-work-link",
   ];
 
   const retiredCopyPatterns = [

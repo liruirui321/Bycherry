@@ -1,5 +1,7 @@
 import { IconCherry, IconLeafSmall } from "./Icons";
-import { navigateHomeSection } from "../navigation";
+import { works } from "./Works";
+import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
+import { preloadRouteForHref } from "../routePrefetch";
 
 const footerLinks = [
   { label: "学习模块", href: "#works" },
@@ -8,7 +10,13 @@ const footerLinks = [
   { label: "联系", href: "#contact" },
 ];
 
+const footerWorkSlugs = ["gene-expression", "concept-explainer", "research-prompt-kit"];
+
 export function Footer() {
+  const footerWorkLinks = footerWorkSlugs
+    .map((slug) => works.find((work) => work.slug === slug))
+    .filter((work): work is (typeof works)[number] => Boolean(work));
+
   return (
     <footer
       style={{
@@ -61,6 +69,41 @@ export function Footer() {
         ))}
       </nav>
 
+      <nav aria-label="页尾继续学习入口" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.55rem", maxWidth: 720, margin: "0 auto 0.95rem" }}>
+        {footerWorkLinks.map((work) => (
+          <a
+            className="footer-work-link"
+            key={work.slug}
+            href={work.href}
+            aria-label={`继续学习${work.title}：先做这个，${work.starter}。可保存产出，${work.outputs.join("、")}`}
+            onMouseEnter={() => preloadRouteForHref(work.href)}
+            onFocus={() => preloadRouteForHref(work.href)}
+            onPointerDown={() => preloadRouteForHref(work.href)}
+            onClick={(event) => {
+              if (!shouldUseClientNavigation(event)) return;
+              event.preventDefault();
+              navigateClient(work.href);
+            }}
+            style={{
+              display: "grid",
+              gap: "0.24rem",
+              color: "rgba(245,241,234,0.88)",
+              textDecoration: "none",
+              border: "1px solid rgba(245,241,234,0.18)",
+              background: "rgba(250,247,241,0.07)",
+              borderRadius: 8,
+              padding: "0.58rem 0.7rem",
+              textAlign: "left",
+              transition: "background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease",
+            }}
+          >
+            <span style={{ color: "#FAF7F1", fontSize: "0.78rem", fontWeight: 900 }}>{work.title}</span>
+            <span style={{ color: "rgba(245,241,234,0.7)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 800 }}>先做：{work.path[0]} → {work.path[1]}</span>
+            <span style={{ color: "rgba(245,241,234,0.82)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 900 }}>产出：{work.outputs[0]} / {work.outputs[1]}</span>
+          </a>
+        ))}
+      </nav>
+
       <div aria-hidden="true" style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem" }}>
         <svg width="132" height="28" viewBox="0 0 132 28" fill="none" focusable="false">
           <path d="M22 15 C36 5 50 24 64 14 C78 5 91 23 108 13" stroke="rgba(245,241,234,0.28)" strokeWidth="3" strokeLinecap="round" />
@@ -76,20 +119,30 @@ export function Footer() {
       <style>
         {`
           footer .footer-link:hover,
-          footer .footer-link:focus-visible {
+          footer .footer-link:focus-visible,
+          footer .footer-work-link:hover,
+          footer .footer-work-link:focus-visible {
             color: #FAF7F1 !important;
             background: rgba(250,247,241,0.14) !important;
             border-color: rgba(245,241,234,0.36) !important;
           }
 
-          footer .footer-link:focus-visible {
+          footer .footer-work-link:hover,
+          footer .footer-work-link:focus-visible {
+            transform: translateY(-2px);
+          }
+
+          footer .footer-link:focus-visible,
+          footer .footer-work-link:focus-visible {
             outline: 3px solid #F2A896;
             outline-offset: 4px;
           }
 
           @media (prefers-reduced-motion: reduce) {
-            footer .footer-link {
+            footer .footer-link,
+            footer .footer-work-link {
               transition: none !important;
+              transform: none !important;
             }
           }
         `}
