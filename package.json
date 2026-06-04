@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "npm run verify:public && npm run verify:sitemap && vite build",
+    "build": "npm run verify:public && npm run verify:links && npm run verify:sitemap && vite build",
+    "verify:links": "node scripts/verify-internal-links.mjs",
     "verify:public": "node scripts/verify-public-assets.mjs",
     "verify:sitemap": "node scripts/verify-sitemap.mjs",
     "dev": "vite"
