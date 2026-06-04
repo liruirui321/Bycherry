@@ -2,6 +2,13 @@
   "name": "bycherry-homepage",
   "private": true,
   "version": "0.0.1",
+  "description": "Cute illustrated personal homepage for science education, AI tools, and course design.",
+  "homepage": "https://bycherry.me",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liruirui321/Bycherry.git"
+  },
+  "author": "Cherry",
   "type": "module",
   "scripts": {
     "build": "npm run verify:public && npm run verify:links && npm run verify:a11y && npm run verify:sitemap && vite build",
