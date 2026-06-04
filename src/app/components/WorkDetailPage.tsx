@@ -275,6 +275,8 @@ function PlantEvolutionContent() {
       challenge: "间歇干燥、强光和浅水环境让祖先类群先获得一部分陆地适应工具。",
       innovation: "环境感知、细胞壁和胁迫响应基因工具箱。",
       prompt: "为什么植物登陆前，淡水浅水环境可能是重要训练场？",
+      answerHint: "浅水环境会周期性暴露在强光、干燥和温度波动中，祖先类群可以先演化出一部分应对陆地压力的基因工具。",
+      teacherMove: "让学生把“环境压力”对应到“需要的结构或基因功能”，例如抗干燥、抗紫外线、细胞壁支撑。",
       certainty: "基因组证据强",
       refs: ["Wang 2019", "Morris 2018"],
     },
@@ -286,6 +288,8 @@ function PlantEvolutionContent() {
       challenge: "陆地环境会让生殖细胞暴露在干燥和紫外线下。",
       innovation: "带孢粉素外壁的孢子，提高保存和传播能力。",
       prompt: "为什么孢子化石可能早于完整植物体化石？",
+      answerHint: "孢粉素外壁更抗分解，也更容易在沉积物中保存；小型早期植物体本身不一定容易形成完整化石。",
+      teacherMove: "引导学生区分“最早化石记录”和“真实起源时间”，说明化石保存会筛选证据。",
       certainty: "化石证据强",
       refs: ["Wellman 2003", "Kenrick 1997"],
     },
@@ -297,6 +301,8 @@ function PlantEvolutionContent() {
       challenge: "离开水体后，植物需要把身体抬起来，同时把孢子送到更容易扩散的位置。",
       innovation: "直立轴、孢子囊和更清晰的孢子体结构。",
       prompt: "早期植物还很小，为什么直立结构仍然重要？",
+      answerHint: "直立结构能把孢子抬离地表，增加扩散机会，也让植物开始在空间上争夺光照。",
+      teacherMove: "可以让学生画出贴地结构和直立结构，比较孢子释放高度、光照获取和身体支撑需求。",
       certainty: "化石与系统发育共同支持",
       refs: ["Kenrick 1997", "Morris 2018"],
     },
@@ -308,6 +314,8 @@ function PlantEvolutionContent() {
       challenge: "要长高就必须解决水分运输、机械支撑和远距离资源分配。",
       innovation: "维管组织和更复杂的分枝结构。",
       prompt: "维管组织为什么会改变陆地生态系统的高度结构？",
+      answerHint: "维管组织让水分和养分能长距离运输，并配合支撑结构让植物长高，陆地植被从低矮覆盖转向分层结构。",
+      teacherMove: "把维管组织类比成运输管线，再追问：如果没有运输系统，植物高度会被什么限制？",
       certainty: "形态化石证据强",
       refs: ["Kenrick 1997", "Nature Plants 2018"],
     },
@@ -319,6 +327,8 @@ function PlantEvolutionContent() {
       challenge: "干燥陆地上，下一代需要保护、营养和等待合适时机的能力。",
       innovation: "胚、营养组织和保护结构整合成种子习性。",
       prompt: "种子为什么比裸露孢子更适合不稳定环境？",
+      answerHint: "种子把胚、营养和保护结构放在一起，可以等待合适条件再萌发，比裸露孢子更能应对干燥和季节波动。",
+      teacherMove: "让学生比较“孢子像轻量传播单元”和“种子像带补给的保护包”，再讨论两者各自优势。",
       certainty: "早期种子化石支持",
       refs: ["Pettitt 1981", "Prestianni 2017"],
     },
@@ -330,6 +340,8 @@ function PlantEvolutionContent() {
       challenge: "繁殖不只要产生后代，还要提高传粉和传播效率。",
       innovation: "花、果实、封闭胚珠以及和动物互动的繁殖系统。",
       prompt: "花和果实为什么会让动物进入植物演化叙事？",
+      answerHint: "花可以吸引或利用传粉者，果实可以帮助种子传播；植物繁殖效率开始和动物行为紧密相连。",
+      teacherMove: "让学生举一个传粉或种子传播例子，再指出这是植物结构和动物行为共同塑造的生态关系。",
       certainty: "早白垩世化石清楚，更早起源仍有争议",
       refs: ["Friis 1994", "Herendeen 2017"],
     },
@@ -404,6 +416,8 @@ ${activeChapter.evidence}
 
 5. 课堂提问
 ${activeChapter.prompt}
+作答提示：${activeChapter.answerHint}
+教师追问：${activeChapter.teacherMove}
 
 6. 参考文献
 ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).join("\n")}`;
@@ -523,6 +537,16 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
 
           <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1rem", color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.9rem" }}>
             <strong style={{ color: "var(--cherry-warm-brown)" }}>课堂提问：</strong>{activeChapter.prompt}
+          </div>
+
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.65rem" }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>讨论引导</div>
+            <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
+              <strong style={{ color: "var(--cherry-warm-brown)" }}>作答提示：</strong>{activeChapter.answerHint}
+            </div>
+            <div style={{ background: "rgba(169,201,172,0.18)", border: "1.5px solid rgba(93,140,101,0.18)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
+              <strong style={{ color: "var(--cherry-warm-brown)" }}>教师追问：</strong>{activeChapter.teacherMove}
+            </div>
           </div>
 
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
