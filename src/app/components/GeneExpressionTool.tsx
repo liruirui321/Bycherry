@@ -41,6 +41,8 @@ const codons = [
   { dna: "CCG", template: "GGC", rna: "CCG", amino: "Pro", anticodon: "GGC", color: "var(--cherry-blue)" },
 ];
 
+const initialCycleProgress = 0.42;
+
 function inBox(molecule: Molecule, box: { x: number; y: number; w: number; h: number }) {
   return molecule.x >= box.x && molecule.x <= box.x + box.w && molecule.y >= box.y && molecule.y <= box.y + box.h;
 }
@@ -97,34 +99,6 @@ function MoleculeNode({
       <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={molecule.type === "pol" ? 13 : 14} fontWeight={900}>
         {docked ? shortLabel : molecule.label}
       </text>
-    </g>
-  );
-}
-
-function ProductBeads({ count, animated = true }: { count: number; animated?: boolean }) {
-  return (
-    <g transform="translate(704 442)">
-      <text x={0} y={-18} fill="var(--cherry-warm-brown)" fontSize={16} fontWeight={900}>
-        蛋白产量计数
-      </text>
-      {Array.from({ length: 12 }).map((_, index) => {
-        const active = index < count;
-        const amino = codons[index % codons.length];
-        const chainIndex = Math.floor(index / codons.length);
-        const beadIndex = index % codons.length;
-        return (
-          <g key={index} transform={`translate(${beadIndex * 34} ${chainIndex * 34})`} opacity={active ? 1 : 0.3}>
-            <circle
-              r={13}
-              fill={active ? amino.color : "rgba(94,68,42,0.08)"}
-              stroke="rgba(94,68,42,0.16)"
-              strokeWidth={1.5}
-            >
-              {active && animated ? <animate attributeName="r" values="12;15;13" dur="1.5s" begin={`${index * 0.08}s`} repeatCount="indefinite" /> : null}
-            </circle>
-          </g>
-        );
-      })}
     </g>
   );
 }
@@ -306,6 +280,16 @@ function aminoCountForRibosome(progress: number) {
   return Math.min(codons.length, Math.floor(progress * codons.length) + 1);
 }
 
+function peptideBeadPoint(exit: Point, index: number) {
+  const points = [
+    { x: exit.x + 5, y: exit.y + 2 },
+    { x: exit.x + 18, y: exit.y + 16 },
+    { x: exit.x + 35, y: exit.y + 8 },
+    { x: exit.x + 50, y: exit.y + 23 },
+  ];
+  return points[index] ?? points[points.length - 1];
+}
+
 function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslate }: { model: { transcriptionOn: boolean; polBound: number; ribBound: number }; progress: number; retainedMrnaCount: number; canTranslate: boolean }) {
   const transcriptionProgress = model.transcriptionOn ? clamp01(progress / 0.78) : 0;
   const ribosomeCanRead = canTranslate && (model.transcriptionOn ? transcriptionProgress > 0.28 : retainedMrnaCount > 0);
@@ -339,6 +323,7 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
             <path d="M-51 17 C-28 11 -14 24 0 17 S28 11 51 17" fill="none" stroke="var(--cherry-red)" strokeWidth={4.4} strokeLinecap="round" />
             <circle cx={-13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
             <circle cx={13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
+            <path d="M10 -2 C21 2 27 10 35 17" fill="none" stroke="var(--cherry-warm-brown)" strokeWidth={3.2} strokeLinecap="round" opacity={0.28} />
             <text x={-13} y={0} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={7} fontWeight={900}>
               P
             </text>
@@ -361,42 +346,41 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
         if (ribosome.opacity <= 0 || aminoCount <= 0) return null;
 
         const exit = { x: ribosome.renderPoint.x + 35, y: ribosome.renderPoint.y + 17 };
-        const firstBead = { x: exit.x + 11, y: exit.y + 7 };
-        const beadStep = { x: 22, y: 11 };
 
         return (
           <g key={`live-peptide-chain-${ribosomeIndex}`} opacity={ribosome.opacity}>
             <path
-              d={`M${exit.x} ${exit.y} C${exit.x + 5} ${exit.y + 3} ${firstBead.x - 8} ${firstBead.y - 2} ${firstBead.x} ${firstBead.y}`}
+              d={`M${exit.x - 14} ${exit.y - 8} C${exit.x - 5} ${exit.y - 2} ${exit.x + 1} ${exit.y + 1} ${exit.x + 5} ${exit.y + 2}`}
               fill="none"
-              stroke="var(--cherry-peach)"
+              stroke="var(--cherry-warm-brown)"
               strokeWidth={4}
               strokeLinecap="round"
+              opacity={0.32}
             />
             {ribosomeIndex === 0 ? (
-              <text x={exit.x - 33} y={exit.y - 14} fill="var(--cherry-warm-brown)" fontSize={11} fontWeight={900}>
-                出口
+              <text x={exit.x + 24} y={exit.y - 18} fill="var(--cherry-forest)" fontSize={11} fontWeight={900}>
+                多肽链
               </text>
             ) : null}
             {codons.slice(0, aminoCount).map((codon, aminoIndex) => {
-              const x = firstBead.x + aminoIndex * beadStep.x;
-              const y = firstBead.y + aminoIndex * beadStep.y;
+              const point = peptideBeadPoint(exit, aminoIndex);
+              const previousPoint = aminoIndex > 0 ? peptideBeadPoint(exit, aminoIndex - 1) : null;
 
               return (
-                <g key={`live-peptide-${ribosomeIndex}-${codon.amino}`} transform={`translate(${x} ${y})`}>
-                  {aminoIndex > 0 ? (
+                <g key={`live-peptide-${ribosomeIndex}-${codon.amino}`} transform={`translate(${point.x} ${point.y})`}>
+                  {previousPoint ? (
                     <line
-                      x1={-beadStep.x + 10}
-                      y1={-beadStep.y + 5}
-                      x2={-10}
+                      x1={previousPoint.x - point.x + 8}
+                      y1={previousPoint.y - point.y + 5}
+                      x2={-8}
                       y2={-5}
                       stroke="var(--cherry-forest)"
-                      strokeWidth={4}
+                      strokeWidth={3.6}
                       strokeLinecap="round"
                     />
                   ) : null}
-                  <circle r={11} fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4}>
-                    <animate attributeName="r" values="9;12;11" dur="0.7s" begin={`${aminoIndex * 0.08}s`} repeatCount="1" />
+                  <circle r={10.5} fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4}>
+                    <animate attributeName="r" values="8;12;10.5" dur="0.7s" begin={`${aminoIndex * 0.08}s`} repeatCount="1" />
                   </circle>
                   <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={7} fontWeight={900}>
                     {codon.amino}
@@ -550,7 +534,7 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
 
 export function GeneExpressionTool() {
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const progressRef = useRef(0);
+  const progressRef = useRef(initialCycleProgress);
   const prefersReducedMotion = usePrefersReducedMotion();
   const zones = {
     promoter: { x: 214, y: 212, w: 160, h: 86 },
@@ -585,7 +569,7 @@ export function GeneExpressionTool() {
 
   const [molecules, setMolecules] = useState<Molecule[]>(dockDefaultMolecules);
   const [dragging, setDragging] = useState<{ id: string; dx: number; dy: number } | null>(null);
-  const [cycleProgress, setCycleProgress] = useState(0);
+  const [cycleProgress, setCycleProgress] = useState(initialCycleProgress);
   const [displayedMrnaCount, setDisplayedMrnaCount] = useState(0);
   const [displayedProteinCount, setDisplayedProteinCount] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -911,8 +895,6 @@ export function GeneExpressionTool() {
                 </g>
               )
             )}
-
-            <ProductBeads count={visibleProteinCount} animated={!prefersReducedMotion} />
 
             <g transform="translate(46 86)">
               <rect width={190} height={28} rx={999} fill="rgba(250,247,241,0.74)" stroke="rgba(94,68,42,0.16)" />
