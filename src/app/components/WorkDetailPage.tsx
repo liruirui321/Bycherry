@@ -687,6 +687,24 @@ function ConceptExplainerContent() {
   const active = explanations[concept];
   const selectedLevel = active.levels[levelIndex];
   const quizAnswered = quizChoice !== null;
+  const lessonFlow = [
+    {
+      title: "1 分钟进入",
+      body: `先问“你听到${concept}会想到什么”，再用类比切入：${active.analogy}`,
+    },
+    {
+      title: "3 分钟讲清",
+      body: `${selectedLevel.title}只保留一个主线：${selectedLevel.body}`,
+    },
+    {
+      title: "2 分钟辨析",
+      body: `${active.compare} 常见误区提醒：${active.pitfall}`,
+    },
+    {
+      title: "1 分钟检查",
+      body: `用即时小测收束：${active.quiz.question}`,
+    },
+  ];
   const lessonOutput = `【概念】${concept}
 【对象】${audience}
 【目标】${lessonGoal}
@@ -709,7 +727,10 @@ ${active.compare}
 六、常见误区
 ${active.pitfall}
 
-七、即时小测
+七、课堂流程
+${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
+
+八、即时小测
 问题：${active.quiz.question}
 选项：${active.quiz.options.join(" / ")}
 答案：${active.quiz.answer}
@@ -833,6 +854,18 @@ ${active.pitfall}
           <ContentCard title="常见误区">
             {active.pitfall}
           </ContentCard>
+        </div>
+      </div>
+
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+        <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.9rem" }}>课堂流程</div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.75rem" }}>
+          {lessonFlow.map((item, index) => (
+            <div key={item.title} style={{ background: index === 1 ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === 1 ? `1.5px solid ${active.color}` : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.82rem", minHeight: 126 }}>
+              <div style={{ color: active.color, fontWeight: 900, marginBottom: "0.45rem", fontSize: "0.82rem" }}>{item.title}</div>
+              <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.62, fontSize: "0.82rem", fontWeight: 800 }}>{item.body}</div>
+            </div>
+          ))}
         </div>
       </div>
 
