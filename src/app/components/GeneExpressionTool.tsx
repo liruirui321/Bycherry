@@ -41,6 +41,44 @@ const codons = [
   { dna: "CCG", template: "GGC", rna: "CCG", amino: "Pro", anticodon: "GGC", color: "var(--cherry-blue)" },
 ];
 
+const geneQuizItems = [
+  {
+    id: "five-end",
+    question: "边转录边翻译时，核糖体最先读取 mRNA 的哪一端？",
+    options: ["5' 自由端", "3' 生长端", "RNA 聚合酶内部"],
+    answer: "5' 自由端",
+    explain: "新生 mRNA 的 5' 端先露出，核糖体可以从这段已露出的序列开始读取密码子。",
+  },
+  {
+    id: "growth-end",
+    question: "mRNA 的 3' 生长端在动画里为什么贴着 RNA 聚合酶？",
+    options: ["新碱基在聚合酶出口附近接上", "核糖体把 mRNA 拉长", "DNA 聚合酶在合成 RNA"],
+    answer: "新碱基在聚合酶出口附近接上",
+    explain: "转录时 RNA 聚合酶沿 DNA 移动，并在出口附近持续延长 RNA 的 3' 端。",
+  },
+  {
+    id: "start-codon",
+    question: "固定序列里的 AUG 在这个模型中对应哪一个氨基酸？",
+    options: ["Met", "Glu", "Phe"],
+    answer: "Met",
+    explain: "AUG 通常作为起始密码子，在这里对应 Met，后面的 GAA、UUU、CCG 继续接出 Glu、Phe、Pro。",
+  },
+  {
+    id: "ribosome-role",
+    question: "如果保留 mRNA 但移走核糖体，最直接的结果是什么？",
+    options: ["多肽链不再继续延伸", "DNA 会立刻消失", "mRNA 会变回 DNA"],
+    answer: "多肽链不再继续延伸",
+    explain: "mRNA 只是被读取的模板；没有核糖体读取密码子，氨基酸就不会继续接到多肽链上。",
+  },
+  {
+    id: "tf-pol",
+    question: "启动子没有 TF 或基因区没有 RNA 聚合酶时，动画为什么不会产生新 mRNA？",
+    options: ["转录没有启动", "翻译速度太快", "多肽链已经完成"],
+    answer: "转录没有启动",
+    explain: "这个简化模型要求 TF 帮助启动子进入可转录状态，同时 RNA 聚合酶负责实际合成 mRNA。",
+  },
+];
+
 const initialCycleProgress = 0.42;
 
 function inBox(molecule: Molecule, box: { x: number; y: number; w: number; h: number }) {
@@ -603,6 +641,8 @@ export function GeneExpressionTool() {
   const [displayedProteinCount, setDisplayedProteinCount] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [speed, setSpeed] = useState(1);
+  const [activeQuizIndex, setActiveQuizIndex] = useState(0);
+  const [quizAnswers, setQuizAnswers] = useState<Record<string, string>>({});
 
   const model = useMemo(() => {
     const tfBound = molecules.filter((molecule) => molecule.type === "tf" && inBox(molecule, zones.promoter)).length;
@@ -642,6 +682,10 @@ export function GeneExpressionTool() {
   const visibleProteinCount = Math.min(12, Math.max(displayedProteinCount, instantProteinCount));
   const proteinReadoutMax = Math.max(visibleProteinCount, proteinCapacity);
   const translationRate = activeRibosomeCount > 0 ? Math.min(100, 35 + activeRibosomeCount * 20) : 0;
+  const activeQuiz = geneQuizItems[activeQuizIndex];
+  const activeQuizAnswer = quizAnswers[activeQuiz.id];
+  const quizAnsweredCount = geneQuizItems.filter((item) => quizAnswers[item.id]).length;
+  const quizCorrectCount = geneQuizItems.filter((item) => quizAnswers[item.id] === item.answer).length;
   const taskStatuses = [
     { label: "把 TF 拖到启动子，观察启动子变亮。", done: model.tfBound > 0 },
     { label: "把 RNA 聚合酶拖到基因区，观察 mRNA 从 5' 端到 3' 生长端延伸。", done: visibleMrnaCount > 0 },
@@ -773,6 +817,14 @@ export function GeneExpressionTool() {
     setMolecules(initialMolecules);
     setDragging(null);
     restartReactionTimeline();
+  }
+
+  function chooseQuizAnswer(option: string) {
+    setQuizAnswers((answers) => ({ ...answers, [activeQuiz.id]: option }));
+  }
+
+  function nextQuiz() {
+    setActiveQuizIndex((index) => (index + 1) % geneQuizItems.length);
   }
 
   function runExpressionPreset() {
@@ -1048,6 +1100,81 @@ export function GeneExpressionTool() {
               <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", fontWeight: 900, marginBottom: "0.32rem" }}>出口处多肽片段</div>
               <strong style={{ color: "var(--cherry-forest)", fontSize: "0.9rem", lineHeight: 1.35 }}>{peptidePreview}</strong>
             </div>
+          </div>
+
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: "0.75rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
+                <IconCheck size={18} />
+                即时小测
+              </div>
+              <div style={{ color: "var(--cherry-red)", fontWeight: 900, fontSize: "0.78rem", whiteSpace: "nowrap" }}>
+                {quizCorrectCount}/{geneQuizItems.length}
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 5, marginBottom: "0.8rem" }} aria-label={`已完成 ${quizAnsweredCount} 道小测`}>
+              {geneQuizItems.map((item, index) => {
+                const answered = Boolean(quizAnswers[item.id]);
+                const correct = quizAnswers[item.id] === item.answer;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    aria-label={`第 ${index + 1} 题${answered ? (correct ? "，已答对" : "，已作答") : "，未作答"}`}
+                    aria-pressed={activeQuizIndex === index}
+                    onClick={() => setActiveQuizIndex(index)}
+                    style={{
+                      width: 24,
+                      height: 10,
+                      borderRadius: 999,
+                      border: "none",
+                      background: activeQuizIndex === index ? "var(--cherry-red)" : answered ? (correct ? "var(--cherry-forest)" : "var(--cherry-yellow)") : "var(--muted)",
+                      cursor: "pointer",
+                      padding: 0,
+                    }}
+                  />
+                );
+              })}
+            </div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, lineHeight: 1.45, fontSize: "0.9rem", marginBottom: "0.75rem" }}>
+              {activeQuiz.question}
+            </div>
+            <div style={{ display: "grid", gap: 7 }}>
+              {activeQuiz.options.map((option) => {
+                const selected = activeQuizAnswer === option;
+                const correct = option === activeQuiz.answer;
+                const answered = Boolean(activeQuizAnswer);
+                return (
+                  <button
+                    key={option}
+                    type="button"
+                    aria-pressed={selected}
+                    onClick={() => chooseQuizAnswer(option)}
+                    style={{
+                      textAlign: "left",
+                      background: selected ? (correct ? "var(--cherry-sage-light)" : "var(--cherry-peach-light)") : "var(--muted)",
+                      border: selected ? `1.5px solid ${correct ? "var(--cherry-forest)" : "var(--cherry-red)"}` : answered && correct ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)",
+                      borderRadius: 14,
+                      padding: "0.58rem 0.72rem",
+                      color: "var(--cherry-warm-brown)",
+                      fontWeight: 900,
+                      cursor: "pointer",
+                      lineHeight: 1.35,
+                    }}
+                  >
+                    {option}
+                  </button>
+                );
+              })}
+            </div>
+            {activeQuizAnswer ? (
+              <div role="status" aria-live="polite" style={{ marginTop: "0.8rem", background: activeQuizAnswer === activeQuiz.answer ? "rgba(169,201,172,0.2)" : "var(--cherry-yellow-light)", border: `1.5px solid ${activeQuizAnswer === activeQuiz.answer ? "rgba(93,140,101,0.22)" : "var(--cherry-yellow)"}`, borderRadius: 16, padding: "0.72rem 0.8rem", color: "var(--cherry-warm-mid)", fontSize: "0.82rem", lineHeight: 1.62, fontWeight: 800 }}>
+                <strong style={{ color: "var(--cherry-warm-brown)" }}>{activeQuizAnswer === activeQuiz.answer ? "答对了：" : "再看一遍："}</strong>{activeQuiz.explain}
+              </div>
+            ) : null}
+            <button type="button" onClick={nextQuiz} style={{ marginTop: "0.8rem", width: "100%", background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.58rem 0.9rem", fontWeight: 900, cursor: "pointer" }}>
+              下一题
+            </button>
           </div>
 
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
