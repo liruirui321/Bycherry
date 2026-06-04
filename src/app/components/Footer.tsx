@@ -31,7 +31,7 @@ export function Footer() {
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: "0.55rem" }}>
         <IconCherry size={20} color="#F2A896" />
-        <span style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "rgba(245,241,234,0.9)", fontWeight: 600 }}>
+        <span style={{ fontSize: "1rem", color: "rgba(245,241,234,0.9)", fontWeight: 600 }}>
           By Cherry
         </span>
         <IconLeafSmall size={16} color="var(--cherry-sage-light)" />

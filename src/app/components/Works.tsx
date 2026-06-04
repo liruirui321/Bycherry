@@ -217,7 +217,7 @@ export function Works() {
         <div style={{ marginBottom: "2.5rem", textAlign: "center" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: "0.75rem" }}>
             <IconFlask size={20} color="var(--cherry-warm-mid)" />
-            <span style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>
+            <span style={{ fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>
               科学、课程和 AI 工具
             </span>
           </div>

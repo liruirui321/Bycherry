@@ -24,6 +24,7 @@ function ContentCard({ title, children }: { title: string; children: React.React
 
 function PromptKitContent() {
   const [activePromptIndex, setActivePromptIndex] = useState(0);
+  const [activeModeIndex, setActiveModeIndex] = useState(0);
   const [material, setMaterial] = useState("研究问题：\n样本/材料：\n已有结果：\n我最担心的问题：");
   const [copied, setCopied] = useState(false);
   const [copiedPack, setCopiedPack] = useState(false);
@@ -79,9 +80,30 @@ function PromptKitContent() {
     },
   ];
   const activePrompt = prompts[activePromptIndex];
+  const promptModes = [
+    {
+      title: "保守核查",
+      description: "只根据材料判断证据是否足够，优先暴露缺口。",
+      instruction: "请保持保守，不要替材料补结论；所有判断都要回到原文、数据、图注或实验设计。",
+      outputs: ["证据边界", "缺失信息", "核查优先级"],
+    },
+    {
+      title: "结构改写",
+      description: "把已有材料整理成更清晰的论文或汇报结构。",
+      instruction: "请优化结构和表达顺序，但不要新增未经材料支持的事实；把改写和新增建议分开。",
+      outputs: ["结构调整", "表达改写", "不可新增内容"],
+    },
+    {
+      title: "导师汇报",
+      description: "压缩成适合开会讨论的要点、风险和下一步。",
+      instruction: "请把输出组织成可汇报版本：先给结论边界，再列关键证据、主要风险和需要导师拍板的问题。",
+      outputs: ["汇报摘要", "风险点", "待确认问题"],
+    },
+  ];
+  const activeMode = promptModes[activeModeIndex];
   const workflowSteps = [
     { label: "材料", body: activePrompt.input, color: "var(--cherry-blue-light)" },
-    { label: "Prompt", body: activePrompt.title, color: "var(--cherry-yellow-light)" },
+    { label: "模式", body: activeMode.title, color: "var(--cherry-yellow-light)" },
     { label: "质控", body: `${activePrompt.checks.length} 项检查`, color: "var(--cherry-sage-light)" },
     { label: "任务包", body: `${activePrompt.output.length} 个栏目`, color: "var(--cherry-peach-light)" },
   ];
@@ -90,8 +112,11 @@ function PromptKitContent() {
 【我的材料】
 ${material.trim() || "请在这里粘贴材料。"}
 
+【工作模式】
+${activeMode.title}：${activeMode.instruction}
+
 【输出格式】
-请使用清晰小标题，并包含：${activePrompt.output.join("、")}。
+请使用清晰小标题，并包含：${[...activePrompt.output, ...activeMode.outputs].join("、")}。
 
 【质量要求】
 ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")}`;
@@ -106,7 +131,7 @@ ${finalPrompt}
 ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")}
 
 三、需要得到的栏目
-${activePrompt.output.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+${[...activePrompt.output, ...activeMode.outputs].map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
 四、人工复核提醒
 1. 结论必须能回到原文、数据或实验设计。
@@ -198,6 +223,21 @@ ${activePrompt.output.map((item, index) => `${index + 1}. ${item}`).join("\n")}
               {copyStatus}
             </div>
 
+            <div style={{ display: "grid", gap: "0.55rem", marginBottom: "0.9rem" }}>
+              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem" }}>工作模式</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(154px, 1fr))", gap: "0.55rem" }}>
+                {promptModes.map((mode, index) => {
+                  const active = activeModeIndex === index;
+                  return (
+                    <button key={mode.title} type="button" aria-pressed={active} onClick={() => { setActiveModeIndex(index); setCopied(false); setCopiedPack(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.68rem", cursor: "pointer" }}>
+                      <strong style={{ display: "block", color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.24rem" }}>{mode.title}</strong>
+                      <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>{mode.description}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="prompt-workflow-grid" role="group" aria-label="科研助手任务流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.62rem", marginBottom: "0.9rem" }}>
               {workflowSteps.map((item, index) => (
                 <div key={item.label} style={{ background: item.color, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.72rem", minHeight: 104, position: "relative", overflow: "hidden" }}>
@@ -253,7 +293,7 @@ ${activePrompt.output.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.7rem", marginBottom: "0.9rem" }}>
-              {activePrompt.output.map((item, index) => (
+              {[...activePrompt.output, ...activeMode.outputs].map((item, index) => (
                 <div key={item} style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 14, padding: "0.65rem", color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.78rem" }}>
                   {index + 1}. {item}
                 </div>
@@ -765,7 +805,7 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
                       </svg>
                     </span>
                     <span style={{ minWidth: 0 }}>
-                      <span style={{ display: "block", color: active ? "var(--cherry-forest)" : "var(--cherry-red)", fontFamily: "'Caveat', cursive", fontSize: "0.92rem", fontWeight: 900, lineHeight: 1.18 }}>{chapter.time}</span>
+                      <span style={{ display: "block", color: active ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.92rem", fontWeight: 900, lineHeight: 1.18 }}>{chapter.time}</span>
                       <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900, marginTop: "0.16rem" }}>{plantStageLabels[index]}</span>
                     </span>
                   </div>
@@ -786,7 +826,7 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
 
         <aside style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-            <div style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-red)", fontWeight: 900, fontSize: "1.05rem", marginBottom: "0.45rem" }}>{activeChapter.time}</div>
+            <div style={{ color: "var(--cherry-red)", fontWeight: 900, fontSize: "1.05rem", marginBottom: "0.45rem" }}>{activeChapter.time}</div>
             <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, lineHeight: 1.35, marginBottom: "0.7rem" }}>{activeChapter.title}</h3>
             <div role="tablist" aria-label="植物演化内容层级" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem", marginBottom: "0.85rem" }}>
               {plantLenses.map((lens) => {
@@ -946,9 +986,9 @@ function ConceptExplainerContent() {
   const explanations: Record<string, { color: string; analogy: string; levels: Array<{ title: string; body: string }>; terms: string[]; mechanism: string[]; compare: string; pitfall: string; quiz: { question: string; options: string[]; answer: string; explain: string } }> = {
     转录: {
       color: "var(--cherry-blue)",
-      analogy: "把书架上的原文抄成一张便签。书还在原处，便签可以被拿去加工。",
+      analogy: "把完整说明书中的一段信息转写成可读取的工作稿。原始 DNA 保留在原处，RNA 负责把信息带到下一步加工流程。",
       levels: [
-        { title: "小学版", body: "DNA 像一本很大的说明书，转录就是把其中一小段抄成 RNA 便签。" },
+        { title: "入门版", body: "DNA 像一份完整说明书，转录就是把其中一段基因信息抄写成 RNA 工作稿。" },
         { title: "高中版", body: "细胞以 DNA 的一条链为模板合成 mRNA，RNA 中用 U 替代 T，mRNA 会把遗传信息带到核糖体。" },
         { title: "研究生版", body: "转录包含启动子识别、转录因子调控、RNA 聚合酶延伸、终止，以及真核细胞中的剪接和转录后加工。" },
       ],
@@ -967,7 +1007,7 @@ function ConceptExplainerContent() {
       color: "var(--cherry-red)",
       analogy: "像鞋带末端的保护套，保护染色体末端不被磨坏、也不容易和别的断端混淆。",
       levels: [
-        { title: "小学版", body: "端粒在染色体两头，像保护套一样保护重要信息。" },
+        { title: "入门版", body: "端粒位于染色体末端，帮助细胞区分真正的末端和需要修复的 DNA 断裂。" },
         { title: "高中版", body: "端粒位于染色体末端，随着细胞分裂逐渐缩短，能减少染色体末端被误认为断裂的风险。" },
         { title: "研究生版", body: "端粒长度、端粒酶活性与复制潜能、细胞衰老、肿瘤发生和干细胞状态有关。" },
       ],
@@ -986,7 +1026,7 @@ function ConceptExplainerContent() {
       color: "var(--cherry-sage)",
       analogy: "不只是住址，更像一份生活档案：住在哪里、吃什么、什么时候活动、和谁竞争。",
       levels: [
-        { title: "小学版", body: "生态位像一种生物在自然里的生活位置和工作。" },
+        { title: "入门版", body: "生态位描述一个物种如何利用资源、占据环境并与其他生物发生关系。" },
         { title: "高中版", body: "生态位描述生物如何利用资源、生活在什么环境、和其他生物如何相互作用。" },
         { title: "研究生版", body: "生态位包含资源维度、空间维度和相互作用维度，可用于解释竞争、共存、适应辐射和群落结构。" },
       ],
@@ -1005,7 +1045,7 @@ function ConceptExplainerContent() {
       color: "var(--cherry-peach)",
       analogy: "像细胞按下自我清理按钮，把自己有序拆开，再交给身体清理。",
       levels: [
-        { title: "小学版", body: "凋亡是细胞有计划地结束自己，避免影响周围细胞。" },
+        { title: "入门版", body: "凋亡是细胞按程序结束自身生命，并把对周围组织的影响控制在较小范围内。" },
         { title: "高中版", body: "凋亡是一种程序性细胞死亡，细胞会收缩、DNA 断裂，并被免疫细胞清除，通常不引发明显炎症。" },
         { title: "研究生版", body: "凋亡通过内源性线粒体通路或外源性死亡受体通路激活 caspase 级联反应，在发育、免疫和肿瘤抑制中很关键。" },
       ],
@@ -2056,7 +2096,7 @@ function WorkSequenceLinks({ work }: { work: Work }) {
               minWidth: 0,
             }}
           >
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "'Caveat', cursive", color: "var(--cherry-forest)", fontWeight: 900, fontSize: "1rem" }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-forest)", fontWeight: 900, fontSize: "1rem" }}>
               {item.align === "left" ? item.direction : null}
               {item.label}
               {item.align === "right" ? item.direction : null}

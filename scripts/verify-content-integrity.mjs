@@ -136,6 +136,10 @@ function verifyNoLowQualityVisibleContent() {
     { label: "为什么做", pattern: /为什么做/ },
     { label: "继续打开", pattern: /继续打开/ },
     { label: "自动生成花粉", pattern: /自动生成花粉/ },
+    { label: "Caveat hand-written font", pattern: /Caveat/ },
+    { label: "手账", pattern: /手账/ },
+    { label: "小纸条", pattern: /小纸条/ },
+    { label: "overly cute copy", pattern: /可爱|绘本|打个招呼|只是想说|Cherry 会怎么叫你/ },
   ];
 
   for (const relativePath of sourceFiles) {

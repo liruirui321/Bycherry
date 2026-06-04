@@ -138,7 +138,7 @@ export function Nav() {
           style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}
         >
           <IconCherry size={28} />
-          <span style={{ fontFamily: "'Caveat', cursive", fontSize: "1.25rem", fontWeight: 700, color: "var(--cherry-warm-brown)", letterSpacing: 0.3 }}>
+          <span style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--cherry-warm-brown)", letterSpacing: 0.3 }}>
             By Cherry
           </span>
         </a>

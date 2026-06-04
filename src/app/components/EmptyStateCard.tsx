@@ -28,7 +28,7 @@ export function EmptyStateCard({
         <path d="M143 77 C152 63 168 66 175 80 C159 90 149 87 143 77Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="1.8" />
         <circle cx="66" cy="30" r="6" fill="var(--cherry-red)" opacity="0.74" />
       </svg>
-      <div style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-red)", fontSize: "1.15rem", fontWeight: 900, marginBottom: "0.45rem" }}>{eyebrow}</div>
+      <div style={{ color: "var(--cherry-red)", fontSize: "1.15rem", fontWeight: 900, marginBottom: "0.45rem" }}>{eyebrow}</div>
       <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.55rem, 4vw, 2.1rem)", fontWeight: 900, lineHeight: 1.25, marginBottom: "0.7rem" }}>
         {title}
       </h1>

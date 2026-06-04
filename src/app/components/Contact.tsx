@@ -138,15 +138,15 @@ export function Contact() {
         {/* Header */}
         <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: "0.75rem" }}>
           <IconMail size={20} color="var(--cherry-warm-mid)" />
-          <span style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>留言小纸条</span>
+          <span style={{ fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>联系与反馈</span>
         </div>
 
         <h2 id="contact-heading" style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3, marginBottom: "0.75rem" }}>
-          说声 Hi 吧
+          联系 Cherry
         </h2>
 
         <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.95rem", maxWidth: 480, margin: "0 auto 2.5rem" }}>
-          如果你想聊聊科学、课程、AI 工具，或者只是想说一声「你好」，都欢迎给我留言~ 我会认真读每一条。
+          如果你想讨论科学内容、课程设计、AI 工具或网站反馈，可以直接发来信息。我会认真阅读并回复可继续推进的问题。
         </p>
 
         <div className="contact-note-illustration">
@@ -177,12 +177,8 @@ export function Contact() {
               position: "relative",
             }}
           >
-            {/* Washi tapes */}
-            <div style={{ position: "absolute", top: -13, left: "38%", width: 70, height: 18, background: "var(--cherry-peach)", opacity: 0.65, borderRadius: 3, transform: "rotate(-2.5deg)" }} />
-            <div style={{ position: "absolute", top: -9, right: "20%", width: 48, height: 14, background: "var(--cherry-sage-light)", opacity: 0.7, borderRadius: 3, transform: "rotate(3.5deg)" }} />
-
             {/* Name */}
-            <label htmlFor="contact-name" style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>
+            <label htmlFor="contact-name" style={{ fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>
               你的名字
             </label>
             <input
@@ -194,7 +190,7 @@ export function Contact() {
                 setName(e.target.value);
                 clearDraftStatus();
               }}
-              placeholder="Cherry 会怎么叫你？"
+              placeholder="你的姓名或称呼"
               required
               style={{
                 width: "100%", background: "rgba(250,247,241,0.85)",
@@ -206,7 +202,7 @@ export function Contact() {
             />
 
             {/* Message */}
-            <label htmlFor="contact-message" style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>
+            <label htmlFor="contact-message" style={{ fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>
               你想说什么
             </label>
             <textarea
@@ -218,7 +214,7 @@ export function Contact() {
                 clearDraftStatus();
               }}
               rows={4}
-              placeholder="聊聊你感兴趣的话题、反馈，或者只是打个招呼都好~"
+              placeholder="写下你想讨论的问题、反馈或合作方向"
               required
               style={{
                 width: "100%", background: "rgba(250,247,241,0.85)",
@@ -254,7 +250,7 @@ export function Contact() {
                 }}
               >
                 <IconSend size={18} color={canUseDraft ? "#FAF7F1" : "var(--cherry-warm-mid)"} />
-                发送小纸条
+                发送信息
               </button>
               <button
                 className="contact-copy-draft"
@@ -302,8 +298,8 @@ export function Contact() {
             <div style={{ display: "flex", justifyContent: "center", margin: "-0.55rem 0 0.55rem" }}>
               <DeliveredNoteIllustration />
             </div>
-            <h3 style={{ fontFamily: "'Caveat', cursive", fontSize: "1.45rem", color: "var(--cherry-warm-brown)", fontWeight: 700, marginBottom: "0.5rem" }}>
-              邮件草稿已打开，谢谢 {name} ~
+            <h3 style={{ fontSize: "1.45rem", color: "var(--cherry-warm-brown)", fontWeight: 700, marginBottom: "0.5rem" }}>
+              邮件草稿已打开，谢谢 {name}
             </h3>
             <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.9rem" }}>
               确认内容后在邮件客户端发送，我就能收到你的留言

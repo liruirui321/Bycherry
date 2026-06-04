@@ -189,10 +189,10 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               >
                 {article.icon} {"tag" in article ? article.tag : article.label}
               </span>
-              <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-warm-mid)", fontWeight: 700 }}>
+              <span style={{ color: "var(--cherry-warm-mid)", fontWeight: 700 }}>
                 {article.date}
               </span>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontFamily: "'Caveat', cursive", color: "var(--cherry-warm-mid)" }}>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 5, color: "var(--cherry-warm-mid)" }}>
                 <IconCoffee size={16} /> 约 {"readTime" in article ? article.readTime : article.readMin} 分钟
               </span>
             </div>
@@ -291,13 +291,13 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                       }}
                       style={{ display: "grid", gap: "0.48rem", justifyItems: item.align === "right" ? "end" : "start", textAlign: item.align, background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.85rem", color: "var(--cherry-warm-mid)", textDecoration: "none" }}
                     >
-                      <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-forest)", fontWeight: 900 }}>
+                      <span style={{ color: "var(--cherry-forest)", fontWeight: 900 }}>
                         {item.align === "left" ? `${item.arrow} ` : ""}{item.label}{item.align === "right" ? ` ${item.arrow}` : ""}
                       </span>
                       <strong style={{ color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.9rem" }}>{item.article.title}</strong>
                       <span style={{ display: "flex", alignItems: "center", justifyContent: item.align === "right" ? "flex-end" : "flex-start", gap: 6, flexWrap: "wrap" }}>
                         <span style={{ background: itemBg, color: itemColor, borderRadius: 999, padding: "0.13rem 0.5rem", fontSize: "0.68rem", fontWeight: 900 }}>{itemType}</span>
-                        <span style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-warm-mid)", fontSize: "0.78rem" }}>约 {itemReadTime} 分钟</span>
+                        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem" }}>约 {itemReadTime} 分钟</span>
                       </span>
                       <span style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.52, fontSize: "0.76rem" }}>{item.article.highlights[0]}</span>
                     </a>

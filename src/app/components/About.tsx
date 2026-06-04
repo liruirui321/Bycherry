@@ -112,7 +112,7 @@ export function About() {
             <h3 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "1.5rem", marginBottom: "0.2rem" }}>
               Cherry
             </h3>
-            <p style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-warm-mid)", fontSize: "1rem", marginBottom: "1.25rem" }}>
+            <p style={{ color: "var(--cherry-warm-mid)", fontSize: "1rem", marginBottom: "1.25rem" }}>
               生物 × 教育 × AI 创作者
             </p>
 
@@ -143,7 +143,7 @@ export function About() {
         <div>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: "1rem" }}>
             <div style={{ width: 28, height: 4, background: "var(--cherry-sage)", borderRadius: 2 }} />
-            <span style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-sage)", fontWeight: 600 }}>关于这个工作台</span>
+            <span style={{ fontSize: "1rem", color: "var(--cherry-sage)", fontWeight: 600 }}>关于这个工作台</span>
           </div>
 
           <h2
@@ -181,7 +181,7 @@ export function About() {
           <div style={{ display: "flex", gap: "2rem", marginTop: "2rem", flexWrap: "wrap" }}>
             {stats.map((s) => (
               <div key={s.label}>
-                <div style={{ fontFamily: "'Caveat', cursive", fontSize: "2rem", fontWeight: 700, color: "var(--cherry-red)", lineHeight: 1 }}>{s.num}</div>
+                <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--cherry-red)", lineHeight: 1 }}>{s.num}</div>
                 <div style={{ fontSize: "0.8rem", color: "var(--cherry-warm-mid)", marginTop: 2 }}>{s.label}</div>
               </div>
             ))}

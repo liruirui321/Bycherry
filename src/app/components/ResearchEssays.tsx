@@ -218,7 +218,7 @@ function EssayCard({ essay }: {
             >
               {essay.label}
             </span>
-            <span style={{ fontFamily: "'Caveat', cursive", fontSize: "0.82rem", color: "var(--cherry-warm-mid)" }}>
+            <span style={{ fontSize: "0.82rem", color: "var(--cherry-warm-mid)" }}>
               {essay.date}
             </span>
           </div>
@@ -285,7 +285,7 @@ function EssayCard({ essay }: {
           ))}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ fontFamily: "'Caveat', cursive", fontSize: "0.82rem", color: "var(--cherry-warm-mid)" }}>
+          <span style={{ fontSize: "0.82rem", color: "var(--cherry-warm-mid)" }}>
             约 {essay.readMin} 分钟
           </span>
           <div
@@ -335,7 +335,7 @@ export function ResearchEssays() {
       <div style={{ marginBottom: "2.5rem" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: "0.75rem" }}>
           <IconLeafSmall size={18} color="var(--cherry-warm-mid)" />
-          <span style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>
+          <span style={{ fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>
             在实验室和文献里想到的事
           </span>
         </div>
@@ -422,7 +422,7 @@ export function ResearchEssays() {
         }}
       >
         <div style={{ width: 40, height: 1.5, background: "var(--border)" }} />
-        <span style={{ fontFamily: "'Caveat', cursive", fontSize: "0.88rem", color: "var(--cherry-warm-mid)" }}>
+        <span style={{ fontSize: "0.88rem", color: "var(--cherry-warm-mid)" }}>
           科研转译和课程设计持续更新
         </span>
         <div style={{ width: 40, height: 1.5, background: "var(--border)" }} />

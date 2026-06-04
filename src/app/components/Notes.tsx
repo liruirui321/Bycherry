@@ -170,7 +170,7 @@ export function Notes() {
           <div>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: "0.75rem" }}>
               <IconBook size={20} color="var(--cherry-warm-mid)" />
-              <span style={{ fontFamily: "'Caveat', cursive", fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>手账目录</span>
+              <span style={{ fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>文章目录</span>
             </div>
             <h2 id="notes-heading" style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
               最近在想的事
@@ -207,7 +207,7 @@ export function Notes() {
 
                 {/* Date + tag */}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
-                  <span style={{ fontFamily: "'Caveat', cursive", fontSize: "0.84rem", color: "var(--cherry-warm-mid)" }}>{note.date}</span>
+                  <span style={{ fontSize: "0.84rem", color: "var(--cherry-warm-mid)" }}>{note.date}</span>
                   <span style={{ background: note.tagBg, color: note.tagColor, borderRadius: 999, padding: "0.18rem 0.62rem", fontSize: "0.74rem", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 4 }}>
                     {note.icon} {note.tag}
                   </span>
@@ -235,7 +235,7 @@ export function Notes() {
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", alignSelf: "end", gap: "0.7rem", flexWrap: "wrap" }}>
-                  <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.78rem", color: "var(--cherry-warm-mid)", fontFamily: "'Caveat', cursive" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.78rem", color: "var(--cherry-warm-mid)" }}>
                     <IconCoffee size={16} /> 约 {note.readTime} 分钟
                   </span>
                   <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "0.8rem", color: "var(--cherry-forest)", fontWeight: 700 }}>
