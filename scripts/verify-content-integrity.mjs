@@ -156,6 +156,8 @@ function verifyWorkCardActions() {
   const copyActionMatches = Array.from(worksSource.matchAll(/\baction:\s*"复制[^"]*"/g), (match) => match[0]);
 
   expect(copyActionMatches.length === 0, `Work card entry actions should open or start the tool, not imply direct copy behavior: ${copyActionMatches.join(", ")}`);
+  expect(worksSource.includes('title: "科研 Agent 工作台"'), "Research AI work card should be titled 科研 Agent 工作台.");
+  expect(!worksSource.includes("科研助手 Prompt Kit"), "Visible work card title must not use the old Prompt Kit naming.");
 }
 
 function verifyWorkDetailCardsStayCompact() {
@@ -164,6 +166,21 @@ function verifyWorkDetailCardsStayCompact() {
   expect(!source.includes("isPlantEvolution"), "Work detail cards must not use plant-specific tall preview sizing.");
   expect(source.includes('gridTemplateColumns: "112px minmax(0, 1fr)"'), "Work detail continue cards should use a uniform compact preview column.");
   expect(source.includes('height: 88'), "Work detail continue card previews should keep a fixed compact height.");
+}
+
+function verifyArticleCardsStayStructured() {
+  const files = [
+    "src/app/components/Notes.tsx",
+    "src/app/components/ResearchEssays.tsx",
+    "src/app/components/ArticleDetailPage.tsx",
+    "src/app/components/EmptyStateCard.tsx",
+  ];
+
+  for (const relativePath of files) {
+    const source = read(relativePath);
+    expect(!source.includes("border: 1.5px dashed"), `${relativePath} must not use dashed illustration frames.`);
+    expect(!source.includes("transform: rotate("), `${relativePath} must not use rotated tape or stamp styling.`);
+  }
 }
 
 const routes = getContentRoutes();
@@ -225,6 +242,7 @@ verifyVisibleThemeWorkCopy();
 verifyNoLowQualityVisibleContent();
 verifyWorkCardActions();
 verifyWorkDetailCardsStayCompact();
+verifyArticleCardsStayStructured();
 
 if (failures.length) {
   console.error("Content integrity verification failed.");

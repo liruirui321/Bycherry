@@ -9,7 +9,7 @@ The app uses custom science visuals and local React components instead of a gene
 - Portfolio cards for science, course design, and AI tools
 - Interactive gene expression visualization
 - Plant evolution timeline with classroom study cards
-- Research prompt kit, concept explainer, and CRISPR teaching simulator
+- Research agent workspace, concept explainer, and CRISPR teaching simulator
 - Notes and research essay sections
 - Mailto-based contact form
 

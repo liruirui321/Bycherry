@@ -135,14 +135,13 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             style={{
               background: "var(--card)",
               border: "1.5px solid var(--border)",
-              borderRadius: 18,
+              borderRadius: 8,
               padding: "0.78rem 1.05rem 1.1rem",
-              boxShadow: "4px 7px 0px rgba(94,68,42,0.07)",
+              boxShadow: "0 8px 18px rgba(94,68,42,0.06)",
               position: "relative",
               overflow: "hidden",
             }}
           >
-            <div style={{ position: "absolute", top: -10, right: 28, width: 68, height: 17, background: article.tagBg ?? article.labelBg, opacity: 0.72, borderRadius: 4, transform: "rotate(4deg)" }} />
             <div className="article-illustration-stamp" style={{ background: article.tagBg ?? article.labelBg, borderColor: article.tagColor ?? article.labelColor }}>
               <ArticleIllustration slug={article.slug} color={article.tagColor ?? article.labelColor} />
             </div>
@@ -327,13 +326,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             right: 1.05rem;
             width: 144px;
             height: 108px;
-            border: 1.5px dashed;
-            border-radius: 18px;
+            border: 1px solid;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 3px 6px 0 rgba(94,68,42,0.07);
-            transform: rotate(1.5deg);
+            box-shadow: 0 8px 18px rgba(94,68,42,0.07);
             overflow: hidden;
           }
 
@@ -394,7 +392,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               width: min(100%, 178px);
               height: 88px;
               margin: 0 0 0.48rem auto;
-              transform: rotate(0.8deg);
             }
 
             .article-meta-row {

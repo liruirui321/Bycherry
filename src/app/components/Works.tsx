@@ -21,13 +21,13 @@ export const works = [
   {
     id: 3, slug: "research-prompt-kit", category: "AI工具" as Category,
     icon: <IconAI size={36} color="var(--cherry-blue)" />,
-    title: "科研助手 Prompt Kit",
-    desc: "选择科研任务，套用材料模板或粘贴自己的材料，生成 prompt、任务包和质控清单。",
+    title: "科研 Agent 工作台",
+    desc: "选择科研任务和工作模式，把材料组织成模型指令、证据边界、质控清单和汇报任务包。",
     href: "/works/research-prompt-kit",
     updated: "2026-06-04",
-    tags: ["AI", "Prompt", "科研"],
-    outputs: ["材料模板", "任务包", "质控清单"],
-    action: "生成 prompt",
+    tags: ["AI", "Agent", "科研"],
+    outputs: ["任务路由", "证据边界", "报告框架"],
+    action: "进入工作台",
     color: "var(--cherry-peach-light)", border: "var(--cherry-peach)", rotate: "-0.8deg",
   },
   {

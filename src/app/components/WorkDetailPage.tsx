@@ -101,6 +101,20 @@ function PromptKitContent() {
     },
   ];
   const activeMode = promptModes[activeModeIndex];
+  const agentCards = [
+    {
+      title: "当前版本",
+      body: "本地生成模型指令、任务包和验收清单；材料只在浏览器里编辑，不上传，也不调用 API。",
+    },
+    {
+      title: "API 版目标",
+      body: "接入模型后，点击运行即可返回结构化分析：证据、推断、风险、待核查点和汇报摘要。",
+    },
+    {
+      title: "适合任务",
+      body: "文献精读、实验设计检查、图表判读、讨论段落修改、审稿回复和术语一致性检查。",
+    },
+  ];
   const workflowSteps = [
     { label: "材料", body: activePrompt.input, color: "var(--cherry-blue-light)" },
     { label: "模式", body: activeMode.title, color: "var(--cherry-yellow-light)" },
@@ -120,11 +134,12 @@ ${activeMode.title}：${activeMode.instruction}
 
 【质量要求】
 ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")}`;
-  const taskPackOutput = `【科研 AI 任务包】
+  const taskPackOutput = `【科研 Agent 任务包】
 任务类型：${activePrompt.title}
 适用材料：${activePrompt.input}
+工作模式：${activeMode.title}
 
-一、要交给 AI 的 prompt
+一、要交给模型的指令
 ${finalPrompt}
 
 二、输出验收清单
@@ -143,7 +158,7 @@ ${[...activePrompt.output, ...activeMode.outputs].map((item, index) => `${index 
     if (copiedToClipboard) {
       setCopied(true);
       setCopiedPack(false);
-      setCopyStatus("Prompt 已复制到剪贴板。");
+      setCopyStatus("模型指令已复制到剪贴板。");
       window.setTimeout(() => setCopied(false), 1400);
       return;
     }
@@ -183,6 +198,22 @@ ${[...activePrompt.output, ...activeMode.outputs].map((item, index) => `${index 
 
   return (
     <section id="prompt-kit-builder" style={{ display: "grid", gap: "1rem" }}>
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "1rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)", display: "grid", gap: "0.8rem" }}>
+        <div>
+          <div style={{ color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.78rem", marginBottom: "0.3rem" }}>科研 Agent 工作台</div>
+          <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.88rem", margin: 0 }}>
+            这个页面先落地科研 Agent 的任务编排层：你选择任务、材料和工作模式，页面生成可交给模型执行的结构化指令。真正调用 API 的版本会把下方任务包直接送入模型并返回报告。
+          </p>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.65rem" }}>
+          {agentCards.map((card) => (
+            <div key={card.title} style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.7rem" }}>
+              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.28rem" }}>{card.title}</strong>
+              <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800 }}>{card.body}</span>
+            </div>
+          ))}
+        </div>
+      </div>
       <div style={{ display: "grid", gridTemplateColumns: "minmax(230px, 0.78fr) minmax(0, 1.3fr)", gap: "1rem", alignItems: "start" }}>
         <aside style={{ display: "grid", gap: "0.7rem" }}>
           {prompts.map((prompt, index) => {
@@ -204,7 +235,7 @@ ${[...activePrompt.output, ...activeMode.outputs].map((item, index) => `${index 
         </aside>
 
         <div style={{ display: "grid", gap: "1rem" }}>
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "1.2rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.8rem" }}>
               <div>
                 <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "1.05rem" }}>{activePrompt.title}</div>
@@ -212,7 +243,7 @@ ${[...activePrompt.output, ...activeMode.outputs].map((item, index) => `${index 
               </div>
               <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
                 <button type="button" onClick={copyPrompt} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
-                  {copied ? "已复制" : "复制 prompt"}
+                  {copied ? "已复制" : "复制模型指令"}
                 </button>
                 <button type="button" onClick={copyTaskPack} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
                   {copiedPack ? "已复制" : "复制任务包"}
@@ -238,7 +269,7 @@ ${[...activePrompt.output, ...activeMode.outputs].map((item, index) => `${index 
               </div>
             </div>
 
-            <div className="prompt-workflow-grid" role="group" aria-label="科研助手任务流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.62rem", marginBottom: "0.9rem" }}>
+            <div className="prompt-workflow-grid" role="group" aria-label="科研 Agent 任务流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.62rem", marginBottom: "0.9rem" }}>
               {workflowSteps.map((item, index) => (
                 <div key={item.label} style={{ background: item.color, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.72rem", minHeight: 104, position: "relative", overflow: "hidden" }}>
                   <svg width="72" height="58" viewBox="0 0 72 58" fill="none" aria-hidden="true" focusable="false" style={{ position: "absolute", right: -8, bottom: -8, opacity: 0.72 }}>
@@ -321,7 +352,7 @@ ${[...activePrompt.output, ...activeMode.outputs].map((item, index) => `${index 
             </ContentCard>
           </div>
 
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "1.2rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.75rem" }}>
               <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>可复制任务包</div>
               <button type="button" onClick={copyTaskPack} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>

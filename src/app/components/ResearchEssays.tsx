@@ -157,8 +157,8 @@ function EssayCard({ essay }: {
       style={{
         background: "var(--card)",
         border: "1.5px solid var(--border)",
-        borderRadius: 18,
-        padding: "1.5rem",
+        borderRadius: 8,
+        padding: "1.25rem",
         transition: "transform 0.2s, box-shadow 0.2s",
         cursor: "pointer",
         position: "relative",
@@ -181,7 +181,7 @@ function EssayCard({ essay }: {
           height: 3,
           background: `linear-gradient(90deg, ${essay.labelColor}, transparent)`,
           opacity: 0.6,
-          borderRadius: "18px 18px 0 0",
+          borderRadius: "8px 8px 0 0",
         }}
       />
 
@@ -368,7 +368,7 @@ export function ResearchEssays() {
           #research .research-essay-card:hover,
           #research .research-essay-card:focus-visible {
             transform: translateY(-3px);
-            box-shadow: 4px 8px 0px rgba(94,68,42,0.1);
+            box-shadow: 0 10px 22px rgba(94,68,42,0.09);
           }
 
           #research .research-essay-card:focus-visible {
@@ -377,15 +377,15 @@ export function ResearchEssays() {
           }
 
           #research .research-essay-illustration {
-            min-height: 94px;
-            border: 1.5px dashed;
-            border-radius: 15px;
+            min-height: 90px;
+            border: 1px solid;
+            border-radius: 8px;
             margin: 0.85rem 0 0.9rem;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            box-shadow: inset 0 0 0 999px rgba(250,247,241,0.38);
+            box-shadow: inset 0 0 0 999px rgba(250,247,241,0.32);
           }
 
           #research .research-essay-illustration svg {

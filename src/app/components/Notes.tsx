@@ -190,8 +190,8 @@ export function Notes() {
                 style={{
                   background: "var(--card)",
                   border: "1.5px solid var(--border)",
-                  borderRadius: 16,
-                  padding: "1.5rem",
+                  borderRadius: 8,
+                  padding: "1.25rem",
                   position: "relative",
                   transition: "transform 0.2s, box-shadow 0.2s",
                   cursor: "pointer",
@@ -253,7 +253,7 @@ export function Notes() {
           #notes .note-card:hover,
           #notes .note-card:focus-visible {
             transform: translateY(-3px);
-            box-shadow: 4px 8px 0px rgba(94,68,42,0.1);
+            box-shadow: 0 10px 22px rgba(94,68,42,0.09);
           }
 
           #notes .note-card:focus-visible {
@@ -262,15 +262,15 @@ export function Notes() {
           }
 
           #notes .note-card-illustration {
-            min-height: 86px;
-            border: 1.5px dashed;
-            border-radius: 14px;
+            min-height: 82px;
+            border: 1px solid;
+            border-radius: 8px;
             margin: 0 0 0.9rem;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            box-shadow: inset 0 0 0 999px rgba(250,247,241,0.38);
+            box-shadow: inset 0 0 0 999px rgba(250,247,241,0.32);
           }
 
           #notes .note-card-illustration svg {
