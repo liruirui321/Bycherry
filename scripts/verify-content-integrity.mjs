@@ -232,6 +232,7 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(staticIndexSource.includes("立即任务："), "Static index fallback must expose immediate learner tasks.");
   expect(staticIndexSource.includes("先做这个："), "Static index fallback must expose first concrete starter actions.");
   expect(heroSource.includes("{work.task}"), "Homepage hero work cards must expose immediate learner tasks.");
+  expect(heroSource.includes("{work.starter}"), "Homepage hero work cards must expose first concrete starter actions.");
   expect(worksSource.includes("先做这个"), "Homepage work cards must expose a first concrete starter action.");
   expect(workDetailSource.includes("{work.starter}"), "Work detail quick start must expose each work starter action.");
   expect(workDetailSource.includes("function WorkQuickStart"), "Work detail pages must include a quick-start entry component.");
