@@ -45,11 +45,12 @@ function WorkbenchIllustration() {
       </g>
 
       <g transform="translate(214 61)">
-        <rect x="0" y="16" width="62" height="50" rx="15" fill="rgba(250,247,241,0.9)" stroke="var(--cherry-red)" strokeWidth="2.3" />
-        <path d="M18 14 L23 4 H39 L44 14" stroke="var(--cherry-red)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="21" cy="39" r="3.8" fill="var(--cherry-warm-brown)" />
-        <circle cx="41" cy="39" r="3.8" fill="var(--cherry-warm-brown)" />
-        <path d="M23 51 C30 56 37 56 44 51" stroke="var(--cherry-warm-brown)" strokeWidth="2.4" strokeLinecap="round" />
+        <rect x="0" y="16" width="64" height="50" rx="13" fill="rgba(250,247,241,0.9)" stroke="var(--cherry-red)" strokeWidth="2.3" />
+        <rect x="10" y="27" width="22" height="7" rx="3.5" fill="var(--cherry-peach-light)" stroke="rgba(94,68,42,0.12)" strokeWidth="1" />
+        <rect x="36" y="27" width="16" height="7" rx="3.5" fill="var(--cherry-blue-light)" stroke="rgba(94,68,42,0.12)" strokeWidth="1" />
+        <path d="M18 45 H52 M18 55 H42" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.52" />
+        <circle cx="13" cy="45" r="3.2" fill="var(--cherry-red)" opacity="0.82" />
+        <circle cx="13" cy="55" r="3.2" fill="var(--cherry-blue)" opacity="0.76" />
         <path d="M51 8 L56 17 L66 20 L57 25 L54 35 L49 26 L39 23 L48 18Z" fill="var(--cherry-yellow)" stroke="rgba(94,68,42,0.14)" strokeWidth="1.2" />
       </g>
 
@@ -108,7 +109,7 @@ export function About() {
               Cherry
             </h3>
             <p style={{ color: "var(--cherry-warm-mid)", fontSize: "1rem", marginBottom: "1.25rem" }}>
-              生物 × 教育 × AI 创作者
+              生命科学教育与 AI 工具创作者
             </p>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
