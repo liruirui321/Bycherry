@@ -221,6 +221,7 @@ function verifyWorkJsonLdLearningOutcomes() {
   const appSource = read("src/app/App.tsx");
   const staticIndexSource = read("scripts/generate-static-index.mjs");
   const heroSource = read("src/app/components/Hero.tsx");
+  const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
 
   expect(appSource.includes("learningResourceType: work.category"), "Runtime work JSON-LD must include learningResourceType.");
   expect(appSource.includes("teaches: [work.task, ...work.path, ...work.outputs]"), "Runtime work JSON-LD must include immediate task, learning path, and output outcomes.");
@@ -228,6 +229,8 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(staticIndexSource.includes("teaches: [route.task, ...route.pathSteps, ...route.outputs].filter(Boolean)"), "Static work JSON-LD generator must include immediate task, learning path, and output outcomes.");
   expect(staticIndexSource.includes("立即任务："), "Static index fallback must expose immediate learner tasks.");
   expect(heroSource.includes("{work.task}"), "Homepage hero work cards must expose immediate learner tasks.");
+  expect(workDetailSource.includes("function WorkQuickStart"), "Work detail pages must include a quick-start entry component.");
+  expect(workDetailSource.includes("<WorkQuickStart work={work} />"), "Work detail pages must render the quick-start entry before deep content.");
 }
 
 function verifyConceptExplainerAgentContract() {

@@ -2944,6 +2944,66 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
   );
 }
 
+function WorkQuickStart({ work }: { work: Work }) {
+  return (
+    <section
+      aria-labelledby="work-quick-start-heading"
+      style={{
+        padding: "0.85rem 1.5rem 1rem",
+        background: "var(--background)",
+        fontFamily: "'Nunito', sans-serif",
+      }}
+    >
+      <div
+        className="work-quick-start"
+        style={{
+          maxWidth: 1060,
+          margin: "0 auto",
+          background: "var(--card)",
+          border: "1.5px solid rgba(94,68,42,0.12)",
+          borderTop: `4px solid ${work.border}`,
+          borderRadius: 8,
+          padding: "0.85rem",
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1.1fr) minmax(220px, 0.9fr)",
+          gap: "0.85rem",
+          alignItems: "stretch",
+          boxShadow: "0 8px 18px rgba(94,68,42,0.06)",
+        }}
+      >
+        <div style={{ display: "grid", gap: "0.42rem", alignContent: "start" }}>
+          <div id="work-quick-start-heading" style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900 }}>立即任务</div>
+          <p style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.55, fontWeight: 900 }}>
+            {work.task}
+          </p>
+        </div>
+        <div className="work-quick-start-meta" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: "0.55rem" }}>
+          <div style={{ background: work.color, border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem" }}>
+            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>三步进入</span>
+            <div role="list" aria-label={`${work.title}三步进入路径`} style={{ display: "grid", gap: "0.25rem" }}>
+              {work.path.map((step, index) => (
+                <span key={step} role="listitem" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.35, fontWeight: 900 }}>
+                  {index + 1}. {step}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem" }}>
+            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>你会得到</span>
+            <div role="list" aria-label={`${work.title}学习产出`} style={{ display: "flex", flexWrap: "wrap", gap: "0.28rem" }}>
+              {work.outputs.map((output) => (
+                <span key={output} role="listitem" style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.13rem 0.42rem", color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>
+                  {output}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function WorkContinueLinks({ work }: { work: Work }) {
   const relatedWorks = [
     ...works.filter((item) => item.slug !== work.slug && item.category === work.category),
@@ -3108,6 +3168,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
   return (
     <main id="main-content" tabIndex={-1}>
       <WorkHero work={work} compact />
+      <WorkQuickStart work={work} />
 
       {hasRichWorkContent(work.slug) ? (
         <section
@@ -3146,6 +3207,16 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           .work-sequence-card,
           .work-next-card {
             transition: transform 0.18s ease, box-shadow 0.18s ease;
+          }
+
+          @media (max-width: 760px) {
+            .work-quick-start {
+              grid-template-columns: 1fr !important;
+            }
+
+            .work-quick-start-meta {
+              grid-template-columns: 1fr !important;
+            }
           }
 
           .work-sequence-card:hover,
