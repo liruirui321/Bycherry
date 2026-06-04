@@ -335,6 +335,12 @@ function verifyConceptExplainerAgentContract() {
     { label: "visual explanation output", text: "可视化解释" },
     { label: "visual selection card", text: "可视化选择" },
     { label: "completion standard card", text: "合格标准" },
+    { label: "understanding check data", text: "understandingChecks" },
+    { label: "self audit output", text: "selfAuditOutput" },
+    { label: "copy understanding audit handler", text: "copyUnderstandingAudit" },
+    { label: "visible understanding audit card", text: "理解验收卡" },
+    { label: "copy audit record button", text: "复制自查记录" },
+    { label: "pass criteria copy", text: "通过标准" },
     { label: "public skill document link", text: "/skills/concept-explainer/SKILL.md" },
     { label: "full skill copy button", text: "复制完整 Skill" },
     { label: "skill markdown frontmatter", text: "name: concept-explainer" },
@@ -372,6 +378,8 @@ function verifyConceptExplainerAgentContract() {
     "Do not only give a definition",
     "Do not fabricate facts",
     "Practice situation",
+    "Understanding audit",
+    "Add pass criteria",
     "Evidence boundary",
   ]) {
     expect(conceptSkillSource.includes(text), `Public concept explainer SKILL.md is missing required content: ${text}`);

@@ -28,7 +28,8 @@ If the concept is too broad, narrow it to one chapter, phenomenon, problem type,
 4. Choose one visual structure: flow diagram, comparison table, three-column concept map, or causal chain.
 5. Explain the mechanism in at most four steps.
 6. Give one practice situation that requires the learner to produce an explanation, not just recognize an answer.
-7. Finish with one quick check and an evidence boundary.
+7. Add an understanding audit with observable pass criteria.
+8. Finish with one quick check and an evidence boundary.
 
 ## Output Format
 
@@ -43,8 +44,9 @@ If the concept is too broad, narrow it to one chapter, phenomenon, problem type,
 9. Common pitfall: one likely wrong understanding.
 10. Practice situation: context, guide question, and expected learner output.
 11. Transfer task: a new example where the learner must apply the concept.
-12. Quick check: one multiple-choice question with answer and explanation.
-13. Evidence boundary: what needs to be checked in source material.
+12. Understanding audit: four checks covering one-sentence definition, mechanism retelling, transfer example, and boundary reminder.
+13. Quick check: one multiple-choice question with answer and explanation.
+14. Evidence boundary: what needs to be checked in source material.
 
 ## Quality Rules
 
@@ -53,4 +55,5 @@ If the concept is too broad, narrow it to one chapter, phenomenon, problem type,
 - Mark uncertain or source-dependent content as "to verify".
 - Do not fabricate facts, values, species, diseases, formulas, or research conclusions.
 - Separate definition, example, mechanism, evidence, and boundary.
+- Add pass criteria so the learner can judge whether the output is usable.
 - Make the final task observable: the learner should know what to write, draw, compare, or check.

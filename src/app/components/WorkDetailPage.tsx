@@ -1855,6 +1855,7 @@ function ConceptExplainerContent() {
   const [lessonGoal, setLessonGoal] = useState("把概念学清楚，并能用例子判断自己是否真正理解");
   const [copiedLesson, setCopiedLesson] = useState(false);
   const [copiedSkill, setCopiedSkill] = useState(false);
+  const [copiedAudit, setCopiedAudit] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   type ConceptExplanation = {
     color: string;
@@ -2088,6 +2089,46 @@ function ConceptExplainerContent() {
       body: `你能用“${concept}”解释一个新情境，并说出它不能直接推出什么。`,
     },
   ];
+  const understandingChecks = [
+    {
+      title: "一句话定义",
+      prompt: `不用背原文，用自己的话写出“${concept}解释了什么”。`,
+      pass: "句子里同时出现对象、关系或变化，不只是重复名词。",
+    },
+    {
+      title: "机制复述",
+      prompt: `按 1-4 步复述${concept}如何发生或如何起作用。`,
+      pass: "每一步都能接上前一步，没有突然跳到结论。",
+    },
+    {
+      title: "例子迁移",
+      prompt: `换一个新情境，判断它是否能用${concept}解释。`,
+      pass: "能说出适用理由，也能指出至少一个不确定点。",
+    },
+    {
+      title: "边界提醒",
+      prompt: `写出一个不能由${concept}直接推出的结论。`,
+      pass: "没有把类比、经验判断或单个例子当成通用事实。",
+    },
+  ];
+  const selfAuditOutput = `【概念理解自查记录】
+概念：${concept}
+学习阶段：${audience}
+学习目标：${lessonGoal}
+
+验收维度
+${understandingChecks.map((item, index) => `${index + 1}. ${item.title}
+任务：${item.prompt}
+通过标准：${item.pass}`).join("\n\n")}
+
+我的最小产出
+1. 一句话定义：
+2. 机制步骤：
+3. 新例子判断：
+4. 不能直接推出：
+
+证据边界
+${active.evidenceBoundary}`;
   const lessonOutput = `【概念】${concept}
 【学习阶段】${audience}
 【学习目标】${lessonGoal}
@@ -2134,10 +2175,13 @@ ${active.evidenceBoundary}
 十三、迁移任务
 ${active.transferTask}
 
-十四、学习流程
+十四、理解验收
+${understandingChecks.map((item, index) => `${index + 1}. ${item.title}：${item.prompt}｜通过标准：${item.pass}`).join("\n")}
+
+十五、学习流程
 ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 
-十五、即时小测
+十六、即时小测
 问题：${active.quiz.question}
 选项：${active.quiz.options.join(" / ")}
 答案：${active.quiz.answer}
@@ -2188,8 +2232,9 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 9. Common pitfall: one likely wrong understanding.
 10. Practice situation: context, guide question, and expected learner output.
 11. Transfer task: a new example where the learner must apply the concept.
-12. Quick check: one multiple-choice question with answer and explanation.
-13. Evidence boundary: what needs to be checked in source material.
+12. Understanding audit: 4 observable checks covering definition, mechanism, transfer, and boundary.
+13. Quick check: one multiple-choice question with answer and explanation.
+14. Evidence boundary: what needs to be checked in source material.
 
 ## Quality Rules
 
@@ -2198,6 +2243,7 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 - Mark uncertain or source-dependent content as "to verify".
 - 不编造具体事实、数据、物种、疾病、公式或研究结论。
 - Separate definition, example, mechanism, evidence, and boundary.
+- Add pass criteria so the learner can judge whether the output is usable.
 - Make the final task observable: the learner should know what to write, draw, compare, or check.`;
 
   function chooseConcept(name: string) {
@@ -2206,6 +2252,7 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
     setQuizChoice(null);
     setCopiedLesson(false);
     setCopiedSkill(false);
+    setCopiedAudit(false);
     setCopyStatus("");
   }
 
@@ -2215,6 +2262,7 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
     setQuizChoice(null);
     setCopiedLesson(false);
     setCopiedSkill(false);
+    setCopiedAudit(false);
     setCopyStatus(explanations[nextConcept] ? "已载入预设高质量解释。" : "已按解释 Agent skill 生成学习卡。");
   }
 
@@ -2223,6 +2271,7 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
     if (copiedToClipboard) {
       setCopiedLesson(true);
       setCopiedSkill(false);
+      setCopiedAudit(false);
       setCopyStatus("学习卡已复制到剪贴板。");
       window.setTimeout(() => setCopiedLesson(false), 1400);
       return;
@@ -2237,12 +2286,28 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
     if (copiedToClipboard) {
       setCopiedSkill(true);
       setCopiedLesson(false);
+      setCopiedAudit(false);
       setCopyStatus("概念解释 skill 指令已复制到剪贴板。");
       window.setTimeout(() => setCopiedSkill(false), 1400);
       return;
     }
 
     setCopiedSkill(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyUnderstandingAudit() {
+    const copiedToClipboard = await copyText(selfAuditOutput);
+    if (copiedToClipboard) {
+      setCopiedAudit(true);
+      setCopiedLesson(false);
+      setCopiedSkill(false);
+      setCopyStatus("理解自查记录已复制到剪贴板。");
+      window.setTimeout(() => setCopiedAudit(false), 1400);
+      return;
+    }
+
+    setCopiedAudit(false);
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -2258,7 +2323,7 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(190px, 0.72fr) minmax(0, 1fr) auto", gap: "0.65rem", alignItems: "end" }}>
           <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
             输入概念
-            <input value={conceptInput} onChange={(event) => { setConceptInput(event.target.value); setCopyStatus(""); }} onKeyDown={(event) => { if (event.key === "Enter") runConceptAgent(); }} placeholder="例如：光合作用、细胞周期、孟德尔遗传" style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
+            <input value={conceptInput} onChange={(event) => { setConceptInput(event.target.value); setCopiedAudit(false); setCopyStatus(""); }} onKeyDown={(event) => { if (event.key === "Enter") runConceptAgent(); }} placeholder="例如：光合作用、细胞周期、孟德尔遗传" style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
           </label>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem" }}>
             {["自测", "类比", "机制", "练习"].map((item, index) => (
@@ -2296,6 +2361,30 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
       </div>
 
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.75rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>理解验收卡</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.2rem", fontWeight: 800 }}>
+              用四个可观察产出检查自己是否真的掌握，而不是只看过解释。
+            </div>
+          </div>
+          <button type="button" onClick={copyUnderstandingAudit} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.5rem 0.86rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+            {copiedAudit ? "已复制" : "复制自查记录"}
+          </button>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
+          {understandingChecks.map((item, index) => (
+            <div key={item.title} style={{ background: index % 2 === 0 ? "var(--cherry-yellow-light)" : "var(--cherry-blue-light)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.72rem", minHeight: 142 }}>
+              <span style={{ width: 22, height: 22, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900, marginBottom: "0.46rem" }}>{index + 1}</span>
+              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.34rem" }}>{item.title}</strong>
+              <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800, marginBottom: "0.42rem" }}>{item.prompt}</span>
+              <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 900 }}>通过标准：{item.pass}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
         <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 900 }}>高质量样例</span>
         {presetConcepts.map((name) => (
@@ -2313,11 +2402,11 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
       <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(180px, 0.52fr) minmax(0, 1fr) auto", gap: "0.75rem", alignItems: "end", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
         <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
           学习阶段
-          <input value={audience} onChange={(event) => { setAudience(event.target.value); setCopiedLesson(false); setCopyStatus(""); }} style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
+          <input value={audience} onChange={(event) => { setAudience(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopyStatus(""); }} style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
         </label>
         <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
           学习目标
-          <input value={lessonGoal} onChange={(event) => { setLessonGoal(event.target.value); setCopiedLesson(false); setCopyStatus(""); }} style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
+          <input value={lessonGoal} onChange={(event) => { setLessonGoal(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopyStatus(""); }} style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
         </label>
         <button type="button" onClick={copyLessonOutput} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.62rem 0.95rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap" }}>
           {copiedLesson ? "已复制" : "复制学习卡"}
