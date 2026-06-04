@@ -19,6 +19,7 @@ const generatedIllustrations = [
   "illustrations/crispr-editing-flow.webp",
   "illustrations/gene-expression-flow.webp",
   "illustrations/plant-evolution-story.webp",
+  "illustrations/research-prompt-workflow.webp",
 ];
 
 function readRoot(relativePath) {

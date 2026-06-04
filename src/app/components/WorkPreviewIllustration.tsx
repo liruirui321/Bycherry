@@ -250,6 +250,29 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
 
   if (slug === "research-prompt-kit") {
     return (
+      <img
+        src="/illustrations/research-prompt-workflow.webp"
+        width={width}
+        height={height}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        style={{
+          width,
+          height,
+          display: "block",
+          objectFit: "cover",
+          borderRadius: 16,
+          border: "1.5px solid rgba(229,163,160,0.24)",
+          boxShadow: "0 10px 20px rgba(94,68,42,0.08)",
+          background: "rgba(250,247,241,0.72)",
+        }}
+      />
+    );
+  }
+
+  if (slug === "research-prompt-kit-vector-fallback") {
+    return (
       <svg width={width} height={height} viewBox="0 0 96 72" fill="none" aria-hidden="true">
         <rect x="12" y="10" width="54" height="52" rx="11" fill="rgba(250,247,241,0.82)" stroke={color} strokeWidth="2.3" />
         <rect x="21" y="20" width="33" height="7" rx="3.5" fill="var(--cherry-blue-light)" />
