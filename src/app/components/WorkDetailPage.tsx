@@ -437,6 +437,26 @@ ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
       body: "对 DOI、参考文献、图表编号和材料来源单独核查，把模型生成内容与真实文献记录分开验证。",
     },
   ];
+  const sourceGroundedSignals = [
+    {
+      title: "语义检索与报告生成",
+      source: "Elicit API",
+      body: "公开 API 文档把论文语义检索、临床试验检索和自动报告作为核心能力，说明科研 Agent 需要可编排的 search/report 接口。",
+      href: "https://docs.elicit.com/",
+    },
+    {
+      title: "多步检索与筛选",
+      source: "Consensus Research Agent",
+      body: "Consensus 的 Pro/Deep 模式强调多步搜索、过滤、跨论文阅读和带引用回答，因此本工具把任务路由、过滤信号和证据字段前置。",
+      href: "https://help.consensus.app/en/articles/9922660-how-to-search-best-practices",
+    },
+    {
+      title: "参考文献核查",
+      source: "scite API",
+      body: "scite API 提供引用数据、citation tallies 和 reference check，说明科研工作流不能只生成总结，还要保留引用核查和风险标记。",
+      href: "https://api.scite.ai/docs",
+    },
+  ];
   const productReferences = [
     { title: "Elicit systematic review / API", href: "https://docs.elicit.com/" },
     { title: "Consensus search best practices", href: "https://help.consensus.app/en/articles/9922660-how-to-search-best-practices" },
@@ -721,6 +741,18 @@ ${localPreviewOutput}`;
             {productReferences.map((item) => (
               <a key={item.href} href={item.href} target="_blank" rel="noreferrer" style={{ color: "var(--cherry-forest)", fontSize: "0.74rem", lineHeight: 1.45, fontWeight: 900, textDecoration: "none" }}>
                 {item.title} →
+              </a>
+            ))}
+          </div>
+        </div>
+        <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.62rem" }}>
+          <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>需求依据</strong>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.58rem" }}>
+            {sourceGroundedSignals.map((item) => (
+              <a key={item.href} href={item.href} target="_blank" rel="noreferrer" style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.65rem", textDecoration: "none" }}>
+                <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.22rem" }}>{item.source}</span>
+                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", marginBottom: "0.28rem" }}>{item.title}</strong>
+                <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{item.body}</span>
               </a>
             ))}
           </div>

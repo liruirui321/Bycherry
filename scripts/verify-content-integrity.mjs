@@ -272,6 +272,14 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "experiment design case", text: "查实验设计练习" },
     { label: "material source boundary", text: "材料来源：练习材料，用于学习证据拆解" },
     { label: "direct local preview cue", text: "可以直接运行本地预览" },
+    { label: "source-grounded demand section", text: "需求依据" },
+    { label: "source-grounded signal data", text: "sourceGroundedSignals" },
+    { label: "semantic search demand", text: "语义检索与报告生成" },
+    { label: "multi-step search demand", text: "多步检索与筛选" },
+    { label: "reference check demand", text: "参考文献核查" },
+    { label: "Elicit API source", text: "https://docs.elicit.com/" },
+    { label: "Consensus source", text: "https://help.consensus.app/en/articles/9922660-how-to-search-best-practices" },
+    { label: "scite API source", text: "https://api.scite.ai/docs" },
   ];
 
   for (const item of requiredWorkbenchFeatures) {
