@@ -21,6 +21,21 @@ function itemList(id, name, routes) {
   };
 }
 
+function escapeHtml(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function replaceRequired(source, pattern, replacement, label) {
+  if (!pattern.test(source)) {
+    throw new Error(`Cannot generate static index fallback: missing ${label}.`);
+  }
+  return source.replace(pattern, replacement);
+}
+
 function buildJsonLd(routes) {
   const works = routes.filter((route) => route.type === "work");
   const articles = routes.filter((route) => route.type !== "work");
@@ -53,7 +68,7 @@ function buildJsonLd(routes) {
 }
 
 function listItems(routes) {
-  return routes.map((route) => `            <li><a href="${route.path}">${route.title}</a></li>`).join("\n");
+  return routes.map((route) => `            <li><a href="${escapeHtml(route.path)}">${escapeHtml(route.title)}</a></li>`).join("\n");
 }
 
 function buildNoscript(routes) {
@@ -87,11 +102,13 @@ function indentedJson(data) {
 
 const routes = getContentRoutes();
 let html = readFileSync(resolve(root, "index.html"), "utf8");
-html = html.replace(
+html = replaceRequired(
+  html,
   /      <script type="application\/ld\+json" data-schema="bycherry-page">[\s\S]*?      <\/script>/,
-  `      <script type="application/ld+json" data-schema="bycherry-page">\n${indentedJson(buildJsonLd(routes))}\n      </script>`
+  `      <script type="application/ld+json" data-schema="bycherry-page">\n${indentedJson(buildJsonLd(routes))}\n      </script>`,
+  "JSON-LD script block"
 );
-html = html.replace(/      <noscript>[\s\S]*?      <\/noscript>/, buildNoscript(routes));
+html = replaceRequired(html, /      <noscript>[\s\S]*?      <\/noscript>/, buildNoscript(routes), "noscript block");
 
 writeFileSync(resolve(root, "index.html"), html);
 console.log(`Static index fallback generated: ${routes.length} content routes.`);
