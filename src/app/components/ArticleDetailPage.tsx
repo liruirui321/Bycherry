@@ -173,7 +173,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const activePlatformPlan = platformUsePlans[selectedPlatformPlanIndex] ?? platformUsePlans[0];
   const platformUsePlansText = platformUsePlans.map((plan) => `${plan.title}\n${plan.fields.map((field) => `- ${field}`).join("\n")}\n- ${plan.output}`).join("\n\n");
   const activePlatformPlanText = activePlatformPlan
-    ? `【SciFuion 当前照填方案】
+    ? `【SciFusion 当前照填方案】
 平台入口：${platformUrl}
 当前用途：${activePlatformPlan.title}
 
@@ -227,7 +227,7 @@ ${aiMaterialAuditPrompts.map((item, index) => `${index + 1}. ${item.title}
 4. 我下一步要完成的可观察输出：`
     : "";
   const platformPasteConfigText = platformUrl
-    ? activePlatformPlanText || `【SciFuion 平台照填配置】
+    ? activePlatformPlanText || `【SciFusion 平台照填配置】
 平台入口：${platformUrl}
 
 ${platformUsePlansText}
@@ -239,7 +239,7 @@ ${platformUsePlansText}
 4. 做完后记录最高频错因，再回到学习卡补薄弱点。`
     : "";
   const platformReviewText = platformUrl
-    ? `【SciFuion 测后复盘记录】
+    ? `【SciFusion 测后复盘记录】
 平台入口：${platformUrl}
 本次用途：
 学习阶段：
@@ -596,7 +596,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   marginBottom: "0.85rem",
                 }}
               >
-                打开平台：scifuion.top
+                打开平台：scifusion.top
               </a>
             ) : null}
 
@@ -629,10 +629,10 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     </div>
                   </div>
                   <a className="article-detail-link" href={platformUrl ?? "#"} target="_blank" rel="noreferrer" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.36rem 0.72rem", textDecoration: "none", fontWeight: 900, fontSize: "0.74rem" }}>
-                    进入 scifuion.top
+                    进入 scifusion.top
                   </a>
                 </div>
-                <div role="group" aria-label="选择 SciFuion 使用场景" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
+                <div role="group" aria-label="选择 SciFusion 使用场景" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
                   {platformUsePlans.map((plan, index) => {
                     const selected = index === selectedPlatformPlanIndex;
 
