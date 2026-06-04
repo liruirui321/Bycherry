@@ -50,8 +50,10 @@ export function Contact() {
   const draftBody = `${trimmedMessage || "（未填写留言）"}\n\n来自：${trimmedName || "（未填写名字）"}`;
   const draftText = `收件人：${emailAddress}\n主题：${draftSubject}\n\n${draftBody}`;
   const emailCopyStatusId = "contact-email-copy-status";
+  const formReadinessId = "contact-form-readiness";
   const formDraftCopyStatusId = "contact-form-draft-copy-status";
   const sentDraftCopyStatusId = "contact-sent-draft-copy-status";
+  const formReadinessText = canUseDraft ? "邮件草稿已准备好，也可以先复制一份备份。" : "写下名字和留言后，就可以打开邮件草稿。";
 
   function clearDraftStatus() {
     setCopiedDraft(false);
@@ -226,6 +228,7 @@ export function Contact() {
                 className="contact-submit"
                 type="submit"
                 disabled={!canUseDraft}
+                aria-describedby="contact-form-readiness"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -251,7 +254,7 @@ export function Contact() {
                 type="button"
                 onClick={copyDraft}
                 disabled={!canUseDraft}
-                aria-describedby={formDraftCopyStatusId}
+                aria-describedby="contact-form-readiness contact-form-draft-copy-status"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -270,6 +273,9 @@ export function Contact() {
               >
                 {copiedDraft ? "已复制留言" : "复制留言内容"}
               </button>
+            </div>
+            <div id={formReadinessId} role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: canUseDraft ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 900, marginTop: "0.65rem" }}>
+              {formReadinessText}
             </div>
             <div id={formDraftCopyStatusId} role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginTop: "0.65rem" }}>
               {draftStatus}
