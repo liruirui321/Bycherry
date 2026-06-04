@@ -215,6 +215,16 @@ function verifyArticleCardsStayStructured() {
   }
 }
 
+function verifyWorkJsonLdLearningOutcomes() {
+  const appSource = read("src/app/App.tsx");
+  const staticIndexSource = read("scripts/generate-static-index.mjs");
+
+  expect(appSource.includes("learningResourceType: work.category"), "Runtime work JSON-LD must include learningResourceType.");
+  expect(appSource.includes("teaches: [...work.path, ...work.outputs]"), "Runtime work JSON-LD must include learning path and output outcomes.");
+  expect(staticIndexSource.includes("learningResourceType: route.category"), "Static work JSON-LD generator must include learningResourceType.");
+  expect(staticIndexSource.includes("teaches: [...route.pathSteps, ...route.outputs]"), "Static work JSON-LD generator must include learning path and output outcomes.");
+}
+
 const routes = getContentRoutes();
 const workSlugs = new Set(routes.filter((route) => route.type === "work").map((route) => route.path.replace(/^\/works\//, "")));
 const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
@@ -276,6 +286,7 @@ verifyNoLowQualityVisibleContent();
 verifyWorkCardActions();
 verifyWorkDetailCardsStayCompact();
 verifyArticleCardsStayStructured();
+verifyWorkJsonLdLearningOutcomes();
 
 if (failures.length) {
   console.error("Content integrity verification failed.");
