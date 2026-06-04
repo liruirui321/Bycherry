@@ -13,6 +13,7 @@ export const works = [
     title: "基因表达可视化",
     desc: "拖拽 TF、RNA 聚合酶和核糖体，观察 mRNA 端点、核糖体读取、多肽链和 5 道即时小测。",
     task: "把 TF 调低再打开 RNA 聚合酶，观察 mRNA 生成变少、核糖体读取减少、蛋白链产量下降。",
+    starter: "先把 RNA 聚合酶打开，再拖动时间滑块，看 mRNA 曲线如何带出核糖体和多肽链。",
     href: "/works/gene-expression",
     updated: "2026-06-04",
     tags: ["生物", "可视化", "交互"],
@@ -27,6 +28,7 @@ export const works = [
     title: "科研 Agent 工作台",
     desc: "选择科研任务和工作模式，把材料组织成模型指令、证据边界、质控清单和汇报任务包。",
     task: "粘贴一段摘要或图注，运行本地预览，得到任务路由、缺失信息和可复制 API JSON。",
+    starter: "先载入读论文练习，运行本地预览，看系统如何拆出证据候选和缺失字段。",
     href: "/works/research-prompt-kit",
     updated: "2026-06-04",
     tags: ["AI", "Agent", "科研"],
@@ -41,6 +43,7 @@ export const works = [
     title: "植物演化时间轴",
     desc: "演化时间轴串联关键创新、证据、自测问题、作答提示和延伸练习。",
     task: "选择一个演化阶段，读证据卡，再用自测问题判断这项创新解决了什么生存压力。",
+    starter: "先点种子阶段，比较孢子和种子各自解决了什么传播与保护问题。",
     href: "/works/plant-evolution-stories",
     updated: "2026-06-04",
     tags: ["植物学", "演化证据", "时间轴"],
@@ -55,6 +58,7 @@ export const works = [
     title: "概念解释生成器",
     desc: "输入任意概念或选择样例，生成自测问题、类比、机制步骤、可视化流程、迁移练习和即时小测。",
     task: "输入一个卡住的概念，先看诊断边界，再生成可复制的学习卡和即时小测。",
+    starter: "先输入光合作用或生态位，按诊断、类比、机制、练习四步检查自己是否真懂。",
     href: "/works/concept-explainer",
     updated: "2026-06-04",
     tags: ["AI", "学习卡", "工具"],
@@ -69,6 +73,7 @@ export const works = [
     title: "CRISPR 编辑模拟器",
     desc: "操作 guide RNA、Cas 蛋白和修复结果，查看匹配评分、编辑判定和模拟报告。",
     task: "找出 PAM，修改 guide RNA 碱基，比较匹配评分如何影响切割和修复结果。",
+    starter: "先选高匹配敲除场景，再切到错配比较，看判定为什么从推荐继续变成谨慎使用。",
     href: "/works/crispr-interactive",
     updated: "2026-06-04",
     tags: ["基因编辑", "互动", "CRISPR"],
@@ -142,6 +147,8 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
       <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem 0.68rem", marginBottom: "0.68rem", display: "grid", gap: "0.24rem" }}>
         <span style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>立即任务</span>
         <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.48, fontWeight: 800 }}>{work.task}</span>
+        <span style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, marginTop: "0.2rem" }}>先做这个</span>
+        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>{work.starter}</span>
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
