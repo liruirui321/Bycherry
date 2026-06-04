@@ -228,8 +228,9 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(appSource.includes("learningResourceType: work.category"), "Runtime work JSON-LD must include learningResourceType.");
   expect(appSource.includes("teaches: [work.task, ...work.path, ...work.outputs]"), "Runtime work JSON-LD must include immediate task, learning path, and output outcomes.");
   expect(staticIndexSource.includes("learningResourceType: route.category"), "Static work JSON-LD generator must include learningResourceType.");
-  expect(staticIndexSource.includes("teaches: [route.task, ...route.pathSteps, ...route.outputs].filter(Boolean)"), "Static work JSON-LD generator must include immediate task, learning path, and output outcomes.");
+  expect(staticIndexSource.includes("teaches: [route.task, route.starter, ...route.pathSteps, ...route.outputs].filter(Boolean)"), "Static work JSON-LD generator must include immediate task, starter action, learning path, and output outcomes.");
   expect(staticIndexSource.includes("立即任务："), "Static index fallback must expose immediate learner tasks.");
+  expect(staticIndexSource.includes("先做这个："), "Static index fallback must expose first concrete starter actions.");
   expect(heroSource.includes("{work.task}"), "Homepage hero work cards must expose immediate learner tasks.");
   expect(worksSource.includes("先做这个"), "Homepage work cards must expose a first concrete starter action.");
   expect(workDetailSource.includes("{work.starter}"), "Work detail quick start must expose each work starter action.");
