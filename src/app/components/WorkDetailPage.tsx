@@ -30,6 +30,7 @@ function PromptKitContent() {
   const [copiedPack, setCopiedPack] = useState(false);
   const [copiedPreview, setCopiedPreview] = useState(false);
   const [copiedJson, setCopiedJson] = useState(false);
+  const [copiedResponseJson, setCopiedResponseJson] = useState(false);
   const [hasRunPreview, setHasRunPreview] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const prompts = [
@@ -242,6 +243,47 @@ function PromptKitContent() {
     human_boundaries: boundaryItems,
   };
   const agentRequestJson = JSON.stringify(agentRequestPayload, null, 2);
+  const acceptanceChecks = [
+    {
+      label: "证据可追溯",
+      passed: visibleEvidenceLines.length > 0,
+      detail: visibleEvidenceLines.length > 0 ? "至少有 1 条材料行可作为证据候选。" : "缺少可引用材料行，模型输出应保持为任务框架。",
+    },
+    {
+      label: "缺口显式标注",
+      passed: missingFields.length === 0,
+      detail: missingFields.length ? `需要在 missing_fields 中保留：${missingFields.join("、")}。` : "当前材料缺口已满足初步分析要求。",
+    },
+    {
+      label: "人工复核保留",
+      passed: reviewerQuestions.length >= 3,
+      detail: "输出必须包含 reviewer_questions，不能把风险判断自动定稿。",
+    },
+  ];
+  const agentResponseContract = {
+    version: "research-agent-response-v1",
+    required_fields: apiOutputFields,
+    expected_response: {
+      task: activePrompt.title,
+      material_summary: "用 2-4 句概括用户提供的材料，不补充材料外事实。",
+      evidence_items: visibleEvidenceLines.map((line, index) => ({
+        id: `evidence_${index + 1}`,
+        source_text: line,
+        supports: activePrompt.output[Math.min(index, activePrompt.output.length - 1)] ?? activePrompt.title,
+      })),
+      inference_items: previewReportRows.map((item) => ({
+        section: item.label,
+        inference: item.body,
+        evidence_required: true,
+      })),
+      missing_fields: missingFields,
+      risk_flags: acceptanceChecks.filter((item) => !item.passed).map((item) => item.label),
+      reviewer_questions: reviewerQuestions,
+      final_report: previewReportRows.map((item) => `${item.label}：${item.body}`).join("\n"),
+    },
+    acceptance_checks: acceptanceChecks,
+  };
+  const agentResponseJson = JSON.stringify(agentResponseContract, null, 2);
   const localPreviewOutput = `【本地 Agent 预览】
 任务：${activePrompt.title}
 工作模式：${activeMode.title}
@@ -267,10 +309,13 @@ ${apiOutputFields.join(", ")}
 六、API 请求 JSON
 ${agentRequestJson}
 
-七、分析报告草稿
+七、API 返回契约
+${agentResponseJson}
+
+八、分析报告草稿
 ${previewReportRows.map((item) => `${item.label}：${item.body}`).join("\n")}
 
-八、复核问题
+九、复核问题
 ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
   const marketNeeds = [
     {
@@ -354,6 +399,7 @@ ${localPreviewOutput}`;
       setCopiedPack(false);
       setCopiedPreview(false);
       setCopiedJson(false);
+      setCopiedResponseJson(false);
       setCopyStatus("模型指令已复制到剪贴板。");
       window.setTimeout(() => setCopied(false), 1400);
       return;
@@ -370,6 +416,7 @@ ${localPreviewOutput}`;
       setCopied(false);
       setCopiedPreview(false);
       setCopiedJson(false);
+      setCopiedResponseJson(false);
       setCopyStatus("任务包已复制到剪贴板。");
       window.setTimeout(() => setCopiedPack(false), 1400);
       return;
@@ -386,6 +433,7 @@ ${localPreviewOutput}`;
       setCopied(false);
       setCopiedPack(false);
       setCopiedJson(false);
+      setCopiedResponseJson(false);
       setCopyStatus("本地预览已复制到剪贴板。");
       window.setTimeout(() => setCopiedPreview(false), 1400);
       return;
@@ -402,6 +450,7 @@ ${localPreviewOutput}`;
       setCopied(false);
       setCopiedPack(false);
       setCopiedPreview(false);
+      setCopiedResponseJson(false);
       setCopyStatus("API 请求 JSON 已复制到剪贴板。");
       window.setTimeout(() => setCopiedJson(false), 1400);
       return;
@@ -411,12 +460,30 @@ ${localPreviewOutput}`;
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  async function copyResponseJson() {
+    const copiedToClipboard = await copyText(agentResponseJson);
+    if (copiedToClipboard) {
+      setCopiedResponseJson(true);
+      setCopied(false);
+      setCopiedPack(false);
+      setCopiedPreview(false);
+      setCopiedJson(false);
+      setCopyStatus("API 返回契约已复制到剪贴板。");
+      window.setTimeout(() => setCopiedResponseJson(false), 1400);
+      return;
+    }
+
+    setCopiedResponseJson(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
   function updateMaterial(value: string) {
     setMaterial(value);
     setCopied(false);
     setCopiedPack(false);
     setCopiedPreview(false);
     setCopiedJson(false);
+    setCopiedResponseJson(false);
     setHasRunPreview(false);
     setCopyStatus("");
   }
@@ -435,6 +502,7 @@ ${localPreviewOutput}`;
     setCopiedPack(false);
     setCopiedPreview(false);
     setCopiedJson(false);
+    setCopiedResponseJson(false);
     setHasRunPreview(false);
     setCopyStatus(`已切换到推荐任务：${suggestedRoute.title}。`);
   }
@@ -494,7 +562,7 @@ ${localPreviewOutput}`;
           {prompts.map((prompt, index) => {
             const active = activePromptIndex === index;
             return (
-              <button key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
+              <button key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
                 <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>{prompt.title}</div>
                 <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginBottom: "0.55rem" }}>{prompt.input}</div>
                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
@@ -526,6 +594,9 @@ ${localPreviewOutput}`;
                 <button type="button" onClick={copyAgentJson} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
                   {copiedJson ? "已复制" : "复制 API JSON"}
                 </button>
+                <button type="button" onClick={copyResponseJson} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+                  {copiedResponseJson ? "已复制" : "复制返回契约"}
+                </button>
               </div>
             </div>
             <div id="prompt-copy-status" role="status" aria-live="polite" style={{ minHeight: "1.2rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginBottom: "0.65rem" }}>
@@ -538,7 +609,7 @@ ${localPreviewOutput}`;
                 {promptModes.map((mode, index) => {
                   const active = activeModeIndex === index;
                   return (
-                    <button key={mode.title} type="button" aria-pressed={active} onClick={() => { setActiveModeIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.68rem", cursor: "pointer" }}>
+                    <button key={mode.title} type="button" aria-pressed={active} onClick={() => { setActiveModeIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.68rem", cursor: "pointer" }}>
                       <strong style={{ display: "block", color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.24rem" }}>{mode.title}</strong>
                       <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>{mode.description}</span>
                     </button>
@@ -647,6 +718,9 @@ ${localPreviewOutput}`;
                   <button type="button" onClick={copyAgentJson} style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                     {copiedJson ? "已复制" : "复制 JSON"}
                   </button>
+                  <button type="button" onClick={copyResponseJson} style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                    {copiedResponseJson ? "已复制" : "复制契约"}
+                  </button>
                 </div>
               </div>
               {hasRunPreview ? (
@@ -692,6 +766,20 @@ ${localPreviewOutput}`;
                     <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>API 请求 JSON</strong>
                     <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.6rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.66rem", lineHeight: 1.5, maxHeight: 220, overflow: "auto" }}>
                       {agentRequestJson}
+                    </code>
+                  </div>
+                  <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.55rem" }}>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>API 返回契约与验收</strong>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.48rem" }}>
+                      {acceptanceChecks.map((item) => (
+                        <div key={item.label} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.58rem" }}>
+                          <strong style={{ display: "block", color: item.passed ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.72rem", marginBottom: "0.24rem" }}>{item.passed ? "通过" : "待补"} · {item.label}</strong>
+                          <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.5, fontWeight: 800 }}>{item.detail}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.6rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.66rem", lineHeight: 1.5, maxHeight: 220, overflow: "auto" }}>
+                      {agentResponseJson}
                     </code>
                   </div>
                   <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.55rem" }}>
