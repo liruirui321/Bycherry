@@ -67,6 +67,51 @@ function verifyArticleBlocks({ relativePath, type, summaryField, readingTimeFiel
   }
 }
 
+function verifyVisibleThemeWorkCopy() {
+  const visibleShellSources = [
+    "src/app/App.tsx",
+    "src/app/components/About.tsx",
+    "src/app/components/Footer.tsx",
+    "src/app/components/Hero.tsx",
+    "src/app/components/Nav.tsx",
+    "src/app/components/WorkDetailPage.tsx",
+    "src/app/components/Works.tsx",
+  ].map((relativePath) => [relativePath, read(relativePath)]);
+
+  const requiredCopy = [
+    "主题作品",
+    "浏览主题作品",
+    "打开主题作品",
+    "全部主题作品",
+    "主题作品前后导航",
+  ];
+
+  const retiredCopyPatterns = [
+    { label: "打开作品", pattern: />\s*打开作品\s*</ },
+    { label: "浏览作品", pattern: /浏览作品/ },
+    { label: "全部作品", pattern: /全部作品/ },
+    { label: "上一个作品", pattern: /label:\s*"上一个作品"/ },
+    { label: "下一个作品", pattern: /label:\s*"下一个作品"/ },
+    { label: "作品前后导航", pattern: /aria-label="作品前后导航"/ },
+    { label: "按作品类型筛选", pattern: /aria-label="按作品类型筛选"/ },
+    { label: "没有找到这个作品", pattern: /title="没有找到这个作品"/ },
+    { label: "这个作品地址可能已经移动", pattern: /body="这个作品地址可能已经移动/ },
+    { label: "科学、课程和 AI 作品", pattern: /科学、课程和 AI 作品\s*·/ },
+  ];
+
+  const combinedSource = visibleShellSources.map(([relativePath, source]) => `\n/* ${relativePath} */\n${source}`).join("\n");
+
+  for (const text of requiredCopy) {
+    expect(combinedSource.includes(text), `Visible shell copy should include: ${text}`);
+  }
+
+  for (const [relativePath, source] of visibleShellSources) {
+    for (const item of retiredCopyPatterns) {
+      expect(!item.pattern.test(source), `${relativePath} still contains retired visible copy: ${item.label}`);
+    }
+  }
+}
+
 const routes = getContentRoutes();
 const workSlugs = new Set(routes.filter((route) => route.type === "work").map((route) => route.path.replace(/^\/works\//, "")));
 const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
@@ -121,6 +166,8 @@ verifyArticleBlocks({
   readingTimeField: "readMin",
   labelField: "label",
 });
+
+verifyVisibleThemeWorkCopy();
 
 if (failures.length) {
   console.error("Content integrity verification failed.");
