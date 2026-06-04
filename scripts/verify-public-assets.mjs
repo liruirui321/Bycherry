@@ -36,6 +36,11 @@ function readPngSize(relativePath) {
   };
 }
 
+function extractContentHrefs(relativePath) {
+  return Array.from(readRoot(relativePath).matchAll(/href:\s*"([^"]+)"/g), (match) => match[1])
+    .filter((href) => href.startsWith("/"));
+}
+
 const failures = [];
 
 function expect(condition, message) {
@@ -84,11 +89,19 @@ const socialPreview = readPngSize("social-preview.png");
 expect(socialPreview.width === 1200 && socialPreview.height === 630, "social-preview.png must be 1200x630 for OG/Twitter cards.");
 
 const indexHtml = readRoot("index.html");
+const contentHrefs = [
+  ...extractContentHrefs("src/app/components/Works.tsx"),
+  ...extractContentHrefs("src/app/components/Notes.tsx"),
+  ...extractContentHrefs("src/app/components/ResearchEssays.tsx"),
+];
 expect(indexHtml.includes('<html lang="zh-CN">'), "index.html must declare zh-CN language.");
 expect(indexHtml.includes('<link rel="canonical" href="https://bycherry.me/" />'), "index.html must include the home canonical URL.");
 expect(indexHtml.includes('<meta property="og:image:secure_url" content="https://bycherry.me/social-preview.png" />'), "index.html must include og:image:secure_url.");
 expect(indexHtml.includes('<link rel="preconnect" href="https://fonts.googleapis.com" />'), "index.html must preconnect to Google Fonts.");
-expect(indexHtml.includes("<noscript>") && indexHtml.includes("/works/gene-expression") && indexHtml.includes("/research/science-to-classroom-question"), "index.html must include a noscript content index.");
+expect(indexHtml.includes("<noscript>"), "index.html must include a noscript content index.");
+for (const href of contentHrefs) {
+  expect(indexHtml.includes(`href="${href}"`), `index.html noscript content index must link to ${href}.`);
+}
 
 const jsonLdMatch = indexHtml.match(/<script type="application\/ld\+json" data-schema="bycherry-page">\s*([\s\S]*?)\s*<\/script>/);
 expect(Boolean(jsonLdMatch), "index.html must include static home JSON-LD.");
@@ -98,6 +111,11 @@ if (jsonLdMatch) {
     const graph = Array.isArray(jsonLd["@graph"]) ? jsonLd["@graph"] : [];
     expect(graph.some((item) => item["@type"] === "WebSite" && item.url === `${siteUrl}/`), "Static JSON-LD must include the By Cherry WebSite.");
     expect(graph.some((item) => item["@type"] === "ItemList" && item["@id"] === `${siteUrl}/#works`), "Static JSON-LD must include the works ItemList.");
+    expect(graph.some((item) => item["@type"] === "ItemList" && item["@id"] === `${siteUrl}/#articles`), "Static JSON-LD must include the articles ItemList.");
+    const jsonLdText = JSON.stringify(jsonLd);
+    for (const href of contentHrefs) {
+      expect(jsonLdText.includes(`${siteUrl}${href}`), `Static JSON-LD must include ${href}.`);
+    }
   } catch (error) {
     failures.push(`Static JSON-LD must be valid JSON: ${error.message}`);
   }
