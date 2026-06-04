@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { IconDNA, IconMicroscope, IconFlask, IconResearch, IconArrowRight, IconLeafSmall, IconStar } from "./Icons";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
@@ -343,6 +344,10 @@ function EssayCard({ essay }: {
 }
 
 export function ResearchEssays() {
+  const [activeLabel, setActiveLabel] = useState("全部");
+  const researchLabels = ["全部", ...Array.from(new Set(essays.map((essay) => essay.label)))];
+  const filteredEssays = activeLabel === "全部" ? essays : essays.filter((essay) => essay.label === activeLabel);
+
   return (
     <section
       id="research"
@@ -386,9 +391,37 @@ export function ResearchEssays() {
         </div>
       </div>
 
+      <div role="group" aria-label="按科研证据主题筛选" style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: "0.75rem" }}>
+        {researchLabels.map((label) => (
+          <button
+            className="research-filter-button"
+            key={label}
+            type="button"
+            onClick={() => setActiveLabel(label)}
+            aria-pressed={activeLabel === label}
+            style={{
+              background: activeLabel === label ? "var(--cherry-forest)" : "var(--card)",
+              color: activeLabel === label ? "#FAF7F1" : "var(--cherry-warm-mid)",
+              border: activeLabel === label ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)",
+              borderRadius: 999,
+              padding: "0.42rem 0.9rem",
+              cursor: "pointer",
+              fontFamily: "'Nunito', sans-serif",
+              fontWeight: 800,
+              fontSize: "0.78rem",
+            }}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+      <div role="status" aria-live="polite" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800, marginBottom: "1.2rem" }}>
+        当前显示 {filteredEssays.length} 篇{activeLabel === "全部" ? "科研证据" : activeLabel}
+      </div>
+
       {/* Two-column grid */}
       <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem", listStyle: "none", margin: 0, padding: 0 }}>
-        {essays.map((essay) => (
+        {filteredEssays.map((essay) => (
           <li key={essay.id} style={{ display: "grid" }}>
             <EssayCard essay={essay} />
           </li>
@@ -404,6 +437,11 @@ export function ResearchEssays() {
           }
 
           #research .research-essay-card:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          #research .research-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
           }

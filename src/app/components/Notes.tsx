@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { IconBook, IconAI, IconLeaf, IconResearch, IconArrowRight, IconCoffee } from "./Icons";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
@@ -177,6 +178,10 @@ function NoteCardIllustration({ slug, color }: { slug: string; color: string }) 
 }
 
 export function Notes() {
+  const [activeTag, setActiveTag] = useState("全部");
+  const noteTags = ["全部", ...Array.from(new Set(notes.map((note) => note.tag)))];
+  const filteredNotes = activeTag === "全部" ? notes : notes.filter((note) => note.tag === activeTag);
+
   return (
     <section
       id="notes"
@@ -216,9 +221,37 @@ export function Notes() {
           </div>
         </div>
 
+        <div role="group" aria-label="按学习方法主题筛选" style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: "0.75rem" }}>
+          {noteTags.map((tag) => (
+            <button
+              className="note-filter-button"
+              key={tag}
+              type="button"
+              onClick={() => setActiveTag(tag)}
+              aria-pressed={activeTag === tag}
+              style={{
+                background: activeTag === tag ? "var(--cherry-forest)" : "var(--card)",
+                color: activeTag === tag ? "#FAF7F1" : "var(--cherry-warm-mid)",
+                border: activeTag === tag ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)",
+                borderRadius: 999,
+                padding: "0.42rem 0.9rem",
+                cursor: "pointer",
+                fontFamily: "'Nunito', sans-serif",
+                fontWeight: 800,
+                fontSize: "0.78rem",
+              }}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+        <div role="status" aria-live="polite" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800, marginBottom: "1.2rem" }}>
+          当前显示 {filteredNotes.length} 篇{activeTag === "全部" ? "学习方法" : activeTag}
+        </div>
+
         {/* Notes grid */}
         <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem", listStyle: "none", margin: 0, padding: 0 }}>
-          {notes.map((note) => (
+          {filteredNotes.map((note) => (
             <li key={note.id} style={{ display: "grid" }}>
               <a
                 className="note-card"
@@ -295,6 +328,11 @@ export function Notes() {
           }
 
           #notes .note-card:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
+          }
+
+          #notes .note-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
           }
