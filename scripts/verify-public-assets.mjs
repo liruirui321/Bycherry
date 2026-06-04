@@ -152,6 +152,8 @@ const indexHtml = readRoot("index.html");
 const appSource = readRoot("src/app/App.tsx");
 const appMetadataSource = readRoot("src/app/siteMetadata.ts");
 const staticIndexSource = readRoot("scripts/generate-static-index.mjs");
+const sitemapGeneratorSource = readRoot("scripts/generate-sitemap.mjs");
+const sitemapVerifierSource = readRoot("scripts/verify-sitemap.mjs");
 const siteMetadataSource = readRoot("scripts/site-metadata.mjs");
 const workPreviewSource = readRoot("src/app/components/WorkPreviewIllustration.tsx");
 const contentHrefs = getContentHrefs();
@@ -164,6 +166,10 @@ expect(staticIndexSource.includes('from "./site-metadata.mjs"'), "Static index g
 for (const exportName of ["siteUrl", "siteDescription", "shareDescription", "shareImageAlt", "worksListDescription", "articlesListDescription"]) {
   expect(siteMetadataSource.includes(`export const ${exportName}`), `site-metadata.mjs must export ${exportName}.`);
   expect(!new RegExp(`const\\s+${exportName}\\s*=`).test(staticIndexSource), `Static index generator must not redeclare ${exportName}; use site-metadata.mjs.`);
+}
+for (const [label, source] of [["sitemap generator", sitemapGeneratorSource], ["sitemap verifier", sitemapVerifierSource]]) {
+  expect(source.includes('from "./site-metadata.mjs"'), `${label} must import shared site metadata.`);
+  expect(!/const\s+siteUrl\s*=/.test(source), `${label} must not redeclare siteUrl; use site-metadata.mjs.`);
 }
 for (const [slug, illustration] of Object.entries(generatedIllustrationsBySlug)) {
   expect(workPreviewSource.includes(`slug === "${slug}"`), `WorkPreviewIllustration must define a preview branch for ${slug}.`);

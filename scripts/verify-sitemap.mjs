@@ -2,9 +2,9 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import { getContentRoutes } from "./content-routes.mjs";
+import { siteUrl } from "./site-metadata.mjs";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const siteUrl = "https://bycherry.me";
 
 function read(relativePath) {
   return readFileSync(resolve(root, relativePath), "utf8");
