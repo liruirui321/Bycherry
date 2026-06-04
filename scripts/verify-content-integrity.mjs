@@ -286,7 +286,7 @@ function verifyConceptExplainerAgentContract() {
     { label: "copyable skill prompt", text: "copyConceptSkillPrompt" },
     { label: "visible skill protocol", text: "概念解释 skill 协议" },
     { label: "arbitrary concept copy", text: "输入任意概念" },
-    { label: "learner-facing agent role", text: "面向学习者" },
+    { label: "direct learner agent role", text: "陪我学习" },
     { label: "anti-shortcut boundary", text: "不要替我跳过判断过程" },
     { label: "anti-fabrication boundary", text: "不编造具体事实" },
     { label: "stable output card", text: "生成学习卡" },
@@ -402,7 +402,7 @@ function verifyLearnerFacingArticleCopy() {
   const requiredLearnerCopy = [
     "用 AI 做学习材料质检",
     "从植物基因组读懂一条证据链",
-    "真实科研如何变成学习者能进入的问题",
+    "真实科研如何变成你能进入的问题",
     "plant-genome-evidence-chain",
     "science-to-learning-question",
     "学习阶段：年级、学科、章节、当前基础",
@@ -438,6 +438,7 @@ function verifyLearnerFacingArticleCopy() {
     { label: "assessment publishing framing", pattern: /审核投放|投放复盘|投放给|发布或导出方式/ },
     { label: "teacher-style learner profile field", pattern: /学习对象：/ },
     { label: "student-as-third-person framing", pattern: /学生基础|学生任务|学生能|学生作品|学生可以/ },
+    { label: "learner-as-third-person framing", pattern: /学习者需要|学习者能|学习者能够|学习者和/ },
   ];
 
   for (const text of requiredLearnerCopy) {

@@ -369,7 +369,7 @@ ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
     },
     {
       title: "科研转译",
-      body: "学习者和创作者需要把真实材料改写成进入问题、图表解读和可复用的知识卡，保留证据边界和不确定性。",
+      body: "你可以把真实材料改写成进入问题、图表解读和可复用的知识卡，同时保留证据边界和不确定性。",
     },
   ];
   const productModules = [
@@ -1693,7 +1693,7 @@ function ConceptExplainerContent() {
   const [conceptInput, setConceptInput] = useState("转录");
   const [levelIndex, setLevelIndex] = useState(1);
   const [quizChoice, setQuizChoice] = useState<string | null>(null);
-  const [audience, setAudience] = useState("成人学习者");
+  const [audience, setAudience] = useState("成人自学者");
   const [lessonGoal, setLessonGoal] = useState("把概念学清楚，并能用例子判断自己是否真正理解");
   const [copiedLesson, setCopiedLesson] = useState(false);
   const [copiedSkill, setCopiedSkill] = useState(false);
@@ -1896,10 +1896,10 @@ function ConceptExplainerContent() {
   ];
   const conceptSkillSteps = [
     "先判断概念所属学科、学习阶段和使用场景。",
-    "再生成一个诊断问题，暴露学习者可能卡住的地方。",
+    "再生成一个诊断问题，暴露我可能卡住的地方。",
     "再给出一个低门槛类比，但明确类比不能推出什么。",
     "再拆成 4 个以内的机制步骤，避免堆术语。",
-    "再给出一个情境练习，让学习者产出一句解释或一张小表。",
+    "再给出一个情境练习，让我产出一句解释或一张小表。",
     "最后生成即时小测和证据边界，提醒哪些内容需要查教材或资料。",
   ];
   const lessonOutput = `【概念】${concept}
@@ -1950,7 +1950,7 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 选项：${active.quiz.options.join(" / ")}
 答案：${active.quiz.answer}
 解释：${active.quiz.explain}`;
-  const conceptSkillPrompt = `你是一个面向学习者的“概念解释 Agent”。请帮助我学习一个概念，不要只给定义，也不要替我跳过判断过程。
+  const conceptSkillPrompt = `你是一个陪我学习的“概念解释 Agent”。请帮助我学习一个概念，不要只给定义，也不要替我跳过判断过程。
 
 【我要学习的概念】
 ${concept}
@@ -1979,7 +1979,7 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 12. 证据边界：哪些内容需要查教材、论文或学习资料确认。
 
 【质量要求】
-- 面向学习者，用“你可以……”表达。
+- 直接对我说话，用“你可以……”表达。
 - 不编造具体事实、数据、物种、疾病或实验结论。
 - 如果概念太宽，先帮我缩小学习范围。
 - 如果资料不足，明确标为“待核查”，不要强行下结论。
