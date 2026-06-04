@@ -281,15 +281,15 @@ function aminoCountForRibosome(progress: number) {
 }
 
 function ribosomePeptideExitPoint(ribosomeCenter: Point) {
-  return { x: ribosomeCenter.x + 43, y: ribosomeCenter.y + 19 };
+  return { x: ribosomeCenter.x + 38, y: ribosomeCenter.y + 16 };
 }
 
 function peptideBeadPoint(exit: Point, index: number) {
   const points = [
-    { x: exit.x + 7, y: exit.y + 1 },
-    { x: exit.x + 22, y: exit.y + 14 },
-    { x: exit.x + 39, y: exit.y + 7 },
-    { x: exit.x + 56, y: exit.y + 20 },
+    { x: exit.x + 3, y: exit.y + 1 },
+    { x: exit.x + 17, y: exit.y + 12 },
+    { x: exit.x + 33, y: exit.y + 5 },
+    { x: exit.x + 49, y: exit.y + 18 },
   ];
   return points[index] ?? points[points.length - 1];
 }
@@ -357,16 +357,16 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
         return (
           <g key={`live-peptide-chain-${ribosomeIndex}`} opacity={ribosome.opacity}>
             <path
-              d={`M${exit.x - 20} ${exit.y - 10} C${exit.x - 10} ${exit.y - 4} ${exit.x - 1} ${exit.y - 1} ${exit.x + 6} ${exit.y}`}
+              d={`M${exit.x - 23} ${exit.y - 9} C${exit.x - 15} ${exit.y - 3} ${exit.x - 7} ${exit.y} ${exit.x + 2} ${exit.y + 1}`}
               fill="none"
               stroke="var(--cherry-forest)"
-              strokeWidth={5.2}
+              strokeWidth={6}
               strokeLinecap="round"
-              opacity={0.35}
+              opacity={0.46}
             />
             {beadPoints.length > 1 ? <path d={chainPath} fill="none" stroke="var(--cherry-forest)" strokeWidth={4.2} strokeLinecap="round" strokeLinejoin="round" opacity={0.78} /> : null}
             {ribosomeIndex === 0 ? (
-              <text x={exit.x + 32} y={exit.y + 36} fill="var(--cherry-forest)" fontSize={11} fontWeight={900}>
+              <text x={exit.x + 24} y={exit.y + 36} fill="var(--cherry-forest)" fontSize={11} fontWeight={900}>
                 多肽链
               </text>
             ) : null}
@@ -615,6 +615,7 @@ export function GeneExpressionTool() {
     { label: "把核糖体拖到 mRNA 附近，观察多肽链从出口逐颗长出。", done: visibleProteinCount > 0 },
   ];
   const integratedMolecules = molecules.filter((molecule) => molecule.type !== "tf" && inBox(molecule, zones[moleculeZone(molecule.type)]));
+  const nextTask = taskStatuses.find((item) => !item.done)?.label ?? "三个操作任务已经完成，可以继续调节分子数量、速度和暂停状态观察表达变化。";
   const currentStatus = (() => {
     if (!model.transcriptionOn) {
       if (activeRibosomeCount > 0) return "转录已经停止，核糖体正在读取保留的 mRNA，多肽链仍会按密码子继续延伸。";
@@ -631,6 +632,7 @@ export function GeneExpressionTool() {
     if (visibleProteinCount === 0) return `核糖体正在读取 ${activeCodon?.rna ?? "密码子"}，tRNA 对准 A/P 位点，第一颗氨基酸小圆即将从出口出现。`;
     return `原核式耦合表达正在发生：RNA 聚合酶延伸 mRNA，核糖体读取 ${activeCodon?.rna ?? "密码子"}，多肽链正按 ${activeCodon?.amino ?? "氨基酸"} 紧贴出口长出。`;
   })();
+  const accessibleSummary = `基因表达仿真。启动子上有 ${model.tfBound} 个转录因子，基因区有 ${model.polBound} 个 RNA 聚合酶，核糖体入口有 ${model.ribBound} 个核糖体。当前 mRNA 数量 ${visibleMrnaCount}，已接入氨基酸 ${visibleProteinCount}。当前状态：${currentStatus} 下一步：${nextTask}`;
 
   useEffect(() => {
     progressRef.current = cycleProgress;
@@ -801,14 +803,18 @@ export function GeneExpressionTool() {
         scrollMarginTop: 76,
       }}
     >
+      <div id="gene-expression-summary" className="gene-sr-only">
+        {accessibleSummary}
+      </div>
       <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.7fr)", gap: "1rem", alignItems: "stretch", minWidth: 0 }}>
         <div className="gene-canvas-card" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 28, boxShadow: "6px 10px 0px rgba(94,68,42,0.09)", overflow: "hidden", minWidth: 0 }}>
           <svg
             className="gene-canvas-svg"
             ref={svgRef}
             viewBox="0 0 980 660"
-            role="img"
+            role="group"
             aria-label="基因表达互动仿真画布"
+            aria-describedby="gene-expression-summary"
             onPointerMove={moveDrag}
             onPointerUp={endDrag}
             onPointerLeave={endDrag}
@@ -1038,16 +1044,16 @@ export function GeneExpressionTool() {
               <IconSparkle size={18} />
               操作任务
             </div>
-            <div style={{ display: "grid", gap: "0.55rem", fontSize: "0.86rem" }}>
+            <ol style={{ display: "grid", gap: "0.55rem", fontSize: "0.86rem", listStyle: "none", margin: 0, padding: 0 }}>
               {taskStatuses.map((item, index) => (
-                <div key={item.label} style={{ display: "flex", gap: 8, alignItems: "flex-start", opacity: item.done ? 1 : 0.72 }}>
+                <li key={item.label} style={{ display: "flex", gap: 8, alignItems: "flex-start", opacity: item.done ? 1 : 0.72 }}>
                   <span style={{ width: 18, height: 18, borderRadius: "50%", background: item.done ? "var(--cherry-forest)" : "rgba(250,247,241,0.7)", border: "1.5px solid rgba(94,68,42,0.16)", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2 }}>
                     {item.done ? <IconCheck size={12} color="#FAF7F1" /> : <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900 }}>{index + 1}</span>}
                   </span>
                   <span style={{ color: item.done ? "var(--cherry-warm-brown)" : "var(--cherry-warm-mid)", fontWeight: item.done ? 900 : 700 }}>{item.label}</span>
-                </div>
+                </li>
               ))}
-            </div>
+            </ol>
           </div>
 
           <div role="status" aria-live="polite" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", color: "var(--cherry-warm-mid)", lineHeight: 1.7 }}>
@@ -1061,6 +1067,18 @@ export function GeneExpressionTool() {
 
       <style>
         {`
+          #gene-expression .gene-sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+          }
+
           @media (max-width: 920px) {
             #gene-expression > div:first-child {
               grid-template-columns: 1fr !important;
@@ -1110,6 +1128,11 @@ export function GeneExpressionTool() {
 
           #gene-expression svg [role="button"]:focus-visible text {
             fill: var(--cherry-red);
+          }
+
+          #gene-expression button:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 4px;
           }
         `}
       </style>
