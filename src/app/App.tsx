@@ -109,6 +109,8 @@ function buildHomeJsonLd() {
             url: `${siteUrl}${work.href}`,
             genre: work.category,
             keywords: work.tags.join(", "),
+            learningResourceType: work.category,
+            teaches: [...work.path, ...work.outputs],
             dateModified: work.updated,
             creator: { "@id": personId },
           },
@@ -299,6 +301,8 @@ export default function App() {
           ...jsonLdBase,
           genre: work.category,
           keywords: work.tags.join(", "),
+          learningResourceType: work.category,
+          teaches: [...work.path, ...work.outputs],
           dateModified: work.updated,
         }
       : note || essay

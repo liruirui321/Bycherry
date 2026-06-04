@@ -19,6 +19,8 @@ function listItemObject(route) {
       url: `${siteUrl}${route.path}`,
       genre: route.category,
       keywords: route.tags.join(", "),
+      learningResourceType: route.category,
+      teaches: [...route.pathSteps, ...route.outputs],
       dateModified: route.lastmod,
       creator: { "@id": `${siteUrl}/#person` },
     };
