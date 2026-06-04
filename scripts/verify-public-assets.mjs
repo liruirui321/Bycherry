@@ -11,6 +11,8 @@ const shareTagline = "科学、课程与 AI 主题作品集";
 const manifestDescription = `${shareTagline}。`;
 const shareDescription = "科学、课程与 AI 主题作品集，收录科学教育、学习工具、课程卡片和科研转译记录。";
 const shareImageAlt = "By Cherry 科学、课程与 AI 主题作品集预览图";
+const worksListDescription = "科学教育、AI 工具和课程设计主题作品。";
+const articlesListDescription = "课程开发、科学传播、AI 创作和科研转译记录。";
 const retiredShareCopy = "可打开、可阅读、可操作";
 
 function readRoot(relativePath) {
@@ -116,8 +118,14 @@ if (jsonLdMatch) {
     const jsonLd = JSON.parse(jsonLdMatch[1]);
     const graph = Array.isArray(jsonLd["@graph"]) ? jsonLd["@graph"] : [];
     expect(graph.some((item) => item["@type"] === "WebSite" && item.url === `${siteUrl}/`), "Static JSON-LD must include the By Cherry WebSite.");
-    expect(graph.some((item) => item["@type"] === "ItemList" && item["@id"] === `${siteUrl}/#works`), "Static JSON-LD must include the works ItemList.");
-    expect(graph.some((item) => item["@type"] === "ItemList" && item["@id"] === `${siteUrl}/#articles`), "Static JSON-LD must include the articles ItemList.");
+    const worksList = graph.find((item) => item["@type"] === "ItemList" && item["@id"] === `${siteUrl}/#works`);
+    const articlesList = graph.find((item) => item["@type"] === "ItemList" && item["@id"] === `${siteUrl}/#articles`);
+    expect(Boolean(worksList), "Static JSON-LD must include the works ItemList.");
+    expect(Boolean(articlesList), "Static JSON-LD must include the articles ItemList.");
+    expect(worksList?.description === worksListDescription, "Static works ItemList must include the current description.");
+    expect(articlesList?.description === articlesListDescription, "Static articles ItemList must include the current description.");
+    expect(worksList?.numberOfItems === contentHrefs.filter((href) => href.startsWith("/works/")).length, "Static works ItemList must include the current numberOfItems.");
+    expect(articlesList?.numberOfItems === contentHrefs.filter((href) => !href.startsWith("/works/")).length, "Static articles ItemList must include the current numberOfItems.");
     const jsonLdText = JSON.stringify(jsonLd);
     for (const href of contentHrefs) {
       expect(jsonLdText.includes(`${siteUrl}${href}`), `Static JSON-LD must include ${href}.`);
