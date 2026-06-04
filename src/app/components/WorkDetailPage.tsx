@@ -1990,11 +1990,8 @@ function WorkContinueLinks({ work }: { work: Work }) {
           </a>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.85rem" }}>
-          {relatedWorks.map((item) => {
-            const isPlantEvolution = item.slug === "plant-evolution-stories";
-
-            return (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "0.85rem" }}>
+          {relatedWorks.map((item) => (
               <a
                 className="work-next-card"
                 key={item.slug}
@@ -2003,32 +2000,22 @@ function WorkContinueLinks({ work }: { work: Work }) {
                 onClick={(event) => openWork(item.href, event)}
                 style={{
                   display: "grid",
-                  gridTemplateColumns: isPlantEvolution ? "92px minmax(0, 1fr)" : "118px minmax(0, 1fr)",
-                  gap: "0.85rem",
+                  gridTemplateColumns: "112px minmax(0, 1fr)",
+                  gap: "0.82rem",
                   alignItems: "center",
-                  background: item.color,
-                  border: `1.5px solid ${item.border}`,
-                  borderRadius: 18,
-                  padding: "0.9rem",
+                  background: "var(--card)",
+                  border: "1.5px solid rgba(94,68,42,0.12)",
+                  borderTop: `4px solid ${item.border}`,
+                  borderRadius: 8,
+                  padding: "0.82rem",
                   color: "inherit",
                   textDecoration: "none",
-                  boxShadow: "3px 5px 0px rgba(94,68,42,0.07)",
+                  boxShadow: "0 8px 18px rgba(94,68,42,0.06)",
                   minWidth: 0,
                 }}
               >
-                <span
-                  aria-hidden="true"
-                  style={{
-                    minHeight: isPlantEvolution ? 132 : 94,
-                    borderRadius: 16,
-                    background: "rgba(250,247,241,0.56)",
-                    border: "1.5px dashed rgba(94,68,42,0.12)",
-                    display: "grid",
-                    placeItems: "center",
-                    overflow: "hidden",
-                  }}
-                >
-                  <WorkPreviewIllustration slug={item.slug} color={item.border} width={isPlantEvolution ? 76 : 112} height={isPlantEvolution ? 134 : 84} />
+                <span aria-hidden="true" style={{ height: 88, borderRadius: 8, background: item.color, border: "1px solid rgba(94,68,42,0.1)", display: "grid", placeItems: "center", overflow: "hidden" }}>
+                  <WorkPreviewIllustration slug={item.slug} color={item.border} width={112} height={88} />
                 </span>
                 <span style={{ minWidth: 0 }}>
                   <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 28, height: 28, borderRadius: 10, background: "rgba(250,247,241,0.64)", marginBottom: "0.42rem" }}>
@@ -2045,8 +2032,7 @@ function WorkContinueLinks({ work }: { work: Work }) {
                   </span>
                 </span>
               </a>
-            );
-          })}
+            ))}
         </div>
       </div>
     </section>

@@ -157,6 +157,14 @@ function verifyWorkCardActions() {
   expect(copyActionMatches.length === 0, `Work card entry actions should open or start the tool, not imply direct copy behavior: ${copyActionMatches.join(", ")}`);
 }
 
+function verifyWorkDetailCardsStayCompact() {
+  const source = read("src/app/components/WorkDetailPage.tsx");
+
+  expect(!source.includes("isPlantEvolution"), "Work detail cards must not use plant-specific tall preview sizing.");
+  expect(source.includes('gridTemplateColumns: "112px minmax(0, 1fr)"'), "Work detail continue cards should use a uniform compact preview column.");
+  expect(source.includes('height: 88'), "Work detail continue card previews should keep a fixed compact height.");
+}
+
 const routes = getContentRoutes();
 const workSlugs = new Set(routes.filter((route) => route.type === "work").map((route) => route.path.replace(/^\/works\//, "")));
 const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
@@ -215,6 +223,7 @@ verifyArticleBlocks({
 verifyVisibleThemeWorkCopy();
 verifyNoLowQualityVisibleContent();
 verifyWorkCardActions();
+verifyWorkDetailCardsStayCompact();
 
 if (failures.length) {
   console.error("Content integrity verification failed.");
