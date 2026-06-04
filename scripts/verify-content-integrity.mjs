@@ -384,6 +384,8 @@ function verifyCrisprLearnerScenarios() {
 
 function verifyLearnerFacingArticleCopy() {
   const articleDetailSource = read("src/app/components/ArticleDetailPage.tsx");
+  const notesSource = read("src/app/components/Notes.tsx");
+  const researchSource = read("src/app/components/ResearchEssays.tsx");
   const learnerArticleSources = [
     "src/app/App.tsx",
     "src/app/components/About.tsx",
@@ -459,6 +461,8 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("actionSteps[0]"), "Article quick start must use the first concrete article action.");
   expect(articleDetailSource.includes("checklist[0]"), "Article quick start must expose the first completion check.");
   expect(articleDetailSource.includes("pitfalls[0]"), "Article quick start must expose the first pitfall to avoid.");
+  expect(notesSource.includes("note.actionSteps[0]"), "Learning method cards must expose each article's first action step.");
+  expect(researchSource.includes("essay.actionSteps[0]"), "Research evidence cards must expose each article's first action step.");
 }
 
 function verifyLearnerProductPositioning() {
