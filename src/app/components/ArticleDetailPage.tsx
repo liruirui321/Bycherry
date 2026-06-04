@@ -76,12 +76,20 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     previousArticle ? { label: "上一篇", arrow: "←", article: previousArticle, align: "left" as const } : null,
     nextArticle ? { label: "下一篇", arrow: "→", article: nextArticle, align: "right" as const } : null,
   ].filter((item): item is { label: string; arrow: string; article: NonNullable<typeof article>; align: "left" | "right" } => Boolean(item));
+  const readingPath = article
+    ? [
+        { label: "进入点", body: article.highlights[0] ?? "先找到这篇文章要解决的问题。" },
+        { label: "证据链", body: article.highlights[1] ?? "再看作者如何组织证据和判断边界。" },
+        { label: "可迁移方法", body: article.highlights[2] ?? "最后提炼可以复用到自己项目里的方法。" },
+      ]
+    : [];
   const summaryText = article
     ? `【阅读摘要】
 标题：${article.title}
 日期：${article.date}
 类型：${"tag" in article ? article.tag : article.label}
 阅读时间：约 ${"readTime" in article ? article.readTime : article.readMin} 分钟
+${"platformUrl" in article ? `平台入口：${article.platformUrl}\n` : ""}
 
 一、摘要
 ${article.excerpt ?? article.body}
@@ -203,6 +211,46 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.88rem", lineHeight: 1.65, margin: "0 0 0.65rem", maxWidth: 760 }}>
               {article.excerpt ?? article.body}
             </p>
+
+            {"platformUrl" in article ? (
+              <a
+                className="article-detail-link"
+                href={article.platformUrl}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "var(--cherry-forest)",
+                  color: "#FAF7F1",
+                  borderRadius: 999,
+                  padding: "0.48rem 0.9rem",
+                  textDecoration: "none",
+                  fontWeight: 900,
+                  fontSize: "0.82rem",
+                  marginBottom: "0.85rem",
+                }}
+              >
+                打开平台：scifuion.top
+              </a>
+            ) : null}
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.6rem", marginBottom: "0.9rem" }}>
+              {readingPath.map((item, index) => (
+                <div key={item.label} style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.08)", borderRadius: 14, padding: "0.7rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: "0.3rem" }}>
+                    <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: article.tagBg ?? article.labelBg, color: article.tagColor ?? article.labelColor, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>
+                      {index + 1}
+                    </span>
+                    <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{item.label}</strong>
+                  </div>
+                  <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.78rem", margin: 0, fontWeight: 800 }}>
+                    {item.body}
+                  </p>
+                </div>
+              ))}
+            </div>
 
             <div style={{ display: "grid", gap: "0.62rem", marginBottom: "0.9rem" }}>
               <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>正文要点</div>
