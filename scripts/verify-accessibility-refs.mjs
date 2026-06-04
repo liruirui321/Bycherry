@@ -37,14 +37,24 @@ function resolveToken(token, stringConstants) {
 }
 
 function collectIds(source, stringConstants) {
-  const ids = new Set(Array.from(source.matchAll(/\bid="([^"]+)"/g), (match) => match[1]));
+  const ids = new Set();
+  const counts = new Map();
+
+  function addId(id) {
+    ids.add(id);
+    counts.set(id, (counts.get(id) ?? 0) + 1);
+  }
+
+  for (const match of source.matchAll(/\bid="([^"]+)"/g)) {
+    addId(match[1]);
+  }
 
   for (const match of source.matchAll(/\bid=\{([A-Za-z_$][\w$]*)\}/g)) {
     const resolved = stringConstants.get(match[1]);
-    if (resolved) ids.add(resolved);
+    if (resolved) addId(resolved);
   }
 
-  return ids;
+  return { ids, counts };
 }
 
 function collectAriaReferences(source, stringConstants) {
@@ -74,14 +84,23 @@ function collectAriaReferences(source, stringConstants) {
 }
 
 const failures = [];
+const duplicateIdAllowlist = new Set(["main-content"]);
 let checkedReferences = 0;
+let checkedIds = 0;
 
 for (const filePath of walkFiles(sourceRoot, [".tsx", ".ts"])) {
   const source = readFileSync(filePath, "utf8");
   const stringConstants = extractStringConstants(source);
-  const ids = collectIds(source, stringConstants);
+  const { ids, counts } = collectIds(source, stringConstants);
   const references = collectAriaReferences(source, stringConstants);
+  checkedIds += ids.size;
   checkedReferences += references.length;
+
+  for (const [id, count] of counts) {
+    if (count > 1 && !duplicateIdAllowlist.has(id)) {
+      failures.push(`${sourceLabel(filePath)} declares static id="${id}" ${count} times.`);
+    }
+  }
 
   for (const reference of references) {
     if (!ids.has(reference.id)) {
@@ -96,4 +115,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Accessibility refs verified: ${checkedReferences} static aria references.`);
+console.log(`Accessibility refs verified: ${checkedReferences} static aria references and ${checkedIds} static ids.`);
