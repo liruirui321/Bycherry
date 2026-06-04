@@ -1514,7 +1514,7 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
               marginBottom: "0.65rem",
             }}
           >
-            ← 回到作品集
+            ← 回到主题作品
           </a>
         ) : null}
 
@@ -1536,7 +1536,7 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
                 event.preventDefault();
                 navigateHome("#works");
               }}
-              aria-label="回到作品集"
+              aria-label="回到主题作品"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -1655,7 +1655,7 @@ function WorkContinueLinks({ work }: { work: Work }) {
             }}
             style={{ color: "var(--cherry-forest)", textDecoration: "none", fontWeight: 900, fontSize: "0.84rem" }}
           >
-            全部作品 →
+            全部主题作品 →
           </a>
         </div>
 
@@ -1784,11 +1784,11 @@ export function WorkDetailPage({ slug }: { slug: string }) {
     return (
       <section id="main-content" tabIndex={-1} style={{ minHeight: "58vh", padding: "5rem 1.5rem", display: "grid", placeItems: "center", fontFamily: "'Nunito', sans-serif" }}>
         <EmptyStateCard
-          eyebrow="作品集"
+          eyebrow="主题作品"
           title="没有找到这个作品"
           body="这个作品地址可能已经移动。可以回到主题作品区，继续浏览科学模拟、课程卡片和 AI 工具。"
           href="/#works"
-          linkText="回到作品集"
+          linkText="回到主题作品"
           onNavigate={(event) => {
             if (!shouldUseClientNavigation(event)) return;
             event.preventDefault();

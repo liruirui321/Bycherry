@@ -6,6 +6,7 @@ import { getContentRoutes } from "./content-routes.mjs";
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const siteUrl = "https://bycherry.me";
 const siteDescription = "By Cherry 是一个可爱插画风的个人网站，收录科学教育、AI 学习工具、项目制课程和创作工作流。";
+const shareImageAlt = "By Cherry 科学、课程与 AI 主题作品集预览图";
 
 function itemList(id, name, routes) {
   return {
@@ -107,6 +108,18 @@ html = replaceRequired(
   /      <script type="application\/ld\+json" data-schema="bycherry-page">[\s\S]*?      <\/script>/,
   `      <script type="application/ld+json" data-schema="bycherry-page">\n${indentedJson(buildJsonLd(routes))}\n      </script>`,
   "JSON-LD script block"
+);
+html = replaceRequired(
+  html,
+  /      <meta property="og:image:alt" content="[^"]*" \/>/,
+  `      <meta property="og:image:alt" content="${escapeHtml(shareImageAlt)}" />`,
+  "OG image alt text"
+);
+html = replaceRequired(
+  html,
+  /      <meta name="twitter:image:alt" content="[^"]*" \/>/,
+  `      <meta name="twitter:image:alt" content="${escapeHtml(shareImageAlt)}" />`,
+  "Twitter image alt text"
 );
 html = replaceRequired(html, /      <noscript>[\s\S]*?      <\/noscript>/, buildNoscript(routes), "noscript block");
 

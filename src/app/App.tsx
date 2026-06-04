@@ -262,7 +262,7 @@ export default function App() {
     const missingRoutedItem = Boolean((detailSlug && !work) || (noteSlug && !note) || (researchSlug && !essay));
     const notFound = unknownPath || missingRoutedItem;
     const title = notFound ? "没有找到页面" : work?.title ?? note?.title ?? essay?.title ?? homeTitle;
-    const description = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览作品、笔记和科研随笔。" : work?.desc ?? note?.excerpt ?? essay?.body ?? defaultDescription;
+    const description = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览主题作品、笔记和科研随笔。" : work?.desc ?? note?.excerpt ?? essay?.body ?? defaultDescription;
     const isArticle = Boolean(note || essay);
     const publishedDate = note?.date ?? essay?.date ?? null;
     const workUpdatedDate = work?.updated ?? null;
@@ -331,12 +331,12 @@ export default function App() {
     upsertMeta('meta[property="og:image:width"]', { property: "og:image:width" }, "1200");
     upsertMeta('meta[property="og:image:height"]', { property: "og:image:height" }, "630");
     upsertMeta('meta[property="og:image:type"]', { property: "og:image:type" }, "image/png");
-    upsertMeta('meta[property="og:image:alt"]', { property: "og:image:alt" }, "By Cherry 科学、课程与 AI 作品集预览图");
+    upsertMeta('meta[property="og:image:alt"]', { property: "og:image:alt" }, "By Cherry 科学、课程与 AI 主题作品集预览图");
     upsertMeta('meta[name="twitter:card"]', { name: "twitter:card" }, "summary_large_image");
     upsertMeta('meta[name="twitter:title"]', { name: "twitter:title" }, fullTitle);
     upsertMeta('meta[name="twitter:description"]', { name: "twitter:description" }, description);
     upsertMeta('meta[name="twitter:image"]', { name: "twitter:image" }, socialImageUrl);
-    upsertMeta('meta[name="twitter:image:alt"]', { name: "twitter:image:alt" }, "By Cherry 科学、课程与 AI 作品集预览图");
+    upsertMeta('meta[name="twitter:image:alt"]', { name: "twitter:image:alt" }, "By Cherry 科学、课程与 AI 主题作品集预览图");
     upsertMeta('meta[name="robots"]', { name: "robots" }, notFound ? "noindex" : "index, follow");
     setOptionalMeta('meta[property="article:published_time"]', { property: "article:published_time" }, isArticle ? publishedDate : null);
     setOptionalMeta('meta[property="article:modified_time"]', { property: "article:modified_time" }, isArticle ? publishedDate : null);
