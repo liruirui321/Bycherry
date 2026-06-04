@@ -7,6 +7,8 @@ Cute illustrated personal homepage for `bycherry.me`, built with React, Vite, an
 - Warm illustrated creator homepage
 - Portfolio cards for science, course design, and AI tools
 - Interactive gene expression visualization
+- Plant evolution timeline with classroom study cards
+- Research prompt kit, concept explainer, and CRISPR teaching simulator
 - Notes and research essay sections
 - Mailto-based contact form
 
@@ -23,11 +25,19 @@ npm run dev
 npm run build
 ```
 
-`npm run build` runs `npm run verify:sitemap` before Vite builds. The sitemap check compares the public routes in `Works.tsx`, `Notes.tsx`, and `ResearchEssays.tsx` with `public/sitemap.xml`, including `lastmod` dates for works, notes, and research essays.
+`npm run build` runs four verification steps before Vite builds:
 
-You can run the check on its own:
+- `verify:public` checks the custom domain, robots file, manifest, favicon, and social preview image.
+- `verify:links` checks static internal links, public routes, home anchors, and static public asset links.
+- `verify:a11y` checks static `aria-labelledby`, `aria-describedby`, `aria-controls`, and duplicate static ids.
+- `verify:sitemap` compares public routes with `public/sitemap.xml`, including `lastmod` dates.
+
+You can run the checks on their own:
 
 ```bash
+npm run verify:public
+npm run verify:links
+npm run verify:a11y
 npm run verify:sitemap
 ```
 
@@ -47,4 +57,6 @@ When adding or removing public content:
 - Update `public/sitemap.xml` with the same route.
 - For works, keep sitemap `lastmod` equal to the item `updated` in `Works.tsx`.
 - For notes and research essays, keep sitemap `lastmod` equal to the item `date`.
-- Run `npm run verify:sitemap` before pushing.
+- Make sure any new static links point to an existing route, home anchor, or public asset.
+- Make sure any new static `aria-*` references point to an existing id.
+- Run `npm run build` before pushing.
