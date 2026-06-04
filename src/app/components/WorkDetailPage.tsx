@@ -929,6 +929,12 @@ function ConceptExplainerContent() {
   const active = explanations[concept];
   const selectedLevel = active.levels[levelIndex];
   const quizAnswered = quizChoice !== null;
+  const conceptFlow = [
+    { label: "概念", value: concept },
+    { label: "类比", value: active.analogy.split("，")[0] },
+    { label: "机制", value: `${active.mechanism.length} 步` },
+    { label: "检查", value: active.quiz.answer },
+  ];
   const lessonFlow = [
     {
       title: "1 分钟进入",
@@ -1027,11 +1033,48 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 
       <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.25fr) minmax(280px, 0.78fr)", gap: "1rem", alignItems: "stretch" }}>
         <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", position: "relative", overflow: "hidden" }}>
-          <svg style={{ position: "absolute", right: -20, top: -14, opacity: 0.16 }} width="180" height="150" viewBox="0 0 180 150" fill="none" aria-hidden="true" focusable="false">
-            <path d="M28 128 Q44 54 146 22 Q150 96 28 128Z" fill={active.color} />
-            <path d="M48 112 Q86 76 134 32" stroke="var(--cherry-warm-brown)" strokeWidth="3" strokeLinecap="round" opacity="0.28" />
-          </svg>
           <div style={{ position: "relative", zIndex: 1 }}>
+            <div className="concept-flow-map" role="group" aria-label="概念讲解生成流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.55rem", marginBottom: "1rem" }}>
+              {conceptFlow.map((item, index) => (
+                <div key={item.label} style={{ minHeight: 96, borderRadius: 16, border: "1.5px solid rgba(94,68,42,0.12)", background: index === 0 ? "var(--cherry-yellow-light)" : index === 1 ? "var(--cherry-blue-light)" : index === 2 ? "var(--cherry-sage-light)" : "var(--cherry-peach-light)", padding: "0.68rem", position: "relative", overflow: "hidden" }}>
+                  <svg width="72" height="58" viewBox="0 0 72 58" fill="none" aria-hidden="true" focusable="false" style={{ position: "absolute", right: -10, bottom: -8, opacity: 0.76 }}>
+                    {index === 0 ? (
+                      <>
+                        <circle cx="29" cy="27" r="18" fill="rgba(250,247,241,0.86)" stroke={active.color} strokeWidth="2.6" />
+                        <path d="M22 27 H38 M30 19 V35" stroke={active.color} strokeWidth="3.2" strokeLinecap="round" />
+                        <circle cx="50" cy="18" r="6" fill="var(--cherry-yellow)" />
+                      </>
+                    ) : index === 1 ? (
+                      <>
+                        <path d="M17 41 C24 15 47 9 58 27 C46 45 29 49 17 41Z" fill="rgba(250,247,241,0.86)" stroke="rgba(94,68,42,0.16)" strokeWidth="1.8" />
+                        <path d="M26 37 C36 30 43 23 53 18" stroke="var(--cherry-warm-brown)" strokeWidth="2.4" strokeLinecap="round" opacity="0.42" />
+                        <circle cx="25" cy="37" r="4.2" fill="var(--cherry-red)" />
+                        <circle cx="39" cy="28" r="4.2" fill="var(--cherry-sage)" />
+                      </>
+                    ) : index === 2 ? (
+                      <>
+                        {[16, 32, 48].map((x, dotIndex) => (
+                          <g key={x}>
+                            <circle cx={x} cy={22 + dotIndex * 8} r="7.5" fill="rgba(250,247,241,0.9)" stroke="var(--cherry-forest)" strokeWidth="1.8" />
+                            {dotIndex < 2 ? <path d={`M${x + 7} ${25 + dotIndex * 8} C${x + 14} ${30 + dotIndex * 8} ${x + 17} ${32 + dotIndex * 8} ${x + 24} ${33 + dotIndex * 8}`} stroke="var(--cherry-forest)" strokeWidth="2.2" strokeLinecap="round" /> : null}
+                          </g>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        <rect x="14" y="13" width="45" height="36" rx="12" fill="rgba(250,247,241,0.9)" stroke="rgba(94,68,42,0.16)" strokeWidth="1.8" />
+                        <path d="M24 31 L32 39 L49 21" stroke="var(--cherry-forest)" strokeWidth="4.6" strokeLinecap="round" strokeLinejoin="round" />
+                        <circle cx="56" cy="39" r="5" fill="var(--cherry-yellow)" />
+                      </>
+                    )}
+                  </svg>
+                  <div style={{ width: 24, height: 24, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.7rem", fontWeight: 900, marginBottom: "0.45rem", position: "relative", zIndex: 1 }}>{index + 1}</div>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.8rem", marginBottom: "0.22rem", position: "relative", zIndex: 1 }}>{item.label}</div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontWeight: 800, fontSize: "0.68rem", lineHeight: 1.42, position: "relative", zIndex: 1, paddingRight: 26 }}>{item.value}</div>
+                </div>
+              ))}
+            </div>
+
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: "0.9rem" }}>
               {active.levels.map((level, index) => (
                 <button key={level.title} type="button" aria-pressed={levelIndex === index} onClick={() => setLevelIndex(index)} style={{ background: levelIndex === index ? active.color : "var(--muted)", color: levelIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
@@ -1141,6 +1184,16 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 
           @media (max-width: 860px) {
             #concept-explainer-tool .concept-responsive-grid {
+              grid-template-columns: 1fr !important;
+            }
+
+            #concept-explainer-tool .concept-flow-map {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+          }
+
+          @media (max-width: 520px) {
+            #concept-explainer-tool .concept-flow-map {
               grid-template-columns: 1fr !important;
             }
           }
