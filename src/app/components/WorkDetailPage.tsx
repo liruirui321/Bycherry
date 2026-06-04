@@ -1687,7 +1687,7 @@ function WorkContinueLinks({ work }: { work: Work }) {
                 <span
                   aria-hidden="true"
                   style={{
-                    minHeight: isPlantEvolution ? 142 : 94,
+                    minHeight: isPlantEvolution ? 132 : 94,
                     borderRadius: 16,
                     background: "rgba(250,247,241,0.56)",
                     border: "1.5px dashed rgba(94,68,42,0.12)",
@@ -1696,7 +1696,7 @@ function WorkContinueLinks({ work }: { work: Work }) {
                     overflow: "hidden",
                   }}
                 >
-                  <WorkPreviewIllustration slug={item.slug} color={item.border} width={isPlantEvolution ? 80 : 112} height={isPlantEvolution ? 150 : 84} />
+                  <WorkPreviewIllustration slug={item.slug} color={item.border} width={isPlantEvolution ? 76 : 112} height={isPlantEvolution ? 134 : 84} />
                 </span>
                 <span style={{ minWidth: 0 }}>
                   <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 28, height: 28, borderRadius: 10, background: "rgba(250,247,241,0.64)", marginBottom: "0.42rem" }}>

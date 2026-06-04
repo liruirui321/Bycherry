@@ -28,27 +28,27 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
     const pathId = `${svgId}-plant-card-path`;
     const clipId = `${svgId}-plant-card-clip`;
     const stages = [
-      { x: 89, y: 304, branch: -52, fill: "var(--cherry-blue-light)", accent: "var(--cherry-sage)" },
-      { x: 97, y: 253, branch: 52, fill: "var(--cherry-yellow-light)", accent: "var(--cherry-yellow)" },
-      { x: 80, y: 204, branch: -50, fill: "var(--cherry-sage-light)", accent: "var(--cherry-forest)" },
-      { x: 102, y: 154, branch: 50, fill: "var(--cherry-sage-light)", accent: "var(--cherry-sage)" },
-      { x: 82, y: 105, branch: -50, fill: "var(--cherry-yellow)", accent: "var(--cherry-warm-brown)" },
-      { x: 101, y: 51, branch: 44, fill: "var(--cherry-peach-light)", accent: "var(--cherry-red)" },
+      { x: 90, y: 280, branch: -48, fill: "var(--cherry-blue-light)", accent: "var(--cherry-blue)" },
+      { x: 101, y: 231, branch: 48, fill: "var(--cherry-yellow-light)", accent: "var(--cherry-yellow)" },
+      { x: 79, y: 184, branch: -48, fill: "var(--cherry-sage-light)", accent: "var(--cherry-forest)" },
+      { x: 103, y: 136, branch: 48, fill: "var(--cherry-sage-light)", accent: "var(--cherry-sage)" },
+      { x: 81, y: 87, branch: -48, fill: "var(--cherry-yellow)", accent: "var(--cherry-warm-brown)" },
+      { x: 104, y: 39, branch: 42, fill: "var(--cherry-peach-light)", accent: "var(--cherry-red)" },
     ];
 
     return (
-      <svg width={width} height={height} viewBox="0 0 180 340" fill="none" aria-hidden="true" focusable="false">
+      <svg width={width} height={height} viewBox="0 0 180 316" fill="none" aria-hidden="true" focusable="false">
         <defs>
           <linearGradient id={skyId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#FFF4DE" />
-            <stop offset="0.34" stopColor="#EEF8E8" />
-            <stop offset="0.66" stopColor="#DDEFCF" />
-            <stop offset="1" stopColor="#D3E8D7" />
+            <stop offset="0.28" stopColor="#F7EED0" />
+            <stop offset="0.58" stopColor="#E8F4D8" />
+            <stop offset="1" stopColor="#CDE7E4" />
           </linearGradient>
           <linearGradient id={waterId} x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="#84B8CC" stopOpacity="0.2" />
-            <stop offset="0.52" stopColor="#84B8CC" stopOpacity="0.48" />
-            <stop offset="1" stopColor="#84B8CC" stopOpacity="0.24" />
+            <stop offset="0" stopColor="#84B8CC" stopOpacity="0.24" />
+            <stop offset="0.5" stopColor="#84B8CC" stopOpacity="0.56" />
+            <stop offset="1" stopColor="#84B8CC" stopOpacity="0.28" />
           </linearGradient>
           <linearGradient id={pathId} x1="0" y1="1" x2="1" y2="0">
             <stop offset="0" stopColor="#8BBE9A" />
@@ -56,26 +56,26 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
             <stop offset="1" stopColor="#E5A3A0" />
           </linearGradient>
           <clipPath id={clipId}>
-            <rect x="8" y="6" width="164" height="328" rx="34" />
+            <rect x="8" y="6" width="164" height="304" rx="32" />
           </clipPath>
         </defs>
-        <rect x="8" y="6" width="164" height="328" rx="34" fill={`url(#${skyId})`} stroke="rgba(93,140,101,0.28)" strokeWidth="1.8" />
+        <rect x="8" y="6" width="164" height="304" rx="32" fill={`url(#${skyId})`} stroke="rgba(93,140,101,0.3)" strokeWidth="1.8" />
         <g clipPath={`url(#${clipId})`}>
-          <circle cx="133" cy="38" r="22" fill="var(--cherry-yellow)" opacity="0.72" />
-          <circle cx="132" cy="38" r="29" fill="var(--cherry-yellow)" opacity="0.13" />
-          <path d="M18 65 C40 45 63 50 78 71 C58 82 35 82 18 65Z M102 86 C122 68 149 73 163 94 C142 105 118 103 102 86Z" fill="#FAF7F1" opacity="0.68" />
-          <path d="M2 130 C36 101 70 128 103 96 C131 69 151 78 179 55 V335 H2Z" fill="rgba(169,201,172,0.16)" />
-          <path d="M1 185 C34 160 59 181 91 152 C124 122 147 138 180 108 V335 H1Z" fill="rgba(169,201,172,0.25)" />
-          <path d="M0 253 C31 232 63 250 95 226 C128 201 153 211 180 187 V335 H0Z" fill="rgba(216,199,168,0.52)" />
-          <path d="M0 285 C34 302 62 279 95 295 C123 309 149 281 180 294 V335 H0Z" fill={`url(#${waterId})`} />
-          <path d="M8 315 C40 296 63 310 92 297 C124 283 148 296 174 276 V335 H8Z" fill="rgba(216,199,168,0.66)" />
-          <path d="M17 316 C45 326 122 323 159 304" stroke="rgba(58,92,62,0.18)" strokeWidth="5.5" strokeLinecap="round" />
-          <path d="M22 322 C35 306 54 306 68 323 M112 321 C123 301 146 302 160 321" stroke="var(--cherry-forest)" strokeWidth="3" strokeLinecap="round" opacity="0.48" />
-          <path d="M33 318 C27 294 35 277 50 265 M42 294 C60 282 75 292 78 312 M131 319 C123 292 132 270 150 258 M145 281 C159 272 173 279 178 296" stroke="var(--cherry-sage)" strokeWidth="2.7" strokeLinecap="round" fill="none" opacity="0.72" />
-          <path d="M89 304 C25 251 128 227 81 187 C34 146 132 128 88 92 C70 77 70 47 106 25" stroke="var(--cherry-forest)" strokeWidth="17" strokeLinecap="round" opacity="0.09" />
-          <path d="M89 304 C25 251 128 227 81 187 C34 146 132 128 88 92 C70 77 70 47 106 25" stroke={`url(#${pathId})`} strokeWidth="6" strokeLinecap="round" />
-          {[34, 56, 125, 151].map((x, index) => (
-            <path key={x} d={`M${x} ${118 + index * 36} C${x - 7} ${106 + index * 36} ${x - 6} ${96 + index * 36} ${x + 5} ${89 + index * 36} M${x + 5} ${89 + index * 36} C${x + 16} ${98 + index * 36} ${x + 12} ${109 + index * 36} ${x} ${118 + index * 36}`} stroke="rgba(58,92,62,0.22)" strokeWidth="1.7" strokeLinecap="round" fill="rgba(169,201,172,0.18)" />
+          <circle cx="132" cy="37" r="20" fill="var(--cherry-yellow)" opacity="0.78" />
+          <circle cx="132" cy="37" r="30" fill="var(--cherry-yellow)" opacity="0.12" />
+          <path d="M17 57 C38 41 63 45 76 66 C55 76 34 75 17 57Z M105 78 C123 62 149 66 163 86 C142 97 120 95 105 78Z" fill="#FAF7F1" opacity="0.72" />
+          <path d="M0 112 C32 89 63 106 94 78 C125 50 148 62 180 34 V310 H0Z" fill="rgba(169,201,172,0.15)" />
+          <path d="M0 169 C31 145 57 162 88 136 C123 107 151 119 180 91 V310 H0Z" fill="rgba(169,201,172,0.26)" />
+          <path d="M0 236 C29 218 63 234 95 213 C127 191 151 198 180 177 V310 H0Z" fill="rgba(216,199,168,0.54)" />
+          <path d="M0 267 C33 281 60 262 94 276 C123 289 151 264 180 276 V310 H0Z" fill={`url(#${waterId})`} />
+          <path d="M11 299 C39 285 65 294 93 283 C122 270 149 281 171 262 V310 H11Z" fill="rgba(216,199,168,0.7)" />
+          <path d="M18 298 C47 306 118 304 158 288" stroke="rgba(58,92,62,0.18)" strokeWidth="5.5" strokeLinecap="round" />
+          <path d="M21 302 C35 288 53 289 66 302 M113 302 C123 284 145 285 159 302" stroke="var(--cherry-forest)" strokeWidth="3" strokeLinecap="round" opacity="0.46" />
+          <path d="M33 298 C27 276 35 259 50 248 M43 274 C59 262 74 273 77 294 M131 300 C122 275 132 253 149 242 M145 264 C160 254 174 261 178 279" stroke="var(--cherry-sage)" strokeWidth="2.7" strokeLinecap="round" fill="none" opacity="0.72" />
+          <path d="M90 280 C28 235 126 212 79 174 C36 139 132 121 87 84 C68 68 73 41 108 22" stroke="var(--cherry-forest)" strokeWidth="17" strokeLinecap="round" opacity="0.09" />
+          <path d="M90 280 C28 235 126 212 79 174 C36 139 132 121 87 84 C68 68 73 41 108 22" stroke={`url(#${pathId})`} strokeWidth="6.2" strokeLinecap="round" />
+          {[31, 151, 42, 137, 60].map((x, index) => (
+            <path key={x} d={`M${x} ${94 + index * 37} C${x - 7} ${83 + index * 37} ${x - 4} ${74 + index * 37} ${x + 7} ${67 + index * 37} M${x + 7} ${67 + index * 37} C${x + 17} ${76 + index * 37} ${x + 11} ${88 + index * 37} ${x} ${94 + index * 37}`} stroke="rgba(58,92,62,0.2)" strokeWidth="1.8" strokeLinecap="round" fill="rgba(169,201,172,0.18)" />
           ))}
         </g>
         {stages.map((stage, index) => {
@@ -87,11 +87,12 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
                 <circle cx="2" cy="2" r={index === 0 ? 24 : 22} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.12)" strokeWidth="1.3" />
                 {index === 0 ? (
                   <g>
-                    <path d="M-21 8 C-12 -6 -2 4 6 -7 C13 -15 23 -8 29 5" stroke="var(--cherry-sage)" strokeWidth="3.2" strokeLinecap="round" fill="none" />
-                    <path d="M-18 15 C-6 5 6 17 18 7 C23 3 28 6 32 12" stroke="var(--cherry-blue)" strokeWidth="2.3" strokeLinecap="round" opacity="0.62" />
+                    <path d="M-22 7 C-12 -7 -2 4 6 -8 C14 -17 25 -8 31 4" stroke="var(--cherry-sage)" strokeWidth="3.2" strokeLinecap="round" fill="none" />
+                    <path d="M-20 15 C-7 4 6 16 19 7 C24 3 30 6 34 12" stroke="var(--cherry-blue)" strokeWidth="2.4" strokeLinecap="round" opacity="0.68" />
                     <circle cx="-13" cy="3" r="6.7" fill="var(--cherry-blue-light)" stroke="var(--cherry-sage)" strokeWidth="1.4" />
                     <circle cx="7" cy="6" r="7.6" fill="var(--cherry-sage-light)" stroke="var(--cherry-sage)" strokeWidth="1.4" />
-                    <circle cx="25" cy="2" r="5.2" fill="rgba(132,184,204,0.62)" stroke="var(--cherry-sage)" strokeWidth="1.2" />
+                    <circle cx="25" cy="1" r="5.4" fill="rgba(132,184,204,0.68)" stroke="var(--cherry-sage)" strokeWidth="1.2" />
+                    <circle cx="1" cy="-13" r="3.2" fill="var(--cherry-blue-light)" opacity="0.72" />
                   </g>
                 ) : null}
                 {index === 1 ? (
@@ -130,9 +131,9 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
                       <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="7.2" fill="var(--cherry-peach)" stroke="rgba(94,68,42,0.12)" strokeWidth="1.1" />
                     ))}
                     <circle cx="0" cy="-2" r="5.3" fill="var(--cherry-yellow)" />
-                    <circle cx="25" cy="13" r="7.4" fill="var(--cherry-red)" opacity="0.88" />
-                    <circle cx="36" cy="7" r="5.8" fill="var(--cherry-red)" opacity="0.72" />
-                    <path d="M19 2 C28 -10 41 -4 43 8 C35 15 26 14 19 2Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="1.1" />
+                    <circle cx="24" cy="13" r="7.4" fill="var(--cherry-red)" opacity="0.9" />
+                    <circle cx="35" cy="7" r="5.8" fill="var(--cherry-red)" opacity="0.74" />
+                    <path d="M18 2 C28 -10 41 -4 42 8 C35 15 26 14 18 2Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="1.1" />
                   </g>
                 ) : null}
               </g>
@@ -142,7 +143,7 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
             </g>
           );
         })}
-        <path d="M22 328 C52 338 127 336 160 315" stroke="var(--cherry-forest)" strokeWidth="2.6" strokeLinecap="round" opacity="0.34" />
+        <path d="M22 306 C52 314 127 313 160 296" stroke="var(--cherry-forest)" strokeWidth="2.6" strokeLinecap="round" opacity="0.34" />
       </svg>
     );
   }
