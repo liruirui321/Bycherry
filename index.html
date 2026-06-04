@@ -1,8 +1,6 @@
-
-  <!DOCTYPE html>
-  <html lang="zh-CN">
-    <head>
-      
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>By Cherry | 科学、课程与 AI</title>
@@ -13,6 +11,8 @@
       <meta name="application-name" content="By Cherry" />
       <meta name="apple-mobile-web-app-title" content="By Cherry" />
       <meta name="mobile-web-app-capable" content="yes" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       <link rel="manifest" href="/site.webmanifest" />
       <link rel="canonical" href="https://bycherry.me/" />
@@ -23,6 +23,7 @@
       <meta property="og:site_name" content="By Cherry" />
       <meta property="og:url" content="https://bycherry.me/" />
       <meta property="og:image" content="https://bycherry.me/social-preview.png" />
+      <meta property="og:image:secure_url" content="https://bycherry.me/social-preview.png" />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:image:type" content="image/png" />
@@ -32,6 +33,43 @@
       <meta name="twitter:description" content="可打开、可阅读、可操作的科学教育、AI 工具和课程设计作品集。" />
       <meta name="twitter:image" content="https://bycherry.me/social-preview.png" />
       <meta name="twitter:image:alt" content="By Cherry 科学、课程与 AI 作品集预览图" />
+      <script type="application/ld+json" data-schema="bycherry-page">
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Person",
+              "@id": "https://bycherry.me/#person",
+              "name": "Cherry",
+              "url": "https://bycherry.me/",
+              "sameAs": ["https://github.com/liruirui321"]
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://bycherry.me/#website",
+              "url": "https://bycherry.me/",
+              "name": "By Cherry",
+              "alternateName": "Bycherry",
+              "description": "By Cherry 是一个可爱插画风的个人网站，收录科学教育、AI 学习工具、项目制课程和创作工作流。",
+              "inLanguage": "zh-CN",
+              "image": "https://bycherry.me/social-preview.png",
+              "publisher": { "@id": "https://bycherry.me/#person" }
+            },
+            {
+              "@type": "ItemList",
+              "@id": "https://bycherry.me/#works",
+              "name": "By Cherry 可打开的作品",
+              "itemListElement": [
+                { "@type": "ListItem", "position": 1, "url": "https://bycherry.me/works/gene-expression", "name": "基因表达可视化" },
+                { "@type": "ListItem", "position": 2, "url": "https://bycherry.me/works/research-prompt-kit", "name": "科研助手 Prompt Kit" },
+                { "@type": "ListItem", "position": 3, "url": "https://bycherry.me/works/plant-evolution-stories", "name": "植物进化小故事" },
+                { "@type": "ListItem", "position": 4, "url": "https://bycherry.me/works/concept-explainer", "name": "概念解释生成器" },
+                { "@type": "ListItem", "position": 5, "url": "https://bycherry.me/works/crispr-interactive", "name": "CRISPR 交互讲解" }
+              ]
+            }
+          ]
+        }
+      </script>
       <style>html, body { height: 100%; margin: 0; } #root { height: 100%; }</style>
       <script>
         (function () {
@@ -46,14 +84,31 @@
           window.history.replaceState(null, "", redirectPath);
         })();
       </script>
-      
-    </head>
+  </head>
 
-    <body>
-      
+  <body>
       <div id="root"></div>
+      <noscript>
+        <main style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 760px; margin: 0 auto; padding: 2rem 1.25rem; color: #5e442a; line-height: 1.7;">
+          <h1 style="font-size: 2rem; line-height: 1.2; margin: 0 0 0.75rem;">By Cherry</h1>
+          <p>这是一个收录科学教育、AI 学习工具、项目制课程和创作工作流的个人网站。当前浏览器没有启用 JavaScript，下面是主要内容入口。</p>
+          <h2 style="font-size: 1.2rem; margin-top: 1.5rem;">可打开的作品</h2>
+          <ul>
+            <li><a href="/works/gene-expression">基因表达可视化</a></li>
+            <li><a href="/works/research-prompt-kit">科研助手 Prompt Kit</a></li>
+            <li><a href="/works/plant-evolution-stories">植物进化小故事</a></li>
+            <li><a href="/works/concept-explainer">概念解释生成器</a></li>
+            <li><a href="/works/crispr-interactive">CRISPR 交互讲解</a></li>
+          </ul>
+          <h2 style="font-size: 1.2rem; margin-top: 1.5rem;">笔记与科研随笔</h2>
+          <ul>
+            <li><a href="/notes/ai-course-development">AI 可以参与课程开发，但不能替代教学判断</a></li>
+            <li><a href="/notes/plant-genome-to-classroom">从植物基因组到高中生物课堂</a></li>
+            <li><a href="/research/science-to-classroom-question">真实科研如何变成学生能进入的问题</a></li>
+            <li><a href="/research/genome-assembly-story">从基因组组装到一个可讲述的科学故事</a></li>
+          </ul>
+        </main>
+      </noscript>
       <script type="module" src="/src/main.tsx"></script>
-      
-    </body>
-  </html>
-  
+  </body>
+</html>
