@@ -1616,6 +1616,7 @@ function ConceptExplainerContent() {
   const [audience, setAudience] = useState("高中生");
   const [lessonGoal, setLessonGoal] = useState("把概念学清楚，并能用例子判断自己是否真正理解");
   const [copiedLesson, setCopiedLesson] = useState(false);
+  const [copiedSkill, setCopiedSkill] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   type ConceptExplanation = {
     color: string;
@@ -1813,6 +1814,14 @@ function ConceptExplainerContent() {
       body: `用即时小测收束：${active.quiz.question}`,
     },
   ];
+  const conceptSkillSteps = [
+    "先判断概念所属学科、学习阶段和使用场景。",
+    "再生成一个诊断问题，暴露学习者可能卡住的地方。",
+    "再给出一个低门槛类比，但明确类比不能推出什么。",
+    "再拆成 4 个以内的机制步骤，避免堆术语。",
+    "再给出一个情境练习，让学习者产出一句解释或一张小表。",
+    "最后生成即时小测和证据边界，提醒哪些内容需要查教材或资料。",
+  ];
   const lessonOutput = `【概念】${concept}
 【学习阶段】${audience}
 【学习目标】${lessonGoal}
@@ -1861,12 +1870,47 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 选项：${active.quiz.options.join(" / ")}
 答案：${active.quiz.answer}
 解释：${active.quiz.explain}`;
+  const conceptSkillPrompt = `你是一个面向学习者的“概念解释 Agent”。请帮助我学习一个概念，不要把输出写成教师教案，也不要只给定义。
+
+【我要学习的概念】
+${concept}
+
+【学习阶段】
+${audience}
+
+【学习目标】
+${lessonGoal}
+
+【固定流程】
+${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+【输出格式】
+1. 先修知识：列出 3 个学习前需要确认的基础点。
+2. 诊断问题：用 1 个问题检查我是否真的理解。
+3. 类比：给一个帮助进入的类比，并说明类比边界。
+4. 分层解释：入门版 / 高中版 / 进阶版各 1 段。
+5. 机制步骤：最多 4 步，每步一句话。
+6. 关键词：列出 4-6 个术语。
+7. 辨析：说明它容易和哪个概念混淆。
+8. 常见误区：指出 1 个最容易错的理解。
+9. 落地示例：给情境材料、引导问题、我的学习产出。
+10. 迁移任务：让我把概念用到一个新例子。
+11. 即时小测：1 道选择题，给答案和解释。
+12. 证据边界：哪些内容需要查教材、论文或课堂材料确认。
+
+【质量要求】
+- 面向学习者，用“你可以……”表达。
+- 不编造具体事实、数据、物种、疾病或实验结论。
+- 如果概念太宽，先帮我缩小学习范围。
+- 如果资料不足，明确标为“待核查”，不要强行下结论。
+- 保持结构稳定，方便我复制成学习卡。`;
 
   function chooseConcept(name: string) {
     setConcept(name);
     setConceptInput(name);
     setQuizChoice(null);
     setCopiedLesson(false);
+    setCopiedSkill(false);
     setCopyStatus("");
   }
 
@@ -1875,6 +1919,7 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
     setConcept(nextConcept);
     setQuizChoice(null);
     setCopiedLesson(false);
+    setCopiedSkill(false);
     setCopyStatus(explanations[nextConcept] ? "已载入预设高质量解释。" : "已按解释 Agent skill 生成学习卡。");
   }
 
@@ -1882,12 +1927,27 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
     const copiedToClipboard = await copyText(lessonOutput);
     if (copiedToClipboard) {
       setCopiedLesson(true);
+      setCopiedSkill(false);
       setCopyStatus("学习卡已复制到剪贴板。");
       window.setTimeout(() => setCopiedLesson(false), 1400);
       return;
     }
 
     setCopiedLesson(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyConceptSkillPrompt() {
+    const copiedToClipboard = await copyText(conceptSkillPrompt);
+    if (copiedToClipboard) {
+      setCopiedSkill(true);
+      setCopiedLesson(false);
+      setCopyStatus("概念解释 skill 指令已复制到剪贴板。");
+      window.setTimeout(() => setCopiedSkill(false), 1400);
+      return;
+    }
+
+    setCopiedSkill(false);
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -1946,6 +2006,28 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
         </button>
         <div id="concept-copy-status" role="status" aria-live="polite" style={{ gridColumn: "1 / -1", minHeight: "1.1rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900 }}>
           {copyStatus}
+        </div>
+      </div>
+
+      <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.04)", display: "grid", gap: "0.75rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>概念解释 skill 协议</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.22rem", fontWeight: 800 }}>
+              这套协议用于保持输出稳定：先诊断，再类比，再机制，再练习，最后补小测和证据边界。
+            </div>
+          </div>
+          <button type="button" onClick={copyConceptSkillPrompt} aria-describedby="concept-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+            {copiedSkill ? "已复制" : "复制 skill 指令"}
+          </button>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.55rem" }}>
+          {conceptSkillSteps.map((item, index) => (
+            <div key={item} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.48rem", alignItems: "start" }}>
+              <span style={{ width: 20, height: 20, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800 }}>{item}</span>
+            </div>
+          ))}
         </div>
       </div>
 
