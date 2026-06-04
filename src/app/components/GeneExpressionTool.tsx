@@ -222,9 +222,27 @@ function pointOnPolyline(points: Point[], progress: number) {
   return points[points.length - 1];
 }
 
-function partialPolylinePath(points: Point[], progress: number) {
+function smoothPath(points: Point[]) {
+  if (points.length === 0) return "";
+  if (points.length === 1) return `M${points[0].x} ${points[0].y}`;
+  if (points.length === 2) return `M${points[0].x} ${points[0].y} L${points[1].x} ${points[1].y}`;
+
+  const path = [`M${points[0].x} ${points[0].y}`];
+  for (let index = 1; index < points.length - 1; index += 1) {
+    const current = points[index];
+    const next = points[index + 1];
+    const midpoint = { x: (current.x + next.x) / 2, y: (current.y + next.y) / 2 };
+    path.push(`Q${current.x} ${current.y} ${midpoint.x} ${midpoint.y}`);
+  }
+
+  const last = points[points.length - 1];
+  path.push(`L${last.x} ${last.y}`);
+  return path.join(" ");
+}
+
+function partialPolylinePoints(points: Point[], progress: number) {
   const boundedProgress = clamp01(progress);
-  if (boundedProgress <= 0) return `M${points[0].x} ${points[0].y}`;
+  if (boundedProgress <= 0) return [points[0]];
 
   const lengths = points.slice(1).map((point, index) => {
     const previous = points[index];
@@ -232,22 +250,26 @@ function partialPolylinePath(points: Point[], progress: number) {
   });
   const totalLength = lengths.reduce((sum, length) => sum + length, 0);
   let remaining = totalLength * boundedProgress;
-  const path = [`M${points[0].x} ${points[0].y}`];
+  const partialPoints = [points[0]];
 
   for (let index = 0; index < lengths.length; index += 1) {
     const previous = points[index];
     const next = points[index + 1];
     if (remaining >= lengths[index]) {
-      path.push(`L${next.x} ${next.y}`);
+      partialPoints.push(next);
       remaining -= lengths[index];
     } else {
       const localProgress = lengths[index] === 0 ? 0 : remaining / lengths[index];
-      path.push(`L${lerp(previous.x, next.x, localProgress)} ${lerp(previous.y, next.y, localProgress)}`);
+      partialPoints.push({ x: lerp(previous.x, next.x, localProgress), y: lerp(previous.y, next.y, localProgress) });
       break;
     }
   }
 
-  return path.join(" ");
+  return partialPoints;
+}
+
+function partialPolylinePath(points: Point[], progress: number) {
+  return smoothPath(partialPolylinePoints(points, progress));
 }
 
 function fullPolylinePath(points: Point[]) {
@@ -256,12 +278,13 @@ function fullPolylinePath(points: Point[]) {
 
 function buildNascentMrnaPath(polymerasePoint: Point, progress: number, offset: Point = { x: 0, y: 0 }) {
   const exit = { x: polymerasePoint.x + 10 + offset.x, y: polymerasePoint.y + 31 + offset.y };
-  const tailLength = 18 + clamp01(progress) * 220;
+  const tailLength = 24 + clamp01(progress) * 235;
 
   return [
-    { x: exit.x - tailLength, y: exit.y + 82 },
-    { x: exit.x - tailLength * 0.7, y: exit.y + 54 },
-    { x: exit.x - tailLength * 0.35, y: exit.y + 72 },
+    { x: exit.x - tailLength, y: exit.y + 94 },
+    { x: exit.x - tailLength * 0.78, y: exit.y + 48 },
+    { x: exit.x - tailLength * 0.52, y: exit.y + 100 },
+    { x: exit.x - tailLength * 0.24, y: exit.y + 54 },
     exit,
   ];
 }
@@ -375,7 +398,6 @@ function LiveExpressionProcess({
             <circle cx={-22} cy={-7} r={9} fill="rgba(250,247,241,0.58)" />
             <circle cx={18} cy={9} r={7} fill="rgba(250,247,241,0.58)" />
             <rect x={-42} y={7} width={84} height={20} rx={9} fill="rgba(250,247,241,0.92)" stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} />
-            <path d="M-51 17 C-28 11 -14 24 0 17 S28 11 51 17" fill="none" stroke="var(--cherry-red)" strokeWidth={4.4} strokeLinecap="round" markerEnd="url(#mrnaArrow)" />
             <circle cx={-13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
             <circle cx={13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
             <path d="M10 -2 C21 2 27 10 35 17" fill="none" stroke="var(--cherry-warm-brown)" strokeWidth={3.2} strokeLinecap="round" opacity={0.28} />
@@ -392,19 +414,12 @@ function LiveExpressionProcess({
             <path d="M15 -5 C23 -8 28 -12 36 -16" fill="none" stroke="var(--cherry-forest)" strokeWidth={2.8} strokeLinecap="round" strokeDasharray="3 4" opacity={0.7}>
               {prefersReducedMotion ? null : <animate attributeName="stroke-dashoffset" values="8;0" dur="0.8s" repeatCount="indefinite" />}
             </path>
-            <text x={-39} y={28} fill="var(--cherry-red)" fontSize={7} fontWeight={900}>
-              5'
-            </text>
-            <text x={34} y={28} fill="var(--cherry-red)" fontSize={7} fontWeight={900}>
-              3'
-            </text>
             <text x={-13} y={0} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={7} fontWeight={900}>
               P
             </text>
             <text x={13} y={0} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={7} fontWeight={900}>
               A
             </text>
-            <circle cx={35} cy={17} r={7} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={2} opacity={0.9} />
             <text y={-14} textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
               核糖体
             </text>

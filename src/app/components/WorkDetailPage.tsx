@@ -348,6 +348,15 @@ function PlantEvolutionContent() {
   ];
   const activeChapter = chapters[activeChapterIndex];
   const shortTimes = ["5.1-4.7亿年", "4.75亿年", "志留-泥盆", "泥盆纪", "晚泥盆", "白垩纪"];
+  const plantTimelinePoints = [
+    { x: 252, y: 628 },
+    { x: 236, y: 522 },
+    { x: 266, y: 418 },
+    { x: 236, y: 312 },
+    { x: 266, y: 204 },
+    { x: 252, y: 96 },
+  ];
+  const plantStageLabels = ["浅水绿藻", "孢子外壁", "直立小轴", "维管分枝", "种子保护包", "花和果实"];
 
   const references = [
     {
@@ -446,53 +455,54 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
       <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "1rem", alignItems: "start" }}>
         <div style={{ display: "grid", gap: "0.85rem", alignContent: "start" }}>
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", overflow: "hidden" }}>
-            <svg viewBox="0 0 760 360" role="img" aria-label="植物从淡水绿藻到被子植物的演化时间轴" style={{ width: "100%", display: "block", background: "linear-gradient(180deg, #FFF8EA 0%, #EDF3DF 100%)", borderRadius: 18 }}>
-            <rect x={24} y={26} width={708} height={306} rx={120} fill="rgba(169,201,172,0.2)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
-            <text x={42} y={60} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>植物演化路径</text>
-            <path d="M88 246 C154 214 202 230 270 194 C340 156 430 170 502 118 C570 70 650 96 704 54" fill="none" stroke="var(--cherry-forest)" strokeWidth={8} strokeLinecap="round" opacity={0.25} />
-            <path d="M88 246 C154 214 202 230 270 194 C340 156 430 170 502 118 C570 70 650 96 704 54" fill="none" stroke="var(--cherry-sage)" strokeWidth={4} strokeLinecap="round" />
-            {chapters.map((chapter, index) => {
-              const points = [
-                { x: 88, y: 246 },
-                { x: 206, y: 218 },
-                { x: 300, y: 180 },
-                { x: 430, y: 152 },
-                { x: 546, y: 104 },
-                { x: 684, y: 66 },
-              ];
-              const point = points[index];
-              const active = activeChapterIndex === index;
-              return (
-                <g
-                  key={chapter.title}
-                  transform={`translate(${point.x} ${point.y})`}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`查看${chapter.title}`}
-                  aria-pressed={active}
-                  onClick={() => choosePlantChapter(index)}
-                  onKeyDown={(event) => {
-                    if (event.key !== "Enter" && event.key !== " ") return;
-                    event.preventDefault();
-                    choosePlantChapter(index);
-                  }}
-                  style={{ cursor: "pointer" }}
-                >
-                  <circle r={active ? 22 : 16} fill={active ? "var(--cherry-yellow)" : "var(--cherry-sage-light)"} stroke={active ? "var(--cherry-red)" : "var(--cherry-forest)"} strokeWidth={active ? 3 : 2} />
-                  <text y={5} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>{index + 1}</text>
-                  <text x={0} y={active ? 42 : 35} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={900}>{shortTimes[index]}</text>
-                </g>
-              );
-            })}
-            <g transform="translate(74 92)">
-              {["淡水适应", "孢子", "直立轴", "维管组织", "种子", "花果"].map((label, index) => (
-                <g key={label} transform={`translate(${index * 108} 0)`}>
-                  <path d="M10 54 Q18 26 50 10 Q54 38 10 54Z" fill={index <= activeChapterIndex ? "var(--cherry-sage)" : "rgba(93,140,101,0.18)"} />
-                  <path d="M18 48 Q32 32 46 16" stroke="var(--cherry-warm-brown)" strokeWidth={1.6} strokeLinecap="round" opacity={0.28} />
-                  <text x={28} y={76} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={11} fontWeight={800}>{label}</text>
-                </g>
-              ))}
-            </g>
+            <svg viewBox="0 0 520 720" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化插画时间轴" style={{ width: "100%", display: "block", background: "linear-gradient(180deg, #FFF8EA 0%, #EDF3DF 58%, #E6D7BE 100%)", borderRadius: 18 }}>
+              <rect x={24} y={24} width={468} height={672} rx={90} fill="rgba(169,201,172,0.18)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
+              <circle cx={420} cy={82} r={34} fill="var(--cherry-yellow)" opacity={0.52} />
+              <path d="M52 648 C108 622 152 642 214 612 C286 578 352 600 462 548" fill="none" stroke="rgba(93,140,101,0.18)" strokeWidth={28} strokeLinecap="round" />
+              <path d="M252 628 C196 574 304 514 252 458 C196 398 304 344 252 286 C196 224 304 162 252 96" fill="none" stroke="var(--cherry-forest)" strokeWidth={9} strokeLinecap="round" opacity={0.18} />
+              <path d="M252 628 C196 574 304 514 252 458 C196 398 304 344 252 286 C196 224 304 162 252 96" fill="none" stroke="var(--cherry-sage)" strokeWidth={4.5} strokeLinecap="round" />
+              <text x={54} y={64} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>植物演化竖向图</text>
+              <text x={54} y={86} fill="var(--cherry-warm-mid)" fontSize={11} fontWeight={800}>从水边工具箱，到花和果实</text>
+              {chapters.map((chapter, index) => {
+                const point = plantTimelinePoints[index];
+                const active = activeChapterIndex === index;
+                const leftSide = index % 2 === 0;
+                const branchX = leftSide ? -108 : 108;
+                const labelX = leftSide ? -178 : 50;
+                return (
+                  <g
+                    key={chapter.title}
+                    transform={`translate(${point.x} ${point.y})`}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`查看${chapter.title}`}
+                    aria-pressed={active}
+                    onClick={() => choosePlantChapter(index)}
+                    onKeyDown={(event) => {
+                      if (event.key !== "Enter" && event.key !== " ") return;
+                      event.preventDefault();
+                      choosePlantChapter(index);
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <path d={`M0 0 C${branchX * 0.25} -18 ${branchX * 0.58} -18 ${branchX} -34`} fill="none" stroke={index <= activeChapterIndex ? "var(--cherry-forest)" : "rgba(93,140,101,0.28)"} strokeWidth={3.2} strokeLinecap="round" />
+                    <g transform={`translate(${branchX} -34)`}>
+                      <path d="M-18 26 Q-10 -8 28 -24 Q31 18 -18 26Z" fill={index <= activeChapterIndex ? "var(--cherry-sage)" : "rgba(93,140,101,0.18)"} stroke={active ? "var(--cherry-red)" : "rgba(93,140,101,0.26)"} strokeWidth={active ? 2.4 : 1.2} />
+                      <path d="M-8 18 Q8 2 22 -16" stroke="var(--cherry-warm-brown)" strokeWidth={1.5} strokeLinecap="round" opacity={0.28} />
+                      {index >= 2 ? <path d="M0 28 C0 12 2 -2 10 -16" fill="none" stroke="var(--cherry-forest)" strokeWidth={index >= 3 ? 4 : 2.8} strokeLinecap="round" opacity={index <= activeChapterIndex ? 0.76 : 0.24} /> : null}
+                      {index >= 4 ? <circle cx={20} cy={-20} r={8} fill="var(--cherry-yellow)" stroke="var(--cherry-warm-brown)" strokeWidth={1.2} opacity={index <= activeChapterIndex ? 0.9 : 0.25} /> : null}
+                      {index >= 5 ? <g opacity={index <= activeChapterIndex ? 1 : 0.25}><circle cx={4} cy={-24} r={6} fill="var(--cherry-peach)" /><circle cx={16} cy={-30} r={6} fill="var(--cherry-peach)" /><circle cx={16} cy={-18} r={6} fill="var(--cherry-peach)" /><circle cx={28} cy={-24} r={6} fill="var(--cherry-peach)" /></g> : null}
+                    </g>
+                    <circle r={active ? 23 : 17} fill={active ? "var(--cherry-yellow)" : "var(--cherry-sage-light)"} stroke={active ? "var(--cherry-red)" : "var(--cherry-forest)"} strokeWidth={active ? 3 : 2} />
+                    <text y={5} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>{index + 1}</text>
+                    <g transform={`translate(${labelX} -48)`}>
+                      <rect width={148} height={54} rx={16} fill={active ? "rgba(250,247,241,0.92)" : "rgba(250,247,241,0.72)"} stroke={active ? "var(--cherry-red)" : "rgba(94,68,42,0.12)"} strokeWidth={active ? 2 : 1.2} />
+                      <text x={14} y={21} fill="var(--cherry-red)" fontSize={10} fontWeight={900}>{shortTimes[index]}</text>
+                      <text x={14} y={39} fill="var(--cherry-warm-brown)" fontSize={11} fontWeight={900}>{plantStageLabels[index]}</text>
+                    </g>
+                  </g>
+                );
+              })}
             </svg>
           </div>
 

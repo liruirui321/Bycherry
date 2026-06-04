@@ -20,18 +20,25 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
 
   if (slug === "plant-evolution-stories") {
     return (
-      <svg width={width} height={height} viewBox="0 0 96 72" fill="none" aria-hidden="true">
-        <rect x="7" y="9" width="82" height="54" rx="24" fill="rgba(169,201,172,0.18)" stroke="rgba(93,140,101,0.22)" strokeWidth="1.4" strokeDasharray="4 4" />
-        <path d="M13 56 C24 46 33 51 43 39 C53 27 64 30 84 15" stroke="var(--cherry-forest)" strokeWidth="4" strokeLinecap="round" opacity="0.58" />
-        {[18, 34, 50, 66, 82].map((x, index) => (
-          <g key={x} transform={`translate(${x} ${54 - index * 9})`}>
-            <circle r={index === 0 ? 9 : 6.5} fill={index === 0 ? "var(--cherry-yellow)" : "var(--cherry-sage-light)"} stroke={index === 0 ? "var(--cherry-red)" : "var(--cherry-forest)"} strokeWidth="1.6" />
-            <text y="3" textAnchor="middle" fontSize="6" fontWeight="900" fill="var(--cherry-warm-brown)">{index + 1}</text>
+      <svg width={width} height={height} viewBox="0 0 72 96" fill="none" aria-hidden="true">
+        <rect x="8" y="5" width="56" height="86" rx="24" fill="rgba(169,201,172,0.18)" stroke="rgba(93,140,101,0.22)" strokeWidth="1.4" strokeDasharray="4 4" />
+        <circle cx="52" cy="17" r="8" fill="var(--cherry-yellow)" opacity="0.5" />
+        <path d="M36 82 C20 68 51 58 35 45 C19 31 50 23 36 11" stroke="var(--cherry-forest)" strokeWidth="5" strokeLinecap="round" opacity="0.16" />
+        <path d="M36 82 C20 68 51 58 35 45 C19 31 50 23 36 11" stroke="var(--cherry-sage)" strokeWidth="2.8" strokeLinecap="round" />
+        {[82, 68, 54, 40, 26, 12].map((y, index) => {
+          const active = index >= 2;
+          const side = index % 2 === 0 ? -14 : 14;
+          return (
+            <g key={y} transform={`translate(${index % 2 === 0 ? 34 : 38} ${y})`}>
+              <path d={`M0 0 C${side * 0.35} -4 ${side * 0.55} -7 ${side} -10`} stroke={active ? "var(--cherry-forest)" : "rgba(93,140,101,0.28)"} strokeWidth="1.7" strokeLinecap="round" />
+              <path d={`M${side - 7} -2 Q${side - 3} -18 ${side + 12} -24 Q${side + 11} -6 ${side - 7} -2Z`} fill={active ? "var(--cherry-sage)" : "rgba(93,140,101,0.2)"} />
+              {index >= 4 ? <circle cx={side + 12} cy="-23" r="4" fill={index === 5 ? "var(--cherry-peach)" : "var(--cherry-yellow)"} stroke="rgba(94,68,42,0.16)" /> : null}
+              <circle r={index === 5 ? 8 : 6.2} fill={index === 5 ? "var(--cherry-yellow)" : "var(--cherry-sage-light)"} stroke={index === 5 ? "var(--cherry-red)" : "var(--cherry-forest)"} strokeWidth="1.5" />
+              <text y="2.5" textAnchor="middle" fontSize="5.2" fontWeight="900" fill="var(--cherry-warm-brown)">{index + 1}</text>
+              {index === 5 ? <path d="M-5 -16 C-9 -22 -4 -28 0 -20 C4 -28 9 -22 5 -16" fill="var(--cherry-peach)" opacity="0.9" /> : null}
           </g>
-        ))}
-        <path d="M18 31 Q22 18 38 13 Q37 29 18 31Z" fill="var(--cherry-sage)" opacity="0.76" />
-        <path d="M52 24 Q57 13 70 10 Q69 24 52 24Z" fill="var(--cherry-sage)" opacity="0.45" />
-        <path d="M74 36 Q78 26 89 23 Q88 36 74 36Z" fill="var(--cherry-sage)" opacity="0.38" />
+          );
+        })}
       </svg>
     );
   }
