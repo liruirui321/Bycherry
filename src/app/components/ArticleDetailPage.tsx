@@ -71,6 +71,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copiedPlatformConfig, setCopiedPlatformConfig] = useState(false);
   const [copiedPlatformReview, setCopiedPlatformReview] = useState(false);
   const [copiedAiAuditPrompts, setCopiedAiAuditPrompts] = useState(false);
+  const [selectedPlatformPlanIndex, setSelectedPlatformPlanIndex] = useState(0);
   const [copyStatus, setCopyStatus] = useState("");
   const collection = kind === "note" ? notes : essays;
   const article = collection.find((item) => item.slug === slug);
@@ -128,21 +129,41 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
         {
           title: "预习诊断",
           fields: ["用途：预习诊断", "学习阶段：刚进入新主题", "知识点：只填 1 个章节或 2-3 个核心概念", "题型：选择题 + 判断题", "难度：基础", "题量：3-5 题，预计 5 分钟"],
+          audit: ["是否暴露了先修概念缺口", "是否每题只检查一个基础判断", "是否能指导下一步补哪一页学习卡"],
           output: "审核重点：题目要能暴露先修缺口，做完后先看错题类型，再决定要不要补先修概念。",
         },
         {
           title: "概念检查",
           fields: ["用途：概念检查", "学习阶段：刚学完一个概念", "知识点：一个容易混淆的概念对", "题型：辨析题 + 简答题", "难度：中等", "题量：2-4 题，预计 6 分钟"],
+          audit: ["干扰项是否来自真实混淆", "解析是否说明错因", "是否能用自己的话改写正确解释"],
           output: "审核重点：干扰项必须来自真实误解，解析要说明为什么错，而不是只给正确答案。",
         },
         {
           title: "复习巩固",
           fields: ["用途：复习巩固", "学习阶段：学完一组相关知识", "知识点：概念 + 过程 + 证据材料", "题型：选择题 + 图表题 + 简答题", "难度：中等到进阶", "题量：6-10 题，预计 10 分钟"],
+          audit: ["是否串起概念、过程和证据", "是否包含至少一道迁移题", "错题是否能归类为概念、读题或证据判断问题"],
           output: "审核重点：题目要能串起多个知识点，完成后记录高频错因，并回到学习卡修改。",
         },
       ]
     : [];
+  const activePlatformPlan = platformUsePlans[selectedPlatformPlanIndex] ?? platformUsePlans[0];
   const platformUsePlansText = platformUsePlans.map((plan) => `${plan.title}\n${plan.fields.map((field) => `- ${field}`).join("\n")}\n- ${plan.output}`).join("\n\n");
+  const activePlatformPlanText = activePlatformPlan
+    ? `【SciFuion 当前照填方案】
+平台入口：${platformUrl}
+当前用途：${activePlatformPlan.title}
+
+照填字段
+${activePlatformPlan.fields.map((field, index) => `${index + 1}. ${field}`).join("\n")}
+
+审核清单
+${activePlatformPlan.audit.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+使用节奏
+1. 先把上面字段照填进平台。
+2. 少量生成后逐题审核，不合格题直接删掉或重写。
+3. 作答后记录最高频错因，再回到学习卡补薄弱点。`
+    : "";
   const aiMaterialAuditPrompts = article?.slug === "ai-course-development"
     ? [
         {
@@ -182,7 +203,7 @@ ${aiMaterialAuditPrompts.map((item, index) => `${index + 1}. ${item.title}
 4. 我下一步要完成的可观察输出：`
     : "";
   const platformPasteConfigText = platformUrl
-    ? `【SciFuion 平台照填配置】
+    ? activePlatformPlanText || `【SciFuion 平台照填配置】
 平台入口：${platformUrl}
 
 ${platformUsePlansText}
@@ -583,9 +604,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     进入 scifuion.top
                   </a>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
-                  {platformUsePlans.map((plan) => (
-                    <div key={plan.title} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem", display: "grid", gap: "0.48rem" }}>
+                <div role="group" aria-label="选择 SciFuion 使用场景" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
+                  {platformUsePlans.map((plan, index) => {
+                    const selected = index === selectedPlatformPlanIndex;
+
+                    return (
+                    <button key={plan.title} type="button" className="platform-plan-button" aria-pressed={selected} onClick={() => { setSelectedPlatformPlanIndex(index); setCopiedPlatformConfig(false); setCopiedPlatformReview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: selected ? "var(--cherry-yellow-light)" : "var(--card)", border: selected ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem", display: "grid", gap: "0.48rem", cursor: "pointer", boxShadow: selected ? "3px 5px 0 rgba(94,68,42,0.08)" : "none" }}>
                       <strong style={{ color: "var(--cherry-forest)", fontSize: "0.8rem" }}>{plan.title}</strong>
                       <span style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>照填配置</span>
                       <div style={{ display: "grid", gap: "0.3rem" }}>
@@ -594,9 +618,36 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                         ))}
                       </div>
                       <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.5, fontWeight: 900 }}>{plan.output}</span>
-                    </div>
-                  ))}
+                    </button>
+                    );
+                  })}
                 </div>
+                {activePlatformPlan ? (
+                  <div className="platform-active-plan-grid" style={{ background: "var(--card)", border: "1.5px solid rgba(58,92,62,0.18)", borderRadius: 8, padding: "0.75rem", display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(210px, 0.72fr)", gap: "0.75rem" }}>
+                    <div>
+                      <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem", marginBottom: "0.42rem" }}>当前方案：{activePlatformPlan.title}</div>
+                      <div style={{ display: "grid", gap: "0.34rem" }}>
+                        {activePlatformPlan.fields.map((field, index) => (
+                          <div key={field} style={{ display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: 8, alignItems: "start" }}>
+                            <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900 }}>{index + 1}</span>
+                            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.77rem", lineHeight: 1.52, fontWeight: 800 }}>{field}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(58,92,62,0.16)", borderRadius: 8, padding: "0.62rem" }}>
+                      <div style={{ color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.76rem", marginBottom: "0.38rem" }}>生成后先查这 3 项</div>
+                      <div style={{ display: "grid", gap: "0.36rem" }}>
+                        {activePlatformPlan.audit.map((item) => (
+                          <div key={item} style={{ display: "grid", gridTemplateColumns: "18px minmax(0, 1fr)", gap: 7, alignItems: "start" }}>
+                            <IconCheck size={15} color="var(--cherry-forest)" />
+                            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.75rem", lineHeight: 1.5, fontWeight: 800 }}>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.58rem" }}>
                   <div style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem", display: "grid", gap: "0.48rem" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.6rem", flexWrap: "wrap" }}>
@@ -890,7 +941,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       <style>
         {`
           .article-detail-link:focus-visible,
-          .article-nav-card:focus-visible {
+          .article-nav-card:focus-visible,
+          .platform-plan-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
           }
@@ -960,6 +1012,10 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           }
 
           @media (max-width: 759px) {
+            .platform-active-plan-grid {
+              grid-template-columns: 1fr !important;
+            }
+
             .article-illustration-stamp {
               position: relative;
               top: auto;
