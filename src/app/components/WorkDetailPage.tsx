@@ -918,12 +918,40 @@ function CrisprContent() {
   };
   const activeRepair = repairResults[repair];
   const effectiveRepair = activeGuide.score < 60 ? repairResults.failed : activeRepair;
+  const guideDecision = activeGuide.score >= 80
+    ? {
+        level: "推荐继续",
+        risk: "定位稳定，适合进入剪切和修复结果讨论。",
+        nextAction: "下一步可以比较插入/删除和模板替换两种修复产物。",
+        color: "var(--cherry-forest)",
+        bg: "var(--cherry-sage-light)",
+      }
+    : activeGuide.score >= 60
+      ? {
+          level: "谨慎使用",
+          risk: "存在错配或效率下降风险，剪切可能发生但不够理想。",
+          nextAction: "先让学生找出错配位置，再比较换用向导 A 后结果如何变化。",
+          color: "var(--cherry-yellow)",
+          bg: "var(--cherry-yellow-light)",
+        }
+      : {
+          level: "不建议执行",
+          risk: "guide 匹配不足或离 PAM 关系不理想，本轮按未成功编辑处理。",
+          nextAction: "回到向导 RNA 区域，选择更接近目标互补序列且靠近 PAM 的 guide。",
+          color: "var(--cherry-red)",
+          bg: "var(--cherry-peach-light)",
+        };
   const baseX = (index: number) => 72 + index * 44;
   const casX = canCut ? baseX(cutIndex) : stepIndex >= 1 ? baseX(activeGuide.start + 3) : baseX(pamStart + 1);
   const reportResult = activeGuide.score < 60 ? "guide 匹配不足，Cas9 不稳定定位，本轮按未成功编辑处理。" : activeRepair.result;
   const crisprReport = `【CRISPR 模拟报告】
 目标 DNA：${target.join(" ")}
 PAM：${pamSequence}
+
+0. 编辑判定
+${guideDecision.level}
+风险说明：${guideDecision.risk}
+建议动作：${guideDecision.nextAction}
 
 1. 向导 RNA
 名称：${activeGuide.name}
@@ -1110,6 +1138,11 @@ ${effectiveRepair.title}
               <div style={{ width: `${activeGuide.score}%`, height: "100%", background: activeGuide.score > 80 ? "var(--cherry-sage)" : activeGuide.score > 50 ? "var(--cherry-yellow)" : "var(--cherry-red)", transition: "width 0.25s ease" }} />
             </div>
             <div style={{ color: "var(--cherry-red)", fontSize: "1.35rem", fontWeight: 900, marginBottom: "0.45rem" }}>{activeGuide.score}%</div>
+            <div role="status" aria-live="polite" style={{ background: guideDecision.bg, border: `1.5px solid ${guideDecision.color}`, borderRadius: 14, padding: "0.68rem", color: "var(--cherry-warm-mid)", lineHeight: 1.58, fontSize: "0.8rem", fontWeight: 800, marginBottom: "0.75rem" }}>
+              <strong style={{ display: "block", color: guideDecision.color, marginBottom: "0.28rem" }}>{guideDecision.level}</strong>
+              {guideDecision.risk}
+              <div style={{ marginTop: "0.42rem", color: "var(--cherry-warm-brown)" }}>{guideDecision.nextAction}</div>
+            </div>
             <div style={{ background: "rgba(250,247,241,0.74)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.6rem", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", fontWeight: 800, marginBottom: "0.75rem" }}>
               目标互补序列：<strong style={{ color: "var(--cherry-warm-brown)" }}>{expectedGuideBases.join(" ")}</strong>
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: "0.45rem", color: "var(--cherry-warm-mid)", fontSize: "0.7rem" }}>
