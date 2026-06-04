@@ -123,6 +123,8 @@ function verifyVisibleLearningModuleCopy() {
     "全部学习模块",
     "学习模块前后导航",
     "30 分钟学习路径",
+    "首屏学习模块总览",
+    "可保存产出",
     "复制路径",
   ];
 
@@ -249,6 +251,12 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("{work.success}"), "Homepage hero work cards must expose concrete completion standards.");
   expect(heroSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage hero work cards must include starter and completion standard in accessible labels.");
   expect(heroSource.includes('aria-label="首屏学习模块目录"'), "Homepage hero must label the first-screen module directory.");
+  expect(heroSource.includes("heroModuleStats"), "Homepage hero must summarize module stats before the first-screen directory.");
+  expect(heroSource.includes("heroOutputCount"), "Homepage hero must calculate saved output counts for first-screen scanning.");
+  expect(heroSource.includes("heroPathStepCount"), "Homepage hero must calculate action step counts for first-screen scanning.");
+  expect(heroSource.includes('aria-label="首屏模块总览"'), "Homepage hero must expose the first-screen module summary to assistive tech.");
+  expect(heroSource.includes("首屏模块总览"), "Homepage copied session plan must include the first-screen module summary.");
+  expect(heroSource.includes("可保存产出"), "Homepage hero must show saved-output coverage before opening a module.");
   expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(154px, 1fr))"'), "Homepage hero module cards must stay compact enough to reveal multiple modules in the first screen.");
   expect(heroSource.includes("minHeight: 152"), "Homepage hero module cards must use compact fixed heights.");
   expect(heroSource.includes("scroll-snap-type: x proximity"), "Homepage hero mobile module directory must support horizontal scanning.");

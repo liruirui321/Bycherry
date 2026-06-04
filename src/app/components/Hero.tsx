@@ -28,11 +28,23 @@ export function Hero() {
         { time: "7 分钟", body: `保存产出：${activeSessionPlan.work.outputs.join(" / ")}。完成标准：${activeSessionPlan.work.success}` },
       ]
     : [];
+  const heroOutputCount = works.reduce((count, work) => count + work.outputs.length, 0);
+  const heroPathStepCount = works.reduce((count, work) => count + work.path.length, 0);
+  const heroModuleStats = [
+    { label: "学习模块", value: `${works.length} 个`, body: "首屏直接进入内容，不需要先翻页面。" },
+    { label: "可保存产出", value: `${heroOutputCount} 项`, body: "每个模块都能留下记录、报告或学习卡。" },
+    { label: "执行步骤", value: `${heroPathStepCount} 步`, body: "入口卡片先给操作顺序，再进入细节。" },
+    { label: "完成标准", value: "全覆盖", body: "进入前就能判断做到什么程度。" },
+  ];
+  const heroModuleStatsText = heroModuleStats.map((item) => `${item.label}：${item.value}。${item.body}`).join("\n");
   const sessionPlanText = activeSessionPlan
     ? `【By Cherry 30 分钟学习路径】
 目标：${activeSessionPlan.label}
 模块：${activeSessionPlan.work.title}
 入口：${activeSessionPlan.work.href}
+
+首屏模块总览
+${heroModuleStatsText}
 
 1. 5 分钟启动
 ${activeSessionPlan.work.starter}
@@ -249,9 +261,20 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
           </div>
 
         <div className="hero-work-list" style={{ background: "transparent", border: "none", borderRadius: 0, padding: 0, boxShadow: "none", minWidth: 0, maxWidth: "100%" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: "0.75rem", flexWrap: "wrap" }}>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.95rem" }}>精选内容</div>
-            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800 }}>{works.length} 个学习模块</div>
+          <div style={{ display: "grid", gap: "0.62rem", marginBottom: "0.75rem" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.95rem" }}>首屏学习模块总览</div>
+              <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800 }}>{works.length} 个学习模块</div>
+            </div>
+            <div role="list" aria-label="首屏模块总览" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(118px, 1fr))", gap: "0.45rem" }}>
+              {heroModuleStats.map((item) => (
+                <div key={item.label} role="listitem" style={{ background: "rgba(250,247,241,0.84)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 9, padding: "0.5rem 0.56rem", minHeight: 74 }}>
+                  <div style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900, marginBottom: "0.12rem" }}>{item.label}</div>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontSize: "1rem", fontWeight: 900, lineHeight: 1.1 }}>{item.value}</div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.64rem", lineHeight: 1.38, fontWeight: 800, marginTop: "0.16rem" }}>{item.body}</div>
+                </div>
+              ))}
+            </div>
           </div>
           <nav className="hero-work-grid" aria-label="首屏学习模块目录" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(154px, 1fr))", gap: "0.55rem", minWidth: 0, maxWidth: "100%" }}>
             {works.map((work) => (
