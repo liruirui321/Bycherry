@@ -20,66 +20,82 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
 
   if (slug === "plant-evolution-stories") {
     const stages = [
-      { x: 40, y: 113, branch: -20, fill: "var(--cherry-blue-light)", accent: "var(--cherry-sage)" },
-      { x: 48, y: 94, branch: 19, fill: "var(--cherry-yellow-light)", accent: "var(--cherry-yellow)" },
-      { x: 39, y: 75, branch: -23, fill: "var(--cherry-sage-light)", accent: "var(--cherry-forest)" },
-      { x: 50, y: 56, branch: 22, fill: "var(--cherry-sage-light)", accent: "var(--cherry-sage)" },
-      { x: 38, y: 36, branch: -22, fill: "var(--cherry-yellow)", accent: "var(--cherry-warm-brown)" },
-      { x: 48, y: 17, branch: 19, fill: "var(--cherry-peach-light)", accent: "var(--cherry-red)" },
+      { x: 48, y: 150, branch: -30, fill: "var(--cherry-blue-light)", accent: "var(--cherry-sage)" },
+      { x: 54, y: 124, branch: 31, fill: "var(--cherry-yellow-light)", accent: "var(--cherry-yellow)" },
+      { x: 46, y: 98, branch: -33, fill: "var(--cherry-sage-light)", accent: "var(--cherry-forest)" },
+      { x: 57, y: 72, branch: 34, fill: "var(--cherry-sage-light)", accent: "var(--cherry-sage)" },
+      { x: 47, y: 45, branch: -32, fill: "var(--cherry-yellow)", accent: "var(--cherry-warm-brown)" },
+      { x: 57, y: 20, branch: 29, fill: "var(--cherry-peach-light)", accent: "var(--cherry-red)" },
     ];
 
     return (
-      <svg width={width} height={height} viewBox="0 0 88 132" fill="none" aria-hidden="true">
-        <rect x="9" y="5" width="70" height="122" rx="27" fill="#FFF8EA" stroke="rgba(93,140,101,0.24)" strokeWidth="1.5" />
-        <path d="M12 98 C25 91 38 101 51 93 C61 87 70 88 79 82 V127 H12Z" fill="rgba(169,201,172,0.26)" />
-        <path d="M9 105 C20 111 29 103 41 109 C53 115 64 104 79 110 V127 H9Z" fill="rgba(132,184,204,0.18)" />
-        <circle cx="63" cy="18" r="8.5" fill="var(--cherry-yellow)" opacity="0.62" />
-        <path d="M44 116 C24 100 60 88 43 72 C24 54 61 42 44 20" stroke="var(--cherry-forest)" strokeWidth="6.2" strokeLinecap="round" opacity="0.13" />
-        <path d="M44 116 C24 100 60 88 43 72 C24 54 61 42 44 20" stroke="var(--cherry-sage)" strokeWidth="3.2" strokeLinecap="round" />
+      <svg width={width} height={height} viewBox="0 0 108 172" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="plant-card-sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#FFF8EA" />
+            <stop offset="0.55" stopColor="#EEF6E9" />
+            <stop offset="1" stopColor="#DDECCF" />
+          </linearGradient>
+          <clipPath id="plant-card-clip">
+            <rect x="8" y="5" width="92" height="162" rx="30" />
+          </clipPath>
+        </defs>
+        <rect x="8" y="5" width="92" height="162" rx="30" fill="url(#plant-card-sky)" stroke="rgba(93,140,101,0.26)" strokeWidth="1.6" />
+        <g clipPath="url(#plant-card-clip)">
+          <circle cx="76" cy="22" r="12" fill="var(--cherry-yellow)" opacity="0.7" />
+          <path d="M5 126 C25 111 41 128 59 113 C73 102 88 106 103 94 V168 H5Z" fill="rgba(169,201,172,0.3)" />
+          <path d="M4 139 C18 146 34 136 50 143 C65 150 80 137 103 144 V168 H4Z" fill="rgba(132,184,204,0.2)" />
+          <path d="M15 154 C31 159 73 159 91 151" stroke="rgba(58,92,62,0.18)" strokeWidth="3" strokeLinecap="round" />
+          <path d="M49 150 C20 126 74 112 50 92 C24 70 77 57 52 35 C40 25 44 18 57 12" stroke="var(--cherry-forest)" strokeWidth="8.2" strokeLinecap="round" opacity="0.11" />
+          <path d="M49 150 C20 126 74 112 50 92 C24 70 77 57 52 35 C40 25 44 18 57 12" stroke="var(--cherry-sage)" strokeWidth="3.8" strokeLinecap="round" />
+        </g>
         {stages.map((stage, index) => {
           const side = stage.branch;
           return (
             <g key={stage.y} transform={`translate(${stage.x} ${stage.y})`}>
-              <path d={`M0 0 C${side * 0.28} -6 ${side * 0.6} -7 ${side} -13`} stroke="var(--cherry-forest)" strokeWidth="1.9" strokeLinecap="round" opacity="0.76" />
-              <g transform={`translate(${side} -13)`}>
+              <path d={`M0 0 C${side * 0.25} -7 ${side * 0.62} -8 ${side} -16`} stroke="var(--cherry-forest)" strokeWidth="2.1" strokeLinecap="round" opacity="0.72" />
+              <g transform={`translate(${side} -16)`}>
                 {index === 0 ? (
                   <g>
-                    <path d="M-12 8 C-8 1 -1 2 3 7 C8 1 14 3 16 9" stroke="var(--cherry-sage)" strokeWidth="2.2" strokeLinecap="round" />
-                    <circle cx="-8" cy="5" r="3.6" fill="var(--cherry-blue-light)" stroke="var(--cherry-sage)" strokeWidth="1.1" />
-                    <circle cx="5" cy="6" r="4.2" fill="var(--cherry-sage-light)" stroke="var(--cherry-sage)" strokeWidth="1.1" />
+                    <path d="M-15 9 C-9 1 -1 3 3 9 C9 1 17 3 20 10" stroke="var(--cherry-sage)" strokeWidth="2.4" strokeLinecap="round" />
+                    <circle cx="-9" cy="5" r="4.3" fill="var(--cherry-blue-light)" stroke="var(--cherry-sage)" strokeWidth="1.1" />
+                    <circle cx="7" cy="6" r="5" fill="var(--cherry-sage-light)" stroke="var(--cherry-sage)" strokeWidth="1.1" />
+                    <circle cx="18" cy="7" r="3.3" fill="rgba(132,184,204,0.58)" stroke="var(--cherry-sage)" strokeWidth="1" />
                   </g>
                 ) : null}
                 {index === 1 ? (
                   <g>
-                    {[[-9, 1], [-2, -5], [7, -2], [12, 5], [0, 7]].map(([cx, cy]) => (
-                      <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="3.1" fill="var(--cherry-yellow)" stroke="rgba(94,68,42,0.18)" strokeWidth="1" />
+                    {[[-11, 1], [-4, -7], [7, -4], [14, 4], [0, 9], [19, -5]].map(([cx, cy]) => (
+                      <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="3.5" fill="var(--cherry-yellow)" stroke="rgba(94,68,42,0.18)" strokeWidth="1" />
                     ))}
                   </g>
                 ) : null}
-                {index === 2 ? <path d="M-2 14 C-2 4 -1 -5 3 -14 M3 -7 C9 -12 14 -10 17 -3" stroke="var(--cherry-forest)" strokeWidth="2.6" strokeLinecap="round" fill="none" /> : null}
-                {index === 3 ? <path d="M0 15 C0 1 2 -11 8 -18 M4 -4 C14 -8 19 -4 21 4 M4 1 C-9 -1 -14 4 -15 12" stroke="var(--cherry-forest)" strokeWidth="3.2" strokeLinecap="round" fill="none" /> : null}
+                {index === 2 ? <path d="M-2 16 C-2 5 -1 -6 4 -16 M4 -8 C11 -14 18 -11 21 -3 M-10 16 C-1 12 9 12 18 16" stroke="var(--cherry-forest)" strokeWidth="2.8" strokeLinecap="round" fill="none" /> : null}
+                {index === 3 ? <path d="M0 17 C0 1 3 -13 10 -21 M4 -5 C16 -10 23 -5 25 4 M4 2 C-12 -1 -18 6 -18 15" stroke="var(--cherry-forest)" strokeWidth="3.4" strokeLinecap="round" fill="none" /> : null}
                 {index === 4 ? (
                   <g>
-                    <ellipse cx="3" cy="-3" rx="7.8" ry="10.5" fill="var(--cherry-yellow)" stroke="var(--cherry-warm-brown)" strokeWidth="1.4" />
-                    <path d="M3 -10 C8 -17 15 -16 18 -10 C14 -5 8 -4 3 -10Z" fill="var(--cherry-sage)" />
+                    <ellipse cx="3" cy="-3" rx="8.5" ry="12" fill="var(--cherry-yellow)" stroke="var(--cherry-warm-brown)" strokeWidth="1.4" />
+                    <path d="M3 -11 C9 -19 17 -18 21 -11 C16 -5 9 -4 3 -11Z" fill="var(--cherry-sage)" />
+                    <path d="M3 -10 C7 -3 7 6 2 12" stroke="rgba(94,68,42,0.3)" strokeWidth="1.4" strokeLinecap="round" />
                   </g>
                 ) : null}
                 {index === 5 ? (
                   <g>
                     {[[-7, -2], [0, -8], [7, -2], [0, 5]].map(([cx, cy]) => (
-                      <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="5.4" fill="var(--cherry-peach)" stroke="rgba(94,68,42,0.12)" strokeWidth="1" />
+                      <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="5.8" fill="var(--cherry-peach)" stroke="rgba(94,68,42,0.12)" strokeWidth="1" />
                     ))}
                     <circle cx="0" cy="-2" r="4.2" fill="var(--cherry-yellow)" />
-                    <circle cx="15" cy="7" r="5" fill="var(--cherry-red)" opacity="0.78" />
+                    <circle cx="16" cy="8" r="5.6" fill="var(--cherry-red)" opacity="0.82" />
+                    <path d="M13 2 C20 -5 27 -2 29 5 C24 10 18 10 13 2Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="0.9" />
                   </g>
                 ) : null}
               </g>
-              <circle r="7.1" fill={stage.fill} stroke={stage.accent} strokeWidth="1.7" />
-              <text y="2.6" textAnchor="middle" fontSize="5.4" fontWeight="900" fill="var(--cherry-warm-brown)">{index + 1}</text>
+              <circle r="7.6" fill={stage.fill} stroke={stage.accent} strokeWidth="1.8" />
+              <text y="2.9" textAnchor="middle" fontSize="5.8" fontWeight="900" fill="var(--cherry-warm-brown)">{index + 1}</text>
             </g>
           );
         })}
-        <path d="M22 123 C31 127 49 128 61 122" stroke="var(--cherry-forest)" strokeWidth="1.7" strokeLinecap="round" opacity="0.32" />
+        <path d="M23 160 C36 166 70 166 86 158" stroke="var(--cherry-forest)" strokeWidth="1.9" strokeLinecap="round" opacity="0.3" />
       </svg>
     );
   }

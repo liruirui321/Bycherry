@@ -103,8 +103,8 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         color: "inherit",
         textDecoration: "none",
         display: "grid",
-        gridTemplateRows: "auto auto 1fr auto auto auto",
-        minHeight: 366,
+        gridTemplateRows: isPlantEvolution ? "auto auto auto auto auto auto" : "auto auto 1fr auto auto auto",
+        minHeight: isPlantEvolution ? 430 : 366,
       }}
     >
       {/* Push pin */}
@@ -120,8 +120,8 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         {work.desc}
       </p>
 
-      <div style={{ minHeight: isPlantEvolution ? 158 : 92, display: "flex", justifyContent: "center", alignItems: "center", background: "rgba(250,247,241,0.46)", border: "1.5px dashed rgba(94,68,42,0.12)", borderRadius: 16, marginBottom: "1rem", padding: isPlantEvolution ? "0.42rem 0" : 0 }}>
-        <WorkPreviewIllustration slug={work.slug} color={work.border} width={isPlantEvolution ? 108 : 132} height={isPlantEvolution ? 162 : 98} />
+      <div style={{ minHeight: isPlantEvolution ? 214 : 92, display: "flex", justifyContent: "center", alignItems: "center", background: isPlantEvolution ? "rgba(250,247,241,0.62)" : "rgba(250,247,241,0.46)", border: "1.5px dashed rgba(94,68,42,0.12)", borderRadius: 16, marginBottom: "1rem", padding: isPlantEvolution ? "0.45rem 0.2rem" : 0 }}>
+        <WorkPreviewIllustration slug={work.slug} color={work.border} width={isPlantEvolution ? 138 : 132} height={isPlantEvolution ? 220 : 98} />
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>

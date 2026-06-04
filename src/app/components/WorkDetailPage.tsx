@@ -548,13 +548,41 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
       <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "1rem", alignItems: "start" }}>
         <div style={{ display: "grid", gap: "0.85rem", alignContent: "start" }}>
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", overflow: "hidden" }}>
-            <svg viewBox="0 0 520 760" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化插画时间轴" style={{ width: "100%", display: "block", background: "linear-gradient(180deg, #FFF8EA 0%, #EDF3DF 56%, #E6D7BE 100%)", borderRadius: 18 }}>
-              <rect x={24} y={24} width={468} height={712} rx={94} fill="rgba(169,201,172,0.16)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
-              <circle cx={420} cy={82} r={34} fill="var(--cherry-yellow)" opacity={0.52} />
-              <path d="M58 618 C116 588 162 629 223 590 C294 545 348 580 466 518" fill="none" stroke="rgba(93,140,101,0.16)" strokeWidth={34} strokeLinecap="round" />
-              <path d="M52 675 C130 706 230 670 305 695 C372 716 431 694 474 660 V736 H52Z" fill="rgba(132,184,204,0.16)" />
-              <path d="M52 692 C103 667 157 682 213 664 C291 640 349 661 462 620" fill="none" stroke="rgba(58,92,62,0.16)" strokeWidth={26} strokeLinecap="round" />
-              <path d="M112 146 C139 128 173 128 202 147 M364 156 C389 136 424 139 450 158" fill="none" stroke="rgba(132,184,204,0.32)" strokeWidth={10} strokeLinecap="round" />
+            <svg viewBox="0 0 520 760" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化插画时间轴" style={{ width: "100%", display: "block", borderRadius: 18 }}>
+              <defs>
+                <linearGradient id="plant-evolution-bg" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="#FFF8EA" />
+                  <stop offset="0.45" stopColor="#EDF3DF" />
+                  <stop offset="0.78" stopColor="#DCECD8" />
+                  <stop offset="1" stopColor="#D9C9AA" />
+                </linearGradient>
+                <linearGradient id="plant-water" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stopColor="#84B8CC" stopOpacity="0.1" />
+                  <stop offset="0.5" stopColor="#84B8CC" stopOpacity="0.32" />
+                  <stop offset="1" stopColor="#84B8CC" stopOpacity="0.08" />
+                </linearGradient>
+                <filter id="plant-soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="5" stdDeviation="5" floodColor="#5E442A" floodOpacity="0.13" />
+                </filter>
+              </defs>
+              <rect x={0} y={0} width={520} height={760} fill="url(#plant-evolution-bg)" />
+              <rect x={24} y={24} width={468} height={712} rx={94} fill="rgba(250,247,241,0.26)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
+              <circle cx={420} cy={82} r={34} fill="var(--cherry-yellow)" opacity={0.62} />
+              <path d="M72 190 C122 164 171 177 212 202 C263 231 317 219 367 185 C401 162 438 158 472 177" fill="none" stroke="rgba(132,184,204,0.24)" strokeWidth={12} strokeLinecap="round" />
+              <path d="M54 585 C113 553 159 600 222 558 C296 507 348 553 469 492" fill="none" stroke="rgba(93,140,101,0.18)" strokeWidth={44} strokeLinecap="round" />
+              <path d="M52 644 C116 600 186 635 247 599 C323 554 393 575 474 530 V736 H52Z" fill="rgba(169,201,172,0.22)" />
+              <path d="M52 674 C130 706 230 670 305 695 C372 716 431 694 474 660 V736 H52Z" fill="url(#plant-water)" />
+              <path d="M52 692 C103 667 157 682 213 664 C291 640 349 661 462 620" fill="none" stroke="rgba(58,92,62,0.17)" strokeWidth={26} strokeLinecap="round" />
+              <path d="M91 713 C130 725 173 714 209 719 M333 724 C369 708 421 725 456 711" fill="none" stroke="rgba(94,68,42,0.16)" strokeWidth={5} strokeLinecap="round" />
+              {[98, 132, 386, 438].map((x) => (
+                <g key={x} opacity={0.38}>
+                  <path d={`M${x} 611 C${x - 8} 596 ${x - 14} 585 ${x - 9} 570`} stroke="var(--cherry-forest)" strokeWidth={3} strokeLinecap="round" />
+                  <path d={`M${x - 8} 584 Q${x - 22} 575 ${x - 30} 590 M${x - 6} 572 Q${x + 7} 563 ${x + 19} 575`} stroke="var(--cherry-sage)" strokeWidth={3} strokeLinecap="round" fill="none" />
+                </g>
+              ))}
+              {[96, 152, 398, 446].map((x) => (
+                <path key={x} d={`M${x} 134 C${x + 16} 122 ${x + 34} 123 ${x + 48} 137`} fill="none" stroke="rgba(132,184,204,0.3)" strokeWidth={9} strokeLinecap="round" />
+              ))}
               <path d="M252 668 C192 607 312 552 252 494 C190 435 312 374 252 318 C192 257 312 201 252 88" fill="none" stroke="var(--cherry-forest)" strokeWidth={10} strokeLinecap="round" opacity={0.16} />
               <path d="M252 668 C192 607 312 552 252 494 C190 435 312 374 252 318 C192 257 312 201 252 88" fill="none" stroke="var(--cherry-sage)" strokeWidth={4.8} strokeLinecap="round" />
               <text x={54} y={64} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>植物演化竖向图</text>
@@ -582,9 +610,10 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
                     style={{ cursor: "pointer" }}
                   >
                     <path d={`M0 0 C${branchX * 0.25} -22 ${branchX * 0.58} -24 ${branchX} -42`} fill="none" stroke={index <= activeChapterIndex ? "var(--cherry-forest)" : "rgba(93,140,101,0.28)"} strokeWidth={3.2} strokeLinecap="round" />
-                    <g transform={`translate(${branchX} -34)`}>
+                    <g transform={`translate(${branchX} -34)`} filter={active ? "url(#plant-soft-shadow)" : undefined}>
                       {renderPlantStageIcon(index, index <= activeChapterIndex)}
                     </g>
+                    {active ? <circle r={32} fill="none" stroke="rgba(214,91,74,0.24)" strokeWidth={7} /> : null}
                     <circle r={active ? 23 : 17} fill={active ? "var(--cherry-yellow)" : "var(--cherry-sage-light)"} stroke={active ? "var(--cherry-red)" : "var(--cherry-forest)"} strokeWidth={active ? 3 : 2} />
                     <text y={5} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={900}>{index + 1}</text>
                     <g transform={`translate(${labelX} -48)`}>
