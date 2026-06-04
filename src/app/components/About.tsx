@@ -81,6 +81,16 @@ export function About() {
       work: findWork("research-prompt-kit"),
       checkpoint: "复制研究记录前，先核查引用来源。",
     },
+    {
+      goal: "读懂植物演化",
+      work: findWork("plant-evolution-stories"),
+      checkpoint: "复制证据判读前，写出结论边界。",
+    },
+    {
+      goal: "判断编辑风险",
+      work: findWork("crispr-interactive"),
+      checkpoint: "复制报告前，说明 guide、PAM 和风险证据。",
+    },
   ];
   const stats = [
     { num: String(works.length), label: "个学习模块" },
@@ -213,6 +223,9 @@ export function About() {
                   </span>
                   <span style={{ color: "var(--cherry-red)", fontSize: "0.7rem", lineHeight: 1.42, fontWeight: 900 }}>
                     检查：{item.checkpoint}
+                  </span>
+                  <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 900 }}>
+                    完成：{item.work.success}
                   </span>
                 </a>
               ))}

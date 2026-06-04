@@ -857,6 +857,7 @@ function verifyLearnerProductPositioning() {
   ].map((relativePath) => [relativePath, read(relativePath)]);
 
   const combinedSource = positioningSources.map(([relativePath, source]) => `\n/* ${relativePath} */\n${source}`).join("\n");
+  const aboutSource = read("src/app/components/About.tsx");
   const requiredProductCopy = [
     "科学学习与 AI",
     "演化时间轴",
@@ -874,6 +875,7 @@ function verifyLearnerProductPositioning() {
     "about-use-card",
     "完成检查",
     "产出：{item.work.outputs[0]}",
+    "完成：{item.work.success}",
   ];
   const retiredProductPatterns = [
     { label: "course-heavy home title", pattern: /科学、课程/ },
@@ -895,6 +897,10 @@ function verifyLearnerProductPositioning() {
     for (const item of retiredProductPatterns) {
       expect(!item.pattern.test(source), `${relativePath} contains retired product positioning copy: ${item.label}`);
     }
+  }
+
+  for (const slug of ["gene-expression", "concept-explainer", "research-prompt-kit", "plant-evolution-stories", "crispr-interactive"]) {
+    expect(aboutSource.includes(`findWork("${slug}")`), `About start guide must include ${slug}.`);
   }
 }
 
