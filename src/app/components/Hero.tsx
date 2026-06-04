@@ -1,20 +1,71 @@
+import { useState } from "react";
 import { IconMicroscope, IconNotebook, IconSeedling } from "./Icons";
 import { works } from "./Works";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
+import { copyText } from "../clipboard";
 import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
 export function Hero() {
+  const [selectedSessionIndex, setSelectedSessionIndex] = useState(0);
+  const [copiedSessionPlan, setCopiedSessionPlan] = useState(false);
+  const [sessionPlanStatus, setSessionPlanStatus] = useState("");
   const goalRoutes = [
     { label: "看懂一个生命过程", href: "/works/gene-expression", workTitle: "基因表达可视化" },
     { label: "拆清一个卡住概念", href: "/works/concept-explainer", workTitle: "概念解释生成器" },
     { label: "整理一段科研材料", href: "/works/research-prompt-kit", workTitle: "科研 Agent 工作台" },
   ];
+  const sessionPlans = [
+    { label: "生命过程", work: works.find((work) => work.slug === "gene-expression") },
+    { label: "卡住概念", work: works.find((work) => work.slug === "concept-explainer") },
+    { label: "科研材料", work: works.find((work) => work.slug === "research-prompt-kit") },
+  ].filter((item): item is { label: string; work: (typeof works)[number] } => Boolean(item.work));
+  const activeSessionPlan = sessionPlans[selectedSessionIndex] ?? sessionPlans[0];
+  const activeSessionSteps = activeSessionPlan
+    ? [
+        { time: "5 分钟", body: activeSessionPlan.work.starter },
+        { time: "18 分钟", body: activeSessionPlan.work.task },
+        { time: "7 分钟", body: `保存产出：${activeSessionPlan.work.outputs.join(" / ")}。完成标准：${activeSessionPlan.work.success}` },
+      ]
+    : [];
+  const sessionPlanText = activeSessionPlan
+    ? `【By Cherry 30 分钟学习路径】
+目标：${activeSessionPlan.label}
+模块：${activeSessionPlan.work.title}
+入口：${activeSessionPlan.work.href}
+
+1. 5 分钟启动
+${activeSessionPlan.work.starter}
+
+2. 18 分钟操作
+${activeSessionPlan.work.task}
+
+3. 7 分钟收束
+保存产出：${activeSessionPlan.work.outputs.join(" / ")}
+完成标准：${activeSessionPlan.work.success}
+
+学习路径
+${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join("\n")}`
+    : "";
 
   function openWork(href: string, event: React.MouseEvent<HTMLAnchorElement>) {
     if (!shouldUseClientNavigation(event)) return;
     event.preventDefault();
     navigateClient(href);
+  }
+
+  async function copySessionPlan() {
+    if (!sessionPlanText) return;
+    const copiedToClipboard = await copyText(sessionPlanText);
+    if (copiedToClipboard) {
+      setCopiedSessionPlan(true);
+      setSessionPlanStatus("30 分钟学习路径已复制到剪贴板。");
+      window.setTimeout(() => setCopiedSessionPlan(false), 1400);
+      return;
+    }
+
+    setCopiedSessionPlan(false);
+    setSessionPlanStatus("复制失败，请手动选中文本复制。");
   }
 
   return (
@@ -122,6 +173,41 @@ export function Hero() {
             ))}
           </div>
         </div>
+
+        {activeSessionPlan ? (
+          <div style={{ background: "rgba(250,247,241,0.82)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 10, padding: "0.72rem", marginBottom: "1rem", display: "grid", gap: "0.55rem" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.7rem", flexWrap: "wrap" }}>
+              <div>
+                <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900 }}>30 分钟学习路径</div>
+                <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>选一个目标，直接带着任务、产出和完成标准进入模块。</div>
+              </div>
+              <button className="hero-session-button" type="button" onClick={copySessionPlan} aria-describedby="hero-session-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.36rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                {copiedSessionPlan ? "已复制" : "复制路径"}
+              </button>
+            </div>
+            <div role="group" aria-label="选择 30 分钟学习路径目标" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+              {sessionPlans.map((plan, index) => {
+                const selected = index === selectedSessionIndex;
+                return (
+                  <button className="hero-session-button" key={plan.label} type="button" aria-pressed={selected} onClick={() => { setSelectedSessionIndex(index); setCopiedSessionPlan(false); setSessionPlanStatus(""); }} style={{ background: selected ? "var(--cherry-yellow-light)" : "var(--muted)", color: selected ? "var(--cherry-warm-brown)" : "var(--cherry-warm-mid)", border: selected ? "1.5px solid var(--cherry-yellow)" : "1.5px solid var(--border)", borderRadius: 999, padding: "0.28rem 0.58rem", fontSize: "0.7rem", fontWeight: 900, cursor: "pointer" }}>
+                    {plan.label}
+                  </button>
+                );
+              })}
+            </div>
+            <div style={{ display: "grid", gap: "0.42rem" }}>
+              {activeSessionSteps.map((item) => (
+                <div key={item.time} style={{ display: "grid", gridTemplateColumns: "58px minmax(0, 1fr)", gap: "0.48rem", alignItems: "start", background: "rgba(250,247,241,0.7)", border: "1px solid rgba(94,68,42,0.09)", borderRadius: 8, padding: "0.46rem" }}>
+                  <span style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>{item.time}</span>
+                  <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.48, fontWeight: 800 }}>{item.body}</span>
+                </div>
+              ))}
+            </div>
+            <div id="hero-session-copy-status" role="status" aria-live="polite" style={{ minHeight: "0.9rem", color: "var(--cherry-forest)", fontSize: "0.7rem", fontWeight: 900 }}>
+              {sessionPlanStatus}
+            </div>
+          </div>
+        ) : null}
 
         {/* CTAs */}
         <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-start", flexWrap: "wrap" }}>
@@ -285,6 +371,7 @@ export function Hero() {
 
         .hero-cta:focus-visible,
         .hero-goal-link:focus-visible,
+        .hero-session-button:focus-visible,
         .hero-work-card:focus-visible {
           outline: 3px solid var(--cherry-red);
           outline-offset: 4px;
@@ -314,6 +401,7 @@ export function Hero() {
         @media (prefers-reduced-motion: reduce) {
           .hero-cta,
           .hero-goal-link,
+          .hero-session-button,
           .hero-work-card {
             transition: none !important;
             transform: none !important;
