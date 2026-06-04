@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { IconDNA, IconMicroscope, IconFlask, IconResearch, IconArrowRight, IconLeafSmall, IconStar } from "./Icons";
+import { copyText } from "../clipboard";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
@@ -354,9 +355,39 @@ function EssayCard({ essay }: {
 
 export function ResearchEssays() {
   const [activeLabel, setActiveLabel] = useState("全部");
+  const [copiedEvidenceChecklist, setCopiedEvidenceChecklist] = useState(false);
+  const [evidenceChecklistStatus, setEvidenceChecklistStatus] = useState("");
   const researchLabels = ["全部", ...Array.from(new Set(essays.map((essay) => essay.label)))];
   const filteredEssays = activeLabel === "全部" ? essays : essays.filter((essay) => essay.label === activeLabel);
   const recommendedEssay = essays.find((essay) => essay.slug === "science-to-learning-question") ?? essays[0];
+  const evidenceChecklistText = `【By Cherry 科研证据执行清单】
+当前范围：${activeLabel === "全部" ? "全部科研证据" : activeLabel}
+文章数量：${filteredEssays.length}
+
+${filteredEssays.map((essay, index) => `${index + 1}. ${essay.title}
+入口：${essay.href}
+先做这个：${essay.actionSteps[0]}
+完成后检查：${essay.checklist[0]}
+证据模板：
+${essay.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
+避坑提醒：${essay.pitfalls[0]}`).join("\n\n")}
+
+使用方式
+1. 先选 1 篇科研证据，不要一次执行全部。
+2. 做完后复制文章页里的学习记录或行动包。
+3. 回到这张清单，记录哪条证据链已经能解释清楚。`;
+
+  async function copyEvidenceChecklist() {
+    const copiedToClipboard = await copyText(evidenceChecklistText);
+    if (copiedToClipboard) {
+      setCopiedEvidenceChecklist(true);
+      setEvidenceChecklistStatus("科研证据执行清单已复制到剪贴板。");
+      window.setTimeout(() => setCopiedEvidenceChecklist(false), 1400);
+      return;
+    }
+    setCopiedEvidenceChecklist(false);
+    setEvidenceChecklistStatus("复制失败，请手动选中文本复制。");
+  }
 
   return (
     <section
@@ -424,7 +455,11 @@ export function ResearchEssays() {
             className="research-filter-button"
             key={label}
             type="button"
-            onClick={() => setActiveLabel(label)}
+            onClick={() => {
+              setActiveLabel(label);
+              setCopiedEvidenceChecklist(false);
+              setEvidenceChecklistStatus("");
+            }}
             aria-pressed={activeLabel === label}
             style={{
               background: activeLabel === label ? "var(--cherry-forest)" : "var(--card)",
@@ -444,6 +479,58 @@ export function ResearchEssays() {
       </div>
       <div role="status" aria-live="polite" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800, marginBottom: "1.2rem" }}>
         当前显示 {filteredEssays.length} 篇{activeLabel === "全部" ? "科研证据" : activeLabel}
+      </div>
+
+      <div
+        className="research-evidence-checklist-panel"
+        style={{
+          background: "var(--card)",
+          border: "1.5px solid rgba(94,68,42,0.12)",
+          borderRadius: 8,
+          padding: "0.85rem 0.95rem",
+          marginBottom: "1.15rem",
+          boxShadow: "0 8px 18px rgba(94,68,42,0.05)",
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1fr) auto",
+          gap: "0.8rem",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ minWidth: 0 }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.9rem", fontWeight: 900, marginBottom: "0.2rem" }}>
+            科研证据执行清单
+          </div>
+          <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, fontWeight: 800 }}>
+            当前范围包含 {filteredEssays.length} 篇科研证据。复制后会带出先做动作、完成检查、证据模板和避坑提醒。
+          </div>
+          <div
+            id="research-evidence-checklist-status"
+            role="status"
+            aria-live="polite"
+            style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900, marginTop: "0.34rem" }}
+          >
+            {evidenceChecklistStatus}
+          </div>
+        </div>
+        <button
+          type="button"
+          className="research-evidence-checklist-button"
+          onClick={copyEvidenceChecklist}
+          aria-describedby="research-evidence-checklist-status"
+          style={{
+            background: "var(--cherry-forest)",
+            color: "#FAF7F1",
+            border: "none",
+            borderRadius: 999,
+            padding: "0.46rem 0.82rem",
+            fontWeight: 900,
+            cursor: "pointer",
+            fontSize: "0.8rem",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {copiedEvidenceChecklist ? "已复制" : "复制清单"}
+        </button>
       </div>
 
       {/* Two-column grid */}
@@ -469,6 +556,7 @@ export function ResearchEssays() {
           }
 
           #research .research-recommended-start:focus-visible,
+          #research .research-evidence-checklist-button:focus-visible,
           #research .research-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
@@ -504,6 +592,16 @@ export function ResearchEssays() {
             #research .research-essay-arrow {
               transition: none !important;
               transform: none !important;
+            }
+          }
+
+          @media (max-width: 640px) {
+            #research .research-evidence-checklist-panel {
+              grid-template-columns: 1fr !important;
+            }
+
+            #research .research-evidence-checklist-button {
+              width: 100%;
             }
           }
         `}
