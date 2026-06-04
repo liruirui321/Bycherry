@@ -10,6 +10,15 @@ function read(relativePath) {
   return readFileSync(resolve(root, relativePath), "utf8");
 }
 
+function unescapeXml(value) {
+  return value
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">")
+    .replaceAll("&quot;", '"')
+    .replaceAll("&apos;", "'")
+    .replaceAll("&amp;", "&");
+}
+
 const contentRoutes = getContentRoutes();
 const expectedPaths = new Set([
   "/",
@@ -21,8 +30,8 @@ const expectedLastmods = new Map([
 
 const sitemap = read("public/sitemap.xml");
 const sitemapEntries = Array.from(sitemap.matchAll(/<url>[\s\S]*?<loc>([^<]+)<\/loc>[\s\S]*?<lastmod>([^<]+)<\/lastmod>[\s\S]*?<\/url>/g), (match) => ({
-  url: match[1],
-  lastmod: match[2],
+  url: unescapeXml(match[1]),
+  lastmod: unescapeXml(match[2]),
 }));
 const sitemapPaths = new Set();
 const sitemapLastmods = new Map();

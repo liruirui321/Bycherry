@@ -10,6 +10,15 @@ function maxDate(routes) {
   return routes.reduce((latest, route) => route.lastmod > latest ? route.lastmod : latest, "1970-01-01");
 }
 
+function escapeXml(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
+}
+
 function routeMeta(route) {
   if (route.path === "/") return { changefreq: "weekly", priority: "1.0" };
   if (route.path === "/works/gene-expression" || route.path === "/works/crispr-interactive") return { changefreq: "monthly", priority: "0.9" };
@@ -20,10 +29,11 @@ function routeMeta(route) {
 
 function xmlEntry(route) {
   const meta = routeMeta(route);
+  const loc = `${siteUrl}${route.path === "/" ? "/" : route.path}`;
   return [
     "  <url>",
-    `    <loc>${siteUrl}${route.path === "/" ? "/" : route.path}</loc>`,
-    `    <lastmod>${route.lastmod}</lastmod>`,
+    `    <loc>${escapeXml(loc)}</loc>`,
+    `    <lastmod>${escapeXml(route.lastmod)}</lastmod>`,
     `    <changefreq>${meta.changefreq}</changefreq>`,
     `    <priority>${meta.priority}</priority>`,
     "  </url>",
@@ -31,6 +41,10 @@ function xmlEntry(route) {
 }
 
 const contentRoutes = getContentRoutes();
+if (!contentRoutes.length) {
+  throw new Error("Cannot generate sitemap without content routes.");
+}
+
 const routes = [
   { path: "/", lastmod: maxDate(contentRoutes) },
   ...contentRoutes,
