@@ -67,6 +67,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copiedSummary, setCopiedSummary] = useState(false);
   const [copiedTemplate, setCopiedTemplate] = useState(false);
   const [copiedActionPack, setCopiedActionPack] = useState(false);
+  const [copiedLearningRecord, setCopiedLearningRecord] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const collection = kind === "note" ? notes : essays;
   const article = collection.find((item) => item.slug === slug);
@@ -103,6 +104,21 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
         pitfall: pitfalls[0] ?? "不要只浏览标题，必须留下一个可复盘的输出。",
       }
     : null;
+  const articleEvidenceItems = article
+    ? [
+        `完成 1 个上手动作：${articleQuickStart?.step ?? actionSteps[0] ?? "先读正文并圈出一个问题"}`,
+        `保存 1 份可复用材料：${starterTemplate[0] ?? "学习记录或证据卡"}`,
+        `用检查清单核对：${articleQuickStart?.check ?? checklist[0] ?? "确认自己留下了可检查结果"}`,
+      ]
+    : [];
+  const articlePracticePlan = article
+    ? [
+        { label: "5 分钟", body: articleQuickStart?.step ?? "先读摘要，圈出一个问题。" },
+        { label: "12 分钟", body: actionSteps.slice(1, 4).join("；") || "把正文要点整理成 3 条可执行步骤。" },
+        { label: "8 分钟", body: checklist.slice(0, 2).join("；") || "用检查清单确认输出是否合格。" },
+        { label: "5 分钟", body: pitfalls[0] ? `复盘避坑：${pitfalls[0]}` : "写下下一步要补的证据或资料。" },
+      ]
+    : [];
   const platformUrl = article && "platformUrl" in article ? article.platformUrl : null;
   const platformUsePlans = platformUrl
     ? [
@@ -142,6 +158,27 @@ ${platformUsePlansText || "这篇内容不需要平台配置。"}
 
 五、可套用模板
 ${starterTemplateText}`
+    : "";
+  const learningRecordText = article
+    ? `【学习记录】${article.title}
+
+一、我先做的动作
+${articleQuickStart?.step ?? actionSteps[0] ?? "先读正文，圈出一个要解决的问题。"}
+
+二、我留下的产出
+${articleEvidenceItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+三、30 分钟执行节奏
+${articlePracticePlan.map((item) => `${item.label}：${item.body}`).join("\n")}
+
+四、我检查到的问题
+${checklist.map((item, index) => `${index + 1}. ${item}：`).join("\n")}
+
+五、我需要避开的误区
+${pitfalls.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+六、下一步回看
+我还需要补充或重做：`
     : "";
   const summaryText = article
     ? `【阅读摘要】
@@ -183,6 +220,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedSummary(true);
       setCopiedTemplate(false);
       setCopiedActionPack(false);
+      setCopiedLearningRecord(false);
       setCopyStatus("阅读摘要已复制到剪贴板。");
       window.setTimeout(() => setCopiedSummary(false), 1400);
       return;
@@ -199,6 +237,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(true);
       setCopiedSummary(false);
       setCopiedActionPack(false);
+      setCopiedLearningRecord(false);
       setCopyStatus("可套用模板已复制到剪贴板。");
       window.setTimeout(() => setCopiedTemplate(false), 1400);
       return;
@@ -215,12 +254,30 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedActionPack(true);
       setCopiedSummary(false);
       setCopiedTemplate(false);
+      setCopiedLearningRecord(false);
       setCopyStatus("行动包已复制到剪贴板。");
       window.setTimeout(() => setCopiedActionPack(false), 1400);
       return;
     }
 
     setCopiedActionPack(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyLearningRecord() {
+    if (!learningRecordText) return;
+    const copiedToClipboard = await copyText(learningRecordText);
+    if (copiedToClipboard) {
+      setCopiedLearningRecord(true);
+      setCopiedSummary(false);
+      setCopiedTemplate(false);
+      setCopiedActionPack(false);
+      setCopyStatus("学习记录已复制到剪贴板。");
+      window.setTimeout(() => setCopiedLearningRecord(false), 1400);
+      return;
+    }
+
+    setCopiedLearningRecord(false);
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -518,6 +575,40 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                 ))}
               </div>
             </div>
+
+            {articleEvidenceItems.length ? (
+              <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 16, padding: "0.9rem", marginTop: "0.9rem" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.68rem" }}>
+                  <div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>读完产出</div>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginTop: "0.18rem", fontWeight: 800 }}>
+                      读完后至少留下一个可检查的学习记录，而不是只浏览内容。
+                    </div>
+                  </div>
+                  <button type="button" onClick={copyLearningRecord} aria-label={`复制${article.title}的学习记录`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.4rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                    {copiedLearningRecord ? "已复制" : "复制学习记录"}
+                  </button>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem", marginBottom: "0.7rem" }}>
+                  {articleEvidenceItems.map((item, index) => (
+                    <div key={item} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.5rem", alignItems: "start" }}>
+                      <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>
+                        {index + 1}
+                      </span>
+                      <span style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.8rem", fontWeight: 800 }}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.52rem" }}>
+                  {articlePracticePlan.map((item) => (
+                    <div key={item.label} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+                      <strong style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.76rem", marginBottom: "0.24rem" }}>{item.label}</strong>
+                      <span style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.5, fontSize: "0.76rem", fontWeight: 800 }}>{item.body}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
 
             <a
               className="article-detail-link"

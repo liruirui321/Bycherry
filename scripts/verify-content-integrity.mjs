@@ -519,6 +519,9 @@ function verifyLearnerFacingArticleCopy() {
     "先做这个",
     "完成后检查",
     "先避开",
+    "读完产出",
+    "复制学习记录",
+    "30 分钟执行节奏",
   ];
   const retiredLearnerArticlePatterns = [
     { label: "old AI course title", pattern: /AI 可以参与课程开发/ },
@@ -547,6 +550,12 @@ function verifyLearnerFacingArticleCopy() {
   }
 
   expect(articleDetailSource.includes("const articleQuickStart"), "Article detail pages must derive a first learner action.");
+  expect(articleDetailSource.includes("const articleEvidenceItems"), "Article detail pages must derive concrete reading completion evidence.");
+  expect(articleDetailSource.includes("const articlePracticePlan"), "Article detail pages must derive a short execution plan.");
+  expect(articleDetailSource.includes("const learningRecordText"), "Article detail pages must include a copyable learning record.");
+  expect(articleDetailSource.includes("copyLearningRecord"), "Article detail pages must provide a learning record copy action.");
+  expect(articleDetailSource.includes("复制学习记录"), "Article detail pages must expose a learning record copy button.");
+  expect(articleDetailSource.includes("读完后至少留下一个可检查的学习记录"), "Article detail pages must frame article completion as a learner output.");
   expect(articleDetailSource.includes("const platformUsePlansText"), "Platform article summaries must include copyable fill-in assessment configurations.");
   expect(articleDetailSource.includes("actionSteps[0]"), "Article quick start must use the first concrete article action.");
   expect(articleDetailSource.includes("checklist[0]"), "Article quick start must expose the first completion check.");
