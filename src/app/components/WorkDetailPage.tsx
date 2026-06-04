@@ -1109,6 +1109,8 @@ function CrisprContent() {
   const [repair, setRepair] = useState<"indel" | "replace" | "failed">("indel");
   const [copiedReport, setCopiedReport] = useState(false);
   const [reportStatus, setReportStatus] = useState("");
+  const [quizIndex, setQuizIndex] = useState(0);
+  const [quizChoice, setQuizChoice] = useState<string | null>(null);
   const target = "T A C G A T T A C C G T A G G".split(" ");
   const rnaComplement: Record<string, string> = { A: "U", T: "A", C: "G", G: "C" };
   const targetStart = 4;
@@ -1125,7 +1127,28 @@ function CrisprContent() {
     { key: "cut", label: "剪切", text: "匹配足够时，Cas9 在 PAM 上游附近切开两条 DNA 链。" },
     { key: "repair", label: "修复", text: "细胞修复切口，结果可能是插入/删除、模板替换或未编辑。" },
   ] as const;
+  const quizItems = [
+    {
+      question: "Cas9 在这张图里为什么先看 PAM？",
+      options: ["PAM 是 Cas9 继续检查邻近序列的入口", "PAM 会直接变成 guide RNA", "PAM 是最终修复产物"],
+      answer: "PAM 是 Cas9 继续检查邻近序列的入口",
+      explain: "SpCas9 通常先识别 NGG 这类 PAM，再检查旁边 DNA 是否能和 guide RNA 配对。",
+    },
+    {
+      question: "guide 区域出现红色虚线时，最合理的解释是什么？",
+      options: ["该位置存在错配，结合稳定性下降", "DNA 已经被完全删除", "PAM 被复制了一次"],
+      answer: "该位置存在错配，结合稳定性下降",
+      explain: "虚线标出 guide RNA 和目标 DNA 不互补的位置；错配越多，定位和剪切越不可靠。",
+    },
+    {
+      question: "选择匹配评分很低的向导 RNA 时，页面为什么按未成功编辑处理？",
+      options: ["Cas9 很难稳定定位到预期位点", "细胞一定会产生模板替换", "低分 guide 会自动修复 DNA"],
+      answer: "Cas9 很难稳定定位到预期位点",
+      explain: "低匹配评分表示 guide 与目标关系弱，Cas9 不应直接进入可靠剪切和修复结果讨论。",
+    },
+  ];
   const activeGuide = guides[guideIndex];
+  const activeQuiz = quizItems[quizIndex];
   const guideRange = Array.from({ length: targetLength }).map((_, index) => activeGuide.start + index);
   const guideBases = activeGuide.sequence.split(" ");
   const expectedGuideBases = guideRange.map((index) => rnaComplement[target[index]] ?? "?");
@@ -1217,6 +1240,17 @@ ${effectiveRepair.title}
   function clearCrisprCopyStatus() {
     setCopiedReport(false);
     setReportStatus("");
+  }
+
+  function chooseCrisprQuiz(index: number) {
+    setQuizIndex(index);
+    setQuizChoice(null);
+    clearCrisprCopyStatus();
+  }
+
+  function answerCrisprQuiz(option: string) {
+    setQuizChoice(option);
+    clearCrisprCopyStatus();
   }
 
   function chooseCrisprStep(nextStep: typeof step) {
@@ -1430,6 +1464,47 @@ ${effectiveRepair.title}
         </div>
       </div>
 
+      <div className="crispr-quiz-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 0.72fr) minmax(0, 1fr)", gap: "1rem", alignItems: "stretch" }}>
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>判读练习</div>
+          <div style={{ display: "grid", gap: 7 }}>
+            {quizItems.map((item, index) => (
+              <button key={item.question} type="button" aria-pressed={quizIndex === index} onClick={() => chooseCrisprQuiz(index)} style={{ display: "grid", gridTemplateColumns: "26px 1fr", gap: 8, alignItems: "center", textAlign: "left", background: quizIndex === index ? "var(--cherry-yellow-light)" : "var(--muted)", border: quizIndex === index ? "1.5px solid var(--cherry-yellow)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.62rem", cursor: "pointer" }}>
+                <span style={{ width: 24, height: 24, borderRadius: "50%", background: quizIndex === index ? "var(--cherry-yellow)" : "rgba(250,247,241,0.9)", color: "var(--cherry-warm-brown)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 900 }}>{index + 1}</span>
+                <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem", fontWeight: 900, lineHeight: 1.42 }}>{item.question}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.75rem", alignContent: "start" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, lineHeight: 1.45 }}>{activeQuiz.question}</div>
+          <div style={{ display: "grid", gap: 7 }}>
+            {activeQuiz.options.map((option) => {
+              const selected = quizChoice === option;
+              const answered = quizChoice !== null;
+              const correct = option === activeQuiz.answer;
+              return (
+                <button key={option} type="button" aria-pressed={selected} onClick={() => answerCrisprQuiz(option)} style={{ textAlign: "left", background: selected ? (correct ? "var(--cherry-sage-light)" : "var(--cherry-peach-light)") : "rgba(250,247,241,0.76)", border: selected ? `1.5px solid ${correct ? "var(--cherry-forest)" : "var(--cherry-red)"}` : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 14, padding: "0.68rem 0.75rem", color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer", lineHeight: 1.45 }}>
+                  {option}
+                  {answered && correct ? <span style={{ color: "var(--cherry-forest)", marginLeft: 8 }}>✓</span> : null}
+                </button>
+              );
+            })}
+          </div>
+          <div role="status" aria-live="polite" style={{ minHeight: "3.4rem", background: quizChoice ? "rgba(250,247,241,0.72)" : "rgba(250,247,241,0.42)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", fontSize: "0.84rem", lineHeight: 1.65 }}>
+            {quizChoice ? (
+              <>
+                <strong style={{ color: quizChoice === activeQuiz.answer ? "var(--cherry-forest)" : "var(--cherry-red)" }}>
+                  {quizChoice === activeQuiz.answer ? "判断正确：" : "再看一眼："}
+                </strong>
+                {activeQuiz.explain}
+              </>
+            ) : "选择一个答案后，这里会给出判读理由。"}
+          </div>
+        </div>
+      </div>
+
       <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.75rem" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>模拟报告</div>
@@ -1463,6 +1538,10 @@ ${effectiveRepair.title}
 
           @media (max-width: 880px) {
             #crispr-simulator > div:first-child {
+              grid-template-columns: 1fr !important;
+            }
+
+            #crispr-simulator .crispr-quiz-grid {
               grid-template-columns: 1fr !important;
             }
           }
