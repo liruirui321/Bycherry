@@ -232,7 +232,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   <IconBook size={18} />
                   可以带走的想法
                 </div>
-                <button type="button" onClick={copyArticleSummary} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.4rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                <button type="button" onClick={copyArticleSummary} aria-label={`复制${article.title}的阅读摘要`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.4rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                   {copiedSummary ? "已复制" : "复制摘要"}
                 </button>
               </div>
@@ -283,6 +283,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                       className="article-nav-card"
                       key={item.article.slug}
                       href={item.article.href}
+                      aria-label={`${item.label}：${item.article.title}`}
                       onClick={(event) => {
                         if (!shouldUseClientNavigation(event)) return;
                         event.preventDefault();
