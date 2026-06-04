@@ -150,8 +150,15 @@ for (const illustration of generatedIllustrations) {
 
 const indexHtml = readRoot("index.html");
 const appSource = readRoot("src/app/App.tsx");
+const staticIndexSource = readRoot("scripts/generate-static-index.mjs");
+const siteMetadataSource = readRoot("scripts/site-metadata.mjs");
 const workPreviewSource = readRoot("src/app/components/WorkPreviewIllustration.tsx");
 const contentHrefs = getContentHrefs();
+expect(staticIndexSource.includes('from "./site-metadata.mjs"'), "Static index generator must import shared site metadata.");
+for (const exportName of ["siteUrl", "siteDescription", "shareDescription", "shareImageAlt", "worksListDescription", "articlesListDescription"]) {
+  expect(siteMetadataSource.includes(`export const ${exportName}`), `site-metadata.mjs must export ${exportName}.`);
+  expect(!new RegExp(`const\\s+${exportName}\\s*=`).test(staticIndexSource), `Static index generator must not redeclare ${exportName}; use site-metadata.mjs.`);
+}
 for (const [slug, illustration] of Object.entries(generatedIllustrationsBySlug)) {
   expect(workPreviewSource.includes(`slug === "${slug}"`), `WorkPreviewIllustration must define a preview branch for ${slug}.`);
   expect(workPreviewSource.includes(`src="/${illustration.path}"`), `WorkPreviewIllustration must use /${illustration.path} for ${slug}.`);
