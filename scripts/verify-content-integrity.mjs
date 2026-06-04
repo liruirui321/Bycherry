@@ -134,6 +134,7 @@ function verifyNoLowQualityVisibleContent() {
     { label: "占位文案", pattern: /占位文案|占位内容|占位页面/ },
     { label: "设计想法", pattern: /设计想法/ },
     { label: "为什么做", pattern: /为什么做/ },
+    { label: "继续打开", pattern: /继续打开/ },
     { label: "自动生成花粉", pattern: /自动生成花粉/ },
   ];
 

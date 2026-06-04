@@ -1840,7 +1840,7 @@ function WorkContinueLinks({ work }: { work: Work }) {
     <section style={{ padding: "0 1.5rem 5rem", fontFamily: "'Nunito', sans-serif" }}>
       <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gap: "0.9rem" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
-          <h2 style={{ color: "var(--cherry-warm-brown)", fontSize: "1.08rem", fontWeight: 900, margin: 0 }}>继续打开</h2>
+          <h2 style={{ color: "var(--cherry-warm-brown)", fontSize: "1.08rem", fontWeight: 900, margin: 0 }}>继续探索</h2>
           <a
             className="work-detail-link"
             href="/#works"
@@ -1864,6 +1864,7 @@ function WorkContinueLinks({ work }: { work: Work }) {
                 className="work-next-card"
                 key={item.slug}
                 href={item.href}
+                aria-label={`继续探索${item.title}：${item.desc}`}
                 onClick={(event) => openWork(item.href, event)}
                 style={{
                   display: "grid",
@@ -1943,6 +1944,7 @@ function WorkSequenceLinks({ work }: { work: Work }) {
             className="work-sequence-card"
             key={item.work.slug}
             href={item.work.href}
+            aria-label={`${item.label}：${item.work.title}`}
             onClick={(event) => openWork(item.work.href, event)}
             style={{
               display: "grid",
