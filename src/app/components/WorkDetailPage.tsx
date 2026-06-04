@@ -656,8 +656,18 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
             {chapters.map((chapter, index) => {
               const active = activeChapterIndex === index;
               return (
-                <button key={chapter.title} type="button" aria-pressed={active} onClick={() => choosePlantChapter(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.78rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
-                  <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-red)", fontFamily: "'Caveat', cursive", fontSize: "0.9rem", fontWeight: 900, marginBottom: "0.3rem" }}>{chapter.time}</div>
+                <button key={chapter.title} type="button" aria-pressed={active} onClick={() => choosePlantChapter(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.78rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer", display: "grid", gap: "0.55rem", alignContent: "start" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "54px minmax(0, 1fr)", gap: "0.62rem", alignItems: "center" }}>
+                    <span aria-hidden="true" style={{ width: 54, height: 54, borderRadius: 18, background: active ? "rgba(250,247,241,0.78)" : "rgba(250,247,241,0.58)", border: active ? "1.5px solid rgba(58,92,62,0.28)" : "1.5px dashed rgba(94,68,42,0.13)", display: "grid", placeItems: "center", overflow: "hidden" }}>
+                      <svg viewBox="-58 -54 116 104" width="52" height="50" fill="none" focusable="false">
+                        {renderPlantStageIcon(index, true)}
+                      </svg>
+                    </span>
+                    <span style={{ minWidth: 0 }}>
+                      <span style={{ display: "block", color: active ? "var(--cherry-forest)" : "var(--cherry-red)", fontFamily: "'Caveat', cursive", fontSize: "0.92rem", fontWeight: 900, lineHeight: 1.18 }}>{chapter.time}</span>
+                      <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900, marginTop: "0.16rem" }}>{plantStageLabels[index]}</span>
+                    </span>
+                  </div>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem", lineHeight: 1.42, marginBottom: "0.45rem" }}>{chapter.title}</div>
                   <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.5, fontSize: "0.74rem", marginBottom: "0.5rem" }}>{chapter.innovation}</div>
                   <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
