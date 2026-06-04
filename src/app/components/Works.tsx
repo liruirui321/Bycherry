@@ -34,7 +34,7 @@ export const works = [
     id: 4, slug: "plant-evolution-stories", category: "课程" as Category,
     icon: <IconLeaf size={36} color="var(--cherry-sage)" />,
     title: "植物进化小故事",
-    desc: "点击演化时间轴，查看关键创新、证据、课堂提问、作答提示和教师追问。",
+    desc: "演化时间轴串联关键创新、证据、课堂提问、作答提示和教师追问。",
     href: "/works/plant-evolution-stories",
     updated: "2026-06-04",
     tags: ["植物学", "科普", "插画"],

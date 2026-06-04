@@ -1794,7 +1794,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
         >
           ← 回到作品集
         </a>
-        <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "2rem", marginTop: "1.5rem" }}>没有找到这个小作品</h1>
+        <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "2rem", marginTop: "1.5rem" }}>没有找到这个作品</h1>
         <style>
           {`
             .work-detail-back-link:focus-visible {

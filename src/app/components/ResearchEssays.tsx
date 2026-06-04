@@ -423,7 +423,7 @@ export function ResearchEssays() {
       >
         <div style={{ width: 40, height: 1.5, background: "var(--border)" }} />
         <span style={{ fontFamily: "'Caveat', cursive", fontSize: "0.88rem", color: "var(--cherry-warm-mid)" }}>
-          点击卡片进入完整随笔
+          科研转译和课程设计持续更新
         </span>
         <div style={{ width: 40, height: 1.5, background: "var(--border)" }} />
       </div>
