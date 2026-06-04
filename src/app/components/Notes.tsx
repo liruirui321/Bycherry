@@ -86,6 +86,58 @@ function navigateTo(href: string, event?: React.MouseEvent<HTMLAnchorElement>) {
   navigateClient(href);
 }
 
+function NoteCardIllustration({ slug, color }: { slug: string; color: string }) {
+  if (slug === "plant-genome-to-classroom") {
+    return (
+      <svg width="132" height="78" viewBox="0 0 132 78" fill="none" aria-hidden="true" focusable="false">
+        <path d="M8 61 C25 47 45 53 61 42 C80 29 97 39 124 21 V74 H8Z" fill="var(--cherry-sage-light)" opacity="0.76" />
+        <path d="M22 67 C41 73 93 73 116 64" stroke="rgba(58,92,62,0.18)" strokeWidth="5" strokeLinecap="round" />
+        <path d="M48 67 C45 50 50 34 61 18" stroke="var(--cherry-forest)" strokeWidth="4" strokeLinecap="round" />
+        <path d="M57 24 C70 12 90 18 95 33 C76 42 64 37 57 24Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="1.8" />
+        <path d="M47 43 C32 35 20 42 19 58 C34 63 43 56 47 43Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="1.8" />
+        <path d="M84 52 C92 42 104 42 112 52" stroke="var(--cherry-blue)" strokeWidth="4" strokeLinecap="round" opacity="0.38" />
+        <circle cx="85" cy="32" r="6" fill="var(--cherry-red)" opacity="0.84" />
+      </svg>
+    );
+  }
+
+  if (slug === "pbl-rubric-evidence") {
+    return (
+      <svg width="132" height="78" viewBox="0 0 132 78" fill="none" aria-hidden="true" focusable="false">
+        <rect x="18" y="17" width="56" height="48" rx="10" fill="rgba(250,247,241,0.9)" stroke={color} strokeWidth="2.2" />
+        <path d="M30 30 H62 M30 42 H58 M30 54 H51" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.42" />
+        <circle cx="89" cy="24" r="11" fill="var(--cherry-yellow)" opacity="0.86" />
+        <path d="M82 52 L89 59 L106 40" stroke="var(--cherry-forest)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M95 18 L100 25 L108 27 L102 32 L100 40 L95 33 L87 30 L93 25Z" fill="var(--cherry-peach)" opacity="0.9" />
+      </svg>
+    );
+  }
+
+  if (slug === "ai-comic-video-workflow") {
+    return (
+      <svg width="132" height="78" viewBox="0 0 132 78" fill="none" aria-hidden="true" focusable="false">
+        <rect x="16" y="20" width="44" height="36" rx="10" fill="rgba(250,247,241,0.92)" stroke={color} strokeWidth="2.2" />
+        <rect x="68" y="16" width="45" height="42" rx="12" fill="var(--cherry-peach-light)" stroke="var(--cherry-red)" strokeWidth="2.2" />
+        <circle cx="30" cy="35" r="3" fill="var(--cherry-warm-brown)" />
+        <circle cx="45" cy="35" r="3" fill="var(--cherry-warm-brown)" />
+        <path d="M31 45 C36 49 42 49 47 45" stroke="var(--cherry-warm-brown)" strokeWidth="2" strokeLinecap="round" />
+        <path d="M80 34 H101 M80 44 H96" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.45" />
+        <path d="M57 38 H70" stroke="var(--cherry-forest)" strokeWidth="3" strokeLinecap="round" />
+        <path d="M99 12 L104 20 L113 22 L106 27 L104 36 L99 28 L90 25 L97 20Z" fill="var(--cherry-yellow)" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg width="132" height="78" viewBox="0 0 132 78" fill="none" aria-hidden="true" focusable="false">
+      <rect x="18" y="18" width="62" height="44" rx="12" fill="rgba(250,247,241,0.9)" stroke={color} strokeWidth="2.2" />
+      <path d="M30 32 H66 M30 44 H58" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.45" />
+      <path d="M91 22 L97 33 L109 37 L98 43 L94 55 L88 44 L76 40 L87 34Z" fill="var(--cherry-yellow)" stroke="rgba(94,68,42,0.14)" strokeWidth="1.2" />
+      <path d="M84 59 C94 49 110 53 115 65 C101 72 90 69 84 59Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
 export function Notes() {
   return (
     <section
@@ -145,7 +197,7 @@ export function Notes() {
                   cursor: "pointer",
                   color: "inherit",
                   display: "grid",
-                  gridTemplateRows: "auto auto auto 1fr auto",
+                  gridTemplateRows: "auto auto auto auto 1fr auto",
                   height: "100%",
                   textDecoration: "none",
                 }}
@@ -164,6 +216,10 @@ export function Notes() {
                 <h3 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "1rem", lineHeight: 1.4, marginBottom: "0.6rem" }}>
                   {note.title}
                 </h3>
+
+                <div className="note-card-illustration" style={{ background: note.tagBg, borderColor: note.tagColor }}>
+                  <NoteCardIllustration slug={note.slug} color={note.tagColor} />
+                </div>
 
                 <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.84rem", lineHeight: 1.65, marginBottom: "1rem" }}>
                   {note.excerpt}
@@ -203,6 +259,24 @@ export function Notes() {
           #notes .note-card:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
+          }
+
+          #notes .note-card-illustration {
+            min-height: 86px;
+            border: 1.5px dashed;
+            border-radius: 14px;
+            margin: 0 0 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: inset 0 0 0 999px rgba(250,247,241,0.38);
+          }
+
+          #notes .note-card-illustration svg {
+            width: min(100%, 150px);
+            height: 86px;
+            display: block;
           }
 
           @media (prefers-reduced-motion: reduce) {
