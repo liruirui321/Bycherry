@@ -65,6 +65,7 @@ function navigateToPath(href: string) {
 export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: string }) {
   const [copiedSummary, setCopiedSummary] = useState(false);
   const [copiedTemplate, setCopiedTemplate] = useState(false);
+  const [copiedActionPack, setCopiedActionPack] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const collection = kind === "note" ? notes : essays;
   const article = collection.find((item) => item.slug === slug);
@@ -88,6 +89,18 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const checklist = article && "checklist" in article ? article.checklist : [];
   const starterTemplate = article && "starterTemplate" in article ? article.starterTemplate : [];
   const starterTemplateText = starterTemplate.map((item) => `- ${item}`).join("\n");
+  const actionPackText = article
+    ? `【行动包】${article.title}
+
+一、上手步骤
+${actionSteps.map((step, index) => `${index + 1}. ${step}`).join("\n")}
+
+二、检查清单
+${checklist.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+三、可套用模板
+${starterTemplateText}`
+    : "";
   const summaryText = article
     ? `【阅读摘要】
 标题：${article.title}
@@ -121,6 +134,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     if (copiedToClipboard) {
       setCopiedSummary(true);
       setCopiedTemplate(false);
+      setCopiedActionPack(false);
       setCopyStatus("阅读摘要已复制到剪贴板。");
       window.setTimeout(() => setCopiedSummary(false), 1400);
       return;
@@ -136,12 +150,29 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     if (copiedToClipboard) {
       setCopiedTemplate(true);
       setCopiedSummary(false);
+      setCopiedActionPack(false);
       setCopyStatus("可套用模板已复制到剪贴板。");
       window.setTimeout(() => setCopiedTemplate(false), 1400);
       return;
     }
 
     setCopiedTemplate(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyActionPack() {
+    if (!actionPackText) return;
+    const copiedToClipboard = await copyText(actionPackText);
+    if (copiedToClipboard) {
+      setCopiedActionPack(true);
+      setCopiedSummary(false);
+      setCopiedTemplate(false);
+      setCopyStatus("行动包已复制到剪贴板。");
+      window.setTimeout(() => setCopiedActionPack(false), 1400);
+      return;
+    }
+
+    setCopiedActionPack(false);
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -284,7 +315,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {actionSteps.length ? (
               <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
-                <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem", marginBottom: "0.65rem" }}>上手步骤</div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>上手步骤</div>
+                  <button type="button" onClick={copyActionPack} aria-label={`复制${article.title}的行动包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                    {copiedActionPack ? "已复制" : "复制行动包"}
+                  </button>
+                </div>
                 <div style={{ display: "grid", gap: "0.55rem" }}>
                   {actionSteps.map((step, index) => (
                     <div key={step} style={{ display: "grid", gridTemplateColumns: "26px minmax(0, 1fr)", gap: 9, alignItems: "start" }}>
