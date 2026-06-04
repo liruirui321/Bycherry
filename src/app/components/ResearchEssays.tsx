@@ -90,6 +90,62 @@ function navigateTo(href: string, event?: React.MouseEvent<HTMLAnchorElement>) {
   navigateClient(href);
 }
 
+function ResearchCardIllustration({ slug, color }: { slug: string; color: string }) {
+  if (slug === "genome-assembly-story") {
+    return (
+      <svg width="150" height="88" viewBox="0 0 150 88" fill="none" aria-hidden="true" focusable="false">
+        <path d="M14 67 C36 50 58 57 76 44 C99 27 116 39 140 19 V82 H14Z" fill="var(--cherry-sage-light)" opacity="0.78" />
+        <path d="M32 71 C55 79 113 78 134 67" stroke="rgba(58,92,62,0.18)" strokeWidth="5" strokeLinecap="round" />
+        <path d="M56 68 C52 48 59 30 72 14" stroke="var(--cherry-forest)" strokeWidth="4.6" strokeLinecap="round" />
+        <path d="M67 21 C82 7 105 13 111 31 C90 41 76 36 67 21Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
+        <path d="M52 43 C35 35 23 43 22 61 C38 66 49 58 52 43Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
+        <path d="M91 59 C100 48 115 49 123 60" stroke={color} strokeWidth="4" strokeLinecap="round" opacity="0.46" />
+        <circle cx="101" cy="35" r="6" fill="var(--cherry-yellow)" opacity="0.86" />
+      </svg>
+    );
+  }
+
+  if (slug === "barcoding-evidence-chain") {
+    return (
+      <svg width="150" height="88" viewBox="0 0 150 88" fill="none" aria-hidden="true" focusable="false">
+        <rect x="20" y="23" width="42" height="48" rx="12" fill="rgba(250,247,241,0.92)" stroke={color} strokeWidth="2.2" />
+        <path d="M33 19 H49 M36 19 V12 H46 V19" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M31 42 C39 34 47 50 55 41" stroke="var(--cherry-blue)" strokeWidth="3.2" strokeLinecap="round" />
+        <path d="M31 52 C39 60 47 44 55 53" stroke="var(--cherry-red)" strokeWidth="3.2" strokeLinecap="round" />
+        <path d="M71 47 H91 M91 47 L86 42 M91 47 L86 52" stroke="var(--cherry-forest)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="98" y="19" width="32" height="54" rx="9" fill="var(--cherry-peach-light)" stroke="var(--cherry-red)" strokeWidth="2" />
+        <path d="M106 34 H122 M106 45 H118 M106 56 H124" stroke="var(--cherry-warm-mid)" strokeWidth="2.4" strokeLinecap="round" opacity="0.5" />
+        <circle cx="116" cy="17" r="7" fill="var(--cherry-yellow)" opacity="0.84" />
+      </svg>
+    );
+  }
+
+  if (slug === "ai-assessment-quality-control") {
+    return (
+      <svg width="150" height="88" viewBox="0 0 150 88" fill="none" aria-hidden="true" focusable="false">
+        <rect x="20" y="23" width="64" height="44" rx="13" fill="rgba(250,247,241,0.92)" stroke={color} strokeWidth="2.2" />
+        <path d="M32 37 H72 M32 49 H62" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.42" />
+        <path d="M89 28 C101 20 119 26 121 42 C123 60 99 68 88 53 C82 44 83 34 89 28Z" fill="#EDE9F5" stroke={color} strokeWidth="2.2" />
+        <circle cx="99" cy="43" r="3.5" fill={color} />
+        <circle cx="112" cy="43" r="3.5" fill={color} />
+        <path d="M99 53 C104 57 111 57 116 53" stroke="var(--cherry-warm-brown)" strokeWidth="2" strokeLinecap="round" />
+        <path d="M109 16 L114 25 L124 28 L115 33 L112 43 L107 34 L97 31 L106 25Z" fill="var(--cherry-yellow)" opacity="0.92" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg width="150" height="88" viewBox="0 0 150 88" fill="none" aria-hidden="true" focusable="false">
+      <rect x="19" y="22" width="58" height="48" rx="12" fill="rgba(250,247,241,0.92)" stroke={color} strokeWidth="2.2" />
+      <path d="M31 36 H64 M31 49 H58" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.44" />
+      <path d="M84 30 C96 16 119 20 126 39 C106 50 91 45 84 30Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
+      <path d="M91 59 C101 48 118 52 125 65 C110 73 98 70 91 59Z" fill="var(--cherry-sage-light)" stroke="var(--cherry-forest)" strokeWidth="1.8" />
+      <circle cx="111" cy="38" r="7" fill="var(--cherry-red)" opacity="0.82" />
+      <path d="M102 18 L107 26 L116 29 L108 34 L106 43 L101 35 L92 32 L100 27Z" fill="var(--cherry-yellow)" />
+    </svg>
+  );
+}
+
 function EssayCard({ essay }: {
   essay: (typeof essays)[0];
 }) {
@@ -109,7 +165,7 @@ function EssayCard({ essay }: {
         overflow: "hidden",
         color: "inherit",
         display: "grid",
-        gridTemplateRows: "auto auto 1fr auto auto",
+        gridTemplateRows: "auto auto auto 1fr auto auto",
         height: "100%",
         textDecoration: "none",
       }}
@@ -182,11 +238,14 @@ function EssayCard({ essay }: {
         </div>
       </div>
 
+      <div className="research-essay-illustration" style={{ background: essay.labelBg, borderColor: essay.labelColor }}>
+        <ResearchCardIllustration slug={essay.slug} color={essay.labelColor} />
+      </div>
+
       {/* Body excerpt — always shown partially, expanded on click */}
       <div
         className="research-essay-excerpt"
         style={{
-          marginTop: "0.9rem",
           overflow: "hidden",
           maxHeight: 76,
           transition: "max-height 0.35s ease",
@@ -317,6 +376,24 @@ export function ResearchEssays() {
             outline-offset: 4px;
           }
 
+          #research .research-essay-illustration {
+            min-height: 94px;
+            border: 1.5px dashed;
+            border-radius: 15px;
+            margin: 0.85rem 0 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: inset 0 0 0 999px rgba(250,247,241,0.38);
+          }
+
+          #research .research-essay-illustration svg {
+            width: min(100%, 168px);
+            height: 94px;
+            display: block;
+          }
+
           #research .research-essay-card:hover .research-essay-arrow,
           #research .research-essay-card:focus-visible .research-essay-arrow {
             transform: translateX(3px);
@@ -325,6 +402,7 @@ export function ResearchEssays() {
           @media (prefers-reduced-motion: reduce) {
             #research .research-essay-card,
             #research .research-essay-excerpt,
+            #research .research-essay-illustration,
             #research .research-essay-arrow {
               transition: none !important;
               transform: none !important;
