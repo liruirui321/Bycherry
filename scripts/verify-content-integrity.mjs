@@ -520,6 +520,15 @@ function verifyLearnerFacingArticleCopy() {
   const combinedSource = learnerArticleSources.map(([relativePath, source]) => `\n/* ${relativePath} */\n${source}`).join("\n");
   const requiredLearnerCopy = [
     "用 AI 做学习材料质检",
+    "aiMaterialAuditPrompts",
+    "aiMaterialAuditPromptText",
+    "copyAiMaterialAuditPrompts",
+    "AI 质检提示词包",
+    "复制质检提示词",
+    "目标对齐",
+    "误解扫描",
+    "证据边界",
+    "练习有效性",
     "从植物基因组读懂一条证据链",
     "真实科研如何变成你能进入的问题",
     "plant-genome-evidence-chain",

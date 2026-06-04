@@ -70,6 +70,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copiedLearningRecord, setCopiedLearningRecord] = useState(false);
   const [copiedPlatformConfig, setCopiedPlatformConfig] = useState(false);
   const [copiedPlatformReview, setCopiedPlatformReview] = useState(false);
+  const [copiedAiAuditPrompts, setCopiedAiAuditPrompts] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const collection = kind === "note" ? notes : essays;
   const article = collection.find((item) => item.slug === slug);
@@ -142,6 +143,44 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
       ]
     : [];
   const platformUsePlansText = platformUsePlans.map((plan) => `${plan.title}\n${plan.fields.map((field) => `- ${field}`).join("\n")}\n- ${plan.output}`).join("\n\n");
+  const aiMaterialAuditPrompts = article?.slug === "ai-course-development"
+    ? [
+        {
+          title: "目标对齐",
+          prompt: "请检查这份学习材料是否只服务一个明确目标。输出：目标一句话、偏离目标的内容、建议删除或收窄的部分。",
+          output: "能判断材料是否在帮我解决当前卡点，而不是堆信息。",
+        },
+        {
+          title: "误解扫描",
+          prompt: "请列出这份材料可能造成的 5 个误解。每个误解都要写成“我可能会误以为……，但实际应该区分……”。",
+          output: "把看似顺滑的解释拆成可检查的误区。",
+        },
+        {
+          title: "证据边界",
+          prompt: "请把材料里的内容分成：可直接相信、需要资料核查、不能由材料推出。不要补充材料中没有的事实。",
+          output: "防止 AI 把推测写成结论。",
+        },
+        {
+          title: "练习有效性",
+          prompt: "请检查每道练习是否能暴露一个具体误解。输出：练习目标、可观察答案、无法判断理解的题目。",
+          output: "留下真正能证明理解的练习。",
+        },
+      ]
+    : [];
+  const aiMaterialAuditPromptText = aiMaterialAuditPrompts.length
+    ? `【AI 学习材料质检提示词包】
+使用方式：把 AI 生成的学习材料粘贴进去，再逐条运行下面 4 个质检任务。
+
+${aiMaterialAuditPrompts.map((item, index) => `${index + 1}. ${item.title}
+提示词：${item.prompt}
+检查产出：${item.output}`).join("\n\n")}
+
+最终判断
+1. 这份材料可以直接使用的部分：
+2. 需要重写的部分：
+3. 必须回到资料核查的部分：
+4. 我下一步要完成的可观察输出：`
+    : "";
   const platformPasteConfigText = platformUrl
     ? `【SciFuion 平台照填配置】
 平台入口：${platformUrl}
@@ -261,6 +300,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedLearningRecord(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
+      setCopiedAiAuditPrompts(false);
       setCopyStatus("阅读摘要已复制到剪贴板。");
       window.setTimeout(() => setCopiedSummary(false), 1400);
       return;
@@ -280,6 +320,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedLearningRecord(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
+      setCopiedAiAuditPrompts(false);
       setCopyStatus("可套用模板已复制到剪贴板。");
       window.setTimeout(() => setCopiedTemplate(false), 1400);
       return;
@@ -299,6 +340,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedLearningRecord(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
+      setCopiedAiAuditPrompts(false);
       setCopyStatus("行动包已复制到剪贴板。");
       window.setTimeout(() => setCopiedActionPack(false), 1400);
       return;
@@ -318,6 +360,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedActionPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
+      setCopiedAiAuditPrompts(false);
       setCopyStatus("学习记录已复制到剪贴板。");
       window.setTimeout(() => setCopiedLearningRecord(false), 1400);
       return;
@@ -337,6 +380,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
+      setCopiedAiAuditPrompts(false);
       setCopyStatus("平台照填配置已复制到剪贴板。");
       window.setTimeout(() => setCopiedPlatformConfig(false), 1400);
       return;
@@ -356,12 +400,33 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
+      setCopiedAiAuditPrompts(false);
       setCopyStatus("测后复盘记录已复制到剪贴板。");
       window.setTimeout(() => setCopiedPlatformReview(false), 1400);
       return;
     }
 
     setCopiedPlatformReview(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyAiMaterialAuditPrompts() {
+    if (!aiMaterialAuditPromptText) return;
+    const copiedToClipboard = await copyText(aiMaterialAuditPromptText);
+    if (copiedToClipboard) {
+      setCopiedAiAuditPrompts(true);
+      setCopiedPlatformReview(false);
+      setCopiedPlatformConfig(false);
+      setCopiedSummary(false);
+      setCopiedTemplate(false);
+      setCopiedActionPack(false);
+      setCopiedLearningRecord(false);
+      setCopyStatus("AI 质检提示词包已复制到剪贴板。");
+      window.setTimeout(() => setCopiedAiAuditPrompts(false), 1400);
+      return;
+    }
+
+    setCopiedAiAuditPrompts(false);
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -556,6 +621,37 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     </code>
                   </div>
                 </div>
+              </div>
+            ) : null}
+
+            {aiMaterialAuditPrompts.length ? (
+              <div style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.22)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>AI 质检提示词包</div>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginTop: "0.18rem", fontWeight: 800 }}>
+                      拿到 AI 生成的学习材料后，先跑这四个检查，再决定保留、重写或回到资料核查。
+                    </div>
+                  </div>
+                  <button type="button" onClick={copyAiMaterialAuditPrompts} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.38rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                    {copiedAiAuditPrompts ? "已复制" : "复制质检提示词"}
+                  </button>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
+                  {aiMaterialAuditPrompts.map((item, index) => (
+                    <div key={item.title} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem", display: "grid", gap: "0.42rem" }}>
+                      <span aria-hidden="true" style={{ width: 22, height: 22, borderRadius: "50%", background: "var(--cherry-blue)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>
+                        {index + 1}
+                      </span>
+                      <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{item.title}</strong>
+                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.52, fontWeight: 800 }}>{item.prompt}</span>
+                      <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 900 }}>检查产出：{item.output}</span>
+                    </div>
+                  ))}
+                </div>
+                <code style={{ display: "block", whiteSpace: "pre-wrap", maxHeight: 220, overflow: "auto", background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.72rem", lineHeight: 1.62 }}>
+                  {aiMaterialAuditPromptText}
+                </code>
               </div>
             ) : null}
 
