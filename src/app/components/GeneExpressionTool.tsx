@@ -722,6 +722,28 @@ export function GeneExpressionTool() {
     { label: "把 RNA 聚合酶拖到基因区，观察 mRNA 从 5' 端到 3' 生长端延伸。", done: visibleMrnaCount > 0 },
     { label: "把核糖体拖到 mRNA 附近，观察多肽链从出口逐颗长出。", done: visibleProteinCount > 0 },
   ];
+  const expressionCompletionChecks = [
+    {
+      title: "转录启动",
+      done: model.transcriptionOn,
+      body: model.transcriptionOn ? "TF 和 RNA 聚合酶都已进入正确区域，DNA 信息正在被转写成 mRNA。" : "先把 TF 放到启动子，再把 RNA 聚合酶放到基因区。",
+    },
+    {
+      title: "mRNA 生长端",
+      done: visibleMrnaCount > 0,
+      body: visibleMrnaCount > 0 ? "已经能看到 mRNA 曲线从 DNA 旁边延伸，3' 生长端贴着 RNA 聚合酶出口。" : "等待 mRNA 片段出现后，再观察 5' 自由端和 3' 生长端的位置。",
+    },
+    {
+      title: "翻译产物",
+      done: visibleProteinCount > 0,
+      body: visibleProteinCount > 0 ? `多肽链已从核糖体出口长出，当前片段是 ${peptidePreview}。` : "把核糖体放到 mRNA 附近，观察氨基酸小圆逐颗接出。",
+    },
+    {
+      title: "小测自查",
+      done: quizCorrectCount >= 3,
+      body: quizCorrectCount >= 3 ? `已答对 ${quizCorrectCount}/${geneQuizItems.length} 题，可以复制记录。` : `当前答对 ${quizCorrectCount}/${geneQuizItems.length} 题；至少答对 3 题再复制记录。`,
+    },
+  ];
   const integratedMolecules = molecules.filter((molecule) => molecule.type !== "tf" && inBox(molecule, zones[moleculeZone(molecule.type)]));
   const nextTask = taskStatuses.find((item) => !item.done)?.label ?? "三个操作任务已经完成，可以继续调节分子数量、速度和暂停状态观察表达变化。";
   const currentStatus = (() => {
@@ -787,7 +809,10 @@ mRNA 数量：${visibleMrnaCount}/${mrnaReadoutMax}
 五、操作任务
 ${taskStatuses.map((item, index) => `${index + 1}. ${item.done ? "已完成" : "待完成"}：${item.label}`).join("\n")}
 
-六、小测进度
+六、完成验收
+${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "通过" : "待完成"}：${item.title}。${item.body}`).join("\n")}
+
+七、小测进度
 已作答：${quizAnsweredCount}/${geneQuizItems.length}
 答对：${quizCorrectCount}/${geneQuizItems.length}`;
 
@@ -1186,6 +1211,31 @@ ${taskStatuses.map((item, index) => `${index + 1}. ${item.done ? "已完成" : "
                   </span>
                   <span>
                     <strong style={{ display: "block", color: item.active ? "var(--cherry-warm-brown)" : "var(--cherry-warm-mid)", fontSize: "0.8rem", marginBottom: "0.28rem" }}>{item.title}</strong>
+                    <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.58, fontWeight: 800 }}>{item.body}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: "0.85rem", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
+                <IconCheck size={18} />
+                完成验收卡
+              </div>
+              <span style={{ background: quizCorrectCount >= 3 ? "var(--cherry-sage-light)" : "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.22rem 0.58rem", color: quizCorrectCount >= 3 ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.72rem", fontWeight: 900 }}>
+                {expressionCompletionChecks.filter((item) => item.done).length}/{expressionCompletionChecks.length}
+              </span>
+            </div>
+            <div style={{ display: "grid", gap: "0.58rem" }}>
+              {expressionCompletionChecks.map((item, index) => (
+                <div key={item.title} style={{ display: "grid", gridTemplateColumns: "28px minmax(0, 1fr)", gap: "0.58rem", alignItems: "start", background: item.done ? "rgba(169,201,172,0.2)" : "rgba(250,247,241,0.72)", border: item.done ? "1.5px solid rgba(93,140,101,0.24)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.72rem" }}>
+                  <span style={{ width: 24, height: 24, borderRadius: "50%", background: item.done ? "var(--cherry-forest)" : "var(--cherry-red)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>
+                    {item.done ? "✓" : index + 1}
+                  </span>
+                  <span>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.28rem" }}>{item.title}</strong>
                     <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.58, fontWeight: 800 }}>{item.body}</span>
                   </span>
                 </div>

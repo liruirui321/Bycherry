@@ -449,6 +449,12 @@ function verifyGeneExpressionLearnerContract() {
     { label: "copy process record handler", text: "copyExpressionProcessRecord" },
     { label: "visible process record card", text: "表达过程记录" },
     { label: "copy process record button", text: "复制记录" },
+    { label: "completion check data", text: "expressionCompletionChecks" },
+    { label: "visible completion card", text: "完成验收卡" },
+    { label: "completion record section", text: "六、完成验收" },
+    { label: "quiz pass threshold", text: "至少答对 3 题再复制记录" },
+    { label: "transcription completion check", text: "转录启动" },
+    { label: "translation product completion check", text: "翻译产物" },
   ];
   const retiredGenePatterns = [
     { label: "teacher/classroom framing", pattern: /课堂|教师|老师|教案|授课|教学/ },
