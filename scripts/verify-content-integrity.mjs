@@ -225,6 +225,50 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(staticIndexSource.includes("teaches: [...route.pathSteps, ...route.outputs]"), "Static work JSON-LD generator must include learning path and output outcomes.");
 }
 
+function verifyConceptExplainerAgentContract() {
+  const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
+  const worksSource = read("src/app/components/Works.tsx");
+  const conceptMatch = workDetailSource.match(/function ConceptExplainerContent\(\) \{([\s\S]*?)\nfunction CrisprContent\(\)/);
+
+  expect(Boolean(conceptMatch), "WorkDetailPage must include ConceptExplainerContent before CrisprContent.");
+
+  if (!conceptMatch) return;
+
+  const conceptSource = conceptMatch[1];
+  const requiredConceptFeatures = [
+    { label: "free concept input state", text: "conceptInput" },
+    { label: "fallback concept agent builder", text: "buildConceptAgentExplanation" },
+    { label: "skill prompt contract", text: "conceptSkillPrompt" },
+    { label: "copyable skill prompt", text: "copyConceptSkillPrompt" },
+    { label: "visible skill protocol", text: "概念解释 skill 协议" },
+    { label: "arbitrary concept copy", text: "输入任意概念" },
+    { label: "learner-facing agent role", text: "面向学习者" },
+    { label: "anti-teacher-plan boundary", text: "不要把输出写成教师教案" },
+    { label: "anti-fabrication boundary", text: "不编造具体事实" },
+    { label: "stable output card", text: "生成学习卡" },
+  ];
+
+  const retiredConceptPatterns = [
+    { label: "teacher prompt label", pattern: /教师追问/ },
+    { label: "teacher output field", pattern: /teacherMove/ },
+    { label: "student output field", pattern: /studentOutput/ },
+    { label: "lecture copy", pattern: /讲给谁|讲解目标|讲解稿/ },
+    { label: "classroom flow heading", pattern: /课堂流程/ },
+  ];
+
+  for (const item of requiredConceptFeatures) {
+    expect(conceptSource.includes(item.text), `Concept explainer agent contract is missing ${item.label}: ${item.text}`);
+  }
+
+  for (const item of retiredConceptPatterns) {
+    expect(!item.pattern.test(conceptSource), `Concept explainer must remain learner-facing and avoid retired copy: ${item.label}`);
+  }
+
+  expect(worksSource.includes("输入任意概念或选择样例"), "Concept explainer work card must advertise arbitrary concept input.");
+  expect(worksSource.includes('outputs: ["学习卡", "可视化流程", "即时小测"]'), "Concept explainer work card outputs must match the learner-facing agent output.");
+  expect(worksSource.includes('path: ["输入概念", "看诊断边界", "生成学习卡"]'), "Concept explainer work card path must describe the learner-facing agent flow.");
+}
+
 const routes = getContentRoutes();
 const workSlugs = new Set(routes.filter((route) => route.type === "work").map((route) => route.path.replace(/^\/works\//, "")));
 const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
@@ -287,6 +331,7 @@ verifyWorkCardActions();
 verifyWorkDetailCardsStayCompact();
 verifyArticleCardsStayStructured();
 verifyWorkJsonLdLearningOutcomes();
+verifyConceptExplainerAgentContract();
 
 if (failures.length) {
   console.error("Content integrity verification failed.");
