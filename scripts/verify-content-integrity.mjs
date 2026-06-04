@@ -471,6 +471,9 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("actionSteps[0]"), "Article quick start must use the first concrete article action.");
   expect(articleDetailSource.includes("checklist[0]"), "Article quick start must expose the first completion check.");
   expect(articleDetailSource.includes("pitfalls[0]"), "Article quick start must expose the first pitfall to avoid.");
+  expect(articleDetailSource.includes("const itemAction = item.article.actionSteps[0]"), "Article previous/next cards must derive the adjacent article first action.");
+  expect(articleDetailSource.includes("const itemCheck = item.article.checklist[0]"), "Article previous/next cards must derive the adjacent article completion check.");
+  expect(articleDetailSource.includes("aria-label={`${item.label}：${item.article.title}。先做这个，${itemAction}。完成后检查，${itemCheck}`}"), "Article previous/next cards must include first action and completion check in accessible labels.");
   expect(notesSource.includes("note.actionSteps[0]"), "Learning method cards must expose each article's first action step.");
   expect(researchSource.includes("essay.actionSteps[0]"), "Research evidence cards must expose each article's first action step.");
   expect(notesSource.includes("aria-label={`打开学习方法：${note.title}。先做这个，${note.actionSteps[0]}。完成后检查，${note.checklist[0]}`}"), "Learning method cards must include first action and completion check in accessible labels.");

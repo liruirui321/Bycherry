@@ -539,13 +539,15 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   const itemReadTime = "readTime" in item.article ? item.article.readTime : item.article.readMin;
                   const itemColor = "tagColor" in item.article ? item.article.tagColor : item.article.labelColor;
                   const itemBg = "tagBg" in item.article ? item.article.tagBg : item.article.labelBg;
+                  const itemAction = item.article.actionSteps[0];
+                  const itemCheck = item.article.checklist[0];
 
                   return (
                     <a
                       className="article-nav-card"
                       key={item.article.slug}
                       href={item.article.href}
-                      aria-label={`${item.label}：${item.article.title}`}
+                      aria-label={`${item.label}：${item.article.title}。先做这个，${itemAction}。完成后检查，${itemCheck}`}
                       onMouseEnter={() => preloadRouteForHref(item.article.href)}
                       onFocus={() => preloadRouteForHref(item.article.href)}
                       onPointerDown={() => preloadRouteForHref(item.article.href)}
@@ -565,6 +567,10 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                         <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem" }}>约 {itemReadTime} 分钟</span>
                       </span>
                       <span style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.52, fontSize: "0.76rem" }}>{item.article.highlights[0]}</span>
+                      <span style={{ display: "block", background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem 0.56rem", color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.74rem", fontWeight: 900 }}>
+                        <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.66rem", marginBottom: "0.14rem" }}>先做这个</span>
+                        {itemAction}
+                      </span>
                     </a>
                   );
                 })}
