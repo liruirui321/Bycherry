@@ -132,6 +132,7 @@ export function Hero() {
                   className="hero-work-card"
                   key={work.slug}
                   href={work.href}
+                  aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}
                   onClick={(event) => openWork(work.href, event)}
                   onMouseEnter={() => preloadRouteForHref(work.href)}
                   onFocus={() => preloadRouteForHref(work.href)}

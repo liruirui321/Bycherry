@@ -109,7 +109,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
     <a
       className="work-card"
       href={href}
-      aria-label={`打开${work.title}：${work.desc}`}
+      aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}
       onClick={openDetail}
       onMouseEnter={previewDetail}
       onPointerDown={previewDetail}
@@ -274,7 +274,7 @@ export function Works() {
         <a
           className="work-recommended-start"
           href={recommendedWork.href}
-          aria-label={`推荐起点：${recommendedWork.title}`}
+          aria-label={`推荐起点：${recommendedWork.title}。先做这个，${recommendedWork.starter}。完成标准，${recommendedWork.success}`}
           onMouseEnter={() => preloadRouteForHref(recommendedWork.href)}
           onFocus={() => preloadRouteForHref(recommendedWork.href)}
           onPointerDown={() => preloadRouteForHref(recommendedWork.href)}

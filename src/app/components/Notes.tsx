@@ -226,7 +226,7 @@ export function Notes() {
         <a
           className="note-recommended-start"
           href={recommendedNote.href}
-          aria-label={`推荐起点：${recommendedNote.title}`}
+          aria-label={`推荐起点：${recommendedNote.title}。先做这个，${recommendedNote.actionSteps[0]}。完成后检查，${recommendedNote.checklist[0]}`}
           onMouseEnter={() => preloadRouteForHref(recommendedNote.href)}
           onFocus={() => preloadRouteForHref(recommendedNote.href)}
           onPointerDown={() => preloadRouteForHref(recommendedNote.href)}
@@ -275,7 +275,7 @@ export function Notes() {
               <a
                 className="note-card"
                 href={note.href}
-                aria-label={`打开学习方法：${note.title}`}
+                aria-label={`打开学习方法：${note.title}。先做这个，${note.actionSteps[0]}。完成后检查，${note.checklist[0]}`}
                 onClick={(event) => navigateTo(note.href, event)}
                 onMouseEnter={() => preloadRouteForHref(note.href)}
                 onFocus={() => preloadRouteForHref(note.href)}

@@ -236,8 +236,10 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("{work.task}"), "Homepage hero work cards must expose immediate learner tasks.");
   expect(heroSource.includes("{work.starter}"), "Homepage hero work cards must expose first concrete starter actions.");
   expect(heroSource.includes("{work.success}"), "Homepage hero work cards must expose concrete completion standards.");
+  expect(heroSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage hero work cards must include starter and completion standard in accessible labels.");
   expect(worksSource.includes("先做这个"), "Homepage work cards must expose a first concrete starter action.");
   expect(worksSource.includes("{work.success}"), "Homepage work cards must expose each work completion standard.");
+  expect(worksSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage work cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("{work.starter}"), "Work detail quick start must expose each work starter action.");
   expect(workDetailSource.includes("{work.success}"), "Work detail quick start must expose each work completion standard.");
   expect(workDetailSource.includes("function WorkQuickStart"), "Work detail pages must include a quick-start entry component.");
@@ -468,6 +470,8 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("pitfalls[0]"), "Article quick start must expose the first pitfall to avoid.");
   expect(notesSource.includes("note.actionSteps[0]"), "Learning method cards must expose each article's first action step.");
   expect(researchSource.includes("essay.actionSteps[0]"), "Research evidence cards must expose each article's first action step.");
+  expect(notesSource.includes("aria-label={`打开学习方法：${note.title}。先做这个，${note.actionSteps[0]}。完成后检查，${note.checklist[0]}`}"), "Learning method cards must include first action and completion check in accessible labels.");
+  expect(researchSource.includes("aria-label={`打开科研证据：${essay.title}。先做这个，${essay.actionSteps[0]}。完成后检查，${essay.checklist[0]}`}"), "Research evidence cards must include first action and completion check in accessible labels.");
 }
 
 function verifyLearnerProductPositioning() {

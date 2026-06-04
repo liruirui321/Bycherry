@@ -187,7 +187,7 @@ function EssayCard({ essay }: {
     <a
       className="research-essay-card"
       href={essay.href}
-      aria-label={`打开科研证据：${essay.title}`}
+      aria-label={`打开科研证据：${essay.title}。先做这个，${essay.actionSteps[0]}。完成后检查，${essay.checklist[0]}`}
       onMouseEnter={() => preloadRouteForHref(essay.href)}
       onFocus={() => preloadRouteForHref(essay.href)}
       onPointerDown={() => preloadRouteForHref(essay.href)}
@@ -404,7 +404,7 @@ export function ResearchEssays() {
       <a
         className="research-recommended-start"
         href={recommendedEssay.href}
-        aria-label={`推荐起点：${recommendedEssay.title}`}
+        aria-label={`推荐起点：${recommendedEssay.title}。先做这个，${recommendedEssay.actionSteps[0]}。完成后检查，${recommendedEssay.checklist[0]}`}
         onMouseEnter={() => preloadRouteForHref(recommendedEssay.href)}
         onFocus={() => preloadRouteForHref(recommendedEssay.href)}
         onPointerDown={() => preloadRouteForHref(recommendedEssay.href)}
