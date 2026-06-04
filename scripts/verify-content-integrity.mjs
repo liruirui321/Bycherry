@@ -537,6 +537,12 @@ function verifyPlantEvolutionLearnerContract() {
     { label: "copy evidence audit button", text: "复制证据判读" },
     { label: "claim boundary visible label", text: "判读边界" },
     { label: "evidence audit section in study card", text: "8. 证据判读" },
+    { label: "completion checks data", text: "plantCompletionChecks" },
+    { label: "visible completion card", text: "阶段完成验收" },
+    { label: "completion section in study card", text: "9. 完成验收" },
+    { label: "completion pass criteria", text: "通过标准：${item.pass}" },
+    { label: "completion location task", text: "阶段定位" },
+    { label: "completion evidence boundary task", text: "证据边界" },
   ];
 
   const retiredPlantPatterns = [

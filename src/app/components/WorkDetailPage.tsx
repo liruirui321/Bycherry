@@ -1540,6 +1540,28 @@ function PlantEvolutionContent() {
       check: "最后保留一个限制条件，避免把证据能支持的范围扩大成完整故事。",
     },
   ];
+  const plantCompletionChecks = [
+    {
+      title: "阶段定位",
+      task: `指出“${activeChapter.title}”处在时间轴的哪一段，并说出它前后各连接了什么变化。`,
+      pass: "回答里同时出现时间、上一阶段或下一阶段、当前阶段关键词。",
+    },
+    {
+      title: "生存压力",
+      task: `用一句话解释这一阶段面对的限制：${activeChapter.challenge}`,
+      pass: "句子不是复述标题，而是说明环境压力或繁殖、运输、保护等限制。",
+    },
+    {
+      title: "关键创新",
+      task: `把“${activeChapter.innovation}”和它解决的问题连成因果句。`,
+      pass: "因果句能写成“因为有了……所以……”，并能回到当前阶段。",
+    },
+    {
+      title: "证据边界",
+      task: `说明当前证据能支持到哪一步，并保留限制：${activeChapter.claimBoundary}`,
+      pass: "没有把化石、基因组、分子钟或系统发育证据说成同一种证据，也没有过度推出。",
+    },
+  ];
   const evidenceAuditOutput = `【植物演化证据判读记录】
 阶段：${activeChapter.title}
 时间：${activeChapter.time}
@@ -1617,7 +1639,12 @@ ${comparisonStages.map((item, index) => `${index + 1}. ${item.label}：${item.ch
 证据来源：${activeChapter.evidenceTypes.join(" / ")}
 结论边界：${activeChapter.claimBoundary}
 
-9. 参考文献
+9. 完成验收
+${plantCompletionChecks.map((item, index) => `${index + 1}. ${item.title}
+任务：${item.task}
+通过标准：${item.pass}`).join("\n\n")}
+
+10. 参考文献
 ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).join("\n")}`;
 
   async function copyStudyCard() {
@@ -2074,6 +2101,25 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
                   </div>
                   <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.52, fontWeight: 900 }}>{item.body}</span>
                   <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.52, fontWeight: 800 }}>{item.check}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.65rem" }}>
+            <div>
+              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>阶段完成验收</strong>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>完成当前阶段前，至少留下定位、压力、创新和证据边界四条可检查回答。</span>
+            </div>
+            <div style={{ display: "grid", gap: "0.52rem" }}>
+              {plantCompletionChecks.map((item, index) => (
+                <div key={item.title} style={{ background: "rgba(250,247,241,0.78)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.66rem", display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.5rem", alignItems: "start" }}>
+                  <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: index === 3 ? "var(--cherry-red)" : "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900 }}>{index + 1}</span>
+                  <span>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.24rem" }}>{item.title}</strong>
+                    <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.52, fontWeight: 800, marginBottom: "0.32rem" }}>{item.task}</span>
+                    <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.7rem", lineHeight: 1.48, fontWeight: 900 }}>通过标准：{item.pass}</span>
+                  </span>
                 </div>
               ))}
             </div>
