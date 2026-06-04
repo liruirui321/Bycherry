@@ -14,6 +14,7 @@ const shareImageAlt = "By Cherry 科学、课程与 AI 主题作品集预览图"
 const worksListDescription = "科学教育、AI 工具和课程设计主题作品。";
 const articlesListDescription = "课程开发、科学传播、AI 创作和科研转译记录。";
 const retiredShareCopy = "可打开、可阅读、可操作";
+const appThemeColor = "#F5F1EA";
 
 function readRoot(relativePath) {
   return readFileSync(resolve(root, relativePath), "utf8");
@@ -87,7 +88,11 @@ expect(manifest.start_url === "/", "site.webmanifest start_url must be /.");
 expect(manifest.scope === "/", "site.webmanifest scope must be /.");
 expect(manifest.display === "standalone", "site.webmanifest display must be standalone.");
 expect(manifest.lang === "zh-CN", "site.webmanifest lang must be zh-CN.");
+expect(manifest.background_color === appThemeColor, "site.webmanifest background_color must match the app theme color.");
+expect(manifest.theme_color === appThemeColor, "site.webmanifest theme_color must match the app theme color.");
 expect(Array.isArray(manifest.icons) && manifest.icons.some((icon) => icon.src === "/favicon.svg" && icon.type === "image/svg+xml"), "site.webmanifest must include /favicon.svg as an SVG icon.");
+const favicon = readPublic("favicon.svg");
+expect(favicon.includes(`fill="${appThemeColor}"`), "favicon.svg background fill must match the app theme color.");
 
 const socialPreview = readPngSize("social-preview.png");
 expect(socialPreview.width === 1200 && socialPreview.height === 630, "social-preview.png must be 1200x630 for OG/Twitter cards.");
@@ -98,6 +103,7 @@ expect(!socialPreviewSvg.includes(retiredShareCopy), "social-preview.svg must no
 const indexHtml = readRoot("index.html");
 const contentHrefs = getContentHrefs();
 expect(indexHtml.includes('<html lang="zh-CN">'), "index.html must declare zh-CN language.");
+expect(indexHtml.includes(`<meta name="theme-color" content="${appThemeColor}" />`), "index.html theme-color must match the app theme color.");
 expect(indexHtml.includes('<link rel="canonical" href="https://bycherry.me/" />'), "index.html must include the home canonical URL.");
 expect(indexHtml.includes(`<meta property="og:description" content="${shareDescription}" />`), "index.html must include the current OG description.");
 expect(indexHtml.includes(`<meta name="twitter:description" content="${shareDescription}" />`), "index.html must include the current Twitter description.");
