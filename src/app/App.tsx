@@ -17,7 +17,7 @@ import { navigateClient, shouldUseClientNavigation } from "./navigation";
 
 const siteTitle = "By Cherry";
 const homeTitle = "科学、课程与 AI";
-const defaultDescription = "By Cherry 是一个可爱插画风的个人网站，收录科学教育、AI 学习工具、项目制课程和创作工作流。";
+const defaultDescription = "By Cherry 是一个清爽科普风的个人网站，收录科学教育、AI 学习工具、项目制课程和创作工作流。";
 const siteUrl = "https://bycherry.me";
 const socialImageUrl = `${siteUrl}/social-preview.png`;
 

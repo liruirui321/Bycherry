@@ -1,11 +1,11 @@
 # By Cherry
 
-Cute illustrated personal homepage for `bycherry.me`, built with React, Vite, and Tailwind CSS.
-The app uses custom inline illustrations and local React components instead of a generated component library.
+Popular-science personal homepage for `bycherry.me`, built with React, Vite, and Tailwind CSS.
+The app uses custom science visuals and local React components instead of a generated component library.
 
 ## Features
 
-- Warm illustrated creator homepage
+- Clean popular-science creator homepage
 - Portfolio cards for science, course design, and AI tools
 - Interactive gene expression visualization
 - Plant evolution timeline with classroom study cards

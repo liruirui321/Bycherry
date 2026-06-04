@@ -5,7 +5,7 @@ import { getContentRoutes } from "./content-routes.mjs";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const siteUrl = "https://bycherry.me";
-const siteDescription = "By Cherry 是一个可爱插画风的个人网站，收录科学教育、AI 学习工具、项目制课程和创作工作流。";
+const siteDescription = "By Cherry 是一个清爽科普风的个人网站，收录科学教育、AI 学习工具、项目制课程和创作工作流。";
 const shareImageAlt = "By Cherry 科学、课程与 AI 主题作品集预览图";
 const worksListDescription = "科学教育、AI 工具和课程设计主题作品。";
 const articlesListDescription = "课程开发、科学传播、AI 创作和科研转译记录。";
