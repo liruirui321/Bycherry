@@ -406,9 +406,10 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
 
   return (
     <div id="plant-evolution-explorer" style={{ display: "grid", gap: "1rem" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "1rem", alignItems: "stretch" }}>
-        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", overflow: "hidden" }}>
-          <svg viewBox="0 0 760 360" role="img" aria-label="植物从淡水绿藻到被子植物的演化时间轴" style={{ width: "100%", display: "block", background: "linear-gradient(180deg, #FFF8EA 0%, #EDF3DF 100%)", borderRadius: 18 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "1rem", alignItems: "start" }}>
+        <div style={{ display: "grid", gap: "0.85rem", alignContent: "start" }}>
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", overflow: "hidden" }}>
+            <svg viewBox="0 0 760 360" role="img" aria-label="植物从淡水绿藻到被子植物的演化时间轴" style={{ width: "100%", display: "block", background: "linear-gradient(180deg, #FFF8EA 0%, #EDF3DF 100%)", borderRadius: 18 }}>
             <rect x={24} y={26} width={708} height={306} rx={120} fill="rgba(169,201,172,0.2)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
             <text x={42} y={60} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>植物演化路径</text>
             <path d="M88 246 C154 214 202 230 270 194 C340 156 430 170 502 118 C570 70 650 96 704 54" fill="none" stroke="var(--cherry-forest)" strokeWidth={8} strokeLinecap="round" opacity={0.25} />
@@ -455,7 +456,28 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
                 </g>
               ))}
             </g>
-          </svg>
+            </svg>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.72rem" }}>
+            {chapters.map((chapter, index) => {
+              const active = activeChapterIndex === index;
+              return (
+                <button key={chapter.title} type="button" aria-pressed={active} onClick={() => choosePlantChapter(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.78rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
+                  <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-red)", fontFamily: "'Caveat', cursive", fontSize: "0.9rem", fontWeight: 900, marginBottom: "0.3rem" }}>{chapter.time}</div>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem", lineHeight: 1.42, marginBottom: "0.45rem" }}>{chapter.title}</div>
+                  <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.5, fontSize: "0.74rem", marginBottom: "0.5rem" }}>{chapter.innovation}</div>
+                  <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                    {chapter.refs.map((ref) => (
+                      <span key={ref} style={{ background: "rgba(250,247,241,0.78)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.15rem 0.45rem", color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.65rem" }}>
+                        {ref}
+                      </span>
+                    ))}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <aside style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
@@ -495,26 +517,6 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
             </code>
           </div>
         </aside>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.8rem" }}>
-        {chapters.map((chapter, index) => {
-          const active = activeChapterIndex === index;
-          return (
-            <button key={chapter.title} type="button" aria-pressed={active} onClick={() => choosePlantChapter(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
-              <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-red)", fontFamily: "'Caveat', cursive", fontSize: "0.95rem", fontWeight: 900, marginBottom: "0.35rem" }}>{chapter.time}</div>
-              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem", lineHeight: 1.45, marginBottom: "0.5rem" }}>{chapter.title}</div>
-              <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.78rem", marginBottom: "0.55rem" }}>{chapter.innovation}</div>
-              <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                {chapter.refs.map((ref) => (
-                  <span key={ref} style={{ background: "rgba(250,247,241,0.78)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.18rem 0.5rem", color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.68rem" }}>
-                    {ref}
-                  </span>
-                ))}
-              </div>
-            </button>
-          );
-        })}
       </div>
 
       <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "1rem" }}>
@@ -1361,7 +1363,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
   return (
     <main id="main-content" tabIndex={-1}>
-      <WorkHero work={work} compact={work.slug === "gene-expression"} />
+      <WorkHero work={work} compact />
 
       {hasRichWorkContent(work.slug) ? (
         <section
