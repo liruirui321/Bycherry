@@ -167,6 +167,15 @@ export function Notes() {
                   {note.excerpt}
                 </p>
 
+                <div style={{ display: "grid", gap: 6, marginBottom: "1rem" }}>
+                  {note.highlights.slice(0, 2).map((highlight) => (
+                    <span key={highlight} style={{ display: "grid", gridTemplateColumns: "12px minmax(0, 1fr)", alignItems: "start", gap: 7, color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 800, lineHeight: 1.48 }}>
+                      <span aria-hidden="true" style={{ width: 7, height: 7, borderRadius: "50%", background: note.tagColor, marginTop: "0.38rem", opacity: 0.78 }} />
+                      {highlight}
+                    </span>
+                  ))}
+                </div>
+
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                   <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: "0.78rem", color: "var(--cherry-warm-mid)", fontFamily: "'Caveat', cursive" }}>
                     <IconCoffee size={16} /> 约 {note.readTime} 分钟
