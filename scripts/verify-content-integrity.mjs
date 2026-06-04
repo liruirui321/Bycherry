@@ -249,6 +249,8 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("{work.task}"), "Homepage hero work cards must expose immediate learner tasks.");
   expect(heroSource.includes("{work.starter}"), "Homepage hero work cards must expose first concrete starter actions.");
   expect(heroSource.includes("{work.success}"), "Homepage hero work cards must expose concrete completion standards.");
+  expect(heroSource.includes("hero-work-outcome") && heroSource.includes('{work.outputs.slice(0, 2).join(" / ")}'), "Homepage hero work cards must visibly expose saved outputs.");
+  expect(heroSource.includes("hero-work-completion") && heroSource.includes("{work.success}"), "Homepage hero work cards must visibly expose completion standards.");
   expect(heroSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage hero work cards must include starter and completion standard in accessible labels.");
   expect(heroSource.includes('aria-label="首屏学习模块目录"'), "Homepage hero must label the first-screen module directory.");
   expect(heroSource.includes("heroModuleStats"), "Homepage hero must summarize module stats before the first-screen directory.");

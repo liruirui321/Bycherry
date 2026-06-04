@@ -31,10 +31,10 @@ export function Hero() {
   const heroOutputCount = works.reduce((count, work) => count + work.outputs.length, 0);
   const heroPathStepCount = works.reduce((count, work) => count + work.path.length, 0);
   const heroModuleStats = [
-    { label: "学习模块", value: `${works.length} 个`, body: "首屏直接进入内容，不需要先翻页面。" },
-    { label: "可保存产出", value: `${heroOutputCount} 项`, body: "每个模块都能留下记录、报告或学习卡。" },
-    { label: "执行步骤", value: `${heroPathStepCount} 步`, body: "入口卡片先给操作顺序，再进入细节。" },
-    { label: "完成标准", value: "全覆盖", body: "进入前就能判断做到什么程度。" },
+    { label: "学习模块", value: `${works.length} 个`, body: "打开卡片就能进入真实内容。" },
+    { label: "可保存产出", value: `${heroOutputCount} 项`, body: "记录、报告和学习卡都能带走。" },
+    { label: "执行步骤", value: `${heroPathStepCount} 步`, body: "每个入口都有操作顺序。" },
+    { label: "完成标准", value: "全覆盖", body: "先看做到什么程度再开始。" },
   ];
   const heroModuleStatsText = heroModuleStats.map((item) => `${item.label}：${item.value}。${item.body}`).join("\n");
   const sessionPlanText = activeSessionPlan
@@ -148,7 +148,7 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
             fontWeight: 700,
           }}
         >
-          整理可直接打开的科学模拟、演化时间轴和 AI 工具。首页先给内容入口，详情页承载真实交互、资料和参考证据。
+          先选一个要解决的问题，再进入对应模块操作。每个入口都标出任务、产出和完成标准，方便你直接开始。
         </p>
 
         <div style={{ display: "grid", gap: "0.5rem", marginBottom: "1rem" }}>
@@ -297,7 +297,7 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
                     textAlign: "left",
                     minHeight: 152,
                     display: "grid",
-                    gridTemplateRows: "auto auto 1fr auto",
+                    gridTemplateRows: "auto auto 1fr auto auto",
                     gap: "0.32rem",
                     position: "relative",
                     overflow: "hidden",
@@ -321,6 +321,16 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
                   <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.4rem 0.45rem", position: "relative", zIndex: 1, marginRight: 34 }}>
                     <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.6rem", fontWeight: 900, marginBottom: "0.12rem" }}>立即任务</span>
                     <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.65rem", lineHeight: 1.34, fontWeight: 800, overflowWrap: "anywhere" }}>{work.task}</span>
+                  </div>
+                  <div className="hero-work-outcome" style={{ display: "grid", gridTemplateColumns: "minmax(0, 0.78fr) minmax(0, 1.22fr)", gap: "0.36rem", position: "relative", zIndex: 1, marginRight: 30 }}>
+                    <span style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.3rem 0.38rem", minWidth: 0 }}>
+                      <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.58rem", fontWeight: 900, marginBottom: "0.08rem" }}>产出</span>
+                      <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.6rem", lineHeight: 1.28, fontWeight: 900, overflowWrap: "anywhere" }}>{work.outputs.slice(0, 2).join(" / ")}</span>
+                    </span>
+                    <span className="hero-work-completion" style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.3rem 0.38rem", minWidth: 0 }}>
+                      <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.58rem", fontWeight: 900, marginBottom: "0.08rem" }}>完成</span>
+                      <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.6rem", lineHeight: 1.28, fontWeight: 900, overflowWrap: "anywhere" }}>{work.success}</span>
+                    </span>
                   </div>
                   <div role="list" aria-label={`${work.title}学习路径`} style={{ display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center", paddingRight: 54, position: "relative", zIndex: 1 }}>
                     {work.path.map((step, index) => (
