@@ -59,6 +59,7 @@ export function getContentRoutes() {
       const lastmod = extractField(block, source.dateField);
       const title = extractField(block, "title");
       const description = extractField(block, source.summaryField);
+      const task = source.type === "work" ? extractField(block, "task") : null;
       const category = extractField(block, "category");
       const tags = extractStringArray(block, "tags");
       const outputs = source.type === "work" ? extractStringArray(block, "outputs") : [];
@@ -69,6 +70,7 @@ export function getContentRoutes() {
       if (!lastmod) failures.push(`${label} is missing ${source.dateField}.`);
       if (!title) failures.push(`${label} is missing title.`);
       if (!description) failures.push(`${label} is missing ${source.summaryField}.`);
+      if (source.type === "work" && !task) failures.push(`${label} is missing task.`);
 
       if (path && !path.startsWith(`${source.prefix}/`)) {
         failures.push(`${label} href must start with ${source.prefix}/.`);
@@ -83,7 +85,7 @@ export function getContentRoutes() {
       }
 
       if (path && lastmod && title && description) {
-        routes.push({ path, lastmod, title, description, category, tags, outputs, pathSteps, source: source.relativePath, type: source.type });
+        routes.push({ path, lastmod, title, description, task, category, tags, outputs, pathSteps, source: source.relativePath, type: source.type });
       }
     });
   }

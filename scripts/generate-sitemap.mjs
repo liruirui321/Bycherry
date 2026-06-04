@@ -1,4 +1,4 @@
-import { writeFileSync } from "node:fs";
+import { chmodSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import { getContentRoutes } from "./content-routes.mjs";
@@ -57,5 +57,7 @@ const sitemap = [
   "",
 ].join("\n");
 
-writeFileSync(resolve(root, "public/sitemap.xml"), sitemap);
+const sitemapPath = resolve(root, "public/sitemap.xml");
+writeFileSync(sitemapPath, sitemap);
+chmodSync(sitemapPath, 0o644);
 console.log(`Sitemap generated: ${routes.length} public routes.`);

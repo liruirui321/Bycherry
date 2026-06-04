@@ -11,6 +11,7 @@ export const works = [
     icon: <IconMicroscope size={36} color="var(--cherry-blue)" />,
     title: "基因表达可视化",
     desc: "拖拽 TF、RNA 聚合酶和核糖体，观察 mRNA 端点、核糖体读取、多肽链和 5 道即时小测。",
+    task: "把 TF 调低再打开 RNA 聚合酶，观察 mRNA 生成变少、核糖体读取减少、蛋白链产量下降。",
     href: "/works/gene-expression",
     updated: "2026-06-04",
     tags: ["生物", "可视化", "交互"],
@@ -24,6 +25,7 @@ export const works = [
     icon: <IconAI size={36} color="var(--cherry-blue)" />,
     title: "科研 Agent 工作台",
     desc: "选择科研任务和工作模式，把材料组织成模型指令、证据边界、质控清单和汇报任务包。",
+    task: "粘贴一段摘要或图注，运行本地预览，得到任务路由、缺失信息和可复制 API JSON。",
     href: "/works/research-prompt-kit",
     updated: "2026-06-04",
     tags: ["AI", "Agent", "科研"],
@@ -37,6 +39,7 @@ export const works = [
     icon: <IconLeaf size={36} color="var(--cherry-sage)" />,
     title: "植物演化时间轴",
     desc: "演化时间轴串联关键创新、证据、自测问题、作答提示和延伸练习。",
+    task: "选择一个演化阶段，读证据卡，再用自测问题判断这项创新解决了什么生存压力。",
     href: "/works/plant-evolution-stories",
     updated: "2026-06-04",
     tags: ["植物学", "演化证据", "时间轴"],
@@ -50,6 +53,7 @@ export const works = [
     icon: <IconAI size={36} color="#7B6CC4" />,
     title: "概念解释生成器",
     desc: "输入任意概念或选择样例，生成自测问题、类比、机制步骤、可视化流程、迁移练习和即时小测。",
+    task: "输入一个卡住的概念，先看诊断边界，再生成可复制的学习卡和即时小测。",
     href: "/works/concept-explainer",
     updated: "2026-06-04",
     tags: ["AI", "学习卡", "工具"],
@@ -63,6 +67,7 @@ export const works = [
     icon: <IconDNA size={36} color1="var(--cherry-red)" color2="var(--cherry-blue)" />,
     title: "CRISPR 编辑模拟器",
     desc: "操作 guide RNA、Cas 蛋白和修复结果，查看匹配评分、编辑判定和模拟报告。",
+    task: "找出 PAM，修改 guide RNA 碱基，比较匹配评分如何影响切割和修复结果。",
     href: "/works/crispr-interactive",
     updated: "2026-06-04",
     tags: ["基因编辑", "互动", "CRISPR"],
@@ -108,7 +113,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         color: "inherit",
         textDecoration: "none",
         display: "grid",
-        gridTemplateRows: "auto auto auto auto auto auto",
+        gridTemplateRows: "auto auto auto auto auto auto auto",
         alignContent: "start",
         minHeight: 384,
       }}
@@ -125,6 +130,11 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
 
       <div style={{ height: 122, minHeight: 122, display: "flex", justifyContent: "center", alignItems: "center", background: work.color, border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, marginBottom: "0.68rem", padding: "0.16rem", overflow: "hidden" }}>
         <WorkPreviewIllustration slug={work.slug} color={work.border} width={214} height={122} />
+      </div>
+
+      <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem 0.68rem", marginBottom: "0.68rem", display: "grid", gap: "0.24rem" }}>
+        <span style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>立即任务</span>
+        <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.48, fontWeight: 800 }}>{work.task}</span>
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
