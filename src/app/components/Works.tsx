@@ -39,7 +39,7 @@ export const works = [
     updated: "2026-06-04",
     tags: ["植物学", "科普", "插画"],
     outputs: ["学习卡", "讨论引导", "参考文献"],
-    action: "复制学习卡",
+    action: "探索时间轴",
     color: "var(--cherry-sage-light)", border: "var(--cherry-sage)", rotate: "1.8deg",
   },
   {

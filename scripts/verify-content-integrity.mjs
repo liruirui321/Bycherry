@@ -145,6 +145,13 @@ function verifyNoLowQualityVisibleContent() {
   }
 }
 
+function verifyWorkCardActions() {
+  const worksSource = read("src/app/components/Works.tsx");
+  const copyActionMatches = Array.from(worksSource.matchAll(/\baction:\s*"复制[^"]*"/g), (match) => match[0]);
+
+  expect(copyActionMatches.length === 0, `Work card entry actions should open or start the tool, not imply direct copy behavior: ${copyActionMatches.join(", ")}`);
+}
+
 const routes = getContentRoutes();
 const workSlugs = new Set(routes.filter((route) => route.type === "work").map((route) => route.path.replace(/^\/works\//, "")));
 const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
@@ -202,6 +209,7 @@ verifyArticleBlocks({
 
 verifyVisibleThemeWorkCopy();
 verifyNoLowQualityVisibleContent();
+verifyWorkCardActions();
 
 if (failures.length) {
   console.error("Content integrity verification failed.");

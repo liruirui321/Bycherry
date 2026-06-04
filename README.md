@@ -31,7 +31,7 @@ npm run build
 - `verify:generated` checks that generated public metadata is committed and up to date.
 - `verify:public` checks the custom domain, host fallbacks, robots file, manifest, favicon, app theme color, social preview image, and static index metadata fallback.
 - `verify:links` checks static internal links and route strings, public routes, home anchors, static public asset links, and safe `target="_blank"` rel attributes.
-- `verify:content` checks that every theme work route has detail content coverage in `WorkDetailPage`, every article route has enough detail-page content, visible shell copy keeps the theme-work naming, and retired low-quality page copy cannot reappear.
+- `verify:content` checks that every theme work route has detail content coverage in `WorkDetailPage`, every article route has enough detail-page content, visible shell copy keeps the theme-work naming, retired low-quality page copy cannot reappear, and work-card CTAs match their entry behavior.
 - `verify:a11y` checks static `aria-labelledby`, `aria-describedby`, `aria-controls`, duplicate static ids, labeled nonsemantic containers, and fixed SVG definition ids in reusable illustration components.
 - `verify:sitemap` compares public routes with `public/sitemap.xml`, including `lastmod`, `changefreq`, and `priority` metadata.
 
@@ -61,6 +61,7 @@ Search crawler hints live in `public/robots.txt` and `public/sitemap.xml`.
 When adding or removing public content:
 
 - Add the route to the matching data source in `src/app/components/Works.tsx`, `Notes.tsx`, or `ResearchEssays.tsx`.
+- For work cards, make `action` describe opening, exploring, or starting the tool; reserve copy-oriented labels for real copy buttons inside detail pages.
 - Run `npm run generate:sitemap`, `npm run generate:index`, or `npm run build` to update generated public metadata.
 - For works, keep sitemap `lastmod` equal to the item `updated` in `Works.tsx`.
 - For notes and research essays, keep sitemap `lastmod` equal to the item `date`.
