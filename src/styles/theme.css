@@ -160,6 +160,10 @@
     overflow-x: hidden;
   }
 
+  html {
+    scroll-padding-top: 76px;
+  }
+
   body {
     @apply bg-background text-foreground;
     margin: 0;
@@ -184,7 +188,7 @@
     position: fixed;
     top: 0.75rem;
     left: 0.75rem;
-    z-index: 100;
+    z-index: 1000;
     transform: translateY(-150%);
     background: var(--cherry-forest);
     color: #FAF7F1;
