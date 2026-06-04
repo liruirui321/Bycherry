@@ -90,8 +90,8 @@ function expect(condition, message) {
 expect(readPublic("CNAME").trim() === expectedDomain, `CNAME must be ${expectedDomain}.`);
 
 const robots = readPublic("robots.txt");
-expect(robots.includes(`Sitemap: ${siteUrl}/sitemap.xml`), "robots.txt must point to the public sitemap.");
-expect(robots.includes("User-agent: *"), "robots.txt must declare the default crawler group.");
+const expectedRobots = `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml`;
+expect(robots.trim() === expectedRobots, "robots.txt must exactly declare the default crawler group, allow rule, and shared-metadata sitemap URL.");
 
 expect(publicExists("favicon.svg"), "favicon.svg is missing.");
 expect(publicExists("social-preview.png"), "social-preview.png is missing.");
