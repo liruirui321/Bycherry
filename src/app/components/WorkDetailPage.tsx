@@ -72,6 +72,7 @@ function PromptKitContent() {
   const [copiedPreview, setCopiedPreview] = useState(false);
   const [copiedJson, setCopiedJson] = useState(false);
   const [copiedResponseJson, setCopiedResponseJson] = useState(false);
+  const [copiedResearchRecord, setCopiedResearchRecord] = useState(false);
   const [hasRunPreview, setHasRunPreview] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const prompts = [
@@ -358,6 +359,34 @@ ${previewReportRows.map((item) => `${item.label}：${item.body}`).join("\n")}
 
 九、复核问题
 ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
+  const researchRecordOutput = `【科研 Agent 研究记录】
+任务：${activePrompt.title}
+工作模式：${activeMode.title}
+材料状态：${materialText ? `${materialLines.length} 行，${materialText.length} 字符` : "未填写材料"}
+推荐路由：${suggestedRoute.title}
+路由置信度：${routeConfidence}
+命中线索：${routeMatchedSignals}
+
+一、材料摘要
+${visibleEvidenceLines.length ? visibleEvidenceLines.map((line, index) => `${index + 1}. ${line}`).join("\n") : "当前没有可引用材料行。"}
+
+二、证据候选
+${visibleEvidenceLines.length ? visibleEvidenceLines.map((line, index) => `${index + 1}. ${line}`).join("\n") : "需要先补充原文、图注、方法或结果描述。"}
+
+三、缺失字段
+${missingFields.length ? missingFields.map((field, index) => `${index + 1}. ${field}`).join("\n") : "当前材料具备初步分析线索，仍需回查原文来源。"}
+
+四、风险标记
+${acceptanceChecks.map((item, index) => `${index + 1}. ${item.label}：${item.passed ? "通过" : "待补"}。${item.detail}`).join("\n")}
+
+五、报告草稿
+${previewReportRows.map((item, index) => `${index + 1}. ${item.label}：${item.body}`).join("\n")}
+
+六、人工复核问题
+${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+七、下一步动作
+${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
   const marketNeeds = [
     {
       title: "科研新人",
@@ -525,6 +554,7 @@ ${localPreviewOutput}`;
       setCopiedPreview(false);
       setCopiedJson(false);
       setCopiedResponseJson(false);
+      setCopiedResearchRecord(false);
       setCopyStatus("模型指令已复制到剪贴板。");
       window.setTimeout(() => setCopied(false), 1400);
       return;
@@ -542,6 +572,7 @@ ${localPreviewOutput}`;
       setCopiedPreview(false);
       setCopiedJson(false);
       setCopiedResponseJson(false);
+      setCopiedResearchRecord(false);
       setCopyStatus("任务包已复制到剪贴板。");
       window.setTimeout(() => setCopiedPack(false), 1400);
       return;
@@ -559,6 +590,7 @@ ${localPreviewOutput}`;
       setCopiedPack(false);
       setCopiedJson(false);
       setCopiedResponseJson(false);
+      setCopiedResearchRecord(false);
       setCopyStatus("本地预览已复制到剪贴板。");
       window.setTimeout(() => setCopiedPreview(false), 1400);
       return;
@@ -576,6 +608,7 @@ ${localPreviewOutput}`;
       setCopiedPack(false);
       setCopiedPreview(false);
       setCopiedResponseJson(false);
+      setCopiedResearchRecord(false);
       setCopyStatus("API 请求 JSON 已复制到剪贴板。");
       window.setTimeout(() => setCopiedJson(false), 1400);
       return;
@@ -593,12 +626,31 @@ ${localPreviewOutput}`;
       setCopiedPack(false);
       setCopiedPreview(false);
       setCopiedJson(false);
+      setCopiedResearchRecord(false);
       setCopyStatus("API 返回契约已复制到剪贴板。");
       window.setTimeout(() => setCopiedResponseJson(false), 1400);
       return;
     }
 
     setCopiedResponseJson(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyResearchRecord() {
+    const copiedToClipboard = await copyText(researchRecordOutput);
+    if (copiedToClipboard) {
+      setCopiedResearchRecord(true);
+      setCopied(false);
+      setCopiedPack(false);
+      setCopiedPreview(false);
+      setCopiedJson(false);
+      setCopiedResponseJson(false);
+      setCopyStatus("研究记录已复制到剪贴板。");
+      window.setTimeout(() => setCopiedResearchRecord(false), 1400);
+      return;
+    }
+
+    setCopiedResearchRecord(false);
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -610,6 +662,7 @@ ${localPreviewOutput}`;
     setCopiedPreview(false);
     setCopiedJson(false);
     setCopiedResponseJson(false);
+    setCopiedResearchRecord(false);
     setHasRunPreview(false);
     setCopyStatus("");
   }
@@ -624,6 +677,7 @@ ${localPreviewOutput}`;
     setCopiedPreview(false);
     setCopiedJson(false);
     setCopiedResponseJson(false);
+    setCopiedResearchRecord(false);
     setHasRunPreview(false);
     setCopyStatus(`已载入${caseItem.title}，可以直接运行本地预览。`);
   }
@@ -643,6 +697,7 @@ ${localPreviewOutput}`;
     setCopiedPreview(false);
     setCopiedJson(false);
     setCopiedResponseJson(false);
+    setCopiedResearchRecord(false);
     setHasRunPreview(false);
     setCopyStatus(`已切换到推荐任务：${suggestedRoute.title}。`);
   }
@@ -763,7 +818,7 @@ ${localPreviewOutput}`;
           {prompts.map((prompt, index) => {
             const active = activePromptIndex === index;
             return (
-              <button key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
+              <button key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
                 <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>{prompt.title}</div>
                 <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginBottom: "0.55rem" }}>{prompt.input}</div>
                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
@@ -810,7 +865,7 @@ ${localPreviewOutput}`;
                 {promptModes.map((mode, index) => {
                   const active = activeModeIndex === index;
                   return (
-                    <button key={mode.title} type="button" aria-pressed={active} onClick={() => { setActiveModeIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.68rem", cursor: "pointer" }}>
+                    <button key={mode.title} type="button" aria-pressed={active} onClick={() => { setActiveModeIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.68rem", cursor: "pointer" }}>
                       <strong style={{ display: "block", color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.24rem" }}>{mode.title}</strong>
                       <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>{mode.description}</span>
                     </button>
@@ -946,6 +1001,9 @@ ${localPreviewOutput}`;
                   <button type="button" onClick={copyResponseJson} style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                     {copiedResponseJson ? "已复制" : "复制契约"}
                   </button>
+                  <button type="button" onClick={copyResearchRecord} style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                    {copiedResearchRecord ? "已复制" : "复制研究记录"}
+                  </button>
                 </div>
               </div>
               {hasRunPreview ? (
@@ -1028,6 +1086,17 @@ ${localPreviewOutput}`;
                         </div>
                       ))}
                     </div>
+                  </div>
+                  <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.55rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.6rem", flexWrap: "wrap" }}>
+                      <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>可保存研究记录</strong>
+                      <button type="button" onClick={copyResearchRecord} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.36rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                        {copiedResearchRecord ? "已复制" : "复制研究记录"}
+                      </button>
+                    </div>
+                    <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.6rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.66rem", lineHeight: 1.5, maxHeight: 220, overflow: "auto" }}>
+                      {researchRecordOutput}
+                    </code>
                   </div>
                 </div>
               ) : (

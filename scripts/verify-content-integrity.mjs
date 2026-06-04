@@ -291,6 +291,13 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "Elicit API source", text: "https://docs.elicit.com/" },
     { label: "Consensus source", text: "https://help.consensus.app/en/articles/9922660-how-to-search-best-practices" },
     { label: "scite API source", text: "https://api.scite.ai/docs" },
+    { label: "copyable research record output", text: "researchRecordOutput" },
+    { label: "research record copy action", text: "copyResearchRecord" },
+    { label: "research record copy button", text: "复制研究记录" },
+    { label: "research record visible card", text: "可保存研究记录" },
+    { label: "research record evidence candidates", text: "二、证据候选" },
+    { label: "research record risk flags", text: "四、风险标记" },
+    { label: "research record next actions", text: "七、下一步动作" },
   ];
 
   for (const item of requiredWorkbenchFeatures) {
