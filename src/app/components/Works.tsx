@@ -15,6 +15,7 @@ export const works = [
     updated: "2026-06-04",
     tags: ["生物", "可视化", "交互"],
     outputs: ["表达读数", "多肽动画", "即时小测"],
+    path: ["调节分子", "观察转录翻译", "完成小测"],
     action: "启动仿真",
     color: "var(--cherry-blue-light)", border: "var(--cherry-blue)", rotate: "-1.5deg",
   },
@@ -27,6 +28,7 @@ export const works = [
     updated: "2026-06-04",
     tags: ["AI", "Agent", "科研"],
     outputs: ["任务路由", "证据边界", "报告框架"],
+    path: ["粘贴材料", "生成任务包", "复核报告"],
     action: "进入工作台",
     color: "var(--cherry-peach-light)", border: "var(--cherry-peach)", rotate: "-0.8deg",
   },
@@ -39,6 +41,7 @@ export const works = [
     updated: "2026-06-04",
     tags: ["植物学", "科普", "插画"],
     outputs: ["学习卡", "讨论引导", "参考文献"],
+    path: ["选择阶段", "读证据", "复制学习卡"],
     action: "探索时间轴",
     color: "var(--cherry-sage-light)", border: "var(--cherry-sage)", rotate: "1.8deg",
   },
@@ -51,6 +54,7 @@ export const works = [
     updated: "2026-06-04",
     tags: ["AI", "教育", "工具"],
     outputs: ["讲解稿", "课堂流程", "即时小测"],
+    path: ["选概念", "看诊断边界", "生成讲解稿"],
     action: "生成讲解稿",
     color: "#EDE9F5", border: "#B5AEDD", rotate: "-1.2deg",
   },
@@ -63,6 +67,7 @@ export const works = [
     updated: "2026-06-04",
     tags: ["基因编辑", "互动", "CRISPR"],
     outputs: ["guide 判定", "编辑结果", "模拟报告"],
+    path: ["找 PAM", "判 guide", "看修复报告"],
     action: "运行编辑",
     color: "var(--cherry-peach-light)", border: "var(--cherry-red)", rotate: "0.5deg",
   },
@@ -135,6 +140,14 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
           <span key={output} style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-warm-brown)", fontSize: "0.73rem", fontWeight: 900 }}>
             <span aria-hidden="true" style={{ width: 7, height: 7, borderRadius: "50%", background: work.border, flexShrink: 0 }} />
             {output}
+          </span>
+        ))}
+      </div>
+
+      <div role="list" aria-label={`${work.title}学习路径`} style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 5, marginTop: "0.72rem" }}>
+        {work.path.map((step, index) => (
+          <span role="listitem" key={step} style={{ background: work.color, border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.34rem 0.36rem", color: "var(--cherry-warm-brown)", fontSize: "0.66rem", fontWeight: 900, lineHeight: 1.32, minHeight: 44, display: "grid", alignContent: "center" }}>
+            {index + 1}. {step}
           </span>
         ))}
       </div>

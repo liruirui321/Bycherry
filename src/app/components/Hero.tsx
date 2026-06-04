@@ -164,10 +164,10 @@ export function Hero() {
                     </span>
                   </div>
                   <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.4, position: "relative", zIndex: 1, display: "block", minWidth: 0, overflowWrap: "anywhere", wordBreak: "break-word", paddingRight: 54 }}>{work.desc}</span>
-                  <div style={{ display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center", paddingRight: 76, position: "relative", zIndex: 1 }}>
-                    {work.outputs.slice(0, 2).map((output) => (
-                      <span key={output} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.12rem 0.42rem", color: "var(--cherry-warm-brown)", fontSize: "0.64rem", fontWeight: 900 }}>
-                        {output}
+                  <div role="list" aria-label={`${work.title}学习路径`} style={{ display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center", paddingRight: 76, position: "relative", zIndex: 1 }}>
+                    {work.path.map((step, index) => (
+                      <span role="listitem" key={step} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.12rem 0.42rem", color: "var(--cherry-warm-brown)", fontSize: "0.62rem", fontWeight: 900 }}>
+                        {index + 1}. {step}
                       </span>
                     ))}
                     <span style={{ background: "var(--cherry-forest)", border: "1px solid var(--cherry-forest)", borderRadius: 999, padding: "0.12rem 0.42rem", color: "#FAF7F1", fontSize: "0.64rem", fontWeight: 900 }}>
