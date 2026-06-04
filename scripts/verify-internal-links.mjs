@@ -1,14 +1,11 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { getContentHrefs } from "./content-routes.mjs";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const sourceRoot = resolve(root, "src/app");
 const publicRoot = resolve(root, "public");
-
-function read(relativePath) {
-  return readFileSync(resolve(root, relativePath), "utf8");
-}
 
 function walkFiles(directory, extensions, files = []) {
   for (const entry of readdirSync(directory)) {
@@ -26,11 +23,6 @@ function walkFiles(directory, extensions, files = []) {
   return files;
 }
 
-function extractDataHrefs(relativePath) {
-  return Array.from(read(relativePath).matchAll(/href:\s*"([^"]+)"/g), (match) => match[1])
-    .filter((href) => href.startsWith("/"));
-}
-
 function extractLiteralHrefs(filePath) {
   const source = readFileSync(filePath, "utf8");
   return Array.from(source.matchAll(/\bhref\s*=\s*"([^"]+)"/g), (match) => match[1])
@@ -39,14 +31,12 @@ function extractLiteralHrefs(filePath) {
 }
 
 function extractStaticIds(relativePath) {
-  return Array.from(read(relativePath).matchAll(/\bid="([^"]+)"/g), (match) => match[1]);
+  return Array.from(readFileSync(resolve(root, relativePath), "utf8").matchAll(/\bid="([^"]+)"/g), (match) => match[1]);
 }
 
 const publicRoutes = new Set([
   "/",
-  ...extractDataHrefs("src/app/components/Works.tsx"),
-  ...extractDataHrefs("src/app/components/Notes.tsx"),
-  ...extractDataHrefs("src/app/components/ResearchEssays.tsx"),
+  ...getContentHrefs(),
 ]);
 
 const homeAnchors = new Set([
