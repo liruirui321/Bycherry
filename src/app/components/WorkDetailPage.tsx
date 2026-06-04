@@ -1616,10 +1616,14 @@ function ConceptExplainerContent() {
   const [lessonGoal, setLessonGoal] = useState("把抽象概念讲清楚，并检查学生是否真的理解");
   const [copiedLesson, setCopiedLesson] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
-  const explanations: Record<string, { color: string; analogy: string; levels: Array<{ title: string; body: string }>; terms: string[]; mechanism: string[]; compare: string; pitfall: string; quiz: { question: string; options: string[]; answer: string; explain: string } }> = {
+  const explanations: Record<string, { color: string; analogy: string; prerequisite: string[]; diagnostic: string; evidenceBoundary: string; transferTask: string; levels: Array<{ title: string; body: string }>; terms: string[]; mechanism: string[]; compare: string; pitfall: string; quiz: { question: string; options: string[]; answer: string; explain: string } }> = {
     转录: {
       color: "var(--cherry-blue)",
       analogy: "把完整说明书中的一段信息转写成可读取的工作稿。原始 DNA 保留在原处，RNA 负责把信息带到下一步加工流程。",
+      prerequisite: ["DNA 有模板链和编码链的方向关系", "RNA 使用 U 而不是 T", "基因表达不是一步完成的过程"],
+      diagnostic: "先问学生：mRNA 是从哪里来的，它和 DNA 的哪一条链互补？如果学生说“DNA 变成 RNA”，说明模板合成和拷贝关系还没有建立。",
+      evidenceBoundary: "这个页面用固定序列说明模板合成和信息转写，不展开剪接、启动子调控强弱、不同物种转录机器差异。",
+      transferTask: "给出编码链 5'-ATG GAA-3'，让学习者写出 mRNA 5'-AUG GAA-3'，再说明为什么不是 TAC CTT。",
       levels: [
         { title: "入门版", body: "DNA 像一份完整说明书，转录就是把其中一段基因信息抄写成 RNA 工作稿。" },
         { title: "高中版", body: "细胞以 DNA 的一条链为模板合成 mRNA，RNA 中用 U 替代 T，mRNA 会把遗传信息带到核糖体。" },
@@ -1639,6 +1643,10 @@ function ConceptExplainerContent() {
     端粒: {
       color: "var(--cherry-red)",
       analogy: "像鞋带末端的保护套，保护染色体末端不被磨坏、也不容易和别的断端混淆。",
+      prerequisite: ["染色体是线性 DNA 和蛋白质组成的结构", "DNA 复制有方向性", "细胞分裂会复制染色体"],
+      diagnostic: "先问学生：为什么染色体末端也需要被识别和保护？如果学生只回答“端粒让人不变老”，说明概念被过度生活化了。",
+      evidenceBoundary: "这个页面解释端粒的末端保护和复制末端问题，不把端粒长度直接等同于个体寿命或所有衰老原因。",
+      transferTask: "让学习者比较“端粒缩短”“细胞衰老”“个体衰老”三句话，标出哪一句可以直接推出，哪一句需要更多证据。",
       levels: [
         { title: "入门版", body: "端粒位于染色体末端，帮助细胞区分真正的末端和需要修复的 DNA 断裂。" },
         { title: "高中版", body: "端粒位于染色体末端，随着细胞分裂逐渐缩短，能减少染色体末端被误认为断裂的风险。" },
@@ -1658,6 +1666,10 @@ function ConceptExplainerContent() {
     生态位: {
       color: "var(--cherry-sage)",
       analogy: "不只是住址，更像一份生活档案：住在哪里、吃什么、什么时候活动、和谁竞争。",
+      prerequisite: ["物种会利用环境资源", "不同物种之间可能竞争或共生", "栖息地只描述生活地点的一部分"],
+      diagnostic: "先问学生：两种动物住在同一片森林，它们的生态位一定相同吗？如果回答“相同”，说明还没有区分栖息地和资源利用方式。",
+      evidenceBoundary: "这个页面用资源、空间和相互作用解释生态位，不涉及完整数学生态位模型或复杂群落网络建模。",
+      transferTask: "给出两种鸟的取食高度、食物类型和活动时间，让学习者判断哪些维度说明生态位分化。",
       levels: [
         { title: "入门版", body: "生态位描述一个物种如何利用资源、占据环境并与其他生物发生关系。" },
         { title: "高中版", body: "生态位描述生物如何利用资源、生活在什么环境、和其他生物如何相互作用。" },
@@ -1677,6 +1689,10 @@ function ConceptExplainerContent() {
     凋亡: {
       color: "var(--cherry-peach)",
       analogy: "像细胞按下自我清理按钮，把自己有序拆开，再交给身体清理。",
+      prerequisite: ["细胞死亡有不同方式", "组织需要清除异常或不再需要的细胞", "炎症反应和细胞破裂有关"],
+      diagnostic: "先问学生：凋亡和坏死都是细胞死亡，为什么教材要分开讲？如果学生只说“一个好一个坏”，说明还没有抓住过程和后果差异。",
+      evidenceBoundary: "这个页面强调程序性死亡和有序清除，不展开所有细胞死亡类型，也不把 caspase 通路等同于全部凋亡调控。",
+      transferTask: "给出细胞收缩、膜破裂、DNA 片段化、炎症反应四个现象，让学习者判断哪些更支持凋亡，哪些更支持坏死。",
       levels: [
         { title: "入门版", body: "凋亡是细胞按程序结束自身生命，并把对周围组织的影响控制在较小范围内。" },
         { title: "高中版", body: "凋亡是一种程序性细胞死亡，细胞会收缩、DNA 断裂，并被免疫细胞清除，通常不引发明显炎症。" },
@@ -1699,9 +1715,9 @@ function ConceptExplainerContent() {
   const quizAnswered = quizChoice !== null;
   const conceptFlow = [
     { label: "概念", value: concept },
-    { label: "类比", value: active.analogy.split("，")[0] },
+    { label: "诊断", value: active.diagnostic.split("。")[0] },
     { label: "机制", value: `${active.mechanism.length} 步` },
-    { label: "检查", value: active.quiz.answer },
+    { label: "迁移", value: active.transferTask.split("，")[0] },
   ];
   const lessonFlow = [
     {
@@ -1725,28 +1741,40 @@ function ConceptExplainerContent() {
 【对象】${audience}
 【目标】${lessonGoal}
 
-一、先用类比进入
+一、先修知识
+${active.prerequisite.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+二、诊断问题
+${active.diagnostic}
+
+三、先用类比进入
 ${active.analogy}
 
-二、${selectedLevel.title}讲解
+四、${selectedLevel.title}讲解
 ${selectedLevel.body}
 
-三、机制步骤
+五、机制步骤
 ${active.mechanism.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-四、关键词
+六、关键词
 ${active.terms.join("、")}
 
-五、辨析
+七、辨析
 ${active.compare}
 
-六、常见误区
+八、常见误区
 ${active.pitfall}
 
-七、课堂流程
+九、证据边界
+${active.evidenceBoundary}
+
+十、迁移任务
+${active.transferTask}
+
+十一、课堂流程
 ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 
-八、即时小测
+十二、即时小测
 问题：${active.quiz.question}
 选项：${active.quiz.options.join(" / ")}
 答案：${active.quiz.answer}
@@ -1796,6 +1824,28 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
         </button>
         <div id="concept-copy-status" role="status" aria-live="polite" style={{ gridColumn: "1 / -1", minHeight: "1.1rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900 }}>
           {copyStatus}
+        </div>
+      </div>
+
+      <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.75rem" }}>
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem", marginBottom: "0.62rem" }}>先修知识</div>
+          <div style={{ display: "grid", gap: "0.46rem" }}>
+            {active.prerequisite.map((item, index) => (
+              <div key={item} style={{ display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.46rem", alignItems: "start", color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.52, fontWeight: 800 }}>
+                <span style={{ width: 18, height: 18, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 18, padding: "0.9rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.04)" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem", marginBottom: "0.48rem" }}>诊断问题</div>
+          <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.62, fontWeight: 800 }}>{active.diagnostic}</div>
+        </div>
+        <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 18, padding: "0.9rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.04)" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem", marginBottom: "0.48rem" }}>证据边界</div>
+          <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.62, fontWeight: 800 }}>{active.evidenceBoundary}</div>
         </div>
       </div>
 
@@ -1907,6 +1957,13 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
           <ContentCard title="常见误区">
             {active.pitfall}
           </ContentCard>
+        </div>
+      </div>
+
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+        <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>迁移任务</div>
+        <div style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.22)", borderRadius: 16, padding: "0.86rem", color: "var(--cherry-warm-mid)", lineHeight: 1.68, fontSize: "0.86rem", fontWeight: 800 }}>
+          {active.transferTask}
         </div>
       </div>
 
