@@ -4148,6 +4148,12 @@ function WorkQuickStart({ work }: { work: Work }) {
     `用自己的话写下：${work.success}`,
     `标记下一步要回看的环节：${work.path[work.path.length - 1] ?? work.path[0]}`,
   ];
+  const reflectionChecks = [
+    `我已经完成路径 1：${work.path[0] ?? "进入模块"}`,
+    `我已经保存至少 1 项产出：${work.outputs.join(" / ")}`,
+    `我能用自己的话说明完成标准：${work.success}`,
+    "我写下了一个还没有弄清楚的问题，方便下次继续查。",
+  ];
   const evidenceTemplate = `【${work.title}复盘证据】
 立即任务：${work.task}
 先做这个：${work.starter}
@@ -4162,8 +4168,12 @@ ${work.path.map((step, index) => `${index + 1}. ${step}：`).join("\n")}
 三、我的解释
 我能说明：
 
-四、下一步回看
-我还需要回看：`;
+四、复盘检查
+${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：`).join("\n")}
+
+五、下一步问题
+我还没有弄清楚：
+我需要回看的资料或页面：`;
 
   async function copyEvidenceTemplate() {
     const copiedToClipboard = await copyText(evidenceTemplate);
@@ -4274,6 +4284,16 @@ ${work.path.map((step, index) => `${index + 1}. ${step}：`).join("\n")}
                   {index + 1}. {item}
                 </span>
               ))}
+            </div>
+            <div style={{ background: "rgba(250,247,241,0.6)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", display: "grid", gap: "0.24rem" }}>
+              <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.68rem", fontWeight: 900 }}>复盘检查</span>
+              <div role="list" aria-label={`${work.title}复盘检查清单`} style={{ display: "grid", gap: "0.22rem" }}>
+                {reflectionChecks.slice(0, 3).map((item, index) => (
+                  <span key={item} role="listitem" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.38, fontWeight: 900 }}>
+                    {index + 1}. {item}
+                  </span>
+                ))}
+              </div>
             </div>
             <div
               id="work-evidence-copy-status"
