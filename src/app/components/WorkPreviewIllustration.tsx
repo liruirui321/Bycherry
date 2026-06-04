@@ -23,6 +23,29 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
   }
 
   if (slug === "plant-evolution-stories") {
+    return (
+      <img
+        src="/illustrations/plant-evolution-story.webp"
+        width={width}
+        height={height}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        style={{
+          width,
+          height,
+          display: "block",
+          objectFit: "cover",
+          borderRadius: 18,
+          border: "1.5px solid rgba(93,140,101,0.18)",
+          boxShadow: "0 10px 20px rgba(94,68,42,0.08)",
+          background: "rgba(250,247,241,0.72)",
+        }}
+      />
+    );
+  }
+
+  if (slug === "plant-evolution-stories-vector-fallback") {
     const skyId = `${svgId}-plant-card-sky`;
     const waterId = `${svgId}-plant-card-water`;
     const pathId = `${svgId}-plant-card-path`;

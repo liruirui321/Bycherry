@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getContentHrefs } from "./content-routes.mjs";
@@ -45,6 +45,11 @@ function readPngSize(relativePath) {
   };
 }
 
+function isWebp(relativePath) {
+  const bytes = readFileSync(resolve(publicRoot, relativePath));
+  return bytes.subarray(0, 4).toString("ascii") === "RIFF" && bytes.subarray(8, 12).toString("ascii") === "WEBP";
+}
+
 const failures = [];
 
 function expect(condition, message) {
@@ -60,6 +65,7 @@ expect(robots.includes("User-agent: *"), "robots.txt must declare the default cr
 expect(publicExists("favicon.svg"), "favicon.svg is missing.");
 expect(publicExists("social-preview.png"), "social-preview.png is missing.");
 expect(publicExists("social-preview.svg"), "social-preview.svg is missing.");
+expect(publicExists("illustrations/plant-evolution-story.webp"), "Plant evolution generated illustration WebP is missing.");
 expect(publicExists("site.webmanifest"), "site.webmanifest is missing.");
 expect(publicExists("_redirects"), "Netlify _redirects fallback is missing.");
 expect(publicExists("404.html"), "Static-host 404 fallback is missing.");
@@ -99,6 +105,11 @@ expect(socialPreview.width === 1200 && socialPreview.height === 630, "social-pre
 const socialPreviewSvg = readPublic("social-preview.svg");
 expect(socialPreviewSvg.includes(shareTagline), "social-preview.svg must include the current share tagline.");
 expect(!socialPreviewSvg.includes(retiredShareCopy), "social-preview.svg must not include retired share copy.");
+if (publicExists("illustrations/plant-evolution-story.webp")) {
+  const plantIllustrationSize = statSync(resolve(publicRoot, "illustrations/plant-evolution-story.webp")).size;
+  expect(isWebp("illustrations/plant-evolution-story.webp"), "Plant evolution generated illustration must be a WebP file.");
+  expect(plantIllustrationSize > 100_000 && plantIllustrationSize < 500_000, "Plant evolution generated illustration WebP should stay detailed but lightweight.");
+}
 
 const indexHtml = readRoot("index.html");
 const contentHrefs = getContentHrefs();
@@ -153,4 +164,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log("Public assets verified: domain, host fallbacks, robots, manifest, favicon, PWA titles, social preview metadata, and index metadata.");
+console.log("Public assets verified: domain, host fallbacks, robots, manifest, favicon, PWA titles, social preview metadata, generated illustrations, and index metadata.");

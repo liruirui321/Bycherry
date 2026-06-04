@@ -620,9 +620,14 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
                 <filter id="plant-soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
                   <feDropShadow dx="0" dy="5" stdDeviation="5" floodColor="#5E442A" floodOpacity="0.13" />
                 </filter>
+                <clipPath id="plant-generated-art-clip">
+                  <rect x={24} y={24} width={468} height={712} rx={94} />
+                </clipPath>
               </defs>
               <rect x={0} y={0} width={520} height={760} fill="url(#plant-evolution-bg)" />
               <rect x={24} y={24} width={468} height={712} rx={94} fill="rgba(250,247,241,0.26)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
+              <image href="/illustrations/plant-evolution-story.webp" x={24} y={24} width={468} height={712} preserveAspectRatio="xMidYMid slice" clipPath="url(#plant-generated-art-clip)" opacity={0.54} />
+              <rect x={24} y={24} width={468} height={712} rx={94} fill="rgba(255,248,234,0.24)" />
               <circle cx={420} cy={82} r={34} fill="var(--cherry-yellow)" opacity={0.62} />
               <circle cx={420} cy={82} r={55} fill="var(--cherry-yellow)" opacity={0.12} />
               {[54, 82, 454, 482].map((x, index) => (
