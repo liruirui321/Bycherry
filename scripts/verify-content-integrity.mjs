@@ -228,8 +228,9 @@ function verifyWorkJsonLdLearningOutcomes() {
 
   expect(appSource.includes("learningResourceType: work.category"), "Runtime work JSON-LD must include learningResourceType.");
   expect(appSource.includes("teaches: [work.task, work.starter, work.success, ...work.path, ...work.outputs]"), "Runtime work JSON-LD must include immediate task, starter action, completion standard, learning path, and output outcomes.");
-  expect(appSource.includes("const workDescription = work ? `${work.desc} 先做这个：${work.starter}。完成标准：${work.success}` : null"), "Runtime work meta descriptions must include starter and completion standard.");
-  expect(appSource.includes("const description = workDescription ??"), "Runtime page metadata must use the actionable work description.");
+  expect(appSource.includes("const metaDescriptionMaxLength = 180"), "Runtime meta descriptions must have a readable length cap.");
+  expect(appSource.includes("function buildMetaDescription"), "Runtime page metadata must use a shared meta description builder.");
+  expect(appSource.includes("const workActionDescription = work ? `先做这个：${work.starter}。完成标准：${work.success}` : null"), "Runtime work meta descriptions must include starter and completion standard.");
   expect(staticIndexSource.includes("learningResourceType: route.category"), "Static work JSON-LD generator must include learningResourceType.");
   expect(staticIndexSource.includes("teaches: [route.task, route.starter, route.success, ...route.pathSteps, ...route.outputs].filter(Boolean)"), "Static work JSON-LD generator must include immediate task, starter action, completion standard, learning path, and output outcomes.");
   expect(staticIndexSource.includes("立即任务："), "Static index fallback must expose immediate learner tasks.");
@@ -483,7 +484,9 @@ function verifyLearnerFacingArticleCopy() {
   expect(appSource.includes("teaches: [note?.actionSteps[0] ?? essay?.actionSteps[0], note?.checklist[0] ?? essay?.checklist[0]]"), "Runtime article detail JSON-LD must include first action and completion check.");
   expect(appSource.includes("const articleFirstAction = note?.actionSteps[0] ?? essay?.actionSteps[0] ?? null"), "Runtime article metadata must derive the first action step.");
   expect(appSource.includes("const articleFirstCheck = note?.checklist[0] ?? essay?.checklist[0] ?? null"), "Runtime article metadata must derive the first completion check.");
+  expect(appSource.includes("const articleActionDescription = (note || essay) && articleFirstAction && articleFirstCheck"), "Runtime article metadata must build an actionable article description.");
   expect(appSource.includes("先做这个：${articleFirstAction}。完成后检查：${articleFirstCheck}"), "Runtime article meta descriptions must include first action and completion check.");
+  expect(appSource.includes("const description = buildMetaDescription(baseDescription, workActionDescription ?? articleActionDescription)"), "Runtime article and work metadata must use the actionable meta description builder.");
   expect(contentRoutesSource.includes("firstAction") && contentRoutesSource.includes("firstCheck"), "Static content routes must extract article first action and completion check.");
   expect(staticIndexSource.includes("teaches: [route.firstAction, route.firstCheck].filter(Boolean)"), "Static article JSON-LD must include first action and completion check.");
   expect(staticIndexSource.includes("完成后检查："), "Static index fallback must expose article completion checks.");

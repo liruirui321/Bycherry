@@ -36,6 +36,23 @@ function setOptionalMeta(selector: string, attributes: Record<string, string>, c
   document.head.querySelector(selector)?.remove();
 }
 
+const metaDescriptionMaxLength = 180;
+
+function truncateMetaText(value: string, maxLength: number) {
+  if (value.length <= maxLength) return value;
+  return `${value.slice(0, Math.max(0, maxLength - 1)).trim()}…`;
+}
+
+function buildMetaDescription(baseDescription: string, actionDescription: string | null) {
+  if (!actionDescription) return truncateMetaText(baseDescription, metaDescriptionMaxLength);
+
+  const actionText = truncateMetaText(actionDescription, metaDescriptionMaxLength);
+  const baseMaxLength = metaDescriptionMaxLength - actionText.length - 1;
+  if (baseMaxLength < 24) return actionText;
+
+  return `${truncateMetaText(baseDescription, baseMaxLength)} ${actionText}`;
+}
+
 function upsertCanonical(url: string) {
   let element = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
   if (!element) {
@@ -271,13 +288,14 @@ export default function App() {
     const missingRoutedItem = Boolean((detailSlug && !work) || (noteSlug && !note) || (researchSlug && !essay));
     const notFound = unknownPath || missingRoutedItem;
     const title = notFound ? "没有找到页面" : work?.title ?? note?.title ?? essay?.title ?? homeTitle;
-    const baseDescription = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览学习模块、方法库和证据库。" : note?.excerpt ?? essay?.body ?? siteDescription;
-    const workDescription = work ? `${work.desc} 先做这个：${work.starter}。完成标准：${work.success}` : null;
+    const baseDescription = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览学习模块、方法库和证据库。" : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
+    const workActionDescription = work ? `先做这个：${work.starter}。完成标准：${work.success}` : null;
     const articleFirstAction = note?.actionSteps[0] ?? essay?.actionSteps[0] ?? null;
     const articleFirstCheck = note?.checklist[0] ?? essay?.checklist[0] ?? null;
-    const description = workDescription ?? ((note || essay) && articleFirstAction && articleFirstCheck
-      ? `${baseDescription} 先做这个：${articleFirstAction}。完成后检查：${articleFirstCheck}`
-      : baseDescription);
+    const articleActionDescription = (note || essay) && articleFirstAction && articleFirstCheck
+      ? `先做这个：${articleFirstAction}。完成后检查：${articleFirstCheck}`
+      : null;
+    const description = buildMetaDescription(baseDescription, workActionDescription ?? articleActionDescription);
     const isArticle = Boolean(note || essay);
     const publishedDate = note?.date ?? essay?.date ?? null;
     const workUpdatedDate = work?.updated ?? null;
