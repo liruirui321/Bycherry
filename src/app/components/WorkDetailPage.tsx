@@ -1700,6 +1700,62 @@ function WorkContinueLinks({ work }: { work: Work }) {
   );
 }
 
+function WorkSequenceLinks({ work }: { work: Work }) {
+  const currentIndex = works.findIndex((item) => item.slug === work.slug);
+  const previousWork = currentIndex > 0 ? works[currentIndex - 1] : null;
+  const nextWork = currentIndex >= 0 && currentIndex < works.length - 1 ? works[currentIndex + 1] : null;
+
+  if (!previousWork && !nextWork) return null;
+
+  function openWork(href: string, event: React.MouseEvent<HTMLAnchorElement>) {
+    if (!shouldUseClientNavigation(event)) return;
+    event.preventDefault();
+    navigateClient(href);
+  }
+
+  const navItems = [
+    previousWork ? { label: "上一个作品", direction: "←", work: previousWork, align: "left" as const } : null,
+    nextWork ? { label: "下一个作品", direction: "→", work: nextWork, align: "right" as const } : null,
+  ].filter((item): item is { label: string; direction: string; work: Work; align: "left" | "right" } => Boolean(item));
+
+  return (
+    <section style={{ padding: "0 1.5rem 1rem", fontFamily: "'Nunito', sans-serif" }}>
+      <nav aria-label="作品前后导航" style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.85rem" }}>
+        {navItems.map((item) => (
+          <a
+            className="work-sequence-card"
+            key={item.work.slug}
+            href={item.work.href}
+            onClick={(event) => openWork(item.work.href, event)}
+            style={{
+              display: "grid",
+              gap: "0.45rem",
+              justifyItems: item.align === "right" ? "end" : "start",
+              textAlign: item.align,
+              background: "var(--card)",
+              border: "1.5px solid var(--border)",
+              borderRadius: 18,
+              padding: "0.95rem",
+              color: "inherit",
+              textDecoration: "none",
+              boxShadow: "3px 5px 0px rgba(94,68,42,0.06)",
+              minWidth: 0,
+            }}
+          >
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "'Caveat', cursive", color: "var(--cherry-forest)", fontWeight: 900, fontSize: "1rem" }}>
+              {item.align === "left" ? item.direction : null}
+              {item.label}
+              {item.align === "right" ? item.direction : null}
+            </span>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.95rem", lineHeight: 1.38, overflowWrap: "anywhere" }}>{item.work.title}</strong>
+            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, overflowWrap: "anywhere" }}>{item.work.desc}</span>
+          </a>
+        ))}
+      </nav>
+    </section>
+  );
+}
+
 export function WorkDetailPage({ slug }: { slug: string }) {
   const work = works.find((item) => item.slug === slug);
 
@@ -1753,6 +1809,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
         </section>
       ) : null}
       {work.slug === "gene-expression" ? <GeneExpressionTool /> : null}
+      <WorkSequenceLinks work={work} />
       <WorkContinueLinks work={work} />
       <style>
         {`
@@ -1767,15 +1824,19 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           }
 
           .work-detail-link:focus-visible,
+          .work-sequence-card:focus-visible,
           .work-next-card:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
           }
 
+          .work-sequence-card,
           .work-next-card {
             transition: transform 0.18s ease, box-shadow 0.18s ease;
           }
 
+          .work-sequence-card:hover,
+          .work-sequence-card:focus-visible,
           .work-next-card:hover,
           .work-next-card:focus-visible {
             transform: translateY(-2px);
@@ -1783,6 +1844,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           }
 
           @media (prefers-reduced-motion: reduce) {
+            .work-sequence-card,
             .work-next-card {
               transition: none !important;
               transform: none !important;
