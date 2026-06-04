@@ -1610,20 +1610,42 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
 
 function ConceptExplainerContent() {
   const [concept, setConcept] = useState("转录");
+  const [conceptInput, setConceptInput] = useState("转录");
   const [levelIndex, setLevelIndex] = useState(1);
   const [quizChoice, setQuizChoice] = useState<string | null>(null);
   const [audience, setAudience] = useState("高中生");
-  const [lessonGoal, setLessonGoal] = useState("把抽象概念讲清楚，并检查学生是否真的理解");
+  const [lessonGoal, setLessonGoal] = useState("把概念学清楚，并能用例子判断自己是否真正理解");
   const [copiedLesson, setCopiedLesson] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
-  const explanations: Record<string, { color: string; analogy: string; prerequisite: string[]; diagnostic: string; evidenceBoundary: string; transferTask: string; levels: Array<{ title: string; body: string }>; terms: string[]; mechanism: string[]; compare: string; pitfall: string; quiz: { question: string; options: string[]; answer: string; explain: string } }> = {
+  type ConceptExplanation = {
+    color: string;
+    analogy: string;
+    prerequisite: string[];
+    diagnostic: string;
+    evidenceBoundary: string;
+    transferTask: string;
+    workedExample: { title: string; situation: string; guideQuestion: string; learnerOutput: string };
+    levels: Array<{ title: string; body: string }>;
+    terms: string[];
+    mechanism: string[];
+    compare: string;
+    pitfall: string;
+    quiz: { question: string; options: string[]; answer: string; explain: string };
+  };
+  const explanations: Record<string, ConceptExplanation> = {
     转录: {
       color: "var(--cherry-blue)",
       analogy: "把完整说明书中的一段信息转写成可读取的工作稿。原始 DNA 保留在原处，RNA 负责把信息带到下一步加工流程。",
       prerequisite: ["DNA 有模板链和编码链的方向关系", "RNA 使用 U 而不是 T", "基因表达不是一步完成的过程"],
-      diagnostic: "先问学生：mRNA 是从哪里来的，它和 DNA 的哪一条链互补？如果学生说“DNA 变成 RNA”，说明模板合成和拷贝关系还没有建立。",
+      diagnostic: "先自测：mRNA 是从哪里来的，它和 DNA 的哪一条链互补？如果你会说“DNA 变成 RNA”，说明模板合成和拷贝关系还没有建立。",
       evidenceBoundary: "这个页面用固定序列说明模板合成和信息转写，不展开剪接、启动子调控强弱、不同物种转录机器差异。",
-      transferTask: "给出编码链 5'-ATG GAA-3'，让学习者写出 mRNA 5'-AUG GAA-3'，再说明为什么不是 TAC CTT。",
+      transferTask: "给出编码链 5'-ATG GAA-3'，请你写出 mRNA 5'-AUG GAA-3'，再说明为什么不是 TAC CTT。",
+      workedExample: {
+        title: "编码链到 mRNA",
+        situation: "给出编码链 5'-ATG GAA TTT-3' 和模板链 3'-TAC CTT AAA-5'，先判断哪条链被 RNA 聚合酶读取。",
+        guideQuestion: "mRNA 为什么和编码链看起来相似，却不是 DNA 本身？",
+        learnerOutput: "你能写出 5'-AUG GAA UUU-3'，并用一句话解释：mRNA 携带这段基因信息，后续被核糖体按密码子读取。",
+      },
       levels: [
         { title: "入门版", body: "DNA 像一份完整说明书，转录就是把其中一段基因信息抄写成 RNA 工作稿。" },
         { title: "高中版", body: "细胞以 DNA 的一条链为模板合成 mRNA，RNA 中用 U 替代 T，mRNA 会把遗传信息带到核糖体。" },
@@ -1644,9 +1666,15 @@ function ConceptExplainerContent() {
       color: "var(--cherry-red)",
       analogy: "像鞋带末端的保护套，保护染色体末端不被磨坏、也不容易和别的断端混淆。",
       prerequisite: ["染色体是线性 DNA 和蛋白质组成的结构", "DNA 复制有方向性", "细胞分裂会复制染色体"],
-      diagnostic: "先问学生：为什么染色体末端也需要被识别和保护？如果学生只回答“端粒让人不变老”，说明概念被过度生活化了。",
+      diagnostic: "先自测：为什么染色体末端也需要被识别和保护？如果你只回答“端粒让人不变老”，说明概念被过度生活化了。",
       evidenceBoundary: "这个页面解释端粒的末端保护和复制末端问题，不把端粒长度直接等同于个体寿命或所有衰老原因。",
-      transferTask: "让学习者比较“端粒缩短”“细胞衰老”“个体衰老”三句话，标出哪一句可以直接推出，哪一句需要更多证据。",
+      transferTask: "比较“端粒缩短”“细胞衰老”“个体衰老”三句话，标出哪一句可以直接推出，哪一句需要更多证据。",
+      workedExample: {
+        title: "从细胞分裂看端粒",
+        situation: "观察三次细胞分裂后的端粒长度示意图：末端重复序列逐渐减少，而编码区暂时没有被直接删除。",
+        guideQuestion: "端粒缩短能不能直接推出一个人变老？你需要把细胞层面的证据和个体层面的现象分开。",
+        learnerOutput: "你能写出：端粒缩短可能触发细胞损伤反应或衰老，但个体衰老还受组织、免疫、代谢和环境等多因素影响。",
+      },
       levels: [
         { title: "入门版", body: "端粒位于染色体末端，帮助细胞区分真正的末端和需要修复的 DNA 断裂。" },
         { title: "高中版", body: "端粒位于染色体末端，随着细胞分裂逐渐缩短，能减少染色体末端被误认为断裂的风险。" },
@@ -1667,9 +1695,15 @@ function ConceptExplainerContent() {
       color: "var(--cherry-sage)",
       analogy: "不只是住址，更像一份生活档案：住在哪里、吃什么、什么时候活动、和谁竞争。",
       prerequisite: ["物种会利用环境资源", "不同物种之间可能竞争或共生", "栖息地只描述生活地点的一部分"],
-      diagnostic: "先问学生：两种动物住在同一片森林，它们的生态位一定相同吗？如果回答“相同”，说明还没有区分栖息地和资源利用方式。",
+      diagnostic: "先自测：两种动物住在同一片森林，它们的生态位一定相同吗？如果你回答“相同”，说明还没有区分栖息地和资源利用方式。",
       evidenceBoundary: "这个页面用资源、空间和相互作用解释生态位，不涉及完整数学生态位模型或复杂群落网络建模。",
-      transferTask: "给出两种鸟的取食高度、食物类型和活动时间，让学习者判断哪些维度说明生态位分化。",
+      transferTask: "给出两种鸟的取食高度、食物类型和活动时间，请你判断哪些维度说明生态位分化。",
+      workedExample: {
+        title: "同一森林里的两种鸟",
+        situation: "材料给出甲鸟在树冠取食昆虫、白天活动；乙鸟在灌木层取食果实、傍晚活动。两者都生活在同一片森林。",
+        guideQuestion: "如果只看住址，它们相同；如果看资源和活动方式，它们哪里不同？",
+        learnerOutput: "你能指出：两种鸟栖息地重叠，但取食高度、食物类型和活动时间不同，因此生态位并不完全相同。",
+      },
       levels: [
         { title: "入门版", body: "生态位描述一个物种如何利用资源、占据环境并与其他生物发生关系。" },
         { title: "高中版", body: "生态位描述生物如何利用资源、生活在什么环境、和其他生物如何相互作用。" },
@@ -1690,9 +1724,15 @@ function ConceptExplainerContent() {
       color: "var(--cherry-peach)",
       analogy: "像细胞按下自我清理按钮，把自己有序拆开，再交给身体清理。",
       prerequisite: ["细胞死亡有不同方式", "组织需要清除异常或不再需要的细胞", "炎症反应和细胞破裂有关"],
-      diagnostic: "先问学生：凋亡和坏死都是细胞死亡，为什么教材要分开讲？如果学生只说“一个好一个坏”，说明还没有抓住过程和后果差异。",
+      diagnostic: "先自测：凋亡和坏死都是细胞死亡，为什么教材要分开讲？如果你只说“一个好一个坏”，说明还没有抓住过程和后果差异。",
       evidenceBoundary: "这个页面强调程序性死亡和有序清除，不展开所有细胞死亡类型，也不把 caspase 通路等同于全部凋亡调控。",
-      transferTask: "给出细胞收缩、膜破裂、DNA 片段化、炎症反应四个现象，让学习者判断哪些更支持凋亡，哪些更支持坏死。",
+      transferTask: "给出细胞收缩、膜破裂、DNA 片段化、炎症反应四个现象，请你判断哪些更支持凋亡，哪些更支持坏死。",
+      workedExample: {
+        title: "发育中清除多余细胞",
+        situation: "观察胚胎发育中手指间蹼状组织逐渐消失的图示，再看细胞收缩、DNA 片段化、被吞噬清除等现象。",
+        guideQuestion: "为什么这不是细胞随机破裂？请用过程有序、周围炎症少、碎片被清除三个证据来判断。",
+        learnerOutput: "你能判断这些现象更支持凋亡，并说明凋亡让组织在发育中重塑，同时减少对周围细胞的干扰。",
+      },
       levels: [
         { title: "入门版", body: "凋亡是细胞按程序结束自身生命，并把对周围组织的影响控制在较小范围内。" },
         { title: "高中版", body: "凋亡是一种程序性细胞死亡，细胞会收缩、DNA 断裂，并被免疫细胞清除，通常不引发明显炎症。" },
@@ -1710,9 +1750,45 @@ function ConceptExplainerContent() {
       },
     },
   };
-  const active = explanations[concept];
-  const selectedLevel = active.levels[levelIndex];
+  function buildConceptAgentExplanation(name: string): ConceptExplanation {
+    const displayName = name.trim() || "待学习概念";
+
+    return {
+      color: "var(--cherry-blue)",
+      analogy: `${displayName} 可以先当作一个“待拆解的科学模型”：不要急着背定义，先看它解决什么问题、由哪些组成部分构成、会在哪些条件下发生变化。`,
+      prerequisite: ["先确认这个概念属于哪个学科或章节", "先找 2-3 个教材关键词", "先区分定义、机制、例子和适用边界"],
+      diagnostic: `先自测：你能不能不用背诵定义，用自己的话说出“${displayName} 解释了什么现象”？如果只能复述名词，说明还需要补充例子和机制。`,
+      evidenceBoundary: `这是基于稳定解释流程生成的学习卡，不会替你编造 ${displayName} 的专属事实；涉及具体数据、公式、物种、疾病或实验结论时，需要回到教材、论文或课堂材料核查。`,
+      transferTask: `找一个你见过的 ${displayName} 例子，按“现象是什么、概念如何解释、还有什么不能解释”三句话写下来。`,
+      workedExample: {
+        title: `${displayName} 三步拆解`,
+        situation: `把 ${displayName} 写在中心，左边列“我已经知道的例子”，右边列“我还说不清的机制或条件”。`,
+        guideQuestion: `如果别人问你“${displayName} 为什么重要”，你能否说出一个现象、一个关键机制和一个使用边界？`,
+        learnerOutput: `你产出一张三栏学习卡：定义一句话、机制三步骤、容易混淆的一点。资料不足的地方标为“待核查”，不要强行定论。`,
+      },
+      levels: [
+        { title: "入门版", body: `${displayName} 是一个需要先用例子进入的概念。先问它描述什么现象，再用一句话写出最核心的关系。` },
+        { title: "高中版", body: `学习 ${displayName} 时，把它拆成定义、参与对象、过程步骤、结果和限制条件。每一项都要能配一个例子。` },
+        { title: "研究生版", body: `进一步学习 ${displayName} 时，需要区分概念模型、证据来源、适用范围、例外情况和不同文献中的定义差异。` },
+      ],
+      terms: [displayName, "定义", "机制", "例子", "边界"],
+      mechanism: ["先定位这个概念解释的现象", "再找参与对象或关键变量", "再整理过程或因果关系", "最后写出适用条件和不能推出的结论"],
+      compare: `${displayName} 的定义、例子和机制不是同一件事。定义负责说明它是什么，例子帮助你看见它，机制解释它如何发生。`,
+      pitfall: `不要只背 ${displayName} 的一句定义。只会背定义，遇到新情境时仍然无法判断它是否适用。`,
+      quiz: {
+        question: `学习 ${displayName} 时，最能检查理解的一步是什么？`,
+        options: ["把定义、机制、例子和边界分开", "只背一个最短定义", "跳过例子直接记答案"],
+        answer: "把定义、机制、例子和边界分开",
+        explain: "真正理解一个概念，需要能解释它适用在哪些情境，也能说出不能直接推出什么。",
+      },
+    };
+  }
+
+  const active = explanations[concept] ?? buildConceptAgentExplanation(concept);
+  const selectedLevel = active.levels[Math.min(levelIndex, active.levels.length - 1)];
   const quizAnswered = quizChoice !== null;
+  const presetConcepts = Object.keys(explanations);
+  const isPresetConcept = Boolean(explanations[concept]);
   const conceptFlow = [
     { label: "概念", value: concept },
     { label: "诊断", value: active.diagnostic.split("。")[0] },
@@ -1722,10 +1798,10 @@ function ConceptExplainerContent() {
   const lessonFlow = [
     {
       title: "1 分钟进入",
-      body: `先问“你听到${concept}会想到什么”，再用类比切入：${active.analogy}`,
+      body: `先写下“我听到${concept}会想到什么”，再用类比切入：${active.analogy}`,
     },
     {
-      title: "3 分钟讲清",
+      title: "3 分钟学清",
       body: `${selectedLevel.title}只保留一个主线：${selectedLevel.body}`,
     },
     {
@@ -1738,8 +1814,8 @@ function ConceptExplainerContent() {
     },
   ];
   const lessonOutput = `【概念】${concept}
-【对象】${audience}
-【目标】${lessonGoal}
+【学习阶段】${audience}
+【学习目标】${lessonGoal}
 
 一、先修知识
 ${active.prerequisite.map((item, index) => `${index + 1}. ${item}`).join("\n")}
@@ -1750,7 +1826,7 @@ ${active.diagnostic}
 三、先用类比进入
 ${active.analogy}
 
-四、${selectedLevel.title}讲解
+四、${selectedLevel.title}解释
 ${selectedLevel.body}
 
 五、机制步骤
@@ -1765,16 +1841,22 @@ ${active.compare}
 八、常见误区
 ${active.pitfall}
 
-九、证据边界
+九、落地示例
+${active.workedExample.title}
+情境：${active.workedExample.situation}
+引导问题：${active.workedExample.guideQuestion}
+学习产出：${active.workedExample.learnerOutput}
+
+十、证据边界
 ${active.evidenceBoundary}
 
-十、迁移任务
+十一、迁移任务
 ${active.transferTask}
 
-十一、课堂流程
+十二、学习流程
 ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 
-十二、即时小测
+十三、即时小测
 问题：${active.quiz.question}
 选项：${active.quiz.options.join(" / ")}
 答案：${active.quiz.answer}
@@ -1782,16 +1864,25 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 
   function chooseConcept(name: string) {
     setConcept(name);
+    setConceptInput(name);
     setQuizChoice(null);
     setCopiedLesson(false);
     setCopyStatus("");
+  }
+
+  function runConceptAgent() {
+    const nextConcept = conceptInput.trim() || "待学习概念";
+    setConcept(nextConcept);
+    setQuizChoice(null);
+    setCopiedLesson(false);
+    setCopyStatus(explanations[nextConcept] ? "已载入预设高质量解释。" : "已按解释 Agent skill 生成学习卡。");
   }
 
   async function copyLessonOutput() {
     const copiedToClipboard = await copyText(lessonOutput);
     if (copiedToClipboard) {
       setCopiedLesson(true);
-      setCopyStatus("讲解稿已复制到剪贴板。");
+      setCopyStatus("学习卡已复制到剪贴板。");
       window.setTimeout(() => setCopiedLesson(false), 1400);
       return;
     }
@@ -1802,25 +1893,56 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 
   return (
     <section id="concept-explainer-tool" style={{ display: "grid", gap: "1rem" }}>
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.75rem" }}>
+        <div>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.28rem" }}>概念解释 Agent</div>
+          <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.58, fontWeight: 800 }}>
+            输入任意概念，按稳定 skill 流程生成学习卡：先自测，再看类比、机制步骤、常见误区、可视化流程、迁移练习和即时小测。
+          </div>
+        </div>
+        <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(190px, 0.72fr) minmax(0, 1fr) auto", gap: "0.65rem", alignItems: "end" }}>
+          <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
+            输入概念
+            <input value={conceptInput} onChange={(event) => { setConceptInput(event.target.value); setCopyStatus(""); }} onKeyDown={(event) => { if (event.key === "Enter") runConceptAgent(); }} placeholder="例如：光合作用、细胞周期、孟德尔遗传" style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
+          </label>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem" }}>
+            {["自测", "类比", "机制", "练习"].map((item, index) => (
+              <span key={item} style={{ background: index === 0 ? "var(--cherry-yellow-light)" : index === 1 ? "var(--cherry-blue-light)" : index === 2 ? "var(--cherry-sage-light)" : "var(--cherry-peach-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.42rem 0.36rem", color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900, textAlign: "center" }}>
+                {index + 1}. {item}
+              </span>
+            ))}
+          </div>
+          <button type="button" onClick={runConceptAgent} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.62rem 0.95rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap" }}>
+            生成学习卡
+          </button>
+        </div>
+      </div>
+
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-        {Object.keys(explanations).map((name) => (
+        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 900 }}>高质量样例</span>
+        {presetConcepts.map((name) => (
           <button key={name} type="button" aria-pressed={concept === name} onClick={() => chooseConcept(name)} style={{ border: concept === name ? `1.5px solid ${active.color}` : "1.5px solid var(--border)", background: concept === name ? "var(--cherry-yellow-light)" : "var(--card)", borderRadius: 999, padding: "0.45rem 0.9rem", color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>
             {name}
           </button>
         ))}
+        {!isPresetConcept ? (
+          <span style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.2)", borderRadius: 999, padding: "0.26rem 0.62rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+            当前：Agent 生成
+          </span>
+        ) : null}
       </div>
 
       <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(180px, 0.52fr) minmax(0, 1fr) auto", gap: "0.75rem", alignItems: "end", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
         <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
-          讲给谁
+          学习阶段
           <input value={audience} onChange={(event) => { setAudience(event.target.value); setCopiedLesson(false); setCopyStatus(""); }} style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
         </label>
         <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
-          讲解目标
+          学习目标
           <input value={lessonGoal} onChange={(event) => { setLessonGoal(event.target.value); setCopiedLesson(false); setCopyStatus(""); }} style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
         </label>
         <button type="button" onClick={copyLessonOutput} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.62rem 0.95rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap" }}>
-          {copiedLesson ? "已复制" : "复制讲解稿"}
+          {copiedLesson ? "已复制" : "复制学习卡"}
         </button>
         <div id="concept-copy-status" role="status" aria-live="polite" style={{ gridColumn: "1 / -1", minHeight: "1.1rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900 }}>
           {copyStatus}
@@ -1852,7 +1974,7 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
       <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.25fr) minmax(280px, 0.78fr)", gap: "1rem", alignItems: "stretch" }}>
         <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", position: "relative", overflow: "hidden" }}>
           <div style={{ position: "relative", zIndex: 1 }}>
-            <div className="concept-flow-map" role="group" aria-label="概念讲解生成流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.55rem", marginBottom: "1rem" }}>
+            <div className="concept-flow-map" role="group" aria-label="概念学习卡生成流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.55rem", marginBottom: "1rem" }}>
               {conceptFlow.map((item, index) => (
                 <div key={item.label} style={{ minHeight: 96, borderRadius: 16, border: "1.5px solid rgba(94,68,42,0.12)", background: index === 0 ? "var(--cherry-yellow-light)" : index === 1 ? "var(--cherry-blue-light)" : index === 2 ? "var(--cherry-sage-light)" : "var(--cherry-peach-light)", padding: "0.68rem", position: "relative", overflow: "hidden" }}>
                   <svg width="72" height="58" viewBox="0 0 72 58" fill="none" aria-hidden="true" focusable="false" style={{ position: "absolute", right: -10, bottom: -8, opacity: 0.76 }}>
@@ -1961,6 +2083,33 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
       </div>
 
       <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.85rem" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>落地示例</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.2rem", fontWeight: 800 }}>{active.workedExample.title}</div>
+          </div>
+          <span style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.24rem 0.62rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+            可直接练习
+          </span>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.75rem" }}>
+          {[
+            { title: "情境材料", body: active.workedExample.situation, bg: "var(--cherry-blue-light)" },
+            { title: "引导问题", body: active.workedExample.guideQuestion, bg: "var(--cherry-sage-light)" },
+            { title: "你的产出", body: active.workedExample.learnerOutput, bg: "var(--cherry-peach-light)" },
+          ].map((item, index) => (
+            <div key={item.title} style={{ background: item.bg, border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.86rem", minHeight: 142 }}>
+              <span style={{ width: 24, height: 24, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.52rem" }}>
+                {index + 1}
+              </span>
+              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.82rem", marginBottom: "0.34rem" }}>{item.title}</strong>
+              <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.62, fontWeight: 800 }}>{item.body}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
         <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>迁移任务</div>
         <div style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.22)", borderRadius: 16, padding: "0.86rem", color: "var(--cherry-warm-mid)", lineHeight: 1.68, fontSize: "0.86rem", fontWeight: 800 }}>
           {active.transferTask}
@@ -1968,7 +2117,7 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
       </div>
 
       <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-        <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.9rem" }}>课堂流程</div>
+        <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.9rem" }}>学习流程</div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.75rem" }}>
           {lessonFlow.map((item, index) => (
             <div key={item.title} style={{ background: index === 1 ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === 1 ? `1.5px solid ${active.color}` : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.82rem", minHeight: 126 }}>
@@ -1981,7 +2130,7 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 
       <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.75rem" }}>
-          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>可复制讲解稿</div>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>可复制学习卡</div>
           <button type="button" onClick={copyLessonOutput} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
             {copiedLesson ? "已复制" : "复制"}
           </button>
