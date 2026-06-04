@@ -238,7 +238,7 @@ ${activePrompt.output.map((item, index) => `${index + 1}. ${item}`).join("\n")}
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.75rem" }}>
               <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>可复制任务包</div>
-              <button type="button" onClick={copyTaskPack} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
+              <button type="button" onClick={copyTaskPack} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
                 {copiedPack ? "已复制" : "复制任务包"}
               </button>
             </div>
@@ -996,7 +996,7 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
       <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.75rem" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>可复制讲解稿</div>
-          <button type="button" onClick={copyLessonOutput} style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+          <button type="button" onClick={copyLessonOutput} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
             {copiedLesson ? "已复制" : "复制"}
           </button>
         </div>
