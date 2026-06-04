@@ -195,6 +195,15 @@ function EssayCard({ essay }: {
         </p>
       </div>
 
+      <div style={{ display: "grid", gap: 6, marginTop: "0.85rem" }}>
+        {essay.highlights.slice(0, 2).map((highlight) => (
+          <span key={highlight} style={{ display: "grid", gridTemplateColumns: "12px minmax(0, 1fr)", alignItems: "start", gap: 7, color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 800, lineHeight: 1.48 }}>
+            <span aria-hidden="true" style={{ width: 7, height: 7, borderRadius: "50%", background: essay.labelColor, marginTop: "0.38rem", opacity: 0.78 }} />
+            {highlight}
+          </span>
+        ))}
+      </div>
+
       {/* Footer */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "1rem", flexWrap: "wrap", gap: 8 }}>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
