@@ -106,6 +106,27 @@ function PromptKitContent() {
   const materialText = material.trim();
   const materialLines = materialText.split("\n").map((line) => line.trim()).filter(Boolean);
   const apiOutputFields = ["task", "material_summary", "evidence_items", "inference_items", "missing_fields", "risk_flags", "reviewer_questions", "final_report"];
+  const taskRouteRules = [
+    { title: "文献精读", signals: ["论文题目", "摘要", "DOI", "方法关键词", "abstract", "method"], pattern: /论文题目|摘要|doi|方法关键词|abstract|method|introduction/i },
+    { title: "实验设计检查", signals: ["实验目的", "分组", "样本量", "对照", "重复数", "统计方法"], pattern: /实验目的|实验对象|分组|样本量|每组|对照|control|重复|replicate|统计方法|检测指标/i },
+    { title: "图表解读", signals: ["图号", "图注", "坐标轴", "单位", "显著性标记"], pattern: /图号|图注|figure|fig\.|坐标轴|单位|显著性标记|误差线|p\s*[<=>]/i },
+    { title: "论文逻辑检查", signals: ["讨论段落", "结果摘要", "目标期刊", "引用", "结论过度"], pattern: /讨论段落|结果摘要|目标期刊|引用|结论过度|证据跳跃|discussion|conclusion/i },
+    { title: "审稿意见回应", signals: ["审稿人意见", "原文位置", "已完成修改", "补充分析"], pattern: /审稿人意见|审稿|reviewer|原文位置|已完成修改|补充分析|response|revision/i },
+    { title: "术语一致性检查", signals: ["重点术语", "缩写表", "统一写法", "变量名"], pattern: /重点术语|术语|缩写表|缩写|统一写法|变量名|abbreviation|terminology/i },
+  ];
+  const routeScores = taskRouteRules.map((rule) => {
+    const matchedSignals = rule.signals.filter((signal) => new RegExp(signal, "i").test(materialText));
+    const broadMatch = rule.pattern.test(materialText);
+    return {
+      ...rule,
+      matchedSignals,
+      score: matchedSignals.length + (broadMatch ? 1 : 0),
+    };
+  });
+  const suggestedRoute = routeScores.reduce((best, item) => (item.score > best.score ? item : best), routeScores[0]);
+  const suggestedPromptIndex = Math.max(0, prompts.findIndex((prompt) => prompt.title === suggestedRoute.title));
+  const routeConfidence = suggestedRoute.score >= 4 ? "高" : suggestedRoute.score >= 2 ? "中" : "低";
+  const routeMatchedSignals = suggestedRoute.matchedSignals.length ? suggestedRoute.matchedSignals.join("、") : "材料较少，先按当前栏目生成任务框架";
   const evidenceCandidateLines = materialLines
     .filter((line) => /摘要|方法|结果|figure|fig\.|图|分组|样本|对照|统计|显著|审稿|修改|讨论|术语|变量|结论|p\s*[<=>]|n\s*=/i.test(line))
     .slice(0, 3);
@@ -199,13 +220,18 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 三、当前证据边界
 ${missingFields.length ? `需要补充：${missingFields.join("、")}。` : "材料具备进入模型分析的基本线索，仍需人工确认原文来源。"}
 
-四、API Agent 输出字段建议
+四、任务路由
+推荐任务：${suggestedRoute.title}
+置信度：${routeConfidence}
+命中线索：${routeMatchedSignals}
+
+五、API Agent 输出字段建议
 ${apiOutputFields.join(", ")}
 
-五、分析报告草稿
+六、分析报告草稿
 ${previewReportRows.map((item) => `${item.label}：${item.body}`).join("\n")}
 
-六、复核问题
+七、复核问题
 ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
   const marketNeeds = [
     {
@@ -348,6 +374,15 @@ ${localPreviewOutput}`;
 
   function clearMaterial() {
     updateMaterial("");
+  }
+
+  function applySuggestedTask() {
+    setActivePromptIndex(suggestedPromptIndex);
+    setCopied(false);
+    setCopiedPack(false);
+    setCopiedPreview(false);
+    setHasRunPreview(false);
+    setCopyStatus(`已切换到推荐任务：${suggestedRoute.title}。`);
   }
 
   return (
@@ -507,6 +542,34 @@ ${localPreviewOutput}`;
               <button type="button" onClick={clearMaterial} style={{ background: "var(--muted)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                 清空材料
               </button>
+            </div>
+
+            <div style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.6rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
+                <div>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>任务路由建议</div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem" }}>
+                    根据当前材料命中的科研信号，推荐先进入最匹配的处理流程。
+                  </div>
+                </div>
+                <button type="button" onClick={applySuggestedTask} disabled={suggestedPromptIndex === activePromptIndex} style={{ background: suggestedPromptIndex === activePromptIndex ? "var(--card)" : "var(--cherry-forest)", color: suggestedPromptIndex === activePromptIndex ? "var(--cherry-warm-mid)" : "#FAF7F1", border: suggestedPromptIndex === activePromptIndex ? "1.5px solid var(--border)" : "none", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: suggestedPromptIndex === activePromptIndex ? "default" : "pointer", fontSize: "0.78rem" }}>
+                  {suggestedPromptIndex === activePromptIndex ? "已在推荐任务" : "切换到推荐任务"}
+                </button>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.5rem" }}>
+                <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+                  <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", marginBottom: "0.2rem" }}>推荐任务</strong>
+                  <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 900 }}>{suggestedRoute.title}</span>
+                </div>
+                <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+                  <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", marginBottom: "0.2rem" }}>路由置信度</strong>
+                  <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{routeConfidence}，命中 {suggestedRoute.score} 个信号</span>
+                </div>
+                <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+                  <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", marginBottom: "0.2rem" }}>命中线索</strong>
+                  <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{routeMatchedSignals}</span>
+                </div>
+              </div>
             </div>
 
             <div style={{ background: hasRunPreview ? "var(--cherry-sage-light)" : "var(--muted)", border: hasRunPreview ? "1.5px solid rgba(93,140,101,0.32)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
