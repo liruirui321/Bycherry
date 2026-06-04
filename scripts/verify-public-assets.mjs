@@ -209,17 +209,20 @@ expect(indexHtml.includes("<noscript>"), "index.html must include a noscript con
 expect(indexHtml.includes("学习路径："), "index.html noscript content index must include work learning paths.");
 expect(indexHtml.includes("拖拽 TF、RNA 聚合酶和核糖体"), "index.html noscript content index must include work descriptions.");
 expect(indexHtml.includes("完成后检查："), "index.html noscript content index must include article completion checks.");
+expect(indexHtml.includes("可保存产出："), "index.html noscript content index must expose copyable learner outputs.");
 for (const href of contentHrefs) {
   expect(indexHtml.includes(`href="${href}"`), `index.html noscript content index must link to ${href}.`);
 }
 for (const route of articleRoutes) {
   expect(indexHtml.includes(`先做这个：${route.firstAction}`), `index.html noscript content index must include first action for ${route.path}.`);
   expect(indexHtml.includes(`完成后检查：${route.firstCheck}`), `index.html noscript content index must include completion check for ${route.path}.`);
+  expect(indexHtml.includes(`可保存产出：${route.firstOutput}`), `index.html noscript content index must include learner output for ${route.path}.`);
 }
 for (const route of workRoutes) {
   expect(indexHtml.includes(`立即任务：${route.task}`), `index.html noscript content index must include immediate task for ${route.path}.`);
   expect(indexHtml.includes(`先做这个：${route.starter}`), `index.html noscript content index must include starter action for ${route.path}.`);
   expect(indexHtml.includes(`完成标准：${route.success}`), `index.html noscript content index must include completion standard for ${route.path}.`);
+  expect(indexHtml.includes(`可保存产出：${route.outputs.join(" / ")}`), `index.html noscript content index must include copyable outputs for ${route.path}.`);
   expect(indexHtml.includes(`学习路径：${route.pathSteps.join(" → ")}`), `index.html noscript content index must include learning path for ${route.path}.`);
 }
 
@@ -249,6 +252,7 @@ if (jsonLdMatch) {
     for (const route of articleRoutes) {
       expect(jsonLdText.includes(route.firstAction), `Static JSON-LD article item must include first action for ${route.path}.`);
       expect(jsonLdText.includes(route.firstCheck), `Static JSON-LD article item must include completion check for ${route.path}.`);
+      expect(jsonLdText.includes(route.firstOutput), `Static JSON-LD article item must include learner output for ${route.path}.`);
     }
     for (const route of workRoutes) {
       expect(jsonLdText.includes(route.task), `Static JSON-LD work item must include immediate task for ${route.path}.`);
@@ -256,6 +260,9 @@ if (jsonLdMatch) {
       expect(jsonLdText.includes(route.success), `Static JSON-LD work item must include completion standard for ${route.path}.`);
       for (const step of route.pathSteps) {
         expect(jsonLdText.includes(step), `Static JSON-LD work item must include learning path step "${step}" for ${route.path}.`);
+      }
+      for (const output of route.outputs) {
+        expect(jsonLdText.includes(output), `Static JSON-LD work item must include learner output "${output}" for ${route.path}.`);
       }
     }
     for (const href of contentHrefs) {

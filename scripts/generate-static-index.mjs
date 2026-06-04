@@ -29,7 +29,7 @@ function listItemObject(route) {
     url: `${siteUrl}${route.path}`,
     datePublished: route.lastmod,
     articleSection: route.type === "research" ? "科研证据" : "学习方法",
-    teaches: [route.firstAction, route.firstCheck].filter(Boolean),
+    teaches: [route.firstAction, route.firstCheck, route.firstOutput].filter(Boolean),
     author: { "@id": `${siteUrl}/#person` },
   };
 }
@@ -111,11 +111,17 @@ function listItems(routes) {
     const success = route.success
       ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">完成标准：${escapeHtml(route.success)}</div>`
       : "";
+    const workOutputs = route.outputs?.length
+      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">可保存产出：${route.outputs.map(escapeHtml).join(" / ")}</div>`
+      : "";
     const firstAction = route.firstAction
       ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">先做这个：${escapeHtml(route.firstAction)}</div>`
       : "";
     const firstCheck = route.firstCheck
       ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">完成后检查：${escapeHtml(route.firstCheck)}</div>`
+      : "";
+    const firstOutput = route.firstOutput
+      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">可保存产出：${escapeHtml(route.firstOutput)}</div>`
       : "";
 
     return [
@@ -125,8 +131,10 @@ function listItems(routes) {
       task,
       starter,
       success,
+      workOutputs,
       firstAction,
       firstCheck,
+      firstOutput,
       pathSteps,
       "            </li>",
     ].filter(Boolean).join("\n");

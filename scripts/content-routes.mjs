@@ -68,8 +68,10 @@ export function getContentRoutes() {
       const pathSteps = source.type === "work" ? extractStringArray(block, "path") : [];
       const actionSteps = source.type !== "work" ? extractStringArray(block, "actionSteps") : [];
       const checklist = source.type !== "work" ? extractStringArray(block, "checklist") : [];
+      const starterTemplate = source.type !== "work" ? extractStringArray(block, "starterTemplate") : [];
       const firstAction = actionSteps[0] ?? null;
       const firstCheck = checklist[0] ?? null;
+      const firstOutput = starterTemplate[0] ?? null;
 
       if (!slug) failures.push(`${label} is missing slug.`);
       if (!path) failures.push(`${label} is missing href.`);
@@ -81,6 +83,7 @@ export function getContentRoutes() {
       if (source.type === "work" && !success) failures.push(`${label} is missing success.`);
       if (source.type !== "work" && !firstAction) failures.push(`${label} is missing a first action step.`);
       if (source.type !== "work" && !firstCheck) failures.push(`${label} is missing a first checklist item.`);
+      if (source.type !== "work" && !firstOutput) failures.push(`${label} is missing a first starter template output.`);
 
       if (path && !path.startsWith(`${source.prefix}/`)) {
         failures.push(`${label} href must start with ${source.prefix}/.`);
@@ -95,7 +98,7 @@ export function getContentRoutes() {
       }
 
       if (path && lastmod && title && description) {
-        routes.push({ path, lastmod, title, description, task, starter, success, firstAction, firstCheck, category, tags, outputs, pathSteps, source: source.relativePath, type: source.type });
+        routes.push({ path, lastmod, title, description, task, starter, success, firstAction, firstCheck, firstOutput, category, tags, outputs, pathSteps, source: source.relativePath, type: source.type });
       }
     });
   }
