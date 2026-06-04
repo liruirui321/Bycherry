@@ -165,6 +165,21 @@
     margin: 0;
   }
 
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+  }
+
+  img,
+  picture,
+  video,
+  canvas {
+    display: block;
+  }
+
   .skip-link {
     position: fixed;
     top: 0.75rem;

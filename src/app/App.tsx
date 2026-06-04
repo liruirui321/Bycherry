@@ -236,7 +236,9 @@ export default function App() {
     upsertMeta('meta[property="og:description"]', { property: "og:description" }, description);
     upsertMeta('meta[property="og:type"]', { property: "og:type" }, work || note || essay ? "article" : "website");
     upsertMeta('meta[property="og:locale"]', { property: "og:locale" }, "zh_CN");
+    upsertMeta('meta[property="og:site_name"]', { property: "og:site_name" }, siteTitle);
     upsertMeta('meta[property="og:url"]', { property: "og:url" }, canonicalUrl);
+    upsertMeta('meta[name="twitter:card"]', { name: "twitter:card" }, "summary");
     upsertMeta('meta[name="twitter:title"]', { name: "twitter:title" }, fullTitle);
     upsertMeta('meta[name="twitter:description"]', { name: "twitter:description" }, description);
     upsertMeta('meta[name="robots"]', { name: "robots" }, notFound ? "noindex" : "index, follow");
