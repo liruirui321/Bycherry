@@ -190,6 +190,7 @@ function EssayCard({ essay }: {
       aria-label={`打开科研证据：${essay.title}`}
       onMouseEnter={() => preloadRouteForHref(essay.href)}
       onFocus={() => preloadRouteForHref(essay.href)}
+      onPointerDown={() => preloadRouteForHref(essay.href)}
       style={{
         background: "var(--card)",
         border: "1.5px solid var(--border)",

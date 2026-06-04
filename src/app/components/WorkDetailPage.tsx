@@ -3048,6 +3048,7 @@ function WorkContinueLinks({ work }: { work: Work }) {
                 onClick={(event) => openWork(item.href, event)}
                 onMouseEnter={() => preloadRouteForHref(item.href)}
                 onFocus={() => preloadRouteForHref(item.href)}
+                onPointerDown={() => preloadRouteForHref(item.href)}
                 style={{
                   display: "grid",
                   gridTemplateColumns: "112px minmax(0, 1fr)",
@@ -3119,6 +3120,7 @@ function WorkSequenceLinks({ work }: { work: Work }) {
             onClick={(event) => openWork(item.work.href, event)}
             onMouseEnter={() => preloadRouteForHref(item.work.href)}
             onFocus={() => preloadRouteForHref(item.work.href)}
+            onPointerDown={() => preloadRouteForHref(item.work.href)}
             style={{
               display: "grid",
               gap: "0.45rem",

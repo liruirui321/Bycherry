@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { IconCherry, IconMenu, IconClose } from "./Icons";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
+import { preloadRouteForHref } from "../routePrefetch";
 
 export function Nav() {
   const [open, setOpen] = useState(false);
@@ -153,6 +154,9 @@ export function Nav() {
                 key={l.label}
                 href={l.href}
                 aria-current={active ? "page" : undefined}
+                onMouseEnter={() => preloadRouteForHref(l.href)}
+                onFocus={() => preloadRouteForHref(l.href)}
+                onPointerDown={() => preloadRouteForHref(l.href)}
                 onClick={(event) => {
                   if (!shouldUseClientNavigation(event)) return;
                   event.preventDefault();
@@ -205,6 +209,8 @@ export function Nav() {
                 key={l.label}
                 href={l.href}
                 aria-current={active ? "page" : undefined}
+                onFocus={() => preloadRouteForHref(l.href)}
+                onPointerDown={() => preloadRouteForHref(l.href)}
                 onClick={(event) => {
                   if (!shouldUseClientNavigation(event)) return;
                   event.preventDefault();

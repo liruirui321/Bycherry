@@ -473,6 +473,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                       aria-label={`${item.label}：${item.article.title}`}
                       onMouseEnter={() => preloadRouteForHref(item.article.href)}
                       onFocus={() => preloadRouteForHref(item.article.href)}
+                      onPointerDown={() => preloadRouteForHref(item.article.href)}
                       onClick={(event) => {
                         if (!shouldUseClientNavigation(event)) return;
                         event.preventDefault();

@@ -102,6 +102,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
       aria-label={`打开${work.title}：${work.desc}`}
       onClick={openDetail}
       onMouseEnter={previewDetail}
+      onPointerDown={previewDetail}
       onMouseLeave={() => setHovered(false)}
       onFocus={previewDetail}
       onBlur={() => setHovered(false)}

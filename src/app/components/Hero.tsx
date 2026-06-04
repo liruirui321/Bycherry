@@ -135,6 +135,7 @@ export function Hero() {
                   onClick={(event) => openWork(work.href, event)}
                   onMouseEnter={() => preloadRouteForHref(work.href)}
                   onFocus={() => preloadRouteForHref(work.href)}
+                  onPointerDown={() => preloadRouteForHref(work.href)}
                   style={{
                     background: work.color,
                     border: `1.5px solid ${work.border}`,

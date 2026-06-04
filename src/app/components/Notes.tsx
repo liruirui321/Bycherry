@@ -261,6 +261,7 @@ export function Notes() {
                 onClick={(event) => navigateTo(note.href, event)}
                 onMouseEnter={() => preloadRouteForHref(note.href)}
                 onFocus={() => preloadRouteForHref(note.href)}
+                onPointerDown={() => preloadRouteForHref(note.href)}
                 style={{
                   background: "var(--card)",
                   border: "1.5px solid var(--border)",
