@@ -1302,6 +1302,7 @@ function PlantEvolutionContent() {
   const [activePlantQuestIndex, setActivePlantQuestIndex] = useState(0);
   const [copiedStudyCard, setCopiedStudyCard] = useState(false);
   const [copiedStageComparison, setCopiedStageComparison] = useState(false);
+  const [copiedEvidenceAudit, setCopiedEvidenceAudit] = useState(false);
   const [studyCardStatus, setStudyCardStatus] = useState("");
   const chapters = [
     {
@@ -1315,6 +1316,8 @@ function PlantEvolutionContent() {
       answerHint: "浅水环境会周期性暴露在强光、干燥和温度波动中，祖先类群可以先演化出一部分应对陆地压力的基因工具。",
       learnerTask: "把“环境压力”对应到“需要的结构或基因功能”：抗干燥、抗紫外线、细胞壁支撑各写一句。",
       certainty: "基因组证据强",
+      evidenceTypes: ["基因组比较", "分子钟推断"],
+      claimBoundary: "可以说明祖先类群已具备部分陆地适应工具，但不能直接证明某个具体登陆地点或完整登陆过程。",
       refs: ["Wang 2019", "Morris 2018"],
     },
     {
@@ -1328,6 +1331,8 @@ function PlantEvolutionContent() {
       answerHint: "孢粉素外壁更抗分解，也更容易在沉积物中保存；小型早期植物体本身不一定容易形成完整化石。",
       learnerTask: "区分“最早化石记录”和“真实起源时间”：写出为什么化石保存会筛选证据。",
       certainty: "化石证据强",
+      evidenceTypes: ["微体化石", "孢子形态"],
+      claimBoundary: "可以支持早期陆地植物已经留下孢子记录，但不能把它等同于最早完整植物体化石。",
       refs: ["Wellman 2003", "Kenrick 1997"],
     },
     {
@@ -1341,6 +1346,8 @@ function PlantEvolutionContent() {
       answerHint: "直立结构能把孢子抬离地表，增加扩散机会，也让植物开始在空间上争夺光照。",
       learnerTask: "画出贴地结构和直立结构，比较孢子释放高度、光照获取和身体支撑需求。",
       certainty: "化石与系统发育共同支持",
+      evidenceTypes: ["形态化石", "系统发育", "分子钟整合"],
+      claimBoundary: "可以重建早期陆地植物逐步分化的大致窗口，但不同支系的精确先后仍需要结合更多材料。",
       refs: ["Kenrick 1997", "Morris 2018"],
     },
     {
@@ -1354,6 +1361,8 @@ function PlantEvolutionContent() {
       answerHint: "维管组织让水分和养分能长距离运输，并配合支撑结构让植物长高，陆地植被从低矮覆盖转向分层结构。",
       learnerTask: "把维管组织看成运输管线：写出没有运输系统时，植物高度会被哪些因素限制。",
       certainty: "形态化石证据强",
+      evidenceTypes: ["形态化石", "结构比较"],
+      claimBoundary: "可以说明运输和支撑结构与长高能力相关，但不能把维管组织单独当成所有生态复杂化的唯一原因。",
       refs: ["Kenrick 1997", "Nature Plants 2018"],
     },
     {
@@ -1367,6 +1376,8 @@ function PlantEvolutionContent() {
       answerHint: "种子把胚、营养和保护结构放在一起，可以等待合适条件再萌发，比裸露孢子更能应对干燥和季节波动。",
       learnerTask: "比较“孢子像轻量传播单元”和“种子像带补给的保护包”，各写一个优势和一个代价。",
       certainty: "早期种子化石支持",
+      evidenceTypes: ["种子化石", "结构重建"],
+      claimBoundary: "可以说明种子习性的关键结构已经出现，但早期种子生态功能还需要结合保存状态和环境证据判断。",
       refs: ["Pettitt 1981", "Prestianni 2017"],
     },
     {
@@ -1380,6 +1391,8 @@ function PlantEvolutionContent() {
       answerHint: "花可以吸引或利用传粉者，果实可以帮助种子传播；植物繁殖效率开始和动物行为紧密相连。",
       learnerTask: "举一个传粉或种子传播例子，说明植物结构和动物行为如何共同塑造生态关系。",
       certainty: "早白垩世化石清楚，更早起源仍有争议",
+      evidenceTypes: ["花粉与花化石", "系统发育", "分子钟推断"],
+      claimBoundary: "可以确认早白垩世被子植物快速多样化较清楚，但更早起源时间不能只靠单一证据定论。",
       refs: ["Friis 1994", "Herendeen 2017"],
     },
   ];
@@ -1493,6 +1506,46 @@ function PlantEvolutionContent() {
     { label: "当前阶段", chapter: activeChapter },
     activeChapterIndex < chapters.length - 1 ? { label: "下一阶段", chapter: chapters[activeChapterIndex + 1] } : null,
   ].filter((item): item is { label: string; chapter: typeof activeChapter } => Boolean(item));
+  const evidenceAuditCards = [
+    {
+      title: "证据来源",
+      body: activeChapter.evidenceTypes.join(" / "),
+      check: "先判断证据来自岩石记录、现生基因组、系统发育还是分子钟，不把它们混成同一种证据。",
+    },
+    {
+      title: "可以相信到哪一步",
+      body: activeChapter.certainty,
+      check: "把可靠程度写进结论里，例如“化石记录支持”或“分子钟提示”，不要省略证据状态。",
+    },
+    {
+      title: "不能直接推出什么",
+      body: activeChapter.claimBoundary,
+      check: "最后保留一个限制条件，避免把证据能支持的范围扩大成完整故事。",
+    },
+  ];
+  const evidenceAuditOutput = `【植物演化证据判读记录】
+阶段：${activeChapter.title}
+时间：${activeChapter.time}
+
+一、证据来源
+${activeChapter.evidenceTypes.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+二、当前证据状态
+${activeChapter.certainty}
+
+三、证据原文摘要
+${activeChapter.evidence}
+
+四、可以写出的结论
+这项创新说明：${activeChapter.innovation}
+它主要解决：${activeChapter.challenge}
+
+五、不能直接推出
+${activeChapter.claimBoundary}
+
+六、我的判读句
+我会把这个阶段表述为：
+我还需要避免的过度推断是：`;
   const stageComparisonOutput = `【植物演化阶段比较记录】
 当前阶段：${activeChapter.title}
 时间：${activeChapter.time}
@@ -1543,7 +1596,11 @@ ${activeStageQuest.check}
 7. 阶段比较
 ${comparisonStages.map((item, index) => `${index + 1}. ${item.label}：${item.chapter.time}｜${item.chapter.innovation}｜证据状态：${item.chapter.certainty}`).join("\n")}
 
-8. 参考文献
+8. 证据判读
+证据来源：${activeChapter.evidenceTypes.join(" / ")}
+结论边界：${activeChapter.claimBoundary}
+
+9. 参考文献
 ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).join("\n")}`;
 
   async function copyStudyCard() {
@@ -1551,6 +1608,7 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
     if (copiedToClipboard) {
       setCopiedStudyCard(true);
       setCopiedStageComparison(false);
+      setCopiedEvidenceAudit(false);
       setStudyCardStatus("学习卡已复制到剪贴板。");
       window.setTimeout(() => setCopiedStudyCard(false), 1400);
       return;
@@ -1565,12 +1623,28 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
     if (copiedToClipboard) {
       setCopiedStageComparison(true);
       setCopiedStudyCard(false);
+      setCopiedEvidenceAudit(false);
       setStudyCardStatus("阶段比较记录已复制到剪贴板。");
       window.setTimeout(() => setCopiedStageComparison(false), 1400);
       return;
     }
 
     setCopiedStageComparison(false);
+    setStudyCardStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyEvidenceAudit() {
+    const copiedToClipboard = await copyText(evidenceAuditOutput);
+    if (copiedToClipboard) {
+      setCopiedEvidenceAudit(true);
+      setCopiedStageComparison(false);
+      setCopiedStudyCard(false);
+      setStudyCardStatus("证据判读记录已复制到剪贴板。");
+      window.setTimeout(() => setCopiedEvidenceAudit(false), 1400);
+      return;
+    }
+
+    setCopiedEvidenceAudit(false);
     setStudyCardStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -1581,6 +1655,7 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
     setActivePlantQuestIndex(0);
     setCopiedStudyCard(false);
     setCopiedStageComparison(false);
+    setCopiedEvidenceAudit(false);
     setStudyCardStatus("");
   }
 
@@ -1852,7 +1927,17 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
                 <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.84rem" }}>
                   <strong style={{ color: "var(--cherry-warm-brown)" }}>证据状态：</strong>{activeChapter.certainty}
                 </div>
+                <div role="group" style={{ display: "flex", gap: 6, flexWrap: "wrap" }} aria-label="当前阶段证据类型">
+                  {activeChapter.evidenceTypes.map((type) => (
+                    <span key={type} style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(58,92,62,0.14)", borderRadius: 999, padding: "0.22rem 0.52rem", color: "var(--cherry-forest)", fontSize: "0.7rem", fontWeight: 900 }}>
+                      {type}
+                    </span>
+                  ))}
+                </div>
                 <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.7, fontSize: "0.86rem" }}>{activeChapter.evidence}</p>
+                <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 14, padding: "0.72rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.82rem" }}>
+                  <strong style={{ color: "var(--cherry-warm-brown)" }}>判读边界：</strong>{activeChapter.claimBoundary}
+                </div>
                 <div style={{ display: "grid", gap: "0.45rem" }}>
                   {activeReferences.map((reference) => (
                     <a key={reference.key} href={reference.url} target="_blank" rel="noreferrer" aria-label={`${reference.title}，新窗口打开`} style={{ color: "var(--cherry-forest)", textDecoration: "none", lineHeight: 1.45, fontSize: "0.78rem", fontWeight: 900 }}>
@@ -1948,6 +2033,30 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
                   {index < comparisonStages.length - 1 ? (
                     <div style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>下一步比较：新能力解决了什么限制，又带来什么新问题？</div>
                   ) : null}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.65rem" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
+              <div>
+                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>证据判读记录</strong>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>先判断证据来源，再写清楚结论边界。</span>
+              </div>
+              <button type="button" onClick={copyEvidenceAudit} aria-describedby="plant-study-card-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                {copiedEvidenceAudit ? "已复制" : "复制证据判读"}
+              </button>
+            </div>
+            <div style={{ display: "grid", gap: "0.52rem" }}>
+              {evidenceAuditCards.map((item, index) => (
+                <div key={item.title} style={{ background: index === 1 ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === 1 ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.66rem", display: "grid", gap: "0.34rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                    <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: index === 2 ? "var(--cherry-red)" : "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900 }}>{index + 1}</span>
+                    <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>{item.title}</strong>
+                  </div>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.52, fontWeight: 900 }}>{item.body}</span>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.52, fontWeight: 800 }}>{item.check}</span>
                 </div>
               ))}
             </div>

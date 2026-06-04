@@ -459,6 +459,15 @@ function verifyPlantEvolutionLearnerContract() {
     { label: "visible comparison card", text: "阶段比较记录" },
     { label: "copy comparison button", text: "复制比较记录" },
     { label: "comparison section in study card", text: "7. 阶段比较" },
+    { label: "evidence type field", text: "evidenceTypes" },
+    { label: "claim boundary field", text: "claimBoundary" },
+    { label: "evidence audit cards", text: "evidenceAuditCards" },
+    { label: "evidence audit output", text: "evidenceAuditOutput" },
+    { label: "copy evidence audit handler", text: "copyEvidenceAudit" },
+    { label: "visible evidence audit card", text: "证据判读记录" },
+    { label: "copy evidence audit button", text: "复制证据判读" },
+    { label: "claim boundary visible label", text: "判读边界" },
+    { label: "evidence audit section in study card", text: "8. 证据判读" },
   ];
 
   const retiredPlantPatterns = [
@@ -477,8 +486,8 @@ function verifyPlantEvolutionLearnerContract() {
   }
 
   expect(worksSource.includes("演化时间轴串联关键创新、证据、自测问题、作答提示和延伸练习。"), "Plant evolution work card must describe the learner-facing self-study flow.");
-  expect(worksSource.includes('outputs: ["学习卡", "阶段比较", "参考文献"]'), "Plant evolution work card outputs must be learner-facing.");
-  expect(worksSource.includes('path: ["选择阶段", "比较创新", "完成练习"]'), "Plant evolution work card path must describe a learner action flow.");
+  expect(worksSource.includes('outputs: ["学习卡", "阶段比较", "证据判读"]'), "Plant evolution work card outputs must be learner-facing.");
+  expect(worksSource.includes('path: ["选择阶段", "判读证据", "完成练习"]'), "Plant evolution work card path must describe a learner action flow.");
 }
 
 function verifyCrisprLearnerScenarios() {
