@@ -132,7 +132,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         display: "grid",
         gridTemplateRows: "auto auto auto auto auto auto auto",
         alignContent: "start",
-        minHeight: 384,
+        minHeight: 424,
       }}
     >
       <div style={{ marginBottom: "0.46rem" }}>{work.icon}</div>
@@ -154,6 +154,8 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.48, fontWeight: 800 }}>{work.task}</span>
         <span style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, marginTop: "0.2rem" }}>先做这个</span>
         <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>{work.starter}</span>
+        <span style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, marginTop: "0.2rem" }}>完成标准</span>
+        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>{work.success}</span>
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
