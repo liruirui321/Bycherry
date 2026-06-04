@@ -3185,11 +3185,43 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
 }
 
 function WorkQuickStart({ work }: { work: Work }) {
+  const [copiedEvidence, setCopiedEvidence] = useState(false);
+  const [evidenceCopyStatus, setEvidenceCopyStatus] = useState("");
   const evidenceItems = [
     `保存 1 份${work.outputs[0] ?? "学习产出"}`,
     `用自己的话写下：${work.success}`,
     `标记下一步要回看的环节：${work.path[work.path.length - 1] ?? work.path[0]}`,
   ];
+  const evidenceTemplate = `【${work.title}复盘证据】
+立即任务：${work.task}
+先做这个：${work.starter}
+完成标准：${work.success}
+
+一、我保存的产出
+${work.outputs.map((output, index) => `${index + 1}. ${output}：`).join("\n")}
+
+二、我完成的路径
+${work.path.map((step, index) => `${index + 1}. ${step}：`).join("\n")}
+
+三、我的解释
+我能说明：
+
+四、下一步回看
+我还需要回看：`;
+
+  async function copyEvidenceTemplate() {
+    const copiedToClipboard = await copyText(evidenceTemplate);
+
+    if (copiedToClipboard) {
+      setCopiedEvidence(true);
+      setEvidenceCopyStatus("复盘模板已复制到剪贴板。");
+      window.setTimeout(() => setCopiedEvidence(false), 1400);
+      return;
+    }
+
+    setCopiedEvidence(false);
+    setEvidenceCopyStatus("复制失败，请手动选中文本复制。");
+  }
 
   return (
     <section
@@ -3257,13 +3289,43 @@ function WorkQuickStart({ work }: { work: Work }) {
             </div>
           </div>
           <div style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(93,140,101,0.18)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem", gridColumn: "1 / -1" }}>
-            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>完成证据</span>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.5rem", flexWrap: "wrap" }}>
+              <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>完成证据</span>
+              <button
+                type="button"
+                className="work-evidence-copy-button"
+                onClick={copyEvidenceTemplate}
+                aria-describedby="work-evidence-copy-status"
+                style={{
+                  border: "1px solid rgba(93,140,101,0.28)",
+                  borderRadius: 999,
+                  background: "var(--background)",
+                  color: "var(--cherry-forest)",
+                  cursor: "pointer",
+                  fontFamily: "'Nunito', sans-serif",
+                  fontSize: "0.66rem",
+                  fontWeight: 900,
+                  padding: "0.22rem 0.58rem",
+                  transition: "transform 0.18s ease, box-shadow 0.18s ease",
+                }}
+              >
+                {copiedEvidence ? "已复制" : "复制复盘模板"}
+              </button>
+            </div>
             <div role="list" aria-label={`${work.title}完成后需要留下的学习证据`} style={{ display: "grid", gap: "0.26rem" }}>
               {evidenceItems.map((item, index) => (
                 <span key={item} role="listitem" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.4, fontWeight: 900 }}>
                   {index + 1}. {item}
                 </span>
               ))}
+            </div>
+            <div
+              id="work-evidence-copy-status"
+              role="status"
+              aria-live="polite"
+              style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}
+            >
+              {evidenceCopyStatus}
             </div>
           </div>
         </div>
@@ -3480,13 +3542,15 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
           .work-detail-link:focus-visible,
           .work-sequence-card:focus-visible,
-          .work-next-card:focus-visible {
+          .work-next-card:focus-visible,
+          .work-evidence-copy-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
           }
 
           .work-sequence-card,
-          .work-next-card {
+          .work-next-card,
+          .work-evidence-copy-button {
             transition: transform 0.18s ease, box-shadow 0.18s ease;
           }
 
@@ -3503,14 +3567,17 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           .work-sequence-card:hover,
           .work-sequence-card:focus-visible,
           .work-next-card:hover,
-          .work-next-card:focus-visible {
+          .work-next-card:focus-visible,
+          .work-evidence-copy-button:hover,
+          .work-evidence-copy-button:focus-visible {
             transform: translateY(-2px);
             box-shadow: 4px 8px 0 rgba(94,68,42,0.1) !important;
           }
 
           @media (prefers-reduced-motion: reduce) {
             .work-sequence-card,
-            .work-next-card {
+            .work-next-card,
+            .work-evidence-copy-button {
               transition: none !important;
               transform: none !important;
             }
