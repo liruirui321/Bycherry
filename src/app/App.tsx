@@ -60,6 +60,84 @@ function upsertJsonLd(data: Record<string, unknown>) {
   element.textContent = JSON.stringify(data);
 }
 
+function buildHomeJsonLd() {
+  const personId = `${siteUrl}/#person`;
+  const websiteId = `${siteUrl}/#website`;
+  const worksListId = `${siteUrl}/#works`;
+  const articlesListId = `${siteUrl}/#articles`;
+  const articles = [
+    ...essays.map((item) => ({ ...item, kind: "科研随笔" })),
+    ...notes.map((item) => ({ ...item, kind: "创作笔记" })),
+  ];
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": personId,
+        name: "Cherry",
+        url: siteUrl,
+        sameAs: ["https://github.com/liruirui321"],
+      },
+      {
+        "@type": "WebSite",
+        "@id": websiteId,
+        url: siteUrl,
+        name: siteTitle,
+        alternateName: "Bycherry",
+        description: defaultDescription,
+        inLanguage: "zh-CN",
+        image: socialImageUrl,
+        publisher: { "@id": personId },
+      },
+      {
+        "@type": "ItemList",
+        "@id": worksListId,
+        name: "By Cherry 可打开的作品",
+        description: "科学教育、AI 工具和课程设计作品。",
+        numberOfItems: works.length,
+        itemListElement: works.map((work, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          url: `${siteUrl}${work.href}`,
+          item: {
+            "@type": "CreativeWork",
+            name: work.title,
+            description: work.desc,
+            url: `${siteUrl}${work.href}`,
+            genre: work.category,
+            keywords: work.tags.join(", "),
+            dateModified: work.updated,
+            creator: { "@id": personId },
+          },
+        })),
+      },
+      {
+        "@type": "ItemList",
+        "@id": articlesListId,
+        name: "By Cherry 笔记与科研随笔",
+        description: "课程开发、科学传播、AI 创作和科研转译记录。",
+        numberOfItems: articles.length,
+        itemListElement: articles.map((article, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          url: `${siteUrl}${article.href}`,
+          item: {
+            "@type": "Article",
+            headline: article.title,
+            description: article.excerpt ?? article.body,
+            url: `${siteUrl}${article.href}`,
+            datePublished: article.date,
+            articleSection: article.kind,
+            author: { "@id": personId },
+          },
+        })),
+      },
+    ],
+  };
+}
+
 function getScrollBehavior(): ScrollBehavior {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 }
@@ -199,15 +277,21 @@ export default function App() {
     const fullTitle = title === homeTitle ? `${siteTitle} | ${title}` : `${title} | ${siteTitle}`;
     const canonicalPath = window.location.pathname === "/" ? "/" : window.location.pathname.replace(/\/$/, "");
     const canonicalUrl = `${siteUrl}${canonicalPath}`;
+    const personId = `${siteUrl}/#person`;
     const jsonLdBase = {
       publisher: {
         "@type": "Person",
+        "@id": personId,
         name: "Cherry",
         url: siteUrl,
       },
+      creator: { "@id": personId },
       url: canonicalUrl,
       name: title,
       description,
+      image: socialImageUrl,
+      inLanguage: "zh-CN",
+      mainEntityOfPage: canonicalUrl,
     };
     const jsonLd = notFound
       ? {
@@ -222,6 +306,7 @@ export default function App() {
           ...jsonLdBase,
           genre: work.category,
           keywords: work.tags.join(", "),
+          dateModified: work.updated,
         }
       : note || essay
         ? {
@@ -230,19 +315,16 @@ export default function App() {
             ...jsonLdBase,
             headline: title,
             datePublished: note?.date ?? essay?.date,
+            dateModified: note?.date ?? essay?.date,
             author: {
               "@type": "Person",
+              "@id": personId,
               name: "Cherry",
               url: siteUrl,
             },
             keywords: essay?.tags?.join(", ") ?? note?.tag,
           }
-        : {
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            ...jsonLdBase,
-            alternateName: "Bycherry",
-          };
+        : buildHomeJsonLd();
 
     document.title = fullTitle;
     upsertMeta('meta[name="description"]', { name: "description" }, description);
