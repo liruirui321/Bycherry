@@ -225,7 +225,7 @@ export function Works() {
             </span>
           </div>
           <h2 id="works-heading" style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
-            可打开的作品
+            主题作品
           </h2>
         </div>
 

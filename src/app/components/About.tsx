@@ -64,7 +64,7 @@ function WorkbenchIllustration() {
 export function About() {
   const reusableOutputs = works.reduce((count, work) => count + work.outputs.length, 0);
   const stats = [
-    { num: String(works.length), label: "个可打开作品" },
+    { num: String(works.length), label: "个主题作品" },
     { num: String(notes.length + essays.length), label: "篇笔记和随笔" },
     { num: String(reusableOutputs), label: "类可复用产物" },
   ];
