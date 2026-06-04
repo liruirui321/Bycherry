@@ -199,7 +199,7 @@ ${activePrompt.output.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
             <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: "0.9rem" }}>
               <button type="button" onClick={fillMaterialTemplate} style={{ background: "var(--cherry-sage-light)", color: "var(--cherry-forest)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                填入示例材料
+                套用材料模板
               </button>
               <button type="button" onClick={clearMaterial} style={{ background: "var(--muted)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                 清空材料
