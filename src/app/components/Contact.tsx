@@ -110,8 +110,8 @@ export function Contact() {
           如果你想聊聊科学、课程、AI 工具，或者只是想说一声「你好」，都欢迎给我留言~ 我会认真读每一条。
         </p>
 
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.52rem 0.42rem 0.9rem", marginBottom: "1.4rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
-          <span style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.84rem" }}>{emailAddress}</span>
+        <div className="contact-email-chip" style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.52rem 0.42rem 0.9rem", marginBottom: "1.4rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", maxWidth: "100%", boxSizing: "border-box" }}>
+          <span style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.84rem", overflowWrap: "anywhere" }}>{emailAddress}</span>
           <button type="button" onClick={copyEmail} aria-describedby={emailCopyStatusId} style={{ background: copiedEmail ? "var(--cherry-sage-light)" : "var(--cherry-forest)", color: copiedEmail ? "var(--cherry-forest)" : "#FAF7F1", border: copiedEmail ? "1.5px solid var(--cherry-sage)" : "none", borderRadius: 999, padding: "0.38rem 0.78rem", fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: "0.78rem", cursor: "pointer" }}>
             {copiedEmail ? "已复制" : "复制邮箱"}
           </button>
@@ -187,7 +187,7 @@ export function Contact() {
               }}
             />
 
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+            <div className="contact-action-row" style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
               <button
                 className="contact-submit"
                 type="submit"
@@ -388,6 +388,21 @@ export function Contact() {
             #contact .contact-social-link {
               transition: none !important;
               transform: none !important;
+            }
+          }
+
+          @media (max-width: 560px) {
+            #contact .contact-email-chip {
+              border-radius: 18px !important;
+              width: 100% !important;
+            }
+
+            #contact .contact-action-row,
+            #contact .contact-submit,
+            #contact .contact-copy-draft,
+            #contact .contact-reset {
+              width: 100% !important;
+              justify-content: center !important;
             }
           }
         `}
