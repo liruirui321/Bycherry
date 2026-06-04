@@ -188,6 +188,10 @@ if (jsonLdMatch) {
     expect(worksList?.numberOfItems === contentHrefs.filter((href) => href.startsWith("/works/")).length, "Static works ItemList must include the current numberOfItems.");
     expect(articlesList?.numberOfItems === contentHrefs.filter((href) => !href.startsWith("/works/")).length, "Static articles ItemList must include the current numberOfItems.");
     const jsonLdText = JSON.stringify(jsonLd);
+    expect(jsonLdText.includes('"@type":"CreativeWork"'), "Static JSON-LD works ListItems must include CreativeWork item objects.");
+    expect(jsonLdText.includes('"@type":"Article"'), "Static JSON-LD article ListItems must include Article item objects.");
+    expect(jsonLdText.includes("拖拽 TF、RNA 聚合酶和核糖体"), "Static JSON-LD must include work descriptions.");
+    expect(jsonLdText.includes("AI 可以参与课程开发"), "Static JSON-LD must include article descriptions.");
     for (const href of contentHrefs) {
       expect(jsonLdText.includes(`${siteUrl}${href}`), `Static JSON-LD must include ${href}.`);
     }

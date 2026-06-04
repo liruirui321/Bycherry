@@ -59,6 +59,8 @@ export function getContentRoutes() {
       const lastmod = extractField(block, source.dateField);
       const title = extractField(block, "title");
       const description = extractField(block, source.summaryField);
+      const category = extractField(block, "category");
+      const tags = extractStringArray(block, "tags");
       const pathSteps = source.type === "work" ? extractStringArray(block, "path") : [];
 
       if (!slug) failures.push(`${label} is missing slug.`);
@@ -80,7 +82,7 @@ export function getContentRoutes() {
       }
 
       if (path && lastmod && title && description) {
-        routes.push({ path, lastmod, title, description, pathSteps, source: source.relativePath, type: source.type });
+        routes.push({ path, lastmod, title, description, category, tags, pathSteps, source: source.relativePath, type: source.type });
       }
     });
   }

@@ -10,6 +10,31 @@ const shareImageAlt = "By Cherry 科学、课程与 AI 主题作品集预览图"
 const worksListDescription = "科学教育、AI 工具和课程设计主题作品。";
 const articlesListDescription = "课程开发、科学传播、AI 创作和科研转译记录。";
 
+function listItemObject(route) {
+  if (route.type === "work") {
+    return {
+      "@type": "CreativeWork",
+      name: route.title,
+      description: route.description,
+      url: `${siteUrl}${route.path}`,
+      genre: route.category,
+      keywords: route.tags.join(", "),
+      dateModified: route.lastmod,
+      creator: { "@id": `${siteUrl}/#person` },
+    };
+  }
+
+  return {
+    "@type": "Article",
+    headline: route.title,
+    description: route.description,
+    url: `${siteUrl}${route.path}`,
+    datePublished: route.lastmod,
+    articleSection: route.type === "research" ? "科研随笔" : "创作笔记",
+    author: { "@id": `${siteUrl}/#person` },
+  };
+}
+
 function itemList(id, name, description, routes) {
   return {
     "@type": "ItemList",
@@ -22,6 +47,7 @@ function itemList(id, name, description, routes) {
       position: index + 1,
       url: `${siteUrl}${route.path}`,
       name: route.title,
+      item: listItemObject(route),
     })),
   };
 }
