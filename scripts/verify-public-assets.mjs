@@ -7,15 +7,16 @@ const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const publicRoot = resolve(root, "public");
 const siteUrl = "https://bycherry.me";
 const expectedDomain = "bycherry.me";
-const shareTagline = "科学、课程与 AI 主题作品集";
+const shareTagline = "科学与 AI 学习工作台";
 const siteDescription = "By Cherry 是一个可直接使用的科学与 AI 学习工作台，提供科学模拟、课程卡片、科研 Agent 和学习笔记。";
 const manifestDescription = `${shareTagline}。`;
-const shareDescription = "科学、课程与 AI 主题作品集，收录科学教育、学习工具、课程卡片和科研转译记录。";
-const shareImageAlt = "By Cherry 科学、课程与 AI 主题作品集预览图";
+const shareDescription = "可直接使用的科学与 AI 学习工作台，提供科学模拟、课程卡片、科研 Agent 和学习笔记。";
+const shareImageAlt = "By Cherry 科学与 AI 学习工作台预览图";
 const worksListDescription = "科学教育、AI 工具和课程设计主题作品。";
 const articlesListDescription = "课程开发、科学传播、AI 创作和科研转译记录。";
 const retiredShareCopy = "可打开、可阅读、可操作";
 const retiredSiteDescription = "清爽科普风的个人网站";
+const retiredSharePositioning = "主题作品集";
 const appThemeColor = "#F5F1EA";
 const generatedIllustrationsBySlug = {
   "concept-explainer": { path: "illustrations/concept-explainer-map.webp", width: 1448, height: 1086 },
@@ -135,6 +136,7 @@ expect(socialPreview.width === 1200 && socialPreview.height === 630, "social-pre
 const socialPreviewSvg = readPublic("social-preview.svg");
 expect(socialPreviewSvg.includes(shareTagline), "social-preview.svg must include the current share tagline.");
 expect(!socialPreviewSvg.includes(retiredShareCopy), "social-preview.svg must not include retired share copy.");
+expect(!socialPreviewSvg.includes(retiredSharePositioning), "social-preview.svg must not include the retired share positioning.");
 for (const illustration of generatedIllustrations) {
   if (!publicExists(illustration.path)) continue;
   const illustrationSize = statSync(resolve(publicRoot, illustration.path)).size;
@@ -165,6 +167,7 @@ expect(indexHtml.includes(`<meta property="og:image:alt" content="${shareImageAl
 expect(indexHtml.includes(`<meta name="twitter:image:alt" content="${shareImageAlt}" />`), "index.html must include the current Twitter image alt text.");
 expect(!indexHtml.includes(retiredShareCopy), "index.html must not include retired share copy.");
 expect(!indexHtml.includes(retiredSiteDescription), "index.html must not include the retired personal-site description.");
+expect(!indexHtml.includes(retiredSharePositioning), "index.html must not include the retired share positioning.");
 expect(indexHtml.includes('<meta property="og:image" content="https://bycherry.me/social-preview.png" />'), "index.html must include the current OG image URL.");
 expect(indexHtml.includes('<meta property="og:image:secure_url" content="https://bycherry.me/social-preview.png" />'), "index.html must include og:image:secure_url.");
 expect(indexHtml.includes('<meta name="twitter:image" content="https://bycherry.me/social-preview.png" />'), "index.html must include the current Twitter image URL.");

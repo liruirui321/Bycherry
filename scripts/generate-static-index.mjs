@@ -6,7 +6,8 @@ import { getContentRoutes } from "./content-routes.mjs";
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const siteUrl = "https://bycherry.me";
 const siteDescription = "By Cherry 是一个可直接使用的科学与 AI 学习工作台，提供科学模拟、课程卡片、科研 Agent 和学习笔记。";
-const shareImageAlt = "By Cherry 科学、课程与 AI 主题作品集预览图";
+const shareDescription = "可直接使用的科学与 AI 学习工作台，提供科学模拟、课程卡片、科研 Agent 和学习笔记。";
+const shareImageAlt = "By Cherry 科学与 AI 学习工作台预览图";
 const worksListDescription = "科学教育、AI 工具和课程设计主题作品。";
 const articlesListDescription = "课程开发、科学传播、AI 创作和科研转译记录。";
 
@@ -152,6 +153,18 @@ html = replaceRequired(
   /      <meta name="description" content="[^"]*" \/>/,
   `      <meta name="description" content="${escapeHtml(siteDescription)}" />`,
   "meta description"
+);
+html = replaceRequired(
+  html,
+  /      <meta property="og:description" content="[^"]*" \/>/,
+  `      <meta property="og:description" content="${escapeHtml(shareDescription)}" />`,
+  "OG description"
+);
+html = replaceRequired(
+  html,
+  /      <meta name="twitter:description" content="[^"]*" \/>/,
+  `      <meta name="twitter:description" content="${escapeHtml(shareDescription)}" />`,
+  "Twitter description"
 );
 html = replaceRequired(
   html,

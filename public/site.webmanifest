@@ -1,7 +1,7 @@
 {
   "name": "By Cherry",
   "short_name": "By Cherry",
-  "description": "科学、课程与 AI 主题作品集。",
+  "description": "科学与 AI 学习工作台。",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
