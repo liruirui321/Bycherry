@@ -129,6 +129,7 @@ function buildHomeJsonLd() {
             url: `${siteUrl}${article.href}`,
             datePublished: article.date,
             articleSection: article.kind,
+            teaches: [article.actionSteps[0], article.checklist[0]],
             author: { "@id": personId },
           },
         })),
@@ -319,6 +320,7 @@ export default function App() {
             headline: title,
             datePublished: note?.date ?? essay?.date,
             dateModified: note?.date ?? essay?.date,
+            teaches: [note?.actionSteps[0] ?? essay?.actionSteps[0], note?.checklist[0] ?? essay?.checklist[0]],
             author: {
               "@type": "Person",
               "@id": personId,
