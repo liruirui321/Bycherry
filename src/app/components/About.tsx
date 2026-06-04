@@ -64,6 +64,24 @@ function WorkbenchIllustration() {
 
 export function About() {
   const reusableOutputs = works.reduce((count, work) => count + work.outputs.length, 0);
+  const findWork = (slug: string) => works.find((work) => work.slug === slug) ?? works[0];
+  const useGuideCards = [
+    {
+      goal: "看懂生命过程",
+      work: findWork("gene-expression"),
+      checkpoint: "调节分子后，解释读数为什么变化。",
+    },
+    {
+      goal: "拆清卡住概念",
+      work: findWork("concept-explainer"),
+      checkpoint: "生成学习卡后，补一句证据边界。",
+    },
+    {
+      goal: "整理科研材料",
+      work: findWork("research-prompt-kit"),
+      checkpoint: "复制研究记录前，先核查引用来源。",
+    },
+  ];
   const stats = [
     { num: String(works.length), label: "个学习模块" },
     { num: String(notes.length + essays.length), label: "篇学习资料" },
@@ -164,6 +182,43 @@ export function About() {
             每个页面都尽量保留可阅读、可操作、可复用的内容：模拟器、时间轴、学习卡、prompt 和证据资料。
           </p>
 
+          <div style={{ display: "grid", gap: "0.65rem", marginTop: "1.15rem" }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", fontWeight: 900 }}>怎么开始</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.6rem" }}>
+              {useGuideCards.map((item) => (
+                <a
+                  key={item.goal}
+                  className="about-use-card"
+                  href={item.work.href}
+                  aria-label={`${item.goal}：打开${item.work.title}。先做这个，${item.work.starter}。完成检查，${item.checkpoint}`}
+                  style={{
+                    display: "grid",
+                    gap: "0.42rem",
+                    background: item.work.color,
+                    border: `1.5px solid ${item.work.border}`,
+                    borderRadius: 8,
+                    padding: "0.72rem",
+                    color: "inherit",
+                    textDecoration: "none",
+                    minHeight: 148,
+                  }}
+                >
+                  <span style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>{item.goal}</span>
+                  <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", lineHeight: 1.35 }}>{item.work.title}</strong>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>
+                    先做：{item.work.path[0]} → {item.work.path[1]}
+                  </span>
+                  <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 900 }}>
+                    产出：{item.work.outputs[0]} / {item.work.outputs[1]}
+                  </span>
+                  <span style={{ color: "var(--cherry-red)", fontSize: "0.7rem", lineHeight: 1.42, fontWeight: 900 }}>
+                    检查：{item.checkpoint}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginTop: "1.35rem" }}>
             <a href="#works" onClick={(event) => navigateHomeSection("#works", event)} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.58rem 1rem", textDecoration: "none", fontWeight: 900, fontSize: "0.86rem", boxShadow: "3px 5px 0px rgba(58,92,62,0.2)" }}>
               打开学习模块
@@ -189,6 +244,23 @@ export function About() {
           #about a:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
+          }
+
+          #about .about-use-card {
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+          }
+
+          #about .about-use-card:hover,
+          #about .about-use-card:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 3px 5px 0 rgba(94,68,42,0.1);
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            #about .about-use-card {
+              transition: none !important;
+              transform: none !important;
+            }
           }
         `}
       </style>

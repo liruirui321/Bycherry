@@ -819,6 +819,10 @@ function verifyLearnerProductPositioning() {
     "看懂一个生命过程",
     "拆清一个卡住概念",
     "整理一段科研材料",
+    "怎么开始",
+    "about-use-card",
+    "完成检查",
+    "产出：{item.work.outputs[0]}",
   ];
   const retiredProductPatterns = [
     { label: "course-heavy home title", pattern: /科学、课程/ },
