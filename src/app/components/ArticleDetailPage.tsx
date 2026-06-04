@@ -91,27 +91,14 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
   return (
     <main id="main-content" tabIndex={-1} style={{ fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
-      <section style={{ padding: "0.75rem 1.5rem 1.4rem" }}>
+      <section style={{ padding: "0.45rem 1.5rem 1.2rem" }}>
         <div style={{ maxWidth: 860, margin: "0 auto" }}>
-          <a
-            className="article-detail-link"
-            href={`/${backHash}`}
-            onClick={(event) => {
-              if (!shouldUseClientNavigation(event)) return;
-              event.preventDefault();
-              navigateHome(backHash);
-            }}
-            style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-forest)", textDecoration: "none", fontWeight: 900, fontSize: "0.8rem", marginBottom: "0.45rem" }}
-          >
-            ← {backText}
-          </a>
-
           <article
             style={{
               background: "var(--card)",
               border: "1.5px solid var(--border)",
               borderRadius: 18,
-              padding: "0.95rem 1.05rem 1.1rem",
+              padding: "0.78rem 1.05rem 1.1rem",
               boxShadow: "4px 7px 0px rgba(94,68,42,0.07)",
               position: "relative",
               overflow: "hidden",
@@ -124,7 +111,33 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               <circle cx="27" cy="31" r="7" fill="var(--cherry-yellow)" opacity="0.8" />
             </svg>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: "0.45rem", paddingRight: 70 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: "0.38rem", paddingRight: 70 }}>
+              <a
+                className="article-detail-link article-back-chip"
+                href={`/${backHash}`}
+                onClick={(event) => {
+                  if (!shouldUseClientNavigation(event)) return;
+                  event.preventDefault();
+                  navigateHome(backHash);
+                }}
+                aria-label={backText}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 30,
+                  height: 30,
+                  color: "var(--cherry-forest)",
+                  background: "var(--muted)",
+                  border: "1.5px solid var(--border)",
+                  borderRadius: 999,
+                  textDecoration: "none",
+                  fontWeight: 900,
+                  fontSize: "0.95rem",
+                }}
+              >
+                ←
+              </a>
               <span
                 style={{
                   display: "inline-flex",
@@ -148,7 +161,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </span>
             </div>
 
-            <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.24rem, 3vw, 1.72rem)", fontWeight: 900, lineHeight: 1.22, marginBottom: "0.45rem", maxWidth: 720 }}>
+            <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.18rem, 2.8vw, 1.62rem)", fontWeight: 900, lineHeight: 1.22, marginBottom: "0.42rem", maxWidth: 720 }}>
               {article.title}
             </h1>
 
@@ -268,6 +281,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           .article-detail-link:hover,
           .article-detail-link:focus-visible {
             color: var(--cherry-red) !important;
+          }
+
+          .article-back-chip:hover,
+          .article-back-chip:focus-visible {
+            background: var(--cherry-yellow-light) !important;
+            border-color: var(--cherry-yellow) !important;
           }
 
           .article-nav-card {
