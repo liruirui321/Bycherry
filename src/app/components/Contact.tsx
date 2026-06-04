@@ -216,7 +216,7 @@ export function Contact() {
                 }}
               >
                 <IconSend size={18} color={canUseDraft ? "#FAF7F1" : "var(--cherry-warm-mid)"} />
-                发送信息
+                打开邮件草稿
               </button>
               <button
                 className="contact-copy-draft"
