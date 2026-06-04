@@ -81,6 +81,8 @@ const geneQuizItems = [
 ];
 
 const initialCycleProgress = 0.42;
+const ribosomeStartFraction = 0.18;
+const ribosomeTravelSpan = 0.72;
 
 function inBox(molecule: Molecule, box: { x: number; y: number; w: number; h: number }) {
   return molecule.x >= box.x && molecule.x <= box.x + box.w && molecule.y >= box.y && molecule.y <= box.y + box.h;
@@ -279,13 +281,15 @@ function fullPolylinePath(points: Point[]) {
 
 function buildNascentMrnaPath(polymerasePoint: Point, progress: number, offset: Point = { x: 0, y: 0 }) {
   const exit = { x: polymerasePoint.x + 10 + offset.x, y: polymerasePoint.y + 31 + offset.y };
-  const tailLength = 24 + clamp01(progress) * 235;
+  const boundedProgress = clamp01(progress);
+  const tailLength = 46 + boundedProgress * 245;
 
   return [
-    { x: exit.x - tailLength, y: exit.y + 94 },
-    { x: exit.x - tailLength * 0.78, y: exit.y + 48 },
-    { x: exit.x - tailLength * 0.52, y: exit.y + 100 },
-    { x: exit.x - tailLength * 0.24, y: exit.y + 54 },
+    { x: exit.x - tailLength, y: exit.y + 86 },
+    { x: exit.x - tailLength * 0.86, y: exit.y + 36 },
+    { x: exit.x - tailLength * 0.64, y: exit.y + 110 },
+    { x: exit.x - tailLength * 0.43, y: exit.y + 58 },
+    { x: exit.x - tailLength * 0.23, y: exit.y + 94 },
     exit,
   ];
 }
@@ -326,12 +330,15 @@ function buildRibosomeTracks(progress: number, ribBound: number, canRead: boolea
     const activeEnd = 0.94;
     const phase = (progress + index * 0.18) % 1;
     const localProgress = phase >= activeStart && phase < activeEnd ? (phase - activeStart) / (activeEnd - activeStart) : 0;
-    const onReadableSegment = canRead && phase >= activeStart && phase < activeEnd && localProgress <= Math.max(0.12, maxTranscribedProgress);
+    const readProgress = ribosomeStartFraction + localProgress * ribosomeTravelSpan;
+    const readableLimit = Math.max(ribosomeStartFraction + 0.06, maxTranscribedProgress - 0.06);
+    const onReadableSegment = canRead && phase >= activeStart && phase < activeEnd && readProgress <= readableLimit;
     const entryOpacity = clamp01((phase - activeStart) / 0.07);
     const exitOpacity = clamp01((activeEnd - phase) / 0.08);
     return {
-      point: pointOnPolyline(path, localProgress),
+      point: pointOnPolyline(path, readProgress),
       progress: localProgress,
+      readProgress,
       opacity: onReadableSegment ? Math.min(entryOpacity, exitOpacity) : 0,
     };
   });
@@ -379,6 +386,8 @@ function LiveExpressionProcess({
   const maxTranscribedProgress = model.transcriptionOn
     ? Math.max(transcriptionProgress, ...polymerases.map((polymerase) => polymerase.progress * polymerase.opacity))
     : retainedMrnaCount > 0 ? 1 : 0;
+  const readableMrnaProgress = clamp01(Math.max(0, maxTranscribedProgress - 0.06));
+  const readableMrnaPath = partialPolylinePath(coupledMrnaPath, readableMrnaProgress);
   const ribosomes = buildRibosomeTracks(progress, model.ribBound, ribosomeCanRead, maxTranscribedProgress, coupledMrnaPath);
   const renderedRibosomes = ribosomes.map((ribosome, index) => ({
     ...ribosome,
@@ -401,8 +410,8 @@ function LiveExpressionProcess({
             <rect x={-42} y={7} width={84} height={20} rx={9} fill="rgba(250,247,241,0.92)" stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} />
             <circle cx={-13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
             <circle cx={13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
-            <path d="M10 -2 C21 2 27 10 35 17" fill="none" stroke="var(--cherry-warm-brown)" strokeWidth={3.2} strokeLinecap="round" opacity={0.28} />
-            <path d="M17 7 C29 12 37 17 43 19" fill="none" stroke="var(--cherry-forest)" strokeWidth={5.2} strokeLinecap="round" opacity={0.28} />
+            <path d="M10 -2 C21 2 27 10 35 17" fill="none" stroke="var(--cherry-warm-brown)" strokeWidth={3.2} strokeLinecap="round" opacity={0.18} />
+            <path d="M17 7 C29 12 37 17 43 19" fill="none" stroke="var(--cherry-forest)" strokeWidth={5.2} strokeLinecap="round" opacity={0.18} />
             <path d="M8 -8 C18 -15 27 -18 36 -16" fill="none" stroke="var(--cherry-forest)" strokeWidth={5} strokeLinecap="round" opacity={0.46} />
             <circle cx={36} cy={-16} r={6.5} fill="var(--cherry-forest)" stroke="#FAF7F1" strokeWidth={2.2} />
             <path d="M13 -42 C13 -30 13 -16 13 -7" fill="none" stroke={currentCodon?.color ?? "var(--cherry-yellow)"} strokeWidth={3.4} strokeLinecap="round" opacity={0.82} />
@@ -546,6 +555,16 @@ function LiveExpressionProcess({
             <path d={fullPolylinePath(nascentPath)} fill="none" stroke="rgba(232,121,95,0.2)" strokeWidth={17} strokeLinecap="round" strokeLinejoin="round" />
             <path d={fullPolylinePath(nascentPath)} fill="none" stroke="var(--cherry-red)" strokeWidth={9} strokeLinecap="round" strokeLinejoin="round" markerEnd="url(#mrnaArrow)" />
             <path
+              d={partialPolylinePath(nascentPath, Math.max(ribosomeStartFraction, polymerase.progress - 0.06))}
+              fill="none"
+              stroke="#FAF7F1"
+              strokeWidth={3.2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="7 8"
+              opacity={polymerase.progress > 0.2 ? 0.95 : 0}
+            />
+            <path
               d={`M${polymeraseBody.x + 3} ${polymeraseBody.y + 18} C${polymeraseBody.x + 8} ${polymeraseBody.y + 26} ${growthEnd.x - 3} ${growthEnd.y - 5} ${growthEnd.x} ${growthEnd.y}`}
               fill="none"
               stroke="var(--cherry-red)"
@@ -562,7 +581,7 @@ function LiveExpressionProcess({
             </g>
             {polymerase.progress > 0.16 ? (
               <text x={fiveEnd.x - 14} y={fiveEnd.y + 39} fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={800}>
-                核糖体从这里开始读
+                核糖体从 5' 端附近开始读
               </text>
             ) : null}
             {codons.map((codon, baseIndex) => {
@@ -592,11 +611,20 @@ function LiveExpressionProcess({
               贴着 RNA 聚合酶出口
             </text>
             <text x={growthEnd.x - 76} y={growthEnd.y + 31} fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={800}>
-              原核模型：核糖体读取已露出的 5' 端
+              原核模型：只能读取已露出的 mRNA
             </text>
           </g>
         );
       })}
+
+      {ribosomeCanRead ? (
+        <g opacity={0.9}>
+          <path d={readableMrnaPath} fill="none" stroke="var(--cherry-forest)" strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="8 7" />
+          <text x={438} y={392} fill="var(--cherry-forest)" fontSize={11} fontWeight={900}>
+            绿色虚线：核糖体当前可读取的已转录片段
+          </text>
+        </g>
+      ) : null}
 
       {polymerases.map((polymerase, index) => (
         <g key={`moving-pol-${index}`} transform={`translate(${polymerase.point.x + polymerase.offset.x} ${polymerase.point.y + polymerase.offset.y})`} opacity={polymerase.opacity}>
@@ -766,17 +794,22 @@ export function GeneExpressionTool() {
     {
       title: "mRNA 生长端",
       active: model.transcriptionOn,
-      body: model.transcriptionOn ? "3' 生长端贴着 RNA 聚合酶出口，RNA 聚合酶往前走时曲线继续变长。" : "转录未启动时不会产生新的 3' 生长端；先放入 TF 和 RNA 聚合酶。",
+      body: model.transcriptionOn ? "3' 生长端贴着 RNA 聚合酶出口，RNA 聚合酶往前走时曲线继续变长；5' 自由端留在外侧。" : "转录未启动时不会产生新的 3' 生长端；先放入 TF 和 RNA 聚合酶。",
     },
     {
       title: "核糖体读带",
       active: activeRibosomeCount > 0,
-      body: activeRibosomeCount > 0 ? `核糖体正在读 ${activeCodon?.rna ?? "已露出的密码子"}，它只沿已经转录出来的 mRNA 片段移动。` : "mRNA 的 5' 自由端露出后，把核糖体放到入口，才会开始读密码子。",
+      body: activeRibosomeCount > 0 ? `核糖体正在读 ${activeCodon?.rna ?? "已露出的密码子"}，它只沿已经转录出来的绿色虚线片段移动，不能越过 RNA 聚合酶。` : "mRNA 的 5' 自由端露出后，把核糖体放到入口，才会开始读密码子。",
     },
     {
       title: "多肽出口",
       active: visibleProteinCount > 0,
       body: visibleProteinCount > 0 ? `多肽链从核糖体右上出口长出，当前片段是 ${peptidePreview}。` : "没有看到氨基酸小圆时，说明核糖体还没读到足够的密码子或还没有加入核糖体。",
+    },
+    {
+      title: "模型边界",
+      active: true,
+      body: "这个仿真显示原核式耦合表达：转录和翻译可以同时发生；真核细胞通常先在细胞核内转录加工，再到细胞质翻译。",
     },
   ];
   const activeProcessFocus = processFocusCards.find((item) => item.active)?.title ?? "等待启动";
