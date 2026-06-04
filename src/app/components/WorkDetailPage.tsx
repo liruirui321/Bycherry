@@ -568,21 +568,44 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
               <rect x={0} y={0} width={520} height={760} fill="url(#plant-evolution-bg)" />
               <rect x={24} y={24} width={468} height={712} rx={94} fill="rgba(250,247,241,0.26)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
               <circle cx={420} cy={82} r={34} fill="var(--cherry-yellow)" opacity={0.62} />
+              <path d="M94 103 C127 80 166 86 188 113 C151 127 118 124 94 103Z M340 137 C371 114 413 119 439 148 C400 161 365 158 340 137Z" fill="#FAF7F1" opacity={0.62} />
               <path d="M72 190 C122 164 171 177 212 202 C263 231 317 219 367 185 C401 162 438 158 472 177" fill="none" stroke="rgba(132,184,204,0.24)" strokeWidth={12} strokeLinecap="round" />
               <path d="M54 585 C113 553 159 600 222 558 C296 507 348 553 469 492" fill="none" stroke="rgba(93,140,101,0.18)" strokeWidth={44} strokeLinecap="round" />
-              <path d="M52 644 C116 600 186 635 247 599 C323 554 393 575 474 530 V736 H52Z" fill="rgba(169,201,172,0.22)" />
-              <path d="M52 674 C130 706 230 670 305 695 C372 716 431 694 474 660 V736 H52Z" fill="url(#plant-water)" />
+              <path d="M52 624 C116 584 186 626 247 588 C323 543 393 563 474 512 V736 H52Z" fill="rgba(169,201,172,0.2)" />
+              <path d="M52 654 C130 697 230 655 305 688 C372 717 431 690 474 648 V736 H52Z" fill="url(#plant-water)" />
+              <path d="M52 704 C96 686 138 700 177 690 C221 680 260 653 307 672 C358 692 409 678 474 638 V736 H52Z" fill="rgba(216,199,168,0.58)" />
               <path d="M52 692 C103 667 157 682 213 664 C291 640 349 661 462 620" fill="none" stroke="rgba(58,92,62,0.17)" strokeWidth={26} strokeLinecap="round" />
               <path d="M91 713 C130 725 173 714 209 719 M333 724 C369 708 421 725 456 711" fill="none" stroke="rgba(94,68,42,0.16)" strokeWidth={5} strokeLinecap="round" />
-              {[98, 132, 386, 438].map((x) => (
-                <g key={x} opacity={0.38}>
-                  <path d={`M${x} 611 C${x - 8} 596 ${x - 14} 585 ${x - 9} 570`} stroke="var(--cherry-forest)" strokeWidth={3} strokeLinecap="round" />
-                  <path d={`M${x - 8} 584 Q${x - 22} 575 ${x - 30} 590 M${x - 6} 572 Q${x + 7} 563 ${x + 19} 575`} stroke="var(--cherry-sage)" strokeWidth={3} strokeLinecap="round" fill="none" />
+              {[78, 104, 132, 378, 414, 442].map((x, index) => (
+                <g key={x} opacity={0.46 + (index % 2) * 0.16}>
+                  <path d={`M${x} 632 C${x - 8} 608 ${x - 15} 591 ${x - 7} 568`} stroke="var(--cherry-forest)" strokeWidth={3.5} strokeLinecap="round" />
+                  <path d={`M${x - 8} 604 Q${x - 27} 591 ${x - 36} 612 M${x - 5} 583 Q${x + 10} 569 ${x + 25} 586 M${x - 4} 618 Q${x + 13} 607 ${x + 25} 621`} stroke="var(--cherry-sage)" strokeWidth={3.2} strokeLinecap="round" fill="none" />
                 </g>
               ))}
+              <g opacity={0.72}>
+                <path d="M79 688 C98 671 126 671 147 688 C128 699 101 700 79 688Z" fill="rgba(132,184,204,0.28)" stroke="rgba(58,92,62,0.22)" strokeWidth={2} />
+                {[92, 112, 133].map((x, index) => (
+                  <circle key={x} cx={x} cy={684 + index * 3} r={9 - index * 1.5} fill={index === 1 ? "var(--cherry-sage-light)" : "var(--cherry-blue-light)"} stroke="var(--cherry-sage)" strokeWidth={1.8} />
+                ))}
+                {[348, 369, 392, 419].map((x, index) => (
+                  <circle key={x} cx={x} cy={704 + (index % 2) * 8} r={6} fill="var(--cherry-yellow)" stroke="rgba(94,68,42,0.2)" strokeWidth={1.5} />
+                ))}
+                <path d="M287 716 C302 699 327 699 343 715" stroke="var(--cherry-forest)" strokeWidth={4} strokeLinecap="round" />
+                <path d="M315 712 C312 691 321 675 335 663 M331 678 C348 666 366 672 372 689 M323 696 C303 689 287 697 280 713" stroke="var(--cherry-forest)" strokeWidth={3.5} strokeLinecap="round" fill="none" />
+              </g>
               {[96, 152, 398, 446].map((x) => (
                 <path key={x} d={`M${x} 134 C${x + 16} 122 ${x + 34} 123 ${x + 48} 137`} fill="none" stroke="rgba(132,184,204,0.3)" strokeWidth={9} strokeLinecap="round" />
               ))}
+              <g opacity={0.72}>
+                <path d="M388 256 C388 221 397 190 415 160" stroke="var(--cherry-forest)" strokeWidth={7} strokeLinecap="round" fill="none" />
+                <path d="M408 172 C428 150 459 158 468 185 C441 197 420 192 408 172Z M395 215 C367 197 342 212 336 239 C362 248 383 239 395 215Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth={2} />
+                <circle cx={431} cy={150} r={10} fill="var(--cherry-red)" opacity={0.86} />
+                <circle cx={453} cy={174} r={8} fill="var(--cherry-peach)" opacity={0.86} />
+              </g>
+              <g opacity={0.66}>
+                <ellipse cx={111} cy={314} rx={19} ry={28} fill="var(--cherry-yellow)" stroke="var(--cherry-warm-brown)" strokeWidth={2.4} />
+                <path d="M111 292 C124 274 145 276 153 294 C139 309 123 309 111 292Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth={2} />
+              </g>
               <path d="M252 668 C192 607 312 552 252 494 C190 435 312 374 252 318 C192 257 312 201 252 88" fill="none" stroke="var(--cherry-forest)" strokeWidth={10} strokeLinecap="round" opacity={0.16} />
               <path d="M252 668 C192 607 312 552 252 494 C190 435 312 374 252 318 C192 257 312 201 252 88" fill="none" stroke="var(--cherry-sage)" strokeWidth={4.8} strokeLinecap="round" />
               <text x={54} y={64} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>植物演化竖向图</text>

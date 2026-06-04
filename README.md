@@ -26,8 +26,9 @@ npm run dev
 npm run build
 ```
 
-`npm run build` regenerates `public/sitemap.xml` and the static homepage fallback, then runs four verification steps before Vite builds:
+`npm run build` regenerates `public/sitemap.xml` and the static homepage fallback, then runs five verification steps before Vite builds:
 
+- `verify:generated` checks that generated public metadata is committed and up to date.
 - `verify:public` checks the custom domain, host fallbacks, robots file, manifest, favicon, social preview image, and static index metadata fallback.
 - `verify:links` checks static internal links, public routes, home anchors, and static public asset links.
 - `verify:a11y` checks static `aria-labelledby`, `aria-describedby`, `aria-controls`, and duplicate static ids.
@@ -37,6 +38,7 @@ You can run the checks on their own:
 
 ```bash
 npm run verify:public
+npm run verify:generated
 npm run verify:links
 npm run verify:a11y
 npm run verify:sitemap
@@ -62,5 +64,6 @@ When adding or removing public content:
 - For notes and research essays, keep sitemap `lastmod` equal to the item `date`.
 - Make sure any new static links point to an existing route, home anchor, or public asset.
 - Make sure any new static `aria-*` references point to an existing id.
+- Make sure generated files are committed after changing content routes.
 - Keep dependencies aligned with actual imports; avoid committing unused generated UI component sets.
 - Run `npm run build` before pushing.
