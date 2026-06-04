@@ -15,6 +15,10 @@ const worksListDescription = "科学教育、AI 工具和课程设计主题作�
 const articlesListDescription = "课程开发、科学传播、AI 创作和科研转译记录。";
 const retiredShareCopy = "可打开、可阅读、可操作";
 const appThemeColor = "#F5F1EA";
+const generatedIllustrations = [
+  "illustrations/gene-expression-flow.webp",
+  "illustrations/plant-evolution-story.webp",
+];
 
 function readRoot(relativePath) {
   return readFileSync(resolve(root, relativePath), "utf8");
@@ -65,7 +69,9 @@ expect(robots.includes("User-agent: *"), "robots.txt must declare the default cr
 expect(publicExists("favicon.svg"), "favicon.svg is missing.");
 expect(publicExists("social-preview.png"), "social-preview.png is missing.");
 expect(publicExists("social-preview.svg"), "social-preview.svg is missing.");
-expect(publicExists("illustrations/plant-evolution-story.webp"), "Plant evolution generated illustration WebP is missing.");
+for (const illustrationPath of generatedIllustrations) {
+  expect(publicExists(illustrationPath), `${illustrationPath} is missing.`);
+}
 expect(publicExists("site.webmanifest"), "site.webmanifest is missing.");
 expect(publicExists("_redirects"), "Netlify _redirects fallback is missing.");
 expect(publicExists("404.html"), "Static-host 404 fallback is missing.");
@@ -105,10 +111,11 @@ expect(socialPreview.width === 1200 && socialPreview.height === 630, "social-pre
 const socialPreviewSvg = readPublic("social-preview.svg");
 expect(socialPreviewSvg.includes(shareTagline), "social-preview.svg must include the current share tagline.");
 expect(!socialPreviewSvg.includes(retiredShareCopy), "social-preview.svg must not include retired share copy.");
-if (publicExists("illustrations/plant-evolution-story.webp")) {
-  const plantIllustrationSize = statSync(resolve(publicRoot, "illustrations/plant-evolution-story.webp")).size;
-  expect(isWebp("illustrations/plant-evolution-story.webp"), "Plant evolution generated illustration must be a WebP file.");
-  expect(plantIllustrationSize > 100_000 && plantIllustrationSize < 500_000, "Plant evolution generated illustration WebP should stay detailed but lightweight.");
+for (const illustrationPath of generatedIllustrations) {
+  if (!publicExists(illustrationPath)) continue;
+  const illustrationSize = statSync(resolve(publicRoot, illustrationPath)).size;
+  expect(isWebp(illustrationPath), `${illustrationPath} must be a WebP file.`);
+  expect(illustrationSize > 100_000 && illustrationSize < 500_000, `${illustrationPath} should stay detailed but lightweight.`);
 }
 
 const indexHtml = readRoot("index.html");
