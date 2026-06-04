@@ -72,6 +72,11 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copiedPlatformReview, setCopiedPlatformReview] = useState(false);
   const [copiedAiAuditPrompts, setCopiedAiAuditPrompts] = useState(false);
   const [selectedPlatformPlanIndex, setSelectedPlatformPlanIndex] = useState(0);
+  const [platformLearnerLevel, setPlatformLearnerLevel] = useState("生物基础入门，已经学过 DNA 和 RNA 基础");
+  const [platformKnowledgeRange, setPlatformKnowledgeRange] = useState("基因表达：DNA、mRNA、蛋白质的信息传递关系");
+  const [platformLearningGoal, setPlatformLearningGoal] = useState("我能说明 DNA、mRNA、蛋白质之间的信息传递关系");
+  const [platformQuestionCount, setPlatformQuestionCount] = useState("6 题");
+  const [platformTimeBudget, setPlatformTimeBudget] = useState("8 分钟");
   const [copyStatus, setCopyStatus] = useState("");
   const collection = kind === "note" ? notes : essays;
   const article = collection.find((item) => item.slug === slug);
@@ -171,11 +176,25 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
       ]
     : [];
   const activePlatformPlan = platformUsePlans[selectedPlatformPlanIndex] ?? platformUsePlans[0];
+  const platformCustomConfigItems = activePlatformPlan
+    ? [
+        `用途：${activePlatformPlan.title}`,
+        `学习阶段：${platformLearnerLevel.trim() || "请填写当前学习背景"}`,
+        `知识点范围：${platformKnowledgeRange.trim() || "请填写本次只测哪些知识点"}`,
+        `测评目标：${platformLearningGoal.trim() || "请写成“我能……”的可观察动作"}`,
+        `题量：${platformQuestionCount.trim() || "请填写题量"}`,
+        `预计完成时间：${platformTimeBudget.trim() || "请填写预计完成时间"}`,
+        "生成要求：题干清楚，答案唯一，干扰项来自真实误解，解析说明为什么对、为什么错",
+      ]
+    : [];
   const platformUsePlansText = platformUsePlans.map((plan) => `${plan.title}\n${plan.fields.map((field) => `- ${field}`).join("\n")}\n- ${plan.output}`).join("\n\n");
   const activePlatformPlanText = activePlatformPlan
     ? `【SciFusion 当前照填方案】
 平台入口：${platformUrl}
 当前用途：${activePlatformPlan.title}
+
+我的照填输入
+${platformCustomConfigItems.map((field, index) => `${index + 1}. ${field}`).join("\n")}
 
 照填字段
 ${activePlatformPlan.fields.map((field, index) => `${index + 1}. ${field}`).join("\n")}
@@ -241,10 +260,11 @@ ${platformUsePlansText}
   const platformReviewText = platformUrl
     ? `【SciFusion 测后复盘记录】
 平台入口：${platformUrl}
-本次用途：
-学习阶段：
-知识点范围：
-题型 / 难度 / 题量：
+本次用途：${activePlatformPlan?.title ?? ""}
+学习阶段：${platformLearnerLevel}
+知识点范围：${platformKnowledgeRange}
+测评目标：${platformLearningGoal}
+题量 / 时间：${platformQuestionCount} / ${platformTimeBudget}
 
 题目审核
 1. 题干是否只问一个核心问题：
@@ -676,6 +696,49 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     </div>
                   </div>
                 ) : null}
+                {activePlatformPlan ? (
+                  <div className="platform-custom-config-grid" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.75rem", display: "grid", gap: "0.65rem" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.7rem", flexWrap: "wrap" }}>
+                      <div>
+                        <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.84rem" }}>我的照填配置</div>
+                        <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem", fontWeight: 800 }}>
+                          把当前要测的主题写清楚，再复制到平台。目标要写成自己能完成的动作。
+                        </div>
+                      </div>
+                      <span style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.26rem 0.62rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+                        {activePlatformPlan.title}
+                      </span>
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.58rem" }}>
+                      <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.74rem", fontWeight: 900 }}>
+                        学习阶段
+                        <input value={platformLearnerLevel} onChange={(event) => { setPlatformLearnerLevel(event.target.value); setCopiedPlatformConfig(false); setCopiedPlatformReview(false); setCopyStatus(""); }} style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.52rem 0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
+                      </label>
+                      <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.74rem", fontWeight: 900 }}>
+                        题量
+                        <input value={platformQuestionCount} onChange={(event) => { setPlatformQuestionCount(event.target.value); setCopiedPlatformConfig(false); setCopiedPlatformReview(false); setCopyStatus(""); }} style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.52rem 0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
+                      </label>
+                      <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.74rem", fontWeight: 900 }}>
+                        知识点范围
+                        <input value={platformKnowledgeRange} onChange={(event) => { setPlatformKnowledgeRange(event.target.value); setCopiedPlatformConfig(false); setCopiedPlatformReview(false); setCopyStatus(""); }} style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.52rem 0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
+                      </label>
+                      <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.74rem", fontWeight: 900 }}>
+                        预计完成时间
+                        <input value={platformTimeBudget} onChange={(event) => { setPlatformTimeBudget(event.target.value); setCopiedPlatformConfig(false); setCopiedPlatformReview(false); setCopyStatus(""); }} style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.52rem 0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
+                      </label>
+                      <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.74rem", fontWeight: 900, gridColumn: "1 / -1" }}>
+                        测评目标
+                        <textarea value={platformLearningGoal} onChange={(event) => { setPlatformLearningGoal(event.target.value); setCopiedPlatformConfig(false); setCopiedPlatformReview(false); setCopyStatus(""); }} rows={2} style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.52rem 0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, resize: "vertical" }} />
+                      </label>
+                    </div>
+                    <div style={{ background: "var(--cherry-blue-light)", border: "1px solid rgba(85,137,179,0.18)", borderRadius: 8, padding: "0.62rem", display: "grid", gap: "0.34rem" }}>
+                      <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.76rem" }}>即将复制到平台的字段</strong>
+                      {platformCustomConfigItems.map((item) => (
+                        <span key={item} style={{ color: "var(--cherry-warm-mid)", fontSize: "0.73rem", lineHeight: 1.46, fontWeight: 800 }}>{item}</span>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.58rem" }}>
                   <div style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem", display: "grid", gap: "0.48rem" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.6rem", flexWrap: "wrap" }}>
@@ -990,6 +1053,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
         {`
           .article-detail-link:focus-visible,
           .article-nav-card:focus-visible,
+          .platform-custom-config-grid input:focus-visible,
+          .platform-custom-config-grid textarea:focus-visible,
           .platform-plan-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
@@ -1060,7 +1125,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           }
 
           @media (max-width: 759px) {
-            .platform-active-plan-grid {
+            .platform-active-plan-grid,
+            .platform-custom-config-grid > div:nth-of-type(2) {
               grid-template-columns: 1fr !important;
             }
 

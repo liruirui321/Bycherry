@@ -241,6 +241,21 @@ function verifyArticleCardsStayStructured() {
   }
 }
 
+function verifyPlatformGuideConfigBuilder() {
+  const articleSource = read("src/app/components/ArticleDetailPage.tsx");
+  const researchSource = read("src/app/components/ResearchEssays.tsx");
+
+  expect(researchSource.includes('platformUrl: "https://scifusion.top"'), "SciFusion guide must keep the direct platform link.");
+  expect(articleSource.includes("platformCustomConfigItems"), "Platform guide must build learner-specific paste fields.");
+  expect(articleSource.includes("platformLearnerLevel"), "Platform guide must collect learner level before copying a config.");
+  expect(articleSource.includes("platformKnowledgeRange"), "Platform guide must collect the knowledge range before copying a config.");
+  expect(articleSource.includes("platformLearningGoal"), "Platform guide must collect an observable learning goal before copying a config.");
+  expect(articleSource.includes("platformQuestionCount") && articleSource.includes("platformTimeBudget"), "Platform guide must collect question count and time budget.");
+  expect(articleSource.includes("我的照填配置"), "Platform guide must visibly expose the learner's custom config builder.");
+  expect(articleSource.includes("即将复制到平台的字段"), "Platform guide must preview the exact fields that will be copied to the platform.");
+  expect(articleSource.includes("测后复盘表"), "Platform guide must keep a copyable post-assessment review table.");
+}
+
 function verifyWorkJsonLdLearningOutcomes() {
   const appSource = read("src/app/App.tsx");
   const staticIndexSource = read("scripts/generate-static-index.mjs");
@@ -940,6 +955,7 @@ verifyNoLowQualityVisibleContent();
 verifyWorkCardActions();
 verifyWorkDetailCardsStayCompact();
 verifyArticleCardsStayStructured();
+verifyPlatformGuideConfigBuilder();
 verifyWorkJsonLdLearningOutcomes();
 verifyResearchAgentWorkbenchContract();
 verifyConceptExplainerAgentContract();
