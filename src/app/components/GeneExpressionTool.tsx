@@ -368,6 +368,7 @@ function LiveExpressionProcess({
     <>
       {renderedRibosomes.map((ribosome, index) => {
         const codonIndex = Math.min(codons.length - 1, Math.floor(ribosome.progress * codons.length));
+        const currentCodon = codons[codonIndex];
         return (
           <g key={`moving-ribosome-${index}`} transform={`translate(${ribosome.renderPoint.x} ${ribosome.renderPoint.y})`} opacity={ribosome.opacity}>
             <ellipse rx={48} ry={30} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={3} />
@@ -381,6 +382,16 @@ function LiveExpressionProcess({
             <path d="M17 7 C29 12 37 17 43 19" fill="none" stroke="var(--cherry-forest)" strokeWidth={5.2} strokeLinecap="round" opacity={0.28} />
             <path d="M8 -8 C18 -15 27 -18 36 -16" fill="none" stroke="var(--cherry-forest)" strokeWidth={5} strokeLinecap="round" opacity={0.46} />
             <circle cx={36} cy={-16} r={6.5} fill="var(--cherry-forest)" stroke="#FAF7F1" strokeWidth={2.2} />
+            <path d="M13 -42 C13 -30 13 -16 13 -7" fill="none" stroke={currentCodon?.color ?? "var(--cherry-yellow)"} strokeWidth={3.4} strokeLinecap="round" opacity={0.82} />
+            <circle cx={13} cy={-43} r={9.5} fill={currentCodon?.color ?? "var(--cherry-yellow)"} stroke="#FAF7F1" strokeWidth={2.2}>
+              {prefersReducedMotion ? null : <animate attributeName="cy" values="-46;-40;-43" dur="0.8s" repeatCount="indefinite" />}
+            </circle>
+            <text x={13} y={-40} textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={6.5} fontWeight={900}>
+              {currentCodon?.amino ?? ""}
+            </text>
+            <path d="M15 -5 C23 -8 28 -12 36 -16" fill="none" stroke="var(--cherry-forest)" strokeWidth={2.8} strokeLinecap="round" strokeDasharray="3 4" opacity={0.7}>
+              {prefersReducedMotion ? null : <animate attributeName="stroke-dashoffset" values="8;0" dur="0.8s" repeatCount="indefinite" />}
+            </path>
             <text x={-39} y={28} fill="var(--cherry-red)" fontSize={7} fontWeight={900}>
               5'
             </text>
@@ -398,7 +409,7 @@ function LiveExpressionProcess({
               核糖体
             </text>
             <text x={0} y={22} textAnchor="middle" fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
-              {codons[codonIndex]?.rna ?? ""}
+              {currentCodon?.rna ?? ""}
             </text>
           </g>
         );
