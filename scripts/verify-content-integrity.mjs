@@ -207,6 +207,10 @@ function verifyWorkCardActions() {
   expect(worksSource.includes("复制清单"), "Works section must expose the checklist copy button.");
   expect(worksSource.includes("filteredOutputCount"), "Works section checklist must summarize saved output counts.");
   expect(worksSource.includes("work-module-checklist-status"), "Works section checklist must expose copy status.");
+  expect(worksSource.includes("learningPathBundles"), "Works section must connect modules with paired reading paths.");
+  expect(worksSource.includes("配套阅读路径"), "Works section must visibly expose paired module and article routes.");
+  expect(worksSource.includes("work-reading-path-link"), "Works section paired reading links must be keyboard focusable.");
+  expect(worksSource.includes("bundle.article.actionSteps[0]") && worksSource.includes("bundle.article.checklist[0]"), "Works section paired reading links must expose article action and completion checks.");
 }
 
 function verifyWorkDetailCardsStayCompact() {

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { IconMicroscope, IconAI, IconLeaf, IconFlask, IconDNA } from "./Icons";
+import { notes } from "./Notes";
+import { essays } from "./ResearchEssays";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { copyText } from "../clipboard";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
@@ -238,6 +240,31 @@ export function Works() {
   const filtered = activeCategory === "全部" ? works : works.filter((w) => w.category === activeCategory);
   const recommendedWork = works.find((work) => work.slug === "gene-expression") ?? works[0];
   const filteredOutputCount = filtered.reduce((count, work) => count + work.outputs.length, 0);
+  const learningPathBundles = [
+    {
+      goal: "看懂生命过程",
+      work: works.find((work) => work.slug === "gene-expression"),
+      article: notes.find((note) => note.slug === "ai-course-development"),
+      note: "先操作仿真，再用 AI 质检法检查自己是否把分子、过程和证据讲清楚。",
+    },
+    {
+      goal: "拆清科研证据",
+      work: works.find((work) => work.slug === "research-prompt-kit"),
+      article: essays.find((essay) => essay.slug === "science-to-learning-question"),
+      note: "先读证据入口，再把材料放进 Agent 工作台拆任务、来源和风险。",
+    },
+    {
+      goal: "整理植物材料",
+      work: works.find((work) => work.slug === "plant-evolution-stories"),
+      article: notes.find((note) => note.slug === "plant-genome-evidence-chain"),
+      note: "先沿时间轴定位创新，再用证据链方法判断材料支持到哪一步。",
+    },
+  ].filter((bundle): bundle is {
+    goal: string;
+    work: (typeof works)[number];
+    article: (typeof notes)[number] | (typeof essays)[number];
+    note: string;
+  } => Boolean(bundle.work && bundle.article));
   const moduleChecklistText = `【By Cherry 学习模块清单】
 当前范围：${activeCategory === "全部" ? "全部学习模块" : activeCategory}
 模块数量：${filtered.length}
@@ -367,6 +394,60 @@ ${filtered.map((work, index) => `${index + 1}. ${work.title}
           </button>
         </div>
 
+        <div className="work-reading-path-panel" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.95rem", marginBottom: "1.15rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", display: "grid", gap: "0.72rem" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.92rem", fontWeight: 900, marginBottom: "0.18rem" }}>配套阅读路径</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, fontWeight: 800 }}>
+              不确定先做工具还是先读文章时，可以按下面的组合走：一个模块配一篇方法或证据文章。
+            </div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "0.72rem" }}>
+            {learningPathBundles.map((bundle) => (
+              <div key={bundle.goal} style={{ background: bundle.work.color, border: `1.5px solid ${bundle.work.border}`, borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.52rem" }}>
+                <div style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>{bundle.goal}</div>
+                <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem", lineHeight: 1.45, fontWeight: 900 }}>{bundle.note}</div>
+                <div style={{ display: "grid", gap: "0.36rem" }}>
+                  <a
+                    className="work-reading-path-link"
+                    href={bundle.work.href}
+                    aria-label={`打开模块：${bundle.work.title}。先做这个，${bundle.work.starter}`}
+                    onMouseEnter={() => preloadRouteForHref(bundle.work.href)}
+                    onFocus={() => preloadRouteForHref(bundle.work.href)}
+                    onPointerDown={() => preloadRouteForHref(bundle.work.href)}
+                    onClick={(event) => {
+                      if (!shouldUseClientNavigation(event)) return;
+                      event.preventDefault();
+                      navigateClient(bundle.work.href);
+                    }}
+                    style={{ background: "rgba(250,247,241,0.78)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.5rem 0.58rem", color: "var(--cherry-warm-brown)", textDecoration: "none", fontSize: "0.74rem", lineHeight: 1.42, fontWeight: 900 }}
+                  >
+                    1. 操作模块：{bundle.work.title}
+                  </a>
+                  <a
+                    className="work-reading-path-link"
+                    href={bundle.article.href}
+                    aria-label={`打开配套文章：${bundle.article.title}。先做这个，${bundle.article.actionSteps[0]}。完成后检查，${bundle.article.checklist[0]}`}
+                    onMouseEnter={() => preloadRouteForHref(bundle.article.href)}
+                    onFocus={() => preloadRouteForHref(bundle.article.href)}
+                    onPointerDown={() => preloadRouteForHref(bundle.article.href)}
+                    onClick={(event) => {
+                      if (!shouldUseClientNavigation(event)) return;
+                      event.preventDefault();
+                      navigateClient(bundle.article.href);
+                    }}
+                    style={{ background: "rgba(250,247,241,0.78)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.5rem 0.58rem", color: "var(--cherry-warm-brown)", textDecoration: "none", fontSize: "0.74rem", lineHeight: 1.42, fontWeight: 900 }}
+                  >
+                    2. 配套阅读：{bundle.article.title}
+                  </a>
+                </div>
+                <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 900 }}>
+                  完成检查：{bundle.article.checklist[0]}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Grid */}
         <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1.25rem", listStyle: "none", margin: 0, padding: 0 }}>
           {filtered.map((work) => (
@@ -383,6 +464,7 @@ ${filtered.map((work, index) => `${index + 1}. ${work.title}
         {`
           #works .work-card:focus-visible,
           #works .work-recommended-start:focus-visible,
+          #works .work-reading-path-link:focus-visible,
           #works .work-module-checklist-button:focus-visible,
           #works .work-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
