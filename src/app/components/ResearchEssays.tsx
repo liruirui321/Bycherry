@@ -331,7 +331,7 @@ function EssayCard({ essay }: {
               fontSize: "0.8rem",
             }}
           >
-            阅读全文
+            查看证据
             <div style={{ transition: "transform 0.25s" }}>
               <IconArrowRight size={14} color="var(--cherry-forest)" />
             </div>

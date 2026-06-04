@@ -334,13 +334,14 @@ function verifyLearnerFacingArticleCopy() {
     "学习资料库",
     "学习方法库",
     "科研证据库",
+    "查看证据",
     "学习方法、科研证据、AI 创作和科研转译资料",
   ];
   const retiredLearnerArticlePatterns = [
     { label: "old AI course title", pattern: /AI 可以参与课程开发/ },
     { label: "old plant classroom title", pattern: /从植物基因组到高中生物课堂/ },
     { label: "note-and-essay directory copy", pattern: /笔记与科研随笔/ },
-    { label: "note navigation copy", pattern: /阅读笔记|回到笔记|最近在想的事|文章目录/ },
+    { label: "generic reading navigation copy", pattern: /阅读全文|阅读笔记|回到笔记|最近在想的事|文章目录/ },
     { label: "research essay navigation copy", pattern: /科研随笔|创作笔记/ },
     { label: "learning note positioning", pattern: /学习笔记|研究笔记/ },
     { label: "classroom framing", pattern: /课堂|教师|老师|教案|授课|教学/ },
