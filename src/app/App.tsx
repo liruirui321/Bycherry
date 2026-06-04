@@ -30,6 +30,15 @@ function upsertMeta(selector: string, attributes: Record<string, string>, conten
   element.setAttribute("content", content);
 }
 
+function setOptionalMeta(selector: string, attributes: Record<string, string>, content: string | null) {
+  if (content) {
+    upsertMeta(selector, attributes, content);
+    return;
+  }
+
+  document.head.querySelector(selector)?.remove();
+}
+
 function upsertCanonical(url: string) {
   let element = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
   if (!element) {
@@ -183,6 +192,10 @@ export default function App() {
     const notFound = unknownPath || missingRoutedItem;
     const title = notFound ? "没有找到页面" : work?.title ?? note?.title ?? essay?.title ?? homeTitle;
     const description = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览作品、笔记和科研随笔。" : work?.desc ?? note?.excerpt ?? essay?.body ?? defaultDescription;
+    const isArticle = Boolean(note || essay);
+    const publishedDate = note?.date ?? essay?.date ?? null;
+    const workUpdatedDate = work?.updated ?? null;
+    const keywords = work?.tags.join(", ") ?? essay?.tags.join(", ") ?? note?.tag ?? null;
     const fullTitle = title === homeTitle ? `${siteTitle} | ${title}` : `${title} | ${siteTitle}`;
     const canonicalPath = window.location.pathname === "/" ? "/" : window.location.pathname.replace(/\/$/, "");
     const canonicalUrl = `${siteUrl}${canonicalPath}`;
@@ -235,7 +248,7 @@ export default function App() {
     upsertMeta('meta[name="description"]', { name: "description" }, description);
     upsertMeta('meta[property="og:title"]', { property: "og:title" }, fullTitle);
     upsertMeta('meta[property="og:description"]', { property: "og:description" }, description);
-    upsertMeta('meta[property="og:type"]', { property: "og:type" }, work || note || essay ? "article" : "website");
+    upsertMeta('meta[property="og:type"]', { property: "og:type" }, isArticle ? "article" : "website");
     upsertMeta('meta[property="og:locale"]', { property: "og:locale" }, "zh_CN");
     upsertMeta('meta[property="og:site_name"]', { property: "og:site_name" }, siteTitle);
     upsertMeta('meta[property="og:url"]', { property: "og:url" }, canonicalUrl);
@@ -250,6 +263,11 @@ export default function App() {
     upsertMeta('meta[name="twitter:image"]', { name: "twitter:image" }, socialImageUrl);
     upsertMeta('meta[name="twitter:image:alt"]', { name: "twitter:image:alt" }, "By Cherry 科学、课程与 AI 作品集预览图");
     upsertMeta('meta[name="robots"]', { name: "robots" }, notFound ? "noindex" : "index, follow");
+    setOptionalMeta('meta[property="article:published_time"]', { property: "article:published_time" }, isArticle ? publishedDate : null);
+    setOptionalMeta('meta[property="article:modified_time"]', { property: "article:modified_time" }, isArticle ? publishedDate : null);
+    setOptionalMeta('meta[property="article:tag"]', { property: "article:tag" }, isArticle ? keywords : null);
+    setOptionalMeta('meta[property="og:updated_time"]', { property: "og:updated_time" }, workUpdatedDate);
+    setOptionalMeta('meta[name="keywords"]', { name: "keywords" }, keywords);
     upsertCanonical(canonicalUrl);
     upsertJsonLd(jsonLd);
   }, [detailSlug, noteSlug, researchSlug, unknownPath, locationKey]);
