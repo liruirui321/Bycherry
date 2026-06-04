@@ -303,6 +303,11 @@ function verifyConceptExplainerAgentContract() {
     { label: "anti-shortcut boundary", text: "不要替我跳过判断过程" },
     { label: "anti-fabrication boundary", text: "不编造具体事实" },
     { label: "stable output card", text: "生成学习卡" },
+    { label: "agent run panel", text: "Agent 运行面板" },
+    { label: "visual mode chooser", text: "visualMode" },
+    { label: "visual explanation output", text: "可视化解释" },
+    { label: "visual selection card", text: "可视化选择" },
+    { label: "completion standard card", text: "合格标准" },
   ];
 
   const retiredConceptPatterns = [
@@ -311,6 +316,7 @@ function verifyConceptExplainerAgentContract() {
     { label: "student output field", pattern: /studentOutput/ },
     { label: "lecture copy", pattern: /教师教案|讲给谁|讲解目标|讲解稿/ },
     { label: "classroom flow heading", pattern: /课堂流程/ },
+    { label: "school-level advanced label", pattern: /研究生版/ },
   ];
 
   for (const item of requiredConceptFeatures) {

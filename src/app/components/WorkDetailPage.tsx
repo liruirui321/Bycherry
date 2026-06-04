@@ -1730,7 +1730,7 @@ function ConceptExplainerContent() {
       levels: [
         { title: "入门版", body: "DNA 像一份完整说明书，转录就是把其中一段基因信息抄写成 RNA 工作稿。" },
         { title: "基础版", body: "细胞以 DNA 的一条链为模板合成 mRNA，RNA 中用 U 替代 T，mRNA 会把遗传信息带到核糖体。" },
-        { title: "研究生版", body: "转录包含启动子识别、转录因子调控、RNA 聚合酶延伸、终止，以及真核细胞中的剪接和转录后加工。" },
+        { title: "进阶版", body: "转录包含启动子识别、转录因子调控、RNA 聚合酶延伸、终止，以及真核细胞中的剪接和转录后加工。" },
       ],
       terms: ["DNA 模板链", "RNA 聚合酶", "mRNA", "启动子"],
       mechanism: ["转录因子帮助定位启动子", "RNA 聚合酶结合 DNA", "按模板链合成 mRNA", "mRNA 离开 DNA，进入后续加工或翻译"],
@@ -1759,7 +1759,7 @@ function ConceptExplainerContent() {
       levels: [
         { title: "入门版", body: "端粒位于染色体末端，帮助细胞区分真正的末端和需要修复的 DNA 断裂。" },
         { title: "基础版", body: "端粒位于染色体末端，随着细胞分裂逐渐缩短，能减少染色体末端被误认为断裂的风险。" },
-        { title: "研究生版", body: "端粒长度、端粒酶活性与复制潜能、细胞衰老、肿瘤发生和干细胞状态有关。" },
+        { title: "进阶版", body: "端粒长度、端粒酶活性与复制潜能、细胞衰老、肿瘤发生和干细胞状态有关。" },
       ],
       terms: ["染色体末端", "端粒酶", "复制末端问题", "细胞衰老"],
       mechanism: ["DNA 复制不能完整复制最末端", "端粒重复序列先被消耗", "端粒过短会触发损伤反应", "端粒酶可在部分细胞中延长端粒"],
@@ -1788,7 +1788,7 @@ function ConceptExplainerContent() {
       levels: [
         { title: "入门版", body: "生态位描述一个物种如何利用资源、占据环境并与其他生物发生关系。" },
         { title: "基础版", body: "生态位描述生物如何利用资源、生活在什么环境、和其他生物如何相互作用。" },
-        { title: "研究生版", body: "生态位包含资源维度、空间维度和相互作用维度，可用于解释竞争、共存、适应辐射和群落结构。" },
+        { title: "进阶版", body: "生态位包含资源维度、空间维度和相互作用维度，可用于解释竞争、共存、适应辐射和群落结构。" },
       ],
       terms: ["资源利用", "竞争", "共存", "群落"],
       mechanism: ["环境提供资源和限制", "物种选择可利用的资源范围", "相似物种发生竞争", "资源分化可帮助物种共存"],
@@ -1817,7 +1817,7 @@ function ConceptExplainerContent() {
       levels: [
         { title: "入门版", body: "凋亡是细胞按程序结束自身生命，并把对周围组织的影响控制在较小范围内。" },
         { title: "基础版", body: "凋亡是一种程序性细胞死亡，细胞会收缩、DNA 断裂，并被免疫细胞清除，通常不引发明显炎症。" },
-        { title: "研究生版", body: "凋亡通过内源性线粒体通路或外源性死亡受体通路激活 caspase 级联反应，在发育、免疫和肿瘤抑制中很关键。" },
+        { title: "进阶版", body: "凋亡通过内源性线粒体通路或外源性死亡受体通路激活 caspase 级联反应，在发育、免疫和肿瘤抑制中很关键。" },
       ],
       terms: ["程序性细胞死亡", "caspase", "线粒体通路", "死亡受体"],
       mechanism: ["细胞收到内部或外部死亡信号", "caspase 级联被激活", "细胞结构被有序拆解", "碎片被吞噬清除"],
@@ -1850,7 +1850,7 @@ function ConceptExplainerContent() {
       levels: [
         { title: "入门版", body: `${displayName} 是一个需要先用例子进入的概念。先问它描述什么现象，再用一句话写出最核心的关系。` },
         { title: "基础版", body: `学习 ${displayName} 时，把它拆成定义、参与对象、过程步骤、结果和限制条件。每一项都要能配一个例子。` },
-        { title: "研究生版", body: `进一步学习 ${displayName} 时，需要区分概念模型、证据来源、适用范围、例外情况和不同文献中的定义差异。` },
+        { title: "进阶版", body: `进一步学习 ${displayName} 时，需要区分概念模型、证据来源、适用范围、例外情况和不同文献中的定义差异。` },
       ],
       terms: [displayName, "定义", "机制", "例子", "边界"],
       mechanism: ["先定位这个概念解释的现象", "再找参与对象或关键变量", "再整理过程或因果关系", "最后写出适用条件和不能推出的结论"],
@@ -1898,54 +1898,88 @@ function ConceptExplainerContent() {
     "先判断概念所属学科、学习阶段和使用场景。",
     "再生成一个诊断问题，暴露我可能卡住的地方。",
     "再给出一个低门槛类比，但明确类比不能推出什么。",
+    "再选择一种可视化解释：流程图、对照表、三栏概念图或因果链。",
     "再拆成 4 个以内的机制步骤，避免堆术语。",
     "再给出一个情境练习，让我产出一句解释或一张小表。",
     "最后生成即时小测和证据边界，提醒哪些内容需要查教材或资料。",
+  ];
+  const visualMode = /循环|周期|轮回|代谢/.test(concept)
+    ? "循环图"
+    : /比较|差异|分类|类型|区别/.test(concept)
+      ? "对照表"
+      : /转录|翻译|表达|凋亡|光合|呼吸|反应|过程|合成|分解/.test(concept)
+        ? "流程箭头图"
+        : /原因|影响|调控|效应|机制/.test(concept)
+          ? "因果链"
+          : "三栏概念图";
+  const conceptAgentCards = [
+    {
+      title: "收窄范围",
+      body: isPresetConcept ? "当前概念已有高质量卡片，可以直接从诊断问题进入。" : `如果“${concept}”太宽，先限定到一个章节、现象或应用场景，再生成学习卡。`,
+    },
+    {
+      title: "可视化选择",
+      body: `本次优先用${visualMode}：把概念、关键变量、变化过程和边界放在同一张图里看。`,
+    },
+    {
+      title: "输出顺序",
+      body: "固定按诊断、类比、机制、例子、迁移、小测、证据边界输出，避免只给一段定义。",
+    },
+    {
+      title: "合格标准",
+      body: `你能用“${concept}”解释一个新情境，并说出它不能直接推出什么。`,
+    },
   ];
   const lessonOutput = `【概念】${concept}
 【学习阶段】${audience}
 【学习目标】${lessonGoal}
 
-一、先修知识
+一、Agent 运行记录
+${conceptAgentCards.map((item, index) => `${index + 1}. ${item.title}：${item.body}`).join("\n")}
+
+二、先修知识
 ${active.prerequisite.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-二、诊断问题
+三、诊断问题
 ${active.diagnostic}
 
-三、先用类比进入
+四、先用类比进入
 ${active.analogy}
 
-四、${selectedLevel.title}解释
+五、${selectedLevel.title}解释
 ${selectedLevel.body}
 
-五、机制步骤
+六、可视化解释
+${visualMode}：${conceptFlow.map((item) => `${item.label}=${item.value}`).join("；")}
+
+七、机制步骤
 ${active.mechanism.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-六、关键词
+八、关键词
 ${active.terms.join("、")}
 
-七、辨析
+九、辨析
 ${active.compare}
 
-八、常见误区
+十、常见误区
 ${active.pitfall}
 
-九、落地示例
+十一、落地示例
 ${active.workedExample.title}
 情境：${active.workedExample.situation}
 引导问题：${active.workedExample.guideQuestion}
 学习产出：${active.workedExample.learnerOutput}
 
-十、证据边界
+十二、证据边界
 ${active.evidenceBoundary}
 
-十一、迁移任务
+十三、迁移任务
 ${active.transferTask}
 
-十二、学习流程
+十四、学习流程
 ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 
-十三、即时小测
+十五、即时小测
 问题：${active.quiz.question}
 选项：${active.quiz.options.join(" / ")}
 答案：${active.quiz.answer}
@@ -1969,14 +2003,15 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 2. 诊断问题：用 1 个问题检查我是否真的理解。
 3. 类比：给一个帮助进入的类比，并说明类比边界。
 4. 分层解释：入门版 / 基础版 / 进阶版各 1 段。
-5. 机制步骤：最多 4 步，每步一句话。
-6. 关键词：列出 4-6 个术语。
-7. 辨析：说明它容易和哪个概念混淆。
-8. 常见误区：指出 1 个最容易错的理解。
-9. 落地示例：给情境材料、引导问题、我的学习产出。
-10. 迁移任务：让我把概念用到一个新例子。
-11. 即时小测：1 道选择题，给答案和解释。
-12. 证据边界：哪些内容需要查教材、论文或学习资料确认。
+5. 可视化解释：选择流程图、对照表、三栏概念图或因果链，并写出图中节点。
+6. 机制步骤：最多 4 步，每步一句话。
+7. 关键词：列出 4-6 个术语。
+8. 辨析：说明它容易和哪个概念混淆。
+9. 常见误区：指出 1 个最容易错的理解。
+10. 落地示例：给情境材料、引导问题、我的学习产出。
+11. 迁移任务：让我把概念用到一个新例子。
+12. 即时小测：1 道选择题，给答案和解释。
+13. 证据边界：哪些内容需要查教材、论文或学习资料确认。
 
 【质量要求】
 - 直接对我说话，用“你可以……”表达。
@@ -2055,6 +2090,29 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
           <button type="button" onClick={runConceptAgent} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.62rem 0.95rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap" }}>
             生成学习卡
           </button>
+        </div>
+      </div>
+
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.75rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>Agent 运行面板</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.2rem", fontWeight: 800 }}>
+              每次输入概念后，先看它如何收窄范围、选图形、组织输出和判断是否合格。
+            </div>
+          </div>
+          <span style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.2)", borderRadius: 999, padding: "0.28rem 0.68rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+            {visualMode}
+          </span>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.58rem" }}>
+          {conceptAgentCards.map((item, index) => (
+            <div key={item.title} style={{ background: index === 1 ? "var(--cherry-blue-light)" : index === 3 ? "var(--cherry-sage-light)" : "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.72rem", minHeight: 122 }}>
+              <span style={{ width: 22, height: 22, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900, marginBottom: "0.46rem" }}>{index + 1}</span>
+              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.3rem" }}>{item.title}</strong>
+              <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800 }}>{item.body}</span>
+            </div>
+          ))}
         </div>
       </div>
 
