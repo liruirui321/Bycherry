@@ -150,10 +150,16 @@ for (const illustration of generatedIllustrations) {
 
 const indexHtml = readRoot("index.html");
 const appSource = readRoot("src/app/App.tsx");
+const appMetadataSource = readRoot("src/app/siteMetadata.ts");
 const staticIndexSource = readRoot("scripts/generate-static-index.mjs");
 const siteMetadataSource = readRoot("scripts/site-metadata.mjs");
 const workPreviewSource = readRoot("src/app/components/WorkPreviewIllustration.tsx");
 const contentHrefs = getContentHrefs();
+expect(appSource.includes('from "./siteMetadata"'), "App.tsx must import runtime metadata from src/app/siteMetadata.ts.");
+for (const exportName of ["siteTitle", "homeTitle", "siteDescription", "siteUrl", "socialImageUrl", "shareImageAlt"]) {
+  expect(appMetadataSource.includes(`export const ${exportName}`), `src/app/siteMetadata.ts must export ${exportName}.`);
+  expect(!new RegExp(`const\\s+${exportName}\\s*=`).test(appSource), `App.tsx must not redeclare ${exportName}; use src/app/siteMetadata.ts.`);
+}
 expect(staticIndexSource.includes('from "./site-metadata.mjs"'), "Static index generator must import shared site metadata.");
 for (const exportName of ["siteUrl", "siteDescription", "shareDescription", "shareImageAlt", "worksListDescription", "articlesListDescription"]) {
   expect(siteMetadataSource.includes(`export const ${exportName}`), `site-metadata.mjs must export ${exportName}.`);
@@ -169,8 +175,8 @@ expect(indexHtml.includes('<meta name="application-name" content="By Cherry" />'
 expect(indexHtml.includes('<meta name="apple-mobile-web-app-title" content="By Cherry" />'), "index.html must include the Apple mobile web app title.");
 expect(indexHtml.includes('<meta name="mobile-web-app-capable" content="yes" />'), "index.html must declare mobile web app capability.");
 expect(indexHtml.includes(`<meta name="description" content="${siteDescription}" />`), "index.html must include the current site description.");
-expect(appSource.includes(siteDescription), "App.tsx runtime metadata must include the current site description.");
-expect(appSource.includes(shareImageAlt), "App.tsx runtime metadata must include the current share image alt text.");
+expect(appMetadataSource.includes(siteDescription), "Runtime metadata module must include the current site description.");
+expect(appMetadataSource.includes(shareImageAlt), "Runtime metadata module must include the current share image alt text.");
 expect(indexHtml.includes('<link rel="canonical" href="https://bycherry.me/" />'), "index.html must include the home canonical URL.");
 expect(indexHtml.includes('<meta property="og:url" content="https://bycherry.me/" />'), "index.html must include the home OG URL.");
 expect(indexHtml.includes(`<meta property="og:description" content="${shareDescription}" />`), "index.html must include the current OG description.");

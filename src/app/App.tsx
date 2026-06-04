@@ -14,12 +14,7 @@ import { Footer } from "./components/Footer";
 import { EmptyStateCard } from "./components/EmptyStateCard";
 import { works } from "./components/Works";
 import { navigateClient, shouldUseClientNavigation } from "./navigation";
-
-const siteTitle = "By Cherry";
-const homeTitle = "科学、课程与 AI";
-const defaultDescription = "By Cherry 是一个可直接使用的科学与 AI 学习工作台，提供科学模拟、课程卡片、科研 Agent 和学习笔记。";
-const siteUrl = "https://bycherry.me";
-const socialImageUrl = `${siteUrl}/social-preview.png`;
+import { homeTitle, shareImageAlt, siteDescription, siteTitle, siteUrl, socialImageUrl } from "./siteMetadata";
 
 function upsertMeta(selector: string, attributes: Record<string, string>, content: string) {
   let element = document.head.querySelector<HTMLMetaElement>(selector);
@@ -87,7 +82,7 @@ function buildHomeJsonLd() {
         url: siteUrl,
         name: siteTitle,
         alternateName: "Bycherry",
-        description: defaultDescription,
+        description: siteDescription,
         inLanguage: "zh-CN",
         image: socialImageUrl,
         publisher: { "@id": personId },
@@ -264,7 +259,7 @@ export default function App() {
     const missingRoutedItem = Boolean((detailSlug && !work) || (noteSlug && !note) || (researchSlug && !essay));
     const notFound = unknownPath || missingRoutedItem;
     const title = notFound ? "没有找到页面" : work?.title ?? note?.title ?? essay?.title ?? homeTitle;
-    const description = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览主题作品、笔记和科研随笔。" : work?.desc ?? note?.excerpt ?? essay?.body ?? defaultDescription;
+    const description = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览主题作品、笔记和科研随笔。" : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
     const isArticle = Boolean(note || essay);
     const publishedDate = note?.date ?? essay?.date ?? null;
     const workUpdatedDate = work?.updated ?? null;
@@ -335,12 +330,12 @@ export default function App() {
     upsertMeta('meta[property="og:image:width"]', { property: "og:image:width" }, "1200");
     upsertMeta('meta[property="og:image:height"]', { property: "og:image:height" }, "630");
     upsertMeta('meta[property="og:image:type"]', { property: "og:image:type" }, "image/png");
-    upsertMeta('meta[property="og:image:alt"]', { property: "og:image:alt" }, "By Cherry 科学与 AI 学习工作台预览图");
+    upsertMeta('meta[property="og:image:alt"]', { property: "og:image:alt" }, shareImageAlt);
     upsertMeta('meta[name="twitter:card"]', { name: "twitter:card" }, "summary_large_image");
     upsertMeta('meta[name="twitter:title"]', { name: "twitter:title" }, fullTitle);
     upsertMeta('meta[name="twitter:description"]', { name: "twitter:description" }, description);
     upsertMeta('meta[name="twitter:image"]', { name: "twitter:image" }, socialImageUrl);
-    upsertMeta('meta[name="twitter:image:alt"]', { name: "twitter:image:alt" }, "By Cherry 科学与 AI 学习工作台预览图");
+    upsertMeta('meta[name="twitter:image:alt"]', { name: "twitter:image:alt" }, shareImageAlt);
     upsertMeta('meta[name="robots"]', { name: "robots" }, notFound ? "noindex" : "index, follow");
     setOptionalMeta('meta[property="article:published_time"]', { property: "article:published_time" }, isArticle ? publishedDate : null);
     setOptionalMeta('meta[property="article:modified_time"]', { property: "article:modified_time" }, isArticle ? publishedDate : null);
