@@ -198,7 +198,7 @@ ${activePrompt.output.map((item, index) => `${index + 1}. ${item}`).join("\n")}
               {copyStatus}
             </div>
 
-            <div className="prompt-workflow-grid" aria-label="科研助手任务流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.62rem", marginBottom: "0.9rem" }}>
+            <div className="prompt-workflow-grid" role="group" aria-label="科研助手任务流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.62rem", marginBottom: "0.9rem" }}>
               {workflowSteps.map((item, index) => (
                 <div key={item.label} style={{ background: item.color, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.72rem", minHeight: 104, position: "relative", overflow: "hidden" }}>
                   <svg width="72" height="58" viewBox="0 0 72 58" fill="none" aria-hidden="true" focusable="false" style={{ position: "absolute", right: -8, bottom: -8, opacity: 0.72 }}>

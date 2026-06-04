@@ -94,11 +94,19 @@ function collectStaticSvgDefinitionIds(source) {
   );
 }
 
+function collectLabeledNonsemanticContainers(source) {
+  return Array.from(
+    source.matchAll(/<(div|span)\b(?=[^>]*\baria-label=)(?![^>]*\brole=)[^>]*>/g),
+    (match) => ({ tag: match[1], snippet: match[0].replace(/\s+/g, " ").slice(0, 160) })
+  );
+}
+
 const failures = [];
 const duplicateIdAllowlist = new Set(["main-content"]);
 let checkedReferences = 0;
 let checkedIds = 0;
 let checkedReusableSvgDefinitions = 0;
+let checkedLabeledContainers = 0;
 
 for (const filePath of walkFiles(sourceRoot, [".tsx", ".ts"])) {
   const source = readFileSync(filePath, "utf8");
@@ -106,9 +114,11 @@ for (const filePath of walkFiles(sourceRoot, [".tsx", ".ts"])) {
   const { ids, counts } = collectIds(source, stringConstants);
   const references = collectAriaReferences(source, stringConstants);
   const staticSvgDefinitionIds = isIllustrationComponentFile(source) ? collectStaticSvgDefinitionIds(source) : [];
+  const labeledNonsemanticContainers = collectLabeledNonsemanticContainers(source);
   checkedIds += ids.size;
   checkedReferences += references.length;
   checkedReusableSvgDefinitions += staticSvgDefinitionIds.length;
+  checkedLabeledContainers += labeledNonsemanticContainers.length;
 
   for (const [id, count] of counts) {
     if (count > 1 && !duplicateIdAllowlist.has(id)) {
@@ -125,6 +135,10 @@ for (const filePath of walkFiles(sourceRoot, [".tsx", ".ts"])) {
       failures.push(`${sourceLabel(filePath)} has ${reference.attribute}="${reference.id}" without a matching static id.`);
     }
   }
+
+  for (const container of labeledNonsemanticContainers) {
+    failures.push(`${sourceLabel(filePath)} has <${container.tag}> with aria-label but no role: ${container.snippet}`);
+  }
 }
 
 if (failures.length) {
@@ -133,4 +147,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Accessibility refs verified: ${checkedReferences} static aria references, ${checkedIds} static ids, and ${checkedReusableSvgDefinitions} reusable SVG definition ids.`);
+console.log(`Accessibility refs verified: ${checkedReferences} static aria references, ${checkedIds} static ids, ${checkedReusableSvgDefinitions} reusable SVG definition ids, and ${checkedLabeledContainers} labeled nonsemantic containers without roles.`);

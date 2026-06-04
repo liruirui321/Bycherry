@@ -1140,7 +1140,7 @@ export function GeneExpressionTool() {
                 {quizCorrectCount}/{geneQuizItems.length}
               </div>
             </div>
-            <div style={{ display: "flex", gap: 5, marginBottom: "0.8rem" }} aria-label={`已完成 ${quizAnsweredCount} 道小测`}>
+            <div role="group" style={{ display: "flex", gap: 5, marginBottom: "0.8rem" }} aria-label={`已完成 ${quizAnsweredCount} 道小测`}>
               {geneQuizItems.map((item, index) => {
                 const answered = Boolean(quizAnswers[item.id]);
                 const correct = quizAnswers[item.id] === item.answer;
