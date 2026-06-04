@@ -20,38 +20,45 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
 
   if (slug === "plant-evolution-stories") {
     const stages = [
-      { x: 74, y: 214, branch: -43, fill: "var(--cherry-blue-light)", accent: "var(--cherry-sage)" },
-      { x: 82, y: 178, branch: 42, fill: "var(--cherry-yellow-light)", accent: "var(--cherry-yellow)" },
-      { x: 68, y: 140, branch: -45, fill: "var(--cherry-sage-light)", accent: "var(--cherry-forest)" },
-      { x: 86, y: 104, branch: 43, fill: "var(--cherry-sage-light)", accent: "var(--cherry-sage)" },
-      { x: 70, y: 68, branch: -43, fill: "var(--cherry-yellow)", accent: "var(--cherry-warm-brown)" },
-      { x: 84, y: 34, branch: 39, fill: "var(--cherry-peach-light)", accent: "var(--cherry-red)" },
+      { x: 78, y: 258, branch: -42, fill: "var(--cherry-blue-light)", accent: "var(--cherry-sage)" },
+      { x: 88, y: 216, branch: 43, fill: "var(--cherry-yellow-light)", accent: "var(--cherry-yellow)" },
+      { x: 72, y: 172, branch: -44, fill: "var(--cherry-sage-light)", accent: "var(--cherry-forest)" },
+      { x: 92, y: 128, branch: 42, fill: "var(--cherry-sage-light)", accent: "var(--cherry-sage)" },
+      { x: 74, y: 84, branch: -42, fill: "var(--cherry-yellow)", accent: "var(--cherry-warm-brown)" },
+      { x: 90, y: 42, branch: 37, fill: "var(--cherry-peach-light)", accent: "var(--cherry-red)" },
     ];
 
     return (
-      <svg width={width} height={height} viewBox="0 0 150 250" fill="none" aria-hidden="true">
+      <svg width={width} height={height} viewBox="0 0 160 300" fill="none" aria-hidden="true">
         <defs>
           <linearGradient id="plant-card-sky" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#FFF8EA" />
-            <stop offset="0.52" stopColor="#EEF6E9" />
-            <stop offset="0.8" stopColor="#DDECCF" />
+            <stop offset="0.46" stopColor="#EEF6E9" />
+            <stop offset="0.76" stopColor="#DDECCF" />
             <stop offset="1" stopColor="#D8C7A8" />
           </linearGradient>
+          <linearGradient id="plant-card-water" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#84B8CC" stopOpacity="0.12" />
+            <stop offset="0.52" stopColor="#84B8CC" stopOpacity="0.38" />
+            <stop offset="1" stopColor="#84B8CC" stopOpacity="0.16" />
+          </linearGradient>
           <clipPath id="plant-card-clip">
-            <rect x="11" y="7" width="128" height="236" rx="36" />
+            <rect x="10" y="7" width="140" height="286" rx="38" />
           </clipPath>
         </defs>
-        <rect x="11" y="7" width="128" height="236" rx="36" fill="url(#plant-card-sky)" stroke="rgba(93,140,101,0.28)" strokeWidth="1.8" />
+        <rect x="10" y="7" width="140" height="286" rx="38" fill="url(#plant-card-sky)" stroke="rgba(93,140,101,0.28)" strokeWidth="1.8" />
         <g clipPath="url(#plant-card-clip)">
-          <circle cx="110" cy="34" r="16" fill="var(--cherry-yellow)" opacity="0.68" />
-          <path d="M8 158 C35 133 59 155 83 132 C104 113 123 116 145 98 V245 H8Z" fill="rgba(169,201,172,0.24)" />
-          <path d="M8 188 C30 170 55 181 79 167 C104 153 124 164 145 147 V245 H8Z" fill="rgba(169,201,172,0.28)" />
-          <path d="M7 213 C32 225 56 211 79 222 C101 232 124 211 146 219 V245 H7Z" fill="rgba(132,184,204,0.2)" />
-          <path d="M18 225 C38 231 104 232 130 220" stroke="rgba(58,92,62,0.18)" strokeWidth="4.2" strokeLinecap="round" />
-          <path d="M26 229 C38 217 52 217 64 229 M103 228 C113 214 128 216 136 229" stroke="var(--cherry-forest)" strokeWidth="2.8" strokeLinecap="round" opacity="0.38" />
-          <path d="M33 231 C28 219 31 211 38 205 M38 218 C49 209 59 214 63 225 M117 229 C111 215 115 204 125 198 M124 213 C134 204 143 208 147 218" stroke="var(--cherry-sage)" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.66" />
-          <path d="M74 214 C24 175 111 156 72 128 C30 94 112 81 75 55 C58 43 62 26 86 18" stroke="var(--cherry-forest)" strokeWidth="13" strokeLinecap="round" opacity="0.1" />
-          <path d="M74 214 C24 175 111 156 72 128 C30 94 112 81 75 55 C58 43 62 26 86 18" stroke="var(--cherry-sage)" strokeWidth="4.8" strokeLinecap="round" />
+          <circle cx="118" cy="39" r="19" fill="var(--cherry-yellow)" opacity="0.68" />
+          <path d="M15 69 C36 52 61 55 77 75 C56 84 33 83 15 69Z M99 92 C120 74 143 78 155 97 C135 106 116 105 99 92Z" fill="#FAF7F1" opacity="0.62" />
+          <path d="M5 151 C35 123 62 148 91 119 C117 94 136 104 154 84 V294 H5Z" fill="rgba(169,201,172,0.18)" />
+          <path d="M4 195 C31 174 54 190 83 168 C112 145 132 159 156 136 V294 H4Z" fill="rgba(169,201,172,0.28)" />
+          <path d="M4 238 C30 254 58 235 83 248 C108 261 130 236 157 247 V294 H4Z" fill="url(#plant-card-water)" />
+          <path d="M4 270 C32 253 58 265 83 256 C113 245 132 255 156 238 V294 H4Z" fill="rgba(216,199,168,0.62)" />
+          <path d="M20 267 C38 275 106 275 142 259" stroke="rgba(58,92,62,0.18)" strokeWidth="4.8" strokeLinecap="round" />
+          <path d="M20 282 C36 269 53 268 68 282 M104 280 C115 264 135 266 147 281" stroke="var(--cherry-forest)" strokeWidth="3" strokeLinecap="round" opacity="0.45" />
+          <path d="M31 281 C24 264 29 250 41 240 M39 260 C53 249 67 257 72 274 M122 279 C115 260 120 243 134 234 M132 253 C146 243 157 249 160 264" stroke="var(--cherry-sage)" strokeWidth="2.6" strokeLinecap="round" fill="none" opacity="0.7" />
+          <path d="M80 258 C23 211 120 187 75 148 C28 108 125 95 80 65 C62 53 64 29 94 20" stroke="var(--cherry-forest)" strokeWidth="14" strokeLinecap="round" opacity="0.1" />
+          <path d="M80 258 C23 211 120 187 75 148 C28 108 125 95 80 65 C62 53 64 29 94 20" stroke="var(--cherry-sage)" strokeWidth="5.2" strokeLinecap="round" />
         </g>
         {stages.map((stage, index) => {
           const side = stage.branch;
@@ -99,7 +106,7 @@ export function WorkPreviewIllustration({ slug, color, width = 96, height = 72 }
             </g>
           );
         })}
-        <path d="M30 234 C50 242 104 241 128 229" stroke="var(--cherry-forest)" strokeWidth="2.2" strokeLinecap="round" opacity="0.3" />
+        <path d="M25 285 C51 294 112 292 139 277" stroke="var(--cherry-forest)" strokeWidth="2.5" strokeLinecap="round" opacity="0.32" />
       </svg>
     );
   }

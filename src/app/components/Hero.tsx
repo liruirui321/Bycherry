@@ -261,7 +261,7 @@ export function Hero() {
                     color: "var(--cherry-warm-brown)",
                     textDecoration: "none",
                     textAlign: "left",
-                    minHeight: isPlantEvolution ? 172 : 150,
+                    minHeight: isPlantEvolution ? 184 : 150,
                     display: "grid",
                     gridTemplateRows: "auto auto 1fr auto",
                     gap: "0.38rem",
@@ -271,7 +271,7 @@ export function Hero() {
                     maxWidth: "100%",
                   }}
                 >
-                  <div aria-hidden="true" style={{ position: "absolute", right: isPlantEvolution ? -8 : -18, bottom: isPlantEvolution ? -22 : -20, width: isPlantEvolution ? 92 : 114, height: isPlantEvolution ? 150 : 92, borderRadius: isPlantEvolution ? "46% 54% 42% 58% / 55% 44% 56% 45%" : "54% 46% 48% 52% / 44% 55% 45% 56%", background: "rgba(250,247,241,0.42)", border: "1.5px dashed rgba(94,68,42,0.12)" }} />
+                  <div aria-hidden="true" style={{ position: "absolute", right: isPlantEvolution ? -10 : -18, bottom: isPlantEvolution ? -18 : -20, width: isPlantEvolution ? 98 : 114, height: isPlantEvolution ? 170 : 92, borderRadius: isPlantEvolution ? "46% 54% 42% 58% / 55% 44% 56% 45%" : "54% 46% 48% 52% / 44% 55% 45% 56%", background: "rgba(250,247,241,0.42)", border: "1.5px dashed rgba(94,68,42,0.12)" }} />
                   <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0, position: "relative", zIndex: 1 }}>
                     <span style={{ width: 28, height: 28, display: "inline-flex", alignItems: "center", justifyContent: "center", transform: "scale(0.68)", transformOrigin: "center" }}>{work.icon}</span>
                     <strong style={{ fontSize: "0.88rem", lineHeight: 1.35, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
@@ -295,8 +295,8 @@ export function Hero() {
                       {work.action}
                     </span>
                   </div>
-                  <div className="hero-work-preview" style={{ position: "absolute", right: isPlantEvolution ? 11 : 2, bottom: isPlantEvolution ? -6 : 0, display: "flex", justifyContent: "flex-end", opacity: 0.96, zIndex: 0 }}>
-                    <WorkPreviewIllustration slug={work.slug} color={work.border} width={isPlantEvolution ? 74 : 118} height={isPlantEvolution ? 124 : 88} />
+                  <div className="hero-work-preview" style={{ position: "absolute", right: isPlantEvolution ? 10 : 2, bottom: isPlantEvolution ? -5 : 0, display: "flex", justifyContent: "flex-end", opacity: 0.96, zIndex: 0 }}>
+                    <WorkPreviewIllustration slug={work.slug} color={work.border} width={isPlantEvolution ? 76 : 118} height={isPlantEvolution ? 143 : 88} />
                   </div>
                 </a>
               );
