@@ -5,7 +5,7 @@ import { getContentRoutes } from "./content-routes.mjs";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const siteUrl = "https://bycherry.me";
-const siteDescription = "By Cherry 是一个清爽科普风的个人网站，收录科学教育、AI 学习工具、项目制课程和创作工作流。";
+const siteDescription = "By Cherry 是一个可直接使用的科学与 AI 学习工作台，提供科学模拟、课程卡片、科研 Agent 和学习笔记。";
 const shareImageAlt = "By Cherry 科学、课程与 AI 主题作品集预览图";
 const worksListDescription = "科学教育、AI 工具和课程设计主题作品。";
 const articlesListDescription = "课程开发、科学传播、AI 创作和科研转译记录。";
@@ -124,7 +124,7 @@ function buildNoscript(routes) {
     "      <noscript>",
     "        <main style=\"font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 760px; margin: 0 auto; padding: 2rem 1.25rem; color: #5e442a; line-height: 1.7;\">",
     "          <h1 style=\"font-size: 2rem; line-height: 1.2; margin: 0 0 0.75rem;\">By Cherry</h1>",
-    "          <p>这是一个收录科学教育、AI 学习工具、项目制课程和创作工作流的个人网站。当前浏览器没有启用 JavaScript，下面保留了主题作品、笔记和科研随笔目录。</p>",
+    `          <p>${escapeHtml(siteDescription)}当前浏览器没有启用 JavaScript，下面保留了主题作品、笔记和科研随笔目录。</p>`,
     "          <h2 style=\"font-size: 1.2rem; margin-top: 1.5rem;\">主题作品</h2>",
     "          <ul>",
     listItems(works),
@@ -147,6 +147,12 @@ function indentedJson(data) {
 
 const routes = getContentRoutes();
 let html = readFileSync(resolve(root, "index.html"), "utf8");
+html = replaceRequired(
+  html,
+  /      <meta name="description" content="[^"]*" \/>/,
+  `      <meta name="description" content="${escapeHtml(siteDescription)}" />`,
+  "meta description"
+);
 html = replaceRequired(
   html,
   /      <script type="application\/ld\+json" data-schema="bycherry-page">[\s\S]*?      <\/script>/,

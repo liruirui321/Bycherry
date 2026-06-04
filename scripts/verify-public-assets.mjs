@@ -8,12 +8,14 @@ const publicRoot = resolve(root, "public");
 const siteUrl = "https://bycherry.me";
 const expectedDomain = "bycherry.me";
 const shareTagline = "科学、课程与 AI 主题作品集";
+const siteDescription = "By Cherry 是一个可直接使用的科学与 AI 学习工作台，提供科学模拟、课程卡片、科研 Agent 和学习笔记。";
 const manifestDescription = `${shareTagline}。`;
 const shareDescription = "科学、课程与 AI 主题作品集，收录科学教育、学习工具、课程卡片和科研转译记录。";
 const shareImageAlt = "By Cherry 科学、课程与 AI 主题作品集预览图";
 const worksListDescription = "科学教育、AI 工具和课程设计主题作品。";
 const articlesListDescription = "课程开发、科学传播、AI 创作和科研转译记录。";
 const retiredShareCopy = "可打开、可阅读、可操作";
+const retiredSiteDescription = "清爽科普风的个人网站";
 const appThemeColor = "#F5F1EA";
 const generatedIllustrationsBySlug = {
   "concept-explainer": { path: "illustrations/concept-explainer-map.webp", width: 1448, height: 1086 },
@@ -154,6 +156,7 @@ expect(indexHtml.includes(`<meta name="theme-color" content="${appThemeColor}" /
 expect(indexHtml.includes('<meta name="application-name" content="By Cherry" />'), "index.html must include the PWA application name.");
 expect(indexHtml.includes('<meta name="apple-mobile-web-app-title" content="By Cherry" />'), "index.html must include the Apple mobile web app title.");
 expect(indexHtml.includes('<meta name="mobile-web-app-capable" content="yes" />'), "index.html must declare mobile web app capability.");
+expect(indexHtml.includes(`<meta name="description" content="${siteDescription}" />`), "index.html must include the current site description.");
 expect(indexHtml.includes('<link rel="canonical" href="https://bycherry.me/" />'), "index.html must include the home canonical URL.");
 expect(indexHtml.includes('<meta property="og:url" content="https://bycherry.me/" />'), "index.html must include the home OG URL.");
 expect(indexHtml.includes(`<meta property="og:description" content="${shareDescription}" />`), "index.html must include the current OG description.");
@@ -161,6 +164,7 @@ expect(indexHtml.includes(`<meta name="twitter:description" content="${shareDesc
 expect(indexHtml.includes(`<meta property="og:image:alt" content="${shareImageAlt}" />`), "index.html must include the current OG image alt text.");
 expect(indexHtml.includes(`<meta name="twitter:image:alt" content="${shareImageAlt}" />`), "index.html must include the current Twitter image alt text.");
 expect(!indexHtml.includes(retiredShareCopy), "index.html must not include retired share copy.");
+expect(!indexHtml.includes(retiredSiteDescription), "index.html must not include the retired personal-site description.");
 expect(indexHtml.includes('<meta property="og:image" content="https://bycherry.me/social-preview.png" />'), "index.html must include the current OG image URL.");
 expect(indexHtml.includes('<meta property="og:image:secure_url" content="https://bycherry.me/social-preview.png" />'), "index.html must include og:image:secure_url.");
 expect(indexHtml.includes('<meta name="twitter:image" content="https://bycherry.me/social-preview.png" />'), "index.html must include the current Twitter image URL.");
@@ -181,6 +185,7 @@ if (jsonLdMatch) {
     expect(graph.some((item) => item["@type"] === "WebSite" && item.url === `${siteUrl}/`), "Static JSON-LD must include the By Cherry WebSite.");
     const worksList = graph.find((item) => item["@type"] === "ItemList" && item["@id"] === `${siteUrl}/#works`);
     const articlesList = graph.find((item) => item["@type"] === "ItemList" && item["@id"] === `${siteUrl}/#articles`);
+    expect(graph.some((item) => item["@type"] === "WebSite" && item.description === siteDescription), "Static JSON-LD WebSite must include the current site description.");
     expect(Boolean(worksList), "Static JSON-LD must include the works ItemList.");
     expect(Boolean(articlesList), "Static JSON-LD must include the articles ItemList.");
     expect(worksList?.description === worksListDescription, "Static works ItemList must include the current description.");
