@@ -1,10 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
 import { About } from "./components/About";
 import { Works } from "./components/Works";
-import { WorkDetailPage } from "./components/WorkDetailPage";
-import { ArticleDetailPage } from "./components/ArticleDetailPage";
 import { ResearchEssays } from "./components/ResearchEssays";
 import { essays } from "./components/ResearchEssays";
 import { Notes } from "./components/Notes";
@@ -15,6 +13,9 @@ import { EmptyStateCard } from "./components/EmptyStateCard";
 import { works } from "./components/Works";
 import { navigateClient, shouldUseClientNavigation } from "./navigation";
 import { homeTitle, shareImageAlt, siteDescription, siteTitle, siteUrl, socialImageUrl } from "./siteMetadata";
+
+const WorkDetailPage = lazy(() => import("./components/WorkDetailPage").then((module) => ({ default: module.WorkDetailPage })));
+const ArticleDetailPage = lazy(() => import("./components/ArticleDetailPage").then((module) => ({ default: module.ArticleDetailPage })));
 
 function upsertMeta(selector: string, attributes: Record<string, string>, content: string) {
   let element = document.head.querySelector<HTMLMetaElement>(selector);
@@ -189,6 +190,16 @@ function NotFoundPage() {
   );
 }
 
+function RouteLoading() {
+  return (
+    <main id="main-content" tabIndex={-1} style={{ minHeight: "52vh", padding: "4rem 1.5rem", display: "grid", placeItems: "center", fontFamily: "'Nunito', sans-serif" }}>
+      <div role="status" aria-live="polite" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.9rem 1rem", color: "var(--cherry-warm-mid)", fontWeight: 900, boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
+        正在打开内容…
+      </div>
+    </main>
+  );
+}
+
 export default function App() {
   const [locationKey, setLocationKey] = useState(getLocationKey());
   const hasNavigated = useRef(false);
@@ -359,11 +370,17 @@ export default function App() {
       </a>
       <Nav />
       {detailSlug ? (
-        <WorkDetailPage slug={detailSlug} />
+        <Suspense fallback={<RouteLoading />}>
+          <WorkDetailPage slug={detailSlug} />
+        </Suspense>
       ) : noteSlug ? (
-        <ArticleDetailPage kind="note" slug={noteSlug} />
+        <Suspense fallback={<RouteLoading />}>
+          <ArticleDetailPage kind="note" slug={noteSlug} />
+        </Suspense>
       ) : researchSlug ? (
-        <ArticleDetailPage kind="research" slug={researchSlug} />
+        <Suspense fallback={<RouteLoading />}>
+          <ArticleDetailPage kind="research" slug={researchSlug} />
+        </Suspense>
       ) : unknownPath ? (
         <NotFoundPage />
       ) : (

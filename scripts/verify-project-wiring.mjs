@@ -11,6 +11,7 @@ function read(relativePath) {
 const packageJson = JSON.parse(read("package.json"));
 const packageLock = JSON.parse(read("package-lock.json"));
 const mainSource = read("src/main.tsx");
+const appSource = read("src/app/App.tsx");
 const indexCss = read("src/styles/index.css");
 const tailwindCss = read("src/styles/tailwind.css");
 const viteConfig = read("vite.config.ts");
@@ -66,6 +67,12 @@ expectExactObject(packageLockRoot?.devDependencies, packageJson.devDependencies,
 expect(mainSource.includes('import { createRoot } from "react-dom/client";'), "src/main.tsx must mount React through react-dom/client.");
 expect(mainSource.includes('import App from "./app/App.tsx";'), "src/main.tsx must import the app root component.");
 expect(mainSource.includes('import "./styles/index.css";'), "src/main.tsx must import the central stylesheet.");
+
+expect(appSource.includes("lazy, Suspense"), "src/app/App.tsx must import lazy and Suspense for route-level code splitting.");
+expect(appSource.includes('lazy(() => import("./components/WorkDetailPage")'), "Work detail pages must be loaded lazily.");
+expect(appSource.includes('lazy(() => import("./components/ArticleDetailPage")'), "Article detail pages must be loaded lazily.");
+expect(!appSource.includes('import { WorkDetailPage } from "./components/WorkDetailPage";'), "WorkDetailPage must not be statically imported into the home bundle.");
+expect(!appSource.includes('import { ArticleDetailPage } from "./components/ArticleDetailPage";'), "ArticleDetailPage must not be statically imported into the home bundle.");
 
 expect(indexCss.includes("@import './fonts.css';"), "src/styles/index.css must import fonts.css.");
 expect(indexCss.includes("@import './tailwind.css';"), "src/styles/index.css must import tailwind.css.");
