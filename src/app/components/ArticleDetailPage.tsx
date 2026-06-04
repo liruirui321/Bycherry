@@ -68,6 +68,8 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copiedTemplate, setCopiedTemplate] = useState(false);
   const [copiedActionPack, setCopiedActionPack] = useState(false);
   const [copiedLearningRecord, setCopiedLearningRecord] = useState(false);
+  const [copiedPlatformConfig, setCopiedPlatformConfig] = useState(false);
+  const [copiedPlatformReview, setCopiedPlatformReview] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const collection = kind === "note" ? notes : essays;
   const article = collection.find((item) => item.slug === slug);
@@ -140,6 +142,42 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
       ]
     : [];
   const platformUsePlansText = platformUsePlans.map((plan) => `${plan.title}\n${plan.fields.map((field) => `- ${field}`).join("\n")}\n- ${plan.output}`).join("\n\n");
+  const platformPasteConfigText = platformUrl
+    ? `【SciFuion 平台照填配置】
+平台入口：${platformUrl}
+
+${platformUsePlansText}
+
+使用规则
+1. 先少量生成，不一次生成过多题。
+2. 生成后逐题审核题干、答案、干扰项和解析。
+3. 删除跑题、歧义、超纲或解析空泛的题。
+4. 做完后记录最高频错因，再回到学习卡补薄弱点。`
+    : "";
+  const platformReviewText = platformUrl
+    ? `【SciFuion 测后复盘记录】
+平台入口：${platformUrl}
+本次用途：
+学习阶段：
+知识点范围：
+题型 / 难度 / 题量：
+
+题目审核
+1. 题干是否只问一个核心问题：
+2. 正确答案是否唯一：
+3. 干扰项是否来自真实误解：
+4. 解析是否说明为什么对、为什么错：
+
+作答复盘
+1. 我错了哪些题：
+2. 高频错因：
+3. 是题目表达问题，还是我没有掌握：
+4. 下一步要修改的学习卡或补充资料：
+
+保留结论
+这次测评真正证明我已经掌握的是：
+仍需要继续核查的是：`
+    : "";
   const starterTemplateText = starterTemplate.map((item) => `- ${item}`).join("\n");
   const actionPackText = article
     ? `【行动包】${article.title}
@@ -221,6 +259,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
+      setCopiedPlatformConfig(false);
+      setCopiedPlatformReview(false);
       setCopyStatus("阅读摘要已复制到剪贴板。");
       window.setTimeout(() => setCopiedSummary(false), 1400);
       return;
@@ -238,6 +278,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedSummary(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
+      setCopiedPlatformConfig(false);
+      setCopiedPlatformReview(false);
       setCopyStatus("可套用模板已复制到剪贴板。");
       window.setTimeout(() => setCopiedTemplate(false), 1400);
       return;
@@ -255,6 +297,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedSummary(false);
       setCopiedTemplate(false);
       setCopiedLearningRecord(false);
+      setCopiedPlatformConfig(false);
+      setCopiedPlatformReview(false);
       setCopyStatus("行动包已复制到剪贴板。");
       window.setTimeout(() => setCopiedActionPack(false), 1400);
       return;
@@ -272,12 +316,52 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedSummary(false);
       setCopiedTemplate(false);
       setCopiedActionPack(false);
+      setCopiedPlatformConfig(false);
+      setCopiedPlatformReview(false);
       setCopyStatus("学习记录已复制到剪贴板。");
       window.setTimeout(() => setCopiedLearningRecord(false), 1400);
       return;
     }
 
     setCopiedLearningRecord(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyPlatformPasteConfig() {
+    if (!platformPasteConfigText) return;
+    const copiedToClipboard = await copyText(platformPasteConfigText);
+    if (copiedToClipboard) {
+      setCopiedPlatformConfig(true);
+      setCopiedPlatformReview(false);
+      setCopiedSummary(false);
+      setCopiedTemplate(false);
+      setCopiedActionPack(false);
+      setCopiedLearningRecord(false);
+      setCopyStatus("平台照填配置已复制到剪贴板。");
+      window.setTimeout(() => setCopiedPlatformConfig(false), 1400);
+      return;
+    }
+
+    setCopiedPlatformConfig(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyPlatformReviewRecord() {
+    if (!platformReviewText) return;
+    const copiedToClipboard = await copyText(platformReviewText);
+    if (copiedToClipboard) {
+      setCopiedPlatformReview(true);
+      setCopiedPlatformConfig(false);
+      setCopiedSummary(false);
+      setCopiedTemplate(false);
+      setCopiedActionPack(false);
+      setCopiedLearningRecord(false);
+      setCopyStatus("测后复盘记录已复制到剪贴板。");
+      window.setTimeout(() => setCopiedPlatformReview(false), 1400);
+      return;
+    }
+
+    setCopiedPlatformReview(false);
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -447,6 +531,30 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                       <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.5, fontWeight: 900 }}>{plan.output}</span>
                     </div>
                   ))}
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.58rem" }}>
+                  <div style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem", display: "grid", gap: "0.48rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.6rem", flexWrap: "wrap" }}>
+                      <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>平台照填文本</strong>
+                      <button type="button" onClick={copyPlatformPasteConfig} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                        {copiedPlatformConfig ? "已复制" : "复制照填配置"}
+                      </button>
+                    </div>
+                    <code style={{ display: "block", whiteSpace: "pre-wrap", maxHeight: 210, overflow: "auto", background: "var(--cherry-yellow-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.72rem", lineHeight: 1.62 }}>
+                      {platformPasteConfigText}
+                    </code>
+                  </div>
+                  <div style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem", display: "grid", gap: "0.48rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.6rem", flexWrap: "wrap" }}>
+                      <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>测后复盘表</strong>
+                      <button type="button" onClick={copyPlatformReviewRecord} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                        {copiedPlatformReview ? "已复制" : "复制复盘表"}
+                      </button>
+                    </div>
+                    <code style={{ display: "block", whiteSpace: "pre-wrap", maxHeight: 210, overflow: "auto", background: "var(--cherry-sage-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.72rem", lineHeight: 1.62 }}>
+                      {platformReviewText}
+                    </code>
+                  </div>
                 </div>
               </div>
             ) : null}
