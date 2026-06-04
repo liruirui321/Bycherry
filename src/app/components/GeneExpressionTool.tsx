@@ -604,6 +604,9 @@ export function GeneExpressionTool() {
   const leadRibosomeProgress = readableRibosomes[0]?.progress ?? 0;
   const activeCodonIndex = leadRibosomeProgress > 0 ? Math.min(codons.length - 1, Math.floor(leadRibosomeProgress * codons.length)) : -1;
   const activeCodon = activeCodonIndex >= 0 ? codons[activeCodonIndex] : null;
+  const focusedCodon = activeCodon ?? (visibleMrnaCount > 0 ? codons[Math.min(codons.length - 1, Math.max(0, visibleProteinCount))] : null);
+  const peptidePreviewCount = activeRibosomeCount > 0 ? aminoCountForRibosome(leadRibosomeProgress) : Math.min(codons.length, visibleProteinCount);
+  const peptidePreview = peptidePreviewCount > 0 ? codons.slice(0, peptidePreviewCount).map((codon) => codon.amino).join(" - ") : "等待第一颗氨基酸";
   const translatedSignal = readableRibosomes.reduce((sum, ribosome) => sum + ribosome.progress, 0);
   const proteinCapacity = canTranslate ? Math.min(12, visibleMrnaCount * model.ribBound) : 0;
   const instantProteinCount = canTranslate ? Math.min(proteinCapacity, Math.floor(translatedSignal * 4)) : 0;
@@ -795,14 +798,18 @@ export function GeneExpressionTool() {
       style={{
         fontFamily: "'Nunito', sans-serif",
         padding: "1rem 1.5rem 5rem",
+        width: "100%",
         maxWidth: 1180,
         margin: "0 auto",
+        boxSizing: "border-box",
+        overflowX: "hidden",
         scrollMarginTop: 76,
       }}
     >
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.7fr)", gap: "1rem", alignItems: "stretch" }}>
-        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 28, boxShadow: "6px 10px 0px rgba(94,68,42,0.09)", overflow: "hidden" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.7fr)", gap: "1rem", alignItems: "stretch", minWidth: 0 }}>
+        <div className="gene-canvas-card" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 28, boxShadow: "6px 10px 0px rgba(94,68,42,0.09)", overflow: "hidden", minWidth: 0 }}>
           <svg
+            className="gene-canvas-svg"
             ref={svgRef}
             viewBox="0 0 980 660"
             role="img"
@@ -909,7 +916,7 @@ export function GeneExpressionTool() {
           </svg>
         </div>
 
-        <aside style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
+        <aside style={{ display: "grid", gap: "1rem", alignContent: "start", minWidth: 0 }}>
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.85rem" }}>
               <IconMicroscope size={19} />
@@ -924,9 +931,9 @@ export function GeneExpressionTool() {
                 ["mRNA 数量", `${visibleMrnaCount}/${mrnaReadoutMax}`],
                 ["已接入氨基酸", `${visibleProteinCount}/${proteinReadoutMax}`],
               ].map(([label, value]) => (
-                <div key={label} style={{ display: "flex", justifyContent: "space-between", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
-                  <span>{label}</span>
-                  <span style={{ color: "var(--cherry-red)", fontWeight: 900 }}>{value}</span>
+                <div className="gene-readout-row" key={label} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", alignItems: "start", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
+                  <span style={{ minWidth: 0, lineHeight: 1.35 }}>{label}</span>
+                  <span className="gene-readout-value" style={{ color: "var(--cherry-red)", fontWeight: 900, textAlign: "right", whiteSpace: "nowrap" }}>{value}</span>
                 </div>
               ))}
             </div>
@@ -981,6 +988,36 @@ export function GeneExpressionTool() {
 
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.85rem" }}>
+              <IconSparkle size={18} />
+              翻译放大镜
+            </div>
+            <div className="translation-lens-grid" style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr auto 1fr", alignItems: "stretch", gap: 7 }}>
+              {[
+                ["mRNA", focusedCodon?.rna ?? "---"],
+                ["tRNA", focusedCodon?.anticodon ?? "---"],
+                ["氨基酸", focusedCodon?.amino ?? "---"],
+              ].map(([label, value], index) => (
+                <span key={label} style={{ display: "contents" }}>
+                  <div style={{ background: index === 2 ? "var(--cherry-yellow-light)" : "rgba(250,247,241,0.78)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.65rem 0.45rem", textAlign: "center", minWidth: 0 }}>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", fontWeight: 900, marginBottom: "0.28rem" }}>{label}</div>
+                    <strong style={{ display: "block", color: index === 2 ? "var(--cherry-red)" : "var(--cherry-warm-brown)", fontSize: "0.86rem", lineHeight: 1.2 }}>{value}</strong>
+                  </div>
+                  {index < 2 ? (
+                    <div className="translation-lens-arrow" aria-hidden="true" style={{ display: "grid", placeItems: "center", color: "var(--cherry-forest)", fontWeight: 900 }}>
+                      →
+                    </div>
+                  ) : null}
+                </span>
+              ))}
+            </div>
+            <div style={{ marginTop: "0.8rem", background: "rgba(169,201,172,0.18)", border: "1.5px solid rgba(93,140,101,0.18)", borderRadius: 16, padding: "0.72rem 0.8rem" }}>
+              <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", fontWeight: 900, marginBottom: "0.32rem" }}>出口处多肽片段</div>
+              <strong style={{ color: "var(--cherry-forest)", fontSize: "0.9rem", lineHeight: 1.35 }}>{peptidePreview}</strong>
+            </div>
+          </div>
+
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.85rem" }}>
               <IconDNA size={18} />
               序列读取
             </div>
@@ -1029,9 +1066,50 @@ export function GeneExpressionTool() {
 
       <style>
         {`
+          #gene-expression,
+          #gene-expression * {
+            box-sizing: border-box;
+          }
+
           @media (max-width: 920px) {
             #gene-expression > div:first-child {
               grid-template-columns: 1fr !important;
+            }
+          }
+
+          @media (max-width: 520px) {
+            #gene-expression {
+              padding-left: 1rem !important;
+              padding-right: 1rem !important;
+            }
+
+            #gene-expression .translation-lens-grid {
+              grid-template-columns: 1fr !important;
+            }
+
+            #gene-expression .translation-lens-arrow {
+              min-height: 16px;
+              transform: rotate(90deg);
+            }
+
+            #gene-expression .gene-canvas-card {
+              overflow-x: auto !important;
+            }
+
+            #gene-expression .gene-canvas-svg {
+              width: 720px !important;
+              max-width: none !important;
+            }
+
+            #gene-expression .gene-readout-row {
+              grid-template-columns: 1fr !important;
+              gap: 2px !important;
+            }
+
+            #gene-expression .gene-readout-value {
+              text-align: left !important;
+              white-space: normal !important;
+              overflow-wrap: anywhere;
             }
           }
 
