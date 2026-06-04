@@ -445,6 +445,12 @@ function verifyPlantEvolutionLearnerContract() {
     { label: "evidence quest", text: "证据判断" },
     { label: "transfer quest", text: "迁移表达" },
     { label: "active quest in study card", text: "6. 当前小关卡" },
+    { label: "comparison stage data", text: "comparisonStages" },
+    { label: "comparison output", text: "stageComparisonOutput" },
+    { label: "copy comparison handler", text: "copyStageComparison" },
+    { label: "visible comparison card", text: "阶段比较记录" },
+    { label: "copy comparison button", text: "复制比较记录" },
+    { label: "comparison section in study card", text: "7. 阶段比较" },
   ];
 
   const retiredPlantPatterns = [
@@ -463,8 +469,8 @@ function verifyPlantEvolutionLearnerContract() {
   }
 
   expect(worksSource.includes("演化时间轴串联关键创新、证据、自测问题、作答提示和延伸练习。"), "Plant evolution work card must describe the learner-facing self-study flow.");
-  expect(worksSource.includes('outputs: ["学习卡", "自测问题", "参考文献"]'), "Plant evolution work card outputs must be learner-facing.");
-  expect(worksSource.includes('path: ["选择阶段", "读证据", "完成练习"]'), "Plant evolution work card path must describe a learner action flow.");
+  expect(worksSource.includes('outputs: ["学习卡", "阶段比较", "参考文献"]'), "Plant evolution work card outputs must be learner-facing.");
+  expect(worksSource.includes('path: ["选择阶段", "比较创新", "完成练习"]'), "Plant evolution work card path must describe a learner action flow.");
 }
 
 function verifyCrisprLearnerScenarios() {

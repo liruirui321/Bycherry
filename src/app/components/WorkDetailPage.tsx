@@ -1301,6 +1301,7 @@ function PlantEvolutionContent() {
   const [activePlantTaskIndex, setActivePlantTaskIndex] = useState(0);
   const [activePlantQuestIndex, setActivePlantQuestIndex] = useState(0);
   const [copiedStudyCard, setCopiedStudyCard] = useState(false);
+  const [copiedStageComparison, setCopiedStageComparison] = useState(false);
   const [studyCardStatus, setStudyCardStatus] = useState("");
   const chapters = [
     {
@@ -1487,6 +1488,30 @@ function PlantEvolutionContent() {
     },
   ];
   const activeStageQuest = stageQuestCards[activePlantQuestIndex] ?? stageQuestCards[0];
+  const comparisonStages = [
+    activeChapterIndex > 0 ? { label: "上一阶段", chapter: chapters[activeChapterIndex - 1] } : null,
+    { label: "当前阶段", chapter: activeChapter },
+    activeChapterIndex < chapters.length - 1 ? { label: "下一阶段", chapter: chapters[activeChapterIndex + 1] } : null,
+  ].filter((item): item is { label: string; chapter: typeof activeChapter } => Boolean(item));
+  const stageComparisonOutput = `【植物演化阶段比较记录】
+当前阶段：${activeChapter.title}
+时间：${activeChapter.time}
+
+一、阶段对照
+${comparisonStages.map((item, index) => `${index + 1}. ${item.label}：${item.chapter.title}
+时间：${item.chapter.time}
+生存问题：${item.chapter.challenge}
+关键创新：${item.chapter.innovation}
+证据状态：${item.chapter.certainty}`).join("\n\n")}
+
+二、我需要写出的比较结论
+1. 上一阶段解决了什么问题：
+2. 当前阶段新增了什么能力：
+3. 新能力带来的代价或新限制：
+4. 下一阶段为什么会接着发生：
+
+三、证据边界
+${activeChapter.evidence}`;
   const studyCardOutput = `【植物演化学习卡】
 阶段：${activeChapter.title}
 时间：${activeChapter.time}
@@ -1515,13 +1540,17 @@ ${activeStageQuest.task}
 ${activeStageQuest.output}
 ${activeStageQuest.check}
 
-7. 参考文献
+7. 阶段比较
+${comparisonStages.map((item, index) => `${index + 1}. ${item.label}：${item.chapter.time}｜${item.chapter.innovation}｜证据状态：${item.chapter.certainty}`).join("\n")}
+
+8. 参考文献
 ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).join("\n")}`;
 
   async function copyStudyCard() {
     const copiedToClipboard = await copyText(studyCardOutput);
     if (copiedToClipboard) {
       setCopiedStudyCard(true);
+      setCopiedStageComparison(false);
       setStudyCardStatus("学习卡已复制到剪贴板。");
       window.setTimeout(() => setCopiedStudyCard(false), 1400);
       return;
@@ -1531,12 +1560,27 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
     setStudyCardStatus("复制失败，请手动选中文本复制。");
   }
 
+  async function copyStageComparison() {
+    const copiedToClipboard = await copyText(stageComparisonOutput);
+    if (copiedToClipboard) {
+      setCopiedStageComparison(true);
+      setCopiedStudyCard(false);
+      setStudyCardStatus("阶段比较记录已复制到剪贴板。");
+      window.setTimeout(() => setCopiedStageComparison(false), 1400);
+      return;
+    }
+
+    setCopiedStageComparison(false);
+    setStudyCardStatus("复制失败，请手动选中文本复制。");
+  }
+
   function choosePlantChapter(index: number) {
     setActiveChapterIndex(index);
     setActivePlantLens("story");
     setActivePlantTaskIndex(0);
     setActivePlantQuestIndex(0);
     setCopiedStudyCard(false);
+    setCopiedStageComparison(false);
     setStudyCardStatus("");
   }
 
@@ -1875,6 +1919,38 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
                 </div>
               </div>
             ) : null}
+          </div>
+
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.65rem" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
+              <div>
+                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>阶段比较记录</strong>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>比较相邻阶段的生存问题、关键创新和证据状态。</span>
+              </div>
+              <button type="button" onClick={copyStageComparison} aria-describedby="plant-study-card-status" style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                {copiedStageComparison ? "已复制" : "复制比较记录"}
+              </button>
+            </div>
+            <div style={{ display: "grid", gap: "0.52rem" }}>
+              {comparisonStages.map((item, index) => (
+                <div key={`${item.label}-${item.chapter.title}`} style={{ background: item.label === "当前阶段" ? "var(--cherry-yellow-light)" : "var(--muted)", border: item.label === "当前阶段" ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.66rem", display: "grid", gap: "0.38rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: "0.55rem", alignItems: "start", flexWrap: "wrap" }}>
+                    <strong style={{ color: item.label === "当前阶段" ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.78rem" }}>{item.label}</strong>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900 }}>{item.chapter.time}</span>
+                  </div>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem", lineHeight: 1.42, fontWeight: 900 }}>{item.chapter.title}</div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.52, fontWeight: 800 }}>
+                    <strong style={{ color: "var(--cherry-warm-brown)" }}>创新：</strong>{item.chapter.innovation}
+                  </div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.52, fontWeight: 800 }}>
+                    <strong style={{ color: "var(--cherry-warm-brown)" }}>证据：</strong>{item.chapter.certainty}
+                  </div>
+                  {index < comparisonStages.length - 1 ? (
+                    <div style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>下一步比较：新能力解决了什么限制，又带来什么新问题？</div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
           </div>
 
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
