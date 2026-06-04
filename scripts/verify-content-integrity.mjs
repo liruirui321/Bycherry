@@ -269,6 +269,44 @@ function verifyConceptExplainerAgentContract() {
   expect(worksSource.includes('path: ["输入概念", "看诊断边界", "生成学习卡"]'), "Concept explainer work card path must describe the learner-facing agent flow.");
 }
 
+function verifyPlantEvolutionLearnerContract() {
+  const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
+  const worksSource = read("src/app/components/Works.tsx");
+  const plantMatch = workDetailSource.match(/function PlantEvolutionContent\(\) \{([\s\S]*?)\nfunction ConceptExplainerContent\(\)/);
+
+  expect(Boolean(plantMatch), "WorkDetailPage must include PlantEvolutionContent before ConceptExplainerContent.");
+
+  if (!plantMatch) return;
+
+  const plantSource = plantMatch[1];
+  const requiredPlantFeatures = [
+    { label: "learner task field", text: "learnerTask" },
+    { label: "self-check lens", text: '{ key: "practice", label: "自测" }' },
+    { label: "self-check question label", text: "自测问题" },
+    { label: "extension practice label", text: "延伸练习" },
+    { label: "copyable learner study card", text: "植物演化学习卡" },
+  ];
+
+  const retiredPlantPatterns = [
+    { label: "teacher task field", pattern: /teacherMove/ },
+    { label: "classroom lens key", pattern: /classroom/ },
+    { label: "teacher follow-up label", pattern: /教师追问/ },
+    { label: "classroom question label", pattern: /课堂提问/ },
+  ];
+
+  for (const item of requiredPlantFeatures) {
+    expect(plantSource.includes(item.text), `Plant evolution learner contract is missing ${item.label}: ${item.text}`);
+  }
+
+  for (const item of retiredPlantPatterns) {
+    expect(!item.pattern.test(plantSource), `Plant evolution page must remain learner-facing and avoid retired copy: ${item.label}`);
+  }
+
+  expect(worksSource.includes("演化时间轴串联关键创新、证据、自测问题、作答提示和延伸练习。"), "Plant evolution work card must describe the learner-facing self-study flow.");
+  expect(worksSource.includes('outputs: ["学习卡", "自测问题", "参考文献"]'), "Plant evolution work card outputs must be learner-facing.");
+  expect(worksSource.includes('path: ["选择阶段", "读证据", "完成练习"]'), "Plant evolution work card path must describe a learner action flow.");
+}
+
 const routes = getContentRoutes();
 const workSlugs = new Set(routes.filter((route) => route.type === "work").map((route) => route.path.replace(/^\/works\//, "")));
 const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
@@ -332,6 +370,7 @@ verifyWorkDetailCardsStayCompact();
 verifyArticleCardsStayStructured();
 verifyWorkJsonLdLearningOutcomes();
 verifyConceptExplainerAgentContract();
+verifyPlantEvolutionLearnerContract();
 
 if (failures.length) {
   console.error("Content integrity verification failed.");
