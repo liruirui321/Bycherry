@@ -347,6 +347,47 @@ function verifyLearnerFacingArticleCopy() {
   }
 }
 
+function verifyLearnerProductPositioning() {
+  const positioningSources = [
+    "src/app/siteMetadata.ts",
+    "src/app/App.tsx",
+    "src/app/components/About.tsx",
+    "src/app/components/Footer.tsx",
+    "src/app/components/Hero.tsx",
+    "src/app/components/WorkDetailPage.tsx",
+    "src/app/components/Works.tsx",
+    "scripts/site-metadata.mjs",
+  ].map((relativePath) => [relativePath, read(relativePath)]);
+
+  const combinedSource = positioningSources.map(([relativePath, source]) => `\n/* ${relativePath} */\n${source}`).join("\n");
+  const requiredProductCopy = [
+    "科学学习与 AI",
+    "演化时间轴",
+    "植物演化时间轴",
+    "CRISPR 编辑模拟器",
+    '"学习项目"',
+    "科学学习和 AI 工具",
+  ];
+  const retiredProductPatterns = [
+    { label: "course-heavy home title", pattern: /科学、课程/ },
+    { label: "course-card positioning", pattern: /课程卡片|课程材料/ },
+    { label: "childlike plant work title", pattern: /植物进化小故事/ },
+    { label: "lecture-style CRISPR title", pattern: /CRISPR 交互讲解/ },
+    { label: "course category literal", pattern: /category:\s*"课程"/ },
+    { label: "course filter literal", pattern: /\["全部",\s*"科学",\s*"课程"/ },
+  ];
+
+  for (const text of requiredProductCopy) {
+    expect(combinedSource.includes(text), `Learner product positioning should include: ${text}`);
+  }
+
+  for (const [relativePath, source] of positioningSources) {
+    for (const item of retiredProductPatterns) {
+      expect(!item.pattern.test(source), `${relativePath} contains retired product positioning copy: ${item.label}`);
+    }
+  }
+}
+
 const routes = getContentRoutes();
 const workSlugs = new Set(routes.filter((route) => route.type === "work").map((route) => route.path.replace(/^\/works\//, "")));
 const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
@@ -412,6 +453,7 @@ verifyWorkJsonLdLearningOutcomes();
 verifyConceptExplainerAgentContract();
 verifyPlantEvolutionLearnerContract();
 verifyLearnerFacingArticleCopy();
+verifyLearnerProductPositioning();
 
 if (failures.length) {
   console.error("Content integrity verification failed.");

@@ -2,7 +2,7 @@
   "name": "bycherry-homepage",
   "private": true,
   "version": "0.0.1",
-  "description": "Popular-science personal homepage for science education, AI tools, and course design.",
+  "description": "Science learning homepage with simulations, AI tools, and learning projects.",
   "homepage": "https://bycherry.me",
   "repository": {
     "type": "git",

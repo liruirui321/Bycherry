@@ -71,7 +71,7 @@ export function Footer() {
       </div>
 
       <p style={{ fontSize: "0.8rem", margin: 0 }}>
-        科学、课程和 AI 主题作品 · © 2026 By Cherry
+        科学学习和 AI 主题作品 · © 2026 By Cherry
       </p>
       <style>
         {`

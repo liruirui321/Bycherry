@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import { getContentRoutes } from "./content-routes.mjs";
-import { articlesListDescription, shareDescription, shareImageAlt, siteDescription, siteUrl, worksListDescription } from "./site-metadata.mjs";
+import { articlesListDescription, homeTitle, shareDescription, shareImageAlt, siteDescription, siteTitle, siteUrl, worksListDescription } from "./site-metadata.mjs";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 
@@ -142,7 +142,14 @@ function indentedJson(data) {
 }
 
 const routes = getContentRoutes();
+const fullHomeTitle = `${siteTitle} | ${homeTitle}`;
 let html = readFileSync(resolve(root, "index.html"), "utf8");
+html = replaceRequired(
+  html,
+  /      <title>[^<]*<\/title>/,
+  `      <title>${escapeHtml(fullHomeTitle)}</title>`,
+  "document title"
+);
 html = replaceRequired(
   html,
   /      <meta name="description" content="[^"]*" \/>/,
@@ -151,9 +158,21 @@ html = replaceRequired(
 );
 html = replaceRequired(
   html,
+  /      <meta property="og:title" content="[^"]*" \/>/,
+  `      <meta property="og:title" content="${escapeHtml(fullHomeTitle)}" />`,
+  "OG title"
+);
+html = replaceRequired(
+  html,
   /      <meta property="og:description" content="[^"]*" \/>/,
   `      <meta property="og:description" content="${escapeHtml(shareDescription)}" />`,
   "OG description"
+);
+html = replaceRequired(
+  html,
+  /      <meta name="twitter:title" content="[^"]*" \/>/,
+  `      <meta name="twitter:title" content="${escapeHtml(fullHomeTitle)}" />`,
+  "Twitter title"
 );
 html = replaceRequired(
   html,

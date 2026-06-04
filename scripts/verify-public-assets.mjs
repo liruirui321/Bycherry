@@ -5,11 +5,13 @@ import { getContentHrefs } from "./content-routes.mjs";
 import {
   articlesListDescription,
   expectedDomain,
+  homeTitle,
   manifestDescription,
   shareDescription,
   shareImageAlt,
   shareTagline,
   siteDescription,
+  siteTitle,
   siteUrl,
   worksListDescription,
 } from "./site-metadata.mjs";
@@ -139,6 +141,7 @@ const socialPreviewSvg = readPublic("social-preview.svg");
 expect(socialPreviewSvg.includes(shareTagline), "social-preview.svg must include the current share tagline.");
 expect(!socialPreviewSvg.includes(retiredShareCopy), "social-preview.svg must not include retired share copy.");
 expect(!socialPreviewSvg.includes(retiredSharePositioning), "social-preview.svg must not include the retired share positioning.");
+expect(!socialPreviewSvg.includes("课程卡片"), "social-preview.svg must not include retired course-card positioning.");
 for (const illustration of generatedIllustrations) {
   if (!publicExists(illustration.path)) continue;
   const illustrationSize = statSync(resolve(publicRoot, illustration.path)).size;
@@ -163,7 +166,7 @@ for (const exportName of ["siteTitle", "homeTitle", "siteDescription", "siteUrl"
   expect(!new RegExp(`const\\s+${exportName}\\s*=`).test(appSource), `App.tsx must not redeclare ${exportName}; use src/app/siteMetadata.ts.`);
 }
 expect(staticIndexSource.includes('from "./site-metadata.mjs"'), "Static index generator must import shared site metadata.");
-for (const exportName of ["siteUrl", "siteDescription", "shareDescription", "shareImageAlt", "worksListDescription", "articlesListDescription"]) {
+for (const exportName of ["siteTitle", "homeTitle", "siteUrl", "siteDescription", "shareDescription", "shareImageAlt", "worksListDescription", "articlesListDescription"]) {
   expect(siteMetadataSource.includes(`export const ${exportName}`), `site-metadata.mjs must export ${exportName}.`);
   expect(!new RegExp(`const\\s+${exportName}\\s*=`).test(staticIndexSource), `Static index generator must not redeclare ${exportName}; use site-metadata.mjs.`);
 }
@@ -180,6 +183,9 @@ expect(indexHtml.includes(`<meta name="theme-color" content="${appThemeColor}" /
 expect(indexHtml.includes('<meta name="application-name" content="By Cherry" />'), "index.html must include the PWA application name.");
 expect(indexHtml.includes('<meta name="apple-mobile-web-app-title" content="By Cherry" />'), "index.html must include the Apple mobile web app title.");
 expect(indexHtml.includes('<meta name="mobile-web-app-capable" content="yes" />'), "index.html must declare mobile web app capability.");
+expect(indexHtml.includes(`<title>${siteTitle} | ${homeTitle}</title>`), "index.html title must use current shared home title.");
+expect(indexHtml.includes(`<meta property="og:title" content="${siteTitle} | ${homeTitle}" />`), "index.html OG title must use current shared home title.");
+expect(indexHtml.includes(`<meta name="twitter:title" content="${siteTitle} | ${homeTitle}" />`), "index.html Twitter title must use current shared home title.");
 expect(indexHtml.includes(`<meta name="description" content="${siteDescription}" />`), "index.html must include the current site description.");
 expect(appMetadataSource.includes(siteDescription), "Runtime metadata module must include the current site description.");
 expect(appMetadataSource.includes(shareImageAlt), "Runtime metadata module must include the current share image alt text.");

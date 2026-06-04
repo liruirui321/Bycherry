@@ -3092,7 +3092,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
         <EmptyStateCard
           eyebrow="主题作品"
           title="没有找到这个主题作品"
-          body="这个主题作品地址可能已经移动。可以回到主题作品区，继续浏览科学模拟、课程卡片和 AI 工具。"
+          body="这个主题作品地址可能已经移动。可以回到主题作品区，继续浏览科学模拟、学习项目和 AI 工具。"
           href="/#works"
           linkText="回到主题作品"
           onNavigate={(event) => {

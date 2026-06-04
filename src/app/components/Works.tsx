@@ -3,7 +3,7 @@ import { IconMicroscope, IconAI, IconLeaf, IconFlask, IconDNA } from "./Icons";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
-type Category = "全部" | "科学" | "课程" | "AI工具";
+type Category = "全部" | "科学" | "学习项目" | "AI工具";
 
 export const works = [
   {
@@ -33,9 +33,9 @@ export const works = [
     color: "var(--cherry-peach-light)", border: "var(--cherry-peach)", rotate: "-0.8deg",
   },
   {
-    id: 4, slug: "plant-evolution-stories", category: "课程" as Category,
+    id: 4, slug: "plant-evolution-stories", category: "学习项目" as Category,
     icon: <IconLeaf size={36} color="var(--cherry-sage)" />,
-    title: "植物进化小故事",
+    title: "植物演化时间轴",
     desc: "演化时间轴串联关键创新、证据、自测问题、作答提示和延伸练习。",
     href: "/works/plant-evolution-stories",
     updated: "2026-06-04",
@@ -61,7 +61,7 @@ export const works = [
   {
     id: 6, slug: "crispr-interactive", category: "科学" as Category,
     icon: <IconDNA size={36} color1="var(--cherry-red)" color2="var(--cherry-blue)" />,
-    title: "CRISPR 交互讲解",
+    title: "CRISPR 编辑模拟器",
     desc: "操作 guide RNA、Cas 蛋白和修复结果，查看匹配评分、编辑判定和模拟报告。",
     href: "/works/crispr-interactive",
     updated: "2026-06-04",
@@ -200,7 +200,7 @@ function WaveDivider({ flip = false }: { flip?: boolean }) {
 
 export function Works() {
   const [activeCategory, setActiveCategory] = useState<Category>("全部");
-  const categories: Category[] = ["全部", "科学", "课程", "AI工具"];
+  const categories: Category[] = ["全部", "科学", "学习项目", "AI工具"];
   const filtered = activeCategory === "全部" ? works : works.filter((w) => w.category === activeCategory);
 
   return (
@@ -231,7 +231,7 @@ export function Works() {
           <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: "0.75rem" }}>
             <IconFlask size={20} color="var(--cherry-warm-mid)" />
             <span style={{ fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>
-              科学、课程和 AI 工具
+              科学学习和 AI 工具
             </span>
           </div>
           <h2 id="works-heading" style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", lineHeight: 1.3 }}>
