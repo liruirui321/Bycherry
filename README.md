@@ -26,7 +26,7 @@ npm run dev
 npm run build
 ```
 
-`npm run build` regenerates `public/sitemap.xml` and the static homepage fallback, then runs six verification steps before Vite builds:
+`npm run build` regenerates `public/sitemap.xml` and the static homepage fallback, then runs seven verification steps before Vite builds:
 
 - `verify:generated` checks that generated public metadata is committed and up to date.
 - `verify:public` checks the custom domain, host fallbacks, robots file, manifest, favicon, app theme color, PWA app titles, social preview URLs, social preview image, and static index metadata fallback.
@@ -34,6 +34,7 @@ npm run build
 - `verify:content` checks that every theme work route has detail content coverage in `WorkDetailPage`, every article route has enough detail-page content, visible shell copy keeps the theme-work naming, retired low-quality page copy cannot reappear, and work-card CTAs match their entry behavior.
 - `verify:a11y` checks static `aria-labelledby`, `aria-describedby`, `aria-controls`, duplicate static ids, labeled nonsemantic containers, previous/next navigation labels, and fixed SVG definition ids in reusable illustration components.
 - `verify:sitemap` compares public routes with `public/sitemap.xml`, including `lastmod`, `changefreq`, and `priority` metadata.
+- `verify:wiring` checks package dependencies, Vite plugins, the React entrypoint, and central stylesheet imports.
 
 You can run the checks on their own:
 
@@ -44,6 +45,7 @@ npm run verify:links
 npm run verify:content
 npm run verify:a11y
 npm run verify:sitemap
+npm run verify:wiring
 npm run generate:index
 npm run generate:sitemap
 ```

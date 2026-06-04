@@ -11,7 +11,7 @@
   "author": "Cherry",
   "type": "module",
   "scripts": {
-    "build": "npm run generate:sitemap && npm run generate:index && npm run verify:generated && npm run verify:public && npm run verify:links && npm run verify:content && npm run verify:a11y && npm run verify:sitemap && vite build",
+    "build": "npm run generate:sitemap && npm run generate:index && npm run verify:generated && npm run verify:public && npm run verify:links && npm run verify:content && npm run verify:a11y && npm run verify:sitemap && npm run verify:wiring && vite build",
     "generate:index": "node scripts/generate-static-index.mjs",
     "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "verify:a11y": "node scripts/verify-accessibility-refs.mjs",
@@ -20,6 +20,7 @@
     "verify:links": "node scripts/verify-internal-links.mjs",
     "verify:public": "node scripts/verify-public-assets.mjs",
     "verify:sitemap": "node scripts/verify-sitemap.mjs",
+    "verify:wiring": "node scripts/verify-project-wiring.mjs",
     "dev": "vite"
   },
   "dependencies": {
