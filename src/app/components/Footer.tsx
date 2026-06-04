@@ -10,7 +10,7 @@ const footerLinks = [
   { label: "联系", href: "#contact" },
 ];
 
-const footerWorkSlugs = ["gene-expression", "concept-explainer", "research-prompt-kit"];
+const footerWorkSlugs = ["gene-expression", "concept-explainer", "research-prompt-kit", "plant-evolution-stories", "crispr-interactive"];
 
 export function Footer() {
   const footerWorkLinks = footerWorkSlugs
@@ -69,13 +69,13 @@ export function Footer() {
         ))}
       </nav>
 
-      <nav aria-label="页尾继续学习入口" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.55rem", maxWidth: 720, margin: "0 auto 0.95rem" }}>
+      <nav aria-label="页尾继续学习入口" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.55rem", maxWidth: 960, margin: "0 auto 0.95rem" }}>
         {footerWorkLinks.map((work) => (
           <a
             className="footer-work-link"
             key={work.slug}
             href={work.href}
-            aria-label={`继续学习${work.title}：先做这个，${work.starter}。可保存产出，${work.outputs.join("、")}`}
+            aria-label={`继续学习${work.title}：先做这个，${work.starter}。可保存产出，${work.outputs.join("、")}。完成标准，${work.success}`}
             onMouseEnter={() => preloadRouteForHref(work.href)}
             onFocus={() => preloadRouteForHref(work.href)}
             onPointerDown={() => preloadRouteForHref(work.href)}
@@ -100,6 +100,7 @@ export function Footer() {
             <span style={{ color: "#FAF7F1", fontSize: "0.78rem", fontWeight: 900 }}>{work.title}</span>
             <span style={{ color: "rgba(245,241,234,0.7)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 800 }}>先做：{work.path[0]} → {work.path[1]}</span>
             <span style={{ color: "rgba(245,241,234,0.82)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 900 }}>产出：{work.outputs[0]} / {work.outputs[1]}</span>
+            <span style={{ color: "rgba(245,241,234,0.72)", fontSize: "0.66rem", lineHeight: 1.42, fontWeight: 900 }}>完成：{work.success}</span>
           </a>
         ))}
       </nav>

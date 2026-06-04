@@ -276,6 +276,7 @@ function verifyWorkJsonLdLearningOutcomes() {
   const heroSource = read("src/app/components/Hero.tsx");
   const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
   const worksSource = read("src/app/components/Works.tsx");
+  const footerSource = read("src/app/components/Footer.tsx");
 
   expect(appSource.includes("learningResourceType: work.category"), "Runtime work JSON-LD must include learningResourceType.");
   expect(appSource.includes("teaches: [work.task, work.starter, work.success, ...work.path, ...work.outputs]"), "Runtime work JSON-LD must include immediate task, starter action, completion standard, learning path, and output outcomes.");
@@ -333,6 +334,10 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes("aria-label={`${item.label}：${item.work.title}。先做这个，${item.work.starter}。完成标准，${item.work.success}`}"), "Work detail previous/next cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("function WorkQuickStart"), "Work detail pages must include a quick-start entry component.");
   expect(workDetailSource.includes("<WorkQuickStart work={work} />"), "Work detail pages must render the quick-start entry before deep content.");
+  expect(footerSource.includes('"plant-evolution-stories"') && footerSource.includes('"crispr-interactive"'), "Footer continue-learning links must cover all learning modules, not only the first three.");
+  expect(footerSource.includes("完成：{work.success}"), "Footer continue-learning links must visibly expose completion standards.");
+  expect(footerSource.includes("完成标准，${work.success}"), "Footer continue-learning accessible labels must include completion standards.");
+  expect(footerSource.includes("maxWidth: 960"), "Footer continue-learning grid must have enough width for all five module links.");
 }
 
 function verifyResearchAgentWorkbenchContract() {
