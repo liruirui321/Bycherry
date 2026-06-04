@@ -479,6 +479,9 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("aria-label={`${item.label}：${item.article.title}。先做这个，${itemAction}。完成后检查，${itemCheck}`}"), "Article previous/next cards must include first action and completion check in accessible labels.");
   expect(appSource.includes("teaches: [article.actionSteps[0], article.checklist[0]]"), "Runtime article list JSON-LD must include first action and completion check.");
   expect(appSource.includes("teaches: [note?.actionSteps[0] ?? essay?.actionSteps[0], note?.checklist[0] ?? essay?.checklist[0]]"), "Runtime article detail JSON-LD must include first action and completion check.");
+  expect(appSource.includes("const articleFirstAction = note?.actionSteps[0] ?? essay?.actionSteps[0] ?? null"), "Runtime article metadata must derive the first action step.");
+  expect(appSource.includes("const articleFirstCheck = note?.checklist[0] ?? essay?.checklist[0] ?? null"), "Runtime article metadata must derive the first completion check.");
+  expect(appSource.includes("先做这个：${articleFirstAction}。完成后检查：${articleFirstCheck}"), "Runtime article meta descriptions must include first action and completion check.");
   expect(contentRoutesSource.includes("firstAction") && contentRoutesSource.includes("firstCheck"), "Static content routes must extract article first action and completion check.");
   expect(staticIndexSource.includes("teaches: [route.firstAction, route.firstCheck].filter(Boolean)"), "Static article JSON-LD must include first action and completion check.");
   expect(staticIndexSource.includes("完成后检查："), "Static index fallback must expose article completion checks.");

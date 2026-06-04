@@ -271,7 +271,12 @@ export default function App() {
     const missingRoutedItem = Boolean((detailSlug && !work) || (noteSlug && !note) || (researchSlug && !essay));
     const notFound = unknownPath || missingRoutedItem;
     const title = notFound ? "没有找到页面" : work?.title ?? note?.title ?? essay?.title ?? homeTitle;
-    const description = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览学习模块、方法库和证据库。" : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
+    const baseDescription = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览学习模块、方法库和证据库。" : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
+    const articleFirstAction = note?.actionSteps[0] ?? essay?.actionSteps[0] ?? null;
+    const articleFirstCheck = note?.checklist[0] ?? essay?.checklist[0] ?? null;
+    const description = (note || essay) && articleFirstAction && articleFirstCheck
+      ? `${baseDescription} 先做这个：${articleFirstAction}。完成后检查：${articleFirstCheck}`
+      : baseDescription;
     const isArticle = Boolean(note || essay);
     const publishedDate = note?.date ?? essay?.date ?? null;
     const workUpdatedDate = work?.updated ?? null;
