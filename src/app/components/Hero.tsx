@@ -76,7 +76,7 @@ export function Hero() {
         justifyContent: "center",
         position: "relative",
         overflow: "hidden",
-        padding: "4.6rem 1.5rem 2.2rem",
+        padding: "2.8rem 1.5rem 1.7rem",
         width: "100%",
         maxWidth: "100%",
       }}
@@ -311,6 +311,8 @@ export function Hero() {
           #top {
             padding-left: 1rem !important;
             padding-right: 1rem !important;
+            padding-top: 1rem !important;
+            padding-bottom: 1.15rem !important;
           }
 
           .hero-inner,
@@ -343,6 +345,10 @@ export function Hero() {
           .hero-work-preview {
             transform: scale(0.82);
             transform-origin: right bottom;
+          }
+
+          .hero-floating-deco {
+            display: none !important;
           }
         }
 
