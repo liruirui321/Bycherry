@@ -7,6 +7,10 @@ const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const publicRoot = resolve(root, "public");
 const siteUrl = "https://bycherry.me";
 const expectedDomain = "bycherry.me";
+const shareTagline = "科学、课程与 AI 主题作品集";
+const manifestDescription = `${shareTagline}。`;
+const shareDescription = "科学、课程与 AI 主题作品集，收录科学教育、学习工具、课程卡片和科研转译记录。";
+const retiredShareCopy = "可打开、可阅读、可操作";
 
 function readRoot(relativePath) {
   return readFileSync(resolve(root, relativePath), "utf8");
@@ -75,6 +79,7 @@ expect(
 const manifest = JSON.parse(readPublic("site.webmanifest"));
 expect(manifest.name === "By Cherry", "site.webmanifest must use the By Cherry app name.");
 expect(manifest.short_name === "By Cherry", "site.webmanifest must use the By Cherry short name.");
+expect(manifest.description === manifestDescription, "site.webmanifest description must match the current share description.");
 expect(manifest.start_url === "/", "site.webmanifest start_url must be /.");
 expect(manifest.scope === "/", "site.webmanifest scope must be /.");
 expect(manifest.display === "standalone", "site.webmanifest display must be standalone.");
@@ -83,11 +88,17 @@ expect(Array.isArray(manifest.icons) && manifest.icons.some((icon) => icon.src =
 
 const socialPreview = readPngSize("social-preview.png");
 expect(socialPreview.width === 1200 && socialPreview.height === 630, "social-preview.png must be 1200x630 for OG/Twitter cards.");
+const socialPreviewSvg = readPublic("social-preview.svg");
+expect(socialPreviewSvg.includes(shareTagline), "social-preview.svg must include the current share tagline.");
+expect(!socialPreviewSvg.includes(retiredShareCopy), "social-preview.svg must not include retired share copy.");
 
 const indexHtml = readRoot("index.html");
 const contentHrefs = getContentHrefs();
 expect(indexHtml.includes('<html lang="zh-CN">'), "index.html must declare zh-CN language.");
 expect(indexHtml.includes('<link rel="canonical" href="https://bycherry.me/" />'), "index.html must include the home canonical URL.");
+expect(indexHtml.includes(`<meta property="og:description" content="${shareDescription}" />`), "index.html must include the current OG description.");
+expect(indexHtml.includes(`<meta name="twitter:description" content="${shareDescription}" />`), "index.html must include the current Twitter description.");
+expect(!indexHtml.includes(retiredShareCopy), "index.html must not include retired share copy.");
 expect(indexHtml.includes('<meta property="og:image:secure_url" content="https://bycherry.me/social-preview.png" />'), "index.html must include og:image:secure_url.");
 expect(indexHtml.includes('<link rel="preconnect" href="https://fonts.googleapis.com" />'), "index.html must preconnect to Google Fonts.");
 expect(indexHtml.includes("<noscript>"), "index.html must include a noscript content index.");
