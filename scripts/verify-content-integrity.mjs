@@ -72,12 +72,12 @@ function verifyArticleBlocks({ relativePath, type, summaryField, readingTimeFiel
       expect(hasField(block, fieldName), `${label} is missing ${fieldName}.`);
     }
 
-    expect(countStringItemsInArray(block, "paragraphs") >= 3, `${label} needs at least 3 paragraph entries for the detail page.`);
+    expect(countStringItemsInArray(block, "paragraphs") >= 6, `${label} needs at least 6 paragraph entries for the detail page.`);
     expect(countStringItemsInArray(block, "highlights") >= 3, `${label} needs at least 3 highlight entries for the detail page.`);
-    expect(countStringItemsInArray(block, "actionSteps") >= 4, `${label} needs at least 4 action steps for hands-on use.`);
-    expect(countStringItemsInArray(block, "checklist") >= 3, `${label} needs at least 3 checklist items.`);
-    expect(countStringItemsInArray(block, "starterTemplate") >= 4, `${label} needs at least 4 starter template lines.`);
-    expect(countStringItemsInArray(block, "pitfalls") >= 3, `${label} needs at least 3 pitfall reminders.`);
+    expect(countStringItemsInArray(block, "actionSteps") >= 5, `${label} needs at least 5 action steps for hands-on use.`);
+    expect(countStringItemsInArray(block, "checklist") >= 4, `${label} needs at least 4 checklist items.`);
+    expect(countStringItemsInArray(block, "starterTemplate") >= 5, `${label} needs at least 5 starter template lines.`);
+    expect(countStringItemsInArray(block, "pitfalls") >= 4, `${label} needs at least 4 pitfall reminders.`);
   }
 }
 
