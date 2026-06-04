@@ -24,6 +24,43 @@ function LeafCluster() {
   );
 }
 
+function WorkbenchIllustration() {
+  return (
+    <svg width="100%" height="170" viewBox="0 0 320 170" fill="none" aria-hidden="true" focusable="false">
+      <rect x="18" y="20" width="284" height="130" rx="28" fill="var(--cherry-yellow-light)" stroke="rgba(94,68,42,0.12)" strokeWidth="2" />
+      <path d="M26 118 C69 92 103 116 137 94 C178 67 216 95 292 58 V150 H26Z" fill="var(--cherry-sage-light)" opacity="0.62" />
+      <path d="M38 139 C80 150 225 148 278 131" stroke="rgba(94,68,42,0.16)" strokeWidth="7" strokeLinecap="round" />
+
+      <rect x="54" y="62" width="86" height="66" rx="13" fill="rgba(250,247,241,0.9)" stroke="var(--cherry-blue)" strokeWidth="2.4" />
+      <rect x="66" y="76" width="48" height="7" rx="3.5" fill="var(--cherry-blue-light)" />
+      <path d="M67 94 H125 M67 108 H111" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.48" />
+      <path d="M77 128 H132" stroke="var(--cherry-warm-brown)" strokeWidth="4" strokeLinecap="round" opacity="0.16" />
+
+      <g transform="translate(143 46)">
+        <path d="M12 71 C12 44 18 23 32 4" stroke="var(--cherry-forest)" strokeWidth="6" strokeLinecap="round" />
+        <path d="M26 16 C42 1 65 8 70 28 C49 38 34 33 26 16Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
+        <path d="M19 43 C2 34 -11 42 -13 60 C5 66 16 59 19 43Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
+        <circle cx="58" cy="28" r="7" fill="var(--cherry-red)" opacity="0.86" />
+        <circle cx="70" cy="41" r="6" fill="var(--cherry-peach)" opacity="0.9" />
+      </g>
+
+      <g transform="translate(214 61)">
+        <rect x="0" y="16" width="62" height="50" rx="15" fill="rgba(250,247,241,0.9)" stroke="var(--cherry-red)" strokeWidth="2.3" />
+        <path d="M18 14 L23 4 H39 L44 14" stroke="var(--cherry-red)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="21" cy="39" r="3.8" fill="var(--cherry-warm-brown)" />
+        <circle cx="41" cy="39" r="3.8" fill="var(--cherry-warm-brown)" />
+        <path d="M23 51 C30 56 37 56 44 51" stroke="var(--cherry-warm-brown)" strokeWidth="2.4" strokeLinecap="round" />
+        <path d="M51 8 L56 17 L66 20 L57 25 L54 35 L49 26 L39 23 L48 18Z" fill="var(--cherry-yellow)" stroke="rgba(94,68,42,0.14)" strokeWidth="1.2" />
+      </g>
+
+      <path d="M68 44 C79 34 92 34 103 45" stroke="var(--cherry-blue)" strokeWidth="5" strokeLinecap="round" opacity="0.38" />
+      <path d="M231 39 C244 29 260 31 270 44" stroke="var(--cherry-peach)" strokeWidth="6" strokeLinecap="round" opacity="0.46" />
+      <circle cx="44" cy="43" r="8" fill="var(--cherry-yellow)" opacity="0.72" />
+      <circle cx="286" cy="104" r="7" fill="var(--cherry-blue-light)" stroke="var(--cherry-blue)" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
 export function About() {
   const reusableOutputs = works.reduce((count, work) => count + work.outputs.length, 0);
   const stats = [
@@ -62,33 +99,14 @@ export function About() {
               background: "var(--card)",
               border: "1.5px solid var(--border)",
               borderRadius: 22,
-              padding: "2rem",
+              padding: "1.25rem 1.35rem 1.45rem",
               boxShadow: "5px 8px 0px rgba(94,68,42,0.08)",
               position: "relative",
+              overflow: "hidden",
             }}
           >
-            {/* Avatar */}
-            <div
-              style={{
-                width: 88,
-                height: 88,
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, var(--cherry-peach-light), var(--cherry-yellow-light))",
-                border: "3px solid var(--cherry-peach)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: "1.25rem",
-              }}
-            >
-              {/* Leaf face illustration */}
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false">
-                <circle cx="24" cy="24" r="18" fill="var(--cherry-sage-light)" />
-                <path d="M24 10 Q32 16 30 26 Q28 34 20 32 Q12 28 14 20 Q16 12 24 10Z" fill="var(--cherry-sage)" opacity="0.7" />
-                <circle cx="20" cy="22" r="2" fill="var(--cherry-warm-brown)" />
-                <circle cx="28" cy="22" r="2" fill="var(--cherry-warm-brown)" />
-                <path d="M20 28 Q24 31 28 28" stroke="var(--cherry-warm-brown)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-              </svg>
+            <div style={{ margin: "-0.3rem -0.4rem 0.75rem" }}>
+              <WorkbenchIllustration />
             </div>
 
             <h3 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "1.5rem", marginBottom: "0.2rem" }}>
