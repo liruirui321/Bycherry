@@ -2,7 +2,8 @@ import { IconMicroscope, IconBook, IconAI, IconLeaf, IconResearch } from "./Icon
 import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
 import { works } from "./Works";
-import { navigateHomeSection } from "../navigation";
+import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
+import { preloadRouteForHref } from "../routePrefetch";
 
 const tags = [
   { label: "生命科学", icon: <IconMicroscope size={15} color="#1a5680" />, bg: "var(--cherry-blue-light)", color: "#1a5680" },
@@ -200,7 +201,15 @@ export function About() {
                   key={item.goal}
                   className="about-use-card"
                   href={item.work.href}
-                  aria-label={`${item.goal}：打开${item.work.title}。先做这个，${item.work.starter}。完成检查，${item.checkpoint}`}
+                  aria-label={`${item.goal}：打开${item.work.title}。先做这个，${item.work.starter}。完成检查，${item.checkpoint}。完成标准，${item.work.success}`}
+                  onMouseEnter={() => preloadRouteForHref(item.work.href)}
+                  onFocus={() => preloadRouteForHref(item.work.href)}
+                  onPointerDown={() => preloadRouteForHref(item.work.href)}
+                  onClick={(event) => {
+                    if (!shouldUseClientNavigation(event)) return;
+                    event.preventDefault();
+                    navigateClient(item.work.href);
+                  }}
                   style={{
                     display: "grid",
                     gap: "0.42rem",

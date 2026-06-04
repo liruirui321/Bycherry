@@ -902,6 +902,11 @@ function verifyLearnerProductPositioning() {
   for (const slug of ["gene-expression", "concept-explainer", "research-prompt-kit", "plant-evolution-stories", "crispr-interactive"]) {
     expect(aboutSource.includes(`findWork("${slug}")`), `About start guide must include ${slug}.`);
   }
+  expect(aboutSource.includes('import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation"'), "About start guide cards must use client-side navigation.");
+  expect(aboutSource.includes('import { preloadRouteForHref } from "../routePrefetch"'), "About start guide cards must preload work detail routes.");
+  expect(aboutSource.includes("onPointerDown={() => preloadRouteForHref(item.work.href)}"), "About start guide cards must preload routes on pointer down.");
+  expect(aboutSource.includes("navigateClient(item.work.href)"), "About start guide cards must navigate without a full page reload.");
+  expect(aboutSource.includes("完成标准，${item.work.success}"), "About start guide accessible labels must include completion standards.");
 }
 
 function verifyContactFeedbackContract() {
