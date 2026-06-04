@@ -383,6 +383,7 @@ function verifyCrisprLearnerScenarios() {
 }
 
 function verifyLearnerFacingArticleCopy() {
+  const articleDetailSource = read("src/app/components/ArticleDetailPage.tsx");
   const learnerArticleSources = [
     "src/app/App.tsx",
     "src/app/components/About.tsx",
@@ -424,6 +425,9 @@ function verifyLearnerFacingArticleCopy() {
     "当前显示",
     "查看证据",
     "学习方法、科研证据、AI 创作和科研转译资料",
+    "先做这个",
+    "完成后检查",
+    "先避开",
   ];
   const retiredLearnerArticlePatterns = [
     { label: "old AI course title", pattern: /AI 可以参与课程开发/ },
@@ -450,6 +454,11 @@ function verifyLearnerFacingArticleCopy() {
       expect(!item.pattern.test(source), `${relativePath} contains retired teacher/classroom-facing article copy: ${item.label}`);
     }
   }
+
+  expect(articleDetailSource.includes("const articleQuickStart"), "Article detail pages must derive a first learner action.");
+  expect(articleDetailSource.includes("actionSteps[0]"), "Article quick start must use the first concrete article action.");
+  expect(articleDetailSource.includes("checklist[0]"), "Article quick start must expose the first completion check.");
+  expect(articleDetailSource.includes("pitfalls[0]"), "Article quick start must expose the first pitfall to avoid.");
 }
 
 function verifyLearnerProductPositioning() {

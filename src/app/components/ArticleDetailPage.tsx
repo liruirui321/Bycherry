@@ -96,6 +96,13 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const checklist = article && "checklist" in article ? article.checklist : [];
   const starterTemplate = article && "starterTemplate" in article ? article.starterTemplate : [];
   const pitfalls = article && "pitfalls" in article ? article.pitfalls : [];
+  const articleQuickStart = article
+    ? {
+        step: actionSteps[0] ?? "先读摘要，圈出这篇内容要解决的一个问题。",
+        check: checklist[0] ?? "完成后确认自己能说出一个可检查的结果。",
+        pitfall: pitfalls[0] ?? "不要只浏览标题，必须留下一个可复盘的输出。",
+      }
+    : null;
   const platformUrl = article && "platformUrl" in article ? article.platformUrl : null;
   const platformUsePlans = platformUrl
     ? [
@@ -329,6 +336,25 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               >
                 打开平台：scifuion.top
               </a>
+            ) : null}
+
+            {articleQuickStart ? (
+              <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.72rem", marginBottom: "0.85rem", display: "grid", gap: "0.58rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                  <span style={{ color: "var(--cherry-red)", fontWeight: 900, fontSize: "0.72rem" }}>先做这个</span>
+                  <span style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem", lineHeight: 1.45 }}>{articleQuickStart.step}</span>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.5rem" }}>
+                  <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.55rem" }}>
+                    <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.16rem" }}>完成后检查</span>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>{articleQuickStart.check}</span>
+                  </div>
+                  <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.55rem" }}>
+                    <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.16rem" }}>先避开</span>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>{articleQuickStart.pitfall}</span>
+                  </div>
+                </div>
+              </div>
             ) : null}
 
             {platformUsePlans.length ? (
