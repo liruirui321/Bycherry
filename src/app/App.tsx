@@ -11,6 +11,7 @@ import { Notes } from "./components/Notes";
 import { notes } from "./components/Notes";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
+import { EmptyStateCard } from "./components/EmptyStateCard";
 import { works } from "./components/Works";
 import { navigateClient, shouldUseClientNavigation } from "./navigation";
 
@@ -175,26 +176,18 @@ function clearRedirectPath() {
 function NotFoundPage() {
   return (
     <main id="main-content" tabIndex={-1} style={{ minHeight: "58vh", padding: "5rem 1.5rem", display: "grid", placeItems: "center", fontFamily: "'Nunito', sans-serif" }}>
-      <section style={{ maxWidth: 620, textAlign: "center", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "2rem", boxShadow: "5px 8px 0px rgba(94,68,42,0.08)" }}>
-        <div style={{ fontFamily: "'Caveat', cursive", color: "var(--cherry-red)", fontSize: "1.15rem", fontWeight: 900, marginBottom: "0.5rem" }}>404</div>
-        <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.55rem, 4vw, 2.1rem)", fontWeight: 900, lineHeight: 1.25, marginBottom: "0.7rem" }}>
-          没有找到这个页面
-        </h1>
-        <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.75, fontSize: "0.95rem", marginBottom: "1.3rem" }}>
-          这个地址可能写错了，或者内容已经移动。可以回到首页继续打开作品、笔记和科研随笔。
-        </p>
-        <a
-          href="/#top"
-          onClick={(event) => {
-            if (!shouldUseClientNavigation(event)) return;
-            event.preventDefault();
-            navigateClient("/#top");
-          }}
-          style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.62rem 1.1rem", textDecoration: "none", fontWeight: 900, boxShadow: "3px 5px 0px rgba(58,92,62,0.22)" }}
-        >
-          回到首页
-        </a>
-      </section>
+      <EmptyStateCard
+        eyebrow="404"
+        title="没有找到这个页面"
+        body="这个地址可能写错了，或者内容已经移动。可以回到首页继续浏览主题作品、笔记和科研随笔。"
+        href="/#top"
+        linkText="回到首页"
+        onNavigate={(event) => {
+          if (!shouldUseClientNavigation(event)) return;
+          event.preventDefault();
+          navigateClient("/#top");
+        }}
+      />
     </main>
   );
 }

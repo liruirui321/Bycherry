@@ -1,6 +1,7 @@
 import { IconBook, IconCheck, IconCoffee, IconLeafSmall } from "./Icons";
 import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
+import { EmptyStateCard } from "./EmptyStateCard";
 import { copyText } from "../clipboard";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 import { useState } from "react";
@@ -108,33 +109,19 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
   if (!article) {
     return (
-      <main id="main-content" tabIndex={-1} style={{ padding: "5rem 1.5rem", maxWidth: 760, margin: "0 auto", fontFamily: "'Nunito', sans-serif" }}>
-        <a
-          className="article-detail-link"
+      <main id="main-content" tabIndex={-1} style={{ minHeight: "58vh", padding: "5rem 1.5rem", display: "grid", placeItems: "center", fontFamily: "'Nunito', sans-serif" }}>
+        <EmptyStateCard
+          eyebrow={kind === "note" ? "笔记" : "科研随笔"}
+          title="没有找到这篇内容"
+          body={`这篇内容可能已经移动。可以回到${kind === "note" ? "笔记" : "科研随笔"}目录，继续浏览最近更新。`}
           href={`/${backHash}`}
-          onClick={(event) => {
+          linkText={backText}
+          onNavigate={(event) => {
             if (!shouldUseClientNavigation(event)) return;
             event.preventDefault();
             navigateHome(backHash);
           }}
-          style={{ color: "var(--cherry-forest)", fontWeight: 900, textDecoration: "none" }}
-        >
-          ← {backText}
-        </a>
-        <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "2rem", marginTop: "1.5rem" }}>没有找到这篇内容</h1>
-        <style>
-          {`
-            .article-detail-link:focus-visible {
-              outline: 3px solid var(--cherry-red);
-              outline-offset: 4px;
-            }
-
-            .article-detail-link:hover,
-            .article-detail-link:focus-visible {
-              color: var(--cherry-red) !important;
-            }
-          `}
-        </style>
+        />
       </main>
     );
   }

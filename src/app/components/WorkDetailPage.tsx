@@ -3,6 +3,7 @@ import { GeneExpressionTool } from "./GeneExpressionTool";
 import { IconDNA } from "./Icons";
 import { works } from "./Works";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
+import { EmptyStateCard } from "./EmptyStateCard";
 import { copyText } from "../clipboard";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
@@ -1781,33 +1782,19 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
   if (!work) {
     return (
-      <section id="main-content" tabIndex={-1} style={{ padding: "5rem 1.5rem", maxWidth: 720, margin: "0 auto", fontFamily: "'Nunito', sans-serif" }}>
-        <a
-          className="work-detail-back-link"
+      <section id="main-content" tabIndex={-1} style={{ minHeight: "58vh", padding: "5rem 1.5rem", display: "grid", placeItems: "center", fontFamily: "'Nunito', sans-serif" }}>
+        <EmptyStateCard
+          eyebrow="作品集"
+          title="没有找到这个作品"
+          body="这个作品地址可能已经移动。可以回到主题作品区，继续浏览科学模拟、课程卡片和 AI 工具。"
           href="/#works"
-          onClick={(event) => {
+          linkText="回到作品集"
+          onNavigate={(event) => {
             if (!shouldUseClientNavigation(event)) return;
             event.preventDefault();
             navigateHome("#works");
           }}
-          style={{ color: "var(--cherry-forest)", fontWeight: 900, textDecoration: "none" }}
-        >
-          ← 回到作品集
-        </a>
-        <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "2rem", marginTop: "1.5rem" }}>没有找到这个作品</h1>
-        <style>
-          {`
-            .work-detail-back-link:focus-visible {
-              outline: 3px solid var(--cherry-red);
-              outline-offset: 4px;
-            }
-
-            .work-detail-back-link:hover,
-            .work-detail-back-link:focus-visible {
-              color: var(--cherry-red) !important;
-            }
-          `}
-        </style>
+        />
       </section>
     );
   }
