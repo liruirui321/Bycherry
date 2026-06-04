@@ -219,6 +219,11 @@ function verifyWorkDetailCardsStayCompact() {
   expect(!source.includes("isPlantEvolution"), "Work detail cards must not use plant-specific tall preview sizing.");
   expect(source.includes('gridTemplateColumns: "112px minmax(0, 1fr)"'), "Work detail continue cards should use a uniform compact preview column.");
   expect(source.includes('height: 88'), "Work detail continue card previews should keep a fixed compact height.");
+  expect(source.includes("conceptInputQuality"), "Concept explainer must judge whether learner inputs are complete enough.");
+  expect(source.includes("concept-agent-input-grid"), "Concept explainer context inputs must be visible in the initial agent panel.");
+  expect(source.includes("资料边界") && source.includes("当前卡点"), "Concept explainer must collect source boundary and current confusion.");
+  expect(source.includes("复制自查记录"), "Concept explainer must expose a copyable understanding audit.");
+  expect(source.includes("conceptInputQualityScore"), "Concept explainer must surface input quality before generating outputs.");
 }
 
 function verifyArticleCardsStayStructured() {
