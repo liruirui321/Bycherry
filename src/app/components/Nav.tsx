@@ -91,13 +91,16 @@ export function Nav() {
     >
       <div
         style={{
+          width: "100%",
           maxWidth: 1100,
           margin: "0 auto",
           padding: "0 1.5rem",
+          boxSizing: "border-box",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           height: 62,
+          position: "relative",
         }}
       >
         {/* Logo */}
@@ -118,7 +121,7 @@ export function Nav() {
         </a>
 
         {/* Desktop links */}
-        <div className="hidden sm:flex" style={{ gap: "0.75rem", alignItems: "center" }}>
+        <div className="nav-desktop-links" style={{ gap: "0.75rem", alignItems: "center" }}>
           {links.map((l) => {
             const active = isActiveLink(l.href);
             return (
@@ -142,9 +145,22 @@ export function Nav() {
 
         {/* Mobile toggle */}
         <button
-          className="sm:hidden"
+          className="nav-mobile-toggle"
           onClick={() => setOpen(!open)}
-          style={{ background: "none", border: "none", cursor: "pointer", padding: 4, display: "flex" }}
+          style={{
+            position: "absolute",
+            right: "1.5rem",
+            top: "50%",
+            transform: "translateY(-50%)",
+            width: 38,
+            height: 38,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 4,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
           aria-label={open ? "关闭菜单" : "打开菜单"}
           aria-expanded={open}
           aria-controls="mobile-navigation"
@@ -197,6 +213,24 @@ export function Nav() {
           nav .mobile-nav-link:focus-visible {
             color: var(--cherry-red) !important;
             background: rgba(232,144,124,0.14) !important;
+          }
+
+          nav .nav-desktop-links {
+            display: none;
+          }
+
+          nav .nav-mobile-toggle {
+            display: inline-flex;
+          }
+
+          @media (min-width: 900px) {
+            nav .nav-desktop-links {
+              display: flex;
+            }
+
+            nav .nav-mobile-toggle {
+              display: none !important;
+            }
           }
 
           @media (prefers-reduced-motion: reduce) {

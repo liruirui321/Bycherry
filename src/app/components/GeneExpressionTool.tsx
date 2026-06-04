@@ -280,12 +280,16 @@ function aminoCountForRibosome(progress: number) {
   return Math.min(codons.length, Math.floor(progress * codons.length) + 1);
 }
 
+function ribosomePeptideExitPoint(ribosomeCenter: Point) {
+  return { x: ribosomeCenter.x + 43, y: ribosomeCenter.y + 19 };
+}
+
 function peptideBeadPoint(exit: Point, index: number) {
   const points = [
-    { x: exit.x + 5, y: exit.y + 2 },
-    { x: exit.x + 18, y: exit.y + 16 },
-    { x: exit.x + 35, y: exit.y + 8 },
-    { x: exit.x + 50, y: exit.y + 23 },
+    { x: exit.x + 7, y: exit.y + 1 },
+    { x: exit.x + 22, y: exit.y + 14 },
+    { x: exit.x + 39, y: exit.y + 7 },
+    { x: exit.x + 56, y: exit.y + 20 },
   ];
   return points[index] ?? points[points.length - 1];
 }
@@ -324,6 +328,7 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
             <circle cx={-13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
             <circle cx={13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
             <path d="M10 -2 C21 2 27 10 35 17" fill="none" stroke="var(--cherry-warm-brown)" strokeWidth={3.2} strokeLinecap="round" opacity={0.28} />
+            <path d="M17 7 C29 12 37 17 43 19" fill="none" stroke="var(--cherry-forest)" strokeWidth={5.2} strokeLinecap="round" opacity={0.28} />
             <text x={-13} y={0} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={7} fontWeight={900}>
               P
             </text>
@@ -345,40 +350,31 @@ function LiveExpressionProcess({ model, progress, retainedMrnaCount, canTranslat
         const aminoCount = aminoCountForRibosome(ribosome.progress);
         if (ribosome.opacity <= 0 || aminoCount <= 0) return null;
 
-        const exit = { x: ribosome.renderPoint.x + 35, y: ribosome.renderPoint.y + 17 };
+        const exit = ribosomePeptideExitPoint(ribosome.renderPoint);
+        const beadPoints = codons.slice(0, aminoCount).map((_, aminoIndex) => peptideBeadPoint(exit, aminoIndex));
+        const chainPath = beadPoints.map((point, aminoIndex) => `${aminoIndex === 0 ? "M" : "L"}${point.x} ${point.y}`).join(" ");
 
         return (
           <g key={`live-peptide-chain-${ribosomeIndex}`} opacity={ribosome.opacity}>
             <path
-              d={`M${exit.x - 14} ${exit.y - 8} C${exit.x - 5} ${exit.y - 2} ${exit.x + 1} ${exit.y + 1} ${exit.x + 5} ${exit.y + 2}`}
+              d={`M${exit.x - 20} ${exit.y - 10} C${exit.x - 10} ${exit.y - 4} ${exit.x - 1} ${exit.y - 1} ${exit.x + 6} ${exit.y}`}
               fill="none"
-              stroke="var(--cherry-warm-brown)"
-              strokeWidth={4}
+              stroke="var(--cherry-forest)"
+              strokeWidth={5.2}
               strokeLinecap="round"
-              opacity={0.32}
+              opacity={0.35}
             />
+            {beadPoints.length > 1 ? <path d={chainPath} fill="none" stroke="var(--cherry-forest)" strokeWidth={4.2} strokeLinecap="round" strokeLinejoin="round" opacity={0.78} /> : null}
             {ribosomeIndex === 0 ? (
-              <text x={exit.x + 24} y={exit.y - 18} fill="var(--cherry-forest)" fontSize={11} fontWeight={900}>
+              <text x={exit.x + 32} y={exit.y + 36} fill="var(--cherry-forest)" fontSize={11} fontWeight={900}>
                 多肽链
               </text>
             ) : null}
             {codons.slice(0, aminoCount).map((codon, aminoIndex) => {
-              const point = peptideBeadPoint(exit, aminoIndex);
-              const previousPoint = aminoIndex > 0 ? peptideBeadPoint(exit, aminoIndex - 1) : null;
+              const point = beadPoints[aminoIndex];
 
               return (
                 <g key={`live-peptide-${ribosomeIndex}-${codon.amino}`} transform={`translate(${point.x} ${point.y})`}>
-                  {previousPoint ? (
-                    <line
-                      x1={previousPoint.x - point.x + 8}
-                      y1={previousPoint.y - point.y + 5}
-                      x2={-8}
-                      y2={-5}
-                      stroke="var(--cherry-forest)"
-                      strokeWidth={3.6}
-                      strokeLinecap="round"
-                    />
-                  ) : null}
                   <circle r={10.5} fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4}>
                     <animate attributeName="r" values="8;12;10.5" dur="0.7s" begin={`${aminoIndex * 0.08}s`} repeatCount="1" />
                   </circle>
