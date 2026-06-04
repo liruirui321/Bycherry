@@ -308,6 +308,11 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("hero-session-copy-status"), "Homepage hero must expose copy status for the session plan.");
   expect(heroSource.includes("保存产出：${activeSessionPlan.work.outputs.join"), "Homepage hero session plan must include saved outputs.");
   expect(heroSource.includes("完成标准：${activeSessionPlan.work.success}"), "Homepage hero session plan must include completion standards.");
+  expect(heroSource.includes('import { notes } from "./Notes"') && heroSource.includes('import { essays } from "./ResearchEssays"'), "Homepage hero session plans must connect modules to paired reading libraries.");
+  expect(heroSource.includes("配套阅读：${activeSessionPlan.article.title}"), "Homepage hero session plan must include a paired reading title.");
+  expect(heroSource.includes("阅读入口：${activeSessionPlan.article.href}"), "Homepage hero copied session plan must include paired reading route.");
+  expect(heroSource.includes("完成检查：${activeSessionPlan.article.checklist[0]}"), "Homepage hero copied session plan must include paired reading completion check.");
+  expect(heroSource.includes("配套阅读进入模块"), "Homepage hero visible session copy must mention paired reading.");
   expect(worksSource.includes("先做这个"), "Homepage work cards must expose a first concrete starter action.");
   expect(worksSource.includes("{work.success}"), "Homepage work cards must expose each work completion standard.");
   expect(worksSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage work cards must include starter and completion standard in accessible labels.");

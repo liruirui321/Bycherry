@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { IconMicroscope, IconNotebook, IconSeedling } from "./Icons";
 import { works } from "./Works";
+import { notes } from "./Notes";
+import { essays } from "./ResearchEssays";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { copyText } from "../clipboard";
 import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
@@ -16,16 +18,29 @@ export function Hero() {
     { label: "整理一段科研材料", href: "/works/research-prompt-kit", workTitle: "科研 Agent 工作台" },
   ];
   const sessionPlans = [
-    { label: "生命过程", work: works.find((work) => work.slug === "gene-expression") },
-    { label: "卡住概念", work: works.find((work) => work.slug === "concept-explainer") },
-    { label: "科研材料", work: works.find((work) => work.slug === "research-prompt-kit") },
-  ].filter((item): item is { label: string; work: (typeof works)[number] } => Boolean(item.work));
+    {
+      label: "生命过程",
+      work: works.find((work) => work.slug === "gene-expression"),
+      article: notes.find((note) => note.slug === "ai-course-development"),
+    },
+    {
+      label: "卡住概念",
+      work: works.find((work) => work.slug === "concept-explainer"),
+      article: essays.find((essay) => essay.slug === "ai-assessment-quality-control"),
+    },
+    {
+      label: "科研材料",
+      work: works.find((work) => work.slug === "research-prompt-kit"),
+      article: essays.find((essay) => essay.slug === "science-to-learning-question"),
+    },
+  ].filter((item): item is { label: string; work: (typeof works)[number]; article: (typeof notes)[number] | (typeof essays)[number] } => Boolean(item.work && item.article));
   const activeSessionPlan = sessionPlans[selectedSessionIndex] ?? sessionPlans[0];
   const activeSessionSteps = activeSessionPlan
     ? [
         { time: "5 分钟", body: activeSessionPlan.work.starter },
-        { time: "18 分钟", body: activeSessionPlan.work.task },
-        { time: "7 分钟", body: `保存产出：${activeSessionPlan.work.outputs.join(" / ")}。完成标准：${activeSessionPlan.work.success}` },
+        { time: "15 分钟", body: activeSessionPlan.work.task },
+        { time: "5 分钟", body: `保存产出：${activeSessionPlan.work.outputs.join(" / ")}。完成标准：${activeSessionPlan.work.success}` },
+        { time: "5 分钟", body: `配套阅读：${activeSessionPlan.article.title}。先做这个：${activeSessionPlan.article.actionSteps[0]}` },
       ]
     : [];
   const heroOutputCount = works.reduce((count, work) => count + work.outputs.length, 0);
@@ -42,6 +57,8 @@ export function Hero() {
 目标：${activeSessionPlan.label}
 模块：${activeSessionPlan.work.title}
 入口：${activeSessionPlan.work.href}
+配套阅读：${activeSessionPlan.article.title}
+阅读入口：${activeSessionPlan.article.href}
 
 首屏模块总览
 ${heroModuleStatsText}
@@ -49,14 +66,18 @@ ${heroModuleStatsText}
 1. 5 分钟启动
 ${activeSessionPlan.work.starter}
 
-2. 18 分钟操作
+2. 15 分钟操作
 ${activeSessionPlan.work.task}
 
-3. 7 分钟收束
+3. 5 分钟收束
 保存产出：${activeSessionPlan.work.outputs.join(" / ")}
 完成标准：${activeSessionPlan.work.success}
 
-学习路径
+4. 5 分钟配套阅读
+${activeSessionPlan.article.actionSteps[0]}
+完成检查：${activeSessionPlan.article.checklist[0]}
+
+模块学习路径
 ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join("\n")}`
     : "";
 
@@ -191,7 +212,7 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.7rem", flexWrap: "wrap" }}>
               <div>
                 <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900 }}>30 分钟学习路径</div>
-                <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>选一个目标，直接带着任务、产出和完成标准进入模块。</div>
+                <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>选一个目标，直接带着任务、产出、完成标准和配套阅读进入模块。</div>
               </div>
               <button className="hero-session-button" type="button" onClick={copySessionPlan} aria-describedby="hero-session-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.36rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
                 {copiedSessionPlan ? "已复制" : "复制路径"}
