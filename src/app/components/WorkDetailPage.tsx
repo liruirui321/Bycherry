@@ -3205,7 +3205,7 @@ function WorkContinueLinks({ work }: { work: Work }) {
                 className="work-next-card"
                 key={item.slug}
                 href={item.href}
-                aria-label={`继续探索${item.title}：${item.desc}`}
+                aria-label={`继续探索${item.title}：先做这个，${item.starter}。完成标准，${item.success}`}
                 onClick={(event) => openWork(item.href, event)}
                 onMouseEnter={() => preloadRouteForHref(item.href)}
                 onFocus={() => preloadRouteForHref(item.href)}
@@ -3235,6 +3235,10 @@ function WorkContinueLinks({ work }: { work: Work }) {
                   </span>
                   <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.35, marginBottom: "0.34rem" }}>{item.title}</strong>
                   <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginBottom: "0.5rem" }}>{item.desc}</span>
+                  <span style={{ display: "block", background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.45rem 0.52rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 900, marginBottom: "0.5rem" }}>
+                    <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.64rem", marginBottom: "0.12rem" }}>先做这个</span>
+                    {item.starter}
+                  </span>
                   <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
                     {item.outputs.map((output) => (
                       <span key={output} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.13rem 0.46rem", color: "var(--cherry-warm-brown)", fontSize: "0.66rem", fontWeight: 900 }}>
@@ -3277,7 +3281,7 @@ function WorkSequenceLinks({ work }: { work: Work }) {
             className="work-sequence-card"
             key={item.work.slug}
             href={item.work.href}
-            aria-label={`${item.label}：${item.work.title}`}
+            aria-label={`${item.label}：${item.work.title}。先做这个，${item.work.starter}。完成标准，${item.work.success}`}
             onClick={(event) => openWork(item.work.href, event)}
             onMouseEnter={() => preloadRouteForHref(item.work.href)}
             onFocus={() => preloadRouteForHref(item.work.href)}
@@ -3304,6 +3308,9 @@ function WorkSequenceLinks({ work }: { work: Work }) {
             </span>
             <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.95rem", lineHeight: 1.38, overflowWrap: "anywhere" }}>{item.work.title}</strong>
             <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, overflowWrap: "anywhere" }}>{item.work.desc}</span>
+            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.45, fontWeight: 900, overflowWrap: "anywhere" }}>
+              先做这个：{item.work.starter}
+            </span>
           </a>
         ))}
       </nav>
