@@ -1,6 +1,7 @@
 # By Cherry
 
 Cute illustrated personal homepage for `bycherry.me`, built with React, Vite, and Tailwind CSS.
+The app uses custom inline illustrations and local React components instead of a generated component library.
 
 ## Features
 
@@ -27,7 +28,7 @@ npm run build
 
 `npm run build` runs four verification steps before Vite builds:
 
-- `verify:public` checks the custom domain, robots file, manifest, favicon, and social preview image.
+- `verify:public` checks the custom domain, robots file, manifest, favicon, social preview image, and static index metadata fallback.
 - `verify:links` checks static internal links, public routes, home anchors, and static public asset links.
 - `verify:a11y` checks static `aria-labelledby`, `aria-describedby`, `aria-controls`, and duplicate static ids.
 - `verify:sitemap` compares public routes with `public/sitemap.xml`, including `lastmod` dates.
@@ -59,4 +60,5 @@ When adding or removing public content:
 - For notes and research essays, keep sitemap `lastmod` equal to the item `date`.
 - Make sure any new static links point to an existing route, home anchor, or public asset.
 - Make sure any new static `aria-*` references point to an existing id.
+- Keep dependencies aligned with actual imports; avoid committing unused generated UI component sets.
 - Run `npm run build` before pushing.
