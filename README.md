@@ -28,7 +28,7 @@ npm run build
 
 `npm run build` runs four verification steps before Vite builds:
 
-- `verify:public` checks the custom domain, robots file, manifest, favicon, social preview image, and static index metadata fallback.
+- `verify:public` checks the custom domain, host fallbacks, robots file, manifest, favicon, social preview image, and static index metadata fallback.
 - `verify:links` checks static internal links, public routes, home anchors, and static public asset links.
 - `verify:a11y` checks static `aria-labelledby`, `aria-describedby`, `aria-controls`, and duplicate static ids.
 - `verify:sitemap` compares public routes with `public/sitemap.xml`, including `lastmod` dates.

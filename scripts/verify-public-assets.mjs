@@ -11,6 +11,10 @@ function readRoot(relativePath) {
   return readFileSync(resolve(root, relativePath), "utf8");
 }
 
+function rootExists(relativePath) {
+  return existsSync(resolve(root, relativePath));
+}
+
 function readPublic(relativePath) {
   return readFileSync(resolve(publicRoot, relativePath), "utf8");
 }
@@ -48,6 +52,24 @@ expect(publicExists("favicon.svg"), "favicon.svg is missing.");
 expect(publicExists("social-preview.png"), "social-preview.png is missing.");
 expect(publicExists("social-preview.svg"), "social-preview.svg is missing.");
 expect(publicExists("site.webmanifest"), "site.webmanifest is missing.");
+expect(publicExists("_redirects"), "Netlify _redirects fallback is missing.");
+expect(publicExists("404.html"), "Static-host 404 fallback is missing.");
+expect(rootExists("vercel.json"), "Vercel rewrite config is missing.");
+
+const redirects = readPublic("_redirects").trim();
+expect(redirects === "/* /index.html 200", "public/_redirects must rewrite all routes to /index.html with 200.");
+
+const staticFallback = readPublic("404.html");
+expect(staticFallback.includes('<meta name="robots" content="noindex" />'), "public/404.html must be noindex.");
+expect(staticFallback.includes('sessionStorage.setItem(') && staticFallback.includes('"bycherry-redirect-path"'), "public/404.html must preserve the requested route in sessionStorage.");
+expect(staticFallback.includes('window.location.replace("/")'), "public/404.html must redirect back to the app root.");
+
+const vercel = JSON.parse(readRoot("vercel.json"));
+expect(Array.isArray(vercel.rewrites), "vercel.json must declare rewrites.");
+expect(
+  vercel.rewrites?.some((rewrite) => rewrite.source === "/(.*)" && rewrite.destination === "/index.html"),
+  "vercel.json must rewrite direct client routes to /index.html."
+);
 
 const manifest = JSON.parse(readPublic("site.webmanifest"));
 expect(manifest.name === "By Cherry", "site.webmanifest must use the By Cherry app name.");
@@ -87,4 +109,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log("Public assets verified: domain, robots, manifest, favicon, social preview, and index metadata.");
+console.log("Public assets verified: domain, host fallbacks, robots, manifest, favicon, social preview, and index metadata.");
