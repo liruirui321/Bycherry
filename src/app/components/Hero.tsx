@@ -244,59 +244,63 @@ export function Hero() {
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800 }}>{works.length} 个作品入口</div>
           </div>
           <div className="hero-work-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(178px, 1fr))", gap: "0.65rem", minWidth: 0, maxWidth: "100%" }}>
-            {works.map((work) => (
-              <a
-                className="hero-work-card"
-                key={work.slug}
-                href={work.href}
-                onClick={(event) => openWork(work.href, event)}
-                style={{
-                  background: work.color,
-                  border: `1.5px solid ${work.border}`,
-                  borderRadius: 16,
-                  padding: "0.72rem 0.78rem 0.7rem",
-                  color: "var(--cherry-warm-brown)",
-                  textDecoration: "none",
-                  textAlign: "left",
-                  minHeight: 150,
-                  display: "grid",
-                  gridTemplateRows: "auto auto 1fr auto",
-                  gap: "0.38rem",
-                  position: "relative",
-                  overflow: "hidden",
-                  minWidth: 0,
-                  maxWidth: "100%",
-                }}
-              >
-                <div aria-hidden="true" style={{ position: "absolute", right: -18, bottom: -20, width: 114, height: 92, borderRadius: "54% 46% 48% 52% / 44% 55% 45% 56%", background: "rgba(250,247,241,0.42)", border: "1.5px dashed rgba(94,68,42,0.12)" }} />
-                <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0, position: "relative", zIndex: 1 }}>
-                  <span style={{ width: 28, height: 28, display: "inline-flex", alignItems: "center", justifyContent: "center", transform: "scale(0.68)", transformOrigin: "center" }}>{work.icon}</span>
-                  <strong style={{ fontSize: "0.88rem", lineHeight: 1.35, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", position: "relative", zIndex: 1 }}>
-                  <span style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.08rem 0.42rem", color: "var(--cherry-forest)", fontSize: "0.62rem", fontWeight: 900 }}>
-                    {work.category}
-                  </span>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.62rem", fontWeight: 900 }}>
-                    {work.updated}
-                  </span>
-                </div>
-                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.45, position: "relative", zIndex: 1, display: "block", minWidth: 0, overflowWrap: "anywhere", wordBreak: "break-word" }}>{work.desc}</span>
-                <div style={{ display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center", paddingRight: 82, position: "relative", zIndex: 1 }}>
-                  {work.outputs.slice(0, 2).map((output) => (
-                    <span key={output} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.12rem 0.42rem", color: "var(--cherry-warm-brown)", fontSize: "0.64rem", fontWeight: 900 }}>
-                      {output}
+            {works.map((work) => {
+              const isPlantEvolution = work.slug === "plant-evolution-stories";
+
+              return (
+                <a
+                  className="hero-work-card"
+                  key={work.slug}
+                  href={work.href}
+                  onClick={(event) => openWork(work.href, event)}
+                  style={{
+                    background: work.color,
+                    border: `1.5px solid ${work.border}`,
+                    borderRadius: 16,
+                    padding: "0.72rem 0.78rem 0.7rem",
+                    color: "var(--cherry-warm-brown)",
+                    textDecoration: "none",
+                    textAlign: "left",
+                    minHeight: isPlantEvolution ? 172 : 150,
+                    display: "grid",
+                    gridTemplateRows: "auto auto 1fr auto",
+                    gap: "0.38rem",
+                    position: "relative",
+                    overflow: "hidden",
+                    minWidth: 0,
+                    maxWidth: "100%",
+                  }}
+                >
+                  <div aria-hidden="true" style={{ position: "absolute", right: isPlantEvolution ? -8 : -18, bottom: isPlantEvolution ? -22 : -20, width: isPlantEvolution ? 92 : 114, height: isPlantEvolution ? 150 : 92, borderRadius: isPlantEvolution ? "46% 54% 42% 58% / 55% 44% 56% 45%" : "54% 46% 48% 52% / 44% 55% 45% 56%", background: "rgba(250,247,241,0.42)", border: "1.5px dashed rgba(94,68,42,0.12)" }} />
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0, position: "relative", zIndex: 1 }}>
+                    <span style={{ width: 28, height: 28, display: "inline-flex", alignItems: "center", justifyContent: "center", transform: "scale(0.68)", transformOrigin: "center" }}>{work.icon}</span>
+                    <strong style={{ fontSize: "0.88rem", lineHeight: 1.35, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", position: "relative", zIndex: 1 }}>
+                    <span style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.08rem 0.42rem", color: "var(--cherry-forest)", fontSize: "0.62rem", fontWeight: 900 }}>
+                      {work.category}
                     </span>
-                  ))}
-                  <span style={{ background: "var(--cherry-forest)", border: "1px solid var(--cherry-forest)", borderRadius: 999, padding: "0.12rem 0.42rem", color: "#FAF7F1", fontSize: "0.64rem", fontWeight: 900 }}>
-                    {work.action}
-                  </span>
-                </div>
-                <div className="hero-work-preview" style={{ position: "absolute", right: 2, bottom: 0, display: "flex", justifyContent: "flex-end", opacity: 0.96, zIndex: 0 }}>
-                  <WorkPreviewIllustration slug={work.slug} color={work.border} width={118} height={88} />
-                </div>
-              </a>
-            ))}
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.62rem", fontWeight: 900 }}>
+                      {work.updated}
+                    </span>
+                  </div>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.45, position: "relative", zIndex: 1, display: "block", minWidth: 0, overflowWrap: "anywhere", wordBreak: "break-word", paddingRight: isPlantEvolution ? 38 : 0 }}>{work.desc}</span>
+                  <div style={{ display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center", paddingRight: isPlantEvolution ? 92 : 82, position: "relative", zIndex: 1 }}>
+                    {work.outputs.slice(0, 2).map((output) => (
+                      <span key={output} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.12rem 0.42rem", color: "var(--cherry-warm-brown)", fontSize: "0.64rem", fontWeight: 900 }}>
+                        {output}
+                      </span>
+                    ))}
+                    <span style={{ background: "var(--cherry-forest)", border: "1px solid var(--cherry-forest)", borderRadius: 999, padding: "0.12rem 0.42rem", color: "#FAF7F1", fontSize: "0.64rem", fontWeight: 900 }}>
+                      {work.action}
+                    </span>
+                  </div>
+                  <div className="hero-work-preview" style={{ position: "absolute", right: isPlantEvolution ? 11 : 2, bottom: isPlantEvolution ? -6 : 0, display: "flex", justifyContent: "flex-end", opacity: 0.96, zIndex: 0 }}>
+                    <WorkPreviewIllustration slug={work.slug} color={work.border} width={isPlantEvolution ? 74 : 118} height={isPlantEvolution ? 124 : 88} />
+                  </div>
+                </a>
+              );
+            })}
           </div>
         </div>
         </div>
