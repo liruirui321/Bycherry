@@ -320,10 +320,25 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "sample statistics audit", text: "样本统计" },
     { label: "research record citation audit", text: "五、引用核查" },
     { label: "research record next actions", text: "八、下一步动作" },
+    { label: "completion standards data", text: "completionStandards" },
+    { label: "visible completion standards", text: "本次完成标准" },
+    { label: "human confirmation framing", text: "人工确认" },
+    { label: "review summary mode", text: "复核摘要" },
+    { label: "usage level heading", text: "使用层级" },
+  ];
+
+  const retiredWorkbenchPatterns = [
+    { label: "mentor framing", pattern: /导师/ },
+    { label: "implementation roadmap heading", pattern: /落地层级/ },
+    { label: "already-landed project copy", pattern: /当前已落地/ },
   ];
 
   for (const item of requiredWorkbenchFeatures) {
     expect(`${practiceCasesSource}\n${promptKitSource}`.includes(item.text), `Research Agent workbench is missing ${item.label}: ${item.text}`);
+  }
+
+  for (const item of retiredWorkbenchPatterns) {
+    expect(!item.pattern.test(promptKitSource), `Research Agent workbench contains retired copy: ${item.label}`);
   }
 
   expect(Array.from(practiceCasesSource.matchAll(/\btask:\s*"/g)).length >= 3, "Research Agent workbench should expose at least three practice cases tied to tasks.");

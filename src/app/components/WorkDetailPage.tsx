@@ -89,9 +89,9 @@ function PromptKitContent() {
       title: "实验设计检查",
       input: "实验目的、分组、样本量、操作步骤、统计方法",
       materialTemplate: "实验目的：\n实验对象/材料：\n分组：对照组 / 处理组\n每组样本量：\n核心变量：\n检测指标：\n统计方法：\n我担心的问题：对照是否足够、重复数是否合理",
-      text: "请检查这份实验设计是否存在变量混杂、对照不足、重复数不足、统计方法不匹配或安全风险。输出时分为：必须修改、建议修改、可以保留、需要导师确认。每条意见都说明它会影响哪一种结论。",
+      text: "请检查这份实验设计是否存在变量混杂、对照不足、重复数不足、统计方法不匹配或安全风险。输出时分为：必须修改、建议修改、可以保留、需要人工确认。每条意见都说明它会影响哪一种结论。",
       checks: ["阳性/阴性对照是否齐全", "重复数是否支持统计", "变量是否只改变一个核心因素"],
-      output: ["必须修改", "建议修改", "可以保留", "导师确认"],
+      output: ["必须修改", "建议修改", "可以保留", "人工确认"],
     },
     {
       title: "图表解读",
@@ -141,10 +141,10 @@ function PromptKitContent() {
       outputs: ["结构调整", "表达改写", "不可新增内容"],
     },
     {
-      title: "导师汇报",
-      description: "压缩成适合开会讨论的要点、风险和下一步。",
-      instruction: "请把输出组织成可汇报版本：先给结论边界，再列关键证据、主要风险和需要导师拍板的问题。",
-      outputs: ["汇报摘要", "风险点", "待确认问题"],
+      title: "复核摘要",
+      description: "压缩成适合自己复盘或会议讨论的要点、风险和下一步。",
+      instruction: "请把输出组织成可复核版本：先给结论边界，再列关键证据、主要风险和需要人工确认的问题。",
+      outputs: ["复核摘要", "风险点", "待确认问题"],
     },
   ];
   const activeMode = promptModes[activeModeIndex];
@@ -197,7 +197,7 @@ function PromptKitContent() {
   const missingFields = materialChecks.filter((item) => item.value === "待补充" || item.value === "偏少").map((item) => item.label);
   const taskActions: Record<string, string[]> = {
     文献精读: ["先抽取研究问题、核心假设和主要证据。", "把作者结论和材料外推断分开。", "优先标注原文未说明的信息。"],
-    实验设计检查: ["先检查变量、对照、重复数和统计方法是否匹配。", "把必须修改项和导师确认项分开。", "说明每个风险会影响哪一种结论。"],
+    实验设计检查: ["先检查变量、对照、重复数和统计方法是否匹配。", "把必须修改项和人工确认项分开。", "说明每个风险会影响哪一种结论。"],
     图表解读: ["先读取坐标轴、单位、分组和统计标记。", "把观察事实、合理推断和不能支持的结论分开。", "标出需要回看图注或方法的点。"],
     论文逻辑检查: ["先逐句找结论和证据的对应关系。", "标出证据跳跃、术语不一致和过度表达。", "给出可替换的克制表述。"],
     审稿意见回应: ["先把审稿意见拆成可执行任务。", "区分已完成修改、需要补充分析和无法补做的限制。", "逐条生成回应结构。"],
@@ -214,7 +214,7 @@ function PromptKitContent() {
     实验设计检查: [
       /对照|control|分组/i.test(materialText) ? "已有对照或分组线索，下一步检查每组是否只改变一个核心变量。" : "需要先补充对照组、处理组和变量设置。",
       /n\s*=|样本|重复|replicate/i.test(materialText) ? "已有样本或重复线索，下一步判断是否支持统计检验。" : "重复数和样本量缺失，不能判断统计可靠性。",
-      /统计|p\s*[<=>]|显著/i.test(materialText) ? "已有统计线索，需确认方法是否匹配数据类型。" : "统计方法缺失，建议列为导师确认项。",
+      /统计|p\s*[<=>]|显著/i.test(materialText) ? "已有统计线索，需确认方法是否匹配数据类型。" : "统计方法缺失，建议列为人工确认项。",
       "把会影响核心结论的风险放入必须修改，把表达和记录问题放入建议修改。",
     ],
     图表解读: [
@@ -249,7 +249,7 @@ function PromptKitContent() {
   const reviewerQuestions = [
     missingFields.length ? `需要先补充 ${missingFields.join("、")} 吗？` : "这些材料行是否就是你希望 Agent 重点引用的证据？",
     activePrompt.checks[0],
-    activeMode.outputs.includes("待确认问题") ? "哪些问题需要放到导师会议里确认？" : "哪些结论必须保持保守表述？",
+    activeMode.outputs.includes("待确认问题") ? "哪些问题需要放到人工复核清单里确认？" : "哪些结论必须保持保守表述？",
   ];
   const citationAuditItems = [
     {
@@ -298,7 +298,7 @@ ${visibleEvidenceLines.length ? visibleEvidenceLines.map((line, index) => `${ind
   const boundaryItems = [
     "不保证论文结论正确，只整理材料和证据关系。",
     "不编造引用、DOI、样本量或统计结果；材料没有就标为待补充。",
-    "不替代导师判断、统计分析、伦理审批或临床/高风险决策。",
+    "不替代统计分析、伦理审批、临床/高风险决策或最终署名责任。",
     "接入外部模型时也要保留人工确认，最终结论由用户复核后使用。",
   ];
   const agentRequestPayload = {
@@ -456,7 +456,7 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
     { title: "任务路由", body: "识别当前材料更适合文献精读、实验设计检查、图表解读、论文逻辑检查、审稿回应还是术语一致性检查。" },
     { title: "证据表", body: "把原文证据、合理推断、缺失信息和风险提醒拆开，要求每个结论都能回到材料行。" },
     { title: "质控闸门", body: "在生成报告前先检查样本、分组、结果证据、统计和人工复核问题，材料不足时不输出强结论。" },
-    { title: "报告框架", body: "生成可复制的导师汇报、论文修改建议、图表解读报告、审稿回复结构或术语统一表。" },
+    { title: "报告框架", body: "生成可复制的复核摘要、论文修改建议、图表解读报告、审稿回复结构或术语统一表。" },
     { title: "API 契约", body: "定义请求 JSON、返回字段和验收条件，后续接模型时仍保持可追踪、可复核、可拒绝。" },
   ];
   const marketSignals = [
@@ -488,7 +488,7 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
       title: "改实验设计",
       input: "粘贴分组、样本量、变量和统计方法",
       agent: "检查对照、重复数、变量混杂和统计方法匹配",
-      output: "必须修改、建议修改、可以保留、导师确认四栏",
+      output: "必须修改、建议修改、可以保留、人工确认四栏",
     },
     {
       title: "讲图表",
@@ -503,10 +503,16 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
       output: "逐条回应结构、修改位置和限制说明",
     },
   ];
+  const completionStandards = [
+    "至少得到 1 条可回到材料行的证据候选。",
+    "缺失字段必须出现在 missing_fields 或研究记录里。",
+    "报告草稿中的每个推断都要能连接到 evidence_items、risk_flags 或 reviewer_questions。",
+    "复制研究记录前，先完成一次引用核查。",
+  ];
   const roadmapItems = [
     {
-      title: "本地编排",
-      body: "当前已落地：任务选择、材料模板、模式切换、路由建议、本地预览、任务包复制和 API JSON 契约。",
+      title: "本页可直接完成",
+      body: "任务选择、材料模板、模式切换、路由建议、本地预览、任务包复制和 API JSON 契约。",
     },
     {
       title: "API 接入契约",
@@ -553,7 +559,7 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
     },
     {
       title: "不做什么",
-      body: "不替你判断论文一定正确，不编造引用，不代替统计分析、导师判断、伦理审批或最终署名责任。",
+      body: "不替你判断论文一定正确，不编造引用，不代替统计分析、伦理审批或最终署名责任。",
     },
   ];
   const workflowSteps = [
@@ -813,6 +819,17 @@ ${localPreviewOutput}`;
             ))}
           </div>
         </div>
+        <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.58rem" }}>
+          <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>本次完成标准</strong>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.52rem" }}>
+            {completionStandards.map((item, index) => (
+              <div key={item} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.45rem", alignItems: "start" }}>
+                <span style={{ width: 20, height: 20, borderRadius: "50%", background: "var(--cherry-red)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.52, fontWeight: 800 }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.75rem" }}>
           <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.55rem" }}>
             <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>市场需求</strong>
@@ -858,7 +875,7 @@ ${localPreviewOutput}`;
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.25fr) minmax(220px, 0.75fr)", gap: "0.75rem" }}>
           <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.55rem" }}>
-            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>落地层级</strong>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>使用层级</strong>
             <div style={{ display: "grid", gap: "0.48rem" }}>
               {roadmapItems.map((item, index) => (
                 <div key={item.title} style={{ display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.48rem", alignItems: "start" }}>
