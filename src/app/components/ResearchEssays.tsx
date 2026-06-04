@@ -6,8 +6,8 @@ import { preloadRouteForHref } from "../routePrefetch";
 export const essays = [
   {
     id: 1,
-    slug: "science-to-classroom-question",
-    href: "/research/science-to-classroom-question",
+    slug: "science-to-learning-question",
+    href: "/research/science-to-learning-question",
     icon: <IconDNA size={26} color1="var(--cherry-blue)" color2="var(--cherry-red)" />,
     date: "2026-06-01",
     label: "科研转化",
@@ -108,12 +108,12 @@ export const essays = [
       "第五步审核答案和干扰项。正确答案必须唯一；干扰项要来自真实误解，而不是随便写一个明显错误的选项。例如基因表达主题里，可以把 RNA 聚合酶和 DNA 聚合酶混淆、把 mRNA 和蛋白质产物混淆作为干扰项。",
       "第六步审核解析。合格解析要说明为什么这个答案成立，也要说明其他选项为什么不成立，并指出对应知识点。解析如果只是重复答案，就还不能帮助你纠错。",
       "第七步作答和复盘。做完后不要只看分数，要看错题和错因。错同一类题时，先判断题目表达是否有歧义，再判断是不是自己没有把概念关系讲透。",
-      "一个可直接套用的例子：主题写“基因表达”，对象写“高中生物，已经学过 DNA 和 RNA 基础”，目标写“我能说明 DNA、mRNA、蛋白质之间的信息传递关系”，题型选选择题和简答题，题量 6 题，难度中等，完成时间 8 分钟。",
+      "一个可直接套用的例子：主题写“基因表达”，学习阶段写“生物基础入门，已经学过 DNA 和 RNA 基础”，目标写“我能说明 DNA、mRNA、蛋白质之间的信息传递关系”，题型选选择题和简答题，题量 6 题，难度中等，完成时间 8 分钟。",
     ],
     highlights: ["平台链接：https://scifuion.top", "输入学习阶段、目标、知识点、题型、难度和题量", "生成后先审核，再作答和复盘"],
     actionSteps: ["打开 https://scifuion.top", "选择本次用途：预习诊断、概念检查或复习巩固", "填写学习阶段、学科、章节和当前基础", "写下一个可观察目标：我需要证明自己能做什么", "填写知识点、题型、难度、题量和预计完成时间", "生成题目后逐题审核题干、答案、干扰项和解析", "完成自测并标记错题原因", "记录高频错因，并据此修改学习卡或补充资料"],
     checklist: ["平台链接已经给到使用者：https://scifuion.top", "测评目标写成自己可完成的具体动作", "每道题只考一个核心问题，条件足够支撑答案", "正确答案唯一，干扰项对应真实误解", "解析说明了为什么对、为什么错、对应哪个知识点", "题量和完成时间符合自学节奏", "测后复盘了高频错因，而不是只看分数"],
-    starterTemplate: ["平台入口：https://scifuion.top", "使用场景：预习诊断 / 概念检查 / 复习巩固", "学习对象：年级、学科、章节、当前基础", "测评目标：我需要证明自己能……", "知识点范围：本次只覆盖……", "题目设置：题型、难度、题量、预计完成时间", "生成要求：题干清楚，答案唯一，干扰项来自真实误解，解析说明原因", "人工审核：删掉跑题、歧义、超纲或解析空泛的题", "作答复盘：最高频错因是什么，下一步改学习卡还是补资料"],
+    starterTemplate: ["平台入口：https://scifuion.top", "使用场景：预习诊断 / 概念检查 / 复习巩固", "学习阶段：年级、学科、章节、当前基础", "测评目标：我需要证明自己能……", "知识点范围：本次只覆盖……", "题目设置：题型、难度、题量、预计完成时间", "生成要求：题干清楚，答案唯一，干扰项来自真实误解，解析说明原因", "人工审核：删掉跑题、歧义、超纲或解析空泛的题", "作答复盘：最高频错因是什么，下一步改学习卡还是补资料"],
     pitfalls: ["不要把平台当成自动出题后直接相信的黑箱", "不要只写章节名，要写清楚自己需要完成的动作", "不要只检查答案而忽略题干歧义和解析质量", "不要把所有错因都归为粗心", "不要一次生成太多题，先用小题量把流程跑顺"],
   },
 ];
@@ -351,7 +351,7 @@ export function ResearchEssays() {
   const [activeLabel, setActiveLabel] = useState("全部");
   const researchLabels = ["全部", ...Array.from(new Set(essays.map((essay) => essay.label)))];
   const filteredEssays = activeLabel === "全部" ? essays : essays.filter((essay) => essay.label === activeLabel);
-  const recommendedEssay = essays.find((essay) => essay.slug === "science-to-classroom-question") ?? essays[0];
+  const recommendedEssay = essays.find((essay) => essay.slug === "science-to-learning-question") ?? essays[0];
 
   return (
     <section

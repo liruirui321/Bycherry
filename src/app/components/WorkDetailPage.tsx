@@ -1614,7 +1614,7 @@ function ConceptExplainerContent() {
   const [conceptInput, setConceptInput] = useState("转录");
   const [levelIndex, setLevelIndex] = useState(1);
   const [quizChoice, setQuizChoice] = useState<string | null>(null);
-  const [audience, setAudience] = useState("高中生");
+  const [audience, setAudience] = useState("成人学习者");
   const [lessonGoal, setLessonGoal] = useState("把概念学清楚，并能用例子判断自己是否真正理解");
   const [copiedLesson, setCopiedLesson] = useState(false);
   const [copiedSkill, setCopiedSkill] = useState(false);
@@ -1650,7 +1650,7 @@ function ConceptExplainerContent() {
       },
       levels: [
         { title: "入门版", body: "DNA 像一份完整说明书，转录就是把其中一段基因信息抄写成 RNA 工作稿。" },
-        { title: "高中版", body: "细胞以 DNA 的一条链为模板合成 mRNA，RNA 中用 U 替代 T，mRNA 会把遗传信息带到核糖体。" },
+        { title: "基础版", body: "细胞以 DNA 的一条链为模板合成 mRNA，RNA 中用 U 替代 T，mRNA 会把遗传信息带到核糖体。" },
         { title: "研究生版", body: "转录包含启动子识别、转录因子调控、RNA 聚合酶延伸、终止，以及真核细胞中的剪接和转录后加工。" },
       ],
       terms: ["DNA 模板链", "RNA 聚合酶", "mRNA", "启动子"],
@@ -1679,7 +1679,7 @@ function ConceptExplainerContent() {
       },
       levels: [
         { title: "入门版", body: "端粒位于染色体末端，帮助细胞区分真正的末端和需要修复的 DNA 断裂。" },
-        { title: "高中版", body: "端粒位于染色体末端，随着细胞分裂逐渐缩短，能减少染色体末端被误认为断裂的风险。" },
+        { title: "基础版", body: "端粒位于染色体末端，随着细胞分裂逐渐缩短，能减少染色体末端被误认为断裂的风险。" },
         { title: "研究生版", body: "端粒长度、端粒酶活性与复制潜能、细胞衰老、肿瘤发生和干细胞状态有关。" },
       ],
       terms: ["染色体末端", "端粒酶", "复制末端问题", "细胞衰老"],
@@ -1708,7 +1708,7 @@ function ConceptExplainerContent() {
       },
       levels: [
         { title: "入门版", body: "生态位描述一个物种如何利用资源、占据环境并与其他生物发生关系。" },
-        { title: "高中版", body: "生态位描述生物如何利用资源、生活在什么环境、和其他生物如何相互作用。" },
+        { title: "基础版", body: "生态位描述生物如何利用资源、生活在什么环境、和其他生物如何相互作用。" },
         { title: "研究生版", body: "生态位包含资源维度、空间维度和相互作用维度，可用于解释竞争、共存、适应辐射和群落结构。" },
       ],
       terms: ["资源利用", "竞争", "共存", "群落"],
@@ -1737,7 +1737,7 @@ function ConceptExplainerContent() {
       },
       levels: [
         { title: "入门版", body: "凋亡是细胞按程序结束自身生命，并把对周围组织的影响控制在较小范围内。" },
-        { title: "高中版", body: "凋亡是一种程序性细胞死亡，细胞会收缩、DNA 断裂，并被免疫细胞清除，通常不引发明显炎症。" },
+        { title: "基础版", body: "凋亡是一种程序性细胞死亡，细胞会收缩、DNA 断裂，并被免疫细胞清除，通常不引发明显炎症。" },
         { title: "研究生版", body: "凋亡通过内源性线粒体通路或外源性死亡受体通路激活 caspase 级联反应，在发育、免疫和肿瘤抑制中很关键。" },
       ],
       terms: ["程序性细胞死亡", "caspase", "线粒体通路", "死亡受体"],
@@ -1770,7 +1770,7 @@ function ConceptExplainerContent() {
       },
       levels: [
         { title: "入门版", body: `${displayName} 是一个需要先用例子进入的概念。先问它描述什么现象，再用一句话写出最核心的关系。` },
-        { title: "高中版", body: `学习 ${displayName} 时，把它拆成定义、参与对象、过程步骤、结果和限制条件。每一项都要能配一个例子。` },
+        { title: "基础版", body: `学习 ${displayName} 时，把它拆成定义、参与对象、过程步骤、结果和限制条件。每一项都要能配一个例子。` },
         { title: "研究生版", body: `进一步学习 ${displayName} 时，需要区分概念模型、证据来源、适用范围、例外情况和不同文献中的定义差异。` },
       ],
       terms: [displayName, "定义", "机制", "例子", "边界"],
@@ -1889,7 +1889,7 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 1. 先修知识：列出 3 个学习前需要确认的基础点。
 2. 诊断问题：用 1 个问题检查我是否真的理解。
 3. 类比：给一个帮助进入的类比，并说明类比边界。
-4. 分层解释：入门版 / 高中版 / 进阶版各 1 段。
+4. 分层解释：入门版 / 基础版 / 进阶版各 1 段。
 5. 机制步骤：最多 4 步，每步一句话。
 6. 关键词：列出 4-6 个术语。
 7. 辨析：说明它容易和哪个概念混淆。

@@ -35,8 +35,8 @@ export const notes = [
   },
   {
     id: 2,
-    slug: "plant-genome-to-classroom",
-    href: "/notes/plant-genome-to-classroom",
+    slug: "plant-genome-evidence-chain",
+    href: "/notes/plant-genome-evidence-chain",
     date: "2026-05-28",
     tag: "科研转化",
     tagColor: "#4A2D80",
@@ -127,7 +127,7 @@ function navigateTo(href: string, event?: React.MouseEvent<HTMLAnchorElement>) {
 }
 
 function NoteCardIllustration({ slug, color }: { slug: string; color: string }) {
-  if (slug === "plant-genome-to-classroom") {
+  if (slug === "plant-genome-evidence-chain") {
     return (
       <svg width="132" height="78" viewBox="0 0 132 78" fill="none" aria-hidden="true" focusable="false">
         <path d="M8 61 C25 47 45 53 61 42 C80 29 97 39 124 21 V74 H8Z" fill="var(--cherry-sage-light)" opacity="0.76" />

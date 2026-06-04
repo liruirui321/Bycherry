@@ -336,6 +336,9 @@ function verifyLearnerFacingArticleCopy() {
     "用 AI 做学习材料质检",
     "从植物基因组读懂一条证据链",
     "真实科研如何变成学习者能进入的问题",
+    "plant-genome-evidence-chain",
+    "science-to-learning-question",
+    "学习阶段：年级、学科、章节、当前基础",
     "预习诊断、概念检查或复习巩固",
     "审核使用",
     "学习资料库",
@@ -353,6 +356,7 @@ function verifyLearnerFacingArticleCopy() {
   const retiredLearnerArticlePatterns = [
     { label: "old AI course title", pattern: /AI 可以参与课程开发/ },
     { label: "old plant classroom title", pattern: /从植物基因组到高中生物课堂/ },
+    { label: "old classroom route slugs", pattern: /plant-genome-to-classroom|science-to-classroom-question/ },
     { label: "note-and-essay directory copy", pattern: /笔记与科研随笔/ },
     { label: "generic reading navigation copy", pattern: /阅读全文|阅读笔记|回到笔记|最近在想的事|文章目录/ },
     { label: "research essay navigation copy", pattern: /科研随笔|创作笔记/ },
@@ -360,6 +364,7 @@ function verifyLearnerFacingArticleCopy() {
     { label: "classroom framing", pattern: /课堂|教师|老师|教案|授课|教学/ },
     { label: "course design framing", pattern: /课程开发|课程设计|课程转化/ },
     { label: "assessment publishing framing", pattern: /审核投放|投放复盘|投放给|发布或导出方式/ },
+    { label: "teacher-style learner profile field", pattern: /学习对象：/ },
     { label: "student-as-third-person framing", pattern: /学生基础|学生任务|学生能|学生作品|学生可以/ },
   ];
 
