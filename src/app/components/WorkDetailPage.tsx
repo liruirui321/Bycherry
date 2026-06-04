@@ -73,6 +73,7 @@ function PromptKitContent() {
   const [copiedJson, setCopiedJson] = useState(false);
   const [copiedResponseJson, setCopiedResponseJson] = useState(false);
   const [copiedResearchRecord, setCopiedResearchRecord] = useState(false);
+  const [copiedCitationAudit, setCopiedCitationAudit] = useState(false);
   const [hasRunPreview, setHasRunPreview] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const prompts = [
@@ -250,6 +251,50 @@ function PromptKitContent() {
     activePrompt.checks[0],
     activeMode.outputs.includes("待确认问题") ? "哪些问题需要放到导师会议里确认？" : "哪些结论必须保持保守表述？",
   ];
+  const citationAuditItems = [
+    {
+      label: "来源标识",
+      status: /doi|pmid|arxiv|期刊|journal|作者|年份|题目/i.test(materialText) ? "已出现" : "待补充",
+      evidence: /doi|pmid|arxiv|期刊|journal|作者|年份|题目/i.test(materialText) ? "材料里出现题目、作者、年份、期刊、DOI、PMID 或 arXiv 线索。" : "还缺少可回查来源，不能把模型生成内容当成文献事实。",
+      action: "记录 DOI/PMID/arXiv、题目、作者年份或原文链接，至少保留一种可回查标识。",
+    },
+    {
+      label: "图表定位",
+      status: /figure|fig\.|图|表|table|图注/i.test(materialText) ? "已出现" : "待补充",
+      evidence: /figure|fig\.|图|表|table|图注/i.test(materialText) ? "材料里出现图号、图注、表格或图表线索。" : "还缺少图号、图注或表格定位，图表解读难以回到原文。",
+      action: "补充图号、图注、坐标轴、单位、分组和统计标记。",
+    },
+    {
+      label: "样本统计",
+      status: /n\s*=|样本|sample|重复|replicate|统计|p\s*[<=>]|显著/i.test(materialText) ? "已出现" : "待补充",
+      evidence: /n\s*=|样本|sample|重复|replicate|统计|p\s*[<=>]|显著/i.test(materialText) ? "材料里出现样本量、重复数、统计方法或显著性线索。" : "还缺少样本量、重复数或统计信息，不能判断结果稳健性。",
+      action: "补充 n 值、重复类型、统计检验、p 值或误差线说明。",
+    },
+    {
+      label: "结论边界",
+      status: /局限|限制|不能|推测|可能|需要验证|correlation|association/i.test(materialText) ? "已出现" : "待补充",
+      evidence: /局限|限制|不能|推测|可能|需要验证|correlation|association/i.test(materialText) ? "材料里出现局限、推测、相关或待验证提示。" : "还缺少结论边界，容易把相关、推测或单图结果写成定论。",
+      action: "写明哪些结论由材料支持，哪些只是推测，哪些必须回到原文或实验验证。",
+    },
+  ];
+  const citationAuditOutput = `【科研 Agent 引用核查记录】
+任务：${activePrompt.title}
+工作模式：${activeMode.title}
+推荐路由：${suggestedRoute.title}
+
+一、来源核查
+${citationAuditItems.map((item, index) => `${index + 1}. ${item.label}：${item.status}
+证据状态：${item.evidence}
+下一步：${item.action}`).join("\n\n")}
+
+二、当前证据候选
+${visibleEvidenceLines.length ? visibleEvidenceLines.map((line, index) => `${index + 1}. ${line}`).join("\n") : "当前没有可引用材料行。"}
+
+三、必须保留的边界
+1. 不编造 DOI、参考文献、图号、样本量或统计结果。
+2. 没有来源标识时，final_report 只能写成待核查摘要。
+3. 每个推断必须连接到 evidence_items 或 missing_fields。
+4. 会影响实验、投稿或署名责任的判断必须人工复核。`;
   const boundaryItems = [
     "不保证论文结论正确，只整理材料和证据关系。",
     "不编造引用、DOI、样本量或统计结果；材料没有就标为待补充。",
@@ -348,16 +393,19 @@ ${missingFields.length ? `需要补充：${missingFields.join("、")}。` : "材
 五、API Agent 输出字段建议
 ${apiOutputFields.join(", ")}
 
-六、API 请求 JSON
+六、引用核查
+${citationAuditItems.map((item, index) => `${index + 1}. ${item.label}：${item.status}。${item.evidence}`).join("\n")}
+
+七、API 请求 JSON
 ${agentRequestJson}
 
-七、API 返回契约
+八、API 返回契约
 ${agentResponseJson}
 
-八、分析报告草稿
+九、分析报告草稿
 ${previewReportRows.map((item) => `${item.label}：${item.body}`).join("\n")}
 
-九、复核问题
+十、复核问题
 ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
   const researchRecordOutput = `【科研 Agent 研究记录】
 任务：${activePrompt.title}
@@ -379,13 +427,16 @@ ${missingFields.length ? missingFields.map((field, index) => `${index + 1}. ${fi
 四、风险标记
 ${acceptanceChecks.map((item, index) => `${index + 1}. ${item.label}：${item.passed ? "通过" : "待补"}。${item.detail}`).join("\n")}
 
-五、报告草稿
+五、引用核查
+${citationAuditItems.map((item, index) => `${index + 1}. ${item.label}：${item.status}。${item.action}`).join("\n")}
+
+六、报告草稿
 ${previewReportRows.map((item, index) => `${index + 1}. ${item.label}：${item.body}`).join("\n")}
 
-六、人工复核问题
+七、人工复核问题
 ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-七、下一步动作
+八、下一步动作
 ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
   const marketNeeds = [
     {
@@ -555,6 +606,7 @@ ${localPreviewOutput}`;
       setCopiedJson(false);
       setCopiedResponseJson(false);
       setCopiedResearchRecord(false);
+      setCopiedCitationAudit(false);
       setCopyStatus("模型指令已复制到剪贴板。");
       window.setTimeout(() => setCopied(false), 1400);
       return;
@@ -573,6 +625,7 @@ ${localPreviewOutput}`;
       setCopiedJson(false);
       setCopiedResponseJson(false);
       setCopiedResearchRecord(false);
+      setCopiedCitationAudit(false);
       setCopyStatus("任务包已复制到剪贴板。");
       window.setTimeout(() => setCopiedPack(false), 1400);
       return;
@@ -591,6 +644,7 @@ ${localPreviewOutput}`;
       setCopiedJson(false);
       setCopiedResponseJson(false);
       setCopiedResearchRecord(false);
+      setCopiedCitationAudit(false);
       setCopyStatus("本地预览已复制到剪贴板。");
       window.setTimeout(() => setCopiedPreview(false), 1400);
       return;
@@ -609,6 +663,7 @@ ${localPreviewOutput}`;
       setCopiedPreview(false);
       setCopiedResponseJson(false);
       setCopiedResearchRecord(false);
+      setCopiedCitationAudit(false);
       setCopyStatus("API 请求 JSON 已复制到剪贴板。");
       window.setTimeout(() => setCopiedJson(false), 1400);
       return;
@@ -627,6 +682,7 @@ ${localPreviewOutput}`;
       setCopiedPreview(false);
       setCopiedJson(false);
       setCopiedResearchRecord(false);
+      setCopiedCitationAudit(false);
       setCopyStatus("API 返回契约已复制到剪贴板。");
       window.setTimeout(() => setCopiedResponseJson(false), 1400);
       return;
@@ -645,12 +701,32 @@ ${localPreviewOutput}`;
       setCopiedPreview(false);
       setCopiedJson(false);
       setCopiedResponseJson(false);
+      setCopiedCitationAudit(false);
       setCopyStatus("研究记录已复制到剪贴板。");
       window.setTimeout(() => setCopiedResearchRecord(false), 1400);
       return;
     }
 
     setCopiedResearchRecord(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyCitationAudit() {
+    const copiedToClipboard = await copyText(citationAuditOutput);
+    if (copiedToClipboard) {
+      setCopiedCitationAudit(true);
+      setCopied(false);
+      setCopiedPack(false);
+      setCopiedPreview(false);
+      setCopiedJson(false);
+      setCopiedResponseJson(false);
+      setCopiedResearchRecord(false);
+      setCopyStatus("引用核查记录已复制到剪贴板。");
+      window.setTimeout(() => setCopiedCitationAudit(false), 1400);
+      return;
+    }
+
+    setCopiedCitationAudit(false);
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -663,6 +739,7 @@ ${localPreviewOutput}`;
     setCopiedJson(false);
     setCopiedResponseJson(false);
     setCopiedResearchRecord(false);
+    setCopiedCitationAudit(false);
     setHasRunPreview(false);
     setCopyStatus("");
   }
@@ -678,6 +755,7 @@ ${localPreviewOutput}`;
     setCopiedJson(false);
     setCopiedResponseJson(false);
     setCopiedResearchRecord(false);
+    setCopiedCitationAudit(false);
     setHasRunPreview(false);
     setCopyStatus(`已载入${caseItem.title}，可以直接运行本地预览。`);
   }
@@ -698,6 +776,7 @@ ${localPreviewOutput}`;
     setCopiedJson(false);
     setCopiedResponseJson(false);
     setCopiedResearchRecord(false);
+    setCopiedCitationAudit(false);
     setHasRunPreview(false);
     setCopyStatus(`已切换到推荐任务：${suggestedRoute.title}。`);
   }
@@ -818,7 +897,7 @@ ${localPreviewOutput}`;
           {prompts.map((prompt, index) => {
             const active = activePromptIndex === index;
             return (
-              <button key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
+              <button key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setCopiedCitationAudit(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
                 <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>{prompt.title}</div>
                 <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginBottom: "0.55rem" }}>{prompt.input}</div>
                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
@@ -865,7 +944,7 @@ ${localPreviewOutput}`;
                 {promptModes.map((mode, index) => {
                   const active = activeModeIndex === index;
                   return (
-                    <button key={mode.title} type="button" aria-pressed={active} onClick={() => { setActiveModeIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.68rem", cursor: "pointer" }}>
+                    <button key={mode.title} type="button" aria-pressed={active} onClick={() => { setActiveModeIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setCopiedCitationAudit(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.68rem", cursor: "pointer" }}>
                       <strong style={{ display: "block", color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.24rem" }}>{mode.title}</strong>
                       <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>{mode.description}</span>
                     </button>
@@ -1004,6 +1083,9 @@ ${localPreviewOutput}`;
                   <button type="button" onClick={copyResearchRecord} style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                     {copiedResearchRecord ? "已复制" : "复制研究记录"}
                   </button>
+                  <button type="button" onClick={copyCitationAudit} style={{ background: "var(--cherry-peach-light)", color: "var(--cherry-red)", border: "1.5px solid rgba(214,91,74,0.28)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                    {copiedCitationAudit ? "已复制" : "复制引用核查"}
+                  </button>
                 </div>
               </div>
               {hasRunPreview ? (
@@ -1034,6 +1116,26 @@ ${localPreviewOutput}`;
                         {missingFields.length ? `当前还缺少 ${missingFields.join("、")}，Agent 只能给出任务框架，不能直接生成强结论。` : "材料已具备进入模型分析的基本线索，但输出仍需要逐条回查原文、图表和实验设计。"}
                       </p>
                     </div>
+                  </div>
+                  <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.55rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.6rem", flexWrap: "wrap" }}>
+                      <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>引用核查</strong>
+                      <button type="button" onClick={copyCitationAudit} style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.36rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                        {copiedCitationAudit ? "已复制" : "复制引用核查"}
+                      </button>
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.48rem" }}>
+                      {citationAuditItems.map((item) => (
+                        <div key={item.label} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.58rem" }}>
+                          <strong style={{ display: "block", color: item.status === "已出现" ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.72rem", marginBottom: "0.24rem" }}>{item.status} · {item.label}</strong>
+                          <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.5, fontWeight: 800, marginBottom: "0.28rem" }}>{item.evidence}</span>
+                          <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.68rem", lineHeight: 1.45, fontWeight: 900 }}>下一步：{item.action}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.6rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.66rem", lineHeight: 1.5, maxHeight: 220, overflow: "auto" }}>
+                      {citationAuditOutput}
+                    </code>
                   </div>
                   <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem" }}>
                     <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>API 输出字段</strong>

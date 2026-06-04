@@ -297,7 +297,16 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "research record visible card", text: "可保存研究记录" },
     { label: "research record evidence candidates", text: "二、证据候选" },
     { label: "research record risk flags", text: "四、风险标记" },
-    { label: "research record next actions", text: "七、下一步动作" },
+    { label: "citation audit data", text: "citationAuditItems" },
+    { label: "copyable citation audit output", text: "citationAuditOutput" },
+    { label: "citation audit copy action", text: "copyCitationAudit" },
+    { label: "citation audit visible card", text: "引用核查" },
+    { label: "citation audit copy button", text: "复制引用核查" },
+    { label: "source identifier audit", text: "来源标识" },
+    { label: "figure locator audit", text: "图表定位" },
+    { label: "sample statistics audit", text: "样本统计" },
+    { label: "research record citation audit", text: "五、引用核查" },
+    { label: "research record next actions", text: "八、下一步动作" },
   ];
 
   for (const item of requiredWorkbenchFeatures) {
