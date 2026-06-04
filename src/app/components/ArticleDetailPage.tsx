@@ -174,10 +174,16 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             </p>
 
             <div style={{ display: "grid", gap: "0.62rem", marginBottom: "0.9rem" }}>
-              {article.paragraphs.map((paragraph) => (
-                <p key={paragraph} style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.78, fontSize: "0.93rem", margin: 0 }}>
-                  {paragraph}
-                </p>
+              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>正文要点</div>
+              {article.paragraphs.map((paragraph, index) => (
+                <div key={paragraph} style={{ display: "grid", gridTemplateColumns: "28px minmax(0, 1fr)", gap: 9, alignItems: "start", background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.08)", borderRadius: 14, padding: "0.72rem" }}>
+                  <span aria-hidden="true" style={{ width: 24, height: 24, borderRadius: "50%", background: article.tagBg ?? article.labelBg, color: article.tagColor ?? article.labelColor, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 900 }}>
+                    {index + 1}
+                  </span>
+                  <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.72, fontSize: "0.9rem", margin: 0 }}>
+                    {paragraph}
+                  </p>
+                </div>
               ))}
             </div>
 
