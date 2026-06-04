@@ -3268,6 +3268,28 @@ function CrisprContent() {
       detail: "插入/删除、模板替换和未编辑都是判读结果，不是承诺；真实结果需要测序或其他实验验证。",
     },
   ];
+  const crisprCompletionChecks = [
+    {
+      title: "判定一句话",
+      body: `写出本轮总判定：${guideDecision.level}。句子里必须同时出现 PAM、guide 匹配和修复边界。`,
+      status: activeGuide.score >= 60 ? "可写判定" : "先换 guide",
+    },
+    {
+      title: "证据四要素",
+      body: `PAM=${pamSequence}；匹配评分=${activeGuide.score}%；错配数=${computedMismatches.length}；修复结果=${effectiveRepair.title}。`,
+      status: computedMismatches.length === 0 ? "证据清楚" : "保留错配",
+    },
+    {
+      title: "风险边界",
+      body: "报告里必须保留脱靶搜索、真实实验验证和修复不确定性，不能把模拟产物写成真实结果。",
+      status: "必须保留",
+    },
+    {
+      title: "小测自查",
+      body: quizChoice === null ? "完成 1 道即时小测，再复制报告。" : quizChoice === activeQuiz.answer ? "当前小测判断正确，可以继续复制报告。" : "当前小测判断错误，先回到判读顺序复核。",
+      status: quizChoice === activeQuiz.answer ? "已通过" : "待完成",
+    },
+  ];
   const decisionCardOutput = `【CRISPR 编辑决策卡】
 练习场景：${activeScenario ? activeScenario.title : "自定义判读"}
 目标：${activeScenario ? activeScenario.goal : "自行组合 guide、流程步骤和修复结果，完成一次编辑判读。"}
@@ -3337,13 +3359,16 @@ ${goNoGoCriteria.map((item, index) => `Go/No-Go ${index + 1}：${item}`).join("\
 6. 风险核查
 ${riskAuditItems.map((item, index) => `${index + 1}. ${item.label}：${item.status}｜${item.detail}`).join("\n")}
 
-7. 判读顺序
+7. 完成验收
+${crisprCompletionChecks.map((item, index) => `${index + 1}. ${item.title}：${item.status}｜${item.body}`).join("\n")}
+
+8. 判读顺序
 ${interpretationSteps.map((item, index) => `${index + 1}. ${item.title}：${item.body}`).join("\n")}
 
-8. 质控检查
+9. 质控检查
 ${qualityChecks.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-9. 边界说明
+10. 边界说明
 ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
 
   function clearCrisprCopyStatus() {
@@ -3488,6 +3513,31 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
               </button>
             );
           })}
+        </div>
+      </div>
+
+      <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.82rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>完成验收卡</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>
+              复制报告前，先确认本轮判定、证据、风险边界和小测状态都能说清楚。
+            </div>
+          </div>
+          <span style={{ background: quizChoice === activeQuiz.answer ? "var(--cherry-sage-light)" : "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.26rem 0.62rem", color: quizChoice === activeQuiz.answer ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.72rem", fontWeight: 900 }}>
+            {quizChoice === activeQuiz.answer ? "小测已通过" : "小测待完成"}
+          </span>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.62rem" }}>
+          {crisprCompletionChecks.map((item, index) => (
+            <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.72rem", minHeight: 132, display: "grid", gap: "0.42rem", alignContent: "start" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: "0.55rem", alignItems: "start" }}>
+                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{item.title}</strong>
+                <span style={{ color: index === 2 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, whiteSpace: "nowrap" }}>{item.status}</span>
+              </div>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.58, fontWeight: 800 }}>{item.body}</span>
+            </div>
+          ))}
         </div>
       </div>
 

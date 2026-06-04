@@ -561,6 +561,12 @@ function verifyCrisprLearnerScenarios() {
     { label: "copy risk audit button", text: "复制风险核查" },
     { label: "off-target audit copy", text: "guide 错配与脱靶" },
     { label: "risk audit report section", text: "6. 风险核查" },
+    { label: "completion check data", text: "crisprCompletionChecks" },
+    { label: "visible completion card", text: "完成验收卡" },
+    { label: "completion report section", text: "7. 完成验收" },
+    { label: "quiz completion state", text: "小测待完成" },
+    { label: "quiz passed state", text: "小测已通过" },
+    { label: "completion report copy", text: "不能把模拟产物写成真实结果" },
   ];
 
   for (const item of requiredCrisprFeatures) {
