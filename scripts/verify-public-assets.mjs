@@ -22,14 +22,9 @@ const retiredShareCopy = "可打开、可阅读、可操作";
 const retiredSiteDescription = "清爽科普风的个人网站";
 const retiredSharePositioning = "主题作品集";
 const appThemeColor = "#F5F1EA";
-const generatedIllustrationsBySlug = {
-  "concept-explainer": { path: "illustrations/concept-explainer-map.webp", width: 1448, height: 1086 },
-  "crispr-interactive": { path: "illustrations/crispr-editing-flow.webp", width: 1448, height: 1086 },
-  "gene-expression": { path: "illustrations/gene-expression-flow.webp", width: 1448, height: 1086 },
-  "plant-evolution-stories": { path: "illustrations/plant-evolution-story.webp", width: 941, height: 1672 },
-  "research-prompt-kit": { path: "illustrations/research-prompt-workflow.webp", width: 1448, height: 1086 },
-};
-const generatedIllustrations = Object.values(generatedIllustrationsBySlug);
+const retainedIllustrations = [
+  { path: "illustrations/plant-evolution-story.webp", width: 941, height: 1672 },
+];
 
 function readRoot(relativePath) {
   return readFileSync(resolve(root, relativePath), "utf8");
@@ -98,7 +93,7 @@ expect(robots.trim() === expectedRobots, "robots.txt must exactly declare the de
 expect(publicExists("favicon.svg"), "favicon.svg is missing.");
 expect(publicExists("social-preview.png"), "social-preview.png is missing.");
 expect(publicExists("social-preview.svg"), "social-preview.svg is missing.");
-for (const illustration of generatedIllustrations) {
+for (const illustration of retainedIllustrations) {
   expect(publicExists(illustration.path), `${illustration.path} is missing.`);
 }
 expect(publicExists("site.webmanifest"), "site.webmanifest is missing.");
@@ -151,7 +146,7 @@ expect(socialPreviewSvg.includes(shareTagline), "social-preview.svg must include
 expect(!socialPreviewSvg.includes(retiredShareCopy), "social-preview.svg must not include retired share copy.");
 expect(!socialPreviewSvg.includes(retiredSharePositioning), "social-preview.svg must not include the retired share positioning.");
 expect(!socialPreviewSvg.includes("课程卡片"), "social-preview.svg must not include retired course-card positioning.");
-for (const illustration of generatedIllustrations) {
+for (const illustration of retainedIllustrations) {
   if (!publicExists(illustration.path)) continue;
   const illustrationSize = statSync(resolve(publicRoot, illustration.path)).size;
   const illustrationDimensions = readVp8WebpSize(illustration.path);
