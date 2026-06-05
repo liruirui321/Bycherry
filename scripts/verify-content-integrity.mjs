@@ -242,6 +242,13 @@ function verifyWorkDetailCardsStayCompact() {
   expect(source.includes("资料边界") && source.includes("当前卡点"), "Concept explainer must collect source boundary and current confusion.");
   expect(source.includes("复制自查记录"), "Concept explainer must expose a copyable understanding audit.");
   expect(source.includes("conceptInputQualityScore"), "Concept explainer must surface input quality before generating outputs.");
+  expect(source.includes("timelineReviewOutput"), "Plant evolution module must provide a copyable full timeline review output.");
+  expect(source.includes("copyTimelineReview"), "Plant evolution module must expose a full timeline review copy action.");
+  expect(source.includes("全线复盘包"), "Plant evolution module must visibly expose a full timeline review pack.");
+  expect(source.includes("复制全线复盘"), "Plant evolution module must expose a visible full timeline review copy button.");
+  expect(source.includes("plant-timeline-review-grid"), "Plant evolution full timeline review must have a stable responsive grid.");
+  expect(source.includes("chapters.map((chapter, index)") && source.includes("plantStageLabels[index]"), "Plant evolution full timeline review must summarize all stages.");
+  expect(source.includes("timelineReviewChecks"), "Plant evolution full timeline review must include completion checks.");
 }
 
 function verifyArticleCardsStayStructured() {

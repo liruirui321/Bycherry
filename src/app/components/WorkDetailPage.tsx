@@ -1661,6 +1661,7 @@ function PlantEvolutionContent() {
   const [copiedStudyCard, setCopiedStudyCard] = useState(false);
   const [copiedStageComparison, setCopiedStageComparison] = useState(false);
   const [copiedEvidenceAudit, setCopiedEvidenceAudit] = useState(false);
+  const [copiedTimelineReview, setCopiedTimelineReview] = useState(false);
   const [studyCardStatus, setStudyCardStatus] = useState("");
   const chapters = [
     {
@@ -1903,6 +1904,20 @@ function PlantEvolutionContent() {
       pass: "没有把化石、基因组、分子钟或系统发育证据说成同一种证据，也没有过度推出。",
     },
   ];
+  const timelineReviewChecks = [
+    {
+      title: "主线一句话",
+      body: "植物演化不是结构堆叠，而是在干燥、支撑、运输、繁殖和传播压力下逐步扩展生存空间。",
+    },
+    {
+      title: "阶段关系",
+      body: "每一阶段都要能接上上一阶段的限制，并说明新结构解决了什么、又留下什么新问题。",
+    },
+    {
+      title: "证据边界",
+      body: "化石记录、基因组比较、系统发育和分子钟各自支持的范围不同，复盘时必须保留证据类型。",
+    },
+  ];
   const evidenceAuditOutput = `【植物演化证据判读记录】
 阶段：${activeChapter.title}
 时间：${activeChapter.time}
@@ -1987,6 +2002,31 @@ ${plantCompletionChecks.map((item, index) => `${index + 1}. ${item.title}
 
 10. 参考文献
 ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).join("\n")}`;
+  const timelineReviewOutput = `【植物演化全线复盘包】
+
+一、主线一句话
+${timelineReviewChecks[0].body}
+
+二、6 个阶段速览
+${chapters.map((chapter, index) => `${index + 1}. ${chapter.time}｜${chapter.title}
+生存压力：${chapter.challenge}
+关键创新：${chapter.innovation}
+证据状态：${chapter.certainty}
+结论边界：${chapter.claimBoundary}`).join("\n\n")}
+
+三、阶段关系检查
+${chapters.map((chapter, index) => `${index + 1}. ${plantStageLabels[index]}：从“${chapter.challenge}”走向“${chapter.innovation}”。`).join("\n")}
+
+四、证据类型复盘
+${Array.from(new Set(chapters.flatMap((chapter) => chapter.evidenceTypes))).map((type, index) => `${index + 1}. ${type}`).join("\n")}
+
+五、完成验收
+${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${item.body}`).join("\n")}
+
+六、我的复盘句
+我能把整条线解释为：
+我还需要保留的证据边界是：
+我最容易过度推出的地方是：`;
 
   async function copyStudyCard() {
     const copiedToClipboard = await copyText(studyCardOutput);
@@ -1994,6 +2034,7 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
       setCopiedStudyCard(true);
       setCopiedStageComparison(false);
       setCopiedEvidenceAudit(false);
+      setCopiedTimelineReview(false);
       setStudyCardStatus("学习卡已复制到剪贴板。");
       window.setTimeout(() => setCopiedStudyCard(false), 1400);
       return;
@@ -2009,6 +2050,7 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
       setCopiedStageComparison(true);
       setCopiedStudyCard(false);
       setCopiedEvidenceAudit(false);
+      setCopiedTimelineReview(false);
       setStudyCardStatus("阶段比较记录已复制到剪贴板。");
       window.setTimeout(() => setCopiedStageComparison(false), 1400);
       return;
@@ -2024,12 +2066,29 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
       setCopiedEvidenceAudit(true);
       setCopiedStageComparison(false);
       setCopiedStudyCard(false);
+      setCopiedTimelineReview(false);
       setStudyCardStatus("证据判读记录已复制到剪贴板。");
       window.setTimeout(() => setCopiedEvidenceAudit(false), 1400);
       return;
     }
 
     setCopiedEvidenceAudit(false);
+    setStudyCardStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyTimelineReview() {
+    const copiedToClipboard = await copyText(timelineReviewOutput);
+    if (copiedToClipboard) {
+      setCopiedTimelineReview(true);
+      setCopiedEvidenceAudit(false);
+      setCopiedStageComparison(false);
+      setCopiedStudyCard(false);
+      setStudyCardStatus("全线复盘包已复制到剪贴板。");
+      window.setTimeout(() => setCopiedTimelineReview(false), 1400);
+      return;
+    }
+
+    setCopiedTimelineReview(false);
     setStudyCardStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -2041,6 +2100,7 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
     setCopiedStudyCard(false);
     setCopiedStageComparison(false);
     setCopiedEvidenceAudit(false);
+    setCopiedTimelineReview(false);
     setStudyCardStatus("");
   }
 
@@ -2466,6 +2526,41 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
             </div>
           </div>
 
+          <div className="plant-timeline-review-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.72rem" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
+              <div>
+                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>全线复盘包</strong>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>把 6 个阶段连成一条解释主线：压力、创新、证据状态和结论边界都要保留下来。</span>
+              </div>
+              <button type="button" onClick={copyTimelineReview} aria-describedby="plant-study-card-status" style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                {copiedTimelineReview ? "已复制" : "复制全线复盘"}
+              </button>
+            </div>
+            <div className="plant-timeline-review-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.52rem" }}>
+              {chapters.map((chapter, index) => (
+                <div key={chapter.title} style={{ background: index === activeChapterIndex ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === activeChapterIndex ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.66rem", display: "grid", gap: "0.34rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem", alignItems: "start" }}>
+                    <strong style={{ color: index === activeChapterIndex ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.74rem" }}>{plantStageLabels[index]}</strong>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.64rem", fontWeight: 900 }}>{chapter.time}</span>
+                  </div>
+                  <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.42, fontWeight: 900 }}>{chapter.innovation}</span>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 800 }}>证据：{chapter.certainty}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "grid", gap: "0.42rem" }}>
+              {timelineReviewChecks.map((item, index) => (
+                <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.58rem", display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.45rem", alignItems: "start" }}>
+                  <span aria-hidden="true" style={{ width: 19, height: 19, borderRadius: "50%", background: index === 2 ? "var(--cherry-red)" : "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+                  <span>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.74rem", marginBottom: "0.18rem" }}>{item.title}</strong>
+                    <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{item.body}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
               <strong style={{ color: "var(--cherry-warm-brown)" }}>本阶段学习卡</strong>
@@ -2516,6 +2611,10 @@ ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).j
 
           @media (max-width: 880px) {
             #plant-evolution-explorer > div:first-child {
+              grid-template-columns: 1fr !important;
+            }
+
+            #plant-evolution-explorer .plant-timeline-review-grid {
               grid-template-columns: 1fr !important;
             }
           }
