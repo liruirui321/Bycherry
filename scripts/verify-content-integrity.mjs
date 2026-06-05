@@ -256,7 +256,10 @@ function verifyArticleCardsStayStructured() {
   expect(!appSource.includes("<ResearchEssays />") && !appSource.includes("<Notes />"), "Homepage should not render separate long Research and Notes sections.");
   expect(homeLibrarySource.includes("home-library-link") && homeLibrarySource.includes("home-library-meta"), "Home library rows must expose compact article metadata.");
   expect(homeLibrarySource.includes('id="research"') && !homeLibrarySource.includes('id="notes"'), "Home library must collapse article anchors into one short section.");
-  expect(!homeLibrarySource.includes("WebkitLineClamp"), "Home library rows must avoid long clamped descriptions on the homepage.");
+  expect(homeLibrarySource.includes('const visibleArticles = articleItems.slice(0, 4)'), "Home library must show only a short latest-article strip.");
+  expect(homeLibrarySource.includes("home-library-list") && homeLibrarySource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"'), "Home library must use one compact article row.");
+  expect(!homeLibrarySource.includes("home-library-grid"), "Home library must not reintroduce a two-column long article directory.");
+  expect(!homeLibrarySource.includes("visibleArticles.slice(0, Math.ceil"), "Home library must not split articles into repeated columns.");
   expect(!homeLibrarySource.includes("note-card") && !homeLibrarySource.includes("research-card"), "Home library must not reintroduce article card layouts.");
 }
 
@@ -382,24 +385,22 @@ function verifyArticleOutcomeSnapshot() {
   const articleSource = read("src/app/components/ArticleDetailPage.tsx");
 
   expect(articleSource.includes("articleOutcomeSnapshot"), "Article detail pages must derive a read-before-output snapshot.");
-  expect(articleSource.includes("读完带走"), "Article detail pages must visibly tell learners what they will take away.");
-  expect(articleSource.includes("article-outcome-snapshot"), "Article detail output snapshot must have a stable class for focus and layout checks.");
   expect(articleSource.includes("copyActionPack") && articleSource.includes("copyLearningRecord"), "Article detail pages must still expose action pack and learning record copy actions.");
-  expect(articleSource.includes("先读正文，再填写记录和复制材料。"), "Article detail output snapshot must use short reading guidance.");
-  expect(articleSource.includes("article-start-action-button"), "Article detail output snapshot must expose a direct start action.");
   expect(articleSource.includes("focusArticleStart"), "Article detail direct start action must focus the primary action or body anchor.");
   expect(articleSource.includes('id="article-primary-action"') && articleSource.includes('id="article-body-points"'), "Article detail pages must expose focusable action and body anchors.");
-  expect(articleSource.includes("article-reading-task-pack"), "Article detail reading task pack must have a stable class for layout checks.");
-  expect(articleSource.includes("article-outcome-actions"), "Article detail task pack actions must stay in a compact top strip.");
+  expect(articleSource.includes(">正文<"), "Article detail pages must move directly from the header into article content.");
+  expect(!articleSource.includes("article-outcome-snapshot") && !articleSource.includes("article-reading-task-pack"), "Article detail pages must not reintroduce a duplicate top task strip.");
+  expect(!articleSource.includes("读完带走") && !articleSource.includes("读完产出"), "Article detail pages must avoid repeated output-summary blocks.");
+  expect(!articleSource.includes('className="article-paired-work-panel"') && !articleSource.includes('className="article-paired-work-link"'), "Article detail pages must not repeat paired module entrances inside articles.");
+  expect(!articleSource.includes("配套模块"), "Article detail pages must avoid repeated module entrances inside articles.");
+  expect(!articleSource.includes("完成验收卡"), "Article detail pages must not add a second completion card after the main checklist.");
   expect(!articleSource.includes('articleReadingTaskPackCards.map((item, index) => (') && !articleSource.includes('minHeight: 136'), "Article detail task pack must not render a front-loaded five-card grid before the body.");
   for (const retiredArticleHeaderBlock of ["function ArticleIllustration", "article-illustration-stamp", "paddingRight: 162", "padding-right: 10.5rem", "articleReadingTaskPackCards", "readingTaskPackText", "copyReadingTaskPack", "copiedReadingTaskPack", "目标是带走可执行材料，而不是只浏览", "先做、抓证据、留产出、验收、接着做", "【阅读任务包】", "已复制任务包", "复制任务包", "已复制行动包"]) {
     expect(!articleSource.includes(retiredArticleHeaderBlock), `Article detail header should stay short and not reintroduce retired top chrome: ${retiredArticleHeaderBlock}.`);
   }
   const bodyPointsRenderIndex = articleSource.indexOf('id="article-body-points"');
   const primaryActionRenderIndex = articleSource.indexOf('id="article-primary-action"');
-  const pairedWorkRenderIndex = articleSource.indexOf('className="article-paired-work-panel"');
   expect(bodyPointsRenderIndex !== -1 && primaryActionRenderIndex !== -1 && bodyPointsRenderIndex < primaryActionRenderIndex, "Article body points must appear before action/checklist panels.");
-  expect(pairedWorkRenderIndex === -1 || bodyPointsRenderIndex < pairedWorkRenderIndex, "Article body points must appear before paired work cards.");
 }
 
 function verifyWorkJsonLdLearningOutcomes() {
@@ -1026,17 +1027,10 @@ function verifyLearnerFacingArticleCopy() {
     "home-library-meta",
     "学习方法、科研证据、AI 创作和科研转译文章",
     "先做这个",
-    "完成后检查",
-    "先避开",
-    "读完产出",
     "读完填写",
     "复制已填写记录",
     "复制学习记录",
-    "30 分钟执行节奏",
-    "配套模块",
     "pairedWorkSlugsByArticleSlug",
-    "article-paired-work-panel",
-    "article-paired-work-link",
   ];
   const retiredLearnerArticlePatterns = [
     { label: "old AI course title", pattern: /AI 可以参与课程开发/ },
@@ -1074,12 +1068,11 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("const articleRecordScore"), "Article detail pages must expose learner record completion scores.");
   expect(articleDetailSource.includes("填写完成度：${articleRecordScore}/4"), "Article learning records must include learner record completion scores.");
   expect(articleDetailSource.includes("填写质量"), "Article learning records must include learner record quality checks.");
-  expect(articleDetailSource.includes("完成验收卡"), "Article detail pages must expose a completion card.");
+  expect(!articleDetailSource.includes("完成验收卡"), "Article detail pages must not reintroduce a second completion card.");
   expect(articleDetailSource.includes("三、我的填写记录"), "Article learning records must include learner-filled notes.");
   expect(articleDetailSource.includes("七、完成验收"), "Article learning records must include completion checks.");
-  expect(articleDetailSource.includes("验收：${item.output}"), "Article completion cards must show observable pass criteria.");
   expect(articleDetailSource.includes("const articlePracticePlan"), "Article detail pages must derive a short execution plan.");
-  expect(articleDetailSource.includes("const pairedWorks"), "Article detail pages must derive paired work modules for next-step action.");
+  expect(articleDetailSource.includes("const pairedWorks"), "Article detail pages must derive paired work modules for copied next-step records.");
   expect(articleDetailSource.includes('const backHash = "#research";') && articleDetailSource.includes('const backText = "回到文章";'), "Article detail pages must return to the unified article index.");
   for (const retiredArticleBackTarget of ['"#notes"', "回到方法库", "回到证据库"]) {
     expect(!articleDetailSource.includes(retiredArticleBackTarget), `Article detail back navigation should not target retired split article anchors: ${retiredArticleBackTarget}.`);
@@ -1087,9 +1080,9 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("八、读完接着做"), "Article learning records must include paired module next actions.");
   expect(articleDetailSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Article paired module links must use the direct-to-tool href helper.");
   expect(articleDetailSource.includes("入口：${getWorkToolHref(work.href)}"), "Article copied next-step records must point directly to work tools.");
-  expect(articleDetailSource.includes("const toolHref = getWorkToolHref(work.href)"), "Article paired module cards must derive direct-to-tool hrefs.");
+  expect(!articleDetailSource.includes("const toolHref = getWorkToolHref(work.href)"), "Article detail pages must not render paired module cards inside articles.");
   expect(articleDetailSource.includes("work.starter") && articleDetailSource.includes("work.success"), "Article paired module cards must expose starter actions and completion standards.");
-  expect(articleDetailSource.includes("aria-label={`打开配套模块：${work.title}`}"), "Article paired module links must use short accessible labels.");
+  expect(!articleDetailSource.includes("aria-label={`打开配套模块：${work.title}`}"), "Article detail pages must not repeat paired module links inside articles.");
   for (const retiredArticlePairedWorkCopy of ["文章解决方法和证据，配套模块负责把这一步变成可操作产出。", "全部学习模块", "article-paired-work-step", "article-paired-work-check", "minHeight: 166", "完成标准：{work.success}"]) {
     expect(!articleDetailSource.includes(retiredArticlePairedWorkCopy), `Article paired module section should stay compact: ${retiredArticlePairedWorkCopy}.`);
   }
@@ -1097,7 +1090,7 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("copyLearningRecord"), "Article detail pages must provide a learning record copy action.");
   expect(articleDetailSource.includes("record-question-input"), "Article detail pages must expose a learner question input.");
   expect(articleDetailSource.includes("复制学习记录"), "Article detail pages must expose a learning record copy button.");
-  expect(articleDetailSource.includes("读完后至少留下一个可检查的学习记录"), "Article detail pages must frame article completion as a learner output.");
+  expect(!articleDetailSource.includes("读完后至少留下一个可检查的学习记录"), "Article detail pages must avoid repeated learner-output framing blocks.");
   expect(articleDetailSource.includes("const platformUsePlansText"), "Platform article summaries must include copyable fill-in assessment configurations.");
   expect(articleDetailSource.includes("actionSteps[0]"), "Article quick start must use the first concrete article action.");
   expect(articleDetailSource.includes("checklist[0]"), "Article quick start must expose the first completion check.");

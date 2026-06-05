@@ -1757,33 +1757,14 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </a>
             ) : null}
 
-            {articleOutcomeSnapshot.length ? (
-              <div className="article-outcome-snapshot article-reading-task-pack" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.42rem 0.52rem", marginBottom: "0.56rem", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.52rem", alignItems: "center" }}>
-                <div style={{ minWidth: 0, display: "grid", gap: "0.18rem" }}>
-                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.8rem" }}>读完带走</div>
-                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.34, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
-                    先读正文，再填写记录和复制材料。
-                  </div>
-                </div>
-                <div className="article-outcome-actions" style={{ display: "inline-flex", gap: "0.38rem", flexWrap: "wrap", justifyContent: "flex-end" }}>
-                  <button type="button" className="article-start-action-button" onClick={focusArticleStart} aria-label={`开始执行${article.title}。先做这个，${articleQuickStart?.step ?? actionSteps[0] ?? "阅读正文要点"}`} style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.72rem", whiteSpace: "nowrap" }}>
-                    开始执行
-                  </button>
-                  <button type="button" onClick={copyLearningRecord} aria-label={`复制${article.title}的学习记录`} aria-describedby="article-summary-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.22)", borderRadius: 999, padding: "0.32rem 0.66rem", fontWeight: 900, cursor: "pointer", fontSize: "0.72rem", whiteSpace: "nowrap" }}>
-                    {copiedLearningRecord ? "已复制记录" : "复制学习记录"}
-                  </button>
-                </div>
-              </div>
-            ) : null}
-
-            <div id="article-body-points" tabIndex={-1} style={{ display: "grid", gap: "0.5rem", marginBottom: "0.78rem" }}>
-              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>正文要点</div>
+            <div id="article-body-points" tabIndex={-1} style={{ display: "grid", gap: "0.48rem", marginBottom: "0.65rem", borderTop: "1px solid rgba(94,68,42,0.12)", paddingTop: "0.55rem" }}>
+              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>正文</div>
               {article.paragraphs.map((paragraph, index) => (
-                <div key={paragraph} style={{ display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: 8, alignItems: "start", background: "var(--muted)", border: "1px solid rgba(94,68,42,0.08)", borderRadius: 8, padding: "0.56rem" }}>
-                  <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: article.tagBg ?? article.labelBg, color: article.tagColor ?? article.labelColor, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>
+                <div key={paragraph} style={{ display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: 8, alignItems: "start", padding: "0.08rem 0" }}>
+                  <span aria-hidden="true" style={{ width: 18, height: 18, borderRadius: "50%", background: article.tagBg ?? article.labelBg, color: article.tagColor ?? article.labelColor, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900, marginTop: 2 }}>
                     {index + 1}
                   </span>
-                  <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.62, fontSize: "0.86rem", margin: 0 }}>
+                  <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.58, fontSize: "0.86rem", margin: 0 }}>
                     {paragraph}
                   </p>
                 </div>
@@ -1791,20 +1772,10 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             </div>
 
             {articleQuickStart ? (
-              <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.72rem", marginBottom: "0.85rem", display: "grid", gap: "0.58rem" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              <div style={{ background: "rgba(246,224,141,0.34)", border: "1px solid rgba(212,170,61,0.42)", borderRadius: 8, padding: "0.55rem 0.62rem", marginBottom: "0.72rem", display: "grid", gap: "0.42rem" }}>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
                   <span style={{ color: "var(--cherry-red)", fontWeight: 900, fontSize: "0.72rem" }}>先做这个</span>
                   <span style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem", lineHeight: 1.45 }}>{articleQuickStart.step}</span>
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.5rem" }}>
-                  <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.55rem" }}>
-                    <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.16rem" }}>完成后检查</span>
-                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>{articleQuickStart.check}</span>
-                  </div>
-                  <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.55rem" }}>
-                    <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.16rem" }}>先避开</span>
-                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>{articleQuickStart.pitfall}</span>
-                  </div>
                 </div>
               </div>
             ) : null}
@@ -2347,62 +2318,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </div>
             ) : null}
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.6rem", marginBottom: "0.9rem" }}>
-              {readingPath.map((item, index) => (
-                <div key={item.label} style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.08)", borderRadius: 14, padding: "0.7rem" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: "0.3rem" }}>
-                    <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: article.tagBg ?? article.labelBg, color: article.tagColor ?? article.labelColor, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>
-                      {index + 1}
-                    </span>
-                    <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{item.label}</strong>
-                  </div>
-                  <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.78rem", margin: 0, fontWeight: 800 }}>
-                    {item.body}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {pairedWorks.length ? (
-              <div className="article-paired-work-panel" style={{ marginBottom: "0.9rem", display: "grid", gap: "0.38rem" }}>
-                <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>配套模块</div>
-                <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 0 }}>
-                  {pairedWorks.map((work) => {
-                    const toolHref = getWorkToolHref(work.href);
-                    return (
-                    <li key={work.slug}>
-                      <a
-                        className="article-paired-work-link"
-                        href={toolHref}
-                        aria-label={`打开配套模块：${work.title}`}
-                        onMouseEnter={() => preloadRouteForHref(toolHref)}
-                        onFocus={() => preloadRouteForHref(toolHref)}
-                        onPointerDown={() => preloadRouteForHref(toolHref)}
-                        onClick={(event) => {
-                          if (!shouldUseClientNavigation(event)) return;
-                          event.preventDefault();
-                          navigateToPath(toolHref);
-                        }}
-                        style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.7rem", alignItems: "center", borderTop: "1px solid rgba(94,68,42,0.1)", padding: "0.52rem 0", color: "inherit", textDecoration: "none", minWidth: 0 }}
-                      >
-                        <span style={{ minWidth: 0, display: "grid", gap: "0.18rem" }}>
-                          <span style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0, flexWrap: "wrap" }}>
-                            <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>{work.category}</span>
-                            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", lineHeight: 1.32, fontWeight: 900, overflowWrap: "anywhere" }}>{work.title}</strong>
-                          </span>
-                          <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
-                            {work.starter}
-                          </span>
-                        </span>
-                        <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900, whiteSpace: "nowrap" }}>打开 →</span>
-                      </a>
-                    </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ) : null}
-
             {actionSteps.length ? (
               <div id="article-primary-action" tabIndex={-1} style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
@@ -2561,60 +2476,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </div>
             </div>
 
-            {articleCompletionChecks.length ? (
-              <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.9rem", marginTop: "0.9rem" }}>
-                <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem", marginBottom: "0.62rem" }}>完成验收卡</div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
-                  {articleCompletionChecks.map((item, index) => (
-                    <div key={item.title} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.5rem", alignItems: "start" }}>
-                      <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: index === 3 ? "var(--cherry-red)" : "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>
-                        {index + 1}
-                      </span>
-                      <span>
-                        <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.24rem" }}>{item.title}</strong>
-                        <span style={{ display: "block", color: "var(--cherry-warm-mid)", lineHeight: 1.52, fontSize: "0.76rem", fontWeight: 800, marginBottom: "0.32rem" }}>{item.body}</span>
-                        <span style={{ display: "block", color: "var(--cherry-warm-brown)", lineHeight: 1.48, fontSize: "0.72rem", fontWeight: 900 }}>验收：{item.output}</span>
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-
-            {articleEvidenceItems.length ? (
-              <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 16, padding: "0.9rem", marginTop: "0.9rem" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.68rem" }}>
-                  <div>
-                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>读完产出</div>
-                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginTop: "0.18rem", fontWeight: 800 }}>
-                      读完后至少留下一个可检查的学习记录，而不是只浏览内容。
-                    </div>
-                  </div>
-                  <button type="button" onClick={copyLearningRecord} aria-label={`复制${article.title}的学习记录`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.4rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                    {copiedLearningRecord ? "已复制" : "复制学习记录"}
-                  </button>
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem", marginBottom: "0.7rem" }}>
-                  {articleEvidenceItems.map((item, index) => (
-                    <div key={item} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.5rem", alignItems: "start" }}>
-                      <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>
-                        {index + 1}
-                      </span>
-                      <span style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.8rem", fontWeight: 800 }}>{item}</span>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.52rem" }}>
-                  {articlePracticePlan.map((item) => (
-                    <div key={item.label} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
-                      <strong style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.76rem", marginBottom: "0.24rem" }}>{item.label}</strong>
-                      <span style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.5, fontSize: "0.76rem", fontWeight: 800 }}>{item.body}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-
             {navArticles.length > 0 ? (
               <nav aria-label="文章前后导航" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.55rem", marginTop: "1rem" }}>
                 {navArticles.map((item) => {
@@ -2663,7 +2524,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           #article-primary-action:focus-visible,
           #article-body-points:focus-visible,
           .article-nav-card:focus-visible,
-          .article-outcome-snapshot button:focus-visible,
           .plant-evidence-chain-builder button:focus-visible,
           .plant-evidence-chain-grid textarea:focus-visible,
           .genome-story-frame-builder button:focus-visible,
@@ -2714,14 +2574,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           }
 
           @media (max-width: 759px) {
-            .article-outcome-snapshot {
-              grid-template-columns: 1fr !important;
-            }
-
-            .article-outcome-actions {
-              justify-content: flex-start !important;
-            }
-
             .article-record-grid,
             .plant-evidence-chain-grid,
             .plant-evidence-chain-builder > div:nth-of-type(3),

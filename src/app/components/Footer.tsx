@@ -8,6 +8,7 @@ const externalLinks = [
 export function Footer() {
   return (
     <footer
+      id="contact"
       style={{
         fontFamily: "'Nunito', sans-serif",
         background: "var(--cherry-forest)",
