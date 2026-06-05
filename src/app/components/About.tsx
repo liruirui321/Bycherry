@@ -98,6 +98,12 @@ export function About() {
     { num: String(notes.length + essays.length), label: "篇学习资料" },
     { num: String(reusableOutputs), label: "类可复用产物" },
   ];
+  const workbenchLoop = [
+    { step: "选入口", body: "按当前问题进入一个模块，不同时打开多个方向。" },
+    { step: "先操作", body: "完成页面里的立即任务，看见过程、证据或配置变化。" },
+    { step: "存产出", body: "复制学习卡、报告、证据判读或复盘模板。" },
+    { step: "定下一步", body: "写下还不清楚的问题，再接一篇配套文章或下一个模块。" },
+  ];
 
   return (
     <section
@@ -192,6 +198,18 @@ export function About() {
           <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.8, fontSize: "0.95rem" }}>
             每个页面都尽量保留可阅读、可操作、可复用的内容：模拟器、时间轴、学习卡、prompt 和证据资料。
           </p>
+
+          <div style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", marginTop: "1rem", display: "grid", gap: "0.55rem" }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", fontWeight: 900 }}>工作台闭环</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(138px, 1fr))", gap: "0.5rem" }}>
+              {workbenchLoop.map((item, index) => (
+                <div key={item.step} className="about-workbench-loop-step" style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.26rem", minHeight: 104 }}>
+                  <span style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>{index + 1}. {item.step}</span>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>{item.body}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <div style={{ display: "grid", gap: "0.65rem", marginTop: "1.15rem" }}>
             <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", fontWeight: 900 }}>怎么开始</div>
