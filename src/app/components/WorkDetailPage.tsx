@@ -2570,7 +2570,7 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
 
           <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.65rem" }}>
             <div>
-              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>阶段完成验收</strong>
+              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>阶段检查</strong>
               <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>完成当前阶段前，至少留下定位、压力、创新和证据边界四条可检查回答。</span>
             </div>
             <div style={{ display: "grid", gap: "0.52rem" }}>
@@ -4590,7 +4590,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
       <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.82rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>完成验收卡</div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>结果检查</div>
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>
               复制报告前，先确认本轮判定、证据、风险边界和小测状态都能说清楚。
             </div>

@@ -1328,7 +1328,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: "0.85rem", flexWrap: "wrap" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
                 <IconCheck size={18} />
-                完成验收卡
+                结果检查
               </div>
               <span style={{ background: quizCorrectCount >= 3 ? "var(--cherry-sage-light)" : "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.22rem 0.58rem", color: quizCorrectCount >= 3 ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.72rem", fontWeight: 900 }}>
                 {expressionCompletionChecks.filter((item) => item.done).length}/{expressionCompletionChecks.length}

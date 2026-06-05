@@ -796,7 +796,7 @@ function verifyGeneExpressionLearnerContract() {
     { label: "experiment completion badge", text: "填写完成度" },
     { label: "experiment record layout", text: "gene-experiment-record-grid" },
     { label: "completion check data", text: "expressionCompletionChecks" },
-    { label: "visible completion card", text: "完成验收卡" },
+    { label: "visible result check", text: "结果检查" },
     { label: "completion record section", text: "六、完成验收" },
     { label: "quiz pass threshold", text: "至少答对 3 题再复制记录" },
     { label: "transcription completion check", text: "转录启动" },
@@ -858,7 +858,7 @@ function verifyPlantEvolutionLearnerContract() {
     { label: "claim boundary visible label", text: "判读边界" },
     { label: "evidence audit section in study card", text: "8. 证据判读" },
     { label: "completion checks data", text: "plantCompletionChecks" },
-    { label: "visible completion card", text: "阶段完成验收" },
+    { label: "visible stage check", text: "阶段检查" },
     { label: "completion section in study card", text: "9. 完成验收" },
     { label: "completion pass criteria", text: "通过标准：${item.pass}" },
     { label: "completion location task", text: "阶段定位" },
@@ -920,7 +920,7 @@ function verifyCrisprLearnerScenarios() {
     { label: "off-target audit copy", text: "guide 错配与脱靶" },
     { label: "risk audit report section", text: "6. 风险核查" },
     { label: "completion check data", text: "crisprCompletionChecks" },
-    { label: "visible completion card", text: "完成验收卡" },
+    { label: "visible result check", text: "结果检查" },
     { label: "completion report section", text: "7. 完成验收" },
     { label: "quiz completion state", text: "小测待完成" },
     { label: "quiz passed state", text: "小测已通过" },
@@ -958,7 +958,6 @@ function verifyLearnerFacingArticleCopy() {
   const learnerArticleSources = [
     "src/app/App.tsx",
     "src/app/components/ArticleDetailPage.tsx",
-    "src/app/components/Contact.tsx",
     "src/app/components/Footer.tsx",
     "src/app/components/Hero.tsx",
     "src/app/components/HomeLibrary.tsx",
@@ -1197,25 +1196,25 @@ function verifyLearnerProductPositioning() {
   }
 }
 
-function verifyContactFeedbackContract() {
-  const contactSource = read("src/app/components/Contact.tsx");
-  const requiredContactFeatures = [
-    { label: "short contact strip", text: "contact-action-strip" },
-    { label: "email copy status", text: "contact-email-copy-status" },
-    { label: "email copy action", text: "copyEmail" },
-    { label: "mailto link", text: "contact-mailto-link" },
-    { label: "mailto target", text: "mailto:${emailAddress}" },
-    { label: "direct email copy", text: "复制邮箱" },
-    { label: "direct mail action", text: "打开邮件" },
-    { label: "github action", text: "contact-social-link" },
+function verifyFooterContactContract() {
+  const footerSource = read("src/app/components/Footer.tsx");
+  const appSource = read("src/app/App.tsx");
+  const requiredFooterContactFeatures = [
+    { label: "contact anchor", text: 'id="contact"' },
+    { label: "external link data", text: "externalLinks" },
+    { label: "github link", text: "https://github.com/liruirui321" },
+    { label: "email mailto", text: "mailto:liruirui321@gmail.com" },
+    { label: "compact footer links", text: "footer-links" },
   ];
 
-  for (const item of requiredContactFeatures) {
-    expect(contactSource.includes(item.text), `Contact feedback flow is missing ${item.label}: ${item.text}`);
+  for (const item of requiredFooterContactFeatures) {
+    expect(footerSource.includes(item.text), `Footer contact flow is missing ${item.label}: ${item.text}`);
   }
 
-  for (const retiredContactBlock of ["contact-compact-form", "contact-draft-copy-status", "relatedPage", "contactPagePresets", "contact-page-presets", "copyDraft", "你的名字", "相关页面", "具体内容", "打开邮件草稿", "复制内容", "feedbackType", "stuckPoint", "triedAction", "expectedOutcome", "feedbackQualityItems", "feedbackChecklistText", "copyFeedbackChecklist", "contact-feedback-quality-panel", "反馈可处理度", "复制核查单", "【By Cherry 反馈核查单】", "发送前确认"]) {
-    expect(!contactSource.includes(retiredContactBlock), `Contact section should stay compact and not include retired long feedback block: ${retiredContactBlock}.`);
+  expect(!appSource.includes("<Contact") && !appSource.includes('import { Contact }'), "Homepage must not render a separate contact strip.");
+  expect(!existsSync(resolve(root, "src/app/components/Contact.tsx")), "The retired Contact component must be removed instead of kept as dead duplicate UI.");
+  for (const retiredContactBlock of ["contact-action-strip", "联系与反馈", "复制邮箱", "打开邮件", "contact-compact-form", "contact-draft-copy-status", "相关页面", "具体内容", "打开邮件草稿", "复制内容", "反馈可处理度", "发送前确认"]) {
+    expect(!footerSource.includes(retiredContactBlock), `Footer contact should stay compact and not include retired contact block: ${retiredContactBlock}.`);
   }
 }
 
@@ -1297,7 +1296,7 @@ verifyPlantEvolutionLearnerContract();
 verifyCrisprLearnerScenarios();
 verifyLearnerFacingArticleCopy();
 verifyLearnerProductPositioning();
-verifyContactFeedbackContract();
+verifyFooterContactContract();
 
 if (failures.length) {
   console.error("Content integrity verification failed.");

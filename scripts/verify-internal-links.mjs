@@ -59,7 +59,7 @@ const homeAnchors = new Set([
   ...extractStaticIds("src/app/components/HomeLibrary.tsx"),
   ...extractStaticIds("src/app/components/ResearchEssays.tsx"),
   ...extractStaticIds("src/app/components/Notes.tsx"),
-  ...extractStaticIds("src/app/components/Contact.tsx"),
+  ...extractStaticIds("src/app/components/Footer.tsx"),
 ]);
 
 const internalLinks = [
