@@ -451,39 +451,29 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(!worksSource.includes("export function Works") && !worksSource.includes("function WorkCard"), "Works module should stay data-only; homepage cards live in Hero.");
   expect(!notesSource.includes("export function Notes") && !notesSource.includes("note-card"), "Notes module should stay data-only; homepage article rows live in HomeLibrary.");
   expect(!researchSource.includes("export function ResearchEssays") && !researchSource.includes("research-essay-card"), "Research module should stay data-only; homepage article rows live in HomeLibrary.");
-  expect(workDetailSource.includes("{work.starter}"), "Work detail quick start must expose each work starter action.");
-  expect(workDetailSource.includes("{work.success}"), "Work detail quick start must expose each work completion standard.");
-  expect(workDetailSource.includes("workFirstRunPlanText"), "Work detail quick start must provide copyable route text.");
-  expect(workDetailSource.includes("copyFirstRunPlan"), "Work detail quick start must provide a copy action.");
-  expect(workDetailSource.includes("work-run-summary"), "Work detail quick start must use a compact summary strip.");
-  expect(workDetailSource.includes("work-run-actions"), "Work detail quick start must keep direct actions in the strip.");
-  expect(workDetailSource.includes("5 分钟") && workDetailSource.includes("15 分钟") && workDetailSource.includes("30 分钟"), "Work detail first-run cards must provide timed entry points.");
-  expect(!workDetailSource.includes("work-first-run-panel") && !workDetailSource.includes("work-first-run-grid") && !workDetailSource.includes("work-quick-start-meta"), "Work detail quick start must not push the tool down with card grids.");
-  expect(workDetailSource.includes("work.outputs.join(\" / \")"), "Work detail first-run cards must derive saved outputs from each module.");
-  expect(workDetailSource.includes("保存 ${work.outputs.join(\" / \")}，并写下完成标准：${work.success}"), "Work detail first-run copy must connect outputs to completion standards.");
-  expect(workDetailSource.includes("work.path.map((step, index)"), "Work detail first-run copy text must include each module path.");
+  for (const retiredWorkQuickStartBlock of ["function WorkQuickStart", "<WorkQuickStart work={work} />", "workFirstRunPlanText", "copyFirstRunPlan", "work-run-summary", "work-run-actions", "work-quick-start", "work-start-tool-link", "work-first-run-copy-button", "复制运行卡", "第一次运行卡"]) {
+    expect(!workDetailSource.includes(retiredWorkQuickStartBlock), `Work detail pages should open directly into the product, not a retired quick-start strip: ${retiredWorkQuickStartBlock}.`);
+  }
   expect(workDetailSource.includes("function WorkCompletionEvidence"), "Work detail pages must keep completion evidence as its own component.");
   expect(workDetailSource.includes("<WorkCompletionEvidence work={work} />"), "Work detail pages must render completion evidence after the primary tool.");
   expect(workDetailSource.includes("work-completion-evidence-panel"), "Work detail completion evidence must use a stable panel class.");
   expect(workDetailSource.includes("完成证据"), "Work detail completion evidence must ask learners to leave completion evidence.");
-  expect(workDetailSource.includes("evidenceItems"), "Work detail quick start must derive completion evidence from work outputs, success, and path.");
-  expect(workDetailSource.includes("evidenceFieldItems"), "Work detail quick start must provide learner-filled evidence fields.");
+  expect(workDetailSource.includes("evidenceItems"), "Work detail completion evidence must derive completion evidence from work outputs, success, and path.");
+  expect(workDetailSource.includes("evidenceFieldItems"), "Work detail completion evidence must provide learner-filled evidence fields.");
   expect(workDetailSource.includes("filledEvidence"), "Work detail reflection template must merge learner-filled evidence.");
-  expect(workDetailSource.includes("work-saved-output"), "Work detail quick start must expose a saved output input.");
-  expect(workDetailSource.includes("reflectionChecks"), "Work detail quick start must derive concrete reflection checks.");
+  expect(workDetailSource.includes("work-saved-output"), "Work detail completion evidence must expose a saved output input.");
+  expect(workDetailSource.includes("reflectionChecks"), "Work detail completion evidence must derive concrete reflection checks.");
   expect(workDetailSource.includes("保存 1 份${work.outputs[0]"), "Work detail completion evidence must include a concrete saved output.");
   expect(workDetailSource.includes("const evidenceTemplate"), "Work detail completion evidence must include a copyable reflection template.");
   expect(workDetailSource.includes("copyEvidenceTemplate"), "Work detail completion evidence must provide a copy action.");
   expect(workDetailSource.includes("复制复盘模板"), "Work detail completion evidence copy button must be visible.");
-  expect(workDetailSource.includes("work-start-tool-link"), "Work detail quick start must expose a direct start link into the primary tool.");
-  expect(workDetailSource.includes("focusPrimaryTool"), "Work detail start action must focus the primary tool anchor.");
   expect(workDetailSource.includes('id="work-primary-tool"') && workDetailSource.includes("tabIndex={-1}"), "Work detail primary tool anchor must be focusable.");
-  const quickStartRenderIndex = workDetailSource.indexOf("<WorkQuickStart work={work} />");
+  const workHeroRenderIndex = workDetailSource.indexOf("<WorkHero work={work} compact />");
   const primaryToolRenderIndex = workDetailSource.indexOf('id="work-primary-tool"');
   const completionEvidenceRenderIndex = workDetailSource.indexOf("<WorkCompletionEvidence work={work} />");
   const pairedReadingRenderIndex = workDetailSource.indexOf("<WorkPairedReading work={work} />");
-  expect(quickStartRenderIndex !== -1 && primaryToolRenderIndex !== -1 && completionEvidenceRenderIndex !== -1 && pairedReadingRenderIndex !== -1, "Work detail pages must render quick start, primary tool, completion evidence, and paired reading.");
-  expect(quickStartRenderIndex < primaryToolRenderIndex && primaryToolRenderIndex < completionEvidenceRenderIndex && completionEvidenceRenderIndex < pairedReadingRenderIndex, "Work detail pages must render the primary tool before completion evidence and paired reading.");
+  expect(workHeroRenderIndex !== -1 && primaryToolRenderIndex !== -1 && completionEvidenceRenderIndex !== -1 && pairedReadingRenderIndex !== -1, "Work detail pages must render title, primary tool, completion evidence, and paired reading.");
+  expect(workHeroRenderIndex < primaryToolRenderIndex && primaryToolRenderIndex < completionEvidenceRenderIndex && completionEvidenceRenderIndex < pairedReadingRenderIndex, "Work detail pages must place the primary tool directly after the compact title bar.");
   expect(workDetailSource.includes("复盘证据"), "Work detail completion evidence template must include a reflection evidence title.");
   expect(workDetailSource.includes("三、我的填写记录"), "Work detail completion evidence template must include learner-filled notes.");
   expect(workDetailSource.includes("五、复盘检查"), "Work detail completion evidence template must include reflection checks.");
@@ -503,8 +493,6 @@ function verifyWorkJsonLdLearningOutcomes() {
   for (const retiredWorkTailBlock of ["function WorkContinueLinks", "<WorkContinueLinks work={work} />", "work-next-card", "继续探索", "全部学习模块 →", "继续探索${item.title}", "先做这个：{item.work.starter}"]) {
     expect(!workDetailSource.includes(retiredWorkTailBlock), `Work detail pages should not reintroduce duplicate long related-module cards: ${retiredWorkTailBlock}.`);
   }
-  expect(workDetailSource.includes("function WorkQuickStart"), "Work detail pages must include a quick-start entry component.");
-  expect(workDetailSource.includes("<WorkQuickStart work={work} />"), "Work detail pages must render the quick-start entry before the primary tool.");
   expect(!footerSource.includes('navigateHomeSection'), "Footer should not repeat homepage section navigation.");
   expect(footerSource.includes("externalLinks"), "Footer should keep compact external contact links.");
   expect(footerSource.includes("科学学习与 AI · 2026"), "Footer should stay as a compact brand line.");

@@ -5165,132 +5165,6 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
   );
 }
 
-function WorkQuickStart({ work }: { work: Work }) {
-  const [copiedFirstRunPlan, setCopiedFirstRunPlan] = useState(false);
-  const [firstRunCopyStatus, setFirstRunCopyStatus] = useState("");
-
-  useEffect(() => {
-    setCopiedFirstRunPlan(false);
-    setFirstRunCopyStatus("");
-  }, [work.slug]);
-
-  const workFirstRunPlanText = `【${work.title}第一次运行卡】
-5 分钟：${work.starter}
-15 分钟：${work.task}
-30 分钟：保存 ${work.outputs.join(" / ")}，并写下完成标准：${work.success}
-
-操作路径：
-${work.path.map((step, index) => `${index + 1}. ${step}`).join("\n")}
-
-我需要带走：
-${work.outputs.map((output, index) => `${index + 1}. ${output}`).join("\n")}`;
-
-  async function copyFirstRunPlan() {
-    const copiedToClipboard = await copyText(workFirstRunPlanText);
-
-    if (copiedToClipboard) {
-      setCopiedFirstRunPlan(true);
-      setFirstRunCopyStatus("第一次运行卡已复制到剪贴板。");
-      window.setTimeout(() => setCopiedFirstRunPlan(false), 1400);
-      return;
-    }
-
-    setCopiedFirstRunPlan(false);
-    setFirstRunCopyStatus("复制失败，请手动选中文本复制。");
-  }
-
-  function focusPrimaryTool() {
-    const target = document.getElementById("work-primary-tool");
-    target?.scrollIntoView({ behavior: "smooth", block: "start" });
-    target?.focus({ preventScroll: true });
-  }
-
-  return (
-    <section
-      aria-labelledby="work-quick-start-heading"
-      style={{
-        padding: "0.46rem 1.5rem 0.58rem",
-        background: "var(--background)",
-        fontFamily: "'Nunito', sans-serif",
-      }}
-    >
-      <div
-        className="work-quick-start"
-        style={{
-          maxWidth: 1060,
-          margin: "0 auto",
-          background: "rgba(250,247,241,0.72)",
-          border: "1px solid rgba(94,68,42,0.1)",
-          borderRadius: 8,
-          padding: "0.52rem 0.62rem",
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) auto",
-          gap: "0.72rem",
-          alignItems: "center",
-        }}
-      >
-        <div className="work-run-summary" style={{ minWidth: 0, display: "grid", gap: "0.22rem" }}>
-          <div id="work-quick-start-heading" style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>立即任务</div>
-          <p style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.82rem", lineHeight: 1.42, fontWeight: 900, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
-            {work.task}
-          </p>
-          <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.35, fontWeight: 900, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
-            先做：{work.starter} · 完成：{work.success}
-          </span>
-          <span id="work-first-run-copy-status" role="status" aria-live="polite" style={{ minHeight: "0.9rem", color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>
-            {firstRunCopyStatus}
-          </span>
-        </div>
-        <div className="work-run-actions" style={{ display: "inline-flex", alignItems: "center", justifyContent: "flex-end", gap: "0.42rem", flexWrap: "wrap" }}>
-          <button
-            type="button"
-            className="work-start-tool-link"
-            aria-label={`开始操作${work.title}。先做这个，${work.starter}`}
-            onClick={focusPrimaryTool}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "var(--cherry-forest)",
-              color: "#FAF7F1",
-              border: "none",
-              borderRadius: 999,
-              padding: "0.42rem 0.82rem",
-              cursor: "pointer",
-              fontFamily: "'Nunito', sans-serif",
-              fontSize: "0.76rem",
-              fontWeight: 900,
-              whiteSpace: "nowrap",
-            }}
-          >
-            开始操作 →
-          </button>
-          <button
-            type="button"
-            className="work-first-run-copy-button"
-            onClick={copyFirstRunPlan}
-            aria-describedby="work-first-run-copy-status"
-            style={{
-              border: "1px solid rgba(58,92,62,0.22)",
-              borderRadius: 999,
-              background: "var(--card)",
-              color: "var(--cherry-forest)",
-              cursor: "pointer",
-              fontFamily: "'Nunito', sans-serif",
-              fontSize: "0.72rem",
-              fontWeight: 900,
-              padding: "0.4rem 0.72rem",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {copiedFirstRunPlan ? "已复制" : "复制运行卡"}
-          </button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function WorkCompletionEvidence({ work }: { work: Work }) {
   const [copiedEvidence, setCopiedEvidence] = useState(false);
   const [evidenceCopyStatus, setEvidenceCopyStatus] = useState("");
@@ -5654,7 +5528,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
   return (
     <main id="main-content" tabIndex={-1}>
       <WorkHero work={work} compact />
-      <WorkQuickStart work={work} />
 
       <section
         id="work-primary-tool"
@@ -5684,8 +5557,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           }
 
           .work-detail-link:focus-visible,
-          .work-start-tool-link:focus-visible,
-          .work-first-run-copy-button:focus-visible,
           .work-paired-reading-link:focus-visible,
           #work-primary-tool:focus-visible,
           .work-sequence-card:focus-visible,
@@ -5697,22 +5568,13 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
           .work-sequence-card,
           .work-paired-reading-link,
-          .work-first-run-copy-button,
           .work-evidence-copy-button {
             transition: transform 0.18s ease, box-shadow 0.18s ease;
           }
 
           @media (max-width: 760px) {
-            .work-quick-start {
-              grid-template-columns: 1fr !important;
-            }
-
             .work-evidence-field-grid {
               grid-template-columns: 1fr !important;
-            }
-
-            .work-run-actions {
-              justify-content: flex-start !important;
             }
           }
 
@@ -5720,8 +5582,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           .work-sequence-card:focus-visible,
           .work-paired-reading-link:hover,
           .work-paired-reading-link:focus-visible,
-          .work-first-run-copy-button:hover,
-          .work-first-run-copy-button:focus-visible,
           .work-evidence-copy-button:hover,
           .work-evidence-copy-button:focus-visible {
             transform: translateY(-2px);
@@ -5731,7 +5591,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           @media (prefers-reduced-motion: reduce) {
             .work-sequence-card,
             .work-paired-reading-link,
-            .work-first-run-copy-button,
             .work-evidence-copy-button {
               transition: none !important;
               transform: none !important;
