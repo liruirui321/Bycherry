@@ -3,12 +3,12 @@ import { works } from "./Works";
 import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
-const homeWorkSummary: Record<string, string> = {
-  "gene-expression": "调节转录与翻译，观察 mRNA、核糖体和多肽链变化。",
-  "research-prompt-kit": "把论文材料整理成任务路由、证据边界和可复制指令。",
-  "plant-evolution-stories": "按时间轴查看植物关键创新、证据和自测。",
-  "concept-explainer": "输入概念，生成解释、流程图、类比和小测。",
-  "crispr-interactive": "修改 guide RNA，判断 PAM、匹配评分和编辑风险。",
+const homeWorkStatus: Record<string, string> = {
+  "gene-expression": "仿真",
+  "research-prompt-kit": "工作台",
+  "plant-evolution-stories": "时间轴",
+  "concept-explainer": "生成器",
+  "crispr-interactive": "模拟器",
 };
 
 export function Hero() {
@@ -27,54 +27,55 @@ export function Hero() {
         minHeight: "auto",
         position: "relative",
         overflow: "hidden",
-        padding: "0.78rem 1.5rem 0.78rem",
+        padding: "0.72rem 1.5rem 0.72rem",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
-        background:
-          "linear-gradient(180deg, rgba(250,247,241,0.98) 0%, rgba(245,241,234,0.95) 100%), linear-gradient(rgba(58,92,62,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(58,92,62,0.05) 1px, transparent 1px)",
-        backgroundSize: "auto, 42px 42px, 42px 42px",
+        background: "var(--background)",
       }}
     >
-      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1120, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
-        <div className="hero-header-row" style={{ maxWidth: 760, marginBottom: "0.5rem" }}>
+      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1060, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
+        <div className="hero-header-row" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", alignItems: "end", gap: "1rem", marginBottom: "0.38rem" }}>
           <div style={{ minWidth: 0 }}>
             <h1
               id="hero-heading"
               style={{
                 fontFamily: "'Nunito', sans-serif",
-                fontSize: "clamp(1.45rem, 3.2vw, 2.2rem)",
+                fontSize: "clamp(1.34rem, 3vw, 2rem)",
                 fontWeight: 800,
                 lineHeight: 1.12,
                 color: "var(--cherry-warm-brown)",
-                margin: "0 0 0.26rem",
+                margin: "0 0 0.18rem",
                 letterSpacing: 0,
                 overflowWrap: "anywhere",
               }}
             >
-              By Cherry 科学与 AI 学习工作台
+              By Cherry
             </h1>
             <p
               style={{
-                fontSize: "clamp(0.9rem, 1.5vw, 1rem)",
+                fontSize: "0.86rem",
                 color: "var(--cherry-warm-mid)",
-                lineHeight: 1.5,
+                lineHeight: 1.38,
                 margin: 0,
-                fontWeight: 700,
+                fontWeight: 800,
                 overflowWrap: "anywhere",
               }}
             >
-              模块直接操作，文章保留方法、证据和可复用记录。
+              科学学习与 AI 工具，直接进入可操作内容。
             </p>
           </div>
+          <span className="hero-count" style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900, whiteSpace: "nowrap" }}>
+            {works.length} 个模块
+          </span>
         </div>
 
-        <nav id="works" className="hero-work-grid" aria-label="首屏学习模块目录" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(218px, 1fr))", gap: "0.46rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+        <nav id="works" className="hero-work-list" aria-label="内容目录" style={{ display: "grid", minWidth: 0, maxWidth: "100%", boxSizing: "border-box", borderTop: "1px solid rgba(94,68,42,0.12)" }}>
           {works.map((work) => {
             const toolHref = getWorkToolHref(work.href);
             return (
               <a
-                className="hero-work-card"
+                className="hero-work-row"
                 key={work.slug}
                 href={toolHref}
                 aria-label={`打开${work.title}`}
@@ -83,36 +84,36 @@ export function Hero() {
                 onFocus={() => preloadRouteForHref(getWorkToolHref(work.href))}
                 onPointerDown={() => preloadRouteForHref(getWorkToolHref(work.href))}
                 style={{
-                  background: "rgba(250,247,241,0.84)",
-                  border: "1.5px solid rgba(94,68,42,0.12)",
-                  borderLeft: `4px solid ${work.border}`,
-                  borderRadius: 8,
-                  padding: "0.52rem 0.58rem",
+                  background: "transparent",
+                  borderBottom: "1px solid rgba(94,68,42,0.12)",
+                  padding: "0.36rem 0",
                   color: "var(--cherry-warm-brown)",
                   textDecoration: "none",
                   textAlign: "left",
-                  minHeight: 58,
                   display: "grid",
-                  gridTemplateColumns: "auto minmax(0, 1fr) auto",
+                  gridTemplateColumns: "1.8rem minmax(0, 1fr) auto auto",
                   alignItems: "center",
-                  gap: "0.52rem",
+                  gap: "0.62rem",
                   position: "relative",
-                  overflow: "hidden",
+                  overflow: "visible",
                   minWidth: 0,
                   maxWidth: "100%",
                   boxSizing: "border-box",
                 }}
               >
-                <span aria-hidden="true" style={{ width: 24, height: 24, borderRadius: 999, background: work.color, border: `1px solid ${work.border}`, display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>
+                <span aria-hidden="true" style={{ width: 22, height: 22, borderRadius: 999, background: work.color, border: `1px solid ${work.border}`, display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--cherry-warm-brown)", fontSize: "0.66rem", fontWeight: 900 }}>
                   {work.id}
                 </span>
-                <div style={{ display: "grid", gap: "0.14rem", minWidth: 0, position: "relative", zIndex: 1 }}>
+                <div style={{ display: "grid", gap: "0.08rem", minWidth: 0, position: "relative", zIndex: 1 }}>
                   <strong style={{ fontSize: "0.84rem", lineHeight: 1.16, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
-                  <span className="hero-work-summary" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.32, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
-                    {homeWorkSummary[work.slug] ?? work.desc}
+                  <span className="hero-work-tags" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.22, fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {work.tags.slice(0, 2).join(" / ")}
                   </span>
                 </div>
-                <span className="hero-work-open" style={{ color: "var(--cherry-forest)", border: "1px solid rgba(58,92,62,0.18)", borderRadius: 999, padding: "0.14rem 0.42rem", fontSize: "0.66rem", fontWeight: 900, whiteSpace: "nowrap" }}>
+                <span className="hero-work-status" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900, whiteSpace: "nowrap" }}>
+                  {homeWorkStatus[work.slug] ?? work.category}
+                </span>
+                <span className="hero-work-open" style={{ color: "var(--cherry-forest)", border: "1px solid rgba(58,92,62,0.2)", borderRadius: 999, padding: "0.12rem 0.4rem", fontSize: "0.65rem", fontWeight: 900, whiteSpace: "nowrap" }}>
                   打开
                 </span>
               </a>
@@ -124,10 +125,7 @@ export function Hero() {
       <style>{`
         @media (max-width: 860px) {
           #top {
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
-            padding-top: 0.58rem !important;
-            padding-bottom: 0.62rem !important;
+            padding: 0.5rem 1rem 0.52rem !important;
           }
 
           .hero-inner,
@@ -138,7 +136,11 @@ export function Hero() {
             overflow-wrap: anywhere;
           }
 
-          .hero-work-grid {
+          .hero-count {
+            justify-self: start;
+          }
+
+          .hero-work-list {
             display: grid !important;
             grid-template-columns: 1fr !important;
             overflow-x: visible;
@@ -148,39 +150,43 @@ export function Hero() {
             box-sizing: border-box;
           }
 
-          .hero-work-card {
+          .hero-work-row {
             width: 100% !important;
             min-width: 0 !important;
             max-width: 100% !important;
             box-sizing: border-box;
-            min-height: 54px !important;
+            grid-template-columns: 1.58rem minmax(0, 1fr) auto !important;
+            gap: 0.48rem !important;
+            padding: 0.32rem 0 !important;
           }
 
-          .hero-work-card strong,
-          .hero-work-card span {
+          .hero-work-status {
+            display: none !important;
+          }
+
+          .hero-work-row strong,
+          .hero-work-row span {
             overflow-wrap: anywhere;
           }
         }
 
-        .hero-work-card:focus-visible {
+        .hero-work-row:focus-visible {
           outline: 3px solid var(--cherry-red);
           outline-offset: 4px;
         }
 
-        .hero-work-card {
-          transition: transform 0.18s ease, box-shadow 0.18s ease;
+        .hero-work-row {
+          transition: color 0.18s ease, background 0.18s ease;
         }
 
-        .hero-work-card:hover,
-        .hero-work-card:focus-visible {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 22px rgba(58,92,62,0.12);
+        .hero-work-row:hover,
+        .hero-work-row:focus-visible {
+          background: rgba(250,247,241,0.54) !important;
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .hero-work-card {
+          .hero-work-row {
             transition: none !important;
-            transform: none !important;
           }
         }
       `}</style>

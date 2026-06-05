@@ -1083,143 +1083,6 @@ ${localPreviewOutput}`;
             这个工作台直接提供科研任务编排：选择任务、材料和工作模式后，页面会生成结构化指令、证据边界、质控清单、报告框架和 API JSON 契约。当前可用于本地整理材料，也可把复制的任务包交给外部模型执行。
           </p>
         </div>
-        <details className="research-agent-reference-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
-          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>说明与边界 · 路由、API、Skill</summary>
-        <details className="research-agent-status-details research-agent-compact-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
-          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>版本状态与 API 边界</summary>
-          <div className="research-agent-status-strip" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.48rem" }}>
-            {agentCards.map((card) => (
-              <div key={card.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.52rem" }}>
-                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.74rem", marginBottom: "0.18rem" }}>{card.title}</strong>
-                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.35, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{card.body}</span>
-              </div>
-            ))}
-          </div>
-        </details>
-        <details className="research-agent-skill-details research-agent-compact-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
-          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>科研 Agent skill</summary>
-          <div className="research-agent-skill-panel" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto auto", gap: "0.65rem", alignItems: "center" }}>
-            <div>
-              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.84rem", marginBottom: "0.24rem" }}>科研 Agent skill</strong>
-              <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800 }}>把任务路由、证据表、缺失字段、风险标记、引用核查和复核问题固定成一套可复用协议。</span>
-            </div>
-            <a href="/skills/research-agent/SKILL.md" className="research-agent-skill-link" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", textDecoration: "none", whiteSpace: "nowrap" }}>
-              打开 Skill
-            </a>
-            <button type="button" onClick={copyResearchAgentSkill} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", whiteSpace: "nowrap" }}>
-              {copiedResearchSkill ? "已复制" : "复制 Skill"}
-            </button>
-          </div>
-        </details>
-        <details className="research-agent-route-recipes research-agent-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.62rem" }}>
-          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>任务路由速查</summary>
-          <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "baseline", flexWrap: "wrap" }}>
-            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>任务路由速查</strong>
-            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 900 }}>先判断材料类型，再决定让 Agent 做抽取、核查、改写还是回应。</span>
-          </div>
-          <div className="research-agent-route-list" style={{ display: "grid", gap: "0.36rem" }}>
-            {taskRouteRecipes.map((item) => (
-              <div className="research-agent-route-row" key={item.route} style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.5rem 0.56rem", display: "grid", gridTemplateColumns: "6.6rem minmax(0, 1fr)", gap: "0.52rem", alignItems: "start" }}>
-                <strong style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.76rem", lineHeight: 1.35 }}>{item.route}</strong>
-                <span style={{ display: "grid", gap: "0.22rem", minWidth: 0 }}>
-                  <span className="research-agent-route-usewhen" style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.35, fontWeight: 900, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>{item.useWhen}</span>
-                  <span className="research-agent-route-detail" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.35, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}><strong style={{ color: "var(--cherry-warm-brown)" }}>输入：</strong>{item.input} <strong style={{ color: "var(--cherry-warm-brown)" }}>产出：</strong>{item.output} <strong style={{ color: "var(--cherry-red)" }}>边界：</strong>{item.noGo}</span>
-                </span>
-              </div>
-            ))}
-          </div>
-        </details>
-        <details className="research-agent-usecase-panel research-agent-compact-details" style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(93,140,101,0.2)", borderRadius: 8, padding: "0.62rem" }}>
-          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>能直接完成什么</summary>
-          <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>能直接完成什么</strong>
-          <div className="research-agent-usecase-list" style={{ display: "grid", gap: "0.36rem" }}>
-            {useCaseBlueprints.map((item) => (
-              <div className="research-agent-usecase-row" key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.5rem 0.56rem", display: "grid", gridTemplateColumns: "5.7rem minmax(0, 1fr)", gap: "0.52rem", alignItems: "start" }}>
-                <strong style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.76rem", lineHeight: 1.35 }}>{item.title}</strong>
-                <span className="research-agent-usecase-detail" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.38, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}><strong style={{ color: "var(--cherry-warm-brown)" }}>输入：</strong>{item.input} <strong style={{ color: "var(--cherry-warm-brown)" }}>处理：</strong>{item.agent} <strong style={{ color: "var(--cherry-warm-brown)" }}>产出：</strong>{item.output}</span>
-              </div>
-            ))}
-          </div>
-        </details>
-        <details className="research-agent-completion-panel research-agent-compact-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 8, padding: "0.62rem" }}>
-          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>本次完成标准</summary>
-          <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>本次完成标准</strong>
-          <div className="research-agent-check-strip" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.36rem" }}>
-            {completionStandards.map((item, index) => (
-              <div key={item} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.46rem 0.5rem", display: "grid", gridTemplateColumns: "20px minmax(0, 1fr)", gap: "0.38rem", alignItems: "start" }}>
-                <span style={{ width: 18, height: 18, borderRadius: "50%", background: "var(--cherry-red)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.6rem", fontWeight: 900 }}>{index + 1}</span>
-                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item}</span>
-              </div>
-            ))}
-          </div>
-        </details>
-        <details className="research-agent-context-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
-          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>市场需求、能力边界和使用层级</summary>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.64rem", marginTop: "0.62rem" }}>
-          <div style={{ background: "rgba(250,247,241,0.62)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.64rem", display: "grid", gap: "0.5rem" }}>
-            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>常见卡点</strong>
-            <div style={{ display: "grid", gap: "0.5rem" }}>
-              {marketNeeds.map((item) => (
-                <div key={item.title} style={{ display: "grid", gridTemplateColumns: "72px minmax(0, 1fr)", gap: "0.55rem", alignItems: "start" }}>
-                  <span style={{ color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.74rem" }}>{item.title}</span>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800 }}>{item.body}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div style={{ background: "rgba(250,247,241,0.62)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.64rem", display: "grid", gap: "0.5rem" }}>
-            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>能力边界</strong>
-            <div style={{ display: "grid", gap: "0.42rem" }}>
-              {boundaryItems.map((item, index) => (
-                <div key={item} style={{ display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.46rem", alignItems: "start" }}>
-                  <span style={{ width: 18, height: 18, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800 }}>{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div style={{ background: "rgba(250,247,241,0.62)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.64rem", display: "grid", gap: "0.5rem" }}>
-            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>使用层级</strong>
-            <div style={{ display: "grid", gap: "0.48rem" }}>
-              {roadmapItems.map((item, index) => (
-                <div key={item.title} style={{ display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.48rem", alignItems: "start" }}>
-                  <span style={{ width: 20, height: 20, borderRadius: "50%", background: index === 0 ? "var(--cherry-forest)" : "var(--card)", color: index === 0 ? "#FAF7F1" : "var(--cherry-forest)", border: index === 0 ? "none" : "1px solid rgba(58,92,62,0.24)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800 }}>
-                    <strong style={{ color: "var(--cherry-warm-brown)" }}>{item.title}：</strong>{item.body}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div style={{ background: "rgba(250,247,241,0.62)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.64rem", display: "grid", gap: "0.44rem" }}>
-            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>模块与原则</strong>
-            {[...productModules, ...marketSignals].map((item) => (
-              <div key={item.title} style={{ display: "grid", gridTemplateColumns: "5.8rem minmax(0, 1fr)", gap: "0.5rem", color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.42, fontWeight: 800 }}>
-                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem" }}>{item.title}</strong>
-                <span>{item.body}</span>
-              </div>
-            ))}
-          </div>
-          </div>
-        </details>
-        <details className="research-agent-method-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
-          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>方法依据与延伸查证</summary>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.5rem", marginTop: "0.62rem" }}>
-            {productReferences.map((item) => (
-              <a key={item.href} href={item.href} target="_blank" rel="noreferrer" style={{ color: "var(--cherry-forest)", fontSize: "0.74rem", lineHeight: 1.45, fontWeight: 900, textDecoration: "none", background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.55rem" }}>
-                {item.title} →
-              </a>
-            ))}
-            {sourceGroundedSignals.map((item) => (
-              <a key={item.href} href={item.href} target="_blank" rel="noreferrer" style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.55rem", textDecoration: "none" }}>
-                <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.22rem" }}>{item.source}</span>
-                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", marginBottom: "0.28rem" }}>{item.title}</strong>
-                <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.42, fontWeight: 800 }}>{item.body}</span>
-              </a>
-            ))}
-          </div>
-        </details>
-        </details>
       </div>
       <div className="prompt-builder-layout" style={{ display: "grid", gridTemplateColumns: "minmax(230px, 0.78fr) minmax(0, 1.3fr)", gap: "1rem", alignItems: "start" }}>
         <aside style={{ display: "grid", gap: "0.7rem" }}>
@@ -1647,6 +1510,144 @@ ${localPreviewOutput}`;
         </div>
       </div>
       </div>
+
+      <details className="research-agent-reference-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>说明与边界 · 路由、API、Skill</summary>
+        <details className="research-agent-status-details research-agent-compact-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>版本状态与 API 边界</summary>
+          <div className="research-agent-status-strip" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.48rem" }}>
+            {agentCards.map((card) => (
+              <div key={card.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.52rem" }}>
+                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.74rem", marginBottom: "0.18rem" }}>{card.title}</strong>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.35, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{card.body}</span>
+              </div>
+            ))}
+          </div>
+        </details>
+        <details className="research-agent-skill-details research-agent-compact-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>科研 Agent skill</summary>
+          <div className="research-agent-skill-panel" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto auto", gap: "0.65rem", alignItems: "center" }}>
+            <div>
+              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.84rem", marginBottom: "0.24rem" }}>科研 Agent skill</strong>
+              <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800 }}>把任务路由、证据表、缺失字段、风险标记、引用核查和复核问题固定成一套可复用协议。</span>
+            </div>
+            <a href="/skills/research-agent/SKILL.md" className="research-agent-skill-link" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", textDecoration: "none", whiteSpace: "nowrap" }}>
+              打开 Skill
+            </a>
+            <button type="button" onClick={copyResearchAgentSkill} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", whiteSpace: "nowrap" }}>
+              {copiedResearchSkill ? "已复制" : "复制 Skill"}
+            </button>
+          </div>
+        </details>
+        <details className="research-agent-route-recipes research-agent-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>任务路由速查</summary>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "baseline", flexWrap: "wrap" }}>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>任务路由速查</strong>
+            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 900 }}>先判断材料类型，再决定让 Agent 做抽取、核查、改写还是回应。</span>
+          </div>
+          <div className="research-agent-route-list" style={{ display: "grid", gap: "0.36rem" }}>
+            {taskRouteRecipes.map((item) => (
+              <div className="research-agent-route-row" key={item.route} style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.5rem 0.56rem", display: "grid", gridTemplateColumns: "6.6rem minmax(0, 1fr)", gap: "0.52rem", alignItems: "start" }}>
+                <strong style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.76rem", lineHeight: 1.35 }}>{item.route}</strong>
+                <span style={{ display: "grid", gap: "0.22rem", minWidth: 0 }}>
+                  <span className="research-agent-route-usewhen" style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.35, fontWeight: 900, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>{item.useWhen}</span>
+                  <span className="research-agent-route-detail" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.35, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}><strong style={{ color: "var(--cherry-warm-brown)" }}>输入：</strong>{item.input} <strong style={{ color: "var(--cherry-warm-brown)" }}>产出：</strong>{item.output} <strong style={{ color: "var(--cherry-red)" }}>边界：</strong>{item.noGo}</span>
+                </span>
+              </div>
+            ))}
+          </div>
+        </details>
+        <details className="research-agent-usecase-panel research-agent-compact-details" style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(93,140,101,0.2)", borderRadius: 8, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>能直接完成什么</summary>
+          <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>能直接完成什么</strong>
+          <div className="research-agent-usecase-list" style={{ display: "grid", gap: "0.36rem" }}>
+            {useCaseBlueprints.map((item) => (
+              <div className="research-agent-usecase-row" key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.5rem 0.56rem", display: "grid", gridTemplateColumns: "5.7rem minmax(0, 1fr)", gap: "0.52rem", alignItems: "start" }}>
+                <strong style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.76rem", lineHeight: 1.35 }}>{item.title}</strong>
+                <span className="research-agent-usecase-detail" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.38, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}><strong style={{ color: "var(--cherry-warm-brown)" }}>输入：</strong>{item.input} <strong style={{ color: "var(--cherry-warm-brown)" }}>处理：</strong>{item.agent} <strong style={{ color: "var(--cherry-warm-brown)" }}>产出：</strong>{item.output}</span>
+              </div>
+            ))}
+          </div>
+        </details>
+        <details className="research-agent-completion-panel research-agent-compact-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 8, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>本次完成标准</summary>
+          <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>本次完成标准</strong>
+          <div className="research-agent-check-strip" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.36rem" }}>
+            {completionStandards.map((item, index) => (
+              <div key={item} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.46rem 0.5rem", display: "grid", gridTemplateColumns: "20px minmax(0, 1fr)", gap: "0.38rem", alignItems: "start" }}>
+                <span style={{ width: 18, height: 18, borderRadius: "50%", background: "var(--cherry-red)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.6rem", fontWeight: 900 }}>{index + 1}</span>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </details>
+        <details className="research-agent-context-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>市场需求、能力边界和使用层级</summary>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.64rem", marginTop: "0.62rem" }}>
+          <div style={{ background: "rgba(250,247,241,0.62)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.64rem", display: "grid", gap: "0.5rem" }}>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>常见卡点</strong>
+            <div style={{ display: "grid", gap: "0.5rem" }}>
+              {marketNeeds.map((item) => (
+                <div key={item.title} style={{ display: "grid", gridTemplateColumns: "72px minmax(0, 1fr)", gap: "0.55rem", alignItems: "start" }}>
+                  <span style={{ color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.74rem" }}>{item.title}</span>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800 }}>{item.body}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ background: "rgba(250,247,241,0.62)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.64rem", display: "grid", gap: "0.5rem" }}>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>能力边界</strong>
+            <div style={{ display: "grid", gap: "0.42rem" }}>
+              {boundaryItems.map((item, index) => (
+                <div key={item} style={{ display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.46rem", alignItems: "start" }}>
+                  <span style={{ width: 18, height: 18, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800 }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ background: "rgba(250,247,241,0.62)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.64rem", display: "grid", gap: "0.5rem" }}>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>使用层级</strong>
+            <div style={{ display: "grid", gap: "0.48rem" }}>
+              {roadmapItems.map((item, index) => (
+                <div key={item.title} style={{ display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.48rem", alignItems: "start" }}>
+                  <span style={{ width: 20, height: 20, borderRadius: "50%", background: index === 0 ? "var(--cherry-forest)" : "var(--card)", color: index === 0 ? "#FAF7F1" : "var(--cherry-forest)", border: index === 0 ? "none" : "1px solid rgba(58,92,62,0.24)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800 }}>
+                    <strong style={{ color: "var(--cherry-warm-brown)" }}>{item.title}：</strong>{item.body}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ background: "rgba(250,247,241,0.62)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.64rem", display: "grid", gap: "0.44rem" }}>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>模块与原则</strong>
+            {[...productModules, ...marketSignals].map((item) => (
+              <div key={item.title} style={{ display: "grid", gridTemplateColumns: "5.8rem minmax(0, 1fr)", gap: "0.5rem", color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.42, fontWeight: 800 }}>
+                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem" }}>{item.title}</strong>
+                <span>{item.body}</span>
+              </div>
+            ))}
+          </div>
+          </div>
+        </details>
+        <details className="research-agent-method-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>方法依据与延伸查证</summary>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.5rem", marginTop: "0.62rem" }}>
+            {productReferences.map((item) => (
+              <a key={item.href} href={item.href} target="_blank" rel="noreferrer" style={{ color: "var(--cherry-forest)", fontSize: "0.74rem", lineHeight: 1.45, fontWeight: 900, textDecoration: "none", background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.55rem" }}>
+                {item.title} →
+              </a>
+            ))}
+            {sourceGroundedSignals.map((item) => (
+              <a key={item.href} href={item.href} target="_blank" rel="noreferrer" style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.55rem", textDecoration: "none" }}>
+                <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.22rem" }}>{item.source}</span>
+                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", marginBottom: "0.28rem" }}>{item.title}</strong>
+                <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.42, fontWeight: 800 }}>{item.body}</span>
+              </a>
+            ))}
+          </div>
+        </details>
+      </details>
 
       <style>
         {`

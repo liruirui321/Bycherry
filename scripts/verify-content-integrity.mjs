@@ -118,7 +118,7 @@ function verifyVisibleLearningModuleCopy() {
 
   const requiredCopy = [
     "学习模块",
-    "首屏学习模块目录",
+    "内容目录",
   ];
 
   const retiredCopyPatterns = [
@@ -196,8 +196,8 @@ function verifyWorkCardActions() {
   expect(copyActionMatches.length === 0, `Work card entry actions should open or start the tool, not imply direct copy behavior: ${copyActionMatches.join(", ")}`);
   expect(worksSource.includes('title: "科研 Agent 工作台"'), "Research AI work card should be titled 科研 Agent 工作台.");
   expect(!worksSource.includes("科研助手 Prompt Kit"), "Visible work card title must not use the old Prompt Kit naming.");
-  expect(heroSource.includes('id="works"') && heroSource.includes('aria-label="首屏学习模块目录"'), "Hero must own the #works anchor and all-module directory.");
-  expect(heroSource.includes("hero-work-summary") && heroSource.includes("hero-work-open"), "Hero module cards must expose compact one-line summaries and direct open actions.");
+  expect(heroSource.includes('id="works"') && heroSource.includes('aria-label="内容目录"'), "Hero must own the #works anchor and all-module directory.");
+  expect(heroSource.includes("hero-work-row") && heroSource.includes("hero-work-open"), "Hero module entries must expose compact rows and direct open actions.");
   expect(!appSource.includes("<Works") && !appSource.includes('import { Works }'), "Homepage should not render a second Works section below the hero.");
   expect(!worksSource.includes("export function Works") && !worksSource.includes("function WorkCard"), "Works.tsx should stay data-only so module entries are not duplicated on the homepage.");
   for (const retiredWorksEntry of ["work-recommended-start", "work-filter-button", "activeCategory", "recommendedWork"]) {
@@ -441,9 +441,9 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("hero-work-open") && heroSource.includes("打开"), "Homepage hero work cards must visibly expose a short direct open action without adding another detail panel.");
   expect(heroSource.includes("aria-label={`打开${work.title}`}"), "Homepage hero work cards must use short accessible labels.");
   expect(heroSource.includes('id="works"'), "Homepage #works anchor must point to the first-screen module directory instead of a duplicate section.");
-  expect(heroSource.includes('aria-label="首屏学习模块目录"'), "Homepage hero must label the first-screen module directory.");
-  expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(218px, 1fr))"'), "Homepage hero module cards must use compact directory rows.");
-  expect(heroSource.includes("minHeight: 58"), "Homepage hero module cards must use short fixed heights.");
+  expect(heroSource.includes('aria-label="内容目录"'), "Homepage hero must label the first-screen module directory.");
+  expect(heroSource.includes("hero-work-row") && !heroSource.includes("hero-work-card"), "Homepage hero module entries must use compact directory rows, not long cards.");
+  expect(!heroSource.includes("minHeight: 58") && !heroSource.includes("hero-work-summary"), "Homepage hero module entries must not return to fixed-height summary cards.");
   expect(heroSource.includes("grid-template-columns: 1fr !important"), "Homepage hero mobile module directory must use readable short rows instead of long stacked panels.");
   expect(heroSource.includes("width: calc(100vw - 2rem)"), "Homepage hero mobile module directory must stay inside the visible viewport.");
   expect(heroSource.includes('boxSizing: "border-box"'), "Homepage hero containers must use border-box sizing to avoid mobile overflow.");
@@ -1131,8 +1131,8 @@ function verifyLearnerProductPositioning() {
     "植物演化时间轴",
     "CRISPR 编辑模拟器",
     '"学习项目"',
-    "首屏学习模块目录",
-    "模块直接操作",
+    "内容目录",
+    "直接进入可操作内容",
     "基因表达可视化",
     "概念解释生成器",
     "科研 Agent",
