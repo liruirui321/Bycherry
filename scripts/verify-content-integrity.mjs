@@ -509,13 +509,17 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes("work-start-tool-link"), "Work detail quick start must expose a direct start link into the primary tool.");
   expect(workDetailSource.includes("focusPrimaryTool"), "Work detail start action must focus the primary tool anchor.");
   expect(workDetailSource.includes('id="work-primary-tool"') && workDetailSource.includes("tabIndex={-1}"), "Work detail primary tool anchor must be focusable.");
+  const quickStartRenderIndex = workDetailSource.indexOf("<WorkQuickStart work={work} />");
+  const primaryToolRenderIndex = workDetailSource.indexOf('id="work-primary-tool"');
+  const pairedReadingRenderIndex = workDetailSource.indexOf("<WorkPairedReading work={work} />");
+  expect(quickStartRenderIndex !== -1 && primaryToolRenderIndex !== -1 && pairedReadingRenderIndex !== -1, "Work detail pages must render quick start, primary tool, and paired reading.");
+  expect(quickStartRenderIndex < primaryToolRenderIndex && primaryToolRenderIndex < pairedReadingRenderIndex, "Work detail pages must render the primary tool before paired reading.");
   expect(workDetailSource.includes("复盘证据"), "Work detail completion evidence template must include a reflection evidence title.");
   expect(workDetailSource.includes("三、我的填写记录"), "Work detail completion evidence template must include learner-filled notes.");
   expect(workDetailSource.includes("五、复盘检查"), "Work detail completion evidence template must include reflection checks.");
   expect(workDetailSource.includes("六、下一步问题"), "Work detail completion evidence template must include a next-question field.");
   expect(workDetailSource.includes("pairedArticleSlugsByWorkSlug"), "Work detail pages must map each module to paired article reading.");
   expect(workDetailSource.includes("function WorkPairedReading"), "Work detail pages must include a paired-reading component.");
-  expect(workDetailSource.includes("<WorkPairedReading work={work} />"), "Work detail pages must render paired reading after the quick-start entry.");
   expect(workDetailSource.includes("做完接着读"), "Work detail paired reading must use learner-facing next-reading framing.");
   expect(workDetailSource.includes("work-paired-reading-link"), "Work detail paired reading must expose direct article links.");
   expect(workDetailSource.includes("article.actionSteps[0]") && workDetailSource.includes("article.checklist[0]") && workDetailSource.includes("article.starterTemplate[0]"), "Work detail paired reading must expose first action, completion check, and saved output template.");
@@ -527,7 +531,7 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes("先做这个：{item.work.starter}"), "Work detail previous/next cards must expose each adjacent module starter action.");
   expect(workDetailSource.includes("aria-label={`${item.label}：${item.work.title}。先做这个，${item.work.starter}。完成标准，${item.work.success}`}"), "Work detail previous/next cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("function WorkQuickStart"), "Work detail pages must include a quick-start entry component.");
-  expect(workDetailSource.includes("<WorkQuickStart work={work} />"), "Work detail pages must render the quick-start entry before deep content.");
+  expect(workDetailSource.includes("<WorkQuickStart work={work} />"), "Work detail pages must render the quick-start entry before the primary tool.");
   expect(footerSource.includes('"plant-evolution-stories"') && footerSource.includes('"crispr-interactive"'), "Footer continue-learning links must cover all learning modules, not only the first three.");
   expect(footerSource.includes("footer-work-step") && footerSource.includes("footer-work-output"), "Footer continue-learning links must stay compact with first step and saved output rows.");
   expect(!footerSource.includes("完成：{work.success}"), "Footer continue-learning links must not repeat long completion standards visibly.");

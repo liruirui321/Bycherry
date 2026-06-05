@@ -5549,7 +5549,7 @@ function WorkPairedReading({ work }: { work: Work }) {
   }
 
   return (
-    <section aria-labelledby="work-paired-reading-heading" style={{ padding: "0 1.5rem 1.15rem", fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
+    <section aria-labelledby="work-paired-reading-heading" style={{ padding: "1.15rem 1.5rem 1.15rem", fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
       <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gap: "0.72rem" }}>
         <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.8rem", flexWrap: "wrap" }}>
           <div style={{ display: "grid", gap: "0.18rem" }}>
@@ -5805,13 +5805,12 @@ export function WorkDetailPage({ slug }: { slug: string }) {
     <main id="main-content" tabIndex={-1}>
       <WorkHero work={work} compact />
       <WorkQuickStart work={work} />
-      <WorkPairedReading work={work} />
 
       <section
         id="work-primary-tool"
         tabIndex={-1}
         style={{
-          padding: work.slug === "gene-expression" ? 0 : "0 1.5rem 5rem",
+          padding: work.slug === "gene-expression" ? 0 : "0 1.5rem 1.2rem",
           maxWidth: work.slug === "gene-expression" ? "none" : 1060,
           margin: "0 auto",
           fontFamily: "'Nunito', sans-serif",
@@ -5819,6 +5818,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
       >
         {work.slug === "gene-expression" ? <GeneExpressionTool /> : hasRichWorkContent(work.slug) ? <RichWorkContent slug={work.slug} /> : null}
       </section>
+      <WorkPairedReading work={work} />
       <WorkSequenceLinks work={work} />
       <WorkContinueLinks work={work} />
       <style>
