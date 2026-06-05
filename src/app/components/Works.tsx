@@ -4,7 +4,7 @@ import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { copyText } from "../clipboard";
-import { navigateClient, shouldUseClientNavigation } from "../navigation";
+import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
 type Category = "全部" | "科学" | "学习项目" | "AI工具";
@@ -94,7 +94,7 @@ export const works = [
 
 function WorkCard({ work }: { work: (typeof works)[0] }) {
   const [hovered, setHovered] = useState(false);
-  const href = "href" in work ? work.href : undefined;
+  const href = "href" in work ? getWorkToolHref(work.href) : undefined;
 
   function openDetail(event?: React.MouseEvent<HTMLAnchorElement>) {
     if (!href) return;
@@ -278,7 +278,7 @@ export function Works() {
 可保存产出：${filteredOutputCount} 项
 
 ${filtered.map((work, index) => `${index + 1}. ${work.title}
-入口：${work.href}
+入口：${getWorkToolHref(work.href)}
 立即任务：${work.task}
 先做这个：${work.starter}
 学习路径：${work.path.join(" → ")}
@@ -295,7 +295,7 @@ ${filtered.map((work, index) => `${index + 1}. ${work.title}
 ${learningPathBundles.map((bundle, index) => `${index + 1}. ${bundle.goal}
 为什么这样走：${bundle.note}
 先操作模块：${bundle.work.title}
-模块入口：${bundle.work.href}
+模块入口：${getWorkToolHref(bundle.work.href)}
 立即任务：${bundle.work.task}
 可保存产出：${bundle.work.outputs.join(" / ")}
 完成标准：${bundle.work.success}
@@ -374,15 +374,15 @@ ${learningPathBundles.map((bundle, index) => `${index + 1}. ${bundle.goal}
 
         <a
           className="work-recommended-start"
-          href={recommendedWork.href}
+          href={getWorkToolHref(recommendedWork.href)}
           aria-label={`推荐起点：${recommendedWork.title}。先做这个，${recommendedWork.starter}。完成标准，${recommendedWork.success}`}
-          onMouseEnter={() => preloadRouteForHref(recommendedWork.href)}
-          onFocus={() => preloadRouteForHref(recommendedWork.href)}
-          onPointerDown={() => preloadRouteForHref(recommendedWork.href)}
+          onMouseEnter={() => preloadRouteForHref(getWorkToolHref(recommendedWork.href))}
+          onFocus={() => preloadRouteForHref(getWorkToolHref(recommendedWork.href))}
+          onPointerDown={() => preloadRouteForHref(getWorkToolHref(recommendedWork.href))}
           onClick={(event) => {
             if (!shouldUseClientNavigation(event)) return;
             event.preventDefault();
-            navigateClient(recommendedWork.href);
+            navigateClient(getWorkToolHref(recommendedWork.href));
           }}
           style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.75rem", alignItems: "center", background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderLeft: `4px solid ${recommendedWork.border}`, borderRadius: 8, padding: "0.82rem 0.95rem", color: "inherit", textDecoration: "none", boxShadow: "0 8px 18px rgba(94,68,42,0.06)", marginBottom: "1rem" }}
         >
@@ -432,20 +432,22 @@ ${learningPathBundles.map((bundle, index) => `${index + 1}. ${bundle.goal}
             </span>
           </div>
           <div className="work-scan-strip-grid" role="list" aria-label="当前筛选下的学习模块速览" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.55rem" }}>
-            {filtered.map((work) => (
+            {filtered.map((work) => {
+              const toolHref = getWorkToolHref(work.href);
+              return (
               <a
                 key={work.slug}
                 role="listitem"
                 className="work-scan-link"
-                href={work.href}
+                href={toolHref}
                 aria-label={`打开${work.title}。先做这个，${work.starter}。可保存产出，${work.outputs.join("、")}`}
-                onMouseEnter={() => preloadRouteForHref(work.href)}
-                onFocus={() => preloadRouteForHref(work.href)}
-                onPointerDown={() => preloadRouteForHref(work.href)}
+                onMouseEnter={() => preloadRouteForHref(toolHref)}
+                onFocus={() => preloadRouteForHref(toolHref)}
+                onPointerDown={() => preloadRouteForHref(toolHref)}
                 onClick={(event) => {
                   if (!shouldUseClientNavigation(event)) return;
                   event.preventDefault();
-                  navigateClient(work.href);
+                  navigateClient(toolHref);
                 }}
                 style={{ background: work.color, border: `1.5px solid ${work.border}`, borderRadius: 8, padding: "0.62rem", color: "inherit", textDecoration: "none", display: "grid", gap: "0.36rem", minHeight: 118 }}
               >
@@ -460,7 +462,8 @@ ${learningPathBundles.map((bundle, index) => `${index + 1}. ${bundle.goal}
                   产出：{work.outputs.slice(0, 2).join(" / ")}
                 </span>
               </a>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -495,22 +498,24 @@ ${learningPathBundles.map((bundle, index) => `${index + 1}. ${bundle.goal}
             </button>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "0.72rem" }}>
-            {learningPathBundles.map((bundle) => (
+            {learningPathBundles.map((bundle) => {
+              const toolHref = getWorkToolHref(bundle.work.href);
+              return (
               <div key={bundle.goal} style={{ background: bundle.work.color, border: `1.5px solid ${bundle.work.border}`, borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.52rem" }}>
                 <div style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>{bundle.goal}</div>
                 <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem", lineHeight: 1.45, fontWeight: 900 }}>{bundle.note}</div>
                 <div style={{ display: "grid", gap: "0.36rem" }}>
                   <a
                     className="work-reading-path-link"
-                    href={bundle.work.href}
+                    href={toolHref}
                     aria-label={`打开模块：${bundle.work.title}。先做这个，${bundle.work.starter}`}
-                    onMouseEnter={() => preloadRouteForHref(bundle.work.href)}
-                    onFocus={() => preloadRouteForHref(bundle.work.href)}
-                    onPointerDown={() => preloadRouteForHref(bundle.work.href)}
+                    onMouseEnter={() => preloadRouteForHref(toolHref)}
+                    onFocus={() => preloadRouteForHref(toolHref)}
+                    onPointerDown={() => preloadRouteForHref(toolHref)}
                     onClick={(event) => {
                       if (!shouldUseClientNavigation(event)) return;
                       event.preventDefault();
-                      navigateClient(bundle.work.href);
+                      navigateClient(toolHref);
                     }}
                     style={{ background: "rgba(250,247,241,0.78)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.5rem 0.58rem", color: "var(--cherry-warm-brown)", textDecoration: "none", fontSize: "0.74rem", lineHeight: 1.42, fontWeight: 900 }}
                   >
@@ -537,7 +542,8 @@ ${learningPathBundles.map((bundle, index) => `${index + 1}. ${bundle.goal}
                   完成检查：{bundle.article.checklist[0]}
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

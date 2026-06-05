@@ -83,7 +83,7 @@ expect(routePrefetchSource.includes('import("./components/WorkDetailPage")'), "R
 expect(routePrefetchSource.includes('import("./components/ArticleDetailPage")'), "Route prefetch must warm the article detail chunk.");
 expect(routePrefetchSource.includes("prefetchedRouteKinds"), "Route prefetch must dedupe repeated hover/focus requests.");
 expect(workCardsSource.includes("preloadRouteForHref(href)"), "Work cards must prefetch detail routes on preview.");
-expect(heroSource.includes("preloadRouteForHref(work.href)"), "Hero work cards must prefetch detail routes on hover or focus.");
+expect(heroSource.includes("preloadRouteForHref(getWorkToolHref(work.href))"), "Hero work cards must prefetch direct-to-tool detail routes on hover or focus.");
 expect(noteCardsSource.includes("preloadRouteForHref(note.href)"), "Note cards must prefetch article routes on hover or focus.");
 expect(researchCardsSource.includes("preloadRouteForHref(essay.href)"), "Research cards must prefetch article routes on hover or focus.");
 expect(navSource.includes("preloadRouteForHref(l.href)"), "Navigation links must prefetch route chunks on hover, focus, or pointer down.");

@@ -5,7 +5,7 @@ import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { copyText } from "../clipboard";
-import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
+import { getWorkToolHref, navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
 export function Hero() {
@@ -79,6 +79,7 @@ export function Hero() {
     },
   ].filter((item): item is { label: string; work: (typeof works)[number]; article: (typeof notes)[number] | (typeof essays)[number] } => Boolean(item.work && item.article));
   const activeSessionPlan = sessionPlans[selectedSessionIndex] ?? sessionPlans[0];
+  const activeSessionWorkToolHref = activeSessionPlan ? getWorkToolHref(activeSessionPlan.work.href) : "";
   const activeSessionSteps = activeSessionPlan
     ? [
         { time: "5 分钟", body: activeSessionPlan.work.starter },
@@ -100,7 +101,7 @@ export function Hero() {
     ? `【By Cherry 30 分钟学习路径】
 目标：${activeSessionPlan.label}
 模块：${activeSessionPlan.work.title}
-入口：${activeSessionPlan.work.href}
+入口：${getWorkToolHref(activeSessionPlan.work.href)}
 配套阅读：${activeSessionPlan.article.title}
 阅读入口：${activeSessionPlan.article.href}
 
@@ -108,7 +109,7 @@ export function Hero() {
 ${heroModuleStatsText}
 
 按手头材料选择
-${materialRoutes.map((route, index) => `${index + 1}. ${route.label} → ${route.href}
+${materialRoutes.map((route, index) => `${index + 1}. ${route.label} → ${getWorkToolHref(route.href)}
 先做：${route.hint}
 带走：${route.output}`).join("\n")}
 
@@ -231,12 +232,12 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
               <a
                 key={route.href}
                 className="hero-goal-link"
-                href={route.href}
+                href={getWorkToolHref(route.href)}
                 aria-label={`${route.label}：打开${route.workTitle}`}
-                onClick={(event) => openWork(route.href, event)}
-                onMouseEnter={() => preloadRouteForHref(route.href)}
-                onFocus={() => preloadRouteForHref(route.href)}
-                onPointerDown={() => preloadRouteForHref(route.href)}
+                onClick={(event) => openWork(getWorkToolHref(route.href), event)}
+                onMouseEnter={() => preloadRouteForHref(getWorkToolHref(route.href))}
+                onFocus={() => preloadRouteForHref(getWorkToolHref(route.href))}
+                onPointerDown={() => preloadRouteForHref(getWorkToolHref(route.href))}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -271,12 +272,12 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
               <a
                 key={route.href}
                 className="hero-material-route-link"
-                href={route.href}
+                href={getWorkToolHref(route.href)}
                 aria-label={`${route.label}：${route.hint}。带走${route.output}`}
-                onClick={(event) => openWork(route.href, event)}
-                onMouseEnter={() => preloadRouteForHref(route.href)}
-                onFocus={() => preloadRouteForHref(route.href)}
-                onPointerDown={() => preloadRouteForHref(route.href)}
+                onClick={(event) => openWork(getWorkToolHref(route.href), event)}
+                onMouseEnter={() => preloadRouteForHref(getWorkToolHref(route.href))}
+                onFocus={() => preloadRouteForHref(getWorkToolHref(route.href))}
+                onPointerDown={() => preloadRouteForHref(getWorkToolHref(route.href))}
                 role="listitem"
                 style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.5rem 0.56rem", color: "inherit", textDecoration: "none", display: "grid", gap: "0.28rem", minHeight: 104 }}
               >
@@ -312,12 +313,12 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.48rem" }}>
               <a
                 className="hero-session-action-link"
-                href={activeSessionPlan.work.href}
+                href={activeSessionWorkToolHref}
                 aria-label={`进入当前学习模块：${activeSessionPlan.work.title}。先做这个，${activeSessionPlan.work.starter}`}
-                onClick={(event) => openWork(activeSessionPlan.work.href, event)}
-                onMouseEnter={() => preloadRouteForHref(activeSessionPlan.work.href)}
-                onFocus={() => preloadRouteForHref(activeSessionPlan.work.href)}
-                onPointerDown={() => preloadRouteForHref(activeSessionPlan.work.href)}
+                onClick={(event) => openWork(activeSessionWorkToolHref, event)}
+                onMouseEnter={() => preloadRouteForHref(activeSessionWorkToolHref)}
+                onFocus={() => preloadRouteForHref(activeSessionWorkToolHref)}
+                onPointerDown={() => preloadRouteForHref(activeSessionWorkToolHref)}
                 style={{ background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 8, padding: "0.48rem 0.58rem", textDecoration: "none", fontSize: "0.74rem", lineHeight: 1.42, fontWeight: 900 }}
               >
                 进入模块：{activeSessionPlan.work.title}
@@ -409,12 +410,12 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
                 <a
                   className="hero-work-card"
                   key={work.slug}
-                  href={work.href}
+                  href={getWorkToolHref(work.href)}
                   aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}
-                  onClick={(event) => openWork(work.href, event)}
-                  onMouseEnter={() => preloadRouteForHref(work.href)}
-                  onFocus={() => preloadRouteForHref(work.href)}
-                  onPointerDown={() => preloadRouteForHref(work.href)}
+                  onClick={(event) => openWork(getWorkToolHref(work.href), event)}
+                  onMouseEnter={() => preloadRouteForHref(getWorkToolHref(work.href))}
+                  onFocus={() => preloadRouteForHref(getWorkToolHref(work.href))}
+                  onPointerDown={() => preloadRouteForHref(getWorkToolHref(work.href))}
                   style={{
                     background: work.color,
                     border: `1.5px solid ${work.border}`,

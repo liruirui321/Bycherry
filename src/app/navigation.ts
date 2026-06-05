@@ -14,6 +14,12 @@ export function navigateClient(href: string) {
   window.dispatchEvent(new PopStateEvent("popstate"));
 }
 
+export const workPrimaryToolHash = "#work-primary-tool";
+
+export function getWorkToolHref(href: string) {
+  return `${href}${workPrimaryToolHash}`;
+}
+
 export function navigateHomeSection(hash: string, event?: MouseEvent<HTMLAnchorElement>) {
   if (event && !shouldUseClientNavigation(event)) return;
   event?.preventDefault();

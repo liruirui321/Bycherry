@@ -169,6 +169,24 @@ function focusPageTarget(element: HTMLElement | null) {
   }
 }
 
+function scrollToHashTarget(shouldMoveFocus: boolean, attempt = 0) {
+  const id = window.location.hash.replace("#", "");
+  if (!id) return false;
+
+  window.requestAnimationFrame(() => {
+    const target = document.getElementById(id);
+    if (!target && attempt < 8) {
+      window.setTimeout(() => scrollToHashTarget(shouldMoveFocus, attempt + 1), 60);
+      return;
+    }
+
+    target?.scrollIntoView({ behavior: getScrollBehavior(), block: "start" });
+    if (shouldMoveFocus) focusPageTarget(target);
+  });
+
+  return true;
+}
+
 function getLocationKey() {
   return `${window.location.pathname}${window.location.search}${window.location.hash}`;
 }
@@ -264,6 +282,8 @@ export default function App() {
     hasNavigated.current = true;
 
     if (detailSlug || noteSlug || researchSlug || unknownPath) {
+      if (!unknownPath && scrollToHashTarget(shouldMoveFocus)) return;
+
       window.scrollTo({ top: 0, behavior: getScrollBehavior() });
       if (shouldMoveFocus) {
         window.requestAnimationFrame(() => focusPageTarget(document.getElementById("main-content")));
@@ -271,14 +291,7 @@ export default function App() {
       return;
     }
 
-    const id = window.location.hash.replace("#", "");
-    if (!id) return;
-
-    window.requestAnimationFrame(() => {
-      const target = document.getElementById(id);
-      target?.scrollIntoView({ behavior: getScrollBehavior(), block: "start" });
-      if (shouldMoveFocus) focusPageTarget(target);
-    });
+    scrollToHashTarget(shouldMoveFocus);
   }, [detailSlug, noteSlug, researchSlug, unknownPath, locationKey]);
 
   useEffect(() => {

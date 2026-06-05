@@ -425,6 +425,7 @@ function verifyArticleOutcomeSnapshot() {
 
 function verifyWorkJsonLdLearningOutcomes() {
   const appSource = read("src/app/App.tsx");
+  const navigationSource = read("src/app/navigation.ts");
   const staticIndexSource = read("scripts/generate-static-index.mjs");
   const heroSource = read("src/app/components/Hero.tsx");
   const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
@@ -436,6 +437,11 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(appSource.includes("const metaDescriptionMaxLength = 180"), "Runtime meta descriptions must have a readable length cap.");
   expect(appSource.includes("function buildMetaDescription"), "Runtime page metadata must use a shared meta description builder.");
   expect(appSource.includes("const workActionDescription = work ? `先做这个：${work.starter}。完成标准：${work.success}` : null"), "Runtime work meta descriptions must include starter and completion standard.");
+  expect(appSource.includes("function scrollToHashTarget"), "App router must support hash target scrolling on routed pages.");
+  expect(appSource.includes("window.setTimeout(() => scrollToHashTarget(shouldMoveFocus, attempt + 1), 60)"), "App router must retry hash scrolling while lazy routed content loads.");
+  expect(appSource.includes("if (!unknownPath && scrollToHashTarget(shouldMoveFocus)) return;"), "App router must honor hash targets on work detail routes.");
+  expect(navigationSource.includes('export const workPrimaryToolHash = "#work-primary-tool"'), "Navigation helpers must centralize the primary work tool hash.");
+  expect(navigationSource.includes("export function getWorkToolHref"), "Navigation helpers must expose a direct-to-tool work href builder.");
   expect(staticIndexSource.includes("learningResourceType: route.category"), "Static work JSON-LD generator must include learningResourceType.");
   expect(staticIndexSource.includes("teaches: [route.task, route.starter, route.success, ...route.pathSteps, ...route.outputs].filter(Boolean)"), "Static work JSON-LD generator must include immediate task, starter action, completion standard, learning path, and output outcomes.");
   expect(staticIndexSource.includes("立即任务："), "Static index fallback must expose immediate learner tasks.");
@@ -458,10 +464,13 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("minHeight: 152"), "Homepage hero module cards must use compact fixed heights.");
   expect(heroSource.includes("scroll-snap-type: x proximity"), "Homepage hero mobile module directory must support horizontal scanning.");
   expect(heroSource.includes("sessionPlans"), "Homepage hero must offer a first-screen 30-minute session plan selector.");
+  expect(heroSource.includes('import { getWorkToolHref, navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation"'), "Homepage hero must use the direct-to-tool work href helper.");
   expect(heroSource.includes("copySessionPlan"), "Homepage hero must provide a copy action for the session plan.");
   expect(heroSource.includes("hero-session-copy-status"), "Homepage hero must expose copy status for the session plan.");
   expect(heroSource.includes("保存产出：${activeSessionPlan.work.outputs.join"), "Homepage hero session plan must include saved outputs.");
   expect(heroSource.includes("完成标准：${activeSessionPlan.work.success}"), "Homepage hero session plan must include completion standards.");
+  expect(heroSource.includes("入口：${getWorkToolHref(activeSessionPlan.work.href)}"), "Homepage copied session plan must point directly to the work tool.");
+  expect(heroSource.includes("${materialRoutes.map((route, index) => `${index + 1}. ${route.label} → ${getWorkToolHref(route.href)}"), "Homepage copied material routes must point directly to work tools.");
   expect(heroSource.includes("回到模块页填写复盘证据"), "Homepage hero copied session plan must point learners back to the work evidence fields.");
   expect(heroSource.includes("hero-session-action-link"), "Homepage hero session plan must expose direct module and paired-reading links.");
   expect(heroSource.includes("进入模块：{activeSessionPlan.work.title}"), "Homepage hero session plan must include a visible direct module link.");
@@ -478,10 +487,20 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("按手头材料选择"), "Homepage copied session plan must include material-based route choices.");
   expect(heroSource.includes("hero-material-route-grid"), "Homepage material route choices must have a stable grid class.");
   expect(heroSource.includes("hero-material-route-link"), "Homepage material route choices must expose direct links.");
+  expect(heroSource.includes("href={getWorkToolHref(route.href)}"), "Homepage material route choices must link directly to work tools.");
+  expect(heroSource.includes("href={getWorkToolHref(work.href)}"), "Homepage first-screen module cards must link directly to work tools.");
+  expect(heroSource.includes("href={activeSessionWorkToolHref}"), "Homepage session action must link directly to the active work tool.");
   expect(heroSource.includes('aria-label="按手头材料选择学习模块"'), "Homepage material route choices must be labeled for assistive tech.");
   expect(heroSource.includes("带走：{route.output}"), "Homepage material route choices must show saved outputs.");
   expect(heroSource.includes("配套阅读进入模块"), "Homepage hero visible session copy must mention paired reading.");
   expect(worksSource.includes("先做这个"), "Homepage work cards must expose a first concrete starter action.");
+  expect(worksSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Works section must use the direct-to-tool work href helper.");
+  expect(worksSource.includes('const href = "href" in work ? getWorkToolHref(work.href) : undefined'), "Homepage work cards must open the primary tool anchor.");
+  expect(worksSource.includes("入口：${getWorkToolHref(work.href)}"), "Copied work module checklist must point directly to work tools.");
+  expect(worksSource.includes("模块入口：${getWorkToolHref(bundle.work.href)}"), "Copied paired reading paths must point module entries directly to work tools.");
+  expect(worksSource.includes("href={getWorkToolHref(recommendedWork.href)}"), "Recommended work entry must link directly to the primary tool.");
+  expect(worksSource.includes("const toolHref = getWorkToolHref(work.href)"), "Works scan links must derive direct-to-tool hrefs.");
+  expect(worksSource.includes("const toolHref = getWorkToolHref(bundle.work.href)"), "Works paired reading module links must derive direct-to-tool hrefs.");
   expect(worksSource.includes("{work.success}"), "Homepage work cards must expose each work completion standard.");
   expect(worksSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage work cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("{work.starter}"), "Work detail quick start must expose each work starter action.");
