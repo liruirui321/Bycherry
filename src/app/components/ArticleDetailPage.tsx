@@ -2048,6 +2048,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     进入 scifusion.top
                   </a>
                 </div>
+                <details className="platform-usage-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem" }}>
+                  <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>照填配置与审核面板 · {activePlatformPlan?.title ?? "选择用途"}</summary>
                 <div role="group" aria-label="选择 SciFusion 使用场景" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
                   {platformUsePlans.map((plan, index) => {
                     const selected = index === selectedPlatformPlanIndex;
@@ -2217,6 +2219,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     </code>
                   </div>
                 </div>
+                </details>
               </div>
             ) : null}
 
@@ -2446,6 +2449,11 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             color: var(--cherry-red) !important;
           }
 
+          .platform-usage-details[open] {
+            display: grid;
+            gap: 0.65rem;
+          }
+
           .article-back-chip:hover,
           .article-back-chip:focus-visible {
             background: var(--cherry-yellow-light) !important;
@@ -2476,6 +2484,10 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             .article-record-panel {
               padding: 0.72rem !important;
               gap: 0.5rem !important;
+            }
+
+            .platform-usage-details {
+              padding: 0.62rem !important;
             }
 
             .article-record-grid {
