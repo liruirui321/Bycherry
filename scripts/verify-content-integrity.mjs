@@ -122,7 +122,6 @@ function verifyVisibleLearningModuleCopy() {
     "全部学习模块",
     "学习模块前后导航",
     "首屏学习模块目录",
-    "bycherry.me",
   ];
 
   const retiredCopyPatterns = [
@@ -507,10 +506,10 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes("aria-label={`${item.label}：${item.work.title}。先做这个，${item.work.starter}。完成标准，${item.work.success}`}"), "Work detail previous/next cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("function WorkQuickStart"), "Work detail pages must include a quick-start entry component.");
   expect(workDetailSource.includes("<WorkQuickStart work={work} />"), "Work detail pages must render the quick-start entry before the primary tool.");
-  expect(footerSource.includes('import { navigateHomeSection } from "../navigation"'), "Footer should keep lightweight home-section navigation.");
+  expect(!footerSource.includes('navigateHomeSection'), "Footer should not repeat homepage section navigation.");
   expect(footerSource.includes("externalLinks"), "Footer should keep compact external contact links.");
-  expect(footerSource.includes("bycherry.me"), "Footer should show the public domain without adding another module directory.");
-  for (const retiredFooterBlock of ["footerWorkLinks", "footer-work-link", "footerNextPlanText", "copyFooterNextPlan", "页尾继续学习清单", "footer-next-plan-panel"]) {
+  expect(footerSource.includes("科学学习与 AI · 2026"), "Footer should stay as a compact brand line.");
+  for (const retiredFooterBlock of ["footerWorkLinks", "footer-work-link", "footerNextPlanText", "copyFooterNextPlan", "页尾继续学习清单", "footer-next-plan-panel", "学习模块", "证据库", "方法库", "联系", "bycherry.me"]) {
     expect(!footerSource.includes(retiredFooterBlock), `Footer should stay short and not include retired duplicate block: ${retiredFooterBlock}.`);
   }
 }
@@ -1216,27 +1215,21 @@ function verifyLearnerProductPositioning() {
 function verifyContactFeedbackContract() {
   const contactSource = read("src/app/components/Contact.tsx");
   const requiredContactFeatures = [
-    { label: "compact contact form", text: "contact-compact-form" },
+    { label: "short contact strip", text: "contact-action-strip" },
     { label: "email copy status", text: "contact-email-copy-status" },
-    { label: "draft copy status", text: "contact-draft-copy-status" },
-    { label: "related page state", text: "relatedPage" },
-    { label: "related page field", text: "相关页面" },
-    { label: "short message field", text: "具体内容" },
-    { label: "structured draft page", text: "相关页面：${trimmedRelatedPage" },
-    { label: "structured draft content", text: "具体内容：" },
-    { label: "short draft ready status", text: "可以打开邮件草稿。" },
-    { label: "page preset data", text: "contactPagePresets" },
-    { label: "page preset group", text: "选择常见反馈页面" },
-    { label: "page preset class", text: "contact-page-presets" },
-    { label: "draft copy action", text: "copyDraft" },
-    { label: "mailto submit", text: "mailto:${emailAddress}" },
+    { label: "email copy action", text: "copyEmail" },
+    { label: "mailto link", text: "contact-mailto-link" },
+    { label: "mailto target", text: "mailto:${emailAddress}" },
+    { label: "direct email copy", text: "复制邮箱" },
+    { label: "direct mail action", text: "打开邮件" },
+    { label: "github action", text: "contact-social-link" },
   ];
 
   for (const item of requiredContactFeatures) {
     expect(contactSource.includes(item.text), `Contact feedback flow is missing ${item.label}: ${item.text}`);
   }
 
-  for (const retiredContactBlock of ["feedbackType", "stuckPoint", "triedAction", "expectedOutcome", "feedbackQualityItems", "feedbackChecklistText", "copyFeedbackChecklist", "contact-feedback-quality-panel", "反馈可处理度", "复制核查单", "【By Cherry 反馈核查单】", "发送前确认"]) {
+  for (const retiredContactBlock of ["contact-compact-form", "contact-draft-copy-status", "relatedPage", "contactPagePresets", "contact-page-presets", "copyDraft", "你的名字", "相关页面", "具体内容", "打开邮件草稿", "复制内容", "feedbackType", "stuckPoint", "triedAction", "expectedOutcome", "feedbackQualityItems", "feedbackChecklistText", "copyFeedbackChecklist", "contact-feedback-quality-panel", "反馈可处理度", "复制核查单", "【By Cherry 反馈核查单】", "发送前确认"]) {
     expect(!contactSource.includes(retiredContactBlock), `Contact section should stay compact and not include retired long feedback block: ${retiredContactBlock}.`);
   }
 }
