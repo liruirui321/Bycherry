@@ -728,6 +728,50 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
       output: "逐条回应结构、修改位置和限制说明",
     },
   ];
+  const taskRouteRecipes = [
+    {
+      route: "文献精读",
+      useWhen: "手里有摘要、方法关键词、结果句或 DOI，想判断论文到底回答了什么。",
+      input: "题目 / 摘要 / 方法 / 结果图注 / 局限性原文",
+      output: "研究问题、核心证据、作者结论、原文未说明内容",
+      noGo: "不根据摘要外的信息替论文补结论。",
+    },
+    {
+      route: "图表解读",
+      useWhen: "看得见图，但说不清坐标轴、分组、统计标记和结论边界。",
+      input: "图号 / 图注 / 坐标轴 / 单位 / 分组 / 显著性标记",
+      output: "观察事实、合理推断、不能支持、下一步检查",
+      noGo: "不把趋势、相关或单张图直接写成因果证明。",
+    },
+    {
+      route: "实验设计检查",
+      useWhen: "已经有实验目的、分组和指标，需要先找对照、重复数和变量风险。",
+      input: "实验目的 / 材料 / 分组 / 样本量 / 核心变量 / 统计方法",
+      output: "必须修改、建议修改、可以保留、人工确认",
+      noGo: "不替代真实实验审批、统计顾问或安全判断。",
+    },
+    {
+      route: "论文逻辑检查",
+      useWhen: "有结果摘要或讨论段落，担心结论过度、引用不足或术语跳跃。",
+      input: "结果摘要 / 讨论段落 / 目标期刊风格 / 引用位置",
+      output: "逐句问题、修改建议、修改理由、缺失证据",
+      noGo: "不新增未经结果支持的解释。",
+    },
+    {
+      route: "审稿意见回应",
+      useWhen: "收到审稿意见，需要拆成补实验、补分析、改写和澄清任务。",
+      input: "审稿意见 / 原文位置 / 已完成修改 / 不能补做的内容",
+      output: "任务拆解、回应草稿、修改位置、限制说明",
+      noGo: "不承诺没有完成的补充分析。",
+    },
+    {
+      route: "术语一致性检查",
+      useWhen: "章节或全文里同一概念写法很多，需要统一中文、英文、缩写和变量名。",
+      input: "全文片段 / 重点术语 / 缩写表 / 变量名",
+      output: "术语、问题、统一写法、出现位置",
+      noGo: "不替换原领域标准术语，必须保留待人工确认项。",
+    },
+  ];
   const completionStandards = [
     "至少得到 1 条可回到材料行的证据候选。",
     "缺失字段必须出现在 missing_fields 或研究记录里。",
@@ -1090,6 +1134,23 @@ ${localPreviewOutput}`;
           <button type="button" onClick={copyResearchAgentSkill} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", whiteSpace: "nowrap" }}>
             {copiedResearchSkill ? "已复制" : "复制 Skill"}
           </button>
+        </div>
+        <div className="research-agent-route-recipes" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.64rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "baseline", flexWrap: "wrap" }}>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>任务路由速查</strong>
+            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 900 }}>先判断材料类型，再决定让 Agent 做抽取、核查、改写还是回应。</span>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "0.58rem" }}>
+            {taskRouteRecipes.map((item) => (
+              <div key={item.route} style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem", display: "grid", gap: "0.38rem" }}>
+                <strong style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.78rem" }}>{item.route}</strong>
+                <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 900 }}>{item.useWhen}</span>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.48, fontWeight: 800 }}><strong style={{ color: "var(--cherry-warm-brown)" }}>输入：</strong>{item.input}</span>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.48, fontWeight: 800 }}><strong style={{ color: "var(--cherry-warm-brown)" }}>产出：</strong>{item.output}</span>
+                <span style={{ color: "var(--cherry-red)", fontSize: "0.7rem", lineHeight: 1.48, fontWeight: 900 }}><strong>边界：</strong>{item.noGo}</span>
+              </div>
+            ))}
+          </div>
         </div>
         <div style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(93,140,101,0.2)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.65rem" }}>
           <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>能直接完成什么</strong>

@@ -242,6 +242,12 @@ function verifyWorkDetailCardsStayCompact() {
   expect(source.includes("资料边界") && source.includes("当前卡点"), "Concept explainer must collect source boundary and current confusion.");
   expect(source.includes("复制自查记录"), "Concept explainer must expose a copyable understanding audit.");
   expect(source.includes("conceptInputQualityScore"), "Concept explainer must surface input quality before generating outputs.");
+  expect(source.includes("taskRouteRecipes"), "Research agent workbench must expose task route recipes.");
+  expect(source.includes("research-agent-route-recipes"), "Research agent task route recipes must be visible near the top of the workbench.");
+  expect(source.includes("任务路由速查"), "Research agent workbench must show a quick route lookup panel.");
+  for (const routeName of ["文献精读", "图表解读", "实验设计检查", "论文逻辑检查", "审稿意见回应", "术语一致性检查"]) {
+    expect(source.includes(routeName), `Research agent route recipes must include ${routeName}.`);
+  }
   expect(source.includes("timelineReviewOutput"), "Plant evolution module must provide a copyable full timeline review output.");
   expect(source.includes("copyTimelineReview"), "Plant evolution module must expose a full timeline review copy action.");
   expect(source.includes("全线复盘包"), "Plant evolution module must visibly expose a full timeline review pack.");
