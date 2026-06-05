@@ -21,10 +21,10 @@ function ArticleIllustration({ slug, color }: { slug: string; color: string }) {
         <path d="M30 56 H82 M30 66 H72" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.45" />
         <path d="M42 82 H94" stroke="var(--cherry-warm-brown)" strokeWidth="4" strokeLinecap="round" opacity="0.18" />
         <path d="M103 24 L108 35 L120 39 L109 45 L105 57 L99 46 L87 42 L98 36Z" fill="var(--cherry-yellow)" stroke="rgba(94,68,42,0.16)" strokeWidth="1.4" />
-        <path d="M113 63 C125 56 138 63 136 77 C134 91 113 94 106 81 C102 73 105 67 113 63Z" fill="var(--cherry-peach-light)" stroke="var(--cherry-red)" strokeWidth="2.2" />
-        <circle cx="116" cy="76" r="3.4" fill="var(--cherry-red)" />
-        <circle cx="127" cy="77" r="3.4" fill="var(--cherry-red)" />
-        <path d="M118 85 C123 89 128 88 132 84" stroke="var(--cherry-warm-brown)" strokeWidth="2" strokeLinecap="round" />
+        <rect x="104" y="61" width="30" height="26" rx="7" fill="var(--cherry-peach-light)" stroke="var(--cherry-red)" strokeWidth="2.2" />
+        <path d="M112 71 H126 M112 79 H122" stroke="var(--cherry-warm-brown)" strokeWidth="2.4" strokeLinecap="round" opacity="0.5" />
+        <path d="M106 71 L109 74 L114 68" stroke="var(--cherry-red)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="130" cy="64" r="4.2" fill="var(--cherry-red)" opacity="0.8" />
       </svg>
     );
   }

@@ -183,6 +183,9 @@ function verifyNoLowQualityVisibleContent() {
     { label: "misleading contact send copy", pattern: /发送信息/ },
     { label: "overly cute copy", pattern: /可爱|绘本|打个招呼|只是想说|Cherry 会怎么叫你/ },
     { label: "cute about illustration face", pattern: /circle cx="21" cy="39"|C30 56 37 56 44 51/ },
+    { label: "cute article AI face", pattern: /circle cx="116" cy="76"|C123 89 128 88 132 84/ },
+    { label: "cute note card face", pattern: /circle cx="30" cy="35"|C36 49 42 49 47 45/ },
+    { label: "cute research card face", pattern: /circle cx="99" cy="43"|C104 57 111 57 116 53/ },
     { label: "note-style contact illustration", pattern: /ContactNote|DeliveredNote|contact-note|Washi|\bwashi\b|\btape\b/i },
   ];
 

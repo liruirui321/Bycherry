@@ -159,11 +159,11 @@ function NoteCardIllustration({ slug, color }: { slug: string; color: string }) 
       <svg width="132" height="78" viewBox="0 0 132 78" fill="none" aria-hidden="true" focusable="false">
         <rect x="16" y="20" width="44" height="36" rx="10" fill="rgba(250,247,241,0.92)" stroke={color} strokeWidth="2.2" />
         <rect x="68" y="16" width="45" height="42" rx="12" fill="var(--cherry-peach-light)" stroke="var(--cherry-red)" strokeWidth="2.2" />
-        <circle cx="30" cy="35" r="3" fill="var(--cherry-warm-brown)" />
-        <circle cx="45" cy="35" r="3" fill="var(--cherry-warm-brown)" />
-        <path d="M31 45 C36 49 42 49 47 45" stroke="var(--cherry-warm-brown)" strokeWidth="2" strokeLinecap="round" />
+        <path d="M26 33 H51 M26 44 H43" stroke="var(--cherry-warm-mid)" strokeWidth="2.8" strokeLinecap="round" opacity="0.5" />
+        <path d="M20 58 H55" stroke="var(--cherry-warm-brown)" strokeWidth="3.2" strokeLinecap="round" opacity="0.16" />
         <path d="M80 34 H101 M80 44 H96" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.45" />
         <path d="M57 38 H70" stroke="var(--cherry-forest)" strokeWidth="3" strokeLinecap="round" />
+        <path d="M78 54 L84 59 L97 47" stroke="var(--cherry-forest)" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
         <path d="M99 12 L104 20 L113 22 L106 27 L104 36 L99 28 L90 25 L97 20Z" fill="var(--cherry-yellow)" />
       </svg>
     );

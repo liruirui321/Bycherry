@@ -161,9 +161,9 @@ function ResearchCardIllustration({ slug, color }: { slug: string; color: string
         <rect x="20" y="23" width="64" height="44" rx="13" fill="rgba(250,247,241,0.92)" stroke={color} strokeWidth="2.2" />
         <path d="M32 37 H72 M32 49 H62" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.42" />
         <path d="M89 28 C101 20 119 26 121 42 C123 60 99 68 88 53 C82 44 83 34 89 28Z" fill="#EDE9F5" stroke={color} strokeWidth="2.2" />
-        <circle cx="99" cy="43" r="3.5" fill={color} />
-        <circle cx="112" cy="43" r="3.5" fill={color} />
-        <path d="M99 53 C104 57 111 57 116 53" stroke="var(--cherry-warm-brown)" strokeWidth="2" strokeLinecap="round" />
+        <path d="M97 40 H113 M97 50 H109" stroke={color} strokeWidth="2.6" strokeLinecap="round" opacity="0.75" />
+        <path d="M92 59 L98 64 L111 51" stroke="var(--cherry-forest)" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="119" cy="55" r="4" fill={color} opacity="0.72" />
         <path d="M109 16 L114 25 L124 28 L115 33 L112 43 L107 34 L97 31 L106 25Z" fill="var(--cherry-yellow)" opacity="0.92" />
       </svg>
     );
