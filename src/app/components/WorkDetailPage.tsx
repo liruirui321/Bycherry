@@ -5737,7 +5737,7 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
   return (
     <section
       style={{
-        padding: compact ? "0.48rem 1.5rem" : "1.15rem 1.5rem 0.75rem",
+        padding: compact ? "0.3rem 1.5rem" : "1.15rem 1.5rem 0.75rem",
         background: "var(--background)",
         fontFamily: "'Nunito', sans-serif",
         borderBottom: "1px solid rgba(94,68,42,0.1)",
@@ -5772,9 +5772,9 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
           className="work-detail-hero-row"
           style={{
             display: "grid",
-            gridTemplateColumns: compact ? "auto auto minmax(0, 1fr)" : "auto minmax(0, 1fr)",
+            gridTemplateColumns: compact ? "auto minmax(0, 1fr) auto" : "auto minmax(0, 1fr)",
             alignItems: "center",
-            gap: compact ? "0.58rem" : "0.75rem",
+            gap: compact ? "0.48rem" : "0.75rem",
           }}
         >
           {compact ? (
@@ -5805,20 +5805,22 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
               ←
             </a>
           ) : null}
-          <div
-            style={{
-              width: compact ? 34 : 50,
-              height: compact ? 34 : 50,
-              borderRadius: compact ? 11 : 16,
-              background: work.color,
-              border: `1.5px solid ${work.border}`,
-              display: "grid",
-              placeItems: "center",
-              boxShadow: "3px 5px 0px rgba(94,68,42,0.08)",
-            }}
-          >
-            <div style={{ transform: "scale(0.72)" }}>{work.icon}</div>
-          </div>
+          {compact ? null : (
+            <div
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 16,
+                background: work.color,
+                border: `1.5px solid ${work.border}`,
+                display: "grid",
+                placeItems: "center",
+                boxShadow: "3px 5px 0px rgba(94,68,42,0.08)",
+              }}
+            >
+              <div style={{ transform: "scale(0.72)" }}>{work.icon}</div>
+            </div>
+          )}
           <div style={{ minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "center", gap: compact ? 8 : 10, flexWrap: "wrap", marginBottom: compact ? 0 : "0.2rem" }}>
               <h1
@@ -5832,37 +5834,39 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
               >
                 {work.title}
               </h1>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-                <span
-                  style={{
-                    background: work.color,
-                    color: "var(--cherry-forest)",
-                    border: `1px solid ${work.border}`,
-                    borderRadius: 999,
-                    padding: compact ? "0.11rem 0.48rem" : "0.16rem 0.55rem",
-                    fontSize: compact ? "0.66rem" : "0.7rem",
-                    fontWeight: 900,
-                  }}
-                >
-                  {work.category}
-                </span>
-                {work.tags.slice(0, compact ? 2 : work.tags.length).map((tag) => (
+              {compact ? null : (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
                   <span
-                    key={tag}
                     style={{
-                      background: "rgba(250,247,241,0.78)",
-                      color: "var(--cherry-warm-mid)",
-                      border: "1px solid rgba(94,68,42,0.1)",
+                      background: work.color,
+                      color: "var(--cherry-forest)",
+                      border: `1px solid ${work.border}`,
                       borderRadius: 999,
-                      padding: compact ? "0.11rem 0.48rem" : "0.16rem 0.55rem",
-                      fontSize: compact ? "0.66rem" : "0.7rem",
+                      padding: "0.16rem 0.55rem",
+                      fontSize: "0.7rem",
                       fontWeight: 900,
                     }}
                   >
-                    {tag}
+                    {work.category}
                   </span>
-                ))}
-              </div>
+                  {work.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      style={{
+                        background: "rgba(250,247,241,0.78)",
+                        color: "var(--cherry-warm-mid)",
+                        border: "1px solid rgba(94,68,42,0.1)",
+                        borderRadius: 999,
+                        padding: "0.16rem 0.55rem",
+                        fontSize: "0.7rem",
+                        fontWeight: 900,
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
             {compact ? null : (
               <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.85rem", lineHeight: 1.5, maxWidth: 780, margin: 0 }}>
@@ -5870,6 +5874,22 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
               </p>
             )}
           </div>
+          {compact ? (
+            <span
+              style={{
+                background: work.color,
+                color: "var(--cherry-forest)",
+                border: `1px solid ${work.border}`,
+                borderRadius: 999,
+                padding: "0.11rem 0.48rem",
+                fontSize: "0.66rem",
+                fontWeight: 900,
+                whiteSpace: "nowrap",
+              }}
+            >
+              {work.category}
+            </span>
+          ) : null}
         </div>
       </div>
     </section>
