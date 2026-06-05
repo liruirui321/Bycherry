@@ -1,8 +1,8 @@
 import type { MouseEvent } from "react";
-import { IconMicroscope, IconNotebook, IconSeedling } from "./Icons";
+import { IconMicroscope } from "./Icons";
 import { works } from "./Works";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
-import { getWorkToolHref, navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
+import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
 export function Hero() {
@@ -30,7 +30,7 @@ export function Hero() {
       }}
     >
       <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1120, width: "100%", minWidth: 0, margin: "0 auto" }}>
-        <div className="hero-header-row" style={{ display: "grid", gridTemplateColumns: "minmax(240px, 0.72fr) minmax(0, 1.28fr)", gap: "1rem", alignItems: "end", marginBottom: "0.9rem" }}>
+        <div className="hero-header-row" style={{ maxWidth: 760, marginBottom: "0.9rem" }}>
           <div style={{ minWidth: 0 }}>
             <div
               style={{
@@ -72,39 +72,8 @@ export function Hero() {
                 fontWeight: 700,
               }}
             >
-              先选一个模块，进入后直接操作。首页只保留目录，完整步骤、记录和练习都放在子页面里。
+              科学学习、AI 工具和科研转译内容入口集中在这里。进入模块后直接操作，文章页保留方法、证据和可复用记录。
             </p>
-          </div>
-
-          <div className="hero-actions" style={{ display: "flex", gap: "0.62rem", justifyContent: "flex-end", flexWrap: "wrap" }}>
-            <a
-              className="hero-cta"
-              href="#works"
-              onClick={(event) => navigateHomeSection("#works", event)}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 8,
-                background: "var(--cherry-forest)", color: "#FAF7F1",
-                borderRadius: 999, padding: "0.58rem 1rem",
-                textDecoration: "none", fontWeight: 800, fontSize: "0.88rem",
-                boxShadow: "3px 5px 0px rgba(58,92,62,0.22)",
-              }}
-            >
-              <IconSeedling size={17} color="#FAF7F1" /> 浏览全部
-            </a>
-            <a
-              className="hero-cta"
-              href="#notes"
-              onClick={(event) => navigateHomeSection("#notes", event)}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 8,
-                background: "rgba(250,247,241,0.82)", color: "var(--cherry-warm-brown)",
-                border: "1.5px solid var(--border)", borderRadius: 999,
-                padding: "0.56rem 1rem",
-                textDecoration: "none", fontWeight: 800, fontSize: "0.88rem",
-              }}
-            >
-              <IconNotebook size={17} /> 方法库
-            </a>
           </div>
         </div>
 
@@ -189,10 +158,6 @@ export function Hero() {
             grid-template-columns: 1fr !important;
           }
 
-          .hero-actions {
-            justify-content: flex-start !important;
-          }
-
           .hero-work-grid {
             display: flex !important;
             grid-template-columns: none !important;
@@ -222,7 +187,6 @@ export function Hero() {
           }
         }
 
-        .hero-cta:focus-visible,
         .hero-work-card:focus-visible {
           outline: 3px solid var(--cherry-red);
           outline-offset: 4px;

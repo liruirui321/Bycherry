@@ -411,6 +411,8 @@ function verifyWorkJsonLdLearningOutcomes() {
   const heroSource = read("src/app/components/Hero.tsx");
   const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
   const worksSource = read("src/app/components/Works.tsx");
+  const notesSource = read("src/app/components/Notes.tsx");
+  const researchSource = read("src/app/components/ResearchEssays.tsx");
   const footerSource = read("src/app/components/Footer.tsx");
 
   expect(appSource.includes("learningResourceType: work.category"), "Runtime work JSON-LD must include learningResourceType.");
@@ -438,9 +440,9 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(178px, 1fr))"'), "Homepage hero module cards must stay compact enough to reveal multiple modules in the first screen.");
   expect(heroSource.includes("minHeight: 154"), "Homepage hero module cards must use compact fixed heights.");
   expect(heroSource.includes("scroll-snap-type: x proximity"), "Homepage hero mobile module directory must support horizontal scanning.");
-  expect(heroSource.includes('import { getWorkToolHref, navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation"'), "Homepage hero must use the direct-to-tool work href helper.");
+  expect(heroSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Homepage hero must use the direct-to-tool work href helper without duplicate home-section CTAs.");
   expect(heroSource.includes("const toolHref = getWorkToolHref(work.href)") && heroSource.includes("href={toolHref}"), "Homepage first-screen module cards must link directly to work tools.");
-  for (const retiredHeroBlock of ["sessionPlans", "materialRoutes", "heroModuleStats", "hero-session-copy-status", "hero-material-route-grid"]) {
+  for (const retiredHeroBlock of ["sessionPlans", "materialRoutes", "heroModuleStats", "hero-session-copy-status", "hero-material-route-grid", "hero-actions", "hero-cta", "navigateHomeSection"]) {
     expect(!heroSource.includes(retiredHeroBlock), `Homepage hero should stay short and not include retired duplicate block: ${retiredHeroBlock}.`);
   }
   expect(!appSource.includes("<Works") && !appSource.includes('import { Works }'), "Homepage must not render a duplicate Works section below the hero.");
@@ -448,6 +450,8 @@ function verifyWorkJsonLdLearningOutcomes() {
     expect(!worksSource.includes(retiredWorksBlock), `Works data module should stay shorter and not include retired duplicate block: ${retiredWorksBlock}.`);
   }
   expect(!worksSource.includes("export function Works") && !worksSource.includes("function WorkCard"), "Works module should stay data-only; homepage cards live in Hero.");
+  expect(!notesSource.includes("export function Notes") && !notesSource.includes("note-card"), "Notes module should stay data-only; homepage article rows live in HomeLibrary.");
+  expect(!researchSource.includes("export function ResearchEssays") && !researchSource.includes("research-essay-card"), "Research module should stay data-only; homepage article rows live in HomeLibrary.");
   expect(workDetailSource.includes("{work.starter}"), "Work detail quick start must expose each work starter action.");
   expect(workDetailSource.includes("{work.success}"), "Work detail quick start must expose each work completion standard.");
   expect(workDetailSource.includes("workFirstRunCards"), "Work detail quick start must build a first-run route card set.");
@@ -1039,7 +1043,6 @@ function verifyLearnerFacingArticleCopy() {
     "home-library-link",
     "home-library-action",
     "home-library-output",
-    "查看证据",
     "学习方法、科研证据、AI 创作和科研转译资料",
     "先做这个",
     "完成后检查",
@@ -1164,9 +1167,8 @@ function verifyLearnerProductPositioning() {
     "CRISPR 编辑模拟器",
     '"学习项目"',
     "science learning lab",
-    "先选一个模块",
     "首屏学习模块目录",
-    "首页只保留目录",
+    "科研转译内容入口",
     "看生命过程",
     "拆概念",
     "整理科研",

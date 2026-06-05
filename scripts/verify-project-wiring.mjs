@@ -85,11 +85,11 @@ expect(routePrefetchSource.includes('import("./components/ArticleDetailPage")'),
 expect(routePrefetchSource.includes("prefetchedRouteKinds"), "Route prefetch must dedupe repeated hover/focus requests.");
 expect(!appSource.includes("<Works") && !workCardsSource.includes("export function Works"), "Homepage work entries must live in the hero, with Works.tsx kept data-only.");
 expect(heroSource.includes("preloadRouteForHref(getWorkToolHref(work.href))"), "Hero work cards must prefetch direct-to-tool detail routes on hover or focus.");
-expect(noteCardsSource.includes("preloadRouteForHref(note.href)"), "Note cards must prefetch article routes on hover or focus.");
-expect(researchCardsSource.includes("preloadRouteForHref(essay.href)"), "Research cards must prefetch article routes on hover or focus.");
+expect(!noteCardsSource.includes("export function Notes") && !noteCardsSource.includes("note-card"), "Notes.tsx must stay data-only so old homepage card code is not bundled.");
+expect(!researchCardsSource.includes("export function ResearchEssays") && !researchCardsSource.includes("research-essay-card"), "ResearchEssays.tsx must stay data-only so old homepage card code is not bundled.");
 expect(homeLibrarySource.includes("preloadRouteForHref(item.href)"), "Home article index must prefetch article routes on hover, focus, or pointer down.");
 expect(navSource.includes("preloadRouteForHref(l.href)"), "Navigation links must prefetch route chunks on hover, focus, or pointer down.");
-expect([heroSource, homeLibrarySource, noteCardsSource, researchCardsSource, navSource].every((source) => source.includes("onPointerDown")), "Primary route entrypoints must prefetch on pointer down for touch devices.");
+expect([heroSource, homeLibrarySource, navSource].every((source) => source.includes("onPointerDown")), "Primary route entrypoints must prefetch on pointer down for touch devices.");
 
 expect(indexCss.includes("@import './fonts.css';"), "src/styles/index.css must import fonts.css.");
 expect(indexCss.includes("@import './tailwind.css';"), "src/styles/index.css must import tailwind.css.");
