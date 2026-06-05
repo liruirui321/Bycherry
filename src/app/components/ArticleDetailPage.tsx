@@ -81,8 +81,8 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copyStatus, setCopyStatus] = useState("");
   const collection = kind === "note" ? notes : essays;
   const article = collection.find((item) => item.slug === slug);
-  const backHash = "#research";
-  const backText = "回到文章";
+  const backHash = "#works";
+  const backText = "回到内容";
 
   useEffect(() => {
     setRecordQuestion("");
@@ -1596,7 +1596,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
         <EmptyStateCard
           eyebrow={kind === "note" ? "学习方法" : "科研证据"}
           title="没有找到这篇内容"
-          body="这篇内容可能已经移动。可以回到文章列表，继续浏览最近更新。"
+          body="这篇内容可能已经移动。可以回到内容目录，继续浏览当前模块。"
           href={`/${backHash}`}
           linkText={backText}
           onNavigate={(event) => {

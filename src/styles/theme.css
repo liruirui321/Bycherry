@@ -164,7 +164,7 @@
     scroll-padding-top: 76px;
   }
 
-  :where(#top, #works, #research, #contact, #main-content) {
+  :where(#top, #works, #contact, #main-content) {
     scroll-margin-top: 76px;
   }
 
@@ -231,11 +231,11 @@
     outline: none;
   }
 
-  :where(#top, #works, #research, #contact):focus {
+  :where(#top, #works, #contact):focus {
     outline: none;
   }
 
-  :where(#top, #works, #research, #contact):focus-visible {
+  :where(#top, #works, #contact):focus-visible {
     box-shadow: inset 0 0 0 3px rgba(184, 68, 51, 0.18);
   }
 

@@ -110,7 +110,6 @@ function verifyVisibleLearningModuleCopy() {
     "src/app/App.tsx",
     "src/app/components/Footer.tsx",
     "src/app/components/Hero.tsx",
-    "src/app/components/HomeLibrary.tsx",
     "src/app/components/Nav.tsx",
     "src/app/components/WorkDetailPage.tsx",
     "src/app/components/Works.tsx",
@@ -240,7 +239,6 @@ function verifyWorkDetailCardsStayCompact() {
 
 function verifyArticleCardsStayStructured() {
   const files = [
-    "src/app/components/HomeLibrary.tsx",
     "src/app/components/ArticleDetailPage.tsx",
     "src/app/components/EmptyStateCard.tsx",
   ];
@@ -252,20 +250,10 @@ function verifyArticleCardsStayStructured() {
   }
 
   const appSource = read("src/app/App.tsx");
-  const homeLibrarySource = read("src/app/components/HomeLibrary.tsx");
 
   expect(!appSource.includes("<HomeLibrary />") && !appSource.includes('import { HomeLibrary }'), "Homepage must not render a second article index below the first-screen module directory.");
   expect(!appSource.includes("<ResearchEssays />") && !appSource.includes("<Notes />"), "Homepage should not render separate long Research and Notes sections.");
-  expect(homeLibrarySource.includes("home-library-link") && homeLibrarySource.includes("home-library-meta"), "Home library rows must expose compact article metadata.");
-  expect(homeLibrarySource.includes('id="research"') && !homeLibrarySource.includes('id="notes"'), "Home library must collapse article anchors into one short section.");
-  expect(homeLibrarySource.includes('const visibleArticles = articleItems.slice(0, 4)'), "Home library must show only a short latest-article strip.");
-  expect(homeLibrarySource.includes("home-library-list") && homeLibrarySource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"'), "Home library must use one compact article row.");
-  expect(homeLibrarySource.includes('gridTemplateColumns: "minmax(0, 1fr) auto"') && homeLibrarySource.includes("minHeight: 42"), "Home library article entries must stay as short row links rather than long cards.");
-  expect(homeLibrarySource.includes("grid-template-columns: repeat(2, minmax(0, 1fr))"), "Home library mobile article links must show as a two-column compact list.");
-  expect(!homeLibrarySource.includes("overflow-x: auto") && !homeLibrarySource.includes("scroll-snap-type"), "Home library must not hide article links behind horizontal scrolling.");
-  expect(!homeLibrarySource.includes("home-library-grid"), "Home library must not reintroduce a two-column long article directory.");
-  expect(!homeLibrarySource.includes("visibleArticles.slice(0, Math.ceil"), "Home library must not split articles into repeated columns.");
-  expect(!homeLibrarySource.includes("note-card") && !homeLibrarySource.includes("research-card"), "Home library must not reintroduce article card layouts.");
+  expect(!existsSync(resolve(root, "src/app/components/HomeLibrary.tsx")), "Retired HomeLibrary component must stay removed so the homepage cannot regain a repeated article index.");
 }
 
 function verifyPlatformGuideConfigBuilder() {
@@ -458,8 +446,8 @@ function verifyWorkJsonLdLearningOutcomes() {
     expect(!worksSource.includes(retiredWorksBlock), `Works data module should stay shorter and not include retired duplicate block: ${retiredWorksBlock}.`);
   }
   expect(!worksSource.includes("export function Works") && !worksSource.includes("function WorkCard"), "Works module should stay data-only; homepage cards live in Hero.");
-  expect(!notesSource.includes("export function Notes") && !notesSource.includes("note-card"), "Notes module should stay data-only; homepage article rows live in HomeLibrary.");
-  expect(!researchSource.includes("export function ResearchEssays") && !researchSource.includes("research-essay-card"), "Research module should stay data-only; homepage article rows live in HomeLibrary.");
+  expect(!notesSource.includes("export function Notes") && !notesSource.includes("note-card"), "Notes module should stay data-only; homepage must not regain article card UI.");
+  expect(!researchSource.includes("export function ResearchEssays") && !researchSource.includes("research-essay-card"), "Research module should stay data-only; homepage must not regain article card UI.");
   for (const retiredWorkQuickStartBlock of ["function WorkQuickStart", "<WorkQuickStart work={work} />", "workFirstRunPlanText", "copyFirstRunPlan", "work-run-summary", "work-run-actions", "work-quick-start", "work-start-tool-link", "work-first-run-copy-button", "复制运行卡", "第一次运行卡"]) {
     expect(!workDetailSource.includes(retiredWorkQuickStartBlock), `Work detail pages should open directly into the product, not a retired quick-start strip: ${retiredWorkQuickStartBlock}.`);
   }
@@ -978,13 +966,11 @@ function verifyLearnerFacingArticleCopy() {
   const articleDetailSource = read("src/app/components/ArticleDetailPage.tsx");
   const notesSource = read("src/app/components/Notes.tsx");
   const researchSource = read("src/app/components/ResearchEssays.tsx");
-  const homeLibrarySource = read("src/app/components/HomeLibrary.tsx");
   const learnerArticleSources = [
     "src/app/App.tsx",
     "src/app/components/ArticleDetailPage.tsx",
     "src/app/components/Footer.tsx",
     "src/app/components/Hero.tsx",
-    "src/app/components/HomeLibrary.tsx",
     "src/app/components/Nav.tsx",
     "src/app/components/Notes.tsx",
     "src/app/components/ResearchEssays.tsx",
@@ -1045,8 +1031,6 @@ function verifyLearnerFacingArticleCopy() {
     "审核重点",
     "题型：选择题 + 图表题 + 简答题",
     "文章",
-    "home-library-link",
-    "home-library-meta",
     "学习方法、科研证据、AI 创作和科研转译文章",
     "先做这个",
     "读完填写",
@@ -1093,7 +1077,7 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("三、我的填写记录"), "Article learning records must include learner-filled notes.");
   expect(articleDetailSource.includes("七、完成验收"), "Article learning records must include completion checks.");
   expect(articleDetailSource.includes("const articlePracticePlan"), "Article detail pages must derive a short execution plan.");
-  expect(articleDetailSource.includes('const backHash = "#research";') && articleDetailSource.includes('const backText = "回到文章";'), "Article detail pages must return to the unified article index.");
+  expect(articleDetailSource.includes('const backHash = "#works";') && articleDetailSource.includes('const backText = "回到内容";'), "Article detail pages must return to the real homepage content directory.");
   for (const retiredArticleBackTarget of ['"#notes"', "回到方法库", "回到证据库"]) {
     expect(!articleDetailSource.includes(retiredArticleBackTarget), `Article detail back navigation should not target retired split article anchors: ${retiredArticleBackTarget}.`);
   }
@@ -1126,19 +1110,12 @@ function verifyLearnerFacingArticleCopy() {
   expect(staticIndexSource.includes("teaches: [route.firstAction, route.firstCheck, route.firstOutput].filter(Boolean)"), "Static article JSON-LD must include first action, completion check, and learner output.");
   expect(staticIndexSource.includes("完成后检查："), "Static index fallback must expose article completion checks.");
   expect(staticIndexSource.includes("可保存产出："), "Static index fallback must expose learner outputs.");
-  expect(homeLibrarySource.includes("const articleItems = [...researchItems, ...noteItems]"), "Home article index must collapse notes and research into one compact list.");
-  expect(homeLibrarySource.includes('aria-label={`打开文章：${item.title}`}'), "Home article index rows must use short accessible labels.");
-  for (const retiredHomeLibraryCopy of ["学习方法库", "科研证据库", "文章索引", "读证据和学方法", "home-library-action", "home-library-output", "item.firstAction", "item.firstCheck", "item.firstOutput"]) {
-    expect(!homeLibrarySource.includes(retiredHomeLibraryCopy), `Home article index should stay short and not include retired long row copy: ${retiredHomeLibraryCopy}.`);
-  }
+  expect(!existsSync(resolve(root, "src/app/components/HomeLibrary.tsx")), "Home article index component must stay removed; articles are reached by direct routes and generated index metadata.");
   for (const retiredNoteBlock of ["methodChecklistText", "copyMethodChecklist", "note-method-checklist-panel", "noteRouteGuides", "methodRouteGuideText", "copyMethodRouteGuide", "note-route-guide-panel", "note-recommended-start"]) {
     expect(!notesSource.includes(retiredNoteBlock), `Learning method library should not repeat route/checklist panels on the homepage: ${retiredNoteBlock}.`);
   }
   for (const retiredResearchBlock of ["evidenceChecklistText", "copyEvidenceChecklist", "research-evidence-checklist-panel", "evidenceRouteGuides", "evidenceRouteGuideText", "copyEvidenceRouteGuide", "research-route-guide-panel", "research-recommended-start"]) {
     expect(!researchSource.includes(retiredResearchBlock), `Research evidence library should not repeat route/checklist panels on the homepage: ${retiredResearchBlock}.`);
-  }
-  for (const retiredHomeArticleBlock of ["note-filter-button", "research-filter-button", "note-card-compact-evidence", "research-card-compact-evidence", "note-card-action-row", "research-card-action-row"]) {
-    expect(!homeLibrarySource.includes(retiredHomeArticleBlock), `Home library should not use retired long article card block: ${retiredHomeArticleBlock}.`);
   }
 }
 

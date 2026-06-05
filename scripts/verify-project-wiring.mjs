@@ -15,7 +15,6 @@ const appSource = read("src/app/App.tsx");
 const routePrefetchSource = read("src/app/routePrefetch.ts");
 const workCardsSource = read("src/app/components/Works.tsx");
 const heroSource = read("src/app/components/Hero.tsx");
-const homeLibrarySource = read("src/app/components/HomeLibrary.tsx");
 const noteCardsSource = read("src/app/components/Notes.tsx");
 const researchCardsSource = read("src/app/components/ResearchEssays.tsx");
 const navSource = read("src/app/components/Nav.tsx");
@@ -87,9 +86,8 @@ expect(!appSource.includes("<Works") && !workCardsSource.includes("export functi
 expect(heroSource.includes("preloadRouteForHref(getWorkToolHref(work.href))"), "Hero work cards must prefetch direct-to-tool detail routes on hover or focus.");
 expect(!noteCardsSource.includes("export function Notes") && !noteCardsSource.includes("note-card"), "Notes.tsx must stay data-only so old homepage card code is not bundled.");
 expect(!researchCardsSource.includes("export function ResearchEssays") && !researchCardsSource.includes("research-essay-card"), "ResearchEssays.tsx must stay data-only so old homepage card code is not bundled.");
-expect(homeLibrarySource.includes("preloadRouteForHref(item.href)"), "Home article index must prefetch article routes on hover, focus, or pointer down.");
 expect(navSource.includes("preloadRouteForHref(l.href)"), "Navigation links must prefetch route chunks on hover, focus, or pointer down.");
-expect([heroSource, homeLibrarySource, navSource].every((source) => source.includes("onPointerDown")), "Primary route entrypoints must prefetch on pointer down for touch devices.");
+expect([heroSource, navSource].every((source) => source.includes("onPointerDown")), "Primary route entrypoints must prefetch on pointer down for touch devices.");
 
 expect(indexCss.includes("@import './fonts.css';"), "src/styles/index.css must import fonts.css.");
 expect(indexCss.includes("@import './tailwind.css';"), "src/styles/index.css must import tailwind.css.");
