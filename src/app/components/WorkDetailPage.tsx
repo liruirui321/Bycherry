@@ -4821,6 +4821,9 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
   return (
     <section id="crispr-simulator" style={{ display: "grid", gap: "1rem" }}>
+      <details className="crispr-start-pack-details crispr-compact-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.05)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>说明、练习与结果检查 · 3 项</summary>
+
       <details className="crispr-intro-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>判读顺序与实验边界</summary>
       <div className="crispr-intro-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.15fr) minmax(260px, 0.85fr)", gap: "1rem" }}>
@@ -4901,6 +4904,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             </div>
           ))}
         </div>
+      </details>
       </details>
 
       <div className="crispr-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.72fr)", gap: "1rem", alignItems: "stretch" }}>
@@ -5061,6 +5065,9 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
           </div>
         </aside>
       </div>
+
+      <details className="crispr-support-pack-details crispr-compact-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.05)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>记录、修复、质控与报告 · 7 项</summary>
 
       <details className="crispr-decision-panel crispr-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>编辑决策卡</summary>
@@ -5257,6 +5264,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.9rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65, maxHeight: 280, overflow: "auto" }}>
           {crisprReport}
         </code>
+      </details>
       </details>
 
       <style>
