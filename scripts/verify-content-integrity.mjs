@@ -397,6 +397,13 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(!footerSource.includes("完成：{work.success}"), "Footer continue-learning links must not repeat long completion standards visibly.");
   expect(footerSource.includes("完成标准，${work.success}"), "Footer continue-learning accessible labels must include completion standards.");
   expect(footerSource.includes("maxWidth: 960"), "Footer continue-learning grid must have enough width for all five module links.");
+  expect(footerSource.includes("footerNextPlanText"), "Footer must provide a copyable continue-learning plan.");
+  expect(footerSource.includes("copyFooterNextPlan"), "Footer must expose a copy action for the continue-learning plan.");
+  expect(footerSource.includes("页尾继续学习清单"), "Footer must visibly name the continue-learning plan.");
+  expect(footerSource.includes("footer-next-plan-panel"), "Footer continue-learning plan must have a stable panel class.");
+  expect(footerSource.includes("footer-plan-copy-status"), "Footer continue-learning copy action must expose copy status.");
+  expect(footerSource.includes("复制清单"), "Footer continue-learning plan must expose a visible copy button.");
+  expect(footerSource.includes("结束前复制模块页的记录、报告或复盘模板"), "Footer copied plan must direct learners to save evidence before stopping.");
 }
 
 function verifyResearchAgentWorkbenchContract() {
