@@ -1235,12 +1235,12 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
         </div>
 
         <aside className="gene-control-aside" style={{ display: "grid", gap: "1rem", alignContent: "start", minWidth: 0 }}>
-          <div className="gene-readout-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.85rem" }}>
+          <div className="gene-readout-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.58rem" }}>
               <IconMicroscope size={19} />
               仿真读数
             </div>
-            <div className="gene-readout-list" style={{ display: "grid", gap: 8 }}>
+            <div className="gene-readout-list" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 6 }}>
               {[
                 ["启动子上的转录因子", model.tfBound],
                 ["参与转录的 RNA 聚合酶", model.polBound],
@@ -1249,13 +1249,13 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
                 ["mRNA 数量", `${visibleMrnaCount}/${mrnaReadoutMax}`],
                 ["已接入氨基酸", `${visibleProteinCount}/${proteinReadoutMax}`],
               ].map(([label, value]) => (
-                <div className="gene-readout-row" key={label} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", alignItems: "start", gap: 12, color: "var(--cherry-warm-mid)", fontWeight: 800 }}>
-                  <span style={{ minWidth: 0, lineHeight: 1.35 }}>{label}</span>
-                  <span className="gene-readout-value" style={{ color: "var(--cherry-red)", fontWeight: 900, textAlign: "right", whiteSpace: "nowrap" }}>{value}</span>
+                <div className="gene-readout-row" key={label} style={{ display: "grid", gap: 3, background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.42rem", color: "var(--cherry-warm-mid)", fontWeight: 800, minWidth: 0 }}>
+                  <span style={{ minWidth: 0, lineHeight: 1.18, fontSize: "0.66rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</span>
+                  <span className="gene-readout-value" style={{ color: "var(--cherry-red)", fontWeight: 900, fontSize: "0.78rem", lineHeight: 1.16, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{value}</span>
                 </div>
               ))}
             </div>
-            <div className="gene-rate-list" style={{ display: "grid", gap: 8, marginTop: "1rem" }}>
+            <div className="gene-rate-list" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 7, marginTop: "0.62rem" }}>
               {[
                 ["转录速率", `${model.transcriptionOn ? Math.min(100, 28 + model.tfBound * 18 + model.polBound * 16) : 0}%`],
                 ["翻译速率", `${translationRate}%`],
@@ -1271,7 +1271,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
                 </div>
               ))}
             </div>
-            <div className="gene-action-row" style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: "1rem" }}>
+            <div className="gene-action-row" style={{ display: "flex", gap: 7, flexWrap: "wrap", marginTop: "0.72rem" }}>
               <button type="button" onClick={runExpressionPreset} aria-label="放入所有分子并从头运行表达过程" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
                 运行表达
               </button>
@@ -1282,7 +1282,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
                 重置
               </button>
             </div>
-            <div className="gene-speed-row" style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: "0.75rem" }}>
+            <div className="gene-speed-row" style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: "0.5rem" }}>
               {([0.5, 1, 1.5] as const).map((value) => (
                 <button key={value} type="button" onClick={() => setSpeed(value)} aria-label={`将动画速度设为 ${value} 倍`} aria-pressed={speed === value} style={{ background: speed === value ? "var(--cherry-yellow)" : "rgba(250,247,241,0.82)", color: "var(--cherry-warm-brown)", border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 999, padding: "0.32rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.75rem" }}>
                   {value}x
@@ -1290,7 +1290,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
               ))}
             </div>
             {integratedMolecules.length > 0 ? (
-              <div className="gene-integrated-strip" style={{ marginTop: "1rem", display: "grid", gap: 7 }}>
+              <div className="gene-integrated-strip" style={{ marginTop: "0.62rem", display: "grid", gap: 6 }}>
                 <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>已加入反应</div>
                 <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                   {integratedMolecules.map((molecule) => (

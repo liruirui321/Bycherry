@@ -819,6 +819,9 @@ function verifyGeneExpressionLearnerContract() {
     expect(geneSource.includes(item.text), `Gene expression learner contract is missing ${item.label}: ${item.text}`);
   }
 
+  expect(geneSource.includes('className="gene-readout-panel"') && geneSource.includes('borderRadius: 12') && geneSource.includes('gridTemplateColumns: "repeat(2, minmax(0, 1fr))"'), "Gene expression readout panel must stay as compact two-column metrics instead of a tall readout list.");
+  expect(geneSource.includes('className="gene-readout-row"') && geneSource.includes('textOverflow: "ellipsis"') && geneSource.includes('className="gene-rate-list"') && geneSource.includes('marginTop: "0.62rem"'), "Gene expression readout rows and rate bars must stay compact.");
+
   for (const item of retiredGenePatterns) {
     expect(!item.pattern.test(geneSource), `Gene expression tool must avoid retired or incorrect copy: ${item.label}`);
   }
