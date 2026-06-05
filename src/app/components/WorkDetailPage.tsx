@@ -2572,23 +2572,23 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             </svg>
           </div>
 
-          <div className="plant-stage-picker-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(116px, 1fr))", gap: "0.42rem" }}>
+          <div className="plant-stage-picker-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))", gap: "0.32rem" }}>
             {chapters.map((chapter, index) => {
               const active = activeChapterIndex === index;
               return (
-                <button className="plant-stage-picker-card" key={chapter.title} type="button" aria-label={`查看${chapter.title}：${chapter.innovation}`} aria-pressed={active} onClick={() => choosePlantChapter(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "rgba(250,247,241,0.72)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.48rem", boxShadow: "none", cursor: "pointer", display: "grid", gap: "0.28rem", alignContent: "start", minHeight: 76 }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "32px minmax(0, 1fr)", gap: "0.38rem", alignItems: "center" }}>
-                    <span aria-hidden="true" style={{ width: 32, height: 32, borderRadius: 8, background: active ? "rgba(250,247,241,0.86)" : "rgba(250,247,241,0.56)", border: active ? "1.5px solid rgba(58,92,62,0.28)" : "1.5px dashed rgba(94,68,42,0.13)", display: "grid", placeItems: "center", overflow: "hidden" }}>
-                      <svg viewBox="-58 -54 116 104" width="34" height="32" fill="none" focusable="false">
+                <button className="plant-stage-picker-card" key={chapter.title} type="button" aria-label={`查看${chapter.title}：${chapter.innovation}`} aria-pressed={active} onClick={() => choosePlantChapter(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "rgba(250,247,241,0.72)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.36rem", boxShadow: "none", cursor: "pointer", display: "grid", gap: "0.18rem", alignContent: "start" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "26px minmax(0, 1fr)", gap: "0.28rem", alignItems: "center" }}>
+                    <span aria-hidden="true" style={{ width: 26, height: 26, borderRadius: 7, background: active ? "rgba(250,247,241,0.86)" : "rgba(250,247,241,0.56)", border: active ? "1.5px solid rgba(58,92,62,0.28)" : "1.5px dashed rgba(94,68,42,0.13)", display: "grid", placeItems: "center", overflow: "hidden" }}>
+                      <svg viewBox="-58 -54 116 104" width="28" height="26" fill="none" focusable="false">
                         {renderPlantStageIcon(index, true)}
                       </svg>
                     </span>
                     <span style={{ minWidth: 0 }}>
-                      <span style={{ display: "block", color: active ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, lineHeight: 1.08, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{shortTimes[index]}</span>
-                      <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.6rem", fontWeight: 900, marginTop: "0.08rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{plantStageLabels[index]}</span>
+                      <span style={{ display: "block", color: active ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.63rem", fontWeight: 900, lineHeight: 1.05, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{shortTimes[index]}</span>
+                      <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.56rem", fontWeight: 900, marginTop: "0.06rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{plantStageLabels[index]}</span>
                     </span>
                   </div>
-                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.68rem", lineHeight: 1.18, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{chapter.title}</div>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.64rem", lineHeight: 1.15, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>{chapter.title}</div>
                   <div className="plant-stage-picker-innovation" style={{ display: "none", color: "var(--cherry-warm-mid)", lineHeight: 1.5, fontSize: "0.74rem", marginBottom: "0.5rem" }}>{chapter.innovation}</div>
                   <div className="plant-stage-picker-refs" style={{ display: "none", gap: 5, flexWrap: "wrap" }}>
                     {chapter.refs.map((ref) => (
