@@ -5191,6 +5191,8 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
       </details>
 
+      <details className="crispr-quiz-details crispr-compact-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.04)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>判读练习 · {quizChoice === activeQuiz.answer ? "当前题已通过" : "待作答"}</summary>
       <div className="crispr-quiz-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 0.72fr) minmax(0, 1fr)", gap: "1rem", alignItems: "stretch" }}>
         <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>判读练习</div>
@@ -5231,6 +5233,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
           </div>
         </div>
       </div>
+      </details>
 
       <details className="crispr-report-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>模拟报告</summary>
@@ -5310,6 +5313,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             #crispr-simulator .crispr-learner-panel,
             #crispr-simulator .crispr-quality-panel,
             #crispr-simulator .crispr-quality-check-details,
+            #crispr-simulator .crispr-quiz-details,
             #crispr-simulator .crispr-report-details {
               padding: 0.68rem !important;
               border-radius: 12px !important;
