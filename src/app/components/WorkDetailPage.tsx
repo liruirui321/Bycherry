@@ -1084,26 +1084,32 @@ ${localPreviewOutput}`;
             这个工作台直接提供科研任务编排：选择任务、材料和工作模式后，页面会生成结构化指令、证据边界、质控清单、报告框架和 API JSON 契约。当前可用于本地整理材料，也可把复制的任务包交给外部模型执行。
           </p>
         </div>
-        <div className="research-agent-status-strip" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.48rem" }}>
-          {agentCards.map((card) => (
-            <div key={card.title} style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.52rem" }}>
-              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.74rem", marginBottom: "0.18rem" }}>{card.title}</strong>
-              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.35, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{card.body}</span>
-            </div>
-          ))}
-        </div>
-        <div className="research-agent-skill-panel" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto auto", gap: "0.65rem", alignItems: "center" }}>
-          <div>
-            <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.84rem", marginBottom: "0.24rem" }}>科研 Agent skill</strong>
-            <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800 }}>把任务路由、证据表、缺失字段、风险标记、引用核查和复核问题固定成一套可复用协议。</span>
+        <details className="research-agent-status-details research-agent-compact-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>版本状态与 API 边界</summary>
+          <div className="research-agent-status-strip" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.48rem" }}>
+            {agentCards.map((card) => (
+              <div key={card.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.52rem" }}>
+                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.74rem", marginBottom: "0.18rem" }}>{card.title}</strong>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.35, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{card.body}</span>
+              </div>
+            ))}
           </div>
-          <a href="/skills/research-agent/SKILL.md" className="research-agent-skill-link" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", textDecoration: "none", whiteSpace: "nowrap" }}>
-            打开 Skill
-          </a>
-          <button type="button" onClick={copyResearchAgentSkill} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", whiteSpace: "nowrap" }}>
-            {copiedResearchSkill ? "已复制" : "复制 Skill"}
-          </button>
-        </div>
+        </details>
+        <details className="research-agent-skill-details research-agent-compact-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>科研 Agent skill</summary>
+          <div className="research-agent-skill-panel" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto auto", gap: "0.65rem", alignItems: "center" }}>
+            <div>
+              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.84rem", marginBottom: "0.24rem" }}>科研 Agent skill</strong>
+              <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800 }}>把任务路由、证据表、缺失字段、风险标记、引用核查和复核问题固定成一套可复用协议。</span>
+            </div>
+            <a href="/skills/research-agent/SKILL.md" className="research-agent-skill-link" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", textDecoration: "none", whiteSpace: "nowrap" }}>
+              打开 Skill
+            </a>
+            <button type="button" onClick={copyResearchAgentSkill} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", whiteSpace: "nowrap" }}>
+              {copiedResearchSkill ? "已复制" : "复制 Skill"}
+            </button>
+          </div>
+        </details>
         <details className="research-agent-route-recipes research-agent-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.62rem" }}>
           <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>任务路由速查</summary>
           <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "baseline", flexWrap: "wrap" }}>
@@ -1700,6 +1706,8 @@ ${localPreviewOutput}`;
             #prompt-kit-builder .research-agent-route-recipes,
             #prompt-kit-builder .research-agent-usecase-panel,
             #prompt-kit-builder .research-agent-completion-panel,
+            #prompt-kit-builder .research-agent-status-details,
+            #prompt-kit-builder .research-agent-skill-details,
             #prompt-kit-builder .research-review-details,
             #prompt-kit-builder .research-agent-prompt-preview-details {
               padding: 0.54rem !important;
