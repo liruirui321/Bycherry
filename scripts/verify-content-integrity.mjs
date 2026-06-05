@@ -786,6 +786,8 @@ function verifyLearnerFacingArticleCopy() {
     "完成后检查",
     "先避开",
     "读完产出",
+    "读完填写",
+    "复制已填写记录",
     "复制学习记录",
     "30 分钟执行节奏",
   ];
@@ -819,12 +821,16 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("const articleQuickStart"), "Article detail pages must derive a first learner action.");
   expect(articleDetailSource.includes("const articleEvidenceItems"), "Article detail pages must derive concrete reading completion evidence.");
   expect(articleDetailSource.includes("const articleCompletionChecks"), "Article detail pages must derive completion checks.");
+  expect(articleDetailSource.includes("const articleRecordFields"), "Article detail pages must provide learner-filled record fields.");
+  expect(articleDetailSource.includes("const filledRecord"), "Article detail pages must merge filled record values into copied learning records.");
   expect(articleDetailSource.includes("完成验收卡"), "Article detail pages must expose a completion card.");
-  expect(articleDetailSource.includes("六、完成验收"), "Article learning records must include completion checks.");
+  expect(articleDetailSource.includes("三、我的填写记录"), "Article learning records must include learner-filled notes.");
+  expect(articleDetailSource.includes("七、完成验收"), "Article learning records must include completion checks.");
   expect(articleDetailSource.includes("验收：${item.output}"), "Article completion cards must show observable pass criteria.");
   expect(articleDetailSource.includes("const articlePracticePlan"), "Article detail pages must derive a short execution plan.");
   expect(articleDetailSource.includes("const learningRecordText"), "Article detail pages must include a copyable learning record.");
   expect(articleDetailSource.includes("copyLearningRecord"), "Article detail pages must provide a learning record copy action.");
+  expect(articleDetailSource.includes("record-question-input"), "Article detail pages must expose a learner question input.");
   expect(articleDetailSource.includes("复制学习记录"), "Article detail pages must expose a learning record copy button.");
   expect(articleDetailSource.includes("读完后至少留下一个可检查的学习记录"), "Article detail pages must frame article completion as a learner output.");
   expect(articleDetailSource.includes("const platformUsePlansText"), "Platform article summaries must include copyable fill-in assessment configurations.");
