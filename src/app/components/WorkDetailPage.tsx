@@ -2826,32 +2826,43 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             }
 
             #plant-evolution-explorer .plant-stage-picker-grid {
-              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-              gap: 0.48rem !important;
+              grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+              gap: 0.34rem !important;
             }
 
             #plant-evolution-explorer .plant-stage-picker-card {
-              border-radius: 12px !important;
-              padding: 0.52rem !important;
-              gap: 0.34rem !important;
+              border-radius: 10px !important;
+              padding: 0.38rem !important;
+              gap: 0.18rem !important;
               box-shadow: none !important;
               min-height: 0 !important;
             }
 
             #plant-evolution-explorer .plant-stage-picker-card > div:first-child {
-              grid-template-columns: 34px minmax(0, 1fr) !important;
-              gap: 0.42rem !important;
+              grid-template-columns: 24px minmax(0, 1fr) !important;
+              gap: 0.3rem !important;
             }
 
             #plant-evolution-explorer .plant-stage-picker-card > div:first-child > span:first-child {
-              width: 34px !important;
-              height: 34px !important;
-              border-radius: 10px !important;
+              width: 24px !important;
+              height: 24px !important;
+              border-radius: 8px !important;
             }
 
             #plant-evolution-explorer .plant-stage-picker-card > div:first-child svg {
-              width: 34px !important;
-              height: 32px !important;
+              width: 25px !important;
+              height: 24px !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-picker-card > div:first-child > span:nth-child(2) > span:first-child {
+              font-size: 0.62rem !important;
+              line-height: 1.05 !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-picker-card > div:first-child > span:nth-child(2) > span:last-child {
+              font-size: 0.58rem !important;
+              line-height: 1.1 !important;
+              margin-top: 0.08rem !important;
             }
 
             #plant-evolution-explorer .plant-stage-picker-card > div:nth-child(2),
@@ -2863,15 +2874,13 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             }
 
             #plant-evolution-explorer .plant-stage-picker-card > div:nth-child(2) {
-              -webkit-line-clamp: 2 !important;
-              font-size: 0.72rem !important;
-              line-height: 1.28 !important;
+              -webkit-line-clamp: 1 !important;
+              font-size: 0.64rem !important;
+              line-height: 1.18 !important;
             }
 
             #plant-evolution-explorer .plant-stage-picker-card > div:nth-child(3) {
-              -webkit-line-clamp: 2 !important;
-              font-size: 0.66rem !important;
-              line-height: 1.32 !important;
+              display: none !important;
             }
 
             #plant-evolution-explorer .plant-stage-picker-card > div:last-child {

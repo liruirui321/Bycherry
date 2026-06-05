@@ -865,6 +865,8 @@ function verifyPlantEvolutionLearnerContract() {
     { label: "completion pass criteria", text: "通过标准：${item.pass}" },
     { label: "completion location task", text: "阶段定位" },
     { label: "completion evidence boundary task", text: "证据边界" },
+    { label: "compact stage picker grid", text: "plant-stage-picker-grid" },
+    { label: "compact stage picker card", text: "plant-stage-picker-card" },
   ];
 
   const retiredPlantPatterns = [
@@ -882,6 +884,8 @@ function verifyPlantEvolutionLearnerContract() {
     expect(!item.pattern.test(plantSource), `Plant evolution page must remain learner-facing and avoid retired copy: ${item.label}`);
   }
 
+  expect(plantSource.includes("#plant-evolution-explorer .plant-stage-picker-grid") && plantSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Plant evolution mobile stage picker must stay as a compact three-column selector.");
+  expect(plantSource.includes("#plant-evolution-explorer .plant-stage-picker-card > div:nth-child(3)") && plantSource.includes("display: none !important"), "Plant evolution mobile stage buttons must not expose long innovation text in the picker.");
   expect(worksSource.includes("演化时间轴串联关键创新、证据、自测问题、作答提示和延伸练习。"), "Plant evolution work card must describe the learner-facing self-study flow.");
   expect(worksSource.includes('outputs: ["学习卡", "阶段比较", "证据判读"]'), "Plant evolution work card outputs must be learner-facing.");
   expect(worksSource.includes('path: ["选择阶段", "判读证据", "完成练习"]'), "Plant evolution work card path must describe a learner action flow.");
