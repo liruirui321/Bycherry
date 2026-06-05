@@ -1611,7 +1611,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
   return (
     <main id="main-content" tabIndex={-1} style={{ fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
-      <section style={{ padding: "0.35rem 1.5rem 1rem" }}>
+      <section className="article-detail-section" style={{ padding: "0.35rem 1.5rem 1rem" }}>
         <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <article
             className="article-detail-card"
@@ -1675,17 +1675,17 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </span>
             </div>
 
-            <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.12rem, 2.5vw, 1.46rem)", fontWeight: 900, lineHeight: 1.18, marginBottom: "0.32rem", maxWidth: 760 }}>
+            <h1 className="article-detail-title" style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.12rem, 2.5vw, 1.46rem)", fontWeight: 900, lineHeight: 1.18, marginBottom: "0.32rem", maxWidth: 760 }}>
               {article.title}
             </h1>
 
-            <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", lineHeight: 1.5, margin: "0 0 0.5rem", maxWidth: 760, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+            <p className="article-detail-lede" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", lineHeight: 1.5, margin: "0 0 0.5rem", maxWidth: 760, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
               {article.excerpt ?? article.body}
             </p>
 
             {"platformUrl" in article ? (
               <a
-                className="article-detail-link"
+                className="article-detail-link article-platform-link"
                 href={platformUrl ?? "#"}
                 target="_blank"
                 rel="noreferrer"
@@ -2516,6 +2516,94 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           }
 
           @media (max-width: 759px) {
+            .article-detail-section {
+              padding: 0.18rem 1rem 0.76rem !important;
+            }
+
+            .article-detail-card {
+              padding: 0.5rem 0.62rem 0.72rem !important;
+            }
+
+            .article-meta-row {
+              display: grid !important;
+              grid-template-columns: 30px minmax(0, 1fr) !important;
+              align-items: center !important;
+              gap: 0.34rem !important;
+              margin-bottom: 0.22rem !important;
+            }
+
+            .article-meta-row > span:nth-of-type(2),
+            .article-meta-row > span:nth-of-type(3) {
+              display: none !important;
+            }
+
+            .article-meta-row > span:nth-of-type(1) {
+              min-width: 0 !important;
+              overflow: hidden !important;
+              text-overflow: ellipsis !important;
+              white-space: nowrap !important;
+              border-radius: 8px !important;
+              padding: 0.18rem 0.44rem !important;
+              font-size: 0.68rem !important;
+            }
+
+            .article-back-chip {
+              width: 28px !important;
+              height: 28px !important;
+              font-size: 0.86rem !important;
+            }
+
+            .article-detail-title {
+              font-size: 1.02rem !important;
+              line-height: 1.14 !important;
+              margin: 0 0 0.2rem !important;
+            }
+
+            .article-detail-lede {
+              font-size: 0.74rem !important;
+              line-height: 1.34 !important;
+              -webkit-line-clamp: 1 !important;
+              margin: 0 0 0.34rem !important;
+            }
+
+            .article-platform-link {
+              display: flex !important;
+              width: 100% !important;
+              border-radius: 8px !important;
+              padding: 0.38rem 0.5rem !important;
+              font-size: 0.74rem !important;
+              margin-bottom: 0.38rem !important;
+              box-sizing: border-box !important;
+            }
+
+            #article-body-points {
+              gap: 0.36rem !important;
+              padding-top: 0.38rem !important;
+              margin-bottom: 0.48rem !important;
+            }
+
+            #article-body-points > div:first-child {
+              display: none !important;
+            }
+
+            #article-body-points > div:not(:first-child) {
+              grid-template-columns: 18px minmax(0, 1fr) !important;
+              gap: 0.36rem !important;
+              padding: 0 !important;
+            }
+
+            #article-body-points > div:not(:first-child) > span:first-child {
+              width: 16px !important;
+              height: 16px !important;
+              font-size: 0.56rem !important;
+              margin-top: 3px !important;
+            }
+
+            #article-body-points p {
+              font-size: 0.8rem !important;
+              line-height: 1.48 !important;
+            }
+
             .article-record-grid,
             .plant-evidence-chain-grid,
             .plant-evidence-chain-builder > div:nth-of-type(3),
