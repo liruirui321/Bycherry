@@ -13,6 +13,7 @@ export function Nav() {
     { label: "看生命过程", href: "/works/gene-expression" },
     { label: "拆概念", href: "/works/concept-explainer" },
     { label: "整理科研", href: "/works/research-prompt-kit" },
+    { label: "更多工具", href: "/#works" },
     { label: "读证据", href: "/#research" },
     { label: "学方法", href: "/#notes" },
     { label: "联系", href: "/#contact" },

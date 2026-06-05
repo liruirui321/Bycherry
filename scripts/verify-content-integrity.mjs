@@ -896,6 +896,7 @@ function verifyLearnerProductPositioning() {
     "看生命过程",
     "拆概念",
     "整理科研",
+    "更多工具",
     "读证据",
     "学方法",
     "怎么开始",
