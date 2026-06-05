@@ -2556,7 +2556,7 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             </div>
           </div>
 
-          <div className="plant-timeline-review-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.72rem" }}>
+          <div className="plant-timeline-review-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.82rem", display: "grid", gap: "0.6rem" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
               <div>
                 <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>全线复盘包</strong>
@@ -2566,26 +2566,23 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
                 {copiedTimelineReview ? "已复制" : "复制全线复盘"}
               </button>
             </div>
-            <div className="plant-timeline-review-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.52rem" }}>
+            <div className="plant-timeline-review-grid" style={{ display: "grid", gap: "0.34rem" }}>
               {chapters.map((chapter, index) => (
-                <div key={chapter.title} style={{ background: index === activeChapterIndex ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === activeChapterIndex ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.66rem", display: "grid", gap: "0.34rem" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem", alignItems: "start" }}>
-                    <strong style={{ color: index === activeChapterIndex ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.74rem" }}>{plantStageLabels[index]}</strong>
-                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.64rem", fontWeight: 900 }}>{chapter.time}</span>
+                <div className="plant-timeline-review-row" key={chapter.title} style={{ background: index === activeChapterIndex ? "var(--cherry-yellow-light)" : "rgba(250,247,241,0.68)", border: index === activeChapterIndex ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.46rem 0.52rem", display: "grid", gridTemplateColumns: "76px minmax(0, 1fr) 66px", gap: "0.48rem", alignItems: "center" }}>
+                  <div style={{ display: "grid", gap: "0.08rem", minWidth: 0 }}>
+                    <strong style={{ color: index === activeChapterIndex ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.68rem", lineHeight: 1.12 }}>{plantStageLabels[index]}</strong>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.58rem", lineHeight: 1.18, fontWeight: 900 }}>{chapter.time}</span>
                   </div>
-                  <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.42, fontWeight: 900 }}>{chapter.innovation}</span>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 800 }}>证据：{chapter.certainty}</span>
+                  <span style={{ minWidth: 0, color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.28, fontWeight: 900, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{chapter.innovation}</span>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.62rem", lineHeight: 1.22, fontWeight: 900, textAlign: "right" }}>{chapter.certainty}</span>
                 </div>
               ))}
             </div>
-            <div style={{ display: "grid", gap: "0.42rem" }}>
+            <div className="plant-timeline-check-strip" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.38rem" }}>
               {timelineReviewChecks.map((item, index) => (
-                <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.58rem", display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.45rem", alignItems: "start" }}>
-                  <span aria-hidden="true" style={{ width: 19, height: 19, borderRadius: "50%", background: index === 2 ? "var(--cherry-red)" : "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
-                  <span>
-                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.74rem", marginBottom: "0.18rem" }}>{item.title}</strong>
-                    <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{item.body}</span>
-                  </span>
+                <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", display: "grid", gap: "0.22rem" }}>
+                  <strong style={{ color: index === 2 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.7rem", lineHeight: 1.18 }}>{index + 1}. {item.title}</strong>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.36, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" }}>{item.body}</span>
                 </div>
               ))}
             </div>
@@ -2644,8 +2641,12 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
               grid-template-columns: 1fr !important;
             }
 
-            #plant-evolution-explorer .plant-timeline-review-grid {
+            #plant-evolution-explorer .plant-timeline-check-strip {
               grid-template-columns: 1fr !important;
+            }
+
+            #plant-evolution-explorer .plant-timeline-review-row {
+              grid-template-columns: 68px minmax(0, 1fr) 58px !important;
             }
           }
 

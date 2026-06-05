@@ -232,6 +232,9 @@ function verifyWorkDetailCardsStayCompact() {
   expect(source.includes("全线复盘包"), "Plant evolution module must visibly expose a full timeline review pack.");
   expect(source.includes("复制全线复盘"), "Plant evolution module must expose a visible full timeline review copy button.");
   expect(source.includes("plant-timeline-review-grid"), "Plant evolution full timeline review must have a stable responsive grid.");
+  expect(source.includes("plant-timeline-review-row"), "Plant evolution full timeline review must use compact stage rows.");
+  expect(source.includes("plant-timeline-check-strip"), "Plant evolution full timeline review checks must stay as a compact strip.");
+  expect(!source.includes('className="plant-timeline-review-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))"'), "Plant evolution full timeline review must not return to tall two-column cards.");
   expect(source.includes("chapters.map((chapter, index)") && source.includes("plantStageLabels[index]"), "Plant evolution full timeline review must summarize all stages.");
   expect(source.includes("timelineReviewChecks"), "Plant evolution full timeline review must include completion checks.");
 }
