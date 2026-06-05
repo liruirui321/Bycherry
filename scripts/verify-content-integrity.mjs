@@ -1238,39 +1238,28 @@ function verifyLearnerProductPositioning() {
 function verifyContactFeedbackContract() {
   const contactSource = read("src/app/components/Contact.tsx");
   const requiredContactFeatures = [
-    { label: "feedback type state", text: "feedbackType" },
+    { label: "compact contact form", text: "contact-compact-form" },
+    { label: "email copy status", text: "contact-email-copy-status" },
+    { label: "draft copy status", text: "contact-draft-copy-status" },
     { label: "related page state", text: "relatedPage" },
-    { label: "stuck point state", text: "stuckPoint" },
-    { label: "tried action state", text: "triedAction" },
-    { label: "expected outcome state", text: "expectedOutcome" },
-    { label: "feedback type field", text: "反馈类型" },
     { label: "related page field", text: "相关页面" },
-    { label: "current stuck point field", text: "当前卡点" },
-    { label: "tried action field", text: "已经尝试" },
-    { label: "expected outcome field", text: "希望得到" },
-    { label: "structured draft body", text: "反馈类型：${feedbackType}" },
+    { label: "short message field", text: "具体内容" },
     { label: "structured draft page", text: "相关页面：${trimmedRelatedPage" },
-    { label: "structured draft stuck point", text: "当前卡点：${trimmedStuckPoint" },
-    { label: "structured draft tried action", text: "已经尝试：${trimmedTriedAction" },
-    { label: "structured draft expected outcome", text: "希望得到：${trimmedExpectedOutcome" },
-    { label: "structured draft status", text: "结构化邮件草稿已准备好" },
+    { label: "structured draft content", text: "具体内容：" },
+    { label: "short draft ready status", text: "可以打开邮件草稿。" },
     { label: "page preset data", text: "contactPagePresets" },
     { label: "page preset group", text: "选择常见反馈页面" },
     { label: "page preset class", text: "contact-page-presets" },
-    { label: "feedback quality data", text: "feedbackQualityItems" },
-    { label: "feedback quality score", text: "feedbackQualityScore" },
-    { label: "copyable feedback checklist", text: "feedbackChecklistText" },
-    { label: "feedback checklist copy handler", text: "copyFeedbackChecklist" },
-    { label: "feedback quality panel", text: "contact-feedback-quality-panel" },
-    { label: "feedback quality visible heading", text: "反馈可处理度" },
-    { label: "feedback checklist copy button", text: "复制核查单" },
-    { label: "feedback checklist copied title", text: "【By Cherry 反馈核查单】" },
-    { label: "feedback checklist completion score", text: "可处理度：${feedbackQualityScore}/5" },
-    { label: "feedback before-send checks", text: "发送前确认" },
+    { label: "draft copy action", text: "copyDraft" },
+    { label: "mailto submit", text: "mailto:${emailAddress}" },
   ];
 
   for (const item of requiredContactFeatures) {
     expect(contactSource.includes(item.text), `Contact feedback flow is missing ${item.label}: ${item.text}`);
+  }
+
+  for (const retiredContactBlock of ["feedbackType", "stuckPoint", "triedAction", "expectedOutcome", "feedbackQualityItems", "feedbackChecklistText", "copyFeedbackChecklist", "contact-feedback-quality-panel", "反馈可处理度", "复制核查单", "【By Cherry 反馈核查单】", "发送前确认"]) {
+    expect(!contactSource.includes(retiredContactBlock), `Contact section should stay compact and not include retired long feedback block: ${retiredContactBlock}.`);
   }
 }
 
