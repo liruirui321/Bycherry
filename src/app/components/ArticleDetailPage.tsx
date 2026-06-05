@@ -88,6 +88,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copiedBarcodeEvidenceTable, setCopiedBarcodeEvidenceTable] = useState(false);
   const [copiedProjectEvidenceTable, setCopiedProjectEvidenceTable] = useState(false);
   const [copiedCreationRunRecord, setCopiedCreationRunRecord] = useState(false);
+  const [copiedResearchQuestionCard, setCopiedResearchQuestionCard] = useState(false);
   const [selectedPlatformPlanIndex, setSelectedPlatformPlanIndex] = useState(0);
   const [platformLearnerLevel, setPlatformLearnerLevel] = useState("生物基础入门，已经学过 DNA 和 RNA 基础");
   const [platformKnowledgeRange, setPlatformKnowledgeRange] = useState("基因表达：DNA、mRNA、蛋白质的信息传递关系");
@@ -124,6 +125,12 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [creationAssetPrompt, setCreationAssetPrompt] = useState("");
   const [creationFailureNote, setCreationFailureNote] = useState("");
   const [creationEditCheck, setCreationEditCheck] = useState("");
+  const [researchTheme, setResearchTheme] = useState("");
+  const [researchEntryExperience, setResearchEntryExperience] = useState("");
+  const [researchObservableQuestion, setResearchObservableQuestion] = useState("");
+  const [researchEvidenceMaterial, setResearchEvidenceMaterial] = useState("");
+  const [researchExplanationTask, setResearchExplanationTask] = useState("");
+  const [researchBoundaryNextStep, setResearchBoundaryNextStep] = useState("");
   const [recordQuestion, setRecordQuestion] = useState("");
   const [recordEvidence, setRecordEvidence] = useState("");
   const [recordOutput, setRecordOutput] = useState("");
@@ -170,6 +177,13 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     setCreationAssetPrompt("");
     setCreationFailureNote("");
     setCreationEditCheck("");
+    setCopiedResearchQuestionCard(false);
+    setResearchTheme("");
+    setResearchEntryExperience("");
+    setResearchObservableQuestion("");
+    setResearchEvidenceMaterial("");
+    setResearchExplanationTask("");
+    setResearchBoundaryNextStep("");
     setCopiedGenomeStoryFrame(false);
     setGenomeStoryObject("");
     setGenomeStoryQuestion("");
@@ -833,6 +847,105 @@ ${creationRunFilled.edit}
 5. 失败原因是否变成限制条件：${creationRunFields[4]?.pass ? "可用" : "待补充"}
 6. 剪辑检查是否覆盖成片体验：${creationRunFields[5]?.pass ? "可用" : "待补充"}`
     : "";
+  const researchQuestionBuilderEnabled = article?.slug === "science-to-learning-question";
+  const researchQuestionFields = researchQuestionBuilderEnabled
+    ? [
+        {
+          id: "research-theme",
+          label: "科研主题",
+          value: researchTheme,
+          setValue: setResearchTheme,
+          placeholder: "例如：植物耐旱相关基因组研究，关注适应性状和表达差异。",
+          pass: researchTheme.trim().length >= 16 && /研究|基因|植物|主题|性状|机制|数据|材料/.test(researchTheme.trim()),
+          help: "先写清真实科研材料讲的对象和方向。",
+        },
+        {
+          id: "research-entry-experience",
+          label: "已有经验",
+          value: researchEntryExperience,
+          setValue: setResearchEntryExperience,
+          placeholder: "例如：我见过干旱时叶片萎蔫，也知道植物会调节气孔和根系。",
+          pass: researchEntryExperience.trim().length >= 18 && /我|见过|知道|观察|经验|现象|已经|生活|例子/.test(researchEntryExperience.trim()),
+          help: "写出可以从自己经验进入的现象或例子。",
+        },
+        {
+          id: "research-observable-question",
+          label: "可观察问题",
+          value: researchObservableQuestion,
+          setValue: setResearchObservableQuestion,
+          placeholder: "例如：为什么同样缺水条件下，有些植物仍能保持较高存活率？",
+          pass: researchObservableQuestion.trim().length >= 18 && /为什么|如何|能否|差异|观察|比较|变化|条件/.test(researchObservableQuestion.trim()),
+          help: "把前沿主题改写成能观察、能比较的问题。",
+        },
+        {
+          id: "research-evidence-material",
+          label: "证据材料",
+          value: researchEvidenceMaterial,
+          setValue: setResearchEvidenceMaterial,
+          placeholder: "例如：一张表达热图 + 一段样本处理说明 + 一个候选基因家族比较。",
+          pass: researchEvidenceMaterial.trim().length >= 18 && /图|数据|样本|证据|材料|比较|表达|结果|说明/.test(researchEvidenceMaterial.trim()),
+          help: "限制在 1-2 份自己能读懂的图表或数据。",
+        },
+        {
+          id: "research-explanation-task",
+          label: "解释任务",
+          value: researchExplanationTask,
+          setValue: setResearchExplanationTask,
+          placeholder: "例如：判断表达升高支持什么、不支持什么，并说明是否能推出因果。",
+          pass: researchExplanationTask.trim().length >= 20 && /判断|解释|支持|不支持|说明|因果|证据|推断/.test(researchExplanationTask.trim()),
+          help: "写成要完成的判断，而不是只复述发现。",
+        },
+        {
+          id: "research-boundary-next-step",
+          label: "边界/下一步",
+          value: researchBoundaryNextStep,
+          setValue: setResearchBoundaryNextStep,
+          placeholder: "例如：表达差异不能直接证明功能，还需要敲除、过表达或更多样本验证。",
+          pass: researchBoundaryNextStep.trim().length >= 20 && /不能|还需要|边界|验证|下一步|样本|因果|限制|核查/.test(researchBoundaryNextStep.trim()),
+          help: "保留证据不能说明的部分和下一步核查。",
+        },
+      ]
+    : [];
+  const researchQuestionScore = researchQuestionFields.filter((field) => field.pass).length;
+  const researchQuestionFilled = {
+    theme: researchTheme.trim() || "科研主题需要写清真实材料的研究对象、数据和方向。",
+    experience: researchEntryExperience.trim() || "已有经验需要提供一个可以进入主题的现象、例子或观察。",
+    question: researchObservableQuestion.trim() || "可观察问题需要能被比较、观察或证据材料逐步回答。",
+    evidence: researchEvidenceMaterial.trim() || "证据材料先限制在 1-2 份可读图表、样本说明或数据结果。",
+    task: researchExplanationTask.trim() || "解释任务需要判断证据支持什么、不支持什么，而不是只复述发现。",
+    boundary: researchBoundaryNextStep.trim() || "边界/下一步需要写出不能直接推出什么，以及还要补什么证据。",
+  };
+  const researchQuestionCardText = researchQuestionBuilderEnabled
+    ? `【科研问题转译卡】
+主题：${article?.title ?? ""}
+填写完成度：${researchQuestionScore}/6
+
+一、科研主题
+${researchQuestionFilled.theme}
+
+二、已有经验
+${researchQuestionFilled.experience}
+
+三、可观察问题
+${researchQuestionFilled.question}
+
+四、证据材料
+${researchQuestionFilled.evidence}
+
+五、解释任务
+${researchQuestionFilled.task}
+
+六、边界/下一步
+${researchQuestionFilled.boundary}
+
+自查
+1. 科研主题是否清楚：${researchQuestionFields[0]?.pass ? "可用" : "待补充"}
+2. 已有经验是否能进入主题：${researchQuestionFields[1]?.pass ? "可用" : "待补充"}
+3. 问题是否可观察或可比较：${researchQuestionFields[2]?.pass ? "可用" : "待补充"}
+4. 证据材料是否有限且可读：${researchQuestionFields[3]?.pass ? "可用" : "待补充"}
+5. 解释任务是否要求判断支持和不支持：${researchQuestionFields[4]?.pass ? "可用" : "待补充"}
+6. 边界是否保留下一步验证：${researchQuestionFields[5]?.pass ? "可用" : "待补充"}`
+    : "";
   const platformUrl = article && "platformUrl" in article ? article.platformUrl : null;
   const platformUsePlans = platformUrl
     ? [
@@ -1282,6 +1395,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedBarcodeEvidenceTable(false);
       setCopiedProjectEvidenceTable(false);
       setCopiedCreationRunRecord(false);
+      setCopiedResearchQuestionCard(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
       setCopiedActionPack(false);
@@ -1307,6 +1421,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedBarcodeEvidenceTable(false);
       setCopiedProjectEvidenceTable(false);
       setCopiedCreationRunRecord(false);
+      setCopiedResearchQuestionCard(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1332,6 +1447,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedBarcodeEvidenceTable(true);
       setCopiedProjectEvidenceTable(false);
       setCopiedCreationRunRecord(false);
+      setCopiedResearchQuestionCard(false);
       setCopiedGenomeStoryFrame(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
@@ -1358,6 +1474,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedProjectEvidenceTable(true);
       setCopiedBarcodeEvidenceTable(false);
       setCopiedCreationRunRecord(false);
+      setCopiedResearchQuestionCard(false);
       setCopiedGenomeStoryFrame(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
@@ -1384,6 +1501,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedCreationRunRecord(true);
       setCopiedProjectEvidenceTable(false);
       setCopiedBarcodeEvidenceTable(false);
+      setCopiedResearchQuestionCard(false);
       setCopiedGenomeStoryFrame(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
@@ -1403,6 +1521,33 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  async function copyResearchQuestionCard() {
+    if (!researchQuestionCardText) return;
+    const copiedToClipboard = await copyText(researchQuestionCardText);
+    if (copiedToClipboard) {
+      setCopiedResearchQuestionCard(true);
+      setCopiedCreationRunRecord(false);
+      setCopiedProjectEvidenceTable(false);
+      setCopiedBarcodeEvidenceTable(false);
+      setCopiedGenomeStoryFrame(false);
+      setCopiedEvidenceChainCard(false);
+      setCopiedSummary(false);
+      setCopiedTemplate(false);
+      setCopiedActionPack(false);
+      setCopiedLearningRecord(false);
+      setCopiedReadingTaskPack(false);
+      setCopiedPlatformConfig(false);
+      setCopiedPlatformReview(false);
+      setCopiedAiAuditPrompts(false);
+      setCopyStatus("科研问题转译卡已复制到剪贴板。");
+      window.setTimeout(() => setCopiedResearchQuestionCard(false), 1400);
+      return;
+    }
+
+    setCopiedResearchQuestionCard(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
   async function copyPlatformPasteConfig() {
     if (!platformPasteConfigText) return;
     const copiedToClipboard = await copyText(platformPasteConfigText);
@@ -1411,6 +1556,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedBarcodeEvidenceTable(false);
       setCopiedProjectEvidenceTable(false);
       setCopiedCreationRunRecord(false);
+      setCopiedResearchQuestionCard(false);
       setCopiedPlatformReview(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1435,6 +1581,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedBarcodeEvidenceTable(false);
       setCopiedProjectEvidenceTable(false);
       setCopiedCreationRunRecord(false);
+      setCopiedResearchQuestionCard(false);
       setCopiedPlatformConfig(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1904,6 +2051,52 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   </code>
                   <button type="button" onClick={copyCreationRunRecord} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
                     {copiedCreationRunRecord ? "已复制" : "复制生成记录"}
+                  </button>
+                </div>
+              </div>
+            ) : null}
+
+            {researchQuestionBuilderEnabled ? (
+              <div className="research-question-card-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>科研问题转译卡</div>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.16rem", fontWeight: 800 }}>
+                      把前沿主题改写成从已有经验能进入、能观察比较、能用证据判断的问题，避免只复述前沿术语。
+                    </div>
+                  </div>
+                  <span style={{ background: researchQuestionScore === 6 ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.26rem 0.62rem", color: researchQuestionScore === 6 ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+                    完成度 {researchQuestionScore}/6
+                  </span>
+                </div>
+                <div className="research-question-card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.62rem" }}>
+                  {researchQuestionFields.map((field) => (
+                    <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.34rem", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 900 }}>
+                      {field.label}
+                      <textarea
+                        id={field.id}
+                        value={field.value}
+                        placeholder={field.placeholder}
+                        rows={3}
+                        onChange={(event) => {
+                          field.setValue(event.currentTarget.value);
+                          setCopiedResearchQuestionCard(false);
+                          setCopyStatus("");
+                        }}
+                        style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem 0.66rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, lineHeight: 1.55, resize: "vertical" }}
+                      />
+                      <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.45, fontWeight: 800 }}>
+                        {field.pass ? "可用" : field.help}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.7rem", alignItems: "start" }}>
+                  <code style={{ display: "block", whiteSpace: "pre-wrap", maxHeight: 240, overflow: "auto", background: "var(--cherry-sage-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.7rem", lineHeight: 1.58 }}>
+                    {researchQuestionCardText}
+                  </code>
+                  <button type="button" onClick={copyResearchQuestionCard} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
+                    {copiedResearchQuestionCard ? "已复制" : "复制转译卡"}
                   </button>
                 </div>
               </div>
@@ -2525,6 +2718,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           .project-evidence-table-grid textarea:focus-visible,
           .creation-run-record-builder button:focus-visible,
           .creation-run-record-grid textarea:focus-visible,
+          .research-question-card-builder button:focus-visible,
+          .research-question-card-grid textarea:focus-visible,
           .article-record-grid textarea:focus-visible,
           .platform-custom-config-grid input:focus-visible,
           .platform-custom-config-grid textarea:focus-visible,
@@ -2609,6 +2804,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             .project-evidence-table-builder > div:nth-of-type(3),
             .creation-run-record-grid,
             .creation-run-record-builder > div:nth-of-type(3),
+            .research-question-card-grid,
+            .research-question-card-builder > div:nth-of-type(3),
             .platform-active-plan-grid,
             .platform-custom-config-grid > div:nth-of-type(2) {
               grid-template-columns: 1fr !important;

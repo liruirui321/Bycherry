@@ -372,6 +372,20 @@ function verifyCreationRunRecordBuilder() {
   expect(articleSource.includes("creation-run-record-builder") && articleSource.includes("creation-run-record-grid"), "AI creation run record builder must have stable classes for layout checks.");
 }
 
+function verifyResearchQuestionTranslationBuilder() {
+  const articleSource = read("src/app/components/ArticleDetailPage.tsx");
+
+  expect(articleSource.includes("researchQuestionBuilderEnabled"), "Research translation article must expose a special question translation card builder.");
+  expect(articleSource.includes('article?.slug === "science-to-learning-question"'), "Research question translation builder must target the science-to-learning-question article.");
+  expect(articleSource.includes("researchQuestionFields"), "Research question translation builder must define learner-fillable fields.");
+  expect(articleSource.includes("researchQuestionCardText"), "Research question translation builder must produce a copyable translation card.");
+  expect(articleSource.includes("copyResearchQuestionCard"), "Research question translation builder must expose a copy handler.");
+  expect(articleSource.includes("科研问题转译卡"), "Research question translation builder must visibly name the translation card.");
+  expect(articleSource.includes("科研主题") && articleSource.includes("已有经验") && articleSource.includes("可观察问题") && articleSource.includes("证据材料") && articleSource.includes("解释任务") && articleSource.includes("边界/下一步"), "Research question translation builder must keep theme, experience, question, evidence, task, and boundary fields.");
+  expect(articleSource.includes("避免只复述前沿术语"), "Research question translation builder must keep the terminology-only caution visible.");
+  expect(articleSource.includes("research-question-card-builder") && articleSource.includes("research-question-card-grid"), "Research question translation builder must have stable classes for layout checks.");
+}
+
 function verifyArticleOutcomeSnapshot() {
   const articleSource = read("src/app/components/ArticleDetailPage.tsx");
 
@@ -1362,6 +1376,7 @@ verifyGenomeAssemblyStoryFrameBuilder();
 verifyBarcodingEvidenceTableBuilder();
 verifyProjectEvidenceTableBuilder();
 verifyCreationRunRecordBuilder();
+verifyResearchQuestionTranslationBuilder();
 verifyArticleOutcomeSnapshot();
 verifyWorkJsonLdLearningOutcomes();
 verifyResearchAgentWorkbenchContract();
