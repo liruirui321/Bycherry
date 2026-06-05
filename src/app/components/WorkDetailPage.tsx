@@ -1075,24 +1075,16 @@ ${localPreviewOutput}`;
   }
 
   return (
-    <section id="prompt-kit-builder" style={{ display: "grid", gap: "1rem" }}>
-      <div className="research-agent-top-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.86rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)", display: "grid", gap: "0.7rem" }}>
-        <div>
-          <div style={{ color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.78rem", marginBottom: "0.3rem" }}>科研 Agent 工作台</div>
-          <p className="research-agent-top-copy" style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.88rem", margin: 0 }}>
-            这个工作台直接提供科研任务编排：选择任务、材料和工作模式后，页面会生成结构化指令、证据边界、质控清单、报告框架和 API JSON 契约。当前可用于本地整理材料，也可把复制的任务包交给外部模型执行。
-          </p>
-        </div>
-      </div>
-      <div className="prompt-builder-layout" style={{ display: "grid", gridTemplateColumns: "minmax(230px, 0.78fr) minmax(0, 1.3fr)", gap: "1rem", alignItems: "start" }}>
-        <aside className="research-prompt-route-grid" style={{ display: "grid", gap: "0.7rem" }}>
+    <section id="prompt-kit-builder" style={{ display: "grid", gap: "0.68rem" }}>
+      <div className="prompt-builder-layout" style={{ display: "grid", gridTemplateColumns: "1fr", gap: "0.68rem", alignItems: "start" }}>
+        <aside className="research-prompt-route-grid" aria-label="科研任务路由" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.42rem" }}>
           {prompts.map((prompt, index) => {
             const active = activePromptIndex === index;
             return (
-              <button className="research-prompt-route-button" key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setCopiedCitationAudit(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
-                <div className="research-prompt-route-title" style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>{prompt.title}</div>
-                <div className="research-prompt-route-input" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginBottom: "0.55rem" }}>{prompt.input}</div>
-                <div className="research-prompt-route-output" style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+              <button className="research-prompt-route-button" key={prompt.title} type="button" aria-label={`${prompt.title}：${prompt.input}`} aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setCopiedCitationAudit(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.48rem 0.56rem", boxShadow: active ? "0 8px 18px rgba(58,92,62,0.1)" : "none", cursor: "pointer", minHeight: 44, display: "grid", alignItems: "center" }}>
+                <div className="research-prompt-route-title" style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontWeight: 900, margin: 0, fontSize: "0.78rem", lineHeight: 1.18, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{prompt.title}</div>
+                <div className="research-prompt-route-input" style={{ display: "none", color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginBottom: "0.55rem" }}>{prompt.input}</div>
+                <div className="research-prompt-route-output" style={{ display: "none", gap: 5, flexWrap: "wrap" }}>
                   {prompt.output.slice(0, 2).map((item) => (
                     <span key={item} style={{ background: "rgba(250,247,241,0.78)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.16rem 0.48rem", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>
                       {item}
@@ -1717,15 +1709,6 @@ ${localPreviewOutput}`;
           }
 
           @media (max-width: 520px) {
-            #prompt-kit-builder .research-agent-top-panel {
-              padding: 0.54rem 0.62rem !important;
-              gap: 0.34rem !important;
-            }
-
-            #prompt-kit-builder .research-agent-top-copy {
-              display: none !important;
-            }
-
             #prompt-kit-builder .research-agent-main-panel {
               padding: 0.68rem !important;
             }

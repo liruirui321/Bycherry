@@ -572,6 +572,7 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "mentor framing", pattern: /导师/ },
     { label: "implementation roadmap heading", pattern: /落地层级/ },
     { label: "already-landed project copy", pattern: /当前已落地/ },
+    { label: "long top explanation panel", pattern: /research-agent-top-panel|这个工作台直接提供/ },
   ];
 
   for (const item of requiredWorkbenchFeatures) {
