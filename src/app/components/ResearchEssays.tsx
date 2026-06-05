@@ -124,62 +124,6 @@ function navigateTo(href: string, event?: React.MouseEvent<HTMLAnchorElement>) {
   navigateClient(href);
 }
 
-function ResearchCardIllustration({ slug, color }: { slug: string; color: string }) {
-  if (slug === "genome-assembly-story") {
-    return (
-      <svg width="150" height="88" viewBox="0 0 150 88" fill="none" aria-hidden="true" focusable="false">
-        <path d="M14 67 C36 50 58 57 76 44 C99 27 116 39 140 19 V82 H14Z" fill="var(--cherry-sage-light)" opacity="0.78" />
-        <path d="M32 71 C55 79 113 78 134 67" stroke="rgba(58,92,62,0.18)" strokeWidth="5" strokeLinecap="round" />
-        <path d="M56 68 C52 48 59 30 72 14" stroke="var(--cherry-forest)" strokeWidth="4.6" strokeLinecap="round" />
-        <path d="M67 21 C82 7 105 13 111 31 C90 41 76 36 67 21Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
-        <path d="M52 43 C35 35 23 43 22 61 C38 66 49 58 52 43Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
-        <path d="M91 59 C100 48 115 49 123 60" stroke={color} strokeWidth="4" strokeLinecap="round" opacity="0.46" />
-        <circle cx="101" cy="35" r="6" fill="var(--cherry-yellow)" opacity="0.86" />
-      </svg>
-    );
-  }
-
-  if (slug === "barcoding-evidence-chain") {
-    return (
-      <svg width="150" height="88" viewBox="0 0 150 88" fill="none" aria-hidden="true" focusable="false">
-        <rect x="20" y="23" width="42" height="48" rx="12" fill="rgba(250,247,241,0.92)" stroke={color} strokeWidth="2.2" />
-        <path d="M33 19 H49 M36 19 V12 H46 V19" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M31 42 C39 34 47 50 55 41" stroke="var(--cherry-blue)" strokeWidth="3.2" strokeLinecap="round" />
-        <path d="M31 52 C39 60 47 44 55 53" stroke="var(--cherry-red)" strokeWidth="3.2" strokeLinecap="round" />
-        <path d="M71 47 H91 M91 47 L86 42 M91 47 L86 52" stroke="var(--cherry-forest)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        <rect x="98" y="19" width="32" height="54" rx="9" fill="var(--cherry-peach-light)" stroke="var(--cherry-red)" strokeWidth="2" />
-        <path d="M106 34 H122 M106 45 H118 M106 56 H124" stroke="var(--cherry-warm-mid)" strokeWidth="2.4" strokeLinecap="round" opacity="0.5" />
-        <circle cx="116" cy="17" r="7" fill="var(--cherry-yellow)" opacity="0.84" />
-      </svg>
-    );
-  }
-
-  if (slug === "ai-assessment-quality-control") {
-    return (
-      <svg width="150" height="88" viewBox="0 0 150 88" fill="none" aria-hidden="true" focusable="false">
-        <rect x="20" y="23" width="64" height="44" rx="13" fill="rgba(250,247,241,0.92)" stroke={color} strokeWidth="2.2" />
-        <path d="M32 37 H72 M32 49 H62" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.42" />
-        <path d="M89 28 C101 20 119 26 121 42 C123 60 99 68 88 53 C82 44 83 34 89 28Z" fill="#EDE9F5" stroke={color} strokeWidth="2.2" />
-        <path d="M97 40 H113 M97 50 H109" stroke={color} strokeWidth="2.6" strokeLinecap="round" opacity="0.75" />
-        <path d="M92 59 L98 64 L111 51" stroke="var(--cherry-forest)" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="119" cy="55" r="4" fill={color} opacity="0.72" />
-        <path d="M109 16 L114 25 L124 28 L115 33 L112 43 L107 34 L97 31 L106 25Z" fill="var(--cherry-yellow)" opacity="0.92" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg width="150" height="88" viewBox="0 0 150 88" fill="none" aria-hidden="true" focusable="false">
-      <rect x="19" y="22" width="58" height="48" rx="12" fill="rgba(250,247,241,0.92)" stroke={color} strokeWidth="2.2" />
-      <path d="M31 36 H64 M31 49 H58" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.44" />
-      <path d="M84 30 C96 16 119 20 126 39 C106 50 91 45 84 30Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
-      <path d="M91 59 C101 48 118 52 125 65 C110 73 98 70 91 59Z" fill="var(--cherry-sage-light)" stroke="var(--cherry-forest)" strokeWidth="1.8" />
-      <circle cx="111" cy="38" r="7" fill="var(--cherry-red)" opacity="0.82" />
-      <path d="M102 18 L107 26 L116 29 L108 34 L106 43 L101 35 L92 32 L100 27Z" fill="var(--cherry-yellow)" />
-    </svg>
-  );
-}
-
 function EssayCard({ essay }: {
   essay: (typeof essays)[0];
 }) {
@@ -195,14 +139,14 @@ function EssayCard({ essay }: {
         background: "var(--card)",
         border: "1.5px solid var(--border)",
         borderRadius: 8,
-        padding: "1.25rem",
+        padding: "1rem",
         transition: "transform 0.2s, box-shadow 0.2s",
         cursor: "pointer",
         position: "relative",
         overflow: "hidden",
         color: "inherit",
         display: "grid",
-        gridTemplateRows: "auto auto auto auto auto auto",
+        gridTemplateRows: "auto auto auto auto",
         height: "100%",
         textDecoration: "none",
       }}
@@ -275,30 +219,12 @@ function EssayCard({ essay }: {
         </div>
       </div>
 
-      <div className="research-essay-illustration" style={{ background: essay.labelBg, borderColor: essay.labelColor }}>
-        <ResearchCardIllustration slug={essay.slug} color={essay.labelColor} />
-      </div>
-
-      {/* Body excerpt — always shown partially, expanded on click */}
-      <div
-        className="research-essay-excerpt"
-        style={{
-          overflow: "hidden",
-          maxHeight: 66,
-          transition: "max-height 0.35s ease",
-        }}
-      >
-        <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.58, margin: 0 }}>
-          {essay.body}
-        </p>
-      </div>
-
-      <div className="research-card-action-row" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem 0.65rem", marginTop: "0.82rem" }}>
+      <div className="research-card-action-row" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.5rem 0.58rem", marginTop: "0.62rem" }}>
         <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.16rem" }}>先做这个</span>
         <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>{essay.actionSteps[0]}</span>
       </div>
 
-      <div className="research-card-quick-evidence" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: "0.54rem", marginTop: "0.72rem" }}>
+      <div className="research-card-compact-evidence" style={{ display: "grid", gap: "0.44rem", marginTop: "0.58rem" }}>
         <div className="research-card-completion" style={{ display: "grid", gap: "0.18rem", borderLeft: `3px solid ${essay.labelColor}`, paddingLeft: "0.58rem" }}>
           <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", fontWeight: 900 }}>完成后检查</span>
           <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 800 }}>{essay.checklist[0]}</span>
@@ -310,24 +236,8 @@ function EssayCard({ essay }: {
       </div>
 
       {/* Footer */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", alignSelf: "end", marginTop: "1rem", flexWrap: "wrap", gap: 8 }}>
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-          {essay.tags.map((t) => (
-            <span
-              key={t}
-              style={{
-                background: "var(--muted)",
-                color: "var(--cherry-warm-mid)",
-                borderRadius: 999,
-                padding: "0.18rem 0.55rem",
-                fontSize: "0.73rem",
-                fontWeight: 600,
-              }}
-            >
-              {t}
-            </span>
-          ))}
-        </div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", alignSelf: "end", marginTop: "0.78rem", flexWrap: "wrap", gap: 8 }}>
+        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.73rem", fontWeight: 800 }}>{essay.tags.slice(0, 2).join(" / ")}</span>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <span style={{ fontSize: "0.82rem", color: "var(--cherry-warm-mid)" }}>
             约 {essay.readMin} 分钟
@@ -358,7 +268,6 @@ export function ResearchEssays() {
   const [activeLabel, setActiveLabel] = useState("全部");
   const researchLabels = ["全部", ...Array.from(new Set(essays.map((essay) => essay.label)))];
   const filteredEssays = activeLabel === "全部" ? essays : essays.filter((essay) => essay.label === activeLabel);
-  const recommendedEssay = essays.find((essay) => essay.slug === "science-to-learning-question") ?? essays[0];
 
   return (
     <section
@@ -366,7 +275,7 @@ export function ResearchEssays() {
       aria-labelledby="research-heading"
       style={{
         fontFamily: "'Nunito', sans-serif",
-        padding: "5rem 1.5rem",
+        padding: "2.6rem 1.5rem",
         maxWidth: 1100,
         margin: "0 auto",
         position: "relative",
@@ -381,7 +290,7 @@ export function ResearchEssays() {
       </svg>
 
       {/* Header */}
-      <div style={{ marginBottom: "2.5rem" }}>
+      <div style={{ marginBottom: "1.15rem" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: "0.75rem" }}>
           <IconLeafSmall size={18} color="var(--cherry-warm-mid)" />
           <span style={{ fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>
@@ -402,23 +311,6 @@ export function ResearchEssays() {
           <div style={{ flex: 1, height: 1.5, background: "var(--border)", borderRadius: 1 }} />
         </div>
       </div>
-
-      <a
-        className="research-recommended-start"
-        href={recommendedEssay.href}
-        aria-label={`推荐起点：${recommendedEssay.title}。先做这个，${recommendedEssay.actionSteps[0]}。完成后检查，${recommendedEssay.checklist[0]}`}
-        onMouseEnter={() => preloadRouteForHref(recommendedEssay.href)}
-        onFocus={() => preloadRouteForHref(recommendedEssay.href)}
-        onPointerDown={() => preloadRouteForHref(recommendedEssay.href)}
-        onClick={(event) => navigateTo(recommendedEssay.href, event)}
-        style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.75rem", alignItems: "center", background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderLeft: `4px solid ${recommendedEssay.labelColor}`, borderRadius: 8, padding: "0.82rem 0.95rem", color: "inherit", textDecoration: "none", boxShadow: "0 8px 18px rgba(94,68,42,0.06)", marginBottom: "1rem" }}
-      >
-        <span style={{ display: "grid", gap: "0.24rem", minWidth: 0 }}>
-          <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900 }}>推荐起点</span>
-          <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.88rem", lineHeight: 1.45, fontWeight: 900 }}>先读真实科研如何变成问题：练习从现象、证据和限制进入科研材料。</span>
-        </span>
-        <span style={{ background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.32rem 0.68rem", fontSize: "0.74rem", fontWeight: 900, whiteSpace: "nowrap" }}>查看证据 →</span>
-      </a>
 
       <div role="group" aria-label="按科研证据主题筛选" style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: "0.75rem" }}>
         {researchLabels.map((label) => (
@@ -449,7 +341,7 @@ export function ResearchEssays() {
       </div>
 
       {/* Two-column grid */}
-      <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem", listStyle: "none", margin: 0, padding: 0 }}>
+      <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(238px, 1fr))", gap: "0.85rem", listStyle: "none", margin: 0, padding: 0 }}>
         {filteredEssays.map((essay) => (
           <li key={essay.id} style={{ display: "grid" }}>
             <EssayCard essay={essay} />
@@ -470,28 +362,9 @@ export function ResearchEssays() {
             outline-offset: 4px;
           }
 
-          #research .research-recommended-start:focus-visible,
           #research .research-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
-          }
-
-          #research .research-essay-illustration {
-            min-height: 90px;
-            border: 1px solid;
-            border-radius: 8px;
-            margin: 0.85rem 0 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow: inset 0 0 0 999px rgba(250,247,241,0.32);
-          }
-
-          #research .research-essay-illustration svg {
-            width: min(100%, 168px);
-            height: 94px;
-            display: block;
           }
 
           #research .research-essay-card:hover .research-essay-arrow,
@@ -501,38 +374,13 @@ export function ResearchEssays() {
 
           @media (prefers-reduced-motion: reduce) {
             #research .research-essay-card,
-            #research .research-essay-excerpt,
-            #research .research-essay-illustration,
             #research .research-essay-arrow {
               transition: none !important;
               transform: none !important;
             }
           }
-
-          @media (max-width: 640px) {
-            #research .research-card-quick-evidence {
-              grid-template-columns: 1fr !important;
-            }
-          }
         `}
       </style>
-
-      {/* Bottom note */}
-      <div
-        style={{
-          marginTop: "2.5rem",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 8,
-        }}
-      >
-        <div style={{ width: 40, height: 1.5, background: "var(--border)" }} />
-        <span style={{ fontSize: "0.88rem", color: "var(--cherry-warm-mid)" }}>
-          科研证据和学习项目持续更新
-        </span>
-        <div style={{ width: 40, height: 1.5, background: "var(--border)" }} />
-      </div>
     </section>
   );
 }

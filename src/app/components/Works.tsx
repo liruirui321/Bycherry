@@ -121,7 +121,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         border: "1.5px solid rgba(94,68,42,0.12)",
         borderTop: `4px solid ${work.border}`,
         borderRadius: 8,
-        padding: "1.28rem 1.28rem 1.18rem",
+        padding: "0.86rem",
         transform: hovered ? "translateY(-4px)" : "none",
         transition: "transform 0.25s, box-shadow 0.25s",
         boxShadow: hovered ? "0 14px 28px rgba(58,92,62,0.12)" : "0 8px 18px rgba(94,68,42,0.06)",
@@ -132,11 +132,11 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         display: "grid",
         gridTemplateRows: "auto auto auto auto auto auto",
         alignContent: "start",
-        minHeight: 344,
+        minHeight: 242,
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.8rem", marginBottom: "0.5rem" }}>
-        <div>{work.icon}</div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.65rem", marginBottom: "0.42rem" }}>
+        <div style={{ transform: "scale(0.72)", transformOrigin: "left top", width: 28, height: 28 }}>{work.icon}</div>
         <span style={{ background: work.color, border: `1px solid ${work.border}`, borderRadius: 999, color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900, padding: "0.15rem 0.46rem", whiteSpace: "nowrap" }}>
           {work.category}
         </span>
@@ -146,21 +146,21 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         {work.title}
       </h3>
 
-      <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.44, marginBottom: "0.6rem" }}>
+      <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.42, marginBottom: "0.5rem", maxHeight: 42, overflow: "hidden" }}>
         {work.desc}
       </p>
 
-      <div style={{ height: 104, minHeight: 104, display: "flex", justifyContent: "center", alignItems: "center", background: work.color, border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, marginBottom: "0.68rem", padding: "0.12rem", overflow: "hidden" }}>
-        <WorkPreviewIllustration slug={work.slug} color={work.border} width={206} height={112} />
+      <div style={{ height: 58, minHeight: 58, display: "flex", justifyContent: "center", alignItems: "center", background: work.color, border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, marginBottom: "0.5rem", padding: "0.1rem", overflow: "hidden" }}>
+        <WorkPreviewIllustration slug={work.slug} color={work.border} width={142} height={76} />
       </div>
 
-      <div className="work-card-first-step" style={{ borderTop: "1px solid rgba(94,68,42,0.12)", borderBottom: "1px solid rgba(94,68,42,0.12)", padding: "0.58rem 0", marginBottom: "0.6rem", display: "grid", gap: "0.22rem" }}>
+      <div className="work-card-first-step" style={{ borderTop: "1px solid rgba(94,68,42,0.12)", borderBottom: "1px solid rgba(94,68,42,0.12)", padding: "0.42rem 0", marginBottom: "0.46rem", display: "grid", gap: "0.18rem" }}>
         <span style={{ color: "var(--cherry-red)", fontSize: "0.67rem", fontWeight: 900 }}>先做这个</span>
-        <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.73rem", lineHeight: 1.42, fontWeight: 900 }}>{work.starter}</span>
+        <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.71rem", lineHeight: 1.38, fontWeight: 900, maxHeight: 40, overflow: "hidden" }}>{work.starter}</span>
       </div>
 
-      <div className="work-card-output-strip" style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: "0.58rem" }}>
-        {work.outputs.map((output) => (
+      <div className="work-card-output-strip" style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: "0.46rem" }}>
+        {work.outputs.slice(0, 2).map((output) => (
           <span key={output} style={{ background: "rgba(250,247,241,0.78)", border: "1px solid rgba(94,68,42,0.1)", color: "var(--cherry-forest)", borderRadius: 999, padding: "0.17rem 0.48rem", fontSize: "0.68rem", fontWeight: 900, fontFamily: "'Nunito', sans-serif" }}>
             {output}
           </span>
@@ -182,7 +182,7 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
           alignItems: "center",
           justifyContent: "center",
           gap: 6,
-          marginTop: "0.78rem",
+          marginTop: "0.58rem",
           background: "rgba(250,247,241,0.82)",
           border: "1.5px solid rgba(58,92,62,0.28)",
           borderRadius: 8,
@@ -222,18 +222,13 @@ function WaveDivider({ flip = false }: { flip?: boolean }) {
 }
 
 export function Works() {
-  const [activeCategory, setActiveCategory] = useState<Category>("全部");
-  const categories: Category[] = ["全部", "科学", "学习项目", "AI工具"];
-  const filtered = activeCategory === "全部" ? works : works.filter((w) => w.category === activeCategory);
-  const recommendedWork = works.find((work) => work.slug === "gene-expression") ?? works[0];
-
   return (
     <section
       id="works"
       aria-labelledby="works-heading"
       style={{
         fontFamily: "'Nunito', sans-serif",
-        padding: "4rem 1.5rem",
+        padding: "2.4rem 1.5rem",
         background: "var(--muted)",
         position: "relative",
         overflow: "hidden",
@@ -249,9 +244,9 @@ export function Works() {
         <path d="M10 55 Q15 35 50 12 Q50 38 10 55Z" fill="var(--cherry-forest)" />
       </svg>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", paddingTop: "1rem" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", paddingTop: "0.75rem" }}>
         {/* Header */}
-        <div style={{ marginBottom: "2.5rem", textAlign: "center" }}>
+        <div style={{ marginBottom: "1.15rem", textAlign: "center" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: "0.75rem" }}>
             <IconFlask size={20} color="var(--cherry-warm-mid)" />
             <span style={{ fontSize: "1rem", color: "var(--cherry-warm-mid)", fontWeight: 600 }}>
@@ -263,56 +258,8 @@ export function Works() {
           </h2>
         </div>
 
-        <a
-          className="work-recommended-start"
-          href={getWorkToolHref(recommendedWork.href)}
-          aria-label={`推荐起点：${recommendedWork.title}。先做这个，${recommendedWork.starter}。完成标准，${recommendedWork.success}`}
-          onMouseEnter={() => preloadRouteForHref(getWorkToolHref(recommendedWork.href))}
-          onFocus={() => preloadRouteForHref(getWorkToolHref(recommendedWork.href))}
-          onPointerDown={() => preloadRouteForHref(getWorkToolHref(recommendedWork.href))}
-          onClick={(event) => {
-            if (!shouldUseClientNavigation(event)) return;
-            event.preventDefault();
-            navigateClient(getWorkToolHref(recommendedWork.href));
-          }}
-          style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.75rem", alignItems: "center", background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderLeft: `4px solid ${recommendedWork.border}`, borderRadius: 8, padding: "0.82rem 0.95rem", color: "inherit", textDecoration: "none", boxShadow: "0 8px 18px rgba(94,68,42,0.06)", marginBottom: "1rem" }}
-        >
-          <span style={{ display: "grid", gap: "0.24rem", minWidth: 0 }}>
-            <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900 }}>推荐起点</span>
-            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.88rem", lineHeight: 1.45, fontWeight: 900 }}>先从基因表达可视化开始：拖动分子，看见 DNA 信息如何变成蛋白链。</span>
-          </span>
-          <span style={{ background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.32rem 0.68rem", fontSize: "0.74rem", fontWeight: 900, whiteSpace: "nowrap" }}>启动仿真 →</span>
-        </a>
-
-        {/* Filter */}
-        <div role="group" aria-label="按学习模块类型筛选" style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: "0.85rem" }}>
-          {categories.map((cat) => (
-              <button
-              className="work-filter-button"
-              key={cat}
-              type="button"
-              onClick={() => setActiveCategory(cat)}
-              aria-pressed={activeCategory === cat}
-              style={{
-                background: activeCategory === cat ? "var(--cherry-forest)" : "var(--card)",
-                color: activeCategory === cat ? "#FAF7F1" : "var(--cherry-warm-mid)",
-                border: activeCategory === cat ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)",
-                borderRadius: 999, padding: "0.45rem 1.25rem",
-                cursor: "pointer", fontFamily: "'Nunito', sans-serif",
-                fontWeight: 700, fontSize: "0.84rem", transition: "all 0.2s",
-              }}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-        <div role="status" aria-live="polite" style={{ color: "var(--cherry-warm-mid)", textAlign: "center", fontSize: "0.78rem", fontWeight: 800, marginBottom: "1.4rem" }}>
-          当前显示 {filtered.length} 个{activeCategory === "全部" ? "学习模块" : activeCategory}
-        </div>
-
-        {/* Grid */}
-        <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1.25rem", listStyle: "none", margin: 0, padding: 0 }}>
-          {filtered.map((work) => (
+        <ul aria-label="全部学习模块" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.85rem", listStyle: "none", margin: 0, padding: 0 }}>
+          {works.map((work) => (
             <li key={work.id} style={{ display: "grid" }}>
               <WorkCard work={work} />
             </li>
@@ -324,16 +271,13 @@ export function Works() {
 
       <style>
         {`
-          #works .work-card:focus-visible,
-          #works .work-recommended-start:focus-visible,
-          #works .work-filter-button:focus-visible {
+          #works .work-card:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
           }
 
           @media (prefers-reduced-motion: reduce) {
-            #works .work-card,
-            #works .work-filter-button {
+            #works .work-card {
               transition: none !important;
               transform: none !important;
             }

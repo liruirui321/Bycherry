@@ -126,63 +126,10 @@ function navigateTo(href: string, event?: React.MouseEvent<HTMLAnchorElement>) {
   navigateClient(href);
 }
 
-function NoteCardIllustration({ slug, color }: { slug: string; color: string }) {
-  if (slug === "plant-genome-evidence-chain") {
-    return (
-      <svg width="132" height="78" viewBox="0 0 132 78" fill="none" aria-hidden="true" focusable="false">
-        <path d="M8 61 C25 47 45 53 61 42 C80 29 97 39 124 21 V74 H8Z" fill="var(--cherry-sage-light)" opacity="0.76" />
-        <path d="M22 67 C41 73 93 73 116 64" stroke="rgba(58,92,62,0.18)" strokeWidth="5" strokeLinecap="round" />
-        <path d="M48 67 C45 50 50 34 61 18" stroke="var(--cherry-forest)" strokeWidth="4" strokeLinecap="round" />
-        <path d="M57 24 C70 12 90 18 95 33 C76 42 64 37 57 24Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="1.8" />
-        <path d="M47 43 C32 35 20 42 19 58 C34 63 43 56 47 43Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="1.8" />
-        <path d="M84 52 C92 42 104 42 112 52" stroke="var(--cherry-blue)" strokeWidth="4" strokeLinecap="round" opacity="0.38" />
-        <circle cx="85" cy="32" r="6" fill="var(--cherry-red)" opacity="0.84" />
-      </svg>
-    );
-  }
-
-  if (slug === "pbl-rubric-evidence") {
-    return (
-      <svg width="132" height="78" viewBox="0 0 132 78" fill="none" aria-hidden="true" focusable="false">
-        <rect x="18" y="17" width="56" height="48" rx="10" fill="rgba(250,247,241,0.9)" stroke={color} strokeWidth="2.2" />
-        <path d="M30 30 H62 M30 42 H58 M30 54 H51" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.42" />
-        <circle cx="89" cy="24" r="11" fill="var(--cherry-yellow)" opacity="0.86" />
-        <path d="M82 52 L89 59 L106 40" stroke="var(--cherry-forest)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M95 18 L100 25 L108 27 L102 32 L100 40 L95 33 L87 30 L93 25Z" fill="var(--cherry-peach)" opacity="0.9" />
-      </svg>
-    );
-  }
-
-  if (slug === "ai-comic-video-workflow") {
-    return (
-      <svg width="132" height="78" viewBox="0 0 132 78" fill="none" aria-hidden="true" focusable="false">
-        <rect x="16" y="20" width="44" height="36" rx="10" fill="rgba(250,247,241,0.92)" stroke={color} strokeWidth="2.2" />
-        <rect x="68" y="16" width="45" height="42" rx="12" fill="var(--cherry-peach-light)" stroke="var(--cherry-red)" strokeWidth="2.2" />
-        <path d="M26 33 H51 M26 44 H43" stroke="var(--cherry-warm-mid)" strokeWidth="2.8" strokeLinecap="round" opacity="0.5" />
-        <path d="M20 58 H55" stroke="var(--cherry-warm-brown)" strokeWidth="3.2" strokeLinecap="round" opacity="0.16" />
-        <path d="M80 34 H101 M80 44 H96" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.45" />
-        <path d="M57 38 H70" stroke="var(--cherry-forest)" strokeWidth="3" strokeLinecap="round" />
-        <path d="M78 54 L84 59 L97 47" stroke="var(--cherry-forest)" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M99 12 L104 20 L113 22 L106 27 L104 36 L99 28 L90 25 L97 20Z" fill="var(--cherry-yellow)" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg width="132" height="78" viewBox="0 0 132 78" fill="none" aria-hidden="true" focusable="false">
-      <rect x="18" y="18" width="62" height="44" rx="12" fill="rgba(250,247,241,0.9)" stroke={color} strokeWidth="2.2" />
-      <path d="M30 32 H66 M30 44 H58" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.45" />
-      <path d="M91 22 L97 33 L109 37 L98 43 L94 55 L88 44 L76 40 L87 34Z" fill="var(--cherry-yellow)" stroke="rgba(94,68,42,0.14)" strokeWidth="1.2" />
-      <path d="M84 59 C94 49 110 53 115 65 C101 72 90 69 84 59Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="1.8" />
-    </svg>
-  );
-}
-
 export function Notes() {
   const [activeTag, setActiveTag] = useState("全部");
   const noteTags = ["全部", ...Array.from(new Set(notes.map((note) => note.tag)))];
   const filteredNotes = activeTag === "全部" ? notes : notes.filter((note) => note.tag === activeTag);
-  const recommendedNote = notes.find((note) => note.slug === "ai-course-development") ?? notes[0];
 
   return (
     <section
@@ -190,7 +137,7 @@ export function Notes() {
       aria-labelledby="notes-heading"
       style={{
         fontFamily: "'Nunito', sans-serif",
-        padding: "5rem 1.5rem",
+        padding: "2.6rem 1.5rem",
         background: "var(--muted)",
         position: "relative",
         overflow: "hidden",
@@ -209,9 +156,9 @@ export function Notes() {
         <path d="M15 80 Q20 50 75 18 Q75 55 15 80Z" fill="var(--cherry-forest)" />
       </svg>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", paddingTop: "1.5rem", paddingBottom: "1.5rem" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", paddingTop: "0.8rem", paddingBottom: "0.8rem" }}>
         {/* Header */}
-        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", marginBottom: "2.5rem" }}>
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", marginBottom: "1.15rem" }}>
           <div>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: "0.75rem" }}>
               <IconBook size={20} color="var(--cherry-warm-mid)" />
@@ -222,23 +169,6 @@ export function Notes() {
             </h2>
           </div>
         </div>
-
-        <a
-          className="note-recommended-start"
-          href={recommendedNote.href}
-          aria-label={`推荐起点：${recommendedNote.title}。先做这个，${recommendedNote.actionSteps[0]}。完成后检查，${recommendedNote.checklist[0]}`}
-          onMouseEnter={() => preloadRouteForHref(recommendedNote.href)}
-          onFocus={() => preloadRouteForHref(recommendedNote.href)}
-          onPointerDown={() => preloadRouteForHref(recommendedNote.href)}
-          onClick={(event) => navigateTo(recommendedNote.href, event)}
-          style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.75rem", alignItems: "center", background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderLeft: `4px solid ${recommendedNote.tagColor}`, borderRadius: 8, padding: "0.82rem 0.95rem", color: "inherit", textDecoration: "none", boxShadow: "0 8px 18px rgba(94,68,42,0.06)", marginBottom: "1rem" }}
-        >
-          <span style={{ display: "grid", gap: "0.24rem", minWidth: 0 }}>
-            <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900 }}>推荐起点</span>
-            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.88rem", lineHeight: 1.45, fontWeight: 900 }}>先读 AI 学习材料质检：学会把 AI 输出拆成目标、误解、证据和复盘。</span>
-          </span>
-          <span style={{ background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.32rem 0.68rem", fontSize: "0.74rem", fontWeight: 900, whiteSpace: "nowrap" }}>打开方法 →</span>
-        </a>
 
         <div role="group" aria-label="按学习方法主题筛选" style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: "0.75rem" }}>
           {noteTags.map((tag) => (
@@ -269,7 +199,7 @@ export function Notes() {
         </div>
 
         {/* Notes grid */}
-        <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem", listStyle: "none", margin: 0, padding: 0 }}>
+        <ul style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(238px, 1fr))", gap: "0.85rem", listStyle: "none", margin: 0, padding: 0 }}>
           {filteredNotes.map((note) => (
             <li key={note.id} style={{ display: "grid" }}>
               <a
@@ -290,7 +220,7 @@ export function Notes() {
                   cursor: "pointer",
                   color: "inherit",
                   display: "grid",
-                  gridTemplateRows: "auto auto auto auto auto auto",
+                  gridTemplateRows: "auto auto auto auto",
                   height: "100%",
                   textDecoration: "none",
                 }}
@@ -310,20 +240,12 @@ export function Notes() {
                   {note.title}
                 </h3>
 
-                <div className="note-card-illustration" style={{ background: note.tagBg, borderColor: note.tagColor }}>
-                  <NoteCardIllustration slug={note.slug} color={note.tagColor} />
-                </div>
-
-                <p className="note-card-excerpt" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.55, marginBottom: "0.72rem", maxHeight: 74, overflow: "hidden" }}>
-                  {note.excerpt}
-                </p>
-
-                <div className="note-card-action-row" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem 0.65rem", marginBottom: "0.68rem" }}>
+                <div className="note-card-action-row" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.5rem 0.58rem", marginBottom: "0.58rem" }}>
                   <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.16rem" }}>先做这个</span>
                   <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>{note.actionSteps[0]}</span>
                 </div>
 
-                <div className="note-card-quick-evidence" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: "0.54rem", marginBottom: "0.86rem" }}>
+                <div className="note-card-compact-evidence" style={{ display: "grid", gap: "0.44rem", marginBottom: "0.7rem" }}>
                   <div className="note-card-completion" style={{ borderLeft: `3px solid ${note.tagColor}`, paddingLeft: "0.58rem", display: "grid", gap: "0.18rem" }}>
                     <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", fontWeight: 900 }}>完成后检查</span>
                     <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 800 }}>{note.checklist[0]}</span>
@@ -361,34 +283,9 @@ export function Notes() {
             outline-offset: 4px;
           }
 
-          #notes .note-recommended-start:focus-visible,
           #notes .note-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
-          }
-
-          #notes .note-card-illustration {
-            min-height: 82px;
-            border: 1px solid;
-            border-radius: 8px;
-            margin: 0 0 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow: inset 0 0 0 999px rgba(250,247,241,0.32);
-          }
-
-          #notes .note-card-illustration svg {
-            width: min(100%, 150px);
-            height: 86px;
-            display: block;
-          }
-
-          @media (max-width: 640px) {
-            #notes .note-card-quick-evidence {
-              grid-template-columns: 1fr !important;
-            }
           }
 
           @media (prefers-reduced-motion: reduce) {
