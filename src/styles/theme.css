@@ -164,7 +164,7 @@
     scroll-padding-top: 76px;
   }
 
-  :where(#top, #works, #about, #research, #notes, #contact, #main-content) {
+  :where(#top, #works, #research, #notes, #contact, #main-content) {
     scroll-margin-top: 76px;
   }
 
@@ -227,11 +227,11 @@
     outline: none;
   }
 
-  :where(#top, #works, #about, #research, #notes, #contact):focus {
+  :where(#top, #works, #research, #notes, #contact):focus {
     outline: none;
   }
 
-  :where(#top, #works, #about, #research, #notes, #contact):focus-visible {
+  :where(#top, #works, #research, #notes, #contact):focus-visible {
     box-shadow: inset 0 0 0 3px rgba(184, 68, 51, 0.18);
   }
 

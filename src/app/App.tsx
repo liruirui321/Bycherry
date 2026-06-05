@@ -1,7 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
-import { About } from "./components/About";
 import { Works } from "./components/Works";
 import { ResearchEssays } from "./components/ResearchEssays";
 import { essays } from "./components/ResearchEssays";
@@ -426,7 +425,6 @@ export default function App() {
         <main id="main-content" tabIndex={-1}>
           <Hero />
           <Works />
-          <About />
           <ResearchEssays />
           <Notes />
           <Contact />

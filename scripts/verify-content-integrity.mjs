@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getContentRoutes } from "./content-routes.mjs";
@@ -108,7 +108,6 @@ function verifyWorkBlocks() {
 function verifyVisibleLearningModuleCopy() {
   const visibleShellSources = [
     "src/app/App.tsx",
-    "src/app/components/About.tsx",
     "src/app/components/Footer.tsx",
     "src/app/components/Hero.tsx",
     "src/app/components/Nav.tsx",
@@ -122,7 +121,6 @@ function verifyVisibleLearningModuleCopy() {
     "全部学习模块",
     "学习模块前后导航",
     "首屏学习模块目录",
-    "可保存产出",
     "bycherry.me",
   ];
 
@@ -967,7 +965,6 @@ function verifyLearnerFacingArticleCopy() {
   const researchSource = read("src/app/components/ResearchEssays.tsx");
   const learnerArticleSources = [
     "src/app/App.tsx",
-    "src/app/components/About.tsx",
     "src/app/components/ArticleDetailPage.tsx",
     "src/app/components/Contact.tsx",
     "src/app/components/Footer.tsx",
@@ -1153,7 +1150,6 @@ function verifyLearnerProductPositioning() {
   const positioningSources = [
     "src/app/siteMetadata.ts",
     "src/app/App.tsx",
-    "src/app/components/About.tsx",
     "src/app/components/Footer.tsx",
     "src/app/components/Hero.tsx",
     "src/app/components/Nav.tsx",
@@ -1163,7 +1159,6 @@ function verifyLearnerProductPositioning() {
   ].map((relativePath) => [relativePath, read(relativePath)]);
 
   const combinedSource = positioningSources.map(([relativePath, source]) => `\n/* ${relativePath} */\n${source}`).join("\n");
-  const aboutSource = read("src/app/components/About.tsx");
   const requiredProductCopy = [
     "科学学习与 AI",
     "演化时间轴",
@@ -1175,8 +1170,6 @@ function verifyLearnerProductPositioning() {
     "先选一个模块",
     "首屏学习模块目录",
     "首页只保留目录",
-    "关于这个工作台",
-    "首页负责选择内容",
     "看生命过程",
     "拆概念",
     "整理科研",
@@ -1207,13 +1200,10 @@ function verifyLearnerProductPositioning() {
     }
   }
 
-  expect(aboutSource.includes("about-compact-band"), "About section should be a compact positioning band.");
-  expect(aboutSource.includes("about-compact-stats"), "About section should keep compact site-scale stats.");
-  expect(aboutSource.includes("首页负责选择内容"), "About section should clarify that homepage chooses content and details live on subpages.");
-  for (const retiredAboutBlock of ["aboutStartGuideText", "copyAboutStartGuide", "about-start-guide-panel", "about-use-card", "工作台开始清单", "复制开始清单"]) {
-    expect(!aboutSource.includes(retiredAboutBlock), `About section should stay short and not include retired duplicate block: ${retiredAboutBlock}.`);
-  }
   const navSource = read("src/app/components/Nav.tsx");
+  const appSource = read("src/app/App.tsx");
+  expect(!appSource.includes("<About") && !appSource.includes('from "./components/About"'), "Homepage should not render a separate About section.");
+  expect(!existsSync(resolve(root, "src/app/components/About.tsx")), "About component should stay removed so homepage remains a short content directory.");
   expect(navSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Navigation work shortcuts must use the direct-to-tool href helper.");
   expect(navSource.includes('{ label: "看生命过程", href: getWorkToolHref("/works/gene-expression"), matchHref: "/works/gene-expression" }'), "Navigation life-process shortcut must open the gene expression tool directly.");
   expect(navSource.includes('{ label: "拆概念", href: getWorkToolHref("/works/concept-explainer"), matchHref: "/works/concept-explainer" }'), "Navigation concept shortcut must open the concept tool directly.");
