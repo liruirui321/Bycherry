@@ -13,14 +13,14 @@ export function Footer() {
         fontFamily: "'Nunito', sans-serif",
         background: "var(--cherry-forest)",
         color: "rgba(245,241,234,0.72)",
-        padding: "1rem 1.5rem",
+        padding: "0.46rem 1.5rem",
       }}
     >
       <div className="footer-inner" style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.8rem", flexWrap: "wrap", minWidth: 0 }}>
         <div className="footer-brand" style={{ display: "inline-flex", alignItems: "center", gap: 8, minWidth: 0 }}>
-          <IconCherry size={18} color="#F2A896" />
-          <span style={{ color: "rgba(245,241,234,0.92)", fontSize: "0.86rem", fontWeight: 900 }}>By Cherry</span>
-          <span style={{ color: "rgba(245,241,234,0.6)", fontSize: "0.76rem", fontWeight: 800 }}>科学学习与 AI · 2026</span>
+          <IconCherry size={16} color="#F2A896" />
+          <span style={{ color: "rgba(245,241,234,0.92)", fontSize: "0.8rem", fontWeight: 900 }}>By Cherry</span>
+          <span style={{ color: "rgba(245,241,234,0.6)", fontSize: "0.68rem", fontWeight: 800 }}>科学学习与 AI · 2026</span>
         </div>
 
         <div className="footer-links" style={{ display: "flex", gap: "0.45rem", flexWrap: "wrap", minWidth: 0 }}>
@@ -37,8 +37,8 @@ export function Footer() {
                 border: "1px solid rgba(245,241,234,0.18)",
                 background: "rgba(250,247,241,0.06)",
                 borderRadius: 999,
-                padding: "0.24rem 0.62rem",
-                fontSize: "0.74rem",
+                padding: "0.16rem 0.5rem",
+                fontSize: "0.68rem",
                 fontWeight: 900,
               }}
             >
@@ -64,14 +64,14 @@ export function Footer() {
 
           @media (max-width: 560px) {
             footer {
-              padding: 0.9rem 1rem !important;
+              padding: 0.42rem 1rem !important;
             }
 
             footer .footer-inner {
               display: grid !important;
               grid-template-columns: 1fr !important;
               justify-items: start !important;
-              gap: 0.62rem !important;
+              gap: 0.38rem !important;
               width: 100% !important;
               max-width: calc(100vw - 2rem) !important;
             }

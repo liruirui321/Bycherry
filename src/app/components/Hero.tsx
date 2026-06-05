@@ -20,7 +20,7 @@ export function Hero() {
         minHeight: "auto",
         position: "relative",
         overflow: "hidden",
-        padding: "1rem 1.5rem 1.05rem",
+        padding: "0.78rem 1.5rem 0.78rem",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
@@ -30,7 +30,7 @@ export function Hero() {
       }}
     >
       <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1120, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
-        <div className="hero-header-row" style={{ maxWidth: 760, marginBottom: "0.72rem" }}>
+        <div className="hero-header-row" style={{ maxWidth: 760, marginBottom: "0.5rem" }}>
           <div style={{ minWidth: 0 }}>
             <h1
               id="hero-heading"
@@ -40,7 +40,7 @@ export function Hero() {
                 fontWeight: 800,
                 lineHeight: 1.12,
                 color: "var(--cherry-warm-brown)",
-                margin: "0 0 0.42rem",
+                margin: "0 0 0.26rem",
                 letterSpacing: 0,
                 overflowWrap: "anywhere",
               }}
@@ -122,8 +122,8 @@ export function Hero() {
           #top {
             padding-left: 1rem !important;
             padding-right: 1rem !important;
-            padding-top: 0.78rem !important;
-            padding-bottom: 0.9rem !important;
+            padding-top: 0.58rem !important;
+            padding-bottom: 0.62rem !important;
           }
 
           .hero-inner,
@@ -149,6 +149,7 @@ export function Hero() {
             min-width: 0 !important;
             max-width: 100% !important;
             box-sizing: border-box;
+            min-height: 52px !important;
           }
 
           .hero-work-card strong,

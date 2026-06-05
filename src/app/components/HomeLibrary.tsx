@@ -40,7 +40,7 @@ function LibraryRows({ items }: { items: LibraryItem[] }) {
               color: "inherit",
               textDecoration: "none",
               borderTop: "1px solid rgba(94,68,42,0.12)",
-              padding: "0.38rem 0",
+              padding: "0.26rem 0",
               background: "transparent",
             }}
           >
@@ -84,16 +84,16 @@ export function HomeLibrary() {
   return (
     <section
       aria-labelledby="home-library-heading"
-      style={{ fontFamily: "'Nunito', sans-serif", padding: "0.25rem 1.5rem 0.45rem", background: "var(--background)" }}
+      style={{ fontFamily: "'Nunito', sans-serif", padding: "0 1.5rem 0.16rem", background: "var(--background)" }}
     >
       <div id="research" style={{ maxWidth: 1100, margin: "0 auto" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap", marginBottom: "0.24rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap", marginBottom: "0.08rem" }}>
           <div>
-            <h2 id="home-library-heading" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.94rem", lineHeight: 1.2, fontWeight: 900 }}>
+            <h2 id="home-library-heading" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.82rem", lineHeight: 1.2, fontWeight: 900 }}>
               最新文章
             </h2>
           </div>
-          <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 900 }}>
+          <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900 }}>
             {visibleArticles.length} 篇
           </span>
         </div>
