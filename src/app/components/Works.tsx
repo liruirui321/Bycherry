@@ -20,7 +20,7 @@ export const works = [
     color: "var(--cherry-blue-light)", border: "var(--cherry-blue)", rotate: "-1.5deg",
   },
   {
-    id: 3, slug: "research-prompt-kit", category: "AI工具" as Category,
+    id: 2, slug: "research-prompt-kit", category: "AI工具" as Category,
     icon: <IconAI size={36} color="var(--cherry-blue)" />,
     title: "科研 Agent 工作台",
     desc: "选择科研任务和工作模式，把材料组织成模型指令、证据边界、引用核查、质控清单和汇报任务包。",
@@ -36,7 +36,7 @@ export const works = [
     color: "var(--cherry-peach-light)", border: "var(--cherry-peach)", rotate: "-0.8deg",
   },
   {
-    id: 4, slug: "plant-evolution-stories", category: "学习项目" as Category,
+    id: 3, slug: "plant-evolution-stories", category: "学习项目" as Category,
     icon: <IconLeaf size={36} color="var(--cherry-sage)" />,
     title: "植物演化时间轴",
     desc: "演化时间轴串联关键创新、证据、自测问题、作答提示和延伸练习。",
@@ -52,7 +52,7 @@ export const works = [
     color: "var(--cherry-sage-light)", border: "var(--cherry-sage)", rotate: "1.8deg",
   },
   {
-    id: 5, slug: "concept-explainer", category: "AI工具" as Category,
+    id: 4, slug: "concept-explainer", category: "AI工具" as Category,
     icon: <IconAI size={36} color="#7B6CC4" />,
     title: "概念解释生成器",
     desc: "输入任意概念或选择样例，生成自测问题、类比、机制步骤、可视化流程、迁移练习和即时小测。",
@@ -68,7 +68,7 @@ export const works = [
     color: "#EDE9F5", border: "#B5AEDD", rotate: "-1.2deg",
   },
   {
-    id: 6, slug: "crispr-interactive", category: "科学" as Category,
+    id: 5, slug: "crispr-interactive", category: "科学" as Category,
     icon: <IconDNA size={36} color1="var(--cherry-red)" color2="var(--cherry-blue)" />,
     title: "CRISPR 编辑模拟器",
     desc: "操作 guide RNA、Cas 蛋白和修复结果，查看匹配评分、编辑判定、风险核查和模拟报告。",

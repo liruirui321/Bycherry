@@ -1304,6 +1304,9 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             ) : null}
           </div>
 
+          <details className="gene-support-pack-details gene-compact-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.05)" }}>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>练习、记录与状态 · 9 项</summary>
+
           <details className="gene-compact-details gene-process-focus-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>过程追踪 · {activeProcessFocus}</summary>
             <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
@@ -1570,6 +1573,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
               {currentStatus}
             </div>
           </div>
+          </details>
           </details>
         </aside>
       </div>
