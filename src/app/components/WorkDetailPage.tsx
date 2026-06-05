@@ -5168,22 +5168,10 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
 function WorkQuickStart({ work }: { work: Work }) {
   const [copiedFirstRunPlan, setCopiedFirstRunPlan] = useState(false);
   const [firstRunCopyStatus, setFirstRunCopyStatus] = useState("");
-  const [copiedEvidence, setCopiedEvidence] = useState(false);
-  const [evidenceCopyStatus, setEvidenceCopyStatus] = useState("");
-  const [savedOutput, setSavedOutput] = useState("");
-  const [observedChange, setObservedChange] = useState("");
-  const [completionProof, setCompletionProof] = useState("");
-  const [nextQuestion, setNextQuestion] = useState("");
 
   useEffect(() => {
     setCopiedFirstRunPlan(false);
     setFirstRunCopyStatus("");
-    setCopiedEvidence(false);
-    setEvidenceCopyStatus("");
-    setSavedOutput("");
-    setObservedChange("");
-    setCompletionProof("");
-    setNextQuestion("");
   }, [work.slug]);
 
   const workFirstRunCards = [
@@ -5203,57 +5191,6 @@ function WorkQuickStart({ work }: { work: Work }) {
       body: `保存 ${work.outputs.join(" / ")}，再写下：${work.success}`,
     },
   ];
-  const evidenceItems = [
-    `保存 1 份${work.outputs[0] ?? "学习产出"}`,
-    `用自己的话写下：${work.success}`,
-    `标记下一步要回看的环节：${work.path[work.path.length - 1] ?? work.path[0]}`,
-  ];
-  const reflectionChecks = [
-    `我已经完成路径 1：${work.path[0] ?? "进入模块"}`,
-    `我已经保存至少 1 项产出：${work.outputs.join(" / ")}`,
-    `我能用自己的话说明完成标准：${work.success}`,
-    "我写下了一个还没有弄清楚的问题，方便下次继续查。",
-  ];
-  const evidenceFieldItems = [
-    {
-      id: "work-saved-output",
-      label: "我保存了什么",
-      value: savedOutput,
-      setter: setSavedOutput,
-      placeholder: work.outputs.join(" / "),
-      fallback: work.outputs[0] ?? "学习产出",
-    },
-    {
-      id: "work-observed-change",
-      label: "我观察到什么变化",
-      value: observedChange,
-      setter: setObservedChange,
-      placeholder: work.starter,
-      fallback: work.starter,
-    },
-    {
-      id: "work-completion-proof",
-      label: "我如何证明完成",
-      value: completionProof,
-      setter: setCompletionProof,
-      placeholder: work.success,
-      fallback: work.success,
-    },
-    {
-      id: "work-next-question",
-      label: "下一步问题",
-      value: nextQuestion,
-      setter: setNextQuestion,
-      placeholder: `回看：${work.path[work.path.length - 1] ?? work.path[0]}`,
-      fallback: `回看：${work.path[work.path.length - 1] ?? work.path[0]}`,
-    },
-  ];
-  const filledEvidence = {
-    savedOutput: savedOutput.trim() || evidenceFieldItems[0].fallback,
-    observedChange: observedChange.trim() || evidenceFieldItems[1].fallback,
-    completionProof: completionProof.trim() || evidenceFieldItems[2].fallback,
-    nextQuestion: nextQuestion.trim() || evidenceFieldItems[3].fallback,
-  };
   const workFirstRunPlanText = `【${work.title}第一次运行卡】
 5 分钟：${work.starter}
 15 分钟：${work.task}
@@ -5264,32 +5201,6 @@ ${work.path.map((step, index) => `${index + 1}. ${step}`).join("\n")}
 
 我需要带走：
 ${work.outputs.map((output, index) => `${index + 1}. ${output}`).join("\n")}`;
-  const evidenceTemplate = `【${work.title}复盘证据】
-立即任务：${work.task}
-先做这个：${work.starter}
-完成标准：${work.success}
-
-一、我保存的产出
-${work.outputs.map((output, index) => `${index + 1}. ${output}：`).join("\n")}
-
-二、我完成的路径
-${work.path.map((step, index) => `${index + 1}. ${step}：`).join("\n")}
-
-三、我的填写记录
-1. 我保存了什么：${filledEvidence.savedOutput}
-2. 我观察到什么变化：${filledEvidence.observedChange}
-3. 我如何证明完成：${filledEvidence.completionProof}
-4. 下一步问题：${filledEvidence.nextQuestion}
-
-四、我的解释
-我能说明：
-
-五、复盘检查
-${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：`).join("\n")}
-
-六、下一步问题
-我还没有弄清楚：
-我需要回看的资料或页面：`;
 
   async function copyFirstRunPlan() {
     const copiedToClipboard = await copyText(workFirstRunPlanText);
@@ -5303,20 +5214,6 @@ ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：
 
     setCopiedFirstRunPlan(false);
     setFirstRunCopyStatus("复制失败，请手动选中文本复制。");
-  }
-
-  async function copyEvidenceTemplate() {
-    const copiedToClipboard = await copyText(evidenceTemplate);
-
-    if (copiedToClipboard) {
-      setCopiedEvidence(true);
-      setEvidenceCopyStatus("复盘模板已复制到剪贴板。");
-      window.setTimeout(() => setCopiedEvidence(false), 1400);
-      return;
-    }
-
-    setCopiedEvidence(false);
-    setEvidenceCopyStatus("复制失败，请手动选中文本复制。");
   }
 
   function focusPrimaryTool() {
@@ -5449,88 +5346,208 @@ ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：
               ))}
             </div>
           </div>
-          <div style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(93,140,101,0.18)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem", gridColumn: "1 / -1" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.5rem", flexWrap: "wrap" }}>
-              <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>完成证据</span>
-              <button
-                type="button"
-                className="work-evidence-copy-button"
-                onClick={copyEvidenceTemplate}
-                aria-describedby="work-evidence-copy-status"
-                style={{
-                  border: "1px solid rgba(93,140,101,0.28)",
-                  borderRadius: 999,
-                  background: "var(--background)",
-                  color: "var(--cherry-forest)",
-                  cursor: "pointer",
-                  fontFamily: "'Nunito', sans-serif",
-                  fontSize: "0.66rem",
-                  fontWeight: 900,
-                  padding: "0.22rem 0.58rem",
-                  transition: "transform 0.18s ease, box-shadow 0.18s ease",
-                }}
-              >
-                {copiedEvidence ? "已复制" : "复制复盘模板"}
-              </button>
-            </div>
-            <div role="list" aria-label={`${work.title}完成后需要留下的学习证据`} style={{ display: "grid", gap: "0.26rem" }}>
-              {evidenceItems.map((item, index) => (
-                <span key={item} role="listitem" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.4, fontWeight: 900 }}>
-                  {index + 1}. {item}
-                </span>
-              ))}
-            </div>
-            <div className="work-evidence-field-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.42rem" }}>
-              {evidenceFieldItems.map((field) => (
-                <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.26rem", color: "var(--cherry-warm-brown)", fontSize: "0.68rem", fontWeight: 900 }}>
-                  {field.label}
-                  <textarea
-                    id={field.id}
-                    value={field.value}
-                    onChange={(event) => {
-                      field.setter(event.target.value);
-                      setCopiedEvidence(false);
-                      setEvidenceCopyStatus("");
-                    }}
-                    rows={2}
-                    placeholder={field.placeholder}
-                    style={{ width: "100%", minHeight: 58, boxSizing: "border-box", border: "1px solid rgba(94,68,42,0.14)", borderRadius: 8, background: "rgba(250,247,241,0.72)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800, padding: "0.46rem", resize: "vertical" }}
-                  />
-                </label>
-              ))}
-            </div>
-            <div style={{ background: "rgba(250,247,241,0.6)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.38rem" }}>
-              {[
-                ["保存", filledEvidence.savedOutput],
-                ["观察", filledEvidence.observedChange],
-                ["证明", filledEvidence.completionProof],
-                ["下一步", filledEvidence.nextQuestion],
-              ].map(([label, body]) => (
-                <span key={label} style={{ display: "grid", gap: "0.12rem" }}>
-                  <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>{label}</span>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 900 }}>{body}</span>
-                </span>
-              ))}
-            </div>
-            <div style={{ background: "rgba(250,247,241,0.6)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", display: "grid", gap: "0.24rem" }}>
-              <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.68rem", fontWeight: 900 }}>复盘检查</span>
-              <div role="list" aria-label={`${work.title}复盘检查清单`} style={{ display: "grid", gap: "0.22rem" }}>
-                {reflectionChecks.slice(0, 3).map((item, index) => (
-                  <span key={item} role="listitem" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.38, fontWeight: 900 }}>
-                    {index + 1}. {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div
-              id="work-evidence-copy-status"
-              role="status"
-              aria-live="polite"
-              style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}
-            >
-              {evidenceCopyStatus}
-            </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WorkCompletionEvidence({ work }: { work: Work }) {
+  const [copiedEvidence, setCopiedEvidence] = useState(false);
+  const [evidenceCopyStatus, setEvidenceCopyStatus] = useState("");
+  const [savedOutput, setSavedOutput] = useState("");
+  const [observedChange, setObservedChange] = useState("");
+  const [completionProof, setCompletionProof] = useState("");
+  const [nextQuestion, setNextQuestion] = useState("");
+
+  useEffect(() => {
+    setCopiedEvidence(false);
+    setEvidenceCopyStatus("");
+    setSavedOutput("");
+    setObservedChange("");
+    setCompletionProof("");
+    setNextQuestion("");
+  }, [work.slug]);
+
+  const evidenceItems = [
+    `保存 1 份${work.outputs[0] ?? "学习产出"}`,
+    `用自己的话写下：${work.success}`,
+    `标记下一步要回看的环节：${work.path[work.path.length - 1] ?? work.path[0]}`,
+  ];
+  const reflectionChecks = [
+    `我已经完成路径 1：${work.path[0] ?? "进入模块"}`,
+    `我已经保存至少 1 项产出：${work.outputs.join(" / ")}`,
+    `我能用自己的话说明完成标准：${work.success}`,
+    "我写下了一个还没有弄清楚的问题，方便下次继续查。",
+  ];
+  const evidenceFieldItems = [
+    {
+      id: "work-saved-output",
+      label: "我保存了什么",
+      value: savedOutput,
+      setter: setSavedOutput,
+      placeholder: work.outputs.join(" / "),
+      fallback: work.outputs[0] ?? "学习产出",
+    },
+    {
+      id: "work-observed-change",
+      label: "我观察到什么变化",
+      value: observedChange,
+      setter: setObservedChange,
+      placeholder: work.starter,
+      fallback: work.starter,
+    },
+    {
+      id: "work-completion-proof",
+      label: "我如何证明完成",
+      value: completionProof,
+      setter: setCompletionProof,
+      placeholder: work.success,
+      fallback: work.success,
+    },
+    {
+      id: "work-next-question",
+      label: "下一步问题",
+      value: nextQuestion,
+      setter: setNextQuestion,
+      placeholder: `回看：${work.path[work.path.length - 1] ?? work.path[0]}`,
+      fallback: `回看：${work.path[work.path.length - 1] ?? work.path[0]}`,
+    },
+  ];
+  const filledEvidence = {
+    savedOutput: savedOutput.trim() || evidenceFieldItems[0].fallback,
+    observedChange: observedChange.trim() || evidenceFieldItems[1].fallback,
+    completionProof: completionProof.trim() || evidenceFieldItems[2].fallback,
+    nextQuestion: nextQuestion.trim() || evidenceFieldItems[3].fallback,
+  };
+  const evidenceTemplate = `【${work.title}复盘证据】
+立即任务：${work.task}
+先做这个：${work.starter}
+完成标准：${work.success}
+
+一、我保存的产出
+${work.outputs.map((output, index) => `${index + 1}. ${output}：`).join("\n")}
+
+二、我完成的路径
+${work.path.map((step, index) => `${index + 1}. ${step}：`).join("\n")}
+
+三、我的填写记录
+1. 我保存了什么：${filledEvidence.savedOutput}
+2. 我观察到什么变化：${filledEvidence.observedChange}
+3. 我如何证明完成：${filledEvidence.completionProof}
+4. 下一步问题：${filledEvidence.nextQuestion}
+
+四、我的解释
+我能说明：
+
+五、复盘检查
+${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：`).join("\n")}
+
+六、下一步问题
+我还没有弄清楚：
+我需要回看的资料或页面：`;
+
+  async function copyEvidenceTemplate() {
+    const copiedToClipboard = await copyText(evidenceTemplate);
+
+    if (copiedToClipboard) {
+      setCopiedEvidence(true);
+      setEvidenceCopyStatus("复盘模板已复制到剪贴板。");
+      window.setTimeout(() => setCopiedEvidence(false), 1400);
+      return;
+    }
+
+    setCopiedEvidence(false);
+    setEvidenceCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
+  return (
+    <section aria-labelledby="work-completion-evidence-heading" style={{ padding: "1.05rem 1.5rem 1.15rem", fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
+      <div className="work-completion-evidence-panel" style={{ maxWidth: 1060, margin: "0 auto", background: "var(--cherry-sage-light)", border: "1px solid rgba(93,140,101,0.18)", borderRadius: 8, padding: "0.82rem", display: "grid", gap: "0.58rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.72rem", flexWrap: "wrap" }}>
+          <div style={{ display: "grid", gap: "0.16rem" }}>
+            <h2 id="work-completion-evidence-heading" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.3, fontWeight: 900 }}>完成证据</h2>
+            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>
+              操作完成后，把观察、产出和下一步问题留在这里。
+            </p>
           </div>
+          <button
+            type="button"
+            className="work-evidence-copy-button"
+            onClick={copyEvidenceTemplate}
+            aria-describedby="work-evidence-copy-status"
+            style={{
+              border: "1px solid rgba(93,140,101,0.28)",
+              borderRadius: 999,
+              background: "var(--background)",
+              color: "var(--cherry-forest)",
+              cursor: "pointer",
+              fontFamily: "'Nunito', sans-serif",
+              fontSize: "0.66rem",
+              fontWeight: 900,
+              padding: "0.22rem 0.58rem",
+              transition: "transform 0.18s ease, box-shadow 0.18s ease",
+            }}
+          >
+            {copiedEvidence ? "已复制" : "复制复盘模板"}
+          </button>
+        </div>
+        <div role="list" aria-label={`${work.title}完成后需要留下的学习证据`} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.42rem" }}>
+          {evidenceItems.map((item, index) => (
+            <span key={item} role="listitem" style={{ background: "rgba(250,247,241,0.66)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.4, fontWeight: 900 }}>
+              {index + 1}. {item}
+            </span>
+          ))}
+        </div>
+        <div className="work-evidence-field-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.42rem" }}>
+          {evidenceFieldItems.map((field) => (
+            <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.26rem", color: "var(--cherry-warm-brown)", fontSize: "0.68rem", fontWeight: 900 }}>
+              {field.label}
+              <textarea
+                id={field.id}
+                value={field.value}
+                onChange={(event) => {
+                  field.setter(event.target.value);
+                  setCopiedEvidence(false);
+                  setEvidenceCopyStatus("");
+                }}
+                rows={2}
+                placeholder={field.placeholder}
+                style={{ width: "100%", minHeight: 58, boxSizing: "border-box", border: "1px solid rgba(94,68,42,0.14)", borderRadius: 8, background: "rgba(250,247,241,0.72)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800, padding: "0.46rem", resize: "vertical" }}
+              />
+            </label>
+          ))}
+        </div>
+        <div style={{ background: "rgba(250,247,241,0.6)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.38rem" }}>
+          {[
+            ["保存", filledEvidence.savedOutput],
+            ["观察", filledEvidence.observedChange],
+            ["证明", filledEvidence.completionProof],
+            ["下一步", filledEvidence.nextQuestion],
+          ].map(([label, body]) => (
+            <span key={label} style={{ display: "grid", gap: "0.12rem" }}>
+              <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>{label}</span>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 900 }}>{body}</span>
+            </span>
+          ))}
+        </div>
+        <div style={{ background: "rgba(250,247,241,0.6)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", display: "grid", gap: "0.24rem" }}>
+          <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.68rem", fontWeight: 900 }}>复盘检查</span>
+          <div role="list" aria-label={`${work.title}复盘检查清单`} style={{ display: "grid", gap: "0.22rem" }}>
+            {reflectionChecks.slice(0, 3).map((item, index) => (
+              <span key={item} role="listitem" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.38, fontWeight: 900 }}>
+                {index + 1}. {item}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div
+          id="work-evidence-copy-status"
+          role="status"
+          aria-live="polite"
+          style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}
+        >
+          {evidenceCopyStatus}
         </div>
       </div>
     </section>
@@ -5818,6 +5835,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
       >
         {work.slug === "gene-expression" ? <GeneExpressionTool /> : hasRichWorkContent(work.slug) ? <RichWorkContent slug={work.slug} /> : null}
       </section>
+      <WorkCompletionEvidence work={work} />
       <WorkPairedReading work={work} />
       <WorkSequenceLinks work={work} />
       <WorkContinueLinks work={work} />

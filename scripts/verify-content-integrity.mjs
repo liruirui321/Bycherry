@@ -496,7 +496,10 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes("work.outputs.join(\" / \")"), "Work detail first-run cards must derive saved outputs from each module.");
   expect(workDetailSource.includes("保存 ${work.outputs.join(\" / \")}，再写下：${work.success}"), "Work detail first-run cards must connect outputs to completion standards.");
   expect(workDetailSource.includes("work.path.map((step, index)"), "Work detail first-run copy text must include each module path.");
-  expect(workDetailSource.includes("完成证据"), "Work detail quick start must ask learners to leave completion evidence.");
+  expect(workDetailSource.includes("function WorkCompletionEvidence"), "Work detail pages must keep completion evidence as its own component.");
+  expect(workDetailSource.includes("<WorkCompletionEvidence work={work} />"), "Work detail pages must render completion evidence after the primary tool.");
+  expect(workDetailSource.includes("work-completion-evidence-panel"), "Work detail completion evidence must use a stable panel class.");
+  expect(workDetailSource.includes("完成证据"), "Work detail completion evidence must ask learners to leave completion evidence.");
   expect(workDetailSource.includes("evidenceItems"), "Work detail quick start must derive completion evidence from work outputs, success, and path.");
   expect(workDetailSource.includes("evidenceFieldItems"), "Work detail quick start must provide learner-filled evidence fields.");
   expect(workDetailSource.includes("filledEvidence"), "Work detail reflection template must merge learner-filled evidence.");
@@ -511,9 +514,10 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes('id="work-primary-tool"') && workDetailSource.includes("tabIndex={-1}"), "Work detail primary tool anchor must be focusable.");
   const quickStartRenderIndex = workDetailSource.indexOf("<WorkQuickStart work={work} />");
   const primaryToolRenderIndex = workDetailSource.indexOf('id="work-primary-tool"');
+  const completionEvidenceRenderIndex = workDetailSource.indexOf("<WorkCompletionEvidence work={work} />");
   const pairedReadingRenderIndex = workDetailSource.indexOf("<WorkPairedReading work={work} />");
-  expect(quickStartRenderIndex !== -1 && primaryToolRenderIndex !== -1 && pairedReadingRenderIndex !== -1, "Work detail pages must render quick start, primary tool, and paired reading.");
-  expect(quickStartRenderIndex < primaryToolRenderIndex && primaryToolRenderIndex < pairedReadingRenderIndex, "Work detail pages must render the primary tool before paired reading.");
+  expect(quickStartRenderIndex !== -1 && primaryToolRenderIndex !== -1 && completionEvidenceRenderIndex !== -1 && pairedReadingRenderIndex !== -1, "Work detail pages must render quick start, primary tool, completion evidence, and paired reading.");
+  expect(quickStartRenderIndex < primaryToolRenderIndex && primaryToolRenderIndex < completionEvidenceRenderIndex && completionEvidenceRenderIndex < pairedReadingRenderIndex, "Work detail pages must render the primary tool before completion evidence and paired reading.");
   expect(workDetailSource.includes("复盘证据"), "Work detail completion evidence template must include a reflection evidence title.");
   expect(workDetailSource.includes("三、我的填写记录"), "Work detail completion evidence template must include learner-filled notes.");
   expect(workDetailSource.includes("五、复盘检查"), "Work detail completion evidence template must include reflection checks.");
