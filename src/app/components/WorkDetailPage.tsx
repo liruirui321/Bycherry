@@ -2302,7 +2302,7 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
 
   return (
     <div id="plant-evolution-explorer" style={{ display: "grid", gap: "1rem" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "1rem", alignItems: "start" }}>
+      <div className="plant-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "1rem", alignItems: "start" }}>
         <div style={{ display: "grid", gap: "0.85rem", alignContent: "start" }}>
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", overflow: "hidden" }}>
             <svg viewBox="0 0 520 760" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化证据时间轴" style={{ width: "100%", display: "block", borderRadius: 18 }}>
@@ -2429,11 +2429,11 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             </svg>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.72rem" }}>
+          <div className="plant-stage-picker-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.72rem" }}>
             {chapters.map((chapter, index) => {
               const active = activeChapterIndex === index;
               return (
-                <button key={chapter.title} type="button" aria-pressed={active} onClick={() => choosePlantChapter(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.78rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer", display: "grid", gap: "0.55rem", alignContent: "start" }}>
+                <button className="plant-stage-picker-card" key={chapter.title} type="button" aria-pressed={active} onClick={() => choosePlantChapter(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.78rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer", display: "grid", gap: "0.55rem", alignContent: "start" }}>
                   <div style={{ display: "grid", gridTemplateColumns: "54px minmax(0, 1fr)", gap: "0.62rem", alignItems: "center" }}>
                     <span aria-hidden="true" style={{ width: 54, height: 54, borderRadius: 18, background: active ? "rgba(250,247,241,0.78)" : "rgba(250,247,241,0.58)", border: active ? "1.5px solid rgba(58,92,62,0.28)" : "1.5px dashed rgba(94,68,42,0.13)", display: "grid", placeItems: "center", overflow: "hidden" }}>
                       <svg viewBox="-58 -54 116 104" width="52" height="50" fill="none" focusable="false">
@@ -2575,7 +2575,8 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             ) : null}
           </div>
 
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.65rem" }}>
+          <details className="plant-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>阶段比较记录</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
               <div>
                 <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>阶段比较记录</strong>
@@ -2605,9 +2606,10 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
                 </div>
               ))}
             </div>
-          </div>
+          </details>
 
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.65rem" }}>
+          <details className="plant-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>证据判读记录</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
               <div>
                 <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>证据判读记录</strong>
@@ -2629,9 +2631,10 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
                 </div>
               ))}
             </div>
-          </div>
+          </details>
 
-          <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.65rem" }}>
+          <details className="plant-compact-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.04)" }}>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>阶段检查</summary>
             <div>
               <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>阶段检查</strong>
               <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>完成当前阶段前，至少留下定位、压力、创新和证据边界四条可检查回答。</span>
@@ -2648,9 +2651,10 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
                 </div>
               ))}
             </div>
-          </div>
+          </details>
 
-          <div className="plant-timeline-review-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.82rem", display: "grid", gap: "0.6rem" }}>
+          <details className="plant-timeline-review-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.78rem" }}>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>全线复盘包</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
               <div>
                 <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>全线复盘包</strong>
@@ -2680,9 +2684,10 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
                 </div>
               ))}
             </div>
-          </div>
+          </details>
 
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+          <details className="plant-study-card-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>本阶段学习卡</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
               <strong style={{ color: "var(--cherry-warm-brown)" }}>本阶段学习卡</strong>
               <button type="button" onClick={copyStudyCard} aria-describedby="plant-study-card-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
@@ -2695,11 +2700,12 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 14, padding: "0.75rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.72rem", lineHeight: 1.55, maxHeight: 180, overflow: "auto" }}>
               {studyCardOutput}
             </code>
-          </div>
+          </details>
         </aside>
       </div>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "1rem" }}>
+      <details className="plant-reference-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>证据与参考文献</summary>
         <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>证据与参考文献</h3>
         <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.8rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.86rem", marginBottom: "0.8rem" }}>
           <strong style={{ color: "var(--cherry-warm-brown)" }}>当前阶段证据：</strong>{activeChapter.evidence}
@@ -2711,7 +2717,7 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             </a>
           ))}
         </div>
-      </div>
+      </details>
 
       <style>
         {`
@@ -2730,8 +2736,23 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             transform: translateY(-2px);
           }
 
+          #plant-evolution-explorer details > summary {
+            list-style-position: outside;
+          }
+
+          #plant-evolution-explorer details[open] > summary {
+            margin-bottom: 0.65rem;
+          }
+
+          #plant-evolution-explorer .plant-compact-details[open],
+          #plant-evolution-explorer .plant-timeline-review-panel[open],
+          #plant-evolution-explorer .plant-study-card-details[open] {
+            display: grid;
+            gap: 0.65rem;
+          }
+
           @media (max-width: 880px) {
-            #plant-evolution-explorer > div:first-child {
+            #plant-evolution-explorer .plant-main-grid {
               grid-template-columns: 1fr !important;
             }
 
@@ -2741,6 +2762,69 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
 
             #plant-evolution-explorer .plant-timeline-review-row {
               grid-template-columns: 68px minmax(0, 1fr) 58px !important;
+            }
+          }
+
+          @media (max-width: 520px) {
+            #plant-evolution-explorer {
+              gap: 0.72rem !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-picker-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.48rem !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-picker-card {
+              border-radius: 12px !important;
+              padding: 0.52rem !important;
+              gap: 0.34rem !important;
+              box-shadow: none !important;
+              min-height: 0 !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-picker-card > div:first-child {
+              grid-template-columns: 34px minmax(0, 1fr) !important;
+              gap: 0.42rem !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-picker-card > div:first-child > span:first-child {
+              width: 34px !important;
+              height: 34px !important;
+              border-radius: 10px !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-picker-card > div:first-child svg {
+              width: 34px !important;
+              height: 32px !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-picker-card > div:nth-child(2),
+            #plant-evolution-explorer .plant-stage-picker-card > div:nth-child(3) {
+              margin: 0 !important;
+              overflow: hidden !important;
+              display: -webkit-box !important;
+              -webkit-box-orient: vertical !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-picker-card > div:nth-child(2) {
+              -webkit-line-clamp: 2 !important;
+              font-size: 0.72rem !important;
+              line-height: 1.28 !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-picker-card > div:nth-child(3) {
+              -webkit-line-clamp: 2 !important;
+              font-size: 0.66rem !important;
+              line-height: 1.32 !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-picker-card > div:last-child {
+              display: none !important;
+            }
+
+            #plant-evolution-explorer aside {
+              gap: 0.72rem !important;
             }
           }
 
@@ -4686,7 +4770,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
       </div>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.72rem" }}>
+      <div className="crispr-practice-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.72rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>练习场景</div>
@@ -4712,7 +4796,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
       </div>
 
-      <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.82rem" }}>
+      <div className="crispr-result-check-panel" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.82rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>结果检查</div>
@@ -4896,7 +4980,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </aside>
       </div>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.9rem" }}>
+      <div className="crispr-decision-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.9rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>编辑决策卡</div>
@@ -4930,7 +5014,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
       </div>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.9rem" }}>
+      <div className="crispr-risk-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.9rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>风险核查记录</div>
@@ -4955,7 +5039,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
       </div>
 
-      <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.9rem" }}>
+      <div className="crispr-learner-panel" style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.9rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>我的判读记录</div>
@@ -4996,7 +5080,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
       </div>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+      <div className="crispr-quality-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.85rem" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>修复结果</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
@@ -5070,8 +5154,9 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
       </div>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.75rem" }}>
+      <details className="crispr-report-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>模拟报告</summary>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", margin: "0.75rem 0" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>模拟报告</div>
           <button type="button" onClick={copyCrisprReport} aria-describedby="crispr-report-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.46rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
             {copiedReport ? "已复制" : "复制报告"}
@@ -5080,10 +5165,10 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         <div id="crispr-report-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 900, marginBottom: "0.55rem" }}>
           {reportStatus}
         </div>
-        <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.9rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65 }}>
+        <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.9rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65, maxHeight: 280, overflow: "auto" }}>
           {crisprReport}
         </code>
-      </div>
+      </details>
 
       <style>
         {`
@@ -5113,11 +5198,91 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             }
 
             #crispr-simulator .crispr-quiz-grid {
-              grid-template-columns: 1fr !important;
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
 
             #crispr-simulator .crispr-learner-record-grid {
-              grid-template-columns: 1fr !important;
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+          }
+
+          @media (max-width: 520px) {
+            #crispr-simulator .crispr-intro-grid,
+            #crispr-simulator .crispr-practice-panel,
+            #crispr-simulator .crispr-result-check-panel,
+            #crispr-simulator .crispr-decision-panel,
+            #crispr-simulator .crispr-risk-panel,
+            #crispr-simulator .crispr-learner-panel,
+            #crispr-simulator .crispr-quality-panel {
+              padding: 0.68rem !important;
+              border-radius: 12px !important;
+            }
+
+            #crispr-simulator .crispr-intro-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.5rem !important;
+            }
+
+            #crispr-simulator .crispr-practice-panel > div:last-child,
+            #crispr-simulator .crispr-result-check-panel > div:last-child,
+            #crispr-simulator .crispr-decision-panel > div:nth-child(2),
+            #crispr-simulator .crispr-risk-panel > div:last-child,
+            #crispr-simulator .crispr-quality-panel > div:last-child,
+            #crispr-simulator .crispr-quiz-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.44rem !important;
+            }
+
+            #crispr-simulator .crispr-practice-panel button,
+            #crispr-simulator .crispr-result-check-panel > div:last-child > div,
+            #crispr-simulator .crispr-decision-panel > div:nth-child(2) > div,
+            #crispr-simulator .crispr-risk-panel > div:last-child > div,
+            #crispr-simulator .crispr-quality-panel > div:last-child > div,
+            #crispr-simulator .crispr-quiz-grid button {
+              padding: 0.48rem !important;
+              min-height: 0 !important;
+              border-radius: 10px !important;
+            }
+
+            #crispr-simulator .crispr-practice-panel span,
+            #crispr-simulator .crispr-result-check-panel span,
+            #crispr-simulator .crispr-decision-panel span,
+            #crispr-simulator .crispr-risk-panel span,
+            #crispr-simulator .crispr-quality-panel span,
+            #crispr-simulator .crispr-quiz-grid span,
+            #crispr-simulator .crispr-quiz-grid div {
+              font-size: 0.66rem !important;
+              line-height: 1.3 !important;
+            }
+
+            #crispr-simulator .crispr-practice-panel button > span,
+            #crispr-simulator .crispr-result-check-panel > div:last-child > div > span,
+            #crispr-simulator .crispr-decision-panel > div:nth-child(2) > div > div:last-child,
+            #crispr-simulator .crispr-risk-panel > div:last-child > div > span,
+            #crispr-simulator .crispr-quality-panel > div:last-child > div > span {
+              overflow: hidden !important;
+              display: -webkit-box !important;
+              -webkit-line-clamp: 3 !important;
+              -webkit-box-orient: vertical !important;
+            }
+
+            #crispr-simulator .crispr-learner-record-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.44rem !important;
+            }
+
+            #crispr-simulator .crispr-learner-record-grid label {
+              padding: 0.48rem !important;
+              min-height: 0 !important;
+              border-radius: 10px !important;
+              gap: 0.3rem !important;
+            }
+
+            #crispr-simulator .crispr-learner-record-grid textarea {
+              min-height: 58px !important;
+              font-size: 0.68rem !important;
+              line-height: 1.35 !important;
+              padding: 0.4rem !important;
             }
           }
 
@@ -5591,7 +5756,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
       >
         {work.slug === "gene-expression" ? <GeneExpressionTool /> : hasRichWorkContent(work.slug) ? <RichWorkContent slug={work.slug} /> : null}
       </section>
-      <WorkCompletionEvidence work={work} />
       <WorkSequenceLinks work={work} />
       <style>
         {`

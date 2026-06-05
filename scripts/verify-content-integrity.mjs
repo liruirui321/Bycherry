@@ -464,30 +464,13 @@ function verifyWorkJsonLdLearningOutcomes() {
   for (const retiredWorkQuickStartBlock of ["function WorkQuickStart", "<WorkQuickStart work={work} />", "workFirstRunPlanText", "copyFirstRunPlan", "work-run-summary", "work-run-actions", "work-quick-start", "work-start-tool-link", "work-first-run-copy-button", "复制运行卡", "第一次运行卡"]) {
     expect(!workDetailSource.includes(retiredWorkQuickStartBlock), `Work detail pages should open directly into the product, not a retired quick-start strip: ${retiredWorkQuickStartBlock}.`);
   }
-  expect(workDetailSource.includes("function WorkCompletionEvidence"), "Work detail pages must keep completion evidence as its own component.");
-  expect(workDetailSource.includes("<WorkCompletionEvidence work={work} />"), "Work detail pages must render completion evidence after the primary tool.");
-  expect(workDetailSource.includes("work-completion-evidence-panel"), "Work detail completion evidence must use a stable panel class.");
-  expect(workDetailSource.includes("完成证据"), "Work detail completion evidence must ask learners to leave completion evidence.");
-  expect(workDetailSource.includes("evidenceItems"), "Work detail completion evidence must derive completion evidence from work outputs, success, and path.");
-  expect(workDetailSource.includes("evidenceFieldItems"), "Work detail completion evidence must provide learner-filled evidence fields.");
-  expect(workDetailSource.includes("filledEvidence"), "Work detail reflection template must merge learner-filled evidence.");
-  expect(workDetailSource.includes("work-saved-output"), "Work detail completion evidence must expose a saved output input.");
-  expect(workDetailSource.includes("reflectionChecks"), "Work detail completion evidence must derive concrete reflection checks.");
-  expect(workDetailSource.includes("保存 1 份${work.outputs[0]"), "Work detail completion evidence must include a concrete saved output.");
-  expect(workDetailSource.includes("const evidenceTemplate"), "Work detail completion evidence must include a copyable reflection template.");
-  expect(workDetailSource.includes("copyEvidenceTemplate"), "Work detail completion evidence must provide a copy action.");
-  expect(workDetailSource.includes("复制复盘模板"), "Work detail completion evidence copy button must be visible.");
+  expect(!workDetailSource.includes("<WorkCompletionEvidence work={work} />"), "Work detail pages should not append a duplicate completion evidence panel after the primary product.");
   expect(workDetailSource.includes('id="work-primary-tool"') && workDetailSource.includes("tabIndex={-1}"), "Work detail primary tool anchor must be focusable.");
   const workHeroRenderIndex = workDetailSource.indexOf("<WorkHero work={work} compact />");
   const primaryToolRenderIndex = workDetailSource.indexOf('id="work-primary-tool"');
-  const completionEvidenceRenderIndex = workDetailSource.indexOf("<WorkCompletionEvidence work={work} />");
   const sequenceLinksRenderIndex = workDetailSource.indexOf("<WorkSequenceLinks work={work} />");
-  expect(workHeroRenderIndex !== -1 && primaryToolRenderIndex !== -1 && completionEvidenceRenderIndex !== -1 && sequenceLinksRenderIndex !== -1, "Work detail pages must render title, primary tool, completion evidence, and compact previous/next navigation.");
-  expect(workHeroRenderIndex < primaryToolRenderIndex && primaryToolRenderIndex < completionEvidenceRenderIndex && completionEvidenceRenderIndex < sequenceLinksRenderIndex, "Work detail pages must place the primary tool directly after the compact title bar, followed by evidence and previous/next navigation.");
-  expect(workDetailSource.includes("复盘证据"), "Work detail completion evidence template must include a reflection evidence title.");
-  expect(workDetailSource.includes("三、我的填写记录"), "Work detail completion evidence template must include learner-filled notes.");
-  expect(workDetailSource.includes("五、复盘检查"), "Work detail completion evidence template must include reflection checks.");
-  expect(workDetailSource.includes("六、下一步问题"), "Work detail completion evidence template must include a next-question field.");
+  expect(workHeroRenderIndex !== -1 && primaryToolRenderIndex !== -1 && sequenceLinksRenderIndex !== -1, "Work detail pages must render title, primary tool, and compact previous/next navigation.");
+  expect(workHeroRenderIndex < primaryToolRenderIndex && primaryToolRenderIndex < sequenceLinksRenderIndex, "Work detail pages must place the primary product directly after the compact title bar, followed by previous/next navigation.");
   for (const retiredWorkArticleBlock of ["pairedArticleSlugsByWorkSlug", "function WorkPairedReading", "配套文章", "work-paired-reading-link", "article.actionSteps[0]", "aria-label={`打开配套文章：${article.title}`", "全部文章 →"]) {
     expect(!workDetailSource.includes(retiredWorkArticleBlock), `Work detail pages should not reintroduce a separate paired-article entrance: ${retiredWorkArticleBlock}.`);
   }
