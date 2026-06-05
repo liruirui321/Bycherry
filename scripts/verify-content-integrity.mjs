@@ -569,6 +569,8 @@ function verifyResearchAgentWorkbenchContract() {
 
   expect(promptKitSource.includes("#prompt-kit-builder .research-prompt-route-grid") && promptKitSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Research Agent mobile route selector must stay as compact three-column task buttons.");
   expect(promptKitSource.includes("#prompt-kit-builder .research-prompt-route-input,") && promptKitSource.includes("#prompt-kit-builder .research-prompt-route-output") && promptKitSource.includes("display: none !important"), "Research Agent mobile route selector must hide long input/output details.");
+  expect(promptKitSource.includes('className="research-agent-mode-grid"') && promptKitSource.includes('gridTemplateColumns: "repeat(3, minmax(0, 1fr))"'), "Research Agent mode selector must stay as compact three-column buttons.");
+  expect(promptKitSource.includes('className="research-agent-mode-desc"') && promptKitSource.includes('style={{ display: "none"'), "Research Agent mode descriptions must stay hidden visually so the material input appears earlier.");
 
   for (const item of retiredWorkbenchPatterns) {
     expect(!item.pattern.test(promptKitSource), `Research Agent workbench contains retired copy: ${item.label}`);

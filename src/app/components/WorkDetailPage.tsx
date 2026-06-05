@@ -1121,15 +1121,15 @@ ${localPreviewOutput}`;
               {copyStatus}
             </div>
 
-            <div className="research-agent-mode-section" style={{ display: "grid", gap: "0.55rem", marginBottom: "0.9rem" }}>
-              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem" }}>工作模式</div>
-              <div className="research-agent-mode-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(154px, 1fr))", gap: "0.55rem" }}>
+            <div className="research-agent-mode-section" style={{ display: "grid", gap: "0.38rem", marginBottom: "0.62rem" }}>
+              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.78rem" }}>工作模式</div>
+              <div className="research-agent-mode-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.42rem" }}>
                 {promptModes.map((mode, index) => {
                   const active = activeModeIndex === index;
                   return (
-                    <button className="research-agent-mode-button" key={mode.title} type="button" aria-pressed={active} onClick={() => { setActiveModeIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setCopiedCitationAudit(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.68rem", cursor: "pointer" }}>
-                      <strong style={{ display: "block", color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.24rem" }}>{mode.title}</strong>
-                      <span className="research-agent-mode-desc" style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>{mode.description}</span>
+                    <button className="research-agent-mode-button" key={mode.title} type="button" aria-label={`${mode.title}：${mode.description}`} aria-pressed={active} onClick={() => { setActiveModeIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setCopiedCitationAudit(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "center", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.46rem 0.5rem", cursor: "pointer", minHeight: 40 }}>
+                      <strong style={{ display: "block", color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.76rem", lineHeight: 1.18, margin: 0 }}>{mode.title}</strong>
+                      <span className="research-agent-mode-desc" style={{ display: "none", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>{mode.description}</span>
                     </button>
                   );
                 })}
