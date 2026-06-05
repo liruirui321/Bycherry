@@ -562,6 +562,10 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "learner review grid", text: "research-review-grid" },
     { label: "API learner review contract", text: "learner_review" },
     { label: "research record learner review section", text: "九、我的复核记录" },
+    { label: "compact route grid", text: "research-prompt-route-grid" },
+    { label: "compact route button", text: "research-prompt-route-button" },
+    { label: "compact route hidden input", text: "research-prompt-route-input" },
+    { label: "compact route hidden output", text: "research-prompt-route-output" },
   ];
 
   const retiredWorkbenchPatterns = [
@@ -573,6 +577,9 @@ function verifyResearchAgentWorkbenchContract() {
   for (const item of requiredWorkbenchFeatures) {
     expect(`${practiceCasesSource}\n${promptKitSource}`.includes(item.text), `Research Agent workbench is missing ${item.label}: ${item.text}`);
   }
+
+  expect(promptKitSource.includes("#prompt-kit-builder .research-prompt-route-grid") && promptKitSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Research Agent mobile route selector must stay as compact three-column task buttons.");
+  expect(promptKitSource.includes("#prompt-kit-builder .research-prompt-route-input,") && promptKitSource.includes("#prompt-kit-builder .research-prompt-route-output") && promptKitSource.includes("display: none !important"), "Research Agent mobile route selector must hide long input/output details.");
 
   for (const item of retiredWorkbenchPatterns) {
     expect(!item.pattern.test(promptKitSource), `Research Agent workbench contains retired copy: ${item.label}`);

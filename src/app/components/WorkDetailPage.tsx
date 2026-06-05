@@ -1085,14 +1085,14 @@ ${localPreviewOutput}`;
         </div>
       </div>
       <div className="prompt-builder-layout" style={{ display: "grid", gridTemplateColumns: "minmax(230px, 0.78fr) minmax(0, 1.3fr)", gap: "1rem", alignItems: "start" }}>
-        <aside style={{ display: "grid", gap: "0.7rem" }}>
+        <aside className="research-prompt-route-grid" style={{ display: "grid", gap: "0.7rem" }}>
           {prompts.map((prompt, index) => {
             const active = activePromptIndex === index;
             return (
-              <button key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setCopiedCitationAudit(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
-                <div style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>{prompt.title}</div>
-                <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginBottom: "0.55rem" }}>{prompt.input}</div>
-                <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+              <button className="research-prompt-route-button" key={prompt.title} type="button" aria-pressed={active} onClick={() => { setActivePromptIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setCopiedCitationAudit(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--card)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: active ? "3px 5px 0px rgba(58,92,62,0.14)" : "3px 5px 0px rgba(94,68,42,0.05)", cursor: "pointer" }}>
+                <div className="research-prompt-route-title" style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.35rem" }}>{prompt.title}</div>
+                <div className="research-prompt-route-input" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginBottom: "0.55rem" }}>{prompt.input}</div>
+                <div className="research-prompt-route-output" style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
                   {prompt.output.slice(0, 2).map((item) => (
                     <span key={item} style={{ background: "rgba(250,247,241,0.78)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.16rem 0.48rem", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>
                       {item}
@@ -1803,16 +1803,32 @@ ${localPreviewOutput}`;
               grid-template-columns: 1fr !important;
             }
 
-            #prompt-kit-builder .prompt-builder-layout aside {
+            #prompt-kit-builder .research-prompt-route-grid {
               display: grid !important;
-              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-              gap: 0.46rem !important;
+              grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+              gap: 0.34rem !important;
             }
 
-            #prompt-kit-builder .prompt-builder-layout aside button {
+            #prompt-kit-builder .research-prompt-route-button {
               border-radius: 8px !important;
-              padding: 0.58rem !important;
+              padding: 0.42rem !important;
               box-shadow: none !important;
+              min-height: 0 !important;
+            }
+
+            #prompt-kit-builder .research-prompt-route-title {
+              margin: 0 !important;
+              font-size: 0.68rem !important;
+              line-height: 1.18 !important;
+              overflow: hidden !important;
+              display: -webkit-box !important;
+              -webkit-line-clamp: 2 !important;
+              -webkit-box-orient: vertical !important;
+            }
+
+            #prompt-kit-builder .research-prompt-route-input,
+            #prompt-kit-builder .research-prompt-route-output {
+              display: none !important;
             }
           }
 
