@@ -439,7 +439,7 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("scroll-snap-type: x proximity"), "Homepage hero mobile module directory must support horizontal scanning.");
   expect(heroSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Homepage hero must use the direct-to-tool work href helper without duplicate home-section CTAs.");
   expect(heroSource.includes("const toolHref = getWorkToolHref(work.href)") && heroSource.includes("href={toolHref}"), "Homepage first-screen module cards must link directly to work tools.");
-  for (const retiredHeroBlock of ["sessionPlans", "materialRoutes", "heroModuleStats", "hero-session-copy-status", "hero-material-route-grid", "hero-actions", "hero-cta", "navigateHomeSection", "完成标准，", "先做这个，"]) {
+  for (const retiredHeroBlock of ["sessionPlans", "materialRoutes", "heroModuleStats", "hero-session-copy-status", "hero-material-route-grid", "hero-actions", "hero-cta", "navigateHomeSection", "science learning lab", "完成标准，", "先做这个，"]) {
     expect(!heroSource.includes(retiredHeroBlock), `Homepage hero should stay short and not include retired duplicate block: ${retiredHeroBlock}.`);
   }
   expect(!appSource.includes("<Works") && !appSource.includes('import { Works }'), "Homepage must not render a duplicate Works section below the hero.");
@@ -494,6 +494,8 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(!footerSource.includes('navigateHomeSection'), "Footer should not repeat homepage section navigation.");
   expect(footerSource.includes("externalLinks"), "Footer should keep compact external contact links.");
   expect(footerSource.includes("科学学习与 AI · 2026"), "Footer should stay as a compact brand line.");
+  expect(footerSource.includes("footer-inner") && footerSource.includes("footer-links"), "Footer should expose mobile-safe layout hooks.");
+  expect(footerSource.includes("@media (max-width: 560px)") && footerSource.includes("grid-template-columns: 1fr !important"), "Footer must stack on narrow screens instead of clipping links.");
   for (const retiredFooterBlock of ["footerWorkLinks", "footer-work-link", "footerNextPlanText", "copyFooterNextPlan", "页尾继续学习清单", "footer-next-plan-panel", "学习模块", "证据库", "方法库", "联系", "bycherry.me"]) {
     expect(!footerSource.includes(retiredFooterBlock), `Footer should stay short and not include retired duplicate block: ${retiredFooterBlock}.`);
   }
@@ -1154,9 +1156,8 @@ function verifyLearnerProductPositioning() {
     "植物演化时间轴",
     "CRISPR 编辑模拟器",
     '"学习项目"',
-    "science learning lab",
     "首屏学习模块目录",
-    "科研转译内容入口",
+    "模块直接操作",
     "基因表达可视化",
     "概念解释生成器",
     "科研 Agent",

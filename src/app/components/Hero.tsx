@@ -1,5 +1,4 @@
 import type { MouseEvent } from "react";
-import { IconMicroscope } from "./Icons";
 import { works } from "./Works";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
@@ -21,7 +20,7 @@ export function Hero() {
         minHeight: "auto",
         position: "relative",
         overflow: "hidden",
-        padding: "1.35rem 1.5rem 1.15rem",
+        padding: "1rem 1.5rem 1.05rem",
         width: "100%",
         maxWidth: "100%",
         background:
@@ -30,35 +29,19 @@ export function Hero() {
       }}
     >
       <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1120, width: "100%", minWidth: 0, margin: "0 auto" }}>
-        <div className="hero-header-row" style={{ maxWidth: 760, marginBottom: "0.9rem" }}>
+        <div className="hero-header-row" style={{ maxWidth: 760, marginBottom: "0.72rem" }}>
           <div style={{ minWidth: 0 }}>
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                background: "rgba(250,247,241,0.82)",
-                border: "1px solid rgba(58,92,62,0.18)",
-                borderRadius: 999,
-                padding: "0.32rem 0.82rem",
-                marginBottom: "0.72rem",
-              }}
-            >
-              <IconMicroscope size={15} color="var(--cherry-forest)" />
-              <span style={{ fontSize: "0.76rem", color: "var(--cherry-warm-mid)", fontWeight: 900, letterSpacing: 0 }}>
-                By Cherry · science learning lab
-              </span>
-            </div>
             <h1
               id="hero-heading"
               style={{
                 fontFamily: "'Nunito', sans-serif",
-                fontSize: "clamp(1.58rem, 3.5vw, 2.45rem)",
+                fontSize: "clamp(1.45rem, 3.2vw, 2.2rem)",
                 fontWeight: 800,
                 lineHeight: 1.12,
                 color: "var(--cherry-warm-brown)",
-                margin: "0 0 0.55rem",
+                margin: "0 0 0.42rem",
                 letterSpacing: 0,
+                overflowWrap: "anywhere",
               }}
             >
               By Cherry 科学与 AI 学习工作台
@@ -67,12 +50,13 @@ export function Hero() {
               style={{
                 fontSize: "clamp(0.9rem, 1.5vw, 1rem)",
                 color: "var(--cherry-warm-mid)",
-                lineHeight: 1.62,
+                lineHeight: 1.5,
                 margin: 0,
                 fontWeight: 700,
+                overflowWrap: "anywhere",
               }}
             >
-              科学学习、AI 工具和科研转译内容入口集中在这里。进入模块后直接操作，文章页保留方法、证据和可复用记录。
+              模块直接操作，文章保留方法、证据和可复用记录。
             </p>
           </div>
         </div>
@@ -136,8 +120,8 @@ export function Hero() {
           #top {
             padding-left: 1rem !important;
             padding-right: 1rem !important;
-            padding-top: 1rem !important;
-            padding-bottom: 1rem !important;
+            padding-top: 0.78rem !important;
+            padding-bottom: 0.9rem !important;
           }
 
           .hero-inner,
@@ -145,6 +129,7 @@ export function Hero() {
             width: 100% !important;
             max-width: calc(100vw - 2rem) !important;
             grid-template-columns: 1fr !important;
+            overflow-wrap: anywhere;
           }
 
           .hero-work-grid {
@@ -159,9 +144,9 @@ export function Hero() {
           }
 
           .hero-work-card {
-            width: min(52vw, 220px) !important;
-            min-width: min(52vw, 220px) !important;
-            max-width: min(52vw, 220px) !important;
+            width: min(46vw, 190px) !important;
+            min-width: min(46vw, 190px) !important;
+            max-width: min(46vw, 190px) !important;
             scroll-snap-align: start;
           }
 
