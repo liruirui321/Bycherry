@@ -1897,71 +1897,43 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             ) : null}
 
             {articleOutcomeSnapshot.length ? (
-              <div className="article-outcome-snapshot" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.76rem", marginBottom: "0.85rem", display: "grid", gap: "0.62rem" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
-                  <div>
-                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.88rem" }}>读完带走</div>
-                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.16rem", fontWeight: 800 }}>
-                      先看本篇要留下什么，再进入正文。目标是带走可执行材料，而不是只浏览。
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", gap: "0.46rem", flexWrap: "wrap" }}>
-                    <button type="button" className="article-start-action-button" onClick={focusArticleStart} aria-label={`开始执行${article.title}。先做这个，${articleQuickStart?.step ?? actionSteps[0] ?? "阅读正文要点"}`} style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.36rem 0.7rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
-                      开始执行
-                    </button>
-                    <button type="button" onClick={copyActionPack} aria-label={`复制${article.title}的行动包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.36rem 0.7rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
-                      {copiedActionPack ? "已复制行动包" : "复制行动包"}
-                    </button>
-                    <button type="button" onClick={copyReadingTaskPack} aria-label={`复制${article.title}的阅读任务包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
-                      {copiedReadingTaskPack ? "已复制任务包" : "复制任务包"}
-                    </button>
-                    <button type="button" onClick={copyLearningRecord} aria-label={`复制${article.title}的学习记录`} aria-describedby="article-summary-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.22)", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
-                      {copiedLearningRecord ? "已复制记录" : "复制学习记录"}
-                    </button>
+              <div className="article-outcome-snapshot article-reading-task-pack" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.54rem 0.62rem", marginBottom: "0.68rem", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.62rem", alignItems: "center" }}>
+                <div style={{ minWidth: 0, display: "grid", gap: "0.18rem" }}>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem" }}>读完带走 · 阅读任务包</div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.38, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                    目标是带走可执行材料，而不是只浏览。先做、抓证据、留产出、验收、接着做。
                   </div>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.52rem" }}>
-                  {articleOutcomeSnapshot.map((item, index) => (
-                    <div key={item.label} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", display: "grid", gap: "0.34rem", minHeight: 122 }}>
-                      <span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: index === 0 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.7rem", fontWeight: 900 }}>
-                        <span aria-hidden="true" style={{ width: 18, height: 18, borderRadius: "50%", background: index === 0 ? "var(--cherry-red)" : "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
-                        {item.label}
-                      </span>
-                      <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.76rem", lineHeight: 1.46, fontWeight: 900 }}>{item.body}</span>
-                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.71rem", lineHeight: 1.45, fontWeight: 800 }}>{item.result}</span>
-                    </div>
-                  ))}
+                <div className="article-outcome-actions" style={{ display: "inline-flex", gap: "0.38rem", flexWrap: "wrap", justifyContent: "flex-end" }}>
+                  <button type="button" className="article-start-action-button" onClick={focusArticleStart} aria-label={`开始执行${article.title}。先做这个，${articleQuickStart?.step ?? actionSteps[0] ?? "阅读正文要点"}`} style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.72rem", whiteSpace: "nowrap" }}>
+                    开始执行
+                  </button>
+                  <button type="button" onClick={copyActionPack} aria-label={`复制${article.title}的行动包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.72rem", whiteSpace: "nowrap" }}>
+                    {copiedActionPack ? "已复制行动包" : "复制行动包"}
+                  </button>
+                  <button type="button" onClick={copyReadingTaskPack} aria-label={`复制${article.title}的阅读任务包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.32rem 0.66rem", fontWeight: 900, cursor: "pointer", fontSize: "0.72rem", whiteSpace: "nowrap" }}>
+                    {copiedReadingTaskPack ? "已复制任务包" : "复制任务包"}
+                  </button>
+                  <button type="button" onClick={copyLearningRecord} aria-label={`复制${article.title}的学习记录`} aria-describedby="article-summary-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.22)", borderRadius: 999, padding: "0.32rem 0.66rem", fontWeight: 900, cursor: "pointer", fontSize: "0.72rem", whiteSpace: "nowrap" }}>
+                    {copiedLearningRecord ? "已复制记录" : "复制学习记录"}
+                  </button>
                 </div>
               </div>
             ) : null}
 
-            {articleReadingTaskPackCards.length ? (
-              <div className="article-reading-task-pack" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.78rem", marginBottom: "0.85rem", display: "grid", gap: "0.66rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
-                  <div>
-                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>阅读任务包</div>
-                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.16rem", fontWeight: 800 }}>
-                      按 5 张卡完成阅读：先做、抓证据、留产出、验收、接着做。
-                    </div>
-                  </div>
-                  <button type="button" onClick={copyReadingTaskPack} aria-label={`复制${article.title}的阅读任务包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem" }}>
-                    {copiedReadingTaskPack ? "已复制" : "复制阅读任务包"}
-                  </button>
+            <div id="article-body-points" tabIndex={-1} style={{ display: "grid", gap: "0.5rem", marginBottom: "0.78rem" }}>
+              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>正文要点</div>
+              {article.paragraphs.map((paragraph, index) => (
+                <div key={paragraph} style={{ display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: 8, alignItems: "start", background: "var(--muted)", border: "1px solid rgba(94,68,42,0.08)", borderRadius: 8, padding: "0.56rem" }}>
+                  <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: article.tagBg ?? article.labelBg, color: article.tagColor ?? article.labelColor, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900 }}>
+                    {index + 1}
+                  </span>
+                  <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.62, fontSize: "0.86rem", margin: 0 }}>
+                    {paragraph}
+                  </p>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(158px, 1fr))", gap: "0.52rem" }}>
-                  {articleReadingTaskPackCards.map((item, index) => (
-                    <div key={item.title} style={{ background: index === 0 ? "var(--cherry-yellow-light)" : index === 1 ? "var(--cherry-blue-light)" : index === 2 ? "var(--cherry-sage-light)" : index === 3 ? "var(--cherry-peach-light)" : "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", display: "grid", gap: "0.34rem", minHeight: 136 }}>
-                      <span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: index === 0 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.7rem", fontWeight: 900 }}>
-                        <span aria-hidden="true" style={{ width: 18, height: 18, borderRadius: "50%", background: index === 0 ? "var(--cherry-red)" : "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
-                        {item.title}
-                      </span>
-                      <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.46, fontWeight: 900 }}>{item.body}</span>
-                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 800 }}>产出：{item.output}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
+              ))}
+            </div>
 
             {articleQuickStart ? (
               <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.72rem", marginBottom: "0.85rem", display: "grid", gap: "0.58rem" }}>
@@ -2725,20 +2697,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </div>
             ) : null}
 
-            <div id="article-body-points" tabIndex={-1} style={{ display: "grid", gap: "0.62rem", marginBottom: "0.9rem" }}>
-              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>正文要点</div>
-              {article.paragraphs.map((paragraph, index) => (
-                <div key={paragraph} style={{ display: "grid", gridTemplateColumns: "28px minmax(0, 1fr)", gap: 9, alignItems: "start", background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.08)", borderRadius: 14, padding: "0.72rem" }}>
-                  <span aria-hidden="true" style={{ width: 24, height: 24, borderRadius: "50%", background: article.tagBg ?? article.labelBg, color: article.tagColor ?? article.labelColor, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 900 }}>
-                    {index + 1}
-                  </span>
-                  <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.72, fontSize: "0.9rem", margin: 0 }}>
-                    {paragraph}
-                  </p>
-                </div>
-              ))}
-            </div>
-
             <div
               style={{
                 background: "var(--cherry-yellow-light)",
@@ -3000,6 +2958,14 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           }
 
           @media (max-width: 759px) {
+            .article-outcome-snapshot {
+              grid-template-columns: 1fr !important;
+            }
+
+            .article-outcome-actions {
+              justify-content: flex-start !important;
+            }
+
             .article-record-grid,
             .plant-evidence-chain-grid,
             .plant-evidence-chain-builder > div:nth-of-type(3),

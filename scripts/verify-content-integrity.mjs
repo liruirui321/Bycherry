@@ -397,10 +397,16 @@ function verifyArticleOutcomeSnapshot() {
   expect(articleSource.includes("article-reading-task-pack"), "Article detail reading task pack must have a stable class for layout checks.");
   expect(articleSource.includes("阅读任务包"), "Article detail pages must visibly name the reading task pack.");
   expect(articleSource.includes("先做、抓证据、留产出、验收、接着做"), "Article detail reading task pack must show the learner execution sequence.");
-  expect(articleSource.includes("复制阅读任务包"), "Article detail reading task pack must expose a visible copy button.");
+  expect(articleSource.includes("article-outcome-actions"), "Article detail task pack actions must stay in a compact top strip.");
+  expect(!articleSource.includes('articleReadingTaskPackCards.map((item, index) => (') && !articleSource.includes('minHeight: 136'), "Article detail task pack must not render a front-loaded five-card grid before the body.");
   expect(articleSource.includes("【阅读任务包】"), "Article copied task pack must include a clear title.");
   expect(articleSource.includes("三、正文抓取顺序"), "Article copied task pack must include the reading path.");
   expect(articleSource.includes("五、读完接着做"), "Article copied task pack must include paired next actions.");
+  const bodyPointsRenderIndex = articleSource.indexOf('id="article-body-points"');
+  const primaryActionRenderIndex = articleSource.indexOf('id="article-primary-action"');
+  const pairedWorkRenderIndex = articleSource.indexOf('className="article-paired-work-panel"');
+  expect(bodyPointsRenderIndex !== -1 && primaryActionRenderIndex !== -1 && bodyPointsRenderIndex < primaryActionRenderIndex, "Article body points must appear before action/checklist panels.");
+  expect(pairedWorkRenderIndex === -1 || bodyPointsRenderIndex < pairedWorkRenderIndex, "Article body points must appear before paired work cards.");
 }
 
 function verifyWorkJsonLdLearningOutcomes() {
