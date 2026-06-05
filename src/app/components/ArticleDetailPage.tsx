@@ -87,6 +87,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copiedEvidenceChainCard, setCopiedEvidenceChainCard] = useState(false);
   const [copiedBarcodeEvidenceTable, setCopiedBarcodeEvidenceTable] = useState(false);
   const [copiedProjectEvidenceTable, setCopiedProjectEvidenceTable] = useState(false);
+  const [copiedCreationRunRecord, setCopiedCreationRunRecord] = useState(false);
   const [selectedPlatformPlanIndex, setSelectedPlatformPlanIndex] = useState(0);
   const [platformLearnerLevel, setPlatformLearnerLevel] = useState("生物基础入门，已经学过 DNA 和 RNA 基础");
   const [platformKnowledgeRange, setPlatformKnowledgeRange] = useState("基因表达：DNA、mRNA、蛋白质的信息传递关系");
@@ -117,6 +118,12 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [projectProcessEvidence, setProjectProcessEvidence] = useState("");
   const [projectRubricCriteria, setProjectRubricCriteria] = useState("");
   const [projectRevisionRecord, setProjectRevisionRecord] = useState("");
+  const [creationSceneGoal, setCreationSceneGoal] = useState("");
+  const [creationCharacterLock, setCreationCharacterLock] = useState("");
+  const [creationShotPlan, setCreationShotPlan] = useState("");
+  const [creationAssetPrompt, setCreationAssetPrompt] = useState("");
+  const [creationFailureNote, setCreationFailureNote] = useState("");
+  const [creationEditCheck, setCreationEditCheck] = useState("");
   const [recordQuestion, setRecordQuestion] = useState("");
   const [recordEvidence, setRecordEvidence] = useState("");
   const [recordOutput, setRecordOutput] = useState("");
@@ -156,6 +163,13 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     setProjectProcessEvidence("");
     setProjectRubricCriteria("");
     setProjectRevisionRecord("");
+    setCopiedCreationRunRecord(false);
+    setCreationSceneGoal("");
+    setCreationCharacterLock("");
+    setCreationShotPlan("");
+    setCreationAssetPrompt("");
+    setCreationFailureNote("");
+    setCreationEditCheck("");
     setCopiedGenomeStoryFrame(false);
     setGenomeStoryObject("");
     setGenomeStoryQuestion("");
@@ -720,6 +734,105 @@ ${projectEvidenceFilled.revision}
 5. 评价量规是否可观察：${projectEvidenceFields[4]?.pass ? "可用" : "待补充"}
 6. 修订记录是否说明作品如何变可靠：${projectEvidenceFields[5]?.pass ? "可用" : "待补充"}`
     : "";
+  const creationRunBuilderEnabled = article?.slug === "ai-comic-video-workflow";
+  const creationRunFields = creationRunBuilderEnabled
+    ? [
+        {
+          id: "creation-scene-goal",
+          label: "场景目标",
+          value: creationSceneGoal,
+          setValue: setCreationSceneGoal,
+          placeholder: "例如：20 秒片段里让主角发现信件，情绪从犹豫转为下定决心。",
+          pass: creationSceneGoal.trim().length >= 18 && /场景|片段|情绪|动作|目标|表现|对白|主角/.test(creationSceneGoal.trim()),
+          help: "写清这一段要表现的情绪、动作或叙事目的。",
+        },
+        {
+          id: "creation-character-lock",
+          label: "角色锁定",
+          value: creationCharacterLock,
+          setValue: setCreationCharacterLock,
+          placeholder: "例如：短黑发、深绿色外套、银色耳钉；禁用长发、红衣、夸张表情。",
+          pass: creationCharacterLock.trim().length >= 20 && /发|服装|颜色|表情|禁用|特征|角色|外观/.test(creationCharacterLock.trim()),
+          help: "写清外观、服装、表情和禁用特征，减少镜头漂移。",
+        },
+        {
+          id: "creation-shot-plan",
+          label: "镜头表",
+          value: creationShotPlan,
+          setValue: setCreationShotPlan,
+          placeholder: "例如：1. 中景推近 4 秒；2. 手部特写 3 秒；3. 侧脸停顿 5 秒。",
+          pass: creationShotPlan.trim().length >= 20 && /镜头|中景|近景|特写|秒|动作|景别|推近|停顿/.test(creationShotPlan.trim()),
+          help: "至少写出 3 个镜头、景别、动作和时长。",
+        },
+        {
+          id: "creation-asset-prompt",
+          label: "资产提示",
+          value: creationAssetPrompt,
+          setValue: setCreationAssetPrompt,
+          placeholder: "例如：角色正面参考、房间黄昏光、桌面信件，统一低饱和写实风格。",
+          pass: creationAssetPrompt.trim().length >= 20 && /角色|场景|参考|光|风格|资产|提示|一致|背景/.test(creationAssetPrompt.trim()),
+          help: "写出生成角色、场景或道具时要复用的提示条件。",
+        },
+        {
+          id: "creation-failure-note",
+          label: "失败原因",
+          value: creationFailureNote,
+          setValue: setCreationFailureNote,
+          placeholder: "例如：第 2 镜手指变形；下次限制手部入镜，改用信件边缘特写。",
+          pass: creationFailureNote.trim().length >= 20 && /失败|问题|漂移|变形|不一致|下次|限制|修正|原因/.test(creationFailureNote.trim()),
+          help: "把坏结果写成下次可复用的限制条件。",
+        },
+        {
+          id: "creation-edit-check",
+          label: "剪辑检查",
+          value: creationEditCheck,
+          setValue: setCreationEditCheck,
+          placeholder: "例如：检查镜头衔接、停顿、声音稳定、字幕可读和情绪递进。",
+          pass: creationEditCheck.trim().length >= 18 && /剪辑|节奏|声音|字幕|转场|衔接|停顿|情绪|可读/.test(creationEditCheck.trim()),
+          help: "写清成片前要检查的节奏、声音、字幕和连续性。",
+        },
+      ]
+    : [];
+  const creationRunScore = creationRunFields.filter((field) => field.pass).length;
+  const creationRunFilled = {
+    scene: creationSceneGoal.trim() || "场景目标需要写清这一段要表现的情绪、动作或叙事目的。",
+    character: creationCharacterLock.trim() || "角色锁定需要记录外观、服装、表情和禁用特征。",
+    shots: creationShotPlan.trim() || "镜头表需要写出景别、动作、时长和镜头目的。",
+    assets: creationAssetPrompt.trim() || "资产提示需要保留角色、场景、道具、光线和风格条件。",
+    failure: creationFailureNote.trim() || "失败原因需要转成下次生成时可复用的限制条件。",
+    edit: creationEditCheck.trim() || "剪辑检查需要覆盖连续性、节奏、声音、字幕和情绪递进。",
+  };
+  const creationRunRecordText = creationRunBuilderEnabled
+    ? `【AI 创作生成记录表】
+主题：${article?.title ?? ""}
+填写完成度：${creationRunScore}/6
+
+一、场景目标
+${creationRunFilled.scene}
+
+二、角色锁定
+${creationRunFilled.character}
+
+三、镜头表
+${creationRunFilled.shots}
+
+四、资产提示
+${creationRunFilled.assets}
+
+五、失败原因
+${creationRunFilled.failure}
+
+六、剪辑检查
+${creationRunFilled.edit}
+
+自查
+1. 场景目标是否明确：${creationRunFields[0]?.pass ? "可用" : "待补充"}
+2. 角色锁定是否能减少漂移：${creationRunFields[1]?.pass ? "可用" : "待补充"}
+3. 镜头表是否包含景别、动作和时长：${creationRunFields[2]?.pass ? "可用" : "待补充"}
+4. 资产提示是否能复用：${creationRunFields[3]?.pass ? "可用" : "待补充"}
+5. 失败原因是否变成限制条件：${creationRunFields[4]?.pass ? "可用" : "待补充"}
+6. 剪辑检查是否覆盖成片体验：${creationRunFields[5]?.pass ? "可用" : "待补充"}`
+    : "";
   const platformUrl = article && "platformUrl" in article ? article.platformUrl : null;
   const platformUsePlans = platformUrl
     ? [
@@ -1168,6 +1281,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedEvidenceChainCard(true);
       setCopiedBarcodeEvidenceTable(false);
       setCopiedProjectEvidenceTable(false);
+      setCopiedCreationRunRecord(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
       setCopiedActionPack(false);
@@ -1192,6 +1306,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedGenomeStoryFrame(true);
       setCopiedBarcodeEvidenceTable(false);
       setCopiedProjectEvidenceTable(false);
+      setCopiedCreationRunRecord(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1216,6 +1331,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     if (copiedToClipboard) {
       setCopiedBarcodeEvidenceTable(true);
       setCopiedProjectEvidenceTable(false);
+      setCopiedCreationRunRecord(false);
       setCopiedGenomeStoryFrame(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
@@ -1241,6 +1357,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     if (copiedToClipboard) {
       setCopiedProjectEvidenceTable(true);
       setCopiedBarcodeEvidenceTable(false);
+      setCopiedCreationRunRecord(false);
       setCopiedGenomeStoryFrame(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
@@ -1260,6 +1377,32 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  async function copyCreationRunRecord() {
+    if (!creationRunRecordText) return;
+    const copiedToClipboard = await copyText(creationRunRecordText);
+    if (copiedToClipboard) {
+      setCopiedCreationRunRecord(true);
+      setCopiedProjectEvidenceTable(false);
+      setCopiedBarcodeEvidenceTable(false);
+      setCopiedGenomeStoryFrame(false);
+      setCopiedEvidenceChainCard(false);
+      setCopiedSummary(false);
+      setCopiedTemplate(false);
+      setCopiedActionPack(false);
+      setCopiedLearningRecord(false);
+      setCopiedReadingTaskPack(false);
+      setCopiedPlatformConfig(false);
+      setCopiedPlatformReview(false);
+      setCopiedAiAuditPrompts(false);
+      setCopyStatus("AI 创作生成记录表已复制到剪贴板。");
+      window.setTimeout(() => setCopiedCreationRunRecord(false), 1400);
+      return;
+    }
+
+    setCopiedCreationRunRecord(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
   async function copyPlatformPasteConfig() {
     if (!platformPasteConfigText) return;
     const copiedToClipboard = await copyText(platformPasteConfigText);
@@ -1267,6 +1410,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedPlatformConfig(true);
       setCopiedBarcodeEvidenceTable(false);
       setCopiedProjectEvidenceTable(false);
+      setCopiedCreationRunRecord(false);
       setCopiedPlatformReview(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1290,6 +1434,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedPlatformReview(true);
       setCopiedBarcodeEvidenceTable(false);
       setCopiedProjectEvidenceTable(false);
+      setCopiedCreationRunRecord(false);
       setCopiedPlatformConfig(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1713,6 +1858,52 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   </code>
                   <button type="button" onClick={copyProjectEvidenceTable} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
                     {copiedProjectEvidenceTable ? "已复制" : "复制项目证据表"}
+                  </button>
+                </div>
+              </div>
+            ) : null}
+
+            {creationRunBuilderEnabled ? (
+              <div className="creation-run-record-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>AI 创作生成记录表</div>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.16rem", fontWeight: 800 }}>
+                      把场景、角色、镜头、资产提示、失败原因和剪辑检查留成记录，避免每次生成都重新试错。
+                    </div>
+                  </div>
+                  <span style={{ background: creationRunScore === 6 ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.26rem 0.62rem", color: creationRunScore === 6 ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+                    完成度 {creationRunScore}/6
+                  </span>
+                </div>
+                <div className="creation-run-record-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.62rem" }}>
+                  {creationRunFields.map((field) => (
+                    <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.34rem", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 900 }}>
+                      {field.label}
+                      <textarea
+                        id={field.id}
+                        value={field.value}
+                        placeholder={field.placeholder}
+                        rows={3}
+                        onChange={(event) => {
+                          field.setValue(event.currentTarget.value);
+                          setCopiedCreationRunRecord(false);
+                          setCopyStatus("");
+                        }}
+                        style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem 0.66rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, lineHeight: 1.55, resize: "vertical" }}
+                      />
+                      <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.45, fontWeight: 800 }}>
+                        {field.pass ? "可用" : field.help}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.7rem", alignItems: "start" }}>
+                  <code style={{ display: "block", whiteSpace: "pre-wrap", maxHeight: 240, overflow: "auto", background: "var(--cherry-sage-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.7rem", lineHeight: 1.58 }}>
+                    {creationRunRecordText}
+                  </code>
+                  <button type="button" onClick={copyCreationRunRecord} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
+                    {copiedCreationRunRecord ? "已复制" : "复制生成记录"}
                   </button>
                 </div>
               </div>
@@ -2332,6 +2523,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           .barcode-evidence-table-grid textarea:focus-visible,
           .project-evidence-table-builder button:focus-visible,
           .project-evidence-table-grid textarea:focus-visible,
+          .creation-run-record-builder button:focus-visible,
+          .creation-run-record-grid textarea:focus-visible,
           .article-record-grid textarea:focus-visible,
           .platform-custom-config-grid input:focus-visible,
           .platform-custom-config-grid textarea:focus-visible,
@@ -2414,6 +2607,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             .barcode-evidence-table-builder > div:nth-of-type(3),
             .project-evidence-table-grid,
             .project-evidence-table-builder > div:nth-of-type(3),
+            .creation-run-record-grid,
+            .creation-run-record-builder > div:nth-of-type(3),
             .platform-active-plan-grid,
             .platform-custom-config-grid > div:nth-of-type(2) {
               grid-template-columns: 1fr !important;

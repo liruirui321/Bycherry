@@ -358,6 +358,20 @@ function verifyProjectEvidenceTableBuilder() {
   expect(articleSource.includes("project-evidence-table-builder") && articleSource.includes("project-evidence-table-grid"), "Project evidence builder must have stable classes for layout checks.");
 }
 
+function verifyCreationRunRecordBuilder() {
+  const articleSource = read("src/app/components/ArticleDetailPage.tsx");
+
+  expect(articleSource.includes("creationRunBuilderEnabled"), "AI creation workflow article must expose a special run record builder.");
+  expect(articleSource.includes('article?.slug === "ai-comic-video-workflow"'), "AI creation run record builder must target the creation workflow article.");
+  expect(articleSource.includes("creationRunFields"), "AI creation run record builder must define learner-fillable fields.");
+  expect(articleSource.includes("creationRunRecordText"), "AI creation run record builder must produce a copyable run record.");
+  expect(articleSource.includes("copyCreationRunRecord"), "AI creation run record builder must expose a copy handler.");
+  expect(articleSource.includes("AI 创作生成记录表"), "AI creation run record builder must visibly name the run record.");
+  expect(articleSource.includes("场景目标") && articleSource.includes("角色锁定") && articleSource.includes("镜头表") && articleSource.includes("资产提示") && articleSource.includes("失败原因") && articleSource.includes("剪辑检查"), "AI creation run record builder must keep scene, character, shot, asset, failure, and edit-check fields.");
+  expect(articleSource.includes("避免每次生成都重新试错"), "AI creation run record builder must keep the reusable-process caution visible.");
+  expect(articleSource.includes("creation-run-record-builder") && articleSource.includes("creation-run-record-grid"), "AI creation run record builder must have stable classes for layout checks.");
+}
+
 function verifyArticleOutcomeSnapshot() {
   const articleSource = read("src/app/components/ArticleDetailPage.tsx");
 
@@ -1347,6 +1361,7 @@ verifyPlantGenomeEvidenceChainBuilder();
 verifyGenomeAssemblyStoryFrameBuilder();
 verifyBarcodingEvidenceTableBuilder();
 verifyProjectEvidenceTableBuilder();
+verifyCreationRunRecordBuilder();
 verifyArticleOutcomeSnapshot();
 verifyWorkJsonLdLearningOutcomes();
 verifyResearchAgentWorkbenchContract();
