@@ -1304,8 +1304,9 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             ) : null}
           </div>
 
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.85rem" }}>
+          <details className="gene-compact-details gene-process-focus-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>过程追踪 · {activeProcessFocus}</summary>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
               <IconSparkle size={18} />
               过程追踪
             </div>
@@ -1322,7 +1323,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
                 </div>
               ))}
             </div>
-          </div>
+          </details>
 
           <details className="gene-compact-details gene-result-check-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.04)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>结果检查 · {expressionCompletionChecks.filter((item) => item.done).length}/{expressionCompletionChecks.length}</summary>
@@ -1414,8 +1415,9 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             </code>
           </details>
 
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.85rem" }}>
+          <details className="gene-compact-details gene-translation-lens-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>翻译放大镜 · {focusedCodon?.rna ?? "---"} → {focusedCodon?.amino ?? "---"}</summary>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
               <IconSparkle size={18} />
               翻译放大镜
             </div>
@@ -1442,7 +1444,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
               <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", fontWeight: 900, marginBottom: "0.32rem" }}>出口处多肽片段</div>
               <strong style={{ color: "var(--cherry-forest)", fontSize: "0.9rem", lineHeight: 1.35 }}>{peptidePreview}</strong>
             </div>
-          </div>
+          </details>
 
           <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: "0.75rem" }}>
