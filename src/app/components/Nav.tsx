@@ -1,13 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { IconCherry, IconMenu, IconClose } from "./Icons";
+import { useEffect, useState } from "react";
+import { IconCherry } from "./Icons";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
 export function Nav() {
-  const [open, setOpen] = useState(false);
   const [locationKey, setLocationKey] = useState(`${window.location.pathname}${window.location.hash}`);
-  const toggleRef = useRef<HTMLButtonElement | null>(null);
-  const firstMobileLinkRef = useRef<HTMLAnchorElement | null>(null);
 
   const links = [
     { label: "内容", href: "/#works", matchHashes: ["#works", "#top"] },
@@ -32,7 +29,6 @@ export function Nav() {
   useEffect(() => {
     function handleLocationChange() {
       setLocationKey(`${window.location.pathname}${window.location.hash}`);
-      setOpen(false);
     }
 
     window.addEventListener("popstate", handleLocationChange);
@@ -42,27 +38,6 @@ export function Nav() {
       window.removeEventListener("hashchange", handleLocationChange);
     };
   }, []);
-
-  useEffect(() => {
-    if (!open) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const focusFrame = window.requestAnimationFrame(() => firstMobileLinkRef.current?.focus());
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key !== "Escape") return;
-      setOpen(false);
-      window.requestAnimationFrame(() => toggleRef.current?.focus());
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.cancelAnimationFrame(focusFrame);
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open]);
 
   function isActiveLink(link: (typeof links)[number]) {
     const { pathname, hash } = window.location;
@@ -82,18 +57,6 @@ export function Nav() {
       background: active ? "rgba(232,144,124,0.16)" : "transparent",
       borderRadius: 999,
       padding: "0.28rem 0.58rem",
-    };
-  }
-
-  function mobileLinkStyle(active: boolean): React.CSSProperties {
-    return {
-      textDecoration: "none",
-      color: active ? "var(--cherry-red)" : "var(--cherry-warm-brown)",
-      fontSize: "1rem",
-      fontWeight: active ? 900 : 600,
-      background: active ? "rgba(232,144,124,0.14)" : "transparent",
-      borderRadius: 12,
-      padding: "0.35rem 0.5rem",
     };
   }
 
@@ -140,8 +103,7 @@ export function Nav() {
           </span>
         </a>
 
-        {/* Desktop links */}
-        <div className="nav-desktop-links" style={{ gap: "0.75rem", alignItems: "center" }}>
+        <div className="nav-links" style={{ position: "fixed", top: 18, left: "max(9.2rem, calc((100vw - 1100px) / 2 + 9.2rem))", zIndex: 80, display: "flex", gap: "0.75rem", alignItems: "center", justifyContent: "flex-start", minWidth: 0 }}>
           {links.map((l) => {
             const active = isActiveLink(l);
             return (
@@ -165,68 +127,12 @@ export function Nav() {
             );
           })}
         </div>
-
-        {/* Mobile toggle */}
-        <button
-          ref={toggleRef}
-          type="button"
-          className="nav-mobile-toggle"
-          onClick={() => setOpen(!open)}
-          style={{
-            position: "absolute",
-            right: "1.5rem",
-            top: "50%",
-            transform: "translateY(-50%)",
-            width: 38,
-            height: 38,
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            padding: 4,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          aria-label={open ? "关闭菜单" : "打开菜单"}
-          aria-expanded={open}
-          aria-controls="mobile-navigation"
-        >
-          {open ? <IconClose size={22} /> : <IconMenu size={22} />}
-        </button>
       </div>
-
-      {open && (
-        <div id="mobile-navigation" role="navigation" aria-label="移动端导航菜单" style={{ background: "var(--cherry-cream)", borderTop: "1.5px solid var(--border)", padding: "1rem 1.5rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem", maxHeight: "calc(100vh - 62px)", overflowY: "auto" }}>
-          {links.map((l, index) => {
-            const active = isActiveLink(l);
-            return (
-              <a
-                ref={index === 0 ? firstMobileLinkRef : undefined}
-                className="mobile-nav-link"
-                key={l.label}
-                href={l.href}
-                aria-current={active ? "page" : undefined}
-                onFocus={() => preloadRouteForHref(l.href)}
-                onPointerDown={() => preloadRouteForHref(l.href)}
-                onClick={(event) => {
-                  if (!shouldUseClientNavigation(event)) return;
-                  event.preventDefault();
-                  setOpen(false);
-                  navigate(l.href);
-                }}
-                style={mobileLinkStyle(active)}
-              >
-                {l.label}
-              </a>
-            );
-          })}
-        </div>
-      )}
 
       <style>
         {`
           nav .nav-logo:focus-visible,
           nav .nav-link:focus-visible,
-          nav .mobile-nav-link:focus-visible,
           nav button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
@@ -237,33 +143,41 @@ export function Nav() {
             color: var(--cherry-red) !important;
           }
 
-          nav .mobile-nav-link:hover,
-          nav .mobile-nav-link:focus-visible {
-            color: var(--cherry-red) !important;
-            background: rgba(232,144,124,0.14) !important;
-          }
-
-          nav .nav-desktop-links {
-            display: none;
-          }
-
-          nav .nav-mobile-toggle {
-            display: inline-flex;
-          }
-
-          @media (min-width: 900px) {
-            nav .nav-desktop-links {
-              display: flex;
+          @media (max-width: 860px) {
+            nav > div {
+              height: 56px !important;
+              padding-left: 1rem !important;
+              padding-right: 1rem !important;
+              gap: 0.55rem !important;
             }
 
-            nav .nav-mobile-toggle {
-              display: none !important;
+            nav .nav-logo {
+              gap: 6px !important;
+            }
+
+            nav .nav-logo span {
+              font-size: 1.08rem !important;
+            }
+
+            nav .nav-logo svg {
+              width: 24px !important;
+              height: 24px !important;
+            }
+
+            nav .nav-links {
+              top: 14px !important;
+              left: 8.5rem !important;
+              gap: 0.28rem !important;
+            }
+
+            nav .nav-link {
+              font-size: 0.72rem !important;
+              padding: 0.2rem 0.32rem !important;
             }
           }
 
           @media (prefers-reduced-motion: reduce) {
-            nav .nav-link,
-            nav .mobile-nav-link {
+            nav .nav-link {
               transition: none !important;
               transform: none !important;
             }

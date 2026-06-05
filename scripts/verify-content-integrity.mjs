@@ -1162,7 +1162,7 @@ function verifyLearnerProductPositioning() {
     "概念解释生成器",
     "科研 Agent",
     "文章",
-    "nav-desktop-links",
+    "nav-links",
   ];
   const retiredProductPatterns = [
     { label: "course-heavy home title", pattern: /科学、课程/ },
@@ -1196,7 +1196,10 @@ function verifyLearnerProductPositioning() {
   expect(navSource.includes('if ("matchHashes" in link && pathname === "/" && link.matchHashes.includes(hash || "#top")) return true;'), "Navigation article entry must track both article homepage anchors.");
   expect(navSource.includes('if (pathname.startsWith("/notes/") || pathname.startsWith("/research/")) return link.href === "/#research";'), "Navigation article entry must stay active on article detail pages.");
   expect(navSource.includes('if (pathname.startsWith("/works/")) return link.href === "/#works";'), "Navigation content entry must stay active on work detail pages.");
-  for (const retiredNavGuide of ["更多工具", "读证据", "学方法", "看生命过程", "整理科研", "生命过程", "拆概念", "科研 Agent", "getWorkToolHref", "matchHref", 'matchHashes: ["#research", "#notes"]', "currentRouteGuideText", "copyCurrentRouteGuide", "nav-route-guide-button", "nav-route-guide-status", "当前位置学习路径", "复制当前位置学习路径", 'import { copyText } from "../clipboard"', 'import { works } from "./Works"', 'import { notes } from "./Notes"', 'import { essays } from "./ResearchEssays"']) {
+  expect(navSource.includes('className="nav-links"') && navSource.includes('position: "fixed"') && navSource.includes('display: "flex"'), "Navigation entries must stay directly visible instead of hiding behind a mobile menu.");
+  expect(navSource.includes("@media (max-width: 860px)") && navSource.includes("nav .nav-link"), "Navigation must include compact small-screen link sizing aligned with the homepage card breakpoint.");
+  expect(navSource.includes("nav .nav-links") && navSource.includes("left: 8.5rem !important"), "Small-screen navigation links must sit beside the logo so all entries stay visible in the left viewport.");
+  for (const retiredNavGuide of ["更多工具", "读证据", "学方法", "看生命过程", "整理科研", "生命过程", "拆概念", "科研 Agent", "getWorkToolHref", "matchHref", "nav-mobile-toggle", "mobile-navigation", "mobile-nav-link", "IconMenu", "IconClose", 'matchHashes: ["#research", "#notes"]', "currentRouteGuideText", "copyCurrentRouteGuide", "nav-route-guide-button", "nav-route-guide-status", "当前位置学习路径", "复制当前位置学习路径", 'import { copyText } from "../clipboard"', 'import { works } from "./Works"', 'import { notes } from "./Notes"', 'import { essays } from "./ResearchEssays"']) {
     expect(!navSource.includes(retiredNavGuide), `Navigation should stay compact and not include retired copy-path guide: ${retiredNavGuide}.`);
   }
 }
