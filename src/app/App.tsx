@@ -3,7 +3,6 @@ import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
 import { essays } from "./components/ResearchEssays";
 import { notes } from "./components/Notes";
-import { HomeLibrary } from "./components/HomeLibrary";
 import { Footer } from "./components/Footer";
 import { EmptyStateCard } from "./components/EmptyStateCard";
 import { works } from "./components/Works";
@@ -421,7 +420,6 @@ export default function App() {
       ) : (
         <main id="main-content" tabIndex={-1}>
           <Hero />
-          <HomeLibrary />
         </main>
       )}
       <Footer />

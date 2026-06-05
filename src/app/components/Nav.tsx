@@ -8,7 +8,6 @@ export function Nav() {
 
   const links = [
     { label: "内容", href: "/#works", matchHashes: ["#works", "#top"] },
-    { label: "文章", href: "/#research", matchHashes: ["#research"] },
     { label: "联系", href: "/#contact" },
   ];
 
@@ -42,7 +41,6 @@ export function Nav() {
   function isActiveLink(link: (typeof links)[number]) {
     const { pathname, hash } = window.location;
     if ("matchHashes" in link && pathname === "/" && link.matchHashes.includes(hash || "#top")) return true;
-    if (pathname.startsWith("/notes/") || pathname.startsWith("/research/")) return link.href === "/#research";
     if (pathname.startsWith("/works/")) return link.href === "/#works";
     return pathname === "/" && link.href === `/${hash || "#top"}`;
   }

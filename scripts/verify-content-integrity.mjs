@@ -198,7 +198,7 @@ function verifyWorkCardActions() {
   expect(worksSource.includes('title: "科研 Agent 工作台"'), "Research AI work card should be titled 科研 Agent 工作台.");
   expect(!worksSource.includes("科研助手 Prompt Kit"), "Visible work card title must not use the old Prompt Kit naming.");
   expect(heroSource.includes('id="works"') && heroSource.includes('aria-label="首屏学习模块目录"'), "Hero must own the #works anchor and all-module directory.");
-  expect(heroSource.includes("hero-work-outcome") && heroSource.includes("hero-work-completion"), "Hero module cards must expose outputs and direct actions.");
+  expect(heroSource.includes("hero-work-summary") && heroSource.includes("hero-work-open"), "Hero module cards must expose compact one-line summaries and direct open actions.");
   expect(!appSource.includes("<Works") && !appSource.includes('import { Works }'), "Homepage should not render a second Works section below the hero.");
   expect(!worksSource.includes("export function Works") && !worksSource.includes("function WorkCard"), "Works.tsx should stay data-only so module entries are not duplicated on the homepage.");
   for (const retiredWorksEntry of ["work-recommended-start", "work-filter-button", "activeCategory", "recommendedWork"]) {
@@ -255,7 +255,7 @@ function verifyArticleCardsStayStructured() {
   const appSource = read("src/app/App.tsx");
   const homeLibrarySource = read("src/app/components/HomeLibrary.tsx");
 
-  expect(appSource.includes("<HomeLibrary />"), "Homepage must render the short article index.");
+  expect(!appSource.includes("<HomeLibrary />") && !appSource.includes('import { HomeLibrary }'), "Homepage must not render a second article index below the first-screen module directory.");
   expect(!appSource.includes("<ResearchEssays />") && !appSource.includes("<Notes />"), "Homepage should not render separate long Research and Notes sections.");
   expect(homeLibrarySource.includes("home-library-link") && homeLibrarySource.includes("home-library-meta"), "Home library rows must expose compact article metadata.");
   expect(homeLibrarySource.includes('id="research"') && !homeLibrarySource.includes('id="notes"'), "Home library must collapse article anchors into one short section.");
@@ -439,13 +439,13 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(staticIndexSource.includes("完成标准："), "Static index fallback must expose concrete completion standards.");
   expect(!heroSource.includes("{work.starter}") && !heroSource.includes("{work.success}"), "Homepage hero work cards must not repeat long starter or completion text.");
   expect(!heroSource.includes("{work.outputs[0]}"), "Homepage hero work cards must not repeat saved-output text.");
-  expect(heroSource.includes("hero-work-completion") && heroSource.includes("{work.action}"), "Homepage hero work cards must visibly expose the module action without adding another detail panel.");
+  expect(heroSource.includes("hero-work-open") && heroSource.includes("打开"), "Homepage hero work cards must visibly expose a short direct open action without adding another detail panel.");
   expect(heroSource.includes("aria-label={`打开${work.title}`}"), "Homepage hero work cards must use short accessible labels.");
   expect(heroSource.includes('id="works"'), "Homepage #works anchor must point to the first-screen module directory instead of a duplicate section.");
   expect(heroSource.includes('aria-label="首屏学习模块目录"'), "Homepage hero must label the first-screen module directory.");
-  expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(136px, 1fr))"'), "Homepage hero module cards must stay compact enough to reveal multiple modules in the first screen.");
-  expect(heroSource.includes("minHeight: 62"), "Homepage hero module cards must use short fixed heights.");
-  expect(heroSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr))"), "Homepage hero mobile module directory must show visible two-column entries.");
+  expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(218px, 1fr))"'), "Homepage hero module cards must use compact directory rows.");
+  expect(heroSource.includes("minHeight: 58"), "Homepage hero module cards must use short fixed heights.");
+  expect(heroSource.includes("grid-template-columns: 1fr !important"), "Homepage hero mobile module directory must use readable short rows instead of long stacked panels.");
   expect(heroSource.includes("width: calc(100vw - 2rem)"), "Homepage hero mobile module directory must stay inside the visible viewport.");
   expect(heroSource.includes('boxSizing: "border-box"'), "Homepage hero containers must use border-box sizing to avoid mobile overflow.");
   expect(!heroSource.includes("scroll-snap-type") && !heroSource.includes("overflow-x: auto"), "Homepage hero must not hide module entries behind horizontal scrolling.");
@@ -1169,9 +1169,10 @@ function verifyLearnerProductPositioning() {
   expect(!existsSync(resolve(root, "src/app/components/About.tsx")), "About component should stay removed so homepage remains a short content directory.");
   expect(navSource.includes('import { navigateClient, shouldUseClientNavigation } from "../navigation"'), "Navigation must stay top-level and not duplicate individual work cards.");
   expect(navSource.includes('{ label: "内容", href: "/#works", matchHashes: ["#works", "#top"] }'), "Navigation should collapse work shortcuts into one content entry.");
-  expect(navSource.includes('{ label: "文章", href: "/#research", matchHashes: ["#research"] }'), "Navigation should collapse research and notes into one article entry.");
-  expect(navSource.includes('if ("matchHashes" in link && pathname === "/" && link.matchHashes.includes(hash || "#top")) return true;'), "Navigation article entry must track both article homepage anchors.");
-  expect(navSource.includes('if (pathname.startsWith("/notes/") || pathname.startsWith("/research/")) return link.href === "/#research";'), "Navigation article entry must stay active on article detail pages.");
+  expect(!navSource.includes('{ label: "文章", href: "/#research", matchHashes: ["#research"] }'), "Navigation must not expose a repeated article entry on the compact homepage.");
+  expect(navSource.includes('{ label: "联系", href: "/#contact" }'), "Navigation must keep one compact contact entry.");
+  expect(navSource.includes('if ("matchHashes" in link && pathname === "/" && link.matchHashes.includes(hash || "#top")) return true;'), "Navigation content entry must track the first-screen module anchor.");
+  expect(!navSource.includes('if (pathname.startsWith("/notes/") || pathname.startsWith("/research/")) return link.href === "/#research";'), "Navigation must not keep article-detail active state for a removed homepage article entry.");
   expect(navSource.includes('if (pathname.startsWith("/works/")) return link.href === "/#works";'), "Navigation content entry must stay active on work detail pages.");
   expect(navSource.includes('className="nav-links"') && navSource.includes('position: "fixed"') && navSource.includes('display: "flex"'), "Navigation entries must stay directly visible instead of hiding behind a mobile menu.");
   expect(navSource.includes("@media (max-width: 860px)") && navSource.includes("nav .nav-link"), "Navigation must include compact small-screen link sizing aligned with the homepage card breakpoint.");
