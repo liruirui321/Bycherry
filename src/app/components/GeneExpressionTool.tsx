@@ -1123,8 +1123,8 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
       <div id="gene-expression-summary" className="gene-sr-only">
         {accessibleSummary}
       </div>
-      <div className="gene-expression-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.7fr)", gap: "1rem", alignItems: "stretch", minWidth: 0 }}>
-        <div className="gene-canvas-card" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 28, boxShadow: "6px 10px 0px rgba(94,68,42,0.09)", overflow: "hidden", minWidth: 0 }}>
+      <div className="gene-expression-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.7fr)", gap: "0.68rem", alignItems: "stretch", minWidth: 0 }}>
+        <div className="gene-canvas-card" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, boxShadow: "0 8px 18px rgba(94,68,42,0.05)", overflow: "hidden", minWidth: 0 }}>
           <svg
             className="gene-canvas-svg"
             ref={svgRef}
@@ -1234,7 +1234,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
           </svg>
         </div>
 
-        <aside className="gene-control-aside" style={{ display: "grid", gap: "1rem", alignContent: "start", minWidth: 0 }}>
+        <aside className="gene-control-aside" style={{ display: "grid", gap: "0.68rem", alignContent: "start", minWidth: 0 }}>
           <div className="gene-readout-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.58rem" }}>
               <IconMicroscope size={19} />
