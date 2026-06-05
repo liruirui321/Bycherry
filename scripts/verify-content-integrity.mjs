@@ -281,6 +281,9 @@ function verifyArticleOutcomeSnapshot() {
   expect(articleSource.includes("article-outcome-snapshot"), "Article detail output snapshot must have a stable class for focus and layout checks.");
   expect(articleSource.includes("copyActionPack") && articleSource.includes("copyLearningRecord"), "Article detail output snapshot must expose action pack and learning record copy actions.");
   expect(articleSource.includes("目标是带走可执行材料，而不是只浏览"), "Article detail output snapshot must frame reading as producing reusable material.");
+  expect(articleSource.includes("article-start-action-button"), "Article detail output snapshot must expose a direct start action.");
+  expect(articleSource.includes("focusArticleStart"), "Article detail direct start action must focus the primary action or body anchor.");
+  expect(articleSource.includes('id="article-primary-action"') && articleSource.includes('id="article-body-points"'), "Article detail pages must expose focusable action and body anchors.");
 }
 
 function verifyWorkJsonLdLearningOutcomes() {

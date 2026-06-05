@@ -458,6 +458,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  function focusArticleStart() {
+    const target = document.getElementById(actionSteps.length ? "article-primary-action" : "article-body-points");
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+    target?.focus({ preventScroll: true });
+  }
+
   async function copyPlatformPasteConfig() {
     if (!platformPasteConfigText) return;
     const copiedToClipboard = await copyText(platformPasteConfigText);
@@ -649,6 +655,9 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     </div>
                   </div>
                   <div style={{ display: "flex", gap: "0.46rem", flexWrap: "wrap" }}>
+                    <button type="button" className="article-start-action-button" onClick={focusArticleStart} aria-label={`开始执行${article.title}。先做这个，${articleQuickStart?.step ?? actionSteps[0] ?? "阅读正文要点"}`} style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.36rem 0.7rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                      开始执行
+                    </button>
                     <button type="button" onClick={copyActionPack} aria-label={`复制${article.title}的行动包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.36rem 0.7rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
                       {copiedActionPack ? "已复制行动包" : "复制行动包"}
                     </button>
@@ -866,7 +875,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             </div>
 
             {actionSteps.length ? (
-              <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
+              <div id="article-primary-action" tabIndex={-1} style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>上手步骤</div>
                   <button type="button" onClick={copyActionPack} aria-label={`复制${article.title}的行动包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
@@ -930,7 +939,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </div>
             ) : null}
 
-            <div style={{ display: "grid", gap: "0.62rem", marginBottom: "0.9rem" }}>
+            <div id="article-body-points" tabIndex={-1} style={{ display: "grid", gap: "0.62rem", marginBottom: "0.9rem" }}>
               <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>正文要点</div>
               {article.paragraphs.map((paragraph, index) => (
                 <div key={paragraph} style={{ display: "grid", gridTemplateColumns: "28px minmax(0, 1fr)", gap: 9, alignItems: "start", background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.08)", borderRadius: 14, padding: "0.72rem" }}>
@@ -1104,6 +1113,9 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       <style>
         {`
           .article-detail-link:focus-visible,
+          .article-start-action-button:focus-visible,
+          #article-primary-action:focus-visible,
+          #article-body-points:focus-visible,
           .article-nav-card:focus-visible,
           .article-outcome-snapshot button:focus-visible,
           .platform-custom-config-grid input:focus-visible,
