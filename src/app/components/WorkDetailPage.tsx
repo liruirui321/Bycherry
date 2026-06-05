@@ -5160,33 +5160,33 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             </div>
           </div>
 
-          <div className="crispr-guide-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>向导 RNA</div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: "0.75rem" }}>
+          <div className="crispr-guide-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.48rem" }}>向导 RNA</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: "0.5rem" }}>
               {guides.map((guide, index) => (
-                <button key={guide.name} type="button" aria-pressed={guideIndex === index} onClick={() => chooseCrisprGuide(index)} style={{ background: guideIndex === index ? "var(--cherry-forest)" : "var(--muted)", color: guideIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.4rem 0.74rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                <button key={guide.name} type="button" aria-label={`${guide.name}：${guide.note}`} aria-pressed={guideIndex === index} onClick={() => chooseCrisprGuide(index)} style={{ background: guideIndex === index ? "var(--cherry-forest)" : "var(--muted)", color: guideIndex === index ? "#FAF7F1" : "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.34rem 0.62rem", fontWeight: 900, cursor: "pointer", fontSize: "0.72rem" }}>
                   {guide.name}
                 </button>
               ))}
             </div>
-            <code style={{ display: "block", background: "var(--cherry-yellow-light)", borderRadius: 12, padding: "0.65rem", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900, whiteSpace: "pre-wrap", marginBottom: "0.7rem" }}>{activeGuide.sequence}</code>
-            <div style={{ height: 10, borderRadius: 999, background: "var(--muted)", overflow: "hidden", marginBottom: "0.55rem" }}>
+            <code style={{ display: "block", background: "var(--cherry-yellow-light)", borderRadius: 8, padding: "0.5rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900, whiteSpace: "pre-wrap", marginBottom: "0.48rem" }}>{activeGuide.sequence}</code>
+            <div style={{ height: 8, borderRadius: 999, background: "var(--muted)", overflow: "hidden", marginBottom: "0.4rem" }}>
               <div style={{ width: `${activeGuide.score}%`, height: "100%", background: activeGuide.score > 80 ? "var(--cherry-sage)" : activeGuide.score > 50 ? "var(--cherry-yellow)" : "var(--cherry-red)", transition: "width 0.25s ease" }} />
             </div>
-            <div style={{ color: "var(--cherry-red)", fontSize: "1.35rem", fontWeight: 900, marginBottom: "0.45rem" }}>{activeGuide.score}%</div>
-            <div className="crispr-guide-decision" role="status" aria-live="polite" style={{ background: guideDecision.bg, border: `1.5px solid ${guideDecision.color}`, borderRadius: 14, padding: "0.68rem", color: "var(--cherry-warm-mid)", lineHeight: 1.58, fontSize: "0.8rem", fontWeight: 800, marginBottom: "0.75rem" }}>
-              <strong style={{ display: "block", color: guideDecision.color, marginBottom: "0.28rem" }}>{guideDecision.level}</strong>
+            <div style={{ color: "var(--cherry-red)", fontSize: "1.08rem", fontWeight: 900, marginBottom: "0.34rem" }}>{activeGuide.score}%</div>
+            <div className="crispr-guide-decision" role="status" aria-live="polite" style={{ background: guideDecision.bg, border: `1.5px solid ${guideDecision.color}`, borderRadius: 10, padding: "0.52rem", color: "var(--cherry-warm-mid)", lineHeight: 1.42, fontSize: "0.72rem", fontWeight: 800, marginBottom: "0.48rem" }}>
+              <strong style={{ display: "block", color: guideDecision.color, marginBottom: "0.2rem" }}>{guideDecision.level}</strong>
               {guideDecision.risk}
-              <div style={{ marginTop: "0.42rem", color: "var(--cherry-warm-brown)" }}>{guideDecision.nextAction}</div>
+              <div className="crispr-guide-next-action" style={{ display: "none", marginTop: "0.42rem", color: "var(--cherry-warm-brown)" }}>{guideDecision.nextAction}</div>
             </div>
-            <div className="crispr-guide-target-note" style={{ background: "rgba(250,247,241,0.74)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.6rem", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", fontWeight: 800, marginBottom: "0.75rem" }}>
+            <div className="crispr-guide-target-note" style={{ display: "none", background: "rgba(250,247,241,0.74)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.6rem", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", fontWeight: 800, marginBottom: "0.75rem" }}>
               目标互补序列：<strong style={{ color: "var(--cherry-warm-brown)" }}>{expectedGuideBases.join(" ")}</strong>
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: "0.45rem", color: "var(--cherry-warm-mid)", fontSize: "0.7rem" }}>
                 <span><strong style={{ color: "var(--cherry-forest)" }}>实线</strong> 互补</span>
                 <span><strong style={{ color: "var(--cherry-red)" }}>虚线</strong> 错配</span>
               </div>
             </div>
-            <div className="crispr-guide-readouts" style={{ display: "grid", gap: 6, marginBottom: "0.75rem" }}>
+            <div className="crispr-guide-readouts" style={{ display: "grid", gap: 5 }}>
               {[
                 ["PAM", pamSequence],
                 ["剪切位点", activeGuide.score >= 60 ? `第 ${cutIndex + 1} 个碱基，PAM 上游 ${cutDistanceFromPam} nt` : "匹配不足，不执行剪切"],
@@ -5198,7 +5198,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
                 </div>
               ))}
             </div>
-            <div className="crispr-guide-note" style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.82rem" }}>{activeGuide.note}</div>
+            <div className="crispr-guide-note" style={{ display: "none", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.82rem" }}>{activeGuide.note}</div>
           </div>
         </aside>
       </div>
