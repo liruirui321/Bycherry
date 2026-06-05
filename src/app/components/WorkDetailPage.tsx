@@ -1364,7 +1364,8 @@ ${localPreviewOutput}`;
               </button>
             </div>
 
-            <div style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.6rem" }}>
+            <details className="research-route-suggestion-details" style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.62rem", marginBottom: "0.9rem" }}>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>任务路由建议 · {suggestedRoute.title} · {routeConfidence}</summary>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
                 <div>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>任务路由建议</div>
@@ -1390,7 +1391,7 @@ ${localPreviewOutput}`;
                   <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{routeMatchedSignals}</span>
                 </div>
               </div>
-            </div>
+            </details>
 
             <details className="research-review-details" style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 8, padding: "0.62rem", marginBottom: "0.9rem" }}>
               <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>我的复核记录 · {learnerResearchReviewScore}/4</summary>
@@ -1446,21 +1447,25 @@ ${localPreviewOutput}`;
                   <button type="button" onClick={() => setHasRunPreview(true)} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                     运行本地预览
                   </button>
-                  <button type="button" onClick={copyLocalPreview} style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                    {copiedPreview ? "已复制" : "复制预览"}
-                  </button>
-                  <button type="button" onClick={copyAgentJson} style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                    {copiedJson ? "已复制" : "复制 JSON"}
-                  </button>
-                  <button type="button" onClick={copyResponseJson} style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                    {copiedResponseJson ? "已复制" : "复制契约"}
-                  </button>
-                  <button type="button" onClick={copyResearchRecord} style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                    {copiedResearchRecord ? "已复制" : "复制研究记录"}
-                  </button>
-                  <button type="button" onClick={copyCitationAudit} style={{ background: "var(--cherry-peach-light)", color: "var(--cherry-red)", border: "1.5px solid rgba(214,91,74,0.28)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                    {copiedCitationAudit ? "已复制" : "复制引用核查"}
-                  </button>
+                  {hasRunPreview ? (
+                    <>
+                      <button type="button" onClick={copyLocalPreview} style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                        {copiedPreview ? "已复制" : "复制预览"}
+                      </button>
+                      <button type="button" onClick={copyAgentJson} style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                        {copiedJson ? "已复制" : "复制 JSON"}
+                      </button>
+                      <button type="button" onClick={copyResponseJson} style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                        {copiedResponseJson ? "已复制" : "复制契约"}
+                      </button>
+                      <button type="button" onClick={copyResearchRecord} style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                        {copiedResearchRecord ? "已复制" : "复制研究记录"}
+                      </button>
+                      <button type="button" onClick={copyCitationAudit} style={{ background: "var(--cherry-peach-light)", color: "var(--cherry-red)", border: "1.5px solid rgba(214,91,74,0.28)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                        {copiedCitationAudit ? "已复制" : "复制引用核查"}
+                      </button>
+                    </>
+                  ) : null}
                 </div>
               </div>
               {hasRunPreview ? (
@@ -1663,6 +1668,7 @@ ${localPreviewOutput}`;
           }
 
           #prompt-kit-builder .research-agent-compact-details[open],
+          #prompt-kit-builder .research-route-suggestion-details[open],
           #prompt-kit-builder .research-review-details[open],
           #prompt-kit-builder .research-agent-prompt-preview-details[open] {
             display: grid;
@@ -1708,6 +1714,7 @@ ${localPreviewOutput}`;
             #prompt-kit-builder .research-agent-completion-panel,
             #prompt-kit-builder .research-agent-status-details,
             #prompt-kit-builder .research-agent-skill-details,
+            #prompt-kit-builder .research-route-suggestion-details,
             #prompt-kit-builder .research-review-details,
             #prompt-kit-builder .research-agent-prompt-preview-details {
               padding: 0.54rem !important;
