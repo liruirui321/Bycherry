@@ -1104,7 +1104,8 @@ ${localPreviewOutput}`;
             {copiedResearchSkill ? "已复制" : "复制 Skill"}
           </button>
         </div>
-        <div className="research-agent-route-recipes" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.46rem" }}>
+        <details className="research-agent-route-recipes research-agent-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>任务路由速查</summary>
           <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "baseline", flexWrap: "wrap" }}>
             <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>任务路由速查</strong>
             <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 900 }}>先判断材料类型，再决定让 Agent 做抽取、核查、改写还是回应。</span>
@@ -1120,8 +1121,9 @@ ${localPreviewOutput}`;
               </div>
             ))}
           </div>
-        </div>
-        <div className="research-agent-usecase-panel" style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(93,140,101,0.2)", borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.46rem" }}>
+        </details>
+        <details className="research-agent-usecase-panel research-agent-compact-details" style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(93,140,101,0.2)", borderRadius: 8, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>能直接完成什么</summary>
           <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>能直接完成什么</strong>
           <div className="research-agent-usecase-list" style={{ display: "grid", gap: "0.36rem" }}>
             {useCaseBlueprints.map((item) => (
@@ -1131,8 +1133,9 @@ ${localPreviewOutput}`;
               </div>
             ))}
           </div>
-        </div>
-        <div className="research-agent-completion-panel" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.42rem" }}>
+        </details>
+        <details className="research-agent-completion-panel research-agent-compact-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 8, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>本次完成标准</summary>
           <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>本次完成标准</strong>
           <div className="research-agent-check-strip" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.36rem" }}>
             {completionStandards.map((item, index) => (
@@ -1142,7 +1145,7 @@ ${localPreviewOutput}`;
               </div>
             ))}
           </div>
-        </div>
+        </details>
         <details className="research-agent-context-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
           <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>市场需求、能力边界和使用层级</summary>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.64rem", marginTop: "0.62rem" }}>
@@ -1383,7 +1386,8 @@ ${localPreviewOutput}`;
               </div>
             </div>
 
-            <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 8, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.72rem" }}>
+            <details className="research-review-details" style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 8, padding: "0.62rem", marginBottom: "0.9rem" }}>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>我的复核记录 · {learnerResearchReviewScore}/4</summary>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
                 <div>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>我的复核记录</div>
@@ -1422,7 +1426,7 @@ ${localPreviewOutput}`;
                   </label>
                 ))}
               </div>
-            </div>
+            </details>
 
             <div style={{ background: hasRunPreview ? "var(--cherry-sage-light)" : "var(--muted)", border: hasRunPreview ? "1.5px solid rgba(93,140,101,0.32)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
@@ -1573,17 +1577,20 @@ ${localPreviewOutput}`;
               )}
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.7rem", marginBottom: "0.9rem" }}>
-              {[...activePrompt.output, ...activeMode.outputs].map((item, index) => (
-                <div key={item} style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 14, padding: "0.65rem", color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.78rem" }}>
-                  {index + 1}. {item}
-                </div>
-              ))}
-            </div>
+            <details className="research-agent-prompt-preview-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 8, padding: "0.62rem" }}>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>生成指令预览</summary>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.7rem", margin: "0.68rem 0 0.9rem" }}>
+                {[...activePrompt.output, ...activeMode.outputs].map((item, index) => (
+                  <div key={item} style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 14, padding: "0.65rem", color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.78rem" }}>
+                    {index + 1}. {item}
+                  </div>
+                ))}
+              </div>
 
-            <code style={{ display: "block", whiteSpace: "pre-wrap", color: "var(--cherry-warm-brown)", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.9rem", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65, maxHeight: 260, overflow: "auto" }}>
-              {finalPrompt}
-            </code>
+              <code style={{ display: "block", whiteSpace: "pre-wrap", color: "var(--cherry-warm-brown)", background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.9rem", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65, maxHeight: 260, overflow: "auto" }}>
+                {finalPrompt}
+              </code>
+            </details>
           </div>
 
           <details className="research-agent-quality-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
@@ -1641,6 +1648,21 @@ ${localPreviewOutput}`;
             transform: translateY(-2px);
           }
 
+          #prompt-kit-builder details > summary {
+            list-style-position: outside;
+          }
+
+          #prompt-kit-builder details[open] > summary {
+            margin-bottom: 0.62rem;
+          }
+
+          #prompt-kit-builder .research-agent-compact-details[open],
+          #prompt-kit-builder .research-review-details[open],
+          #prompt-kit-builder .research-agent-prompt-preview-details[open] {
+            display: grid;
+            gap: 0.62rem;
+          }
+
           @media (max-width: 880px) {
             #prompt-kit-builder .prompt-builder-layout {
               grid-template-columns: 1fr !important;
@@ -1677,9 +1699,10 @@ ${localPreviewOutput}`;
 
             #prompt-kit-builder .research-agent-route-recipes,
             #prompt-kit-builder .research-agent-usecase-panel,
-            #prompt-kit-builder .research-agent-completion-panel {
+            #prompt-kit-builder .research-agent-completion-panel,
+            #prompt-kit-builder .research-review-details,
+            #prompt-kit-builder .research-agent-prompt-preview-details {
               padding: 0.54rem !important;
-              gap: 0.36rem !important;
             }
 
             #prompt-kit-builder .research-agent-route-list,
