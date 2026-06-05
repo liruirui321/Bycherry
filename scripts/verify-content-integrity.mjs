@@ -1078,6 +1078,13 @@ function verifyLearnerProductPositioning() {
     "复制开始清单",
     "先选一个入口，不同时展开多个方向",
     "三、结束前保存证据",
+    "currentRouteGuideText",
+    "copyCurrentRouteGuide",
+    "nav-route-guide-button",
+    "nav-route-guide-status",
+    "当前位置学习路径",
+    "复制当前位置学习路径",
+    "打开一个模块，完成页面里的首步任务，并保存一份产出",
   ];
   const retiredProductPatterns = [
     { label: "course-heavy home title", pattern: /科学、课程/ },
@@ -1109,6 +1116,12 @@ function verifyLearnerProductPositioning() {
   expect(aboutSource.includes("onPointerDown={() => preloadRouteForHref(item.work.href)}"), "About start guide cards must preload routes on pointer down.");
   expect(aboutSource.includes("navigateClient(item.work.href)"), "About start guide cards must navigate without a full page reload.");
   expect(aboutSource.includes("完成标准，${item.work.success}"), "About start guide accessible labels must include completion standards.");
+  const navSource = read("src/app/components/Nav.tsx");
+  expect(navSource.includes('import { works } from "./Works"') && navSource.includes('import { notes } from "./Notes"') && navSource.includes('import { essays } from "./ResearchEssays"'), "Navigation route guide must derive current work and article context.");
+  expect(navSource.includes('import { copyText } from "../clipboard"'), "Navigation route guide must use the shared clipboard helper.");
+  expect(navSource.includes("currentWork") && navSource.includes("currentArticle"), "Navigation route guide must detect work and article pages.");
+  expect(navSource.includes("currentHomeSection"), "Navigation route guide must handle homepage sections.");
+  expect(navSource.includes("role=\"status\"") && navSource.includes("aria-live=\"polite\""), "Navigation route guide must expose copy status accessibly.");
 }
 
 function verifyContactFeedbackContract() {
