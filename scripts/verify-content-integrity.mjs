@@ -339,6 +339,9 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes("const evidenceTemplate"), "Work detail completion evidence must include a copyable reflection template.");
   expect(workDetailSource.includes("copyEvidenceTemplate"), "Work detail completion evidence must provide a copy action.");
   expect(workDetailSource.includes("复制复盘模板"), "Work detail completion evidence copy button must be visible.");
+  expect(workDetailSource.includes("work-start-tool-link"), "Work detail quick start must expose a direct start link into the primary tool.");
+  expect(workDetailSource.includes("focusPrimaryTool"), "Work detail start action must focus the primary tool anchor.");
+  expect(workDetailSource.includes('id="work-primary-tool"') && workDetailSource.includes("tabIndex={-1}"), "Work detail primary tool anchor must be focusable.");
   expect(workDetailSource.includes("复盘证据"), "Work detail completion evidence template must include a reflection evidence title.");
   expect(workDetailSource.includes("四、复盘检查"), "Work detail completion evidence template must include reflection checks.");
   expect(workDetailSource.includes("五、下一步问题"), "Work detail completion evidence template must include a next-question field.");

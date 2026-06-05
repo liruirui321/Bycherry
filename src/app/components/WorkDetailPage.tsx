@@ -4246,6 +4246,12 @@ ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：
     setEvidenceCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  function focusPrimaryTool() {
+    const target = document.getElementById("work-primary-tool");
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+    target?.focus({ preventScroll: true });
+  }
+
   return (
     <section
       aria-labelledby="work-quick-start-heading"
@@ -4277,6 +4283,29 @@ ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：
           <p style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.55, fontWeight: 900 }}>
             {work.task}
           </p>
+          <button
+            type="button"
+            className="work-start-tool-link"
+            aria-label={`开始操作${work.title}。先做这个，${work.starter}`}
+            onClick={focusPrimaryTool}
+            style={{
+              justifySelf: "start",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "var(--cherry-forest)",
+              color: "#FAF7F1",
+              border: "none",
+              borderRadius: 999,
+              padding: "0.42rem 0.82rem",
+              cursor: "pointer",
+              fontFamily: "'Nunito', sans-serif",
+              fontSize: "0.76rem",
+              fontWeight: 900,
+            }}
+          >
+            开始操作 →
+          </button>
         </div>
         <div className="work-quick-start-meta" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.55rem" }}>
           <div style={{ background: "var(--cherry-yellow-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem" }}>
@@ -4546,19 +4575,18 @@ export function WorkDetailPage({ slug }: { slug: string }) {
       <WorkHero work={work} compact />
       <WorkQuickStart work={work} />
 
-      {hasRichWorkContent(work.slug) ? (
-        <section
-          style={{
-            padding: "0 1.5rem 5rem",
-            maxWidth: 1060,
-            margin: "0 auto",
-            fontFamily: "'Nunito', sans-serif",
-          }}
-        >
-          <RichWorkContent slug={work.slug} />
-        </section>
-      ) : null}
-      {work.slug === "gene-expression" ? <GeneExpressionTool /> : null}
+      <section
+        id="work-primary-tool"
+        tabIndex={-1}
+        style={{
+          padding: work.slug === "gene-expression" ? 0 : "0 1.5rem 5rem",
+          maxWidth: work.slug === "gene-expression" ? "none" : 1060,
+          margin: "0 auto",
+          fontFamily: "'Nunito', sans-serif",
+        }}
+      >
+        {work.slug === "gene-expression" ? <GeneExpressionTool /> : hasRichWorkContent(work.slug) ? <RichWorkContent slug={work.slug} /> : null}
+      </section>
       <WorkSequenceLinks work={work} />
       <WorkContinueLinks work={work} />
       <style>
@@ -4574,6 +4602,8 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           }
 
           .work-detail-link:focus-visible,
+          .work-start-tool-link:focus-visible,
+          #work-primary-tool:focus-visible,
           .work-sequence-card:focus-visible,
           .work-next-card:focus-visible,
           .work-evidence-copy-button:focus-visible {
