@@ -123,7 +123,6 @@ function verifyVisibleLearningModuleCopy() {
     "学习模块前后导航",
     "首屏学习模块目录",
     "可保存产出",
-    "复制路径",
     "bycherry.me",
   ];
 
@@ -1041,7 +1040,6 @@ function verifyLearnerFacingArticleCopy() {
     "当前显示",
     "note-card-compact-evidence",
     "research-card-compact-evidence",
-    "复制路径",
     "查看证据",
     "学习方法、科研证据、AI 创作和科研转译资料",
     "先做这个",
@@ -1185,13 +1183,7 @@ function verifyLearnerProductPositioning() {
     "更多工具",
     "读证据",
     "学方法",
-    "currentRouteGuideText",
-    "copyCurrentRouteGuide",
-    "nav-route-guide-button",
-    "nav-route-guide-status",
-    "当前位置学习路径",
-    "复制当前位置学习路径",
-    "打开一个模块，完成页面里的首步任务，并保存一份产出",
+    "nav-desktop-links",
   ];
   const retiredProductPatterns = [
     { label: "course-heavy home title", pattern: /科学、课程/ },
@@ -1222,17 +1214,14 @@ function verifyLearnerProductPositioning() {
     expect(!aboutSource.includes(retiredAboutBlock), `About section should stay short and not include retired duplicate block: ${retiredAboutBlock}.`);
   }
   const navSource = read("src/app/components/Nav.tsx");
-  expect(navSource.includes('import { works } from "./Works"') && navSource.includes('import { notes } from "./Notes"') && navSource.includes('import { essays } from "./ResearchEssays"'), "Navigation route guide must derive current work and article context.");
-  expect(navSource.includes('import { copyText } from "../clipboard"'), "Navigation route guide must use the shared clipboard helper.");
   expect(navSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Navigation work shortcuts must use the direct-to-tool href helper.");
   expect(navSource.includes('{ label: "看生命过程", href: getWorkToolHref("/works/gene-expression"), matchHref: "/works/gene-expression" }'), "Navigation life-process shortcut must open the gene expression tool directly.");
   expect(navSource.includes('{ label: "拆概念", href: getWorkToolHref("/works/concept-explainer"), matchHref: "/works/concept-explainer" }'), "Navigation concept shortcut must open the concept tool directly.");
   expect(navSource.includes('{ label: "整理科研", href: getWorkToolHref("/works/research-prompt-kit"), matchHref: "/works/research-prompt-kit" }'), "Navigation research shortcut must open the research tool directly.");
-  expect(navSource.includes("入口：${getWorkToolHref(currentWork.href)}"), "Navigation copied current-work guide must point directly to the work tool.");
   expect(navSource.includes("if (\"matchHref\" in link && pathname === link.matchHref) return true;"), "Navigation active states must still match direct-to-tool shortcuts by pathname.");
-  expect(navSource.includes("currentWork") && navSource.includes("currentArticle"), "Navigation route guide must detect work and article pages.");
-  expect(navSource.includes("currentHomeSection"), "Navigation route guide must handle homepage sections.");
-  expect(navSource.includes("role=\"status\"") && navSource.includes("aria-live=\"polite\""), "Navigation route guide must expose copy status accessibly.");
+  for (const retiredNavGuide of ["currentRouteGuideText", "copyCurrentRouteGuide", "nav-route-guide-button", "nav-route-guide-status", "当前位置学习路径", "复制当前位置学习路径", 'import { copyText } from "../clipboard"', 'import { works } from "./Works"', 'import { notes } from "./Notes"', 'import { essays } from "./ResearchEssays"']) {
+    expect(!navSource.includes(retiredNavGuide), `Navigation should stay compact and not include retired copy-path guide: ${retiredNavGuide}.`);
+  }
 }
 
 function verifyContactFeedbackContract() {

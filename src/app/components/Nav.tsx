@@ -1,17 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { IconCherry, IconMenu, IconClose } from "./Icons";
-import { works } from "./Works";
-import { notes } from "./Notes";
-import { essays } from "./ResearchEssays";
-import { copyText } from "../clipboard";
 import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
 export function Nav() {
   const [open, setOpen] = useState(false);
   const [locationKey, setLocationKey] = useState(`${window.location.pathname}${window.location.hash}`);
-  const [copiedRouteGuide, setCopiedRouteGuide] = useState(false);
-  const [routeGuideStatus, setRouteGuideStatus] = useState("");
   const toggleRef = useRef<HTMLButtonElement | null>(null);
   const firstMobileLinkRef = useRef<HTMLAnchorElement | null>(null);
 
@@ -24,66 +18,6 @@ export function Nav() {
     { label: "学方法", href: "/#notes" },
     { label: "联系", href: "/#contact" },
   ];
-  const currentPath = locationKey.split("#")[0] || "/";
-  const currentWork = works.find((work) => work.href === currentPath);
-  const articleLibrary = [...notes, ...essays];
-  const currentArticle = articleLibrary.find((article) => article.href === currentPath);
-  const currentHomeSection = locationKey.includes("#") ? locationKey.slice(locationKey.indexOf("#")) : "#top";
-  const currentRouteGuideText = currentWork
-    ? `【当前位置学习路径】
-页面：${currentWork.title}
-入口：${getWorkToolHref(currentWork.href)}
-类型：学习模块
-
-先做这个
-${currentWork.starter}
-
-任务
-${currentWork.task}
-
-可保存产出
-${currentWork.outputs.join(" / ")}
-
-完成标准
-${currentWork.success}
-
-下一步
-1. 在页面内复制记录、报告或学习卡。
-2. 回到配套阅读或首页继续选一个相关入口。`
-    : currentArticle
-      ? `【当前位置学习路径】
-页面：${currentArticle.title}
-入口：${currentArticle.href}
-类型：${"tag" in currentArticle ? currentArticle.tag : currentArticle.label}
-
-先做这个
-${currentArticle.actionSteps[0]}
-
-完成后检查
-${currentArticle.checklist[0]}
-
-可保存产出
-${currentArticle.starterTemplate[0]}
-
-下一步
-1. 复制文章里的阅读任务包或学习记录。
-2. 打开配套模块继续操作。`
-      : `【当前位置学习路径】
-页面：By Cherry 首页 ${currentHomeSection}
-入口：/
-类型：学习工作台
-
-先做这个
-按目标选一个入口，不同时展开多个方向。
-
-可选入口
-${links.slice(0, 6).map((link, index) => `${index + 1}. ${link.label}：${link.href}`).join("\n")}
-
-完成标准
-打开一个模块，完成页面里的首步任务，并保存一份产出。
-
-下一步
-回到首屏学习模块目录，打开一个模块；完整步骤、记录和练习都在子页面里。`;
 
   function navigate(href: string) {
     if (href.startsWith("/")) {
@@ -97,19 +31,6 @@ ${links.slice(0, 6).map((link, index) => `${index + 1}. ${link.label}：${link.h
     }
 
     window.location.hash = href;
-  }
-
-  async function copyCurrentRouteGuide() {
-    const copiedToClipboard = await copyText(currentRouteGuideText);
-    if (copiedToClipboard) {
-      setCopiedRouteGuide(true);
-      setRouteGuideStatus("当前位置学习路径已复制。");
-      window.setTimeout(() => setCopiedRouteGuide(false), 1400);
-      return;
-    }
-
-    setCopiedRouteGuide(false);
-    setRouteGuideStatus("复制失败，请手动复制当前位置学习路径。");
   }
 
   useEffect(() => {
@@ -248,26 +169,6 @@ ${links.slice(0, 6).map((link, index) => `${index + 1}. ${link.label}：${link.h
               </a>
             );
           })}
-          <button
-            type="button"
-            className="nav-route-guide-button"
-            onClick={copyCurrentRouteGuide}
-            aria-describedby="nav-route-guide-status"
-            style={{
-              background: copiedRouteGuide ? "var(--cherry-sage-light)" : "var(--cherry-forest)",
-              color: copiedRouteGuide ? "var(--cherry-forest)" : "#FAF7F1",
-              border: copiedRouteGuide ? "1.5px solid var(--cherry-sage)" : "none",
-              borderRadius: 999,
-              padding: "0.34rem 0.68rem",
-              fontFamily: "'Nunito', sans-serif",
-              fontWeight: 900,
-              fontSize: "0.78rem",
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {copiedRouteGuide ? "已复制" : "复制路径"}
-          </button>
         </div>
 
         {/* Mobile toggle */}
@@ -323,31 +224,8 @@ ${links.slice(0, 6).map((link, index) => `${index + 1}. ${link.label}：${link.h
               </a>
             );
           })}
-          <button
-            type="button"
-            className="nav-route-guide-button"
-            onClick={copyCurrentRouteGuide}
-            aria-describedby="nav-route-guide-status"
-            style={{
-              background: copiedRouteGuide ? "var(--cherry-sage-light)" : "var(--cherry-forest)",
-              color: copiedRouteGuide ? "var(--cherry-forest)" : "#FAF7F1",
-              border: copiedRouteGuide ? "1.5px solid var(--cherry-sage)" : "none",
-              borderRadius: 12,
-              padding: "0.58rem 0.75rem",
-              fontFamily: "'Nunito', sans-serif",
-              fontWeight: 900,
-              fontSize: "0.9rem",
-              cursor: "pointer",
-              textAlign: "center",
-            }}
-          >
-            {copiedRouteGuide ? "已复制当前位置路径" : "复制当前位置学习路径"}
-          </button>
         </div>
       )}
-      <div id="nav-route-guide-status" role="status" aria-live="polite" style={{ position: "absolute", width: 1, height: 1, padding: 0, margin: -1, overflow: "hidden", clip: "rect(0 0 0 0)", whiteSpace: "nowrap", border: 0 }}>
-        {routeGuideStatus}
-      </div>
 
       <style>
         {`
@@ -370,11 +248,6 @@ ${links.slice(0, 6).map((link, index) => `${index + 1}. ${link.label}：${link.h
             background: rgba(232,144,124,0.14) !important;
           }
 
-          nav .nav-route-guide-button:hover,
-          nav .nav-route-guide-button:focus-visible {
-            transform: translateY(-1px);
-          }
-
           nav .nav-desktop-links {
             display: none;
           }
@@ -395,8 +268,7 @@ ${links.slice(0, 6).map((link, index) => `${index + 1}. ${link.label}：${link.h
 
           @media (prefers-reduced-motion: reduce) {
             nav .nav-link,
-            nav .mobile-nav-link,
-            nav .nav-route-guide-button {
+            nav .mobile-nav-link {
               transition: none !important;
               transform: none !important;
             }
