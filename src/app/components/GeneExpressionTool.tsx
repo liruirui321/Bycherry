@@ -1123,7 +1123,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
       <div id="gene-expression-summary" className="gene-sr-only">
         {accessibleSummary}
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.7fr)", gap: "1rem", alignItems: "stretch", minWidth: 0 }}>
+      <div className="gene-expression-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.7fr)", gap: "1rem", alignItems: "stretch", minWidth: 0 }}>
         <div className="gene-canvas-card" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 28, boxShadow: "6px 10px 0px rgba(94,68,42,0.09)", overflow: "hidden", minWidth: 0 }}>
           <svg
             className="gene-canvas-svg"
@@ -1579,7 +1579,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
           }
 
           @media (max-width: 920px) {
-            #gene-expression > div:first-child {
+            #gene-expression .gene-expression-main-grid {
               grid-template-columns: 1fr !important;
             }
           }
@@ -1600,12 +1600,14 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             }
 
             #gene-expression .gene-canvas-card {
-              overflow-x: auto !important;
+              overflow: hidden !important;
+              border-radius: 18px !important;
             }
 
             #gene-expression .gene-canvas-svg {
-              width: 720px !important;
-              max-width: none !important;
+              width: 100% !important;
+              max-width: 100% !important;
+              min-width: 0 !important;
             }
 
             #gene-expression .gene-readout-row {

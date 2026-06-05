@@ -804,11 +804,16 @@ function verifyGeneExpressionLearnerContract() {
     { label: "quiz pass threshold", text: "至少答对 3 题再复制记录" },
     { label: "transcription completion check", text: "转录启动" },
     { label: "translation product completion check", text: "翻译产物" },
+    { label: "stable mobile main grid class", text: "gene-expression-main-grid" },
+    { label: "mobile main grid selector", text: "#gene-expression .gene-expression-main-grid" },
+    { label: "mobile canvas scales to viewport", text: "width: 100% !important" },
   ];
   const retiredGenePatterns = [
     { label: "teacher/classroom framing", pattern: /课堂|教师|老师|教案|授课|教学/ },
     { label: "placeholder framing", pattern: /\bdemo\b|设计想法/ },
     { label: "incorrect DNA polymerase label", pattern: /DNA 聚合酶/ },
+    { label: "broken hidden-summary grid selector", pattern: /#gene-expression > div:first-child/ },
+    { label: "fixed-width mobile canvas", pattern: /width:\s*720px/ },
   ];
 
   for (const item of requiredGeneFeatures) {
