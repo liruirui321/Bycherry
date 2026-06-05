@@ -246,6 +246,16 @@ function verifyArticleCardsStayStructured() {
     expect(!source.includes("border: 1.5px dashed"), `${relativePath} must not use dashed illustration frames.`);
     expect(!source.includes("transform: rotate("), `${relativePath} must not use rotated tape or stamp styling.`);
   }
+
+  const notesSource = read("src/app/components/Notes.tsx");
+  const researchSource = read("src/app/components/ResearchEssays.tsx");
+
+  expect(notesSource.includes("note-card-action-row"), "Learning method cards must keep a compact first-action row.");
+  expect(notesSource.includes("note-card-quick-evidence"), "Learning method cards must group completion and output into a compact evidence area.");
+  expect(notesSource.includes("note-card-excerpt") && notesSource.includes("maxHeight: 74"), "Learning method cards must keep excerpts short enough for scanning.");
+  expect(researchSource.includes("research-card-action-row"), "Research evidence cards must keep a compact first-action row.");
+  expect(researchSource.includes("research-card-quick-evidence"), "Research evidence cards must group completion and output into a compact evidence area.");
+  expect(researchSource.includes("maxHeight: 66"), "Research evidence cards must keep excerpts short enough for scanning.");
 }
 
 function verifyPlatformGuideConfigBuilder() {

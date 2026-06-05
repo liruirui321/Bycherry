@@ -203,7 +203,7 @@ function EssayCard({ essay }: {
         overflow: "hidden",
         color: "inherit",
         display: "grid",
-        gridTemplateRows: "auto auto auto 1fr auto auto auto auto",
+        gridTemplateRows: "auto auto auto auto auto auto",
         height: "100%",
         textDecoration: "none",
       }}
@@ -285,37 +285,29 @@ function EssayCard({ essay }: {
         className="research-essay-excerpt"
         style={{
           overflow: "hidden",
-          maxHeight: 76,
+          maxHeight: 66,
           transition: "max-height 0.35s ease",
         }}
       >
-        <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.85rem", lineHeight: 1.7 }}>
+        <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.58, margin: 0 }}>
           {essay.body}
         </p>
       </div>
 
-      <div style={{ display: "grid", alignContent: "start", gap: 6, marginTop: "0.85rem" }}>
-        {essay.highlights.slice(0, 2).map((highlight) => (
-          <span key={highlight} style={{ display: "grid", gridTemplateColumns: "12px minmax(0, 1fr)", alignItems: "start", gap: 7, color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 800, lineHeight: 1.48 }}>
-            <span aria-hidden="true" style={{ width: 7, height: 7, borderRadius: "50%", background: essay.labelColor, marginTop: "0.38rem", opacity: 0.78 }} />
-            {highlight}
-          </span>
-        ))}
-      </div>
-
-      <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem 0.65rem", marginTop: "0.9rem" }}>
+      <div className="research-card-action-row" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem 0.65rem", marginTop: "0.82rem" }}>
         <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.16rem" }}>先做这个</span>
         <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>{essay.actionSteps[0]}</span>
       </div>
 
-      <div className="research-card-completion" style={{ display: "grid", gap: "0.22rem", borderLeft: `3px solid ${essay.labelColor}`, paddingLeft: "0.64rem", marginTop: "0.75rem" }}>
-        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900 }}>完成后检查</span>
-        <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>{essay.checklist[0]}</span>
-      </div>
-
-      <div className="research-card-output" style={{ background: "rgba(250,247,241,0.72)", border: "1px dashed rgba(94,68,42,0.18)", borderRadius: 8, padding: "0.5rem 0.62rem", marginTop: "0.75rem" }}>
-        <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.14rem" }}>读完产出</span>
-        <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.75rem", lineHeight: 1.5, fontWeight: 800 }}>{essay.starterTemplate[0]}</span>
+      <div className="research-card-quick-evidence" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: "0.54rem", marginTop: "0.72rem" }}>
+        <div className="research-card-completion" style={{ display: "grid", gap: "0.18rem", borderLeft: `3px solid ${essay.labelColor}`, paddingLeft: "0.58rem" }}>
+          <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", fontWeight: 900 }}>完成后检查</span>
+          <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 800 }}>{essay.checklist[0]}</span>
+        </div>
+        <div className="research-card-output" style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.14)", borderRadius: 8, padding: "0.46rem 0.55rem", display: "grid", gap: "0.16rem" }}>
+          <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>读完产出</span>
+          <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 800 }}>{essay.starterTemplate[0]}</span>
+        </div>
       </div>
 
       {/* Footer */}
@@ -612,6 +604,10 @@ ${essay.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
 
             #research .research-evidence-checklist-button {
               width: 100%;
+            }
+
+            #research .research-card-quick-evidence {
+              grid-template-columns: 1fr !important;
             }
           }
         `}

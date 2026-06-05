@@ -337,7 +337,7 @@ ${note.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
                   cursor: "pointer",
                   color: "inherit",
                   display: "grid",
-                  gridTemplateRows: "auto auto auto auto 1fr auto auto auto",
+                  gridTemplateRows: "auto auto auto auto auto auto",
                   height: "100%",
                   textDecoration: "none",
                 }}
@@ -361,32 +361,24 @@ ${note.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
                   <NoteCardIllustration slug={note.slug} color={note.tagColor} />
                 </div>
 
-                <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.84rem", lineHeight: 1.65, marginBottom: "1rem" }}>
+                <p className="note-card-excerpt" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.55, marginBottom: "0.72rem", maxHeight: 74, overflow: "hidden" }}>
                   {note.excerpt}
                 </p>
 
-                <div style={{ display: "grid", alignContent: "start", gap: 6, marginBottom: "1rem" }}>
-                  {note.highlights.slice(0, 2).map((highlight) => (
-                    <span key={highlight} style={{ display: "grid", gridTemplateColumns: "12px minmax(0, 1fr)", alignItems: "start", gap: 7, color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 800, lineHeight: 1.48 }}>
-                      <span aria-hidden="true" style={{ width: 7, height: 7, borderRadius: "50%", background: note.tagColor, marginTop: "0.38rem", opacity: 0.78 }} />
-                      {highlight}
-                    </span>
-                  ))}
-                </div>
-
-                <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem 0.65rem", marginBottom: "1rem" }}>
+                <div className="note-card-action-row" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem 0.65rem", marginBottom: "0.68rem" }}>
                   <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.16rem" }}>先做这个</span>
                   <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>{note.actionSteps[0]}</span>
                 </div>
 
-                <div className="note-card-completion" style={{ display: "grid", gap: "0.22rem", borderLeft: `3px solid ${note.tagColor}`, paddingLeft: "0.64rem", marginBottom: "0.7rem" }}>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900 }}>完成后检查</span>
-                  <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>{note.checklist[0]}</span>
-                </div>
-
-                <div className="note-card-output" style={{ background: "rgba(250,247,241,0.72)", border: "1px dashed rgba(94,68,42,0.18)", borderRadius: 8, padding: "0.5rem 0.62rem", marginBottom: "1rem" }}>
-                  <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.14rem" }}>读完产出</span>
-                  <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.75rem", lineHeight: 1.5, fontWeight: 800 }}>{note.starterTemplate[0]}</span>
+                <div className="note-card-quick-evidence" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: "0.54rem", marginBottom: "0.86rem" }}>
+                  <div className="note-card-completion" style={{ borderLeft: `3px solid ${note.tagColor}`, paddingLeft: "0.58rem", display: "grid", gap: "0.18rem" }}>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", fontWeight: 900 }}>完成后检查</span>
+                    <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 800 }}>{note.checklist[0]}</span>
+                  </div>
+                  <div className="note-card-output" style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.14)", borderRadius: 8, padding: "0.46rem 0.55rem", display: "grid", gap: "0.16rem" }}>
+                    <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>读完产出</span>
+                    <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 800 }}>{note.starterTemplate[0]}</span>
+                  </div>
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", alignSelf: "end", gap: "0.7rem", flexWrap: "wrap" }}>
@@ -448,6 +440,10 @@ ${note.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
 
             #notes .note-method-checklist-button {
               width: 100%;
+            }
+
+            #notes .note-card-quick-evidence {
+              grid-template-columns: 1fr !important;
             }
           }
 
