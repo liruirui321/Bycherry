@@ -133,55 +133,47 @@ function WorkCard({ work }: { work: (typeof works)[0] }) {
         color: "inherit",
         textDecoration: "none",
         display: "grid",
-        gridTemplateRows: "auto auto auto auto auto auto auto",
+        gridTemplateRows: "auto auto auto auto auto auto",
         alignContent: "start",
-        minHeight: 424,
+        minHeight: 344,
       }}
     >
-      <div style={{ marginBottom: "0.46rem" }}>{work.icon}</div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.8rem", marginBottom: "0.5rem" }}>
+        <div>{work.icon}</div>
+        <span style={{ background: work.color, border: `1px solid ${work.border}`, borderRadius: 999, color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900, padding: "0.15rem 0.46rem", whiteSpace: "nowrap" }}>
+          {work.category}
+        </span>
+      </div>
 
       <h3 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 800, color: "var(--cherry-warm-brown)", fontSize: "1rem", marginBottom: "0.42rem", lineHeight: 1.25 }}>
         {work.title}
       </h3>
 
-      <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.79rem", lineHeight: 1.48, marginBottom: "0.64rem" }}>
+      <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.44, marginBottom: "0.6rem" }}>
         {work.desc}
       </p>
 
-      <div style={{ height: 122, minHeight: 122, display: "flex", justifyContent: "center", alignItems: "center", background: work.color, border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, marginBottom: "0.68rem", padding: "0.16rem", overflow: "hidden" }}>
-        <WorkPreviewIllustration slug={work.slug} color={work.border} width={214} height={122} />
+      <div style={{ height: 104, minHeight: 104, display: "flex", justifyContent: "center", alignItems: "center", background: work.color, border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, marginBottom: "0.68rem", padding: "0.12rem", overflow: "hidden" }}>
+        <WorkPreviewIllustration slug={work.slug} color={work.border} width={206} height={112} />
       </div>
 
-      <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem 0.68rem", marginBottom: "0.68rem", display: "grid", gap: "0.24rem" }}>
-        <span style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>立即任务</span>
-        <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.48, fontWeight: 800 }}>{work.task}</span>
-        <span style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, marginTop: "0.2rem" }}>先做这个</span>
-        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>{work.starter}</span>
-        <span style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, marginTop: "0.2rem" }}>完成标准</span>
-        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>{work.success}</span>
+      <div className="work-card-first-step" style={{ borderTop: "1px solid rgba(94,68,42,0.12)", borderBottom: "1px solid rgba(94,68,42,0.12)", padding: "0.58rem 0", marginBottom: "0.6rem", display: "grid", gap: "0.22rem" }}>
+        <span style={{ color: "var(--cherry-red)", fontSize: "0.67rem", fontWeight: 900 }}>先做这个</span>
+        <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.73rem", lineHeight: 1.42, fontWeight: 900 }}>{work.starter}</span>
       </div>
 
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-        {work.tags.map((t) => (
-          <span key={t} style={{ background: "rgba(250,247,241,0.75)", color: "var(--cherry-warm-mid)", borderRadius: 999, padding: "0.2rem 0.6rem", fontSize: "0.74rem", fontWeight: 600, fontFamily: "'Nunito', sans-serif" }}>
-            {t}
-          </span>
-        ))}
-      </div>
-
-      <div style={{ display: "grid", gap: 4, marginTop: "0.72rem" }}>
+      <div className="work-card-output-strip" style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: "0.58rem" }}>
         {work.outputs.map((output) => (
-          <span key={output} style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-warm-brown)", fontSize: "0.73rem", fontWeight: 900 }}>
-            <span aria-hidden="true" style={{ width: 7, height: 7, borderRadius: "50%", background: work.border, flexShrink: 0 }} />
+          <span key={output} style={{ background: "rgba(250,247,241,0.78)", border: "1px solid rgba(94,68,42,0.1)", color: "var(--cherry-forest)", borderRadius: 999, padding: "0.17rem 0.48rem", fontSize: "0.68rem", fontWeight: 900, fontFamily: "'Nunito', sans-serif" }}>
             {output}
           </span>
         ))}
       </div>
 
-      <div role="list" aria-label={`${work.title}学习路径`} style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 5, marginTop: "0.72rem" }}>
+      <div role="list" aria-label={`${work.title}学习路径`} style={{ display: "flex", flexWrap: "wrap", gap: 5, color: "var(--cherry-warm-mid)", fontSize: "0.67rem", fontWeight: 900, lineHeight: 1.35 }}>
         {work.path.map((step, index) => (
-          <span role="listitem" key={step} style={{ background: work.color, border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.34rem 0.36rem", color: "var(--cherry-warm-brown)", fontSize: "0.66rem", fontWeight: 900, lineHeight: 1.32, minHeight: 44, display: "grid", alignContent: "center" }}>
-            {index + 1}. {step}
+          <span role="listitem" key={step}>
+            {index > 0 ? "→ " : ""}{index + 1}. {step}
           </span>
         ))}
       </div>
