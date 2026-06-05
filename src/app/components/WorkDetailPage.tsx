@@ -2618,6 +2618,9 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             ) : null}
           </div>
 
+          <details className="plant-support-pack-details plant-compact-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.05)" }}>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>记录、复盘与文献 · 6 项</summary>
+
           <details className="plant-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>阶段比较记录</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
@@ -2744,10 +2747,8 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
               {studyCardOutput}
             </code>
           </details>
-        </aside>
-      </div>
 
-      <details className="plant-reference-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem" }}>
+          <details className="plant-reference-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>证据与参考文献</summary>
         <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>证据与参考文献</h3>
         <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.8rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.86rem", marginBottom: "0.8rem" }}>
@@ -2761,6 +2762,9 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
           ))}
         </div>
       </details>
+          </details>
+        </aside>
+      </div>
 
       <style>
         {`
