@@ -337,6 +337,9 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes("{work.success}"), "Work detail quick start must expose each work completion standard.");
   expect(workDetailSource.includes("完成证据"), "Work detail quick start must ask learners to leave completion evidence.");
   expect(workDetailSource.includes("evidenceItems"), "Work detail quick start must derive completion evidence from work outputs, success, and path.");
+  expect(workDetailSource.includes("evidenceFieldItems"), "Work detail quick start must provide learner-filled evidence fields.");
+  expect(workDetailSource.includes("filledEvidence"), "Work detail reflection template must merge learner-filled evidence.");
+  expect(workDetailSource.includes("work-saved-output"), "Work detail quick start must expose a saved output input.");
   expect(workDetailSource.includes("reflectionChecks"), "Work detail quick start must derive concrete reflection checks.");
   expect(workDetailSource.includes("保存 1 份${work.outputs[0]"), "Work detail completion evidence must include a concrete saved output.");
   expect(workDetailSource.includes("const evidenceTemplate"), "Work detail completion evidence must include a copyable reflection template.");
@@ -346,8 +349,9 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes("focusPrimaryTool"), "Work detail start action must focus the primary tool anchor.");
   expect(workDetailSource.includes('id="work-primary-tool"') && workDetailSource.includes("tabIndex={-1}"), "Work detail primary tool anchor must be focusable.");
   expect(workDetailSource.includes("复盘证据"), "Work detail completion evidence template must include a reflection evidence title.");
-  expect(workDetailSource.includes("四、复盘检查"), "Work detail completion evidence template must include reflection checks.");
-  expect(workDetailSource.includes("五、下一步问题"), "Work detail completion evidence template must include a next-question field.");
+  expect(workDetailSource.includes("三、我的填写记录"), "Work detail completion evidence template must include learner-filled notes.");
+  expect(workDetailSource.includes("五、复盘检查"), "Work detail completion evidence template must include reflection checks.");
+  expect(workDetailSource.includes("六、下一步问题"), "Work detail completion evidence template must include a next-question field.");
   expect(workDetailSource.includes("aria-label={`继续探索${item.title}：先做这个，${item.starter}。完成标准，${item.success}`}"), "Work detail related cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("先做这个：{item.work.starter}"), "Work detail previous/next cards must expose each adjacent module starter action.");
   expect(workDetailSource.includes("aria-label={`${item.label}：${item.work.title}。先做这个，${item.work.starter}。完成标准，${item.work.success}`}"), "Work detail previous/next cards must include starter and completion standard in accessible labels.");

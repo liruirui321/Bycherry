@@ -4200,6 +4200,20 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
 function WorkQuickStart({ work }: { work: Work }) {
   const [copiedEvidence, setCopiedEvidence] = useState(false);
   const [evidenceCopyStatus, setEvidenceCopyStatus] = useState("");
+  const [savedOutput, setSavedOutput] = useState("");
+  const [observedChange, setObservedChange] = useState("");
+  const [completionProof, setCompletionProof] = useState("");
+  const [nextQuestion, setNextQuestion] = useState("");
+
+  useEffect(() => {
+    setCopiedEvidence(false);
+    setEvidenceCopyStatus("");
+    setSavedOutput("");
+    setObservedChange("");
+    setCompletionProof("");
+    setNextQuestion("");
+  }, [work.slug]);
+
   const evidenceItems = [
     `保存 1 份${work.outputs[0] ?? "学习产出"}`,
     `用自己的话写下：${work.success}`,
@@ -4211,6 +4225,46 @@ function WorkQuickStart({ work }: { work: Work }) {
     `我能用自己的话说明完成标准：${work.success}`,
     "我写下了一个还没有弄清楚的问题，方便下次继续查。",
   ];
+  const evidenceFieldItems = [
+    {
+      id: "work-saved-output",
+      label: "我保存了什么",
+      value: savedOutput,
+      setter: setSavedOutput,
+      placeholder: work.outputs.join(" / "),
+      fallback: work.outputs[0] ?? "学习产出",
+    },
+    {
+      id: "work-observed-change",
+      label: "我观察到什么变化",
+      value: observedChange,
+      setter: setObservedChange,
+      placeholder: work.starter,
+      fallback: work.starter,
+    },
+    {
+      id: "work-completion-proof",
+      label: "我如何证明完成",
+      value: completionProof,
+      setter: setCompletionProof,
+      placeholder: work.success,
+      fallback: work.success,
+    },
+    {
+      id: "work-next-question",
+      label: "下一步问题",
+      value: nextQuestion,
+      setter: setNextQuestion,
+      placeholder: `回看：${work.path[work.path.length - 1] ?? work.path[0]}`,
+      fallback: `回看：${work.path[work.path.length - 1] ?? work.path[0]}`,
+    },
+  ];
+  const filledEvidence = {
+    savedOutput: savedOutput.trim() || evidenceFieldItems[0].fallback,
+    observedChange: observedChange.trim() || evidenceFieldItems[1].fallback,
+    completionProof: completionProof.trim() || evidenceFieldItems[2].fallback,
+    nextQuestion: nextQuestion.trim() || evidenceFieldItems[3].fallback,
+  };
   const evidenceTemplate = `【${work.title}复盘证据】
 立即任务：${work.task}
 先做这个：${work.starter}
@@ -4222,13 +4276,19 @@ ${work.outputs.map((output, index) => `${index + 1}. ${output}：`).join("\n")}
 二、我完成的路径
 ${work.path.map((step, index) => `${index + 1}. ${step}：`).join("\n")}
 
-三、我的解释
+三、我的填写记录
+1. 我保存了什么：${filledEvidence.savedOutput}
+2. 我观察到什么变化：${filledEvidence.observedChange}
+3. 我如何证明完成：${filledEvidence.completionProof}
+4. 下一步问题：${filledEvidence.nextQuestion}
+
+四、我的解释
 我能说明：
 
-四、复盘检查
+五、复盘检查
 ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：`).join("\n")}
 
-五、下一步问题
+六、下一步问题
 我还没有弄清楚：
 我需要回看的资料或页面：`;
 
@@ -4368,6 +4428,38 @@ ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：
               {evidenceItems.map((item, index) => (
                 <span key={item} role="listitem" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.4, fontWeight: 900 }}>
                   {index + 1}. {item}
+                </span>
+              ))}
+            </div>
+            <div className="work-evidence-field-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.42rem" }}>
+              {evidenceFieldItems.map((field) => (
+                <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.26rem", color: "var(--cherry-warm-brown)", fontSize: "0.68rem", fontWeight: 900 }}>
+                  {field.label}
+                  <textarea
+                    id={field.id}
+                    value={field.value}
+                    onChange={(event) => {
+                      field.setter(event.target.value);
+                      setCopiedEvidence(false);
+                      setEvidenceCopyStatus("");
+                    }}
+                    rows={2}
+                    placeholder={field.placeholder}
+                    style={{ width: "100%", minHeight: 58, boxSizing: "border-box", border: "1px solid rgba(94,68,42,0.14)", borderRadius: 8, background: "rgba(250,247,241,0.72)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800, padding: "0.46rem", resize: "vertical" }}
+                  />
+                </label>
+              ))}
+            </div>
+            <div style={{ background: "rgba(250,247,241,0.6)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.38rem" }}>
+              {[
+                ["保存", filledEvidence.savedOutput],
+                ["观察", filledEvidence.observedChange],
+                ["证明", filledEvidence.completionProof],
+                ["下一步", filledEvidence.nextQuestion],
+              ].map(([label, body]) => (
+                <span key={label} style={{ display: "grid", gap: "0.12rem" }}>
+                  <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>{label}</span>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 900 }}>{body}</span>
                 </span>
               ))}
             </div>
@@ -4606,7 +4698,8 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           #work-primary-tool:focus-visible,
           .work-sequence-card:focus-visible,
           .work-next-card:focus-visible,
-          .work-evidence-copy-button:focus-visible {
+          .work-evidence-copy-button:focus-visible,
+          .work-evidence-field-grid textarea:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
           }
@@ -4623,6 +4716,10 @@ export function WorkDetailPage({ slug }: { slug: string }) {
             }
 
             .work-quick-start-meta {
+              grid-template-columns: 1fr !important;
+            }
+
+            .work-evidence-field-grid {
               grid-template-columns: 1fr !important;
             }
           }
