@@ -1296,9 +1296,9 @@ ${localPreviewOutput}`;
               </button>
             </div>
 
-            <div className="research-agent-preview-panel" style={{ background: hasRunPreview ? "var(--cherry-sage-light)" : "var(--muted)", border: hasRunPreview ? "1.5px solid rgba(93,140,101,0.32)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.68rem", marginBottom: "0.62rem", display: "grid", gap: "0.52rem" }}>
+            <div className="research-agent-preview-panel" style={{ background: hasRunPreview ? "var(--cherry-sage-light)" : "transparent", border: hasRunPreview ? "1.5px solid rgba(93,140,101,0.32)" : "none", borderRadius: hasRunPreview ? 8 : 0, padding: hasRunPreview ? "0.68rem" : 0, marginBottom: hasRunPreview ? "0.62rem" : "0.42rem", display: "grid", gap: hasRunPreview ? "0.52rem" : "0.28rem" }}>
               <div className="research-agent-preview-header" style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
-                <div>
+                <div style={{ display: hasRunPreview ? "block" : "none" }}>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>本地 Agent 预览</div>
                   <div className="research-agent-preview-copy" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem" }}>
                     不调用 API，只根据当前材料做任务路由和证据边界预判。
@@ -1442,11 +1442,7 @@ ${localPreviewOutput}`;
                     </code>
                   </div>
                 </div>
-              ) : (
-                <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.6 }}>
-                  点击运行后，这里会显示材料状态、证据边界和下一步分析顺序。
-                </div>
-              )}
+              ) : null}
             </div>
 
             <details className="research-agent-output-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem" }}>
