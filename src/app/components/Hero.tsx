@@ -58,7 +58,7 @@ export function Hero() {
           </span>
         </div>
 
-        <nav id="works" className="hero-work-list" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "1fr", gap: "0.34rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+        <nav id="works" className="hero-work-list" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: "0.46rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
           {works.map((work) => {
             const toolHref = getWorkToolHref(work.href);
             return (
@@ -74,20 +74,20 @@ export function Hero() {
                 style={{
                   background: "rgba(250,247,241,0.62)",
                   border: "1px solid rgba(94,68,42,0.12)",
-                  borderLeft: `3px solid ${work.border}`,
+                  borderTop: `3px solid ${work.border}`,
                   borderRadius: 8,
-                  padding: "0.42rem 0.58rem",
+                  padding: "0.54rem 0.58rem",
                   color: "var(--cherry-warm-brown)",
                   textDecoration: "none",
                   textAlign: "left",
                   display: "grid",
-                  gridTemplateColumns: "auto minmax(0, 1fr) auto auto",
-                  alignItems: "center",
-                  gap: "0.56rem",
+                  gridTemplateColumns: "1fr",
+                  alignItems: "start",
+                  gap: "0.34rem",
                   position: "relative",
                   overflow: "hidden",
                   minWidth: 0,
-                  minHeight: 48,
+                  minHeight: 76,
                   maxWidth: "100%",
                   boxSizing: "border-box",
                 }}
@@ -95,13 +95,8 @@ export function Hero() {
                 <span aria-hidden="true" style={{ width: 24, height: 24, borderRadius: 999, background: work.color, border: `1px solid ${work.border}`, display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--cherry-warm-brown)", fontSize: "0.68rem", fontWeight: 900, flex: "0 0 auto" }}>
                   {work.id}
                 </span>
-                <strong style={{ fontSize: "0.86rem", lineHeight: 1.16, minWidth: 0, overflowWrap: "anywhere", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{work.title}</strong>
-                <span className="hero-work-tags" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.64rem", lineHeight: 1.22, fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {work.tags.slice(0, 2).join(" / ")}
-                </span>
-                <span className="hero-work-status" style={{ color: "var(--cherry-forest)", fontSize: "0.64rem", fontWeight: 900, whiteSpace: "nowrap" }}>
-                  {homeWorkStatus[work.slug] ?? work.category}
-                </span>
+                <strong style={{ fontSize: "0.82rem", lineHeight: 1.18, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
+                <span className="hero-work-status" style={{ color: "var(--cherry-forest)", fontSize: "0.64rem", fontWeight: 900, whiteSpace: "nowrap" }}>{homeWorkStatus[work.slug] ?? work.category}</span>
               </a>
             );
           })}
@@ -128,7 +123,7 @@ export function Hero() {
 
           .hero-work-list {
             display: grid !important;
-            grid-template-columns: 1fr !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             gap: 0.3rem !important;
             overflow-x: visible;
             padding-bottom: 0;
@@ -142,10 +137,10 @@ export function Hero() {
             min-width: 0 !important;
             max-width: 100% !important;
             box-sizing: border-box;
-            grid-template-columns: auto minmax(0, 1fr) auto !important;
-            gap: 0.46rem !important;
-            min-height: 46px !important;
-            padding: 0.38rem 0.5rem !important;
+            grid-template-columns: 1fr !important;
+            gap: 0.24rem !important;
+            min-height: 64px !important;
+            padding: 0.42rem 0.48rem !important;
           }
 
           .hero-work-status {
