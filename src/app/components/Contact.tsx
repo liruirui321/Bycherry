@@ -22,6 +22,13 @@ export function Contact() {
   const trimmedMessage = message.trim();
   const canUseDraft = Boolean(trimmedName && trimmedMessage);
   const feedbackTypes = ["内容卡住", "页面问题", "工具建议", "资料补充", "合作讨论"];
+  const contactPagePresets = [
+    { label: "基因表达", href: "/works/gene-expression" },
+    { label: "概念解释", href: "/works/concept-explainer" },
+    { label: "科研 Agent", href: "/works/research-prompt-kit" },
+    { label: "植物演化", href: "/works/plant-evolution-stories" },
+    { label: "SciFusion", href: "/research/ai-assessment-quality-control" },
+  ];
   const draftSubject = `By Cherry ${feedbackType} - ${trimmedName || "未署名"}`;
   const draftBody = `反馈类型：${feedbackType}
 相关页面：${trimmedRelatedPage || "未填写"}
@@ -225,6 +232,33 @@ ${trimmedMessage || "（未填写内容）"}
                   }}
                 />
               </label>
+            </div>
+
+            <div className="contact-page-presets" role="group" aria-label="选择常见反馈页面" style={{ display: "flex", flexWrap: "wrap", gap: "0.42rem", marginTop: "-0.85rem", marginBottom: "1.15rem" }}>
+              {contactPagePresets.map((preset) => (
+                <button
+                  key={preset.href}
+                  type="button"
+                  aria-pressed={relatedPage === preset.href}
+                  onClick={() => {
+                    setRelatedPage(preset.href);
+                    clearDraftStatus();
+                  }}
+                  style={{
+                    background: relatedPage === preset.href ? "var(--cherry-sage-light)" : "rgba(250,247,241,0.82)",
+                    color: relatedPage === preset.href ? "var(--cherry-forest)" : "var(--cherry-warm-mid)",
+                    border: relatedPage === preset.href ? "1.5px solid var(--cherry-sage)" : "1.5px solid var(--border)",
+                    borderRadius: 999,
+                    padding: "0.28rem 0.68rem",
+                    fontFamily: "'Nunito', sans-serif",
+                    fontWeight: 900,
+                    fontSize: "0.76rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  {preset.label}
+                </button>
+              ))}
             </div>
 
             <label htmlFor="contact-stuck-point" style={{ fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>

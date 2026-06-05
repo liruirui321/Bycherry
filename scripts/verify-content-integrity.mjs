@@ -943,6 +943,9 @@ function verifyContactFeedbackContract() {
     { label: "structured draft page", text: "相关页面：${trimmedRelatedPage" },
     { label: "structured draft stuck point", text: "当前卡点：${trimmedStuckPoint" },
     { label: "structured draft status", text: "结构化邮件草稿已准备好" },
+    { label: "page preset data", text: "contactPagePresets" },
+    { label: "page preset group", text: "选择常见反馈页面" },
+    { label: "page preset class", text: "contact-page-presets" },
   ];
 
   for (const item of requiredContactFeatures) {
