@@ -1133,6 +1133,16 @@ function verifyContactFeedbackContract() {
     { label: "page preset data", text: "contactPagePresets" },
     { label: "page preset group", text: "选择常见反馈页面" },
     { label: "page preset class", text: "contact-page-presets" },
+    { label: "feedback quality data", text: "feedbackQualityItems" },
+    { label: "feedback quality score", text: "feedbackQualityScore" },
+    { label: "copyable feedback checklist", text: "feedbackChecklistText" },
+    { label: "feedback checklist copy handler", text: "copyFeedbackChecklist" },
+    { label: "feedback quality panel", text: "contact-feedback-quality-panel" },
+    { label: "feedback quality visible heading", text: "反馈可处理度" },
+    { label: "feedback checklist copy button", text: "复制核查单" },
+    { label: "feedback checklist copied title", text: "【By Cherry 反馈核查单】" },
+    { label: "feedback checklist completion score", text: "可处理度：${feedbackQualityScore}/5" },
+    { label: "feedback before-send checks", text: "发送前确认" },
   ];
 
   for (const item of requiredContactFeatures) {

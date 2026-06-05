@@ -15,6 +15,7 @@ export function Contact() {
   const [sent, setSent] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedDraft, setCopiedDraft] = useState(false);
+  const [copiedFeedbackChecklist, setCopiedFeedbackChecklist] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const [draftStatus, setDraftStatus] = useState("");
 
@@ -50,9 +51,55 @@ ${trimmedMessage || "（未填写内容）"}
   const formDraftCopyStatusId = "contact-form-draft-copy-status";
   const sentDraftCopyStatusId = "contact-sent-draft-copy-status";
   const formReadinessText = canUseDraft ? "结构化邮件草稿已准备好，也可以先复制一份备份。" : "写下名字和具体内容后，就可以打开邮件草稿。";
+  const feedbackQualityItems = [
+    {
+      label: "相关页面",
+      pass: trimmedRelatedPage.length >= 6,
+      help: "写清具体页面路径或选择常见页面。",
+    },
+    {
+      label: "当前卡点",
+      pass: trimmedStuckPoint.length >= 8,
+      help: "说明卡在哪里，而不是只写“看不懂”。",
+    },
+    {
+      label: "已经尝试",
+      pass: trimmedTriedAction.length >= 10,
+      help: "写出已经点过、拖过、复制过或读过什么。",
+    },
+    {
+      label: "希望得到",
+      pass: trimmedExpectedOutcome.length >= 10,
+      help: "说明希望页面补什么、改什么或解释到什么程度。",
+    },
+    {
+      label: "具体内容",
+      pass: trimmedMessage.length >= 18,
+      help: "补充具体例子、现象或建议。",
+    },
+  ];
+  const feedbackQualityScore = feedbackQualityItems.filter((item) => item.pass).length;
+  const feedbackChecklistText = `【By Cherry 反馈核查单】
+反馈类型：${feedbackType}
+相关页面：${trimmedRelatedPage || "未填写"}
+当前卡点：${trimmedStuckPoint || "未填写"}
+已经尝试：${trimmedTriedAction || "未填写"}
+希望得到：${trimmedExpectedOutcome || "未填写"}
+具体内容：${trimmedMessage || "未填写"}
+
+可处理度：${feedbackQualityScore}/5
+${feedbackQualityItems.map((item, index) => `${index + 1}. ${item.label}：${item.pass ? "可用" : "待补充"}｜${item.help}`).join("\n")}
+
+发送前确认
+1. 我已经写清页面位置。
+2. 我已经写清具体卡点。
+3. 我已经说明自己尝试过什么。
+4. 我已经写出希望得到的改进结果。
+5. 我已经保留具体例子或现象。`;
 
   function clearDraftStatus() {
     setCopiedDraft(false);
+    setCopiedFeedbackChecklist(false);
     setDraftStatus("");
   }
 
@@ -90,6 +137,7 @@ ${trimmedMessage || "（未填写内容）"}
     const copiedToClipboard = await copyText(draftText);
     if (copiedToClipboard) {
       setCopiedDraft(true);
+      setCopiedFeedbackChecklist(false);
       setDraftStatus("信息内容已复制。");
       window.setTimeout(() => setCopiedDraft(false), 1400);
       return;
@@ -97,6 +145,20 @@ ${trimmedMessage || "（未填写内容）"}
 
     setCopiedDraft(false);
     setDraftStatus("复制失败，请手动复制信息内容。");
+  }
+
+  async function copyFeedbackChecklist() {
+    const copiedToClipboard = await copyText(feedbackChecklistText);
+    if (copiedToClipboard) {
+      setCopiedFeedbackChecklist(true);
+      setCopiedDraft(false);
+      setDraftStatus("反馈核查单已复制。");
+      window.setTimeout(() => setCopiedFeedbackChecklist(false), 1400);
+      return;
+    }
+
+    setCopiedFeedbackChecklist(false);
+    setDraftStatus("复制失败，请手动复制反馈核查单。");
   }
 
   const socials = [
@@ -358,6 +420,36 @@ ${trimmedMessage || "（未填写内容）"}
                 boxSizing: "border-box", lineHeight: 1.65,
               }}
             />
+
+            <div className="contact-feedback-quality-panel" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", marginBottom: "1.2rem", display: "grid", gap: "0.62rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                <div>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", fontWeight: 900 }}>反馈可处理度</div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.16rem", fontWeight: 800 }}>
+                    尽量把页面、卡点、尝试、期待和例子写清楚，后续才容易改进。
+                  </div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+                  <span style={{ background: feedbackQualityScore >= 4 ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", border: feedbackQualityScore >= 4 ? "1.5px solid var(--cherry-sage)" : "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.28rem 0.62rem", color: feedbackQualityScore >= 4 ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+                    {feedbackQualityScore}/5 可用
+                  </span>
+                  <button type="button" onClick={copyFeedbackChecklist} aria-describedby={formDraftCopyStatusId} style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.34rem 0.68rem", fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: "0.76rem", cursor: "pointer" }}>
+                    {copiedFeedbackChecklist ? "已复制" : "复制核查单"}
+                  </button>
+                </div>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.48rem" }}>
+                {feedbackQualityItems.map((item) => (
+                  <div key={item.label} style={{ background: item.pass ? "var(--cherry-sage-light)" : "rgba(250,247,241,0.82)", border: item.pass ? "1.5px solid rgba(93,140,101,0.22)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.52rem", display: "grid", gap: "0.22rem", minHeight: 94 }}>
+                    <span style={{ display: "flex", justifyContent: "space-between", gap: "0.45rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+                      {item.label}
+                      <span style={{ color: item.pass ? "var(--cherry-forest)" : "var(--cherry-red)" }}>{item.pass ? "可用" : "待补"}</span>
+                    </span>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 800 }}>{item.help}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <div className="contact-action-row" style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
               <button
