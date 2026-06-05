@@ -330,6 +330,20 @@ function verifyGenomeAssemblyStoryFrameBuilder() {
   expect(articleSource.includes("genome-story-frame-builder") && articleSource.includes("genome-story-frame-grid"), "Story-frame builder must have stable classes for layout checks.");
 }
 
+function verifyBarcodingEvidenceTableBuilder() {
+  const articleSource = read("src/app/components/ArticleDetailPage.tsx");
+
+  expect(articleSource.includes("barcodeEvidenceBuilderEnabled"), "Barcoding evidence article must expose a special evidence table builder.");
+  expect(articleSource.includes('article?.slug === "barcoding-evidence-chain"'), "Barcoding evidence builder must target the Barcoding evidence article.");
+  expect(articleSource.includes("barcodeEvidenceFields"), "Barcoding evidence builder must define learner-fillable fields.");
+  expect(articleSource.includes("barcodeEvidenceTableText"), "Barcoding evidence builder must produce a copyable evidence table.");
+  expect(articleSource.includes("copyBarcodeEvidenceTable"), "Barcoding evidence builder must expose a copy handler.");
+  expect(articleSource.includes("鉴定证据链表"), "Barcoding evidence builder must visibly name the identification evidence table.");
+  expect(articleSource.includes("样本记录") && articleSource.includes("实验质量") && articleSource.includes("序列质量") && articleSource.includes("BLAST 证据") && articleSource.includes("树图位置") && articleSource.includes("结论边界"), "Barcoding evidence builder must keep sample, lab, sequence, BLAST, tree, and conclusion-boundary fields.");
+  expect(articleSource.includes("避免把最高匹配直接当最终答案"), "Barcoding evidence builder must keep the highest-match caution visible.");
+  expect(articleSource.includes("barcode-evidence-table-builder") && articleSource.includes("barcode-evidence-table-grid"), "Barcoding evidence builder must have stable classes for layout checks.");
+}
+
 function verifyArticleOutcomeSnapshot() {
   const articleSource = read("src/app/components/ArticleDetailPage.tsx");
 
@@ -1317,6 +1331,7 @@ verifyArticleCardsStayStructured();
 verifyPlatformGuideConfigBuilder();
 verifyPlantGenomeEvidenceChainBuilder();
 verifyGenomeAssemblyStoryFrameBuilder();
+verifyBarcodingEvidenceTableBuilder();
 verifyArticleOutcomeSnapshot();
 verifyWorkJsonLdLearningOutcomes();
 verifyResearchAgentWorkbenchContract();

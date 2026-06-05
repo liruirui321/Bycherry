@@ -85,6 +85,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copiedPlatformReview, setCopiedPlatformReview] = useState(false);
   const [copiedAiAuditPrompts, setCopiedAiAuditPrompts] = useState(false);
   const [copiedEvidenceChainCard, setCopiedEvidenceChainCard] = useState(false);
+  const [copiedBarcodeEvidenceTable, setCopiedBarcodeEvidenceTable] = useState(false);
   const [selectedPlatformPlanIndex, setSelectedPlatformPlanIndex] = useState(0);
   const [platformLearnerLevel, setPlatformLearnerLevel] = useState("生物基础入门，已经学过 DNA 和 RNA 基础");
   const [platformKnowledgeRange, setPlatformKnowledgeRange] = useState("基因表达：DNA、mRNA、蛋白质的信息传递关系");
@@ -103,6 +104,12 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [genomeStoryFunction, setGenomeStoryFunction] = useState("");
   const [genomeStoryComparison, setGenomeStoryComparison] = useState("");
   const [genomeStoryConnection, setGenomeStoryConnection] = useState("");
+  const [barcodeSampleRecord, setBarcodeSampleRecord] = useState("");
+  const [barcodeLabRecord, setBarcodeLabRecord] = useState("");
+  const [barcodeSequenceQuality, setBarcodeSequenceQuality] = useState("");
+  const [barcodeBlastEvidence, setBarcodeBlastEvidence] = useState("");
+  const [barcodeTreePosition, setBarcodeTreePosition] = useState("");
+  const [barcodeConclusionBoundary, setBarcodeConclusionBoundary] = useState("");
   const [recordQuestion, setRecordQuestion] = useState("");
   const [recordEvidence, setRecordEvidence] = useState("");
   const [recordOutput, setRecordOutput] = useState("");
@@ -128,6 +135,13 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     setEvidenceMaterial("");
     setEvidenceInterpretation("");
     setEvidenceLimit("");
+    setCopiedBarcodeEvidenceTable(false);
+    setBarcodeSampleRecord("");
+    setBarcodeLabRecord("");
+    setBarcodeSequenceQuality("");
+    setBarcodeBlastEvidence("");
+    setBarcodeTreePosition("");
+    setBarcodeConclusionBoundary("");
     setCopiedGenomeStoryFrame(false);
     setGenomeStoryObject("");
     setGenomeStoryQuestion("");
@@ -493,6 +507,105 @@ ${genomeStoryFilled.connection}
 4. 功能证据是否提供解释线索：${genomeStoryFields[3]?.pass ? "可用" : "待补充"}
 5. 比较证据是否说明差异：${genomeStoryFields[4]?.pass ? "可用" : "待补充"}
 6. 连接句是否回到主问题：${genomeStoryFields[5]?.pass ? "可用" : "待补充"}`
+    : "";
+  const barcodeEvidenceBuilderEnabled = article?.slug === "barcoding-evidence-chain";
+  const barcodeEvidenceFields = barcodeEvidenceBuilderEnabled
+    ? [
+        {
+          id: "barcode-sample-record",
+          label: "样本记录",
+          value: barcodeSampleRecord,
+          setValue: setBarcodeSampleRecord,
+          placeholder: "例如：样本 C01，采自校园池塘边，保留照片、地点、日期和采集人。",
+          pass: barcodeSampleRecord.trim().length >= 18 && /样本|编号|照片|地点|采集|日期|来源/.test(barcodeSampleRecord.trim()),
+          help: "写清样本编号、来源、照片或采集记录。",
+        },
+        {
+          id: "barcode-lab-record",
+          label: "实验质量",
+          value: barcodeLabRecord,
+          setValue: setBarcodeLabRecord,
+          placeholder: "例如：DNA 提取成功，PCR 有单一清晰条带，阴性对照无条带。",
+          pass: barcodeLabRecord.trim().length >= 18 && /DNA|PCR|条带|对照|提取|测序|实验|阴性|阳性/i.test(barcodeLabRecord.trim()),
+          help: "写出 DNA、PCR、对照或实验记录是否支持继续分析。",
+        },
+        {
+          id: "barcode-sequence-quality",
+          label: "序列质量",
+          value: barcodeSequenceQuality,
+          setValue: setBarcodeSequenceQuality,
+          placeholder: "例如：测序峰图前 30 bp 噪音较高，剪切后保留 620 bp 可比对序列。",
+          pass: barcodeSequenceQuality.trim().length >= 18 && /序列|峰图|质量|剪切|长度|碱基|测序|bp|read/i.test(barcodeSequenceQuality.trim()),
+          help: "写出峰图、长度、剪切或序列质量边界。",
+        },
+        {
+          id: "barcode-blast-evidence",
+          label: "BLAST 证据",
+          value: barcodeBlastEvidence,
+          setValue: setBarcodeBlastEvidence,
+          placeholder: "例如：最高匹配为物种 A，相似度 98.6%，覆盖度 96%，候选物种差距 1.8%。",
+          pass: barcodeBlastEvidence.trim().length >= 18 && /BLAST|相似度|覆盖度|匹配|候选|数据库|identity|coverage/i.test(barcodeBlastEvidence.trim()),
+          help: "同时记录相似度、覆盖度、候选差距或数据库线索。",
+        },
+        {
+          id: "barcode-tree-position",
+          label: "树图位置",
+          value: barcodeTreePosition,
+          setValue: setBarcodeTreePosition,
+          placeholder: "例如：样本与候选物种 A 聚在同一分支，但节点支持率只有 61。",
+          pass: barcodeTreePosition.trim().length >= 16 && /树|分支|聚类|支持率|系统发育|节点|候选|clade|bootstrap/i.test(barcodeTreePosition.trim()),
+          help: "写出样本在系统发育树上和候选物种的关系。",
+        },
+        {
+          id: "barcode-conclusion-boundary",
+          label: "结论边界",
+          value: barcodeConclusionBoundary,
+          setValue: setBarcodeConclusionBoundary,
+          placeholder: "例如：目前可写作可能为物种 A；还不能排除近缘物种，需要复核 marker 或补采样。",
+          pass: barcodeConclusionBoundary.trim().length >= 20 && /可能|不能|还需要|边界|排除|复核|补采样|验证|不确定/.test(barcodeConclusionBoundary.trim()),
+          help: "写清确定、可能或仍需验证，不要把最高匹配直接当最终答案。",
+        },
+      ]
+    : [];
+  const barcodeEvidenceScore = barcodeEvidenceFields.filter((field) => field.pass).length;
+  const barcodeEvidenceFilled = {
+    sample: barcodeSampleRecord.trim() || "样本需要有编号、照片、地点、日期和采集人，避免后续无法回溯。",
+    lab: barcodeLabRecord.trim() || "实验记录需要说明 DNA、PCR、对照或测序过程是否支持继续分析。",
+    sequence: barcodeSequenceQuality.trim() || "序列质量需要说明峰图、剪切、长度和可比对范围。",
+    blast: barcodeBlastEvidence.trim() || "BLAST 证据需要同时看相似度、覆盖度、候选差距和数据库记录。",
+    tree: barcodeTreePosition.trim() || "树图位置需要说明样本与候选物种是否聚在可信分支。",
+    boundary: barcodeConclusionBoundary.trim() || "结论要写成确定、可能或仍需验证，不能把最高匹配直接当最终答案。",
+  };
+  const barcodeEvidenceTableText = barcodeEvidenceBuilderEnabled
+    ? `【Barcoding 鉴定证据链表】
+主题：${article?.title ?? ""}
+填写完成度：${barcodeEvidenceScore}/6
+
+一、样本记录
+${barcodeEvidenceFilled.sample}
+
+二、实验质量
+${barcodeEvidenceFilled.lab}
+
+三、序列质量
+${barcodeEvidenceFilled.sequence}
+
+四、BLAST 证据
+${barcodeEvidenceFilled.blast}
+
+五、树图位置
+${barcodeEvidenceFilled.tree}
+
+六、结论边界
+${barcodeEvidenceFilled.boundary}
+
+自查
+1. 样本是否可回溯：${barcodeEvidenceFields[0]?.pass ? "可用" : "待补充"}
+2. 实验记录是否支持继续分析：${barcodeEvidenceFields[1]?.pass ? "可用" : "待补充"}
+3. 序列质量是否说明清楚：${barcodeEvidenceFields[2]?.pass ? "可用" : "待补充"}
+4. BLAST 是否同时看相似度、覆盖度和候选差距：${barcodeEvidenceFields[3]?.pass ? "可用" : "待补充"}
+5. 树图位置是否能支撑候选判断：${barcodeEvidenceFields[4]?.pass ? "可用" : "待补充"}
+6. 结论是否保留确定、可能或仍需验证：${barcodeEvidenceFields[5]?.pass ? "可用" : "待补充"}`
     : "";
   const platformUrl = article && "platformUrl" in article ? article.platformUrl : null;
   const platformUsePlans = platformUrl
@@ -940,6 +1053,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     const copiedToClipboard = await copyText(evidenceChainCardText);
     if (copiedToClipboard) {
       setCopiedEvidenceChainCard(true);
+      setCopiedBarcodeEvidenceTable(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
       setCopiedActionPack(false);
@@ -962,6 +1076,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     const copiedToClipboard = await copyText(genomeStoryFrameText);
     if (copiedToClipboard) {
       setCopiedGenomeStoryFrame(true);
+      setCopiedBarcodeEvidenceTable(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -980,11 +1095,36 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  async function copyBarcodeEvidenceTable() {
+    if (!barcodeEvidenceTableText) return;
+    const copiedToClipboard = await copyText(barcodeEvidenceTableText);
+    if (copiedToClipboard) {
+      setCopiedBarcodeEvidenceTable(true);
+      setCopiedGenomeStoryFrame(false);
+      setCopiedEvidenceChainCard(false);
+      setCopiedSummary(false);
+      setCopiedTemplate(false);
+      setCopiedActionPack(false);
+      setCopiedLearningRecord(false);
+      setCopiedReadingTaskPack(false);
+      setCopiedPlatformConfig(false);
+      setCopiedPlatformReview(false);
+      setCopiedAiAuditPrompts(false);
+      setCopyStatus("鉴定证据链表已复制到剪贴板。");
+      window.setTimeout(() => setCopiedBarcodeEvidenceTable(false), 1400);
+      return;
+    }
+
+    setCopiedBarcodeEvidenceTable(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
   async function copyPlatformPasteConfig() {
     if (!platformPasteConfigText) return;
     const copiedToClipboard = await copyText(platformPasteConfigText);
     if (copiedToClipboard) {
       setCopiedPlatformConfig(true);
+      setCopiedBarcodeEvidenceTable(false);
       setCopiedPlatformReview(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1006,6 +1146,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     const copiedToClipboard = await copyText(platformReviewText);
     if (copiedToClipboard) {
       setCopiedPlatformReview(true);
+      setCopiedBarcodeEvidenceTable(false);
       setCopiedPlatformConfig(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1337,6 +1478,52 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   </code>
                   <button type="button" onClick={copyGenomeStoryFrame} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
                     {copiedGenomeStoryFrame ? "已复制" : "复制骨架"}
+                  </button>
+                </div>
+              </div>
+            ) : null}
+
+            {barcodeEvidenceBuilderEnabled ? (
+              <div className="barcode-evidence-table-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>鉴定证据链表</div>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.16rem", fontWeight: 800 }}>
+                      把样本、实验、序列、BLAST、树图和结论边界串起来，避免把最高匹配直接当最终答案。
+                    </div>
+                  </div>
+                  <span style={{ background: barcodeEvidenceScore === 6 ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.26rem 0.62rem", color: barcodeEvidenceScore === 6 ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+                    完成度 {barcodeEvidenceScore}/6
+                  </span>
+                </div>
+                <div className="barcode-evidence-table-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.62rem" }}>
+                  {barcodeEvidenceFields.map((field) => (
+                    <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.34rem", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 900 }}>
+                      {field.label}
+                      <textarea
+                        id={field.id}
+                        value={field.value}
+                        placeholder={field.placeholder}
+                        rows={3}
+                        onChange={(event) => {
+                          field.setValue(event.currentTarget.value);
+                          setCopiedBarcodeEvidenceTable(false);
+                          setCopyStatus("");
+                        }}
+                        style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem 0.66rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, lineHeight: 1.55, resize: "vertical" }}
+                      />
+                      <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.45, fontWeight: 800 }}>
+                        {field.pass ? "可用" : field.help}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.7rem", alignItems: "start" }}>
+                  <code style={{ display: "block", whiteSpace: "pre-wrap", maxHeight: 240, overflow: "auto", background: "var(--cherry-sage-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.7rem", lineHeight: 1.58 }}>
+                    {barcodeEvidenceTableText}
+                  </code>
+                  <button type="button" onClick={copyBarcodeEvidenceTable} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
+                    {copiedBarcodeEvidenceTable ? "已复制" : "复制证据链表"}
                   </button>
                 </div>
               </div>
@@ -1952,6 +2139,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           .plant-evidence-chain-grid textarea:focus-visible,
           .genome-story-frame-builder button:focus-visible,
           .genome-story-frame-grid textarea:focus-visible,
+          .barcode-evidence-table-builder button:focus-visible,
+          .barcode-evidence-table-grid textarea:focus-visible,
           .article-record-grid textarea:focus-visible,
           .platform-custom-config-grid input:focus-visible,
           .platform-custom-config-grid textarea:focus-visible,
@@ -2030,6 +2219,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             .plant-evidence-chain-builder > div:nth-of-type(3),
             .genome-story-frame-grid,
             .genome-story-frame-builder > div:nth-of-type(3),
+            .barcode-evidence-table-grid,
+            .barcode-evidence-table-builder > div:nth-of-type(3),
             .platform-active-plan-grid,
             .platform-custom-config-grid > div:nth-of-type(2) {
               grid-template-columns: 1fr !important;
