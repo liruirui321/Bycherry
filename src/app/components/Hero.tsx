@@ -35,7 +35,7 @@ export function Hero() {
       }}
     >
       <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1060, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
-        <div className="hero-header-row" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", alignItems: "end", gap: "1rem", marginBottom: "0.36rem" }}>
+        <div className="hero-header-row" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", alignItems: "center", gap: "0.7rem", marginBottom: "0.24rem" }}>
           <div style={{ minWidth: 0 }}>
             <h1
               id="hero-heading"
@@ -53,12 +53,12 @@ export function Hero() {
               By Cherry · 科学学习与 AI
             </h1>
           </div>
-          <span className="hero-count" style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900, whiteSpace: "nowrap" }}>
-            当前 {works.length} 个内容
+          <span className="hero-count" style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, whiteSpace: "nowrap" }}>
+            {works.length} 个内容
           </span>
         </div>
 
-        <nav id="works" className="hero-work-list" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: "0.34rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+        <nav id="works" className="hero-work-list" aria-label="内容目录" style={{ display: "flex", alignItems: "center", gap: "0.28rem", flexWrap: "wrap", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
           {works.map((work) => {
             const toolHref = getWorkToolHref(work.href);
             return (
@@ -72,28 +72,26 @@ export function Hero() {
                 onFocus={() => preloadRouteForHref(getWorkToolHref(work.href))}
                 onPointerDown={() => preloadRouteForHref(getWorkToolHref(work.href))}
                 style={{
-                  background: "rgba(250,247,241,0.38)",
+                  background: "transparent",
                   border: "1px solid rgba(94,68,42,0.1)",
-                  borderLeft: `4px solid ${work.border}`,
-                  borderRadius: 6,
-                  padding: "0.42rem 0.48rem",
+                  borderTop: `2px solid ${work.border}`,
+                  borderRadius: 4,
+                  padding: "0.22rem 0.38rem",
                   color: "var(--cherry-warm-brown)",
                   textDecoration: "none",
                   textAlign: "left",
-                  display: "grid",
-                  gridTemplateColumns: "1fr",
-                  alignItems: "start",
-                  gap: "0.2rem",
+                  display: "inline-flex",
+                  alignItems: "baseline",
+                  gap: "0.34rem",
                   position: "relative",
                   overflow: "hidden",
                   minWidth: 0,
-                  minHeight: 48,
                   maxWidth: "100%",
                   boxSizing: "border-box",
                 }}
               >
-                <strong style={{ fontSize: "0.76rem", lineHeight: 1.16, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
-                <span className="hero-work-status" style={{ color: "var(--cherry-forest)", fontSize: "0.6rem", fontWeight: 900, whiteSpace: "nowrap" }}>{homeWorkStatus[work.slug] ?? work.category}</span>
+                <strong style={{ fontSize: "0.72rem", lineHeight: 1.14, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
+                <span className="hero-work-status" style={{ color: "var(--cherry-forest)", fontSize: "0.56rem", fontWeight: 900, whiteSpace: "nowrap" }}>{homeWorkStatus[work.slug] ?? work.category}</span>
               </a>
             );
           })}
@@ -118,31 +116,28 @@ export function Hero() {
             justify-self: start;
           }
 
-          .hero-work-list {
-            display: grid !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            gap: 0.3rem !important;
-            overflow-x: visible;
-            padding-bottom: 0;
-            width: calc(100vw - 2rem) !important;
-            max-width: calc(100vw - 2rem) !important;
-            box-sizing: border-box;
-          }
+	          .hero-work-list {
+	            display: flex !important;
+	            gap: 0.24rem !important;
+	            overflow-x: visible;
+	            padding-bottom: 0;
+	            width: calc(100vw - 2rem) !important;
+	            max-width: calc(100vw - 2rem) !important;
+	            box-sizing: border-box;
+	          }
 
-          .hero-work-row {
-            width: 100% !important;
-            min-width: 0 !important;
-            max-width: 100% !important;
-            box-sizing: border-box;
-            grid-template-columns: 1fr !important;
-            gap: 0.24rem !important;
-            min-height: 46px !important;
-            padding: 0.36rem 0.42rem !important;
-          }
+	          .hero-work-row {
+	            width: 100% !important;
+	            min-width: 0 !important;
+	            max-width: 100% !important;
+	            box-sizing: border-box;
+	            gap: 0.28rem !important;
+	            padding: 0.2rem 0.34rem !important;
+	          }
 
-          .hero-work-status {
-            font-size: 0.6rem !important;
-          }
+	          .hero-work-status {
+	            font-size: 0.55rem !important;
+	          }
 
           .hero-work-tags {
             display: none !important;
@@ -163,10 +158,10 @@ export function Hero() {
           transition: color 0.18s ease, background 0.18s ease;
         }
 
-        .hero-work-row:hover,
-        .hero-work-row:focus-visible {
-          background: rgba(250,247,241,0.54) !important;
-        }
+	        .hero-work-row:hover,
+	        .hero-work-row:focus-visible {
+	          background: rgba(250,247,241,0.48) !important;
+	        }
 
         @media (prefers-reduced-motion: reduce) {
           .hero-work-row {

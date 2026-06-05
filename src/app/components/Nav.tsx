@@ -80,7 +80,7 @@ export function Nav() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          height: 62,
+          height: 50,
           position: "relative",
         }}
       >
@@ -95,13 +95,13 @@ export function Nav() {
           }}
           style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}
         >
-          <IconCherry size={28} />
-          <span style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--cherry-warm-brown)", letterSpacing: 0.3 }}>
+          <IconCherry size={24} />
+          <span style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--cherry-warm-brown)", letterSpacing: 0 }}>
             By Cherry
           </span>
         </a>
 
-        <div className="nav-links" style={{ position: "fixed", top: 18, left: "max(9.2rem, calc((100vw - 1100px) / 2 + 9.2rem))", zIndex: 80, display: "flex", gap: "0.75rem", alignItems: "center", justifyContent: "flex-start", minWidth: 0 }}>
+        <div className="nav-links" style={{ position: "fixed", top: 12, left: "max(8.2rem, calc((100vw - 1100px) / 2 + 8.2rem))", zIndex: 80, display: "flex", gap: "0.48rem", alignItems: "center", justifyContent: "flex-start", minWidth: 0 }}>
           {links.map((l) => {
             const active = isActiveLink(l);
             return (
@@ -143,7 +143,7 @@ export function Nav() {
 
           @media (max-width: 860px) {
             nav > div {
-              height: 56px !important;
+	              height: 48px !important;
               padding-left: 1rem !important;
               padding-right: 1rem !important;
               gap: 0.55rem !important;
@@ -154,17 +154,17 @@ export function Nav() {
             }
 
             nav .nav-logo span {
-              font-size: 1.08rem !important;
+	              font-size: 1rem !important;
             }
 
             nav .nav-logo svg {
-              width: 24px !important;
-              height: 24px !important;
+	              width: 22px !important;
+	              height: 22px !important;
             }
 
             nav .nav-links {
-              top: 14px !important;
-              left: 8.5rem !important;
+	              top: 12px !important;
+	              left: 7.8rem !important;
               gap: 0.28rem !important;
             }
 

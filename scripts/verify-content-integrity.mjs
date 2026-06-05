@@ -197,7 +197,7 @@ function verifyWorkCardActions() {
   expect(!worksSource.includes("科研助手 Prompt Kit"), "Visible work card title must not use the old Prompt Kit naming.");
   expect(heroSource.includes('id="works"') && heroSource.includes('aria-label="内容目录"'), "Hero must own the #works anchor and all-module directory.");
   expect(heroSource.includes("hero-work-row") && !heroSource.includes("hero-work-open"), "Hero module entries must stay as compact clickable entries without repeated open pills.");
-  expect(heroSource.includes('gridTemplateColumns: "repeat(5, minmax(0, 1fr))"'), "Homepage module entries must render as a compact first-screen matrix instead of long stacked rows.");
+  expect(heroSource.includes('display: "flex"') && heroSource.includes('flexWrap: "wrap"'), "Homepage module entries must render as a short directory strip instead of a card matrix or long stacked rows.");
   expect(!appSource.includes("<Works") && !appSource.includes('import { Works }'), "Homepage should not render a second Works section below the hero.");
   expect(!worksSource.includes("export function Works") && !worksSource.includes("function WorkCard"), "Works.tsx should stay data-only so module entries are not duplicated on the homepage.");
   for (const retiredWorksEntry of ["work-recommended-start", "work-filter-button", "activeCategory", "recommendedWork"]) {
@@ -432,9 +432,9 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("aria-label={`打开${work.title}`}"), "Homepage hero work cards must use short accessible labels.");
   expect(heroSource.includes('id="works"'), "Homepage #works anchor must point to the first-screen module directory instead of a duplicate section.");
   expect(heroSource.includes('aria-label="内容目录"'), "Homepage hero must label the first-screen module directory.");
-  expect(heroSource.includes("hero-work-row") && heroSource.includes('gridTemplateColumns: "repeat(5, minmax(0, 1fr))"') && !heroSource.includes("hero-work-card"), "Homepage hero module entries must use a compact module matrix, not long repeated cards.");
-  expect(heroSource.includes("minHeight: 48") && !heroSource.includes("minHeight: 76") && !heroSource.includes("minHeight: 88") && !heroSource.includes("hero-work-summary"), "Homepage hero module entries must stay as short directory rows instead of tall sticky-note cards.");
-  expect(heroSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") && heroSource.includes("min-height: 46px !important"), "Homepage hero mobile module directory must use compact two-column rows instead of long stacked panels.");
+  expect(heroSource.includes("hero-work-row") && heroSource.includes('display: "inline-flex"') && !heroSource.includes("hero-work-card"), "Homepage hero module entries must use a compact directory strip, not long repeated cards.");
+  expect(!heroSource.includes("minHeight: 48") && !heroSource.includes("minHeight: 76") && !heroSource.includes("minHeight: 88") && !heroSource.includes("hero-work-summary"), "Homepage hero module entries must not use fixed-height sticky-note cards.");
+  expect(heroSource.includes("display: flex !important") && !heroSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") && !heroSource.includes("min-height: 46px !important"), "Homepage hero mobile module directory must stay as a short wrapping strip instead of stacked panels.");
   expect(heroSource.includes("width: calc(100vw - 2rem)"), "Homepage hero mobile module directory must stay inside the visible viewport.");
   expect(heroSource.includes('boxSizing: "border-box"'), "Homepage hero containers must use border-box sizing to avoid mobile overflow.");
   expect(!heroSource.includes("scroll-snap-type") && !heroSource.includes("overflow-x: auto"), "Homepage hero must not hide module entries behind horizontal scrolling.");
@@ -1203,7 +1203,7 @@ function verifyLearnerProductPositioning() {
   expect(navSource.includes('if (pathname.startsWith("/works/")) return link.href === "/#works";'), "Navigation content entry must stay active on work detail pages.");
   expect(navSource.includes('className="nav-links"') && navSource.includes('position: "fixed"') && navSource.includes('display: "flex"'), "Navigation entries must stay directly visible instead of hiding behind a mobile menu.");
   expect(navSource.includes("@media (max-width: 860px)") && navSource.includes("nav .nav-link"), "Navigation must include compact small-screen link sizing aligned with the homepage card breakpoint.");
-  expect(navSource.includes("nav .nav-links") && navSource.includes("left: 8.5rem !important"), "Small-screen navigation links must sit beside the logo so all entries stay visible in the left viewport.");
+  expect(navSource.includes("nav .nav-links") && navSource.includes("left: 7.8rem !important"), "Small-screen navigation links must sit beside the compact logo so all entries stay visible in the left viewport.");
   for (const retiredNavGuide of ["更多工具", "读证据", "学方法", "看生命过程", "整理科研", "生命过程", "拆概念", "科研 Agent", "getWorkToolHref", "matchHref", "nav-mobile-toggle", "mobile-navigation", "mobile-nav-link", "IconMenu", "IconClose", 'matchHashes: ["#research", "#notes"]', "currentRouteGuideText", "copyCurrentRouteGuide", "nav-route-guide-button", "nav-route-guide-status", "当前位置学习路径", "复制当前位置学习路径", 'import { copyText } from "../clipboard"', 'import { works } from "./Works"', 'import { notes } from "./Notes"', 'import { essays } from "./ResearchEssays"']) {
     expect(!navSource.includes(retiredNavGuide), `Navigation should stay compact and not include retired copy-path guide: ${retiredNavGuide}.`);
   }
