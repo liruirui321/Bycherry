@@ -1,4 +1,4 @@
-import { IconBook, IconCheck, IconCoffee, IconLeafSmall } from "./Icons";
+import { IconBook, IconCheck, IconCoffee } from "./Icons";
 import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
 import { works } from "./Works";
@@ -2615,27 +2615,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </div>
             ) : null}
 
-            <a
-              className="article-detail-link"
-              href={`/${backHash}`}
-              onClick={(event) => {
-                if (!shouldUseClientNavigation(event)) return;
-                event.preventDefault();
-                navigateHome(backHash);
-              }}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 5,
-                marginTop: "1.5rem",
-                color: "var(--cherry-forest)",
-                fontWeight: 900,
-                textDecoration: "none",
-              }}
-            >
-              ← {backText}
-            </a>
-
             {navArticles.length > 0 ? (
               <nav aria-label="文章前后导航" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.55rem", marginTop: "1rem" }}>
                 {navArticles.map((item) => {
@@ -2674,10 +2653,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </nav>
             ) : null}
           </article>
-
-          <div style={{ display: "flex", justifyContent: "center", marginTop: "1.5rem", opacity: 0.55 }}>
-            <IconLeafSmall size={28} color="var(--cherry-sage)" />
-          </div>
         </div>
       </section>
 

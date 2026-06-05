@@ -1104,6 +1104,9 @@ function verifyLearnerFacingArticleCopy() {
   for (const retiredArticleNavCardCopy of ["const itemAction = item.article.actionSteps[0]", "const itemCheck = item.article.checklist[0]", "const itemOutput = item.article.starterTemplate[0]", "article-nav-card-check", "article-nav-card-output"]) {
     expect(!articleDetailSource.includes(retiredArticleNavCardCopy), `Article previous/next navigation should not reintroduce long card details: ${retiredArticleNavCardCopy}.`);
   }
+  for (const retiredArticleFooterChrome of ["IconLeafSmall", "← {backText}", 'marginTop: "1.5rem",\n                color: "var(--cherry-forest)"']) {
+    expect(!articleDetailSource.includes(retiredArticleFooterChrome), `Article detail footer should not reintroduce duplicate return links or decoration: ${retiredArticleFooterChrome}.`);
+  }
   expect(appSource.includes("teaches: [article.actionSteps[0], article.checklist[0], article.starterTemplate[0]]"), "Runtime article list JSON-LD must include first action, completion check, and learner output.");
   expect(appSource.includes("teaches: [note?.actionSteps[0] ?? essay?.actionSteps[0], note?.checklist[0] ?? essay?.checklist[0], note?.starterTemplate[0] ?? essay?.starterTemplate[0]]"), "Runtime article detail JSON-LD must include first action, completion check, and learner output.");
   expect(appSource.includes("const articleFirstAction = note?.actionSteps[0] ?? essay?.actionSteps[0] ?? null"), "Runtime article metadata must derive the first action step.");
