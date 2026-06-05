@@ -2520,6 +2520,7 @@ function ConceptExplainerContent() {
   const [copiedLesson, setCopiedLesson] = useState(false);
   const [copiedSkill, setCopiedSkill] = useState(false);
   const [copiedAudit, setCopiedAudit] = useState(false);
+  const [copiedExplanationPack, setCopiedExplanationPack] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const [definitionDraft, setDefinitionDraft] = useState("");
   const [mechanismDraft, setMechanismDraft] = useState("");
@@ -2848,6 +2849,33 @@ function ConceptExplainerContent() {
       body: `你能用“${concept}”解释“${applicationContextText}”，并说出它不能直接推出什么。`,
     },
   ];
+  const conceptExplanationPackCards = [
+    {
+      title: "一句话解释",
+      body: selectedLevel.body,
+      output: "先用自己的话改写，不要照抄定义。",
+    },
+    {
+      title: "图形骨架",
+      body: `${visualMode}：${visualStructureItems.map((item) => item.title).join(" -> ")}`,
+      output: "照着 4 个节点画一张小图，再逐节点复述。",
+    },
+    {
+      title: "机制主线",
+      body: active.mechanism.map((item, index) => `${index + 1}. ${item}`).join("；"),
+      output: "复述时每一步都要能接到下一步。",
+    },
+    {
+      title: "误区边界",
+      body: `${active.pitfall} ${contextualEvidenceBoundary}`,
+      output: "写出一个不能直接推出的结论。",
+    },
+    {
+      title: "马上练习",
+      body: active.workedExample.guideQuestion,
+      output: active.workedExample.learnerOutput,
+    },
+  ];
   const understandingChecks = [
     {
       title: "一句话定义",
@@ -3005,6 +3033,34 @@ ${lessonFlow.map((item) => `${item.title}：${item.body}`).join("\n")}
 选项：${active.quiz.options.join(" / ")}
 答案：${active.quiz.answer}
 解释：${active.quiz.explain}`;
+  const conceptExplanationPackText = `【概念解释包】
+概念：${concept}
+学习阶段：${audience}
+学习目标：${lessonGoal}
+资料边界：${sourceBoundaryText}
+当前卡点：${stuckPointText}
+应用情境：${applicationContextText}
+
+一、先读这 5 张卡
+${conceptExplanationPackCards.map((item, index) => `${index + 1}. ${item.title}
+解释：${item.body}
+要做：${item.output}`).join("\n\n")}
+
+二、可视化解释图
+结构：${visualMode}
+${visualStructureItems.map((item, index) => `${index + 1}. ${item.title}：${item.body}`).join("\n")}
+
+三、即时小测
+问题：${active.quiz.question}
+选项：${active.quiz.options.join(" / ")}
+答案：${active.quiz.answer}
+解释：${active.quiz.explain}
+
+四、完成门槛
+1. 能用自己的话写出一句话解释。
+2. 能按 1-4 步复述机制。
+3. 能把概念迁移到一个新例子。
+4. 能说出一个不能直接推出的结论。`;
   const conceptSkillPrompt = `---
 name: concept-explainer
 description: Use when a learner wants to understand any concept through diagnosis, analogy, mechanism steps, visual structure, transfer practice, and a quick check without skipping the reasoning process.
@@ -3066,9 +3122,10 @@ ${conceptSkillSteps.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 9. Common pitfall: one likely wrong understanding.
 10. Practice situation: context, guide question, and expected learner output.
 11. Transfer task: a new example where the learner must apply the concept.
-12. Understanding audit: 4 observable checks covering definition, mechanism, transfer, and boundary.
-13. Quick check: one multiple-choice question with answer and explanation.
-14. Evidence boundary: what needs to be checked in source material and what is only a general explanation.
+12. Explanation package: five learner-facing cards covering one-sentence explanation, visual skeleton, mechanism, pitfall boundary, and immediate practice.
+13. Understanding audit: 4 observable checks covering definition, mechanism, transfer, and boundary.
+14. Quick check: one multiple-choice question with answer and explanation.
+15. Evidence boundary: what needs to be checked in source material and what is only a general explanation.
 
 ## Completion Gate
 
@@ -3099,6 +3156,7 @@ If any of these are missing, add them before the final answer.
     setCopiedLesson(false);
     setCopiedSkill(false);
     setCopiedAudit(false);
+    setCopiedExplanationPack(false);
     setCopyStatus("");
   }
 
@@ -3109,6 +3167,7 @@ If any of these are missing, add them before the final answer.
     setCopiedLesson(false);
     setCopiedSkill(false);
     setCopiedAudit(false);
+    setCopiedExplanationPack(false);
     setCopyStatus(explanations[nextConcept] ? "已载入预设高质量解释。" : "已按解释 Agent skill 生成学习卡。");
   }
 
@@ -3118,6 +3177,7 @@ If any of these are missing, add them before the final answer.
       setCopiedLesson(true);
       setCopiedSkill(false);
       setCopiedAudit(false);
+      setCopiedExplanationPack(false);
       setCopyStatus("学习卡已复制到剪贴板。");
       window.setTimeout(() => setCopiedLesson(false), 1400);
       return;
@@ -3133,6 +3193,7 @@ If any of these are missing, add them before the final answer.
       setCopiedSkill(true);
       setCopiedLesson(false);
       setCopiedAudit(false);
+      setCopiedExplanationPack(false);
       setCopyStatus("概念解释 skill 指令已复制到剪贴板。");
       window.setTimeout(() => setCopiedSkill(false), 1400);
       return;
@@ -3148,12 +3209,29 @@ If any of these are missing, add them before the final answer.
       setCopiedAudit(true);
       setCopiedLesson(false);
       setCopiedSkill(false);
+      setCopiedExplanationPack(false);
       setCopyStatus("理解自查记录已复制到剪贴板。");
       window.setTimeout(() => setCopiedAudit(false), 1400);
       return;
     }
 
     setCopiedAudit(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyConceptExplanationPack() {
+    const copiedToClipboard = await copyText(conceptExplanationPackText);
+    if (copiedToClipboard) {
+      setCopiedExplanationPack(true);
+      setCopiedLesson(false);
+      setCopiedSkill(false);
+      setCopiedAudit(false);
+      setCopyStatus("概念解释包已复制到剪贴板。");
+      window.setTimeout(() => setCopiedExplanationPack(false), 1400);
+      return;
+    }
+
+    setCopiedExplanationPack(false);
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -3212,6 +3290,30 @@ If any of these are missing, add them before the final answer.
                 <span style={{ color: item.status === "已填写" || item.status === "可用" ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.66rem", fontWeight: 900 }}>{item.status}</span>
               </div>
               <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.42, fontWeight: 800 }}>{item.detail}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="concept-explanation-pack" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.78rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>概念解释包</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.2rem", fontWeight: 800 }}>
+              生成后先看这 5 张卡：一句话解释、图形骨架、机制主线、误区边界和马上练习。
+            </div>
+          </div>
+          <button type="button" onClick={copyConceptExplanationPack} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.5rem 0.86rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+            {copiedExplanationPack ? "已复制" : "复制解释包"}
+          </button>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
+          {conceptExplanationPackCards.map((item, index) => (
+            <div key={item.title} style={{ background: index === 0 ? "var(--cherry-yellow-light)" : index === 1 ? "var(--cherry-blue-light)" : index === 2 ? "var(--cherry-sage-light)" : "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.72rem", minHeight: 152 }}>
+              <span style={{ width: 22, height: 22, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900, marginBottom: "0.46rem" }}>{index + 1}</span>
+              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.34rem" }}>{item.title}</strong>
+              <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800, marginBottom: "0.44rem" }}>{item.body}</span>
+              <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 900 }}>要做：{item.output}</span>
             </div>
           ))}
         </div>

@@ -66,9 +66,10 @@ If any field is missing, ask at most two short questions. Prioritize source boun
 9. Common pitfall: one likely wrong understanding.
 10. Practice situation: context, guide question, and expected learner output.
 11. Transfer task: a new example where the learner must apply the concept, preferably close to the stated application context.
-12. Understanding audit: four checks covering one-sentence definition, mechanism retelling, transfer example, and boundary reminder.
-13. Quick check: one multiple-choice question with answer and explanation.
-14. Evidence boundary: what needs to be checked in source material and what is only a general explanation.
+12. Explanation package: five learner-facing cards covering one-sentence explanation, visual skeleton, mechanism, pitfall boundary, and immediate practice.
+13. Understanding audit: four checks covering one-sentence definition, mechanism retelling, transfer example, and boundary reminder.
+14. Quick check: one multiple-choice question with answer and explanation.
+15. Evidence boundary: what needs to be checked in source material and what is only a general explanation.
 
 ## Completion Gate
 
