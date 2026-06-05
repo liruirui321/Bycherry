@@ -13,7 +13,7 @@ export function Nav() {
     { label: "生命过程", href: getWorkToolHref("/works/gene-expression"), matchHref: "/works/gene-expression" },
     { label: "拆概念", href: getWorkToolHref("/works/concept-explainer"), matchHref: "/works/concept-explainer" },
     { label: "科研 Agent", href: getWorkToolHref("/works/research-prompt-kit"), matchHref: "/works/research-prompt-kit" },
-    { label: "文章", href: "/#research", matchHashes: ["#research", "#notes"] },
+    { label: "文章", href: "/#research", matchHashes: ["#research"] },
     { label: "联系", href: "/#contact" },
   ];
 

@@ -1081,6 +1081,10 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("验收：${item.output}"), "Article completion cards must show observable pass criteria.");
   expect(articleDetailSource.includes("const articlePracticePlan"), "Article detail pages must derive a short execution plan.");
   expect(articleDetailSource.includes("const pairedWorks"), "Article detail pages must derive paired work modules for next-step action.");
+  expect(articleDetailSource.includes('const backHash = "#research";') && articleDetailSource.includes('const backText = "回到文章";'), "Article detail pages must return to the unified article index.");
+  for (const retiredArticleBackTarget of ['"#notes"', "回到方法库", "回到证据库"]) {
+    expect(!articleDetailSource.includes(retiredArticleBackTarget), `Article detail back navigation should not target retired split article anchors: ${retiredArticleBackTarget}.`);
+  }
   expect(articleDetailSource.includes("八、读完接着做"), "Article learning records must include paired module next actions.");
   expect(articleDetailSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Article paired module links must use the direct-to-tool href helper.");
   expect(articleDetailSource.includes("入口：${getWorkToolHref(work.href)}"), "Article copied next-step records must point directly to work tools.");
@@ -1192,11 +1196,11 @@ function verifyLearnerProductPositioning() {
   expect(navSource.includes('{ label: "生命过程", href: getWorkToolHref("/works/gene-expression"), matchHref: "/works/gene-expression" }'), "Navigation life-process shortcut must open the gene expression tool directly.");
   expect(navSource.includes('{ label: "拆概念", href: getWorkToolHref("/works/concept-explainer"), matchHref: "/works/concept-explainer" }'), "Navigation concept shortcut must open the concept tool directly.");
   expect(navSource.includes('{ label: "科研 Agent", href: getWorkToolHref("/works/research-prompt-kit"), matchHref: "/works/research-prompt-kit" }'), "Navigation research shortcut must open the research tool directly.");
-  expect(navSource.includes('{ label: "文章", href: "/#research", matchHashes: ["#research", "#notes"] }'), "Navigation should collapse research and notes into one article entry.");
+  expect(navSource.includes('{ label: "文章", href: "/#research", matchHashes: ["#research"] }'), "Navigation should collapse research and notes into one article entry.");
   expect(navSource.includes("if (\"matchHref\" in link && pathname === link.matchHref) return true;"), "Navigation active states must still match direct-to-tool shortcuts by pathname.");
   expect(navSource.includes('if ("matchHashes" in link && pathname === "/" && link.matchHashes.includes(hash || "#top")) return true;'), "Navigation article entry must track both article homepage anchors.");
   expect(navSource.includes('if (pathname.startsWith("/notes/") || pathname.startsWith("/research/")) return link.href === "/#research";'), "Navigation article entry must stay active on article detail pages.");
-  for (const retiredNavGuide of ["更多工具", "读证据", "学方法", "看生命过程", "整理科研", "currentRouteGuideText", "copyCurrentRouteGuide", "nav-route-guide-button", "nav-route-guide-status", "当前位置学习路径", "复制当前位置学习路径", 'import { copyText } from "../clipboard"', 'import { works } from "./Works"', 'import { notes } from "./Notes"', 'import { essays } from "./ResearchEssays"']) {
+  for (const retiredNavGuide of ["更多工具", "读证据", "学方法", "看生命过程", "整理科研", 'matchHashes: ["#research", "#notes"]', "currentRouteGuideText", "copyCurrentRouteGuide", "nav-route-guide-button", "nav-route-guide-status", "当前位置学习路径", "复制当前位置学习路径", 'import { copyText } from "../clipboard"', 'import { works } from "./Works"', 'import { notes } from "./Notes"', 'import { essays } from "./ResearchEssays"']) {
     expect(!navSource.includes(retiredNavGuide), `Navigation should stay compact and not include retired copy-path guide: ${retiredNavGuide}.`);
   }
 }

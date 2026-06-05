@@ -101,8 +101,8 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const articleIndex = collection.findIndex((item) => item.slug === slug);
   const previousArticle = articleIndex > 0 ? collection[articleIndex - 1] : null;
   const nextArticle = articleIndex >= 0 && articleIndex < collection.length - 1 ? collection[articleIndex + 1] : null;
-  const backHash = kind === "note" ? "#notes" : "#research";
-  const backText = kind === "note" ? "回到方法库" : "回到证据库";
+  const backHash = "#research";
+  const backText = "回到文章";
 
   useEffect(() => {
     setRecordQuestion("");
