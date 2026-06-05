@@ -119,7 +119,6 @@ function verifyVisibleLearningModuleCopy() {
   const requiredCopy = [
     "学习模块",
     "浏览学习模块",
-    "全部学习模块",
     "学习模块前后导航",
     "首屏学习模块目录",
   ];
@@ -216,8 +215,8 @@ function verifyWorkDetailCardsStayCompact() {
   const source = read("src/app/components/WorkDetailPage.tsx");
 
   expect(!source.includes("isPlantEvolution"), "Work detail cards must not use plant-specific tall preview sizing.");
-  expect(source.includes('gridTemplateColumns: "112px minmax(0, 1fr)"'), "Work detail continue cards should use a uniform compact preview column.");
-  expect(source.includes('height: 88'), "Work detail continue card previews should keep a fixed compact height.");
+  expect(source.includes('gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))"'), "Work detail previous/next navigation should stay compact.");
+  expect(!source.includes('gridTemplateColumns: "112px minmax(0, 1fr)"') && !source.includes("height: 88"), "Work detail pages must not reintroduce related-module preview cards.");
   expect(source.includes("conceptInputQuality"), "Concept explainer must judge whether learner inputs are complete enough.");
   expect(source.includes("concept-agent-input-grid"), "Concept explainer context inputs must be visible in the initial agent panel.");
   expect(source.includes("资料边界") && source.includes("当前卡点"), "Concept explainer must collect source boundary and current confusion.");
@@ -496,19 +495,19 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes("六、下一步问题"), "Work detail completion evidence template must include a next-question field.");
   expect(workDetailSource.includes("pairedArticleSlugsByWorkSlug"), "Work detail pages must map each module to paired article reading.");
   expect(workDetailSource.includes("function WorkPairedReading"), "Work detail pages must include a paired-reading component.");
-  expect(workDetailSource.includes("做完接着读"), "Work detail paired reading must use learner-facing next-reading framing.");
+  expect(workDetailSource.includes("配套文章"), "Work detail paired reading must use compact paired-article framing.");
   expect(workDetailSource.includes("work-paired-reading-link"), "Work detail paired reading must expose direct article links.");
-  expect(workDetailSource.includes("article.actionSteps[0]") && workDetailSource.includes("article.checklist[0]") && workDetailSource.includes("article.starterTemplate[0]"), "Work detail paired reading must expose first action, completion check, and saved output template.");
-  expect(workDetailSource.includes("aria-label={`打开配套阅读：${article.title}。先做这个，${article.actionSteps[0]}。完成后检查，${article.checklist[0]}`"), "Work detail paired reading links must include action and completion check in accessible labels.");
+  expect(workDetailSource.includes("article.actionSteps[0]"), "Work detail paired reading must expose the first concrete reading action.");
+  expect(workDetailSource.includes("aria-label={`打开配套文章：${article.title}`}"), "Work detail paired reading links must use short accessible labels.");
   for (const slug of ["gene-expression", "concept-explainer", "research-prompt-kit", "plant-evolution-stories", "crispr-interactive"]) {
     expect(workDetailSource.includes(`"${slug}"`), `Work detail paired reading must include ${slug}.`);
   }
   expect(workDetailSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Work detail related work links must use the direct-to-tool href helper.");
-  expect(workDetailSource.includes("const toolHref = getWorkToolHref(item.href)"), "Work detail related cards must derive direct-to-tool hrefs.");
   expect(workDetailSource.includes("const toolHref = getWorkToolHref(item.work.href)"), "Work detail previous/next cards must derive direct-to-tool hrefs.");
-  expect(workDetailSource.includes("aria-label={`继续探索${item.title}：先做这个，${item.starter}。完成标准，${item.success}`}"), "Work detail related cards must include starter and completion standard in accessible labels.");
-  expect(workDetailSource.includes("先做这个：{item.work.starter}"), "Work detail previous/next cards must expose each adjacent module starter action.");
-  expect(workDetailSource.includes("aria-label={`${item.label}：${item.work.title}。先做这个，${item.work.starter}。完成标准，${item.work.success}`}"), "Work detail previous/next cards must include starter and completion standard in accessible labels.");
+  expect(workDetailSource.includes("aria-label={`${item.label}模块：${item.work.title}`}"), "Work detail previous/next links must use short accessible labels.");
+  for (const retiredWorkTailBlock of ["function WorkContinueLinks", "<WorkContinueLinks work={work} />", "work-next-card", "继续探索", "全部学习模块 →", "继续探索${item.title}", "先做这个：{item.work.starter}"]) {
+    expect(!workDetailSource.includes(retiredWorkTailBlock), `Work detail pages should not reintroduce duplicate long related-module cards: ${retiredWorkTailBlock}.`);
+  }
   expect(workDetailSource.includes("function WorkQuickStart"), "Work detail pages must include a quick-start entry component.");
   expect(workDetailSource.includes("<WorkQuickStart work={work} />"), "Work detail pages must render the quick-start entry before the primary tool.");
   expect(!footerSource.includes('navigateHomeSection'), "Footer should not repeat homepage section navigation.");

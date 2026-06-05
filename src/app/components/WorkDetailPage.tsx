@@ -5505,15 +5505,10 @@ function WorkPairedReading({ work }: { work: Work }) {
   }
 
   return (
-    <section aria-labelledby="work-paired-reading-heading" style={{ padding: "1.15rem 1.5rem 1.15rem", fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
-      <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gap: "0.72rem" }}>
+    <section aria-labelledby="work-paired-reading-heading" style={{ padding: "0.65rem 1.5rem 0.75rem", fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
+      <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gap: "0.45rem" }}>
         <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.8rem", flexWrap: "wrap" }}>
-          <div style={{ display: "grid", gap: "0.18rem" }}>
-            <h2 id="work-paired-reading-heading" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1rem", lineHeight: 1.25, fontWeight: 900 }}>做完接着读</h2>
-            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.48, fontWeight: 800 }}>
-              先完成本页操作，再用配套文章把概念、证据和复盘方法补完整。
-            </p>
-          </div>
+          <h2 id="work-paired-reading-heading" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.96rem", lineHeight: 1.25, fontWeight: 900 }}>配套文章</h2>
           <a
             className="work-detail-link"
             href="/#research"
@@ -5527,149 +5522,47 @@ function WorkPairedReading({ work }: { work: Work }) {
             全部文章 →
           </a>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "0.72rem" }}>
+        <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 0 }}>
           {pairedArticles.map((article) => (
-            <a
-              key={article.slug}
-              className="work-paired-reading-link"
-              href={article.href}
-              aria-label={`打开配套阅读：${article.title}。先做这个，${article.actionSteps[0]}。完成后检查，${article.checklist[0]}`}
-              onClick={(event) => openArticle(article.href, event)}
-              onMouseEnter={() => preloadRouteForHref(article.href)}
-              onFocus={() => preloadRouteForHref(article.href)}
-              onPointerDown={() => preloadRouteForHref(article.href)}
-              style={{
-                display: "grid",
-                gap: "0.55rem",
-                alignContent: "start",
-                background: "var(--card)",
-                border: "1.5px solid rgba(94,68,42,0.12)",
-                borderTop: `4px solid ${getArticleLabelColor(article)}`,
-                borderRadius: 8,
-                padding: "0.82rem",
-                minHeight: 204,
-                color: "inherit",
-                textDecoration: "none",
-                boxShadow: "0 8px 18px rgba(94,68,42,0.06)",
-                minWidth: 0,
-              }}
-            >
-              <span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.5rem", minWidth: 0 }}>
-                <span style={{ background: getArticleLabelBg(article), color: getArticleLabelColor(article), border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.14rem 0.5rem", fontSize: "0.66rem", fontWeight: 900 }}>
-                  {getArticleLabel(article)}
-                </span>
-                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", fontWeight: 900 }}>
-                  {"readTime" in article ? `${article.readTime} 分钟` : `${article.readMin} 分钟`}
-                </span>
-              </span>
-              <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.94rem", lineHeight: 1.35, fontWeight: 900, overflowWrap: "anywhere" }}>{article.title}</strong>
-              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.52, fontWeight: 800, overflowWrap: "anywhere" }}>
-                {"excerpt" in article ? article.excerpt : article.body}
-              </span>
-              <span style={{ display: "grid", gap: "0.32rem", marginTop: "auto" }}>
-                <span style={{ background: "var(--cherry-yellow-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.45rem 0.5rem", color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.42, fontWeight: 900 }}>
-                  先做这个：{article.actionSteps[0]}
-                </span>
-                <span style={{ display: "grid", gap: "0.2rem", gridTemplateColumns: "minmax(0, 1fr)", background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.45rem 0.5rem" }}>
-                  <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", lineHeight: 1.35, fontWeight: 900 }}>完成后检查：{article.checklist[0]}</span>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.35, fontWeight: 900 }}>读完产出：{article.starterTemplate[0]}</span>
-                </span>
-              </span>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function WorkContinueLinks({ work }: { work: Work }) {
-  const relatedWorks = [
-    ...works.filter((item) => item.slug !== work.slug && item.category === work.category),
-    ...works.filter((item) => item.slug !== work.slug && item.category !== work.category),
-  ].slice(0, 2);
-
-  if (relatedWorks.length === 0) return null;
-
-  function openWork(href: string, event: React.MouseEvent<HTMLAnchorElement>) {
-    if (!shouldUseClientNavigation(event)) return;
-    event.preventDefault();
-    navigateClient(href);
-  }
-
-  return (
-    <section style={{ padding: "0 1.5rem 5rem", fontFamily: "'Nunito', sans-serif" }}>
-      <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gap: "0.9rem" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
-          <h2 style={{ color: "var(--cherry-warm-brown)", fontSize: "1.08rem", fontWeight: 900, margin: 0 }}>继续探索</h2>
-          <a
-            className="work-detail-link"
-            href="/#works"
-            onClick={(event) => {
-              if (!shouldUseClientNavigation(event)) return;
-              event.preventDefault();
-              navigateHome("#works");
-            }}
-            style={{ color: "var(--cherry-forest)", textDecoration: "none", fontWeight: 900, fontSize: "0.84rem" }}
-          >
-            全部学习模块 →
-          </a>
-        </div>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "0.85rem" }}>
-          {relatedWorks.map((item) => {
-            const toolHref = getWorkToolHref(item.href);
-            return (
+            <li key={article.slug}>
               <a
-                className="work-next-card"
-                key={item.slug}
-                href={toolHref}
-                aria-label={`继续探索${item.title}：先做这个，${item.starter}。完成标准，${item.success}`}
-                onClick={(event) => openWork(toolHref, event)}
-                onMouseEnter={() => preloadRouteForHref(toolHref)}
-                onFocus={() => preloadRouteForHref(toolHref)}
-                onPointerDown={() => preloadRouteForHref(toolHref)}
+                className="work-paired-reading-link"
+                href={article.href}
+                aria-label={`打开配套文章：${article.title}`}
+                onClick={(event) => openArticle(article.href, event)}
+                onMouseEnter={() => preloadRouteForHref(article.href)}
+                onFocus={() => preloadRouteForHref(article.href)}
+                onPointerDown={() => preloadRouteForHref(article.href)}
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "112px minmax(0, 1fr)",
-                  gap: "0.82rem",
+                  gridTemplateColumns: "minmax(0, 1fr) auto",
+                  gap: "0.7rem",
                   alignItems: "center",
-                  background: "var(--card)",
-                  border: "1.5px solid rgba(94,68,42,0.12)",
-                  borderTop: `4px solid ${item.border}`,
-                  borderRadius: 8,
-                  padding: "0.82rem",
+                  borderTop: "1px solid rgba(94,68,42,0.1)",
+                  padding: "0.5rem 0",
                   color: "inherit",
                   textDecoration: "none",
-                  boxShadow: "0 8px 18px rgba(94,68,42,0.06)",
                   minWidth: 0,
                 }}
               >
-                <span aria-hidden="true" style={{ height: 88, borderRadius: 8, background: item.color, border: "1px solid rgba(94,68,42,0.1)", display: "grid", placeItems: "center", overflow: "hidden" }}>
-                  <WorkPreviewIllustration slug={item.slug} color={item.border} width={112} height={88} />
+                <span style={{ minWidth: 0, display: "grid", gap: "0.18rem" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", minWidth: 0 }}>
+                    <span style={{ color: getArticleLabelColor(article), fontSize: "0.66rem", fontWeight: 900 }}>
+                      {getArticleLabel(article)}
+                    </span>
+                    <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", lineHeight: 1.32, fontWeight: 900, overflowWrap: "anywhere" }}>{article.title}</strong>
+                  </span>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
+                    {article.actionSteps[0]}
+                  </span>
                 </span>
-                <span style={{ minWidth: 0 }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 28, height: 28, borderRadius: 10, background: "rgba(250,247,241,0.64)", marginBottom: "0.42rem" }}>
-                    <span style={{ transform: "scale(0.54)", display: "inline-flex" }}>{item.icon}</span>
-                  </span>
-                  <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.35, marginBottom: "0.34rem" }}>{item.title}</strong>
-                  <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginBottom: "0.5rem" }}>{item.desc}</span>
-                  <span style={{ display: "block", background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.45rem 0.52rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 900, marginBottom: "0.5rem" }}>
-                    <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.64rem", marginBottom: "0.12rem" }}>先做这个</span>
-                    {item.starter}
-                  </span>
-                  <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                    {item.outputs.map((output) => (
-                      <span key={output} style={{ background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.13rem 0.46rem", color: "var(--cherry-warm-brown)", fontSize: "0.66rem", fontWeight: 900 }}>
-                        {output}
-                      </span>
-                    ))}
-                  </span>
+                <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900, whiteSpace: "nowrap" }}>
+                  阅读 →
                 </span>
               </a>
-            );
-          })}
-        </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
@@ -5689,13 +5582,13 @@ function WorkSequenceLinks({ work }: { work: Work }) {
   }
 
   const navItems = [
-    previousWork ? { label: "上一个学习模块", direction: "←", work: previousWork, align: "left" as const } : null,
-    nextWork ? { label: "下一个学习模块", direction: "→", work: nextWork, align: "right" as const } : null,
+    previousWork ? { label: "上一个", direction: "←", work: previousWork, align: "left" as const } : null,
+    nextWork ? { label: "下一个", direction: "→", work: nextWork, align: "right" as const } : null,
   ].filter((item): item is { label: string; direction: string; work: Work; align: "left" | "right" } => Boolean(item));
 
   return (
-    <section style={{ padding: "0 1.5rem 1rem", fontFamily: "'Nunito', sans-serif" }}>
-      <nav aria-label="学习模块前后导航" style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.85rem" }}>
+    <section style={{ padding: "0 1.5rem 2.5rem", fontFamily: "'Nunito', sans-serif" }}>
+      <nav aria-label="学习模块前后导航" style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.55rem" }}>
         {navItems.map((item) => {
           const toolHref = getWorkToolHref(item.work.href);
           return (
@@ -5703,36 +5596,31 @@ function WorkSequenceLinks({ work }: { work: Work }) {
             className="work-sequence-card"
             key={item.work.slug}
             href={toolHref}
-            aria-label={`${item.label}：${item.work.title}。先做这个，${item.work.starter}。完成标准，${item.work.success}`}
+            aria-label={`${item.label}模块：${item.work.title}`}
             onClick={(event) => openWork(toolHref, event)}
             onMouseEnter={() => preloadRouteForHref(toolHref)}
             onFocus={() => preloadRouteForHref(toolHref)}
             onPointerDown={() => preloadRouteForHref(toolHref)}
             style={{
               display: "grid",
-              gap: "0.45rem",
+              gap: "0.18rem",
               justifyItems: item.align === "right" ? "end" : "start",
               textAlign: item.align,
-              background: "var(--card)",
-              border: "1.5px solid var(--border)",
-              borderRadius: 18,
-              padding: "0.95rem",
+              background: "transparent",
+              borderTop: "1px solid rgba(94,68,42,0.12)",
+              borderRadius: 0,
+              padding: "0.5rem 0",
               color: "inherit",
               textDecoration: "none",
-              boxShadow: "3px 5px 0px rgba(94,68,42,0.06)",
               minWidth: 0,
             }}
           >
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-forest)", fontWeight: 900, fontSize: "1rem" }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.72rem" }}>
               {item.align === "left" ? item.direction : null}
               {item.label}
               {item.align === "right" ? item.direction : null}
             </span>
-            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.95rem", lineHeight: 1.38, overflowWrap: "anywhere" }}>{item.work.title}</strong>
-            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, overflowWrap: "anywhere" }}>{item.work.desc}</span>
-            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.45, fontWeight: 900, overflowWrap: "anywhere" }}>
-              先做这个：{item.work.starter}
-            </span>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", lineHeight: 1.35, overflowWrap: "anywhere" }}>{item.work.title}</strong>
           </a>
           );
         })}
@@ -5783,7 +5671,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
       <WorkCompletionEvidence work={work} />
       <WorkPairedReading work={work} />
       <WorkSequenceLinks work={work} />
-      <WorkContinueLinks work={work} />
       <style>
         {`
           .work-detail-back-link:focus-visible {
@@ -5802,7 +5689,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           .work-paired-reading-link:focus-visible,
           #work-primary-tool:focus-visible,
           .work-sequence-card:focus-visible,
-          .work-next-card:focus-visible,
           .work-evidence-copy-button:focus-visible,
           .work-evidence-field-grid textarea:focus-visible {
             outline: 3px solid var(--cherry-red);
@@ -5811,7 +5697,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
           .work-sequence-card,
           .work-paired-reading-link,
-          .work-next-card,
           .work-first-run-copy-button,
           .work-evidence-copy-button {
             transition: transform 0.18s ease, box-shadow 0.18s ease;
@@ -5835,8 +5720,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           .work-sequence-card:focus-visible,
           .work-paired-reading-link:hover,
           .work-paired-reading-link:focus-visible,
-          .work-next-card:hover,
-          .work-next-card:focus-visible,
           .work-first-run-copy-button:hover,
           .work-first-run-copy-button:focus-visible,
           .work-evidence-copy-button:hover,
@@ -5848,7 +5731,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           @media (prefers-reduced-motion: reduce) {
             .work-sequence-card,
             .work-paired-reading-link,
-            .work-next-card,
             .work-first-run-copy-button,
             .work-evidence-copy-button {
               transition: none !important;
@@ -5856,11 +5738,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
             }
           }
 
-          @media (max-width: 560px) {
-            .work-next-card {
-              grid-template-columns: 1fr !important;
-            }
-          }
         `}
       </style>
     </main>
