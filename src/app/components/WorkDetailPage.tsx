@@ -1084,6 +1084,8 @@ ${localPreviewOutput}`;
             这个工作台直接提供科研任务编排：选择任务、材料和工作模式后，页面会生成结构化指令、证据边界、质控清单、报告框架和 API JSON 契约。当前可用于本地整理材料，也可把复制的任务包交给外部模型执行。
           </p>
         </div>
+        <details className="research-agent-reference-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>说明与边界 · 路由、API、Skill</summary>
         <details className="research-agent-status-details research-agent-compact-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
           <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>版本状态与 API 边界</summary>
           <div className="research-agent-status-strip" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.48rem" }}>
@@ -1217,6 +1219,7 @@ ${localPreviewOutput}`;
               </a>
             ))}
           </div>
+        </details>
         </details>
       </div>
       <div className="prompt-builder-layout" style={{ display: "grid", gridTemplateColumns: "minmax(230px, 0.78fr) minmax(0, 1.3fr)", gap: "1rem", alignItems: "start" }}>
@@ -1668,6 +1671,7 @@ ${localPreviewOutput}`;
           }
 
           #prompt-kit-builder .research-agent-compact-details[open],
+          #prompt-kit-builder .research-agent-reference-details[open],
           #prompt-kit-builder .research-route-suggestion-details[open],
           #prompt-kit-builder .research-review-details[open],
           #prompt-kit-builder .research-agent-prompt-preview-details[open] {
@@ -1714,6 +1718,7 @@ ${localPreviewOutput}`;
             #prompt-kit-builder .research-agent-completion-panel,
             #prompt-kit-builder .research-agent-status-details,
             #prompt-kit-builder .research-agent-skill-details,
+            #prompt-kit-builder .research-agent-reference-details,
             #prompt-kit-builder .research-route-suggestion-details,
             #prompt-kit-builder .research-review-details,
             #prompt-kit-builder .research-agent-prompt-preview-details {
