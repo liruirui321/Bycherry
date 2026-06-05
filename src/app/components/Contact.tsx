@@ -9,6 +9,8 @@ export function Contact() {
   const [feedbackType, setFeedbackType] = useState("内容卡住");
   const [relatedPage, setRelatedPage] = useState("/works/gene-expression");
   const [stuckPoint, setStuckPoint] = useState("");
+  const [triedAction, setTriedAction] = useState("");
+  const [expectedOutcome, setExpectedOutcome] = useState("");
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -19,6 +21,8 @@ export function Contact() {
   const trimmedName = name.trim();
   const trimmedRelatedPage = relatedPage.trim();
   const trimmedStuckPoint = stuckPoint.trim();
+  const trimmedTriedAction = triedAction.trim();
+  const trimmedExpectedOutcome = expectedOutcome.trim();
   const trimmedMessage = message.trim();
   const canUseDraft = Boolean(trimmedName && trimmedMessage);
   const feedbackTypes = ["内容卡住", "页面问题", "工具建议", "资料补充", "合作讨论"];
@@ -33,6 +37,8 @@ export function Contact() {
   const draftBody = `反馈类型：${feedbackType}
 相关页面：${trimmedRelatedPage || "未填写"}
 当前卡点：${trimmedStuckPoint || "未填写"}
+已经尝试：${trimmedTriedAction || "未填写"}
+希望得到：${trimmedExpectedOutcome || "未填写"}
 
 具体内容：
 ${trimmedMessage || "（未填写内容）"}
@@ -283,6 +289,51 @@ ${trimmedMessage || "（未填写内容）"}
               }}
             />
 
+            <div className="contact-learning-context-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.8rem", marginBottom: "1.25rem" }}>
+              <label htmlFor="contact-tried-action" style={{ fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "grid", gap: "0.4rem" }}>
+                已经尝试
+                <textarea
+                  id="contact-tried-action"
+                  name="tried-action"
+                  value={triedAction}
+                  onChange={(e) => {
+                    setTriedAction(e.target.value);
+                    clearDraftStatus();
+                  }}
+                  rows={3}
+                  placeholder="例如：拖过 RNA 聚合酶，也复制了表达过程记录"
+                  style={{
+                    width: "100%", background: "rgba(250,247,241,0.85)",
+                    border: "1.5px solid var(--border)", borderRadius: 8,
+                    padding: "0.65rem 1rem", fontSize: "0.9rem",
+                    fontFamily: "'Nunito', sans-serif", color: "var(--cherry-warm-brown)",
+                    boxSizing: "border-box", lineHeight: 1.6, resize: "vertical",
+                  }}
+                />
+              </label>
+              <label htmlFor="contact-expected-outcome" style={{ fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "grid", gap: "0.4rem" }}>
+                希望得到
+                <textarea
+                  id="contact-expected-outcome"
+                  name="expected-outcome"
+                  value={expectedOutcome}
+                  onChange={(e) => {
+                    setExpectedOutcome(e.target.value);
+                    clearDraftStatus();
+                  }}
+                  rows={3}
+                  placeholder="例如：希望页面更明确显示核糖体从哪里开始翻译"
+                  style={{
+                    width: "100%", background: "rgba(250,247,241,0.85)",
+                    border: "1.5px solid var(--border)", borderRadius: 8,
+                    padding: "0.65rem 1rem", fontSize: "0.9rem",
+                    fontFamily: "'Nunito', sans-serif", color: "var(--cherry-warm-brown)",
+                    boxSizing: "border-box", lineHeight: 1.6, resize: "vertical",
+                  }}
+                />
+              </label>
+            </div>
+
             {/* Message */}
             <label htmlFor="contact-message" style={{ fontSize: "1rem", color: "var(--cherry-warm-brown)", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>
               具体内容
@@ -512,7 +563,8 @@ ${trimmedMessage || "（未填写内容）"}
           }
 
           @media (max-width: 560px) {
-            #contact .contact-feedback-grid {
+            #contact .contact-feedback-grid,
+            #contact .contact-learning-context-grid {
               grid-template-columns: 1fr !important;
             }
 
