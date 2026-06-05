@@ -370,6 +370,16 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes("三、我的填写记录"), "Work detail completion evidence template must include learner-filled notes.");
   expect(workDetailSource.includes("五、复盘检查"), "Work detail completion evidence template must include reflection checks.");
   expect(workDetailSource.includes("六、下一步问题"), "Work detail completion evidence template must include a next-question field.");
+  expect(workDetailSource.includes("pairedArticleSlugsByWorkSlug"), "Work detail pages must map each module to paired article reading.");
+  expect(workDetailSource.includes("function WorkPairedReading"), "Work detail pages must include a paired-reading component.");
+  expect(workDetailSource.includes("<WorkPairedReading work={work} />"), "Work detail pages must render paired reading after the quick-start entry.");
+  expect(workDetailSource.includes("做完接着读"), "Work detail paired reading must use learner-facing next-reading framing.");
+  expect(workDetailSource.includes("work-paired-reading-link"), "Work detail paired reading must expose direct article links.");
+  expect(workDetailSource.includes("article.actionSteps[0]") && workDetailSource.includes("article.checklist[0]") && workDetailSource.includes("article.starterTemplate[0]"), "Work detail paired reading must expose first action, completion check, and saved output template.");
+  expect(workDetailSource.includes("aria-label={`打开配套阅读：${article.title}。先做这个，${article.actionSteps[0]}。完成后检查，${article.checklist[0]}`"), "Work detail paired reading links must include action and completion check in accessible labels.");
+  for (const slug of ["gene-expression", "concept-explainer", "research-prompt-kit", "plant-evolution-stories", "crispr-interactive"]) {
+    expect(workDetailSource.includes(`"${slug}"`), `Work detail paired reading must include ${slug}.`);
+  }
   expect(workDetailSource.includes("aria-label={`继续探索${item.title}：先做这个，${item.starter}。完成标准，${item.success}`}"), "Work detail related cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("先做这个：{item.work.starter}"), "Work detail previous/next cards must expose each adjacent module starter action.");
   expect(workDetailSource.includes("aria-label={`${item.label}：${item.work.title}。先做这个，${item.work.starter}。完成标准，${item.work.success}`}"), "Work detail previous/next cards must include starter and completion standard in accessible labels.");

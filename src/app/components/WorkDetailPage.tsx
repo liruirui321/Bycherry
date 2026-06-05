@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GeneExpressionTool } from "./GeneExpressionTool";
 import { IconDNA } from "./Icons";
+import { notes } from "./Notes";
+import { essays } from "./ResearchEssays";
 import { works } from "./Works";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { EmptyStateCard } from "./EmptyStateCard";
@@ -9,6 +11,35 @@ import { navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
 type Work = (typeof works)[number];
+type PairedArticle = (typeof notes)[number] | (typeof essays)[number];
+
+const articleLibrary: PairedArticle[] = [...notes, ...essays];
+
+const pairedArticleSlugsByWorkSlug: Record<string, string[]> = {
+  "gene-expression": ["ai-course-development", "ai-assessment-quality-control"],
+  "concept-explainer": ["ai-course-development", "science-to-learning-question"],
+  "research-prompt-kit": ["science-to-learning-question", "genome-assembly-story"],
+  "plant-evolution-stories": ["plant-genome-evidence-chain", "science-to-learning-question"],
+  "crispr-interactive": ["barcoding-evidence-chain", "plant-genome-evidence-chain"],
+};
+
+function getPairedArticlesForWork(work: Work) {
+  return (pairedArticleSlugsByWorkSlug[work.slug] ?? [])
+    .map((articleSlug) => articleLibrary.find((article) => article.slug === articleSlug))
+    .filter((article): article is PairedArticle => Boolean(article));
+}
+
+function getArticleLabel(article: PairedArticle) {
+  return "tag" in article ? article.tag : article.label;
+}
+
+function getArticleLabelColor(article: PairedArticle) {
+  return "tagColor" in article ? article.tagColor : article.labelColor;
+}
+
+function getArticleLabelBg(article: PairedArticle) {
+  return "tagBg" in article ? article.tagBg : article.labelBg;
+}
 
 function navigateHome(hash = "") {
   navigateClient(`/${hash}`);
@@ -4635,6 +4666,96 @@ ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：
   );
 }
 
+function WorkPairedReading({ work }: { work: Work }) {
+  const pairedArticles = getPairedArticlesForWork(work);
+
+  if (pairedArticles.length === 0) return null;
+
+  function openArticle(href: string, event: React.MouseEvent<HTMLAnchorElement>) {
+    if (!shouldUseClientNavigation(event)) return;
+    event.preventDefault();
+    navigateClient(href);
+  }
+
+  return (
+    <section aria-labelledby="work-paired-reading-heading" style={{ padding: "0 1.5rem 1.15rem", fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
+      <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gap: "0.72rem" }}>
+        <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.8rem", flexWrap: "wrap" }}>
+          <div style={{ display: "grid", gap: "0.18rem" }}>
+            <h2 id="work-paired-reading-heading" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1rem", lineHeight: 1.25, fontWeight: 900 }}>做完接着读</h2>
+            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.48, fontWeight: 800 }}>
+              先完成本页操作，再用配套文章把概念、证据和复盘方法补完整。
+            </p>
+          </div>
+          <a
+            className="work-detail-link"
+            href="/#notes"
+            onClick={(event) => {
+              if (!shouldUseClientNavigation(event)) return;
+              event.preventDefault();
+              navigateHome("#notes");
+            }}
+            style={{ color: "var(--cherry-forest)", textDecoration: "none", fontWeight: 900, fontSize: "0.78rem" }}
+          >
+            全部学习资料 →
+          </a>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "0.72rem" }}>
+          {pairedArticles.map((article) => (
+            <a
+              key={article.slug}
+              className="work-paired-reading-link"
+              href={article.href}
+              aria-label={`打开配套阅读：${article.title}。先做这个，${article.actionSteps[0]}。完成后检查，${article.checklist[0]}`}
+              onClick={(event) => openArticle(article.href, event)}
+              onMouseEnter={() => preloadRouteForHref(article.href)}
+              onFocus={() => preloadRouteForHref(article.href)}
+              onPointerDown={() => preloadRouteForHref(article.href)}
+              style={{
+                display: "grid",
+                gap: "0.55rem",
+                alignContent: "start",
+                background: "var(--card)",
+                border: "1.5px solid rgba(94,68,42,0.12)",
+                borderTop: `4px solid ${getArticleLabelColor(article)}`,
+                borderRadius: 8,
+                padding: "0.82rem",
+                minHeight: 204,
+                color: "inherit",
+                textDecoration: "none",
+                boxShadow: "0 8px 18px rgba(94,68,42,0.06)",
+                minWidth: 0,
+              }}
+            >
+              <span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.5rem", minWidth: 0 }}>
+                <span style={{ background: getArticleLabelBg(article), color: getArticleLabelColor(article), border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.14rem 0.5rem", fontSize: "0.66rem", fontWeight: 900 }}>
+                  {getArticleLabel(article)}
+                </span>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", fontWeight: 900 }}>
+                  {"readTime" in article ? `${article.readTime} 分钟` : `${article.readMin} 分钟`}
+                </span>
+              </span>
+              <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.94rem", lineHeight: 1.35, fontWeight: 900, overflowWrap: "anywhere" }}>{article.title}</strong>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.52, fontWeight: 800, overflowWrap: "anywhere" }}>
+                {"excerpt" in article ? article.excerpt : article.body}
+              </span>
+              <span style={{ display: "grid", gap: "0.32rem", marginTop: "auto" }}>
+                <span style={{ background: "var(--cherry-yellow-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.45rem 0.5rem", color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.42, fontWeight: 900 }}>
+                  先做这个：{article.actionSteps[0]}
+                </span>
+                <span style={{ display: "grid", gap: "0.2rem", gridTemplateColumns: "minmax(0, 1fr)", background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.45rem 0.5rem" }}>
+                  <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", lineHeight: 1.35, fontWeight: 900 }}>完成后检查：{article.checklist[0]}</span>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.35, fontWeight: 900 }}>读完产出：{article.starterTemplate[0]}</span>
+                </span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function WorkContinueLinks({ work }: { work: Work }) {
   const relatedWorks = [
     ...works.filter((item) => item.slug !== work.slug && item.category === work.category),
@@ -4813,6 +4934,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
     <main id="main-content" tabIndex={-1}>
       <WorkHero work={work} compact />
       <WorkQuickStart work={work} />
+      <WorkPairedReading work={work} />
 
       <section
         id="work-primary-tool"
@@ -4842,6 +4964,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
           .work-detail-link:focus-visible,
           .work-start-tool-link:focus-visible,
+          .work-paired-reading-link:focus-visible,
           #work-primary-tool:focus-visible,
           .work-sequence-card:focus-visible,
           .work-next-card:focus-visible,
@@ -4852,6 +4975,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           }
 
           .work-sequence-card,
+          .work-paired-reading-link,
           .work-next-card,
           .work-evidence-copy-button {
             transition: transform 0.18s ease, box-shadow 0.18s ease;
@@ -4873,6 +4997,8 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
           .work-sequence-card:hover,
           .work-sequence-card:focus-visible,
+          .work-paired-reading-link:hover,
+          .work-paired-reading-link:focus-visible,
           .work-next-card:hover,
           .work-next-card:focus-visible,
           .work-evidence-copy-button:hover,
@@ -4883,6 +5009,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
           @media (prefers-reduced-motion: reduce) {
             .work-sequence-card,
+            .work-paired-reading-link,
             .work-next-card,
             .work-evidence-copy-button {
               transition: none !important;
