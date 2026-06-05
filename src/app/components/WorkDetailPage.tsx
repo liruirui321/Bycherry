@@ -4785,6 +4785,8 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
   return (
     <section id="crispr-simulator" style={{ display: "grid", gap: "1rem" }}>
+      <details className="crispr-intro-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>判读顺序与实验边界</summary>
       <div className="crispr-intro-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.15fr) minmax(260px, 0.85fr)", gap: "1rem" }}>
         <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.72rem" }}>判读顺序</div>
@@ -4810,6 +4812,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
           </div>
         </div>
       </div>
+      </details>
 
       <div className="crispr-practice-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.72rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
@@ -4837,7 +4840,8 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
       </div>
 
-      <div className="crispr-result-check-panel" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.82rem" }}>
+      <details className="crispr-result-check-panel" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.04)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>结果检查 · {quizChoice === activeQuiz.answer ? "小测已通过" : "小测待完成"}</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>结果检查</div>
@@ -4860,7 +4864,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             </div>
           ))}
         </div>
-      </div>
+      </details>
 
       <div className="crispr-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.72fr)", gap: "1rem", alignItems: "stretch" }}>
         <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, overflow: "hidden", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
@@ -5244,6 +5248,8 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             margin-bottom: 0.65rem;
           }
 
+          #crispr-simulator .crispr-intro-details[open],
+          #crispr-simulator .crispr-result-check-panel[open],
           #crispr-simulator .crispr-compact-details[open],
           #crispr-simulator .crispr-quality-check-details[open] {
             display: grid;
@@ -5267,6 +5273,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
           @media (max-width: 520px) {
             #crispr-simulator .crispr-intro-grid,
+            #crispr-simulator .crispr-intro-details,
             #crispr-simulator .crispr-practice-panel,
             #crispr-simulator .crispr-result-check-panel,
             #crispr-simulator .crispr-decision-panel,
@@ -5285,7 +5292,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             }
 
             #crispr-simulator .crispr-practice-panel > div:last-child,
-            #crispr-simulator .crispr-result-check-panel > div:last-child,
+            #crispr-simulator .crispr-result-check-panel > div:nth-of-type(2),
             #crispr-simulator .crispr-decision-panel > div:nth-of-type(2),
             #crispr-simulator .crispr-risk-panel > div:last-child,
             #crispr-simulator .crispr-quality-panel > div:last-child,
@@ -5296,7 +5303,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             }
 
             #crispr-simulator .crispr-practice-panel button,
-            #crispr-simulator .crispr-result-check-panel > div:last-child > div,
+            #crispr-simulator .crispr-result-check-panel > div:nth-of-type(2) > div,
             #crispr-simulator .crispr-decision-panel > div:nth-of-type(2) > div,
             #crispr-simulator .crispr-risk-panel > div:last-child > div,
             #crispr-simulator .crispr-quality-panel > div:last-child > div,
@@ -5320,7 +5327,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             }
 
             #crispr-simulator .crispr-practice-panel button > span,
-            #crispr-simulator .crispr-result-check-panel > div:last-child > div > span,
+            #crispr-simulator .crispr-result-check-panel > div:nth-of-type(2) > div > span,
             #crispr-simulator .crispr-decision-panel > div:nth-of-type(2) > div > div:last-child,
             #crispr-simulator .crispr-risk-panel > div:last-child > div > span,
             #crispr-simulator .crispr-quality-panel > div:last-child > div > span,
