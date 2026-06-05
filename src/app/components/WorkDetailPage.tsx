@@ -5387,9 +5387,10 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
       </details>
 
-      <div className="crispr-quality-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.85rem" }}>
-          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>修复结果</div>
+      <details className="crispr-quality-panel crispr-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>修复结果 · {effectiveRepair.title}</summary>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", margin: "0.72rem 0 0.68rem" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>切换模拟结果</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
             {([
               ["indel", "插入/删除"],
@@ -5406,7 +5407,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
           <strong style={{ color: effectiveRepair.color }}>{effectiveRepair.title}：</strong>
           {reportResult}
         </div>
-      </div>
+      </details>
 
       <details className="crispr-quality-check-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>质控检查</summary>
