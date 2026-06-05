@@ -227,7 +227,9 @@ function WaveDivider({ flip = false }: { flip?: boolean }) {
 export function Works() {
   const [activeCategory, setActiveCategory] = useState<Category>("全部");
   const [copiedModuleChecklist, setCopiedModuleChecklist] = useState(false);
+  const [copiedReadingPathPlan, setCopiedReadingPathPlan] = useState(false);
   const [moduleChecklistStatus, setModuleChecklistStatus] = useState("");
+  const [readingPathStatus, setReadingPathStatus] = useState("");
   const categories: Category[] = ["全部", "科学", "学习项目", "AI工具"];
   const filtered = activeCategory === "全部" ? works : works.filter((w) => w.category === activeCategory);
   const recommendedWork = works.find((work) => work.slug === "gene-expression") ?? works[0];
@@ -287,6 +289,26 @@ ${filtered.map((work, index) => `${index + 1}. ${work.title}
 1. 先选 1 个模块，不要同时打开全部。
 2. 完成后复制模块页里的记录或报告。
 3. 回到这张清单，勾掉已经保存产出的模块。`;
+  const readingPathPlanText = `【By Cherry 配套阅读路径】
+覆盖模块：${pairedWorkCount}/${works.length}
+
+${learningPathBundles.map((bundle, index) => `${index + 1}. ${bundle.goal}
+为什么这样走：${bundle.note}
+先操作模块：${bundle.work.title}
+模块入口：${bundle.work.href}
+立即任务：${bundle.work.task}
+可保存产出：${bundle.work.outputs.join(" / ")}
+完成标准：${bundle.work.success}
+再读配套文章：${bundle.article.title}
+文章入口：${bundle.article.href}
+阅读上手动作：${bundle.article.actionSteps[0]}
+阅读完成检查：${bundle.article.checklist[0]}
+最后留下：${bundle.article.starterTemplate[0]}`).join("\n\n")}
+
+使用方式
+1. 先选其中 1 条路径，不要同时开多个方向。
+2. 先完成模块里的可保存产出，再读文章补方法或证据。
+3. 结束时复制模块复盘模板或文章学习记录，留下可回看的证据。`;
 
   async function copyModuleChecklist() {
     const copiedToClipboard = await copyText(moduleChecklistText);
@@ -299,6 +321,19 @@ ${filtered.map((work, index) => `${index + 1}. ${work.title}
 
     setCopiedModuleChecklist(false);
     setModuleChecklistStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyReadingPathPlan() {
+    const copiedToClipboard = await copyText(readingPathPlanText);
+    if (copiedToClipboard) {
+      setCopiedReadingPathPlan(true);
+      setReadingPathStatus("配套阅读路径已复制到剪贴板。");
+      window.setTimeout(() => setCopiedReadingPathPlan(false), 1400);
+      return;
+    }
+
+    setCopiedReadingPathPlan(false);
+    setReadingPathStatus("复制失败，请手动选中文本复制。");
   }
 
   return (
@@ -400,11 +435,19 @@ ${filtered.map((work, index) => `${index + 1}. ${work.title}
         </div>
 
         <div className="work-reading-path-panel" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.95rem", marginBottom: "1.15rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", display: "grid", gap: "0.72rem" }}>
-          <div>
-            <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.92rem", fontWeight: 900, marginBottom: "0.18rem" }}>配套阅读路径</div>
-            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, fontWeight: 800 }}>
-              不确定先做工具还是先读文章时，可以按下面的组合走：{pairedWorkCount}/{works.length} 个模块都配好了一篇方法或证据文章。
+          <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.8rem", alignItems: "center" }}>
+            <div>
+              <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.92rem", fontWeight: 900, marginBottom: "0.18rem" }}>配套阅读路径</div>
+              <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, fontWeight: 800 }}>
+                不确定先做工具还是先读文章时，可以按下面的组合走：{pairedWorkCount}/{works.length} 个模块都配好了一篇方法或证据文章。
+              </div>
+              <div id="work-reading-path-status" role="status" aria-live="polite" style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900, marginTop: "0.34rem" }}>
+                {readingPathStatus}
+              </div>
             </div>
+            <button type="button" className="work-reading-path-copy-button" onClick={copyReadingPathPlan} aria-describedby="work-reading-path-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.46rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem", whiteSpace: "nowrap" }}>
+              {copiedReadingPathPlan ? "已复制" : "复制路径"}
+            </button>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "0.72rem" }}>
             {learningPathBundles.map((bundle) => (
@@ -470,6 +513,7 @@ ${filtered.map((work, index) => `${index + 1}. ${work.title}
           #works .work-card:focus-visible,
           #works .work-recommended-start:focus-visible,
           #works .work-reading-path-link:focus-visible,
+          #works .work-reading-path-copy-button:focus-visible,
           #works .work-module-checklist-button:focus-visible,
           #works .work-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
@@ -490,6 +534,11 @@ ${filtered.map((work, index) => `${index + 1}. ${work.title}
               grid-template-columns: 1fr !important;
             }
 
+            #works .work-reading-path-panel > div:first-child {
+              grid-template-columns: 1fr !important;
+            }
+
+            #works .work-reading-path-copy-button,
             #works .work-module-checklist-button {
               width: 100%;
             }

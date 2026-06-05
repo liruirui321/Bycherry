@@ -212,6 +212,10 @@ function verifyWorkCardActions() {
   expect(worksSource.includes("minHeight: 344"), "Homepage work cards must stay compact enough for scanning.");
   expect(worksSource.includes("learningPathBundles"), "Works section must connect modules with paired reading paths.");
   expect(worksSource.includes("配套阅读路径"), "Works section must visibly expose paired module and article routes.");
+  expect(worksSource.includes("readingPathPlanText"), "Works section paired reading paths must provide a copyable plan.");
+  expect(worksSource.includes("copyReadingPathPlan"), "Works section must expose a paired reading path copy action.");
+  expect(worksSource.includes("work-reading-path-status"), "Works section paired reading path copy action must expose copy status.");
+  expect(worksSource.includes("work-reading-path-copy-button"), "Works section must expose a paired reading path copy button.");
   expect(worksSource.includes("work-reading-path-link"), "Works section paired reading links must be keyboard focusable.");
   expect(worksSource.includes("bundle.article.actionSteps[0]") && worksSource.includes("bundle.article.checklist[0]"), "Works section paired reading links must expose article action and completion checks.");
   expect(worksSource.includes("pairedWorkCount") && worksSource.includes("{pairedWorkCount}/{works.length}"), "Works section paired reading paths must show full module coverage.");
