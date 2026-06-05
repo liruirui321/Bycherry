@@ -793,6 +793,12 @@ function verifyGeneExpressionLearnerContract() {
     { label: "stable mobile main grid class", text: "gene-expression-main-grid" },
     { label: "mobile main grid selector", text: "#gene-expression .gene-expression-main-grid" },
     { label: "mobile canvas scales to viewport", text: "width: 100% !important" },
+    { label: "compact control aside", text: "gene-control-aside" },
+    { label: "compact readout panel", text: "gene-readout-panel" },
+    { label: "compact readout list", text: "gene-readout-list" },
+    { label: "compact rate list", text: "gene-rate-list" },
+    { label: "compact action row", text: "gene-action-row" },
+    { label: "compact integrated molecule strip", text: "gene-integrated-strip" },
   ];
   const retiredGenePatterns = [
     { label: "teacher/classroom framing", pattern: /课堂|教师|老师|教案|授课|教学/ },
@@ -810,6 +816,8 @@ function verifyGeneExpressionLearnerContract() {
     expect(!item.pattern.test(geneSource), `Gene expression tool must avoid retired or incorrect copy: ${item.label}`);
   }
 
+  expect(geneSource.includes("#gene-expression .gene-readout-row") && geneSource.includes("grid-template-columns: minmax(0, 1fr) auto !important"), "Gene expression mobile readouts must stay as compact two-column rows.");
+  expect(geneSource.includes("#gene-expression .gene-action-row") && geneSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Gene expression mobile actions must stay as a short three-button row.");
   expect(worksSource.includes('outputs: ["表达读数", "过程记录", "即时小测"]'), "Gene expression work card outputs must include the copyable process record.");
   expect(worksSource.includes('path: ["调节分子", "观察过程", "复制记录"]'), "Gene expression work card path must describe the learner action flow.");
 }

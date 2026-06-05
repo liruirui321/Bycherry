@@ -1234,13 +1234,13 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
           </svg>
         </div>
 
-        <aside style={{ display: "grid", gap: "1rem", alignContent: "start", minWidth: 0 }}>
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+        <aside className="gene-control-aside" style={{ display: "grid", gap: "1rem", alignContent: "start", minWidth: 0 }}>
+          <div className="gene-readout-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.85rem" }}>
               <IconMicroscope size={19} />
               仿真读数
             </div>
-            <div style={{ display: "grid", gap: 8 }}>
+            <div className="gene-readout-list" style={{ display: "grid", gap: 8 }}>
               {[
                 ["启动子上的转录因子", model.tfBound],
                 ["参与转录的 RNA 聚合酶", model.polBound],
@@ -1255,7 +1255,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
                 </div>
               ))}
             </div>
-            <div style={{ display: "grid", gap: 8, marginTop: "1rem" }}>
+            <div className="gene-rate-list" style={{ display: "grid", gap: 8, marginTop: "1rem" }}>
               {[
                 ["转录速率", `${model.transcriptionOn ? Math.min(100, 28 + model.tfBound * 18 + model.polBound * 16) : 0}%`],
                 ["翻译速率", `${translationRate}%`],
@@ -1271,7 +1271,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
                 </div>
               ))}
             </div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: "1rem" }}>
+            <div className="gene-action-row" style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: "1rem" }}>
               <button type="button" onClick={runExpressionPreset} aria-label="放入所有分子并从头运行表达过程" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
                 运行表达
               </button>
@@ -1282,7 +1282,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
                 重置
               </button>
             </div>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: "0.75rem" }}>
+            <div className="gene-speed-row" style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: "0.75rem" }}>
               {([0.5, 1, 1.5] as const).map((value) => (
                 <button key={value} type="button" onClick={() => setSpeed(value)} aria-label={`将动画速度设为 ${value} 倍`} aria-pressed={speed === value} style={{ background: speed === value ? "var(--cherry-yellow)" : "rgba(250,247,241,0.82)", color: "var(--cherry-warm-brown)", border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 999, padding: "0.32rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.75rem" }}>
                   {value}x
@@ -1290,7 +1290,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
               ))}
             </div>
             {integratedMolecules.length > 0 ? (
-              <div style={{ marginTop: "1rem", display: "grid", gap: 7 }}>
+              <div className="gene-integrated-strip" style={{ marginTop: "1rem", display: "grid", gap: 7 }}>
                 <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>已加入反应</div>
                 <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                   {integratedMolecules.map((molecule) => (
@@ -1617,6 +1617,25 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
               padding-right: 1rem !important;
             }
 
+            #gene-expression .gene-control-aside {
+              gap: 0.52rem !important;
+            }
+
+            #gene-expression .gene-readout-panel {
+              padding: 0.68rem !important;
+              border-radius: 12px !important;
+              box-shadow: none !important;
+            }
+
+            #gene-expression .gene-readout-panel > div:first-child {
+              margin-bottom: 0.48rem !important;
+              font-size: 0.82rem !important;
+            }
+
+            #gene-expression .gene-readout-list {
+              gap: 0.3rem !important;
+            }
+
             #gene-expression .translation-lens-grid {
               grid-template-columns: 1fr !important;
             }
@@ -1638,14 +1657,65 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             }
 
             #gene-expression .gene-readout-row {
-              grid-template-columns: 1fr !important;
-              gap: 2px !important;
+              grid-template-columns: minmax(0, 1fr) auto !important;
+              gap: 0.44rem !important;
+              font-size: 0.72rem !important;
+              line-height: 1.25 !important;
+              min-height: 0 !important;
             }
 
             #gene-expression .gene-readout-value {
-              text-align: left !important;
-              white-space: normal !important;
+              text-align: right !important;
+              white-space: nowrap !important;
               overflow-wrap: anywhere;
+            }
+
+            #gene-expression .gene-rate-list {
+              gap: 0.42rem !important;
+              margin-top: 0.6rem !important;
+            }
+
+            #gene-expression .gene-rate-list > div > div:first-child {
+              font-size: 0.68rem !important;
+              margin-bottom: 3px !important;
+            }
+
+            #gene-expression .gene-rate-list > div > div:last-child {
+              height: 6px !important;
+            }
+
+            #gene-expression .gene-action-row {
+              display: grid !important;
+              grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+              gap: 0.42rem !important;
+              margin-top: 0.62rem !important;
+            }
+
+            #gene-expression .gene-action-row button,
+            #gene-expression .gene-speed-row button {
+              padding: 0.42rem 0.34rem !important;
+              min-height: 0 !important;
+              font-size: 0.72rem !important;
+              border-radius: 999px !important;
+            }
+
+            #gene-expression .gene-speed-row {
+              margin-top: 0.46rem !important;
+              gap: 0.36rem !important;
+            }
+
+            #gene-expression .gene-integrated-strip {
+              margin-top: 0.54rem !important;
+              gap: 0.34rem !important;
+            }
+
+            #gene-expression .gene-integrated-strip > div:first-child {
+              display: none !important;
+            }
+
+            #gene-expression .gene-integrated-strip button {
+              padding: 0.26rem 0.5rem !important;
+              font-size: 0.68rem !important;
             }
 
             #gene-expression .gene-compact-details {
