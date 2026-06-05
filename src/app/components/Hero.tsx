@@ -3,14 +3,6 @@ import { works } from "./Works";
 import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
-const homeWorkStatus: Record<string, string> = {
-  "gene-expression": "仿真",
-  "research-prompt-kit": "工作台",
-  "plant-evolution-stories": "时间轴",
-  "concept-explainer": "生成器",
-  "crispr-interactive": "模拟器",
-};
-
 export function Hero() {
   function openWork(href: string, event: MouseEvent<HTMLAnchorElement>) {
     if (!shouldUseClientNavigation(event)) return;
@@ -35,7 +27,7 @@ export function Hero() {
       }}
     >
       <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1060, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
-        <div className="hero-header-row" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", alignItems: "center", gap: "0.7rem", marginBottom: "0.24rem" }}>
+        <div className="hero-header-row" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", alignItems: "center", gap: "0.7rem", marginBottom: "0.2rem" }}>
           <div style={{ minWidth: 0 }}>
             <h1
               id="hero-heading"
@@ -53,9 +45,6 @@ export function Hero() {
               By Cherry · 科学学习与 AI
             </h1>
           </div>
-          <span className="hero-count" style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, whiteSpace: "nowrap" }}>
-            {works.length} 个内容
-          </span>
         </div>
 
         <nav id="works" className="hero-work-list" aria-label="内容目录" style={{ display: "flex", alignItems: "center", gap: "0.24rem", flexWrap: "wrap", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
@@ -66,7 +55,7 @@ export function Hero() {
                 className="hero-work-row"
                 key={work.slug}
                 href={toolHref}
-                aria-label={`打开${work.title}`}
+                aria-label={`打开${work.title}：${work.desc}`}
                 onClick={(event) => openWork(toolHref, event)}
                 onMouseEnter={() => preloadRouteForHref(getWorkToolHref(work.href))}
                 onFocus={() => preloadRouteForHref(getWorkToolHref(work.href))}
@@ -81,8 +70,8 @@ export function Hero() {
                   textDecoration: "none",
                   textAlign: "left",
                   display: "inline-flex",
-                  alignItems: "baseline",
-                  gap: "0.3rem",
+                  alignItems: "center",
+                  gap: "0.22rem",
                   position: "relative",
                   overflow: "hidden",
                   minWidth: 0,
@@ -91,7 +80,6 @@ export function Hero() {
                 }}
               >
                 <strong style={{ fontSize: "0.72rem", lineHeight: 1.14, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
-                <span className="hero-work-status" style={{ color: "var(--cherry-forest)", fontSize: "0.56rem", fontWeight: 900, whiteSpace: "nowrap" }}>{homeWorkStatus[work.slug] ?? work.category}</span>
               </a>
             );
           })}
@@ -112,10 +100,6 @@ export function Hero() {
             overflow-wrap: anywhere;
           }
 
-          .hero-count {
-            justify-self: start;
-          }
-
 	          .hero-work-list {
 	            display: flex !important;
 	            gap: 0.2rem 0.28rem !important;
@@ -131,12 +115,8 @@ export function Hero() {
 	            min-width: 0 !important;
 	            max-width: calc(50vw - 1.2rem) !important;
 	            box-sizing: border-box;
-	            gap: 0.24rem !important;
+	            gap: 0 !important;
 	            padding: 0.14rem 0.26rem !important;
-	          }
-
-	          .hero-work-status {
-	            font-size: 0.55rem !important;
 	          }
 
           .hero-work-tags {
