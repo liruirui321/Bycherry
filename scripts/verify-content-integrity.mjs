@@ -486,6 +486,16 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(worksSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage work cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("{work.starter}"), "Work detail quick start must expose each work starter action.");
   expect(workDetailSource.includes("{work.success}"), "Work detail quick start must expose each work completion standard.");
+  expect(workDetailSource.includes("workFirstRunCards"), "Work detail quick start must build a first-run route card set.");
+  expect(workDetailSource.includes("workFirstRunPlanText"), "Work detail first-run cards must provide copyable route text.");
+  expect(workDetailSource.includes("copyFirstRunPlan"), "Work detail first-run cards must provide a copy action.");
+  expect(workDetailSource.includes("第一次运行卡"), "Work detail quick start must visibly expose a first-run card.");
+  expect(workDetailSource.includes("5 分钟") && workDetailSource.includes("15 分钟") && workDetailSource.includes("30 分钟"), "Work detail first-run cards must provide timed entry points.");
+  expect(workDetailSource.includes("work-first-run-panel") && workDetailSource.includes("work-first-run-grid"), "Work detail first-run cards must use stable panel and grid classes.");
+  expect(workDetailSource.includes('aria-label={`${work.title}第一次运行路线`}'), "Work detail first-run route must be labeled for assistive tech.");
+  expect(workDetailSource.includes("work.outputs.join(\" / \")"), "Work detail first-run cards must derive saved outputs from each module.");
+  expect(workDetailSource.includes("保存 ${work.outputs.join(\" / \")}，再写下：${work.success}"), "Work detail first-run cards must connect outputs to completion standards.");
+  expect(workDetailSource.includes("work.path.map((step, index)"), "Work detail first-run copy text must include each module path.");
   expect(workDetailSource.includes("完成证据"), "Work detail quick start must ask learners to leave completion evidence.");
   expect(workDetailSource.includes("evidenceItems"), "Work detail quick start must derive completion evidence from work outputs, success, and path.");
   expect(workDetailSource.includes("evidenceFieldItems"), "Work detail quick start must provide learner-filled evidence fields.");

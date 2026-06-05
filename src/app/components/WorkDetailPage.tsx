@@ -5166,6 +5166,8 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
 }
 
 function WorkQuickStart({ work }: { work: Work }) {
+  const [copiedFirstRunPlan, setCopiedFirstRunPlan] = useState(false);
+  const [firstRunCopyStatus, setFirstRunCopyStatus] = useState("");
   const [copiedEvidence, setCopiedEvidence] = useState(false);
   const [evidenceCopyStatus, setEvidenceCopyStatus] = useState("");
   const [savedOutput, setSavedOutput] = useState("");
@@ -5174,6 +5176,8 @@ function WorkQuickStart({ work }: { work: Work }) {
   const [nextQuestion, setNextQuestion] = useState("");
 
   useEffect(() => {
+    setCopiedFirstRunPlan(false);
+    setFirstRunCopyStatus("");
     setCopiedEvidence(false);
     setEvidenceCopyStatus("");
     setSavedOutput("");
@@ -5182,6 +5186,23 @@ function WorkQuickStart({ work }: { work: Work }) {
     setNextQuestion("");
   }, [work.slug]);
 
+  const workFirstRunCards = [
+    {
+      time: "5 分钟",
+      title: "进入操作",
+      body: work.starter,
+    },
+    {
+      time: "15 分钟",
+      title: "跑完整体",
+      body: work.task,
+    },
+    {
+      time: "30 分钟",
+      title: "留下结果",
+      body: `保存 ${work.outputs.join(" / ")}，再写下：${work.success}`,
+    },
+  ];
   const evidenceItems = [
     `保存 1 份${work.outputs[0] ?? "学习产出"}`,
     `用自己的话写下：${work.success}`,
@@ -5233,6 +5254,16 @@ function WorkQuickStart({ work }: { work: Work }) {
     completionProof: completionProof.trim() || evidenceFieldItems[2].fallback,
     nextQuestion: nextQuestion.trim() || evidenceFieldItems[3].fallback,
   };
+  const workFirstRunPlanText = `【${work.title}第一次运行卡】
+5 分钟：${work.starter}
+15 分钟：${work.task}
+30 分钟：保存 ${work.outputs.join(" / ")}，并写下完成标准：${work.success}
+
+操作路径：
+${work.path.map((step, index) => `${index + 1}. ${step}`).join("\n")}
+
+我需要带走：
+${work.outputs.map((output, index) => `${index + 1}. ${output}`).join("\n")}`;
   const evidenceTemplate = `【${work.title}复盘证据】
 立即任务：${work.task}
 先做这个：${work.starter}
@@ -5259,6 +5290,20 @@ ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：
 六、下一步问题
 我还没有弄清楚：
 我需要回看的资料或页面：`;
+
+  async function copyFirstRunPlan() {
+    const copiedToClipboard = await copyText(workFirstRunPlanText);
+
+    if (copiedToClipboard) {
+      setCopiedFirstRunPlan(true);
+      setFirstRunCopyStatus("第一次运行卡已复制到剪贴板。");
+      window.setTimeout(() => setCopiedFirstRunPlan(false), 1400);
+      return;
+    }
+
+    setCopiedFirstRunPlan(false);
+    setFirstRunCopyStatus("复制失败，请手动选中文本复制。");
+  }
 
   async function copyEvidenceTemplate() {
     const copiedToClipboard = await copyText(evidenceTemplate);
@@ -5334,6 +5379,42 @@ ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：
           >
             开始操作 →
           </button>
+          <div className="work-first-run-panel" style={{ marginTop: "0.18rem", background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.64rem", display: "grid", gap: "0.52rem" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.52rem", flexWrap: "wrap" }}>
+              <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>第一次运行卡</span>
+              <button
+                type="button"
+                className="work-first-run-copy-button"
+                onClick={copyFirstRunPlan}
+                aria-describedby="work-first-run-copy-status"
+                style={{
+                  border: "1px solid rgba(58,92,62,0.22)",
+                  borderRadius: 999,
+                  background: "var(--background)",
+                  color: "var(--cherry-forest)",
+                  cursor: "pointer",
+                  fontFamily: "'Nunito', sans-serif",
+                  fontSize: "0.66rem",
+                  fontWeight: 900,
+                  padding: "0.22rem 0.58rem",
+                }}
+              >
+                {copiedFirstRunPlan ? "已复制" : "复制运行卡"}
+              </button>
+            </div>
+            <div className="work-first-run-grid" role="list" aria-label={`${work.title}第一次运行路线`} style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.42rem" }}>
+              {workFirstRunCards.map((card) => (
+                <span key={card.time} role="listitem" style={{ display: "grid", gap: "0.24rem", background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.5rem", minWidth: 0 }}>
+                  <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>{card.time}</span>
+                  <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.35, fontWeight: 900 }}>{card.title}</strong>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.4, fontWeight: 900, overflowWrap: "anywhere" }}>{card.body}</span>
+                </span>
+              ))}
+            </div>
+            <div id="work-first-run-copy-status" role="status" aria-live="polite" style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>
+              {firstRunCopyStatus}
+            </div>
+          </div>
         </div>
         <div className="work-quick-start-meta" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.55rem" }}>
           <div style={{ background: "var(--cherry-yellow-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem" }}>
@@ -5754,6 +5835,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
           .work-detail-link:focus-visible,
           .work-start-tool-link:focus-visible,
+          .work-first-run-copy-button:focus-visible,
           .work-paired-reading-link:focus-visible,
           #work-primary-tool:focus-visible,
           .work-sequence-card:focus-visible,
@@ -5767,6 +5849,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           .work-sequence-card,
           .work-paired-reading-link,
           .work-next-card,
+          .work-first-run-copy-button,
           .work-evidence-copy-button {
             transition: transform 0.18s ease, box-shadow 0.18s ease;
           }
@@ -5783,6 +5866,10 @@ export function WorkDetailPage({ slug }: { slug: string }) {
             .work-evidence-field-grid {
               grid-template-columns: 1fr !important;
             }
+
+            .work-first-run-grid {
+              grid-template-columns: 1fr !important;
+            }
           }
 
           .work-sequence-card:hover,
@@ -5791,6 +5878,8 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           .work-paired-reading-link:focus-visible,
           .work-next-card:hover,
           .work-next-card:focus-visible,
+          .work-first-run-copy-button:hover,
+          .work-first-run-copy-button:focus-visible,
           .work-evidence-copy-button:hover,
           .work-evidence-copy-button:focus-visible {
             transform: translateY(-2px);
@@ -5801,6 +5890,7 @@ export function WorkDetailPage({ slug }: { slug: string }) {
             .work-sequence-card,
             .work-paired-reading-link,
             .work-next-card,
+            .work-first-run-copy-button,
             .work-evidence-copy-button {
               transition: none !important;
               transform: none !important;
