@@ -1573,6 +1573,23 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  const practicePackItemCount = [
+    evidenceChainBuilderEnabled,
+    genomeStoryBuilderEnabled,
+    barcodeEvidenceBuilderEnabled,
+    projectEvidenceBuilderEnabled,
+    creationRunBuilderEnabled,
+    researchQuestionBuilderEnabled,
+    aiMaterialAuditBuilderEnabled,
+    aiMaterialAuditPrompts.length > 0,
+    actionSteps.length > 0,
+    checklist.length > 0,
+    pitfalls.length > 0,
+    starterTemplate.length > 0,
+    articleRecordFields.length > 0,
+  ].filter(Boolean).length;
+  const practicePackAvailable = practicePackItemCount > 0;
+
   if (!article) {
     return (
       <main id="main-content" tabIndex={-1} style={{ minHeight: "58vh", padding: "5rem 1.5rem", display: "grid", placeItems: "center", fontFamily: "'Nunito', sans-serif" }}>
@@ -1713,8 +1730,13 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </div>
             ) : null}
 
+            {practicePackAvailable ? (
+              <details className="article-practice-pack-details article-compact-tool-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.72rem" }}>
+                <summary>练习、模板与记录 · {practicePackItemCount} 项</summary>
+
             {evidenceChainBuilderEnabled ? (
-              <div className="plant-evidence-chain-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+              <details className="plant-evidence-chain-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <summary>证据四格卡 · 完成度 {evidenceChainScore}/4</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>证据四格卡</div>
@@ -1756,11 +1778,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     {copiedEvidenceChainCard ? "已复制" : "复制四格卡"}
                   </button>
                 </div>
-              </div>
+              </details>
             ) : null}
 
             {genomeStoryBuilderEnabled ? (
-              <div className="genome-story-frame-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+              <details className="genome-story-frame-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <summary>科学故事骨架 · 完成度 {genomeStoryScore}/6</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>科学故事骨架</div>
@@ -1802,11 +1825,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     {copiedGenomeStoryFrame ? "已复制" : "复制骨架"}
                   </button>
                 </div>
-              </div>
+              </details>
             ) : null}
 
             {barcodeEvidenceBuilderEnabled ? (
-              <div className="barcode-evidence-table-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+              <details className="barcode-evidence-table-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <summary>鉴定证据链表 · 完成度 {barcodeEvidenceScore}/6</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>鉴定证据链表</div>
@@ -1848,11 +1872,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     {copiedBarcodeEvidenceTable ? "已复制" : "复制证据链表"}
                   </button>
                 </div>
-              </div>
+              </details>
             ) : null}
 
             {projectEvidenceBuilderEnabled ? (
-              <div className="project-evidence-table-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+              <details className="project-evidence-table-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <summary>项目证据表 · 完成度 {projectEvidenceScore}/6</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>项目证据表</div>
@@ -1894,11 +1919,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     {copiedProjectEvidenceTable ? "已复制" : "复制项目证据表"}
                   </button>
                 </div>
-              </div>
+              </details>
             ) : null}
 
             {creationRunBuilderEnabled ? (
-              <div className="creation-run-record-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+              <details className="creation-run-record-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <summary>AI 创作生成记录表 · 完成度 {creationRunScore}/6</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>AI 创作生成记录表</div>
@@ -1940,11 +1966,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     {copiedCreationRunRecord ? "已复制" : "复制生成记录"}
                   </button>
                 </div>
-              </div>
+              </details>
             ) : null}
 
             {researchQuestionBuilderEnabled ? (
-              <div className="research-question-card-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+              <details className="research-question-card-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <summary>科研问题转译卡 · 完成度 {researchQuestionScore}/6</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>科研问题转译卡</div>
@@ -1986,11 +2013,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     {copiedResearchQuestionCard ? "已复制" : "复制转译卡"}
                   </button>
                 </div>
-              </div>
+              </details>
             ) : null}
 
             {aiMaterialAuditBuilderEnabled ? (
-              <div className="ai-material-audit-table-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+              <details className="ai-material-audit-table-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <summary>AI 学习材料质检表 · 完成度 {aiMaterialAuditScore}/6</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>AI 学习材料质检表</div>
@@ -2032,7 +2060,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     {copiedAiMaterialAuditTable ? "已复制" : "复制质检表"}
                   </button>
                 </div>
-              </div>
+              </details>
             ) : null}
 
             {platformUsePlans.length ? (
@@ -2224,7 +2252,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             ) : null}
 
             {aiMaterialAuditPrompts.length ? (
-              <div style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.22)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
+              <details className="article-compact-tool-details ai-material-audit-prompt-details" style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.22)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
+                <summary>AI 质检提示词包 · {aiMaterialAuditPrompts.length} 个检查</summary>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>AI 质检提示词包</div>
@@ -2251,11 +2280,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                 <code style={{ display: "block", whiteSpace: "pre-wrap", maxHeight: 220, overflow: "auto", background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.72rem", lineHeight: 1.62 }}>
                   {aiMaterialAuditPromptText}
                 </code>
-              </div>
+              </details>
             ) : null}
 
             {actionSteps.length ? (
-              <div id="article-primary-action" tabIndex={-1} style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
+              <details id="article-primary-action" className="article-compact-tool-details article-primary-action-details" tabIndex={-1} style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
+                <summary>上手步骤 · {actionSteps.length} 步</summary>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>上手步骤</div>
                   <button type="button" onClick={copyActionPack} aria-label={`复制${article.title}的行动包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
@@ -2272,11 +2302,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     </div>
                   ))}
                 </div>
-              </div>
+              </details>
             ) : null}
 
             {checklist.length ? (
-              <div style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.08)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
+              <details className="article-compact-tool-details article-checklist-details" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.08)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
+                <summary>检查清单 · {checklist.length} 项</summary>
                 <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem", marginBottom: "0.65rem" }}>检查清单</div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.55rem" }}>
                   {checklist.map((item) => (
@@ -2286,11 +2317,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     </div>
                   ))}
                 </div>
-              </div>
+              </details>
             ) : null}
 
             {pitfalls.length ? (
-              <div style={{ background: "var(--cherry-peach-light)", border: "1.5px solid rgba(181,80,51,0.18)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
+              <details className="article-compact-tool-details article-pitfalls-details" style={{ background: "var(--cherry-peach-light)", border: "1.5px solid rgba(181,80,51,0.18)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
+                <summary>避坑提醒 · {pitfalls.length} 条</summary>
                 <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem", marginBottom: "0.65rem" }}>避坑提醒</div>
                 <div style={{ display: "grid", gap: "0.55rem" }}>
                   {pitfalls.map((item, index) => (
@@ -2302,11 +2334,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     </div>
                   ))}
                 </div>
-              </div>
+              </details>
             ) : null}
 
             {starterTemplate.length ? (
-              <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
+              <details className="article-compact-tool-details article-template-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
+                <summary>可套用模板</summary>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>可套用模板</div>
                   <button type="button" onClick={copyTemplateText} aria-label={`复制${article.title}的可套用模板`} aria-describedby="article-summary-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
@@ -2316,11 +2349,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                 <code style={{ display: "block", whiteSpace: "pre-wrap", background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.72rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.7 }}>
                   {starterTemplateText}
                 </code>
-              </div>
+              </details>
             ) : null}
 
             {articleRecordFields.length ? (
-              <div className="article-record-panel" style={{ background: "var(--card)", border: "1.5px solid rgba(58,92,62,0.18)", borderRadius: 16, padding: "0.9rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
+              <details className="article-record-panel article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(58,92,62,0.18)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
+                <summary>读完填写 · 完成度 {articleRecordScore}/4</summary>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>读完填写</div>
@@ -2379,7 +2413,10 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     </div>
                   ))}
                 </div>
-              </div>
+              </details>
+            ) : null}
+
+              </details>
             ) : null}
 
             <div
@@ -2454,6 +2491,24 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             gap: 0.65rem;
           }
 
+          .article-compact-tool-details > summary {
+            color: var(--cherry-warm-brown);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 900;
+            line-height: 1.35;
+            list-style-position: inside;
+          }
+
+          .article-compact-tool-details[open] {
+            display: grid;
+            gap: 0.62rem;
+          }
+
+          .article-compact-tool-details[open] > summary {
+            color: var(--cherry-forest);
+          }
+
           .article-back-chip:hover,
           .article-back-chip:focus-visible {
             background: var(--cherry-yellow-light) !important;
@@ -2482,12 +2537,16 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             }
 
             .article-record-panel {
-              padding: 0.72rem !important;
-              gap: 0.5rem !important;
+              padding: 0.62rem !important;
             }
 
             .platform-usage-details {
               padding: 0.62rem !important;
+            }
+
+            .article-compact-tool-details {
+              padding: 0.58rem 0.62rem !important;
+              margin-bottom: 0.46rem !important;
             }
 
             .article-record-grid {
