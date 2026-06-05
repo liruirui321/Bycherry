@@ -3811,6 +3811,9 @@ If any of these are missing, add them before the final answer.
         </div>
       </div>
 
+      <details className="concept-support-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.72rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.05)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>说明、可视化与导出 · 7 项</summary>
+
       <details className="concept-agent-run-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>Agent 运行面板 · {visualMode}</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap", marginTop: "0.62rem" }}>
@@ -4184,6 +4187,7 @@ If any of these are missing, add them before the final answer.
         <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.95rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.68, maxHeight: 280, overflow: "auto" }}>
           {lessonOutput}
         </code>
+      </details>
       </details>
 
       <style>
