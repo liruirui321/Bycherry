@@ -96,6 +96,13 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [evidenceMaterial, setEvidenceMaterial] = useState("");
   const [evidenceInterpretation, setEvidenceInterpretation] = useState("");
   const [evidenceLimit, setEvidenceLimit] = useState("");
+  const [copiedGenomeStoryFrame, setCopiedGenomeStoryFrame] = useState(false);
+  const [genomeStoryObject, setGenomeStoryObject] = useState("");
+  const [genomeStoryQuestion, setGenomeStoryQuestion] = useState("");
+  const [genomeStoryStructure, setGenomeStoryStructure] = useState("");
+  const [genomeStoryFunction, setGenomeStoryFunction] = useState("");
+  const [genomeStoryComparison, setGenomeStoryComparison] = useState("");
+  const [genomeStoryConnection, setGenomeStoryConnection] = useState("");
   const [recordQuestion, setRecordQuestion] = useState("");
   const [recordEvidence, setRecordEvidence] = useState("");
   const [recordOutput, setRecordOutput] = useState("");
@@ -121,6 +128,13 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     setEvidenceMaterial("");
     setEvidenceInterpretation("");
     setEvidenceLimit("");
+    setCopiedGenomeStoryFrame(false);
+    setGenomeStoryObject("");
+    setGenomeStoryQuestion("");
+    setGenomeStoryStructure("");
+    setGenomeStoryFunction("");
+    setGenomeStoryComparison("");
+    setGenomeStoryConnection("");
     setCopyStatus("");
   }, [kind, slug]);
   const navArticles = [
@@ -380,6 +394,105 @@ ${evidenceChainFilled.limit}
 2. 证据是否来自图表、数据或样本：${evidenceChainFields[1]?.pass ? "可用" : "待补充"}
 3. 解释是否没有超过证据范围：${evidenceChainFields[2]?.pass ? "可用" : "待补充"}
 4. 限制是否保留了不确定性：${evidenceChainFields[3]?.pass ? "可用" : "待补充"}`
+    : "";
+  const genomeStoryBuilderEnabled = article?.slug === "genome-assembly-story";
+  const genomeStoryFields = genomeStoryBuilderEnabled
+    ? [
+        {
+          id: "genome-story-object",
+          label: "研究对象",
+          value: genomeStoryObject,
+          setValue: setGenomeStoryObject,
+          placeholder: "例如：一种耐旱植物，代表某个特殊生态位或演化分支。",
+          pass: genomeStoryObject.trim().length >= 12,
+          help: "写清这个物种为什么值得讲。",
+        },
+        {
+          id: "genome-story-question",
+          label: "主问题",
+          value: genomeStoryQuestion,
+          setValue: setGenomeStoryQuestion,
+          placeholder: "例如：这些基因组数据能解释它为什么更能适应干旱环境吗？",
+          pass: genomeStoryQuestion.trim().length >= 16 && /为什么|如何|能否|解释|帮助|变化|能力/.test(genomeStoryQuestion.trim()),
+          help: "写成能被证据逐步回答的问题。",
+        },
+        {
+          id: "genome-story-structure",
+          label: "结构证据",
+          value: genomeStoryStructure,
+          setValue: setGenomeStoryStructure,
+          placeholder: "例如：染色体级组装、基因数量、重复序列或组装质量指标。",
+          pass: genomeStoryStructure.trim().length >= 16 && /染色体|组装|基因|重复|结构|质量|N50|contig|scaffold/i.test(genomeStoryStructure.trim()),
+          help: "写出说明数据是否可靠或结构有什么特点的证据。",
+        },
+        {
+          id: "genome-story-function",
+          label: "功能证据",
+          value: genomeStoryFunction,
+          setValue: setGenomeStoryFunction,
+          placeholder: "例如：某个基因家族扩张、表达模式改变或功能注释线索。",
+          pass: genomeStoryFunction.trim().length >= 16 && /功能|表达|基因家族|注释|通路|调控|扩张|收缩/.test(genomeStoryFunction.trim()),
+          help: "写出功能、表达或注释层面的线索。",
+        },
+        {
+          id: "genome-story-comparison",
+          label: "比较证据",
+          value: genomeStoryComparison,
+          setValue: setGenomeStoryComparison,
+          placeholder: "例如：与近缘物种相比，某类基因或结构出现差异。",
+          pass: genomeStoryComparison.trim().length >= 16 && /比较|近缘|差异|物种|同源|系统发育|保守|特异/.test(genomeStoryComparison.trim()),
+          help: "写出这些线索和谁相比、差异在哪里。",
+        },
+        {
+          id: "genome-story-connection",
+          label: "连接句",
+          value: genomeStoryConnection,
+          setValue: setGenomeStoryConnection,
+          placeholder: "例如：结构证据说明数据可靠，功能和比较证据共同提示这个适应性解释值得继续验证。",
+          pass: genomeStoryConnection.trim().length >= 22 && /因为|所以|共同|连接|提示|支持|解释|验证/.test(genomeStoryConnection.trim()),
+          help: "把三类证据连回主问题，避免只堆图表。",
+        },
+      ]
+    : [];
+  const genomeStoryScore = genomeStoryFields.filter((field) => field.pass).length;
+  const genomeStoryFilled = {
+    object: genomeStoryObject.trim() || "一个具有特殊性状、生态位或演化位置的植物研究对象。",
+    question: genomeStoryQuestion.trim() || "这些基因组数据能解释这个物种的某种变化、能力或历史吗？",
+    structure: genomeStoryStructure.trim() || "结构证据说明组装质量、染色体结构、基因数量或重复序列特点。",
+    function: genomeStoryFunction.trim() || "功能证据提供基因家族、表达模式、通路或注释线索。",
+    comparison: genomeStoryComparison.trim() || "比较证据说明它与近缘物种或对照材料之间的差异。",
+    connection: genomeStoryConnection.trim() || "结构证据保证数据可用，功能和比较证据共同把材料连接回主问题；结论仍需要保留验证边界。",
+  };
+  const genomeStoryFrameText = genomeStoryBuilderEnabled
+    ? `【基因组科学故事骨架】
+主题：${article?.title ?? ""}
+填写完成度：${genomeStoryScore}/6
+
+一、研究对象
+${genomeStoryFilled.object}
+
+二、主问题
+${genomeStoryFilled.question}
+
+三、结构证据
+${genomeStoryFilled.structure}
+
+四、功能证据
+${genomeStoryFilled.function}
+
+五、比较证据
+${genomeStoryFilled.comparison}
+
+六、连接句
+${genomeStoryFilled.connection}
+
+自查
+1. 研究对象是否有讲述理由：${genomeStoryFields[0]?.pass ? "可用" : "待补充"}
+2. 主问题是否能被证据回答：${genomeStoryFields[1]?.pass ? "可用" : "待补充"}
+3. 结构证据是否说明数据基础：${genomeStoryFields[2]?.pass ? "可用" : "待补充"}
+4. 功能证据是否提供解释线索：${genomeStoryFields[3]?.pass ? "可用" : "待补充"}
+5. 比较证据是否说明差异：${genomeStoryFields[4]?.pass ? "可用" : "待补充"}
+6. 连接句是否回到主问题：${genomeStoryFields[5]?.pass ? "可用" : "待补充"}`
     : "";
   const platformUrl = article && "platformUrl" in article ? article.platformUrl : null;
   const platformUsePlans = platformUrl
@@ -844,6 +957,29 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  async function copyGenomeStoryFrame() {
+    if (!genomeStoryFrameText) return;
+    const copiedToClipboard = await copyText(genomeStoryFrameText);
+    if (copiedToClipboard) {
+      setCopiedGenomeStoryFrame(true);
+      setCopiedEvidenceChainCard(false);
+      setCopiedSummary(false);
+      setCopiedTemplate(false);
+      setCopiedActionPack(false);
+      setCopiedLearningRecord(false);
+      setCopiedReadingTaskPack(false);
+      setCopiedPlatformConfig(false);
+      setCopiedPlatformReview(false);
+      setCopiedAiAuditPrompts(false);
+      setCopyStatus("科学故事骨架已复制到剪贴板。");
+      window.setTimeout(() => setCopiedGenomeStoryFrame(false), 1400);
+      return;
+    }
+
+    setCopiedGenomeStoryFrame(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
   async function copyPlatformPasteConfig() {
     if (!platformPasteConfigText) return;
     const copiedToClipboard = await copyText(platformPasteConfigText);
@@ -1155,6 +1291,52 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   </code>
                   <button type="button" onClick={copyEvidenceChainCard} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
                     {copiedEvidenceChainCard ? "已复制" : "复制四格卡"}
+                  </button>
+                </div>
+              </div>
+            ) : null}
+
+            {genomeStoryBuilderEnabled ? (
+              <div className="genome-story-frame-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>科学故事骨架</div>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.16rem", fontWeight: 800 }}>
+                      把组装、注释和比较图表放回同一个主问题，避免把流程步骤当成故事主线。
+                    </div>
+                  </div>
+                  <span style={{ background: genomeStoryScore === 6 ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.26rem 0.62rem", color: genomeStoryScore === 6 ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+                    完成度 {genomeStoryScore}/6
+                  </span>
+                </div>
+                <div className="genome-story-frame-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.62rem" }}>
+                  {genomeStoryFields.map((field) => (
+                    <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.34rem", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 900 }}>
+                      {field.label}
+                      <textarea
+                        id={field.id}
+                        value={field.value}
+                        placeholder={field.placeholder}
+                        rows={3}
+                        onChange={(event) => {
+                          field.setValue(event.currentTarget.value);
+                          setCopiedGenomeStoryFrame(false);
+                          setCopyStatus("");
+                        }}
+                        style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem 0.66rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, lineHeight: 1.55, resize: "vertical" }}
+                      />
+                      <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.45, fontWeight: 800 }}>
+                        {field.pass ? "可用" : field.help}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.7rem", alignItems: "start" }}>
+                  <code style={{ display: "block", whiteSpace: "pre-wrap", maxHeight: 240, overflow: "auto", background: "var(--cherry-sage-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.7rem", lineHeight: 1.58 }}>
+                    {genomeStoryFrameText}
+                  </code>
+                  <button type="button" onClick={copyGenomeStoryFrame} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
+                    {copiedGenomeStoryFrame ? "已复制" : "复制骨架"}
                   </button>
                 </div>
               </div>
@@ -1768,6 +1950,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           .article-outcome-snapshot button:focus-visible,
           .plant-evidence-chain-builder button:focus-visible,
           .plant-evidence-chain-grid textarea:focus-visible,
+          .genome-story-frame-builder button:focus-visible,
+          .genome-story-frame-grid textarea:focus-visible,
           .article-record-grid textarea:focus-visible,
           .platform-custom-config-grid input:focus-visible,
           .platform-custom-config-grid textarea:focus-visible,
@@ -1844,6 +2028,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             .article-record-grid,
             .plant-evidence-chain-grid,
             .plant-evidence-chain-builder > div:nth-of-type(3),
+            .genome-story-frame-grid,
+            .genome-story-frame-builder > div:nth-of-type(3),
             .platform-active-plan-grid,
             .platform-custom-config-grid > div:nth-of-type(2) {
               grid-template-columns: 1fr !important;

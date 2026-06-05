@@ -310,6 +310,20 @@ function verifyPlantGenomeEvidenceChainBuilder() {
   expect(articleSource.includes("plant-evidence-chain-builder") && articleSource.includes("plant-evidence-chain-grid"), "Evidence-chain builder must have stable classes for layout checks.");
 }
 
+function verifyGenomeAssemblyStoryFrameBuilder() {
+  const articleSource = read("src/app/components/ArticleDetailPage.tsx");
+
+  expect(articleSource.includes("genomeStoryBuilderEnabled"), "Genome assembly article must expose a special story-frame builder.");
+  expect(articleSource.includes('article?.slug === "genome-assembly-story"'), "Story-frame builder must target the genome assembly article.");
+  expect(articleSource.includes("genomeStoryFields"), "Story-frame builder must define learner-fillable fields.");
+  expect(articleSource.includes("genomeStoryFrameText"), "Story-frame builder must produce a copyable story frame.");
+  expect(articleSource.includes("copyGenomeStoryFrame"), "Story-frame builder must expose a copy handler.");
+  expect(articleSource.includes("科学故事骨架"), "Story-frame builder must visibly name the story frame.");
+  expect(articleSource.includes("研究对象") && articleSource.includes("主问题") && articleSource.includes("结构证据") && articleSource.includes("功能证据") && articleSource.includes("比较证据") && articleSource.includes("连接句"), "Story-frame builder must keep object, question, structure, function, comparison, and connection fields.");
+  expect(articleSource.includes("避免把流程步骤当成故事主线"), "Story-frame builder must keep the article's main caution visible.");
+  expect(articleSource.includes("genome-story-frame-builder") && articleSource.includes("genome-story-frame-grid"), "Story-frame builder must have stable classes for layout checks.");
+}
+
 function verifyArticleOutcomeSnapshot() {
   const articleSource = read("src/app/components/ArticleDetailPage.tsx");
 
@@ -1296,6 +1310,7 @@ verifyWorkDetailCardsStayCompact();
 verifyArticleCardsStayStructured();
 verifyPlatformGuideConfigBuilder();
 verifyPlantGenomeEvidenceChainBuilder();
+verifyGenomeAssemblyStoryFrameBuilder();
 verifyArticleOutcomeSnapshot();
 verifyWorkJsonLdLearningOutcomes();
 verifyResearchAgentWorkbenchContract();
