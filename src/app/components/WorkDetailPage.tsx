@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { GeneExpressionTool } from "./GeneExpressionTool";
 import { IconDNA } from "./Icons";
 import { works } from "./Works";
-import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { EmptyStateCard } from "./EmptyStateCard";
 import { copyText } from "../clipboard";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";

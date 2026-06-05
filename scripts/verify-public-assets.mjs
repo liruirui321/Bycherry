@@ -167,7 +167,6 @@ const staticIndexSource = readRoot("scripts/generate-static-index.mjs");
 const sitemapGeneratorSource = readRoot("scripts/generate-sitemap.mjs");
 const sitemapVerifierSource = readRoot("scripts/verify-sitemap.mjs");
 const siteMetadataSource = readRoot("scripts/site-metadata.mjs");
-const workPreviewSource = readRoot("src/app/components/WorkPreviewIllustration.tsx");
 const contentRoutes = getContentRoutes();
 const contentHrefs = getContentHrefs();
 const articleRoutes = contentRoutes.filter((route) => route.type !== "work");
@@ -186,10 +185,7 @@ for (const [label, source] of [["sitemap generator", sitemapGeneratorSource], ["
   expect(source.includes('from "./site-metadata.mjs"'), `${label} must import shared site metadata.`);
   expect(!/const\s+siteUrl\s*=/.test(source), `${label} must not redeclare siteUrl; use site-metadata.mjs.`);
 }
-for (const [slug, illustration] of Object.entries(generatedIllustrationsBySlug)) {
-  expect(workPreviewSource.includes(`slug === "${slug}"`), `WorkPreviewIllustration must define a preview branch for ${slug}.`);
-  expect(workPreviewSource.includes(`src="/${illustration.path}"`), `WorkPreviewIllustration must use /${illustration.path} for ${slug}.`);
-}
+expect(!existsSync(resolve(root, "src/app/components/WorkPreviewIllustration.tsx")), "Retired WorkPreviewIllustration component must stay removed; work pages should open directly into product content.");
 expect(indexHtml.includes('<html lang="zh-CN">'), "index.html must declare zh-CN language.");
 expect(indexHtml.includes(`<meta name="theme-color" content="${appThemeColor}" />`), "index.html theme-color must match the app theme color.");
 expect(indexHtml.includes('<meta name="application-name" content="By Cherry" />'), "index.html must include the PWA application name.");
