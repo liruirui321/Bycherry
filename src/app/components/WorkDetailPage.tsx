@@ -4832,92 +4832,6 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
   return (
     <section id="crispr-simulator" style={{ display: "grid", gap: "1rem" }}>
-      <details className="crispr-start-pack-details crispr-compact-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.05)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>说明、练习与结果检查 · 3 项</summary>
-
-      <details className="crispr-intro-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>判读顺序与实验边界</summary>
-      <div className="crispr-intro-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.15fr) minmax(260px, 0.85fr)", gap: "1rem" }}>
-        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.72rem" }}>判读顺序</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.65rem" }}>
-            {interpretationSteps.map((item, index) => (
-              <div key={item.title} style={{ background: index === stepIndex ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === stepIndex ? "1.5px solid var(--cherry-yellow)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.72rem", minHeight: 118 }}>
-                <span style={{ width: 24, height: 24, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.45rem" }}>{index + 1}</span>
-                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.26rem" }}>{item.title}</strong>
-                <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, fontWeight: 800 }}>{item.body}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div style={{ background: "var(--cherry-peach-light)", border: "1.5px solid rgba(214,91,74,0.2)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
-          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.72rem" }}>实验边界</div>
-          <div style={{ display: "grid", gap: "0.52rem" }}>
-            {boundaryItems.map((item, index) => (
-              <div key={item} style={{ display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.46rem", alignItems: "start", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800 }}>
-                <span style={{ width: 18, height: 18, borderRadius: "50%", background: "var(--cherry-red)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
-                <span>{item}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      </details>
-
-      <details className="crispr-practice-panel crispr-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>练习场景 · {activeScenario ? activeScenario.title : "自定义判读"}</summary>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
-          <div>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>练习场景</div>
-            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>
-              先选一个判读任务，页面会自动切到对应 guide、步骤和修复结果。
-            </div>
-          </div>
-          <span style={{ color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900 }}>
-            {activeScenario ? `当前：${activeScenario.title}` : "当前：自定义判读"}
-          </span>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.62rem" }}>
-          {practiceScenarios.map((scenario, index) => {
-            const active = activeScenarioIndex === index;
-            return (
-              <button key={scenario.title} type="button" aria-pressed={active} onClick={() => chooseCrisprScenario(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 16, padding: "0.72rem", cursor: "pointer", display: "grid", gap: "0.36rem" }}>
-                <strong style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{scenario.title}</strong>
-                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{scenario.goal}</span>
-                <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.48, fontWeight: 900 }}>{scenario.check}</span>
-              </button>
-            );
-          })}
-        </div>
-      </details>
-
-      <details className="crispr-result-check-panel" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.04)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>结果检查 · {quizChoice === activeQuiz.answer ? "小测已通过" : "小测待完成"}</summary>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
-          <div>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>结果检查</div>
-            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>
-              复制报告前，先确认本轮判定、证据、风险边界和小测状态都能说清楚。
-            </div>
-          </div>
-          <span style={{ background: quizChoice === activeQuiz.answer ? "var(--cherry-sage-light)" : "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.26rem 0.62rem", color: quizChoice === activeQuiz.answer ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.72rem", fontWeight: 900 }}>
-            {quizChoice === activeQuiz.answer ? "小测已通过" : "小测待完成"}
-          </span>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.62rem" }}>
-          {crisprCompletionChecks.map((item, index) => (
-            <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.72rem", minHeight: 132, display: "grid", gap: "0.42rem", alignContent: "start" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", gap: "0.55rem", alignItems: "start" }}>
-                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{item.title}</strong>
-                <span style={{ color: index === 2 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, whiteSpace: "nowrap" }}>{item.status}</span>
-              </div>
-              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.58, fontWeight: 800 }}>{item.body}</span>
-            </div>
-          ))}
-        </div>
-      </details>
-      </details>
-
       <div className="crispr-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.72fr)", gap: "1rem", alignItems: "stretch" }}>
         <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, overflow: "hidden", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
           <svg viewBox="0 0 760 430" role="img" aria-label="CRISPR Cas9 识别、剪切和修复示意图" style={{ width: "100%", display: "block", background: "linear-gradient(180deg, #FFF8EA 0%, #F2E9DB 100%)" }}>
@@ -5078,7 +4992,89 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
       </div>
 
       <details className="crispr-support-pack-details crispr-compact-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.05)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>记录、修复、质控与报告 · 7 项</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>说明、练习、记录与报告 · 10 项</summary>
+
+      <details className="crispr-intro-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>判读顺序与实验边界</summary>
+      <div className="crispr-intro-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.15fr) minmax(260px, 0.85fr)", gap: "1rem" }}>
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.72rem" }}>判读顺序</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.65rem" }}>
+            {interpretationSteps.map((item, index) => (
+              <div key={item.title} style={{ background: index === stepIndex ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === stepIndex ? "1.5px solid var(--cherry-yellow)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.72rem", minHeight: 118 }}>
+                <span style={{ width: 24, height: 24, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.45rem" }}>{index + 1}</span>
+                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.26rem" }}>{item.title}</strong>
+                <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, fontWeight: 800 }}>{item.body}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{ background: "var(--cherry-peach-light)", border: "1.5px solid rgba(214,91,74,0.2)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.72rem" }}>实验边界</div>
+          <div style={{ display: "grid", gap: "0.52rem" }}>
+            {boundaryItems.map((item, index) => (
+              <div key={item} style={{ display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.46rem", alignItems: "start", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800 }}>
+                <span style={{ width: 18, height: 18, borderRadius: "50%", background: "var(--cherry-red)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      </details>
+
+      <details className="crispr-practice-panel crispr-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>练习场景 · {activeScenario ? activeScenario.title : "自定义判读"}</summary>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>练习场景</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>
+              先选一个判读任务，页面会自动切到对应 guide、步骤和修复结果。
+            </div>
+          </div>
+          <span style={{ color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900 }}>
+            {activeScenario ? `当前：${activeScenario.title}` : "当前：自定义判读"}
+          </span>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.62rem" }}>
+          {practiceScenarios.map((scenario, index) => {
+            const active = activeScenarioIndex === index;
+            return (
+              <button key={scenario.title} type="button" aria-pressed={active} onClick={() => chooseCrisprScenario(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 16, padding: "0.72rem", cursor: "pointer", display: "grid", gap: "0.36rem" }}>
+                <strong style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{scenario.title}</strong>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{scenario.goal}</span>
+                <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.48, fontWeight: 900 }}>{scenario.check}</span>
+              </button>
+            );
+          })}
+        </div>
+      </details>
+
+      <details className="crispr-result-check-panel" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.04)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>结果检查 · {quizChoice === activeQuiz.answer ? "小测已通过" : "小测待完成"}</summary>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>结果检查</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>
+              复制报告前，先确认本轮判定、证据、风险边界和小测状态都能说清楚。
+            </div>
+          </div>
+          <span style={{ background: quizChoice === activeQuiz.answer ? "var(--cherry-sage-light)" : "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.26rem 0.62rem", color: quizChoice === activeQuiz.answer ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.72rem", fontWeight: 900 }}>
+            {quizChoice === activeQuiz.answer ? "小测已通过" : "小测待完成"}
+          </span>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.62rem" }}>
+          {crisprCompletionChecks.map((item, index) => (
+            <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.72rem", minHeight: 132, display: "grid", gap: "0.42rem", alignContent: "start" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: "0.55rem", alignItems: "start" }}>
+                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{item.title}</strong>
+                <span style={{ color: index === 2 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, whiteSpace: "nowrap" }}>{item.status}</span>
+              </div>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.58, fontWeight: 800 }}>{item.body}</span>
+            </div>
+          ))}
+        </div>
+      </details>
 
       <details className="crispr-decision-panel crispr-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>编辑决策卡</summary>
