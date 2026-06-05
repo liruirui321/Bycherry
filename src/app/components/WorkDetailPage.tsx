@@ -4137,20 +4137,15 @@ If any of these are missing, add them before the final answer.
         ) : null}
       </div>
 
-      <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto auto", gap: "0.75rem", alignItems: "center", background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
-        <div>
-          <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", fontWeight: 900, marginBottom: "0.24rem" }}>保存这次学习产出</div>
-          <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800 }}>
-            学习卡会带上概念、当前水平、目标、资料边界、卡点、应用情境、可视化节点、练习和验收标准。
-          </div>
-        </div>
-        <button type="button" onClick={copyLessonOutput} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.62rem 0.95rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap" }}>
+      <div className="concept-save-actions concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto auto", gap: "0.45rem", alignItems: "center", background: "transparent", border: "none", borderRadius: 0, padding: 0, boxShadow: "none" }}>
+        <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 900 }}>导出</div>
+        <button type="button" onClick={copyLessonOutput} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.76rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap", fontSize: "0.78rem" }}>
           {copiedLesson ? "已复制" : "复制学习卡"}
         </button>
-        <button type="button" onClick={copyUnderstandingAudit} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.62rem 0.95rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap" }}>
+        <button type="button" onClick={copyUnderstandingAudit} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.76rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap", fontSize: "0.78rem" }}>
           {copiedAudit ? "已复制" : "复制自查记录"}
         </button>
-        <div id="concept-copy-status" role="status" aria-live="polite" style={{ gridColumn: "1 / -1", minHeight: "1.1rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900 }}>
+        <div id="concept-copy-status" role="status" aria-live="polite" style={{ gridColumn: "1 / -1", minHeight: "0.9rem", color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900 }}>
           {copyStatus}
         </div>
       </div>
