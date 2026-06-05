@@ -2078,20 +2078,14 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                 </div>
                 <details className="platform-usage-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem" }}>
                   <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>照填配置与审核面板 · {activePlatformPlan?.title ?? "选择用途"}</summary>
-                <div role="group" aria-label="选择 SciFusion 使用场景" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
+                <div role="group" aria-label="选择 SciFusion 使用场景" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "0.38rem" }}>
                   {platformUsePlans.map((plan, index) => {
                     const selected = index === selectedPlatformPlanIndex;
 
                     return (
-                    <button key={plan.title} type="button" className="platform-plan-button" aria-pressed={selected} onClick={() => { setSelectedPlatformPlanIndex(index); setCopiedPlatformConfig(false); setCopiedPlatformReview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: selected ? "var(--cherry-yellow-light)" : "var(--card)", border: selected ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem", display: "grid", gap: "0.48rem", cursor: "pointer", boxShadow: selected ? "3px 5px 0 rgba(94,68,42,0.08)" : "none" }}>
-                      <strong style={{ color: "var(--cherry-forest)", fontSize: "0.8rem" }}>{plan.title}</strong>
-                      <span style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>照填配置</span>
-                      <div style={{ display: "grid", gap: "0.3rem" }}>
-                        {plan.fields.map((field) => (
-                          <span key={field} style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.48, fontWeight: 800 }}>{field}</span>
-                        ))}
-                      </div>
-                      <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.5, fontWeight: 900 }}>{plan.output}</span>
+                    <button key={plan.title} type="button" className="platform-plan-button" aria-label={`${plan.title}：${plan.fields.join("；")}；${plan.output}`} aria-pressed={selected} onClick={() => { setSelectedPlatformPlanIndex(index); setCopiedPlatformConfig(false); setCopiedPlatformReview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: selected ? "var(--cherry-yellow-light)" : "var(--card)", border: selected ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem 0.56rem", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.38rem", alignItems: "center", cursor: "pointer", boxShadow: selected ? "0 8px 18px rgba(94,68,42,0.06)" : "none" }}>
+                      <strong style={{ color: "var(--cherry-forest)", fontSize: "0.78rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{plan.title}</strong>
+                      <span style={{ color: selected ? "var(--cherry-red)" : "var(--cherry-warm-mid)", fontSize: "0.66rem", fontWeight: 900, whiteSpace: "nowrap" }}>{selected ? "当前" : "选择"}</span>
                     </button>
                     );
                   })}

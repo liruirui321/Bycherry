@@ -270,6 +270,7 @@ function verifyPlatformGuideConfigBuilder() {
   expect(articleSource.includes("platformTopicTemplates"), "Platform guide must provide one-click topic fill packages.");
   expect(articleSource.includes("applyPlatformTopicTemplate"), "Platform guide must let learners load a topic package into the platform config.");
   expect(articleSource.includes("常用主题照填包"), "Platform guide must visibly expose reusable topic packages.");
+  expect(articleSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))"') && articleSource.includes('aria-label={`${plan.title}：${plan.fields.join("；")}；${plan.output}`}') && /className="platform-plan-button"[\s\S]{0,520}padding: "0\.48rem 0\.56rem"[\s\S]{0,180}gridTemplateColumns: "minmax\(0, 1fr\) auto"/.test(articleSource), "Platform use plan buttons must stay as short selectors instead of repeating the full fill-in configuration in each button.");
   expect(articleSource.includes("platformAuditFocus"), "Platform guide must collect the learner's question-audit focus.");
   expect(articleSource.includes("审核重点：${platformAuditFocus"), "Platform copied configs must include the audit focus.");
   expect(articleSource.includes("我的照填配置"), "Platform guide must visibly expose the learner's custom config builder.");
