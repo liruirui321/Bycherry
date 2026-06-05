@@ -1611,18 +1611,18 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
   return (
     <main id="main-content" tabIndex={-1} style={{ fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
-      <section className="article-detail-section" style={{ padding: "0.35rem 1.5rem 1rem" }}>
+      <section className="article-detail-section" style={{ padding: "0.22rem 1.5rem 1rem" }}>
         <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <article
             className="article-detail-card"
             style={{
-              background: "var(--card)",
-              border: "1.5px solid var(--border)",
-              borderRadius: 8,
-              padding: "0.68rem 0.92rem 1rem",
-              boxShadow: "0 8px 18px rgba(94,68,42,0.06)",
+              background: "transparent",
+              border: "none",
+              borderRadius: 0,
+              padding: "0.4rem 0 0.9rem",
+              boxShadow: "none",
               position: "relative",
-              overflow: "hidden",
+              overflow: "visible",
             }}
           >
             <div className="article-meta-row" style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: "0.3rem" }}>
@@ -2521,7 +2521,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             }
 
             .article-detail-card {
-              padding: 0.5rem 0.62rem 0.72rem !important;
+              padding: 0.2rem 0 0.72rem !important;
             }
 
             .article-meta-row {
