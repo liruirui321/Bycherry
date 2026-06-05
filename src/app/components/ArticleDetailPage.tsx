@@ -139,19 +139,6 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     setGenomeStoryConnection("");
     setCopyStatus("");
   }, [kind, slug]);
-  const readingPath = article
-    ? "platformUrl" in article
-      ? [
-          { label: "平台入口", body: article.highlights[0] ?? "先打开平台，确认要使用的工具入口。" },
-          { label: "填写参数", body: article.highlights[1] ?? "再填写对象、目标、范围和生成要求。" },
-          { label: "审核使用", body: article.highlights[2] ?? "最后人工审核题目质量，再作答和复盘。" },
-        ]
-      : [
-          { label: "进入点", body: article.highlights[0] ?? "先找到这篇文章要解决的问题。" },
-          { label: "证据链", body: article.highlights[1] ?? "再看作者如何组织证据和判断边界。" },
-          { label: "可迁移方法", body: article.highlights[2] ?? "最后提炼可以复用到自己项目里的方法。" },
-        ]
-    : [];
   const actionSteps = article && "actionSteps" in article ? article.actionSteps : [];
   const checklist = article && "checklist" in article ? article.checklist : [];
   const starterTemplate = article && "starterTemplate" in article ? article.starterTemplate : [];
@@ -168,25 +155,6 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
         `完成 1 个上手动作：${articleQuickStart?.step ?? actionSteps[0] ?? "先读正文并圈出一个问题"}`,
         `保存 1 份可复用材料：${starterTemplate[0] ?? "学习记录或证据卡"}`,
         `用检查清单核对：${articleQuickStart?.check ?? checklist[0] ?? "确认自己留下了可检查结果"}`,
-      ]
-    : [];
-  const articleOutcomeSnapshot = article
-    ? [
-        {
-          label: "行动包",
-          body: actionSteps[0] ?? "先完成一个可观察动作。",
-          result: "复制后直接按步骤执行。",
-        },
-        {
-          label: "可保存材料",
-          body: starterTemplate[0] ?? "保存一份学习记录或证据卡。",
-          result: "读完后能放进自己的笔记继续用。",
-        },
-        {
-          label: "完成检查",
-          body: checklist[0] ?? "确认自己留下了可检查结果。",
-          result: "能判断这篇内容是否真的被用上。",
-        },
       ]
     : [];
   const articleCompletionChecks = article
