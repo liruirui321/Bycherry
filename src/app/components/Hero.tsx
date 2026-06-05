@@ -16,6 +16,8 @@ export function Hero() {
     { label: "看懂一个生命过程", href: "/works/gene-expression", workTitle: "基因表达可视化" },
     { label: "拆清一个卡住概念", href: "/works/concept-explainer", workTitle: "概念解释生成器" },
     { label: "整理一段科研材料", href: "/works/research-prompt-kit", workTitle: "科研 Agent 工作台" },
+    { label: "梳理植物演化证据", href: "/works/plant-evolution-stories", workTitle: "植物演化时间轴" },
+    { label: "判断一次编辑风险", href: "/works/crispr-interactive", workTitle: "CRISPR 编辑模拟器" },
   ];
   const sessionPlans = [
     {
@@ -32,6 +34,16 @@ export function Hero() {
       label: "科研材料",
       work: works.find((work) => work.slug === "research-prompt-kit"),
       article: essays.find((essay) => essay.slug === "science-to-learning-question"),
+    },
+    {
+      label: "植物演化",
+      work: works.find((work) => work.slug === "plant-evolution-stories"),
+      article: notes.find((note) => note.slug === "plant-genome-evidence-chain"),
+    },
+    {
+      label: "DNA 证据",
+      work: works.find((work) => work.slug === "crispr-interactive"),
+      article: essays.find((essay) => essay.slug === "barcoding-evidence-chain"),
     },
   ].filter((item): item is { label: string; work: (typeof works)[number]; article: (typeof notes)[number] | (typeof essays)[number] } => Boolean(item.work && item.article));
   const activeSessionPlan = sessionPlans[selectedSessionIndex] ?? sessionPlans[0];

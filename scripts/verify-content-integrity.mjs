@@ -334,6 +334,9 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("进入模块：{activeSessionPlan.work.title}"), "Homepage hero session plan must include a visible direct module link.");
   expect(heroSource.includes("配套阅读：{activeSessionPlan.article.title}"), "Homepage hero session plan must include a visible paired-reading link.");
   expect(heroSource.includes('import { notes } from "./Notes"') && heroSource.includes('import { essays } from "./ResearchEssays"'), "Homepage hero session plans must connect modules to paired reading libraries.");
+  for (const slug of ["gene-expression", "concept-explainer", "research-prompt-kit", "plant-evolution-stories", "crispr-interactive"]) {
+    expect(heroSource.includes(`work.slug === "${slug}"`), `Homepage 30-minute session plans must include ${slug}.`);
+  }
   expect(heroSource.includes("配套阅读：${activeSessionPlan.article.title}"), "Homepage hero session plan must include a paired reading title.");
   expect(heroSource.includes("阅读入口：${activeSessionPlan.article.href}"), "Homepage hero copied session plan must include paired reading route.");
   expect(heroSource.includes("完成检查：${activeSessionPlan.article.checklist[0]}"), "Homepage hero copied session plan must include paired reading completion check.");
