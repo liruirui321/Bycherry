@@ -3832,7 +3832,7 @@ If any of these are missing, add them before the final answer.
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>概念解释包</div>
-            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.2rem", fontWeight: 800 }}>
+            <div className="concept-pack-header-copy" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.2rem", fontWeight: 800 }}>
               生成后先看这 5 张卡：一句话解释、图形骨架、机制主线、误区边界和马上练习。
             </div>
           </div>
@@ -3846,7 +3846,7 @@ If any of these are missing, add them before the final answer.
               <span style={{ width: 22, height: 22, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900, marginBottom: "0.46rem" }}>{index + 1}</span>
               <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.34rem" }}>{item.title}</strong>
               <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800, marginBottom: "0.44rem" }}>{item.body}</span>
-              <span style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 900 }}>要做：{item.output}</span>
+              <span className="concept-pack-output" style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 900 }}>要做：{item.output}</span>
             </div>
           ))}
         </div>
@@ -4328,6 +4328,38 @@ If any of these are missing, add them before the final answer.
               min-height: 0 !important;
               padding: 0.54rem !important;
               border-radius: 10px !important;
+            }
+
+            #concept-explainer-tool .concept-pack-header-copy,
+            #concept-explainer-tool .concept-pack-output {
+              display: none !important;
+            }
+
+            #concept-explainer-tool .concept-pack-card-grid {
+              grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+              gap: 0.36rem !important;
+            }
+
+            #concept-explainer-tool .concept-pack-card {
+              padding: 0.42rem !important;
+              gap: 0.18rem !important;
+            }
+
+            #concept-explainer-tool .concept-pack-card > span:first-child {
+              width: 18px !important;
+              height: 18px !important;
+              font-size: 0.58rem !important;
+              margin-bottom: 0.24rem !important;
+            }
+
+            #concept-explainer-tool .concept-pack-card strong {
+              font-size: 0.66rem !important;
+              line-height: 1.18 !important;
+              margin-bottom: 0.18rem !important;
+              overflow: hidden !important;
+              display: -webkit-box !important;
+              -webkit-line-clamp: 2 !important;
+              -webkit-box-orient: vertical !important;
             }
 
             #concept-explainer-tool .concept-pack-card span,

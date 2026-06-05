@@ -669,6 +669,8 @@ function verifyConceptExplainerAgentContract() {
     { label: "visible explanation pack", text: "概念解释包" },
     { label: "explanation pack class", text: "concept-explanation-pack" },
     { label: "explanation pack copy button", text: "复制解释包" },
+    { label: "compact explanation pack header", text: "concept-pack-header-copy" },
+    { label: "compact explanation pack output", text: "concept-pack-output" },
     { label: "explanation pack card one-sentence", text: "一句话解释" },
     { label: "explanation pack visual skeleton", text: "图形骨架" },
     { label: "explanation pack immediate practice", text: "马上练习" },
@@ -717,6 +719,8 @@ function verifyConceptExplainerAgentContract() {
     expect(!item.pattern.test(conceptSource), `Concept explainer must remain learner-facing and avoid retired copy: ${item.label}`);
   }
 
+  expect(conceptSource.includes("#concept-explainer-tool .concept-pack-card-grid") && conceptSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Concept explainer mobile explanation pack must stay as compact three-column cards.");
+  expect(conceptSource.includes("#concept-explainer-tool .concept-pack-header-copy,") && conceptSource.includes("#concept-explainer-tool .concept-pack-output") && conceptSource.includes("display: none !important"), "Concept explainer mobile explanation pack must hide repeated helper/output lines.");
   expect(worksSource.includes("输入任意概念或选择样例"), "Concept explainer work card must advertise arbitrary concept input.");
   expect(worksSource.includes('outputs: ["学习卡", "可视化流程", "即时小测"]'), "Concept explainer work card outputs must match the learner-facing agent output.");
   expect(worksSource.includes('path: ["输入概念", "看诊断边界", "生成学习卡"]'), "Concept explainer work card path must describe the learner-facing agent flow.");
