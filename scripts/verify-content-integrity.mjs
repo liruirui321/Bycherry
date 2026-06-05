@@ -119,10 +119,8 @@ function verifyVisibleLearningModuleCopy() {
   const requiredCopy = [
     "学习模块",
     "浏览学习模块",
-    "打开学习模块",
     "全部学习模块",
     "学习模块前后导航",
-    "30 分钟学习路径",
     "首屏学习模块目录",
     "可保存产出",
     "复制路径",
@@ -1195,31 +1193,14 @@ function verifyLearnerProductPositioning() {
     "先选一个模块",
     "首屏学习模块目录",
     "首页只保留目录",
+    "关于这个工作台",
+    "首页负责选择内容",
     "看生命过程",
     "拆概念",
     "整理科研",
     "更多工具",
     "读证据",
     "学方法",
-    "怎么开始",
-    "工作台闭环",
-    "about-workbench-loop-step",
-    "选入口",
-    "先操作",
-    "存产出",
-    "定下一步",
-    "about-use-card",
-    "完成检查",
-    "产出：{item.work.outputs[0]}",
-    "完成：{item.work.success}",
-    "aboutStartGuideText",
-    "copyAboutStartGuide",
-    "about-start-guide-panel",
-    "about-start-guide-status",
-    "工作台开始清单",
-    "复制开始清单",
-    "先选一个入口，不同时展开多个方向",
-    "三、结束前保存证据",
     "currentRouteGuideText",
     "copyCurrentRouteGuide",
     "nav-route-guide-button",
@@ -1250,16 +1231,12 @@ function verifyLearnerProductPositioning() {
     }
   }
 
-  for (const slug of ["gene-expression", "concept-explainer", "research-prompt-kit", "plant-evolution-stories", "crispr-interactive"]) {
-    expect(aboutSource.includes(`findWork("${slug}")`), `About start guide must include ${slug}.`);
+  expect(aboutSource.includes("about-compact-band"), "About section should be a compact positioning band.");
+  expect(aboutSource.includes("about-compact-stats"), "About section should keep compact site-scale stats.");
+  expect(aboutSource.includes("首页负责选择内容"), "About section should clarify that homepage chooses content and details live on subpages.");
+  for (const retiredAboutBlock of ["aboutStartGuideText", "copyAboutStartGuide", "about-start-guide-panel", "about-use-card", "工作台开始清单", "复制开始清单"]) {
+    expect(!aboutSource.includes(retiredAboutBlock), `About section should stay short and not include retired duplicate block: ${retiredAboutBlock}.`);
   }
-  expect(aboutSource.includes('import { getWorkToolHref, navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation"'), "About start guide cards must use client-side direct-to-tool navigation.");
-  expect(aboutSource.includes("入口：${getWorkToolHref(item.work.href)}"), "About copied start guide must point directly to work tools.");
-  expect(aboutSource.includes("const toolHref = getWorkToolHref(item.work.href)"), "About start guide cards must derive direct-to-tool hrefs.");
-  expect(aboutSource.includes('import { preloadRouteForHref } from "../routePrefetch"'), "About start guide cards must preload work detail routes.");
-  expect(aboutSource.includes("onPointerDown={() => preloadRouteForHref(toolHref)}"), "About start guide cards must preload direct-to-tool routes on pointer down.");
-  expect(aboutSource.includes("navigateClient(toolHref)"), "About start guide cards must navigate directly to tools without a full page reload.");
-  expect(aboutSource.includes("完成标准，${item.work.success}"), "About start guide accessible labels must include completion standards.");
   const navSource = read("src/app/components/Nav.tsx");
   expect(navSource.includes('import { works } from "./Works"') && navSource.includes('import { notes } from "./Notes"') && navSource.includes('import { essays } from "./ResearchEssays"'), "Navigation route guide must derive current work and article context.");
   expect(navSource.includes('import { copyText } from "../clipboard"'), "Navigation route guide must use the shared clipboard helper.");

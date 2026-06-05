@@ -83,7 +83,7 @@ ${links.slice(0, 6).map((link, index) => `${index + 1}. ${link.label}：${link.h
 打开一个模块，完成页面里的首步任务，并保存一份产出。
 
 下一步
-复制首页 30 分钟学习路径、工作台开始清单或页尾继续学习清单。`;
+回到首屏学习模块目录，打开一个模块；完整步骤、记录和练习都在子页面里。`;
 
   function navigate(href: string) {
     if (href.startsWith("/")) {
