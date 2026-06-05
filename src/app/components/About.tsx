@@ -2,8 +2,10 @@ import { IconMicroscope, IconBook, IconAI, IconLeaf, IconResearch } from "./Icon
 import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
 import { works } from "./Works";
+import { copyText } from "../clipboard";
 import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
+import { useState } from "react";
 
 const tags = [
   { label: "生命科学", icon: <IconMicroscope size={15} color="#1a5680" />, bg: "var(--cherry-blue-light)", color: "#1a5680" },
@@ -64,6 +66,8 @@ function WorkbenchIllustration() {
 }
 
 export function About() {
+  const [copiedStartGuide, setCopiedStartGuide] = useState(false);
+  const [startGuideStatus, setStartGuideStatus] = useState("");
   const reusableOutputs = works.reduce((count, work) => count + work.outputs.length, 0);
   const findWork = (slug: string) => works.find((work) => work.slug === slug) ?? works[0];
   const useGuideCards = [
@@ -104,6 +108,44 @@ export function About() {
     { step: "存产出", body: "复制学习卡、报告、证据判读或复盘模板。" },
     { step: "定下一步", body: "写下还不清楚的问题，再接一篇配套文章或下一个模块。" },
   ];
+  const aboutStartGuideText = `【By Cherry 工作台开始清单】
+
+工作台规模
+1. 学习模块：${works.length} 个
+2. 学习资料：${notes.length + essays.length} 篇
+3. 可复用产物：${reusableOutputs} 类
+
+一、先选一个入口，不同时展开多个方向
+${useGuideCards.map((item, index) => `${index + 1}. ${item.goal}
+模块：${item.work.title}
+入口：${item.work.href}
+先做：${item.work.starter}
+产出：${item.work.outputs.join(" / ")}
+检查：${item.checkpoint}
+完成标准：${item.work.success}`).join("\n\n")}
+
+二、按工作台闭环执行
+${workbenchLoop.map((item, index) => `${index + 1}. ${item.step}：${item.body}`).join("\n")}
+
+三、结束前保存证据
+1. 我打开的模块：
+2. 我完成的操作：
+3. 我复制保存的产出：
+4. 我能证明完成的标准：
+5. 我下一步要补的问题：`;
+
+  async function copyAboutStartGuide() {
+    const copiedToClipboard = await copyText(aboutStartGuideText);
+    if (copiedToClipboard) {
+      setCopiedStartGuide(true);
+      setStartGuideStatus("工作台开始清单已复制到剪贴板。");
+      window.setTimeout(() => setCopiedStartGuide(false), 1400);
+      return;
+    }
+
+    setCopiedStartGuide(false);
+    setStartGuideStatus("复制失败，请手动选中文本复制。");
+  }
 
   return (
     <section
@@ -211,6 +253,21 @@ export function About() {
             </div>
           </div>
 
+          <div className="about-start-guide-panel" style={{ background: "var(--card)", border: "1.5px solid rgba(58,92,62,0.18)", borderRadius: 8, padding: "0.78rem", marginTop: "0.85rem", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.7rem", alignItems: "center", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+            <div>
+              <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", fontWeight: 900 }}>工作台开始清单</div>
+              <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem", fontWeight: 800 }}>
+                复制一份入口、首步、产出、完成标准和收尾记录，开始前先确定本次只做一个方向。
+              </div>
+            </div>
+            <button type="button" onClick={copyAboutStartGuide} aria-describedby="about-start-guide-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.8rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", whiteSpace: "nowrap" }}>
+              {copiedStartGuide ? "已复制" : "复制开始清单"}
+            </button>
+            <div id="about-start-guide-status" role="status" aria-live="polite" style={{ gridColumn: "1 / -1", minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900 }}>
+              {startGuideStatus}
+            </div>
+          </div>
+
           <div style={{ display: "grid", gap: "0.65rem", marginTop: "1.15rem" }}>
             <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", fontWeight: 900 }}>怎么开始</div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.6rem" }}>
@@ -300,6 +357,12 @@ export function About() {
             #about .about-use-card {
               transition: none !important;
               transform: none !important;
+            }
+          }
+
+          @media (max-width: 640px) {
+            #about .about-start-guide-panel {
+              grid-template-columns: 1fr !important;
             }
           }
         `}

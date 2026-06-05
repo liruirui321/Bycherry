@@ -1070,6 +1070,14 @@ function verifyLearnerProductPositioning() {
     "完成检查",
     "产出：{item.work.outputs[0]}",
     "完成：{item.work.success}",
+    "aboutStartGuideText",
+    "copyAboutStartGuide",
+    "about-start-guide-panel",
+    "about-start-guide-status",
+    "工作台开始清单",
+    "复制开始清单",
+    "先选一个入口，不同时展开多个方向",
+    "三、结束前保存证据",
   ];
   const retiredProductPatterns = [
     { label: "course-heavy home title", pattern: /科学、课程/ },
