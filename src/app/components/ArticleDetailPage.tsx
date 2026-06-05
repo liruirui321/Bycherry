@@ -80,6 +80,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copiedTemplate, setCopiedTemplate] = useState(false);
   const [copiedActionPack, setCopiedActionPack] = useState(false);
   const [copiedLearningRecord, setCopiedLearningRecord] = useState(false);
+  const [copiedReadingTaskPack, setCopiedReadingTaskPack] = useState(false);
   const [copiedPlatformConfig, setCopiedPlatformConfig] = useState(false);
   const [copiedPlatformReview, setCopiedPlatformReview] = useState(false);
   const [copiedAiAuditPrompts, setCopiedAiAuditPrompts] = useState(false);
@@ -108,6 +109,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     setRecordOutput("");
     setRecordNextStep("");
     setCopiedLearningRecord(false);
+    setCopiedReadingTaskPack(false);
     setCopyStatus("");
   }, [kind, slug]);
   const navArticles = [
@@ -236,6 +238,35 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     ? (pairedWorkSlugsByArticleSlug[article.slug] ?? [])
         .map((workSlug) => works.find((work) => work.slug === workSlug))
         .filter((work): work is (typeof works)[number] => Boolean(work))
+    : [];
+  const articleReadingTaskPackCards = article
+    ? [
+        {
+          title: "先做",
+          body: articleQuickStart?.step ?? actionSteps[0] ?? "先读正文，圈出一个要解决的问题。",
+          output: "开始前写下本篇要解决的一个卡点。",
+        },
+        {
+          title: "抓证据",
+          body: article.highlights.slice(0, 2).join("；") || "从正文中抓 2 条能支撑理解的证据。",
+          output: "每条证据都要能回答一个子问题。",
+        },
+        {
+          title: "留产出",
+          body: starterTemplate[0] ?? "保存一份学习记录或证据卡。",
+          output: "把模板填成自己的材料，而不是只复制空表。",
+        },
+        {
+          title: "验收",
+          body: checklist[0] ?? "完成后确认自己留下了可检查结果。",
+          output: "用一句话说明这篇内容是否真的被用上。",
+        },
+        {
+          title: "接着做",
+          body: pairedWorks[0] ? `${pairedWorks[0].title}：${pairedWorks[0].starter}` : "回到学习模块总览，选择一个相关工具继续操作。",
+          output: pairedWorks[0] ? `完成标准：${pairedWorks[0].success}` : "继续留下一个可保存产出。",
+        },
+      ]
     : [];
   const filledRecord = {
     question: recordQuestion.trim() || articleRecordFields[0]?.fallback || "",
@@ -483,6 +514,29 @@ ${pairedWorks.length ? pairedWorks.map((work, index) => `${index + 1}. ${work.ti
 九、下一步回看
 我还需要补充或重做：`
     : "";
+  const readingTaskPackText = article
+    ? `【阅读任务包】${article.title}
+
+一、先按 5 张卡执行
+${articleReadingTaskPackCards.map((item, index) => `${index + 1}. ${item.title}
+任务：${item.body}
+产出：${item.output}`).join("\n\n")}
+
+二、30 分钟执行节奏
+${articlePracticePlan.map((item) => `${item.label}：${item.body}`).join("\n")}
+
+三、正文抓取顺序
+${readingPath.map((item, index) => `${index + 1}. ${item.label}：${item.body}`).join("\n")}
+
+四、可套用模板
+${starterTemplateText}
+
+五、读完接着做
+${pairedWorks.length ? pairedWorks.map((work, index) => `${index + 1}. ${work.title}
+入口：${work.href}
+先做这个：${work.starter}
+完成标准：${work.success}`).join("\n\n") : "回到学习模块总览，选择一个相关工具继续操作。"}`
+    : "";
   const summaryText = article
     ? `【阅读摘要】
 标题：${article.title}
@@ -524,6 +578,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
+      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -544,6 +599,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedSummary(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
+      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -564,6 +620,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedSummary(false);
       setCopiedTemplate(false);
       setCopiedLearningRecord(false);
+      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -584,6 +641,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedSummary(false);
       setCopiedTemplate(false);
       setCopiedActionPack(false);
+      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -593,6 +651,27 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     }
 
     setCopiedLearningRecord(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyReadingTaskPack() {
+    if (!readingTaskPackText) return;
+    const copiedToClipboard = await copyText(readingTaskPackText);
+    if (copiedToClipboard) {
+      setCopiedReadingTaskPack(true);
+      setCopiedSummary(false);
+      setCopiedTemplate(false);
+      setCopiedActionPack(false);
+      setCopiedLearningRecord(false);
+      setCopiedPlatformConfig(false);
+      setCopiedPlatformReview(false);
+      setCopiedAiAuditPrompts(false);
+      setCopyStatus("阅读任务包已复制到剪贴板。");
+      window.setTimeout(() => setCopiedReadingTaskPack(false), 1400);
+      return;
+    }
+
+    setCopiedReadingTaskPack(false);
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -612,6 +691,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
+      setCopiedReadingTaskPack(false);
       setCopiedAiAuditPrompts(false);
       setCopyStatus("平台照填配置已复制到剪贴板。");
       window.setTimeout(() => setCopiedPlatformConfig(false), 1400);
@@ -632,6 +712,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
+      setCopiedReadingTaskPack(false);
       setCopiedAiAuditPrompts(false);
       setCopyStatus("测后复盘记录已复制到剪贴板。");
       window.setTimeout(() => setCopiedPlatformReview(false), 1400);
@@ -653,6 +734,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
+      setCopiedReadingTaskPack(false);
       setCopyStatus("AI 质检提示词包已复制到剪贴板。");
       window.setTimeout(() => setCopiedAiAuditPrompts(false), 1400);
       return;
@@ -799,6 +881,9 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     <button type="button" onClick={copyActionPack} aria-label={`复制${article.title}的行动包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.36rem 0.7rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
                       {copiedActionPack ? "已复制行动包" : "复制行动包"}
                     </button>
+                    <button type="button" onClick={copyReadingTaskPack} aria-label={`复制${article.title}的阅读任务包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                      {copiedReadingTaskPack ? "已复制任务包" : "复制任务包"}
+                    </button>
                     <button type="button" onClick={copyLearningRecord} aria-label={`复制${article.title}的学习记录`} aria-describedby="article-summary-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.22)", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
                       {copiedLearningRecord ? "已复制记录" : "复制学习记录"}
                     </button>
@@ -813,6 +898,34 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                       </span>
                       <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.76rem", lineHeight: 1.46, fontWeight: 900 }}>{item.body}</span>
                       <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.71rem", lineHeight: 1.45, fontWeight: 800 }}>{item.result}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {articleReadingTaskPackCards.length ? (
+              <div className="article-reading-task-pack" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.78rem", marginBottom: "0.85rem", display: "grid", gap: "0.66rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>阅读任务包</div>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.16rem", fontWeight: 800 }}>
+                      按 5 张卡完成阅读：先做、抓证据、留产出、验收、接着做。
+                    </div>
+                  </div>
+                  <button type="button" onClick={copyReadingTaskPack} aria-label={`复制${article.title}的阅读任务包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem" }}>
+                    {copiedReadingTaskPack ? "已复制" : "复制阅读任务包"}
+                  </button>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(158px, 1fr))", gap: "0.52rem" }}>
+                  {articleReadingTaskPackCards.map((item, index) => (
+                    <div key={item.title} style={{ background: index === 0 ? "var(--cherry-yellow-light)" : index === 1 ? "var(--cherry-blue-light)" : index === 2 ? "var(--cherry-sage-light)" : index === 3 ? "var(--cherry-peach-light)" : "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", display: "grid", gap: "0.34rem", minHeight: 136 }}>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: index === 0 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.7rem", fontWeight: 900 }}>
+                        <span aria-hidden="true" style={{ width: 18, height: 18, borderRadius: "50%", background: index === 0 ? "var(--cherry-red)" : "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+                        {item.title}
+                      </span>
+                      <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.46, fontWeight: 900 }}>{item.body}</span>
+                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 800 }}>产出：{item.output}</span>
                     </div>
                   ))}
                 </div>

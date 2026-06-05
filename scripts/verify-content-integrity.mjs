@@ -295,6 +295,16 @@ function verifyArticleOutcomeSnapshot() {
   expect(articleSource.includes("article-start-action-button"), "Article detail output snapshot must expose a direct start action.");
   expect(articleSource.includes("focusArticleStart"), "Article detail direct start action must focus the primary action or body anchor.");
   expect(articleSource.includes('id="article-primary-action"') && articleSource.includes('id="article-body-points"'), "Article detail pages must expose focusable action and body anchors.");
+  expect(articleSource.includes("articleReadingTaskPackCards"), "Article detail pages must derive a five-card reading task pack.");
+  expect(articleSource.includes("readingTaskPackText"), "Article detail pages must provide a copyable reading task pack.");
+  expect(articleSource.includes("copyReadingTaskPack"), "Article detail pages must expose a reading task pack copy action.");
+  expect(articleSource.includes("article-reading-task-pack"), "Article detail reading task pack must have a stable class for layout checks.");
+  expect(articleSource.includes("阅读任务包"), "Article detail pages must visibly name the reading task pack.");
+  expect(articleSource.includes("先做、抓证据、留产出、验收、接着做"), "Article detail reading task pack must show the learner execution sequence.");
+  expect(articleSource.includes("复制阅读任务包"), "Article detail reading task pack must expose a visible copy button.");
+  expect(articleSource.includes("【阅读任务包】"), "Article copied task pack must include a clear title.");
+  expect(articleSource.includes("三、正文抓取顺序"), "Article copied task pack must include the reading path.");
+  expect(articleSource.includes("五、读完接着做"), "Article copied task pack must include paired next actions.");
 }
 
 function verifyWorkJsonLdLearningOutcomes() {
