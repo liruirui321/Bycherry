@@ -118,7 +118,6 @@ function verifyVisibleLearningModuleCopy() {
 
   const requiredCopy = [
     "学习模块",
-    "学习模块前后导航",
     "首屏学习模块目录",
   ];
 
@@ -214,7 +213,7 @@ function verifyWorkDetailCardsStayCompact() {
   const source = read("src/app/components/WorkDetailPage.tsx");
 
   expect(!source.includes("isPlantEvolution"), "Work detail cards must not use plant-specific tall preview sizing.");
-  expect(source.includes('gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))"'), "Work detail previous/next navigation should stay compact.");
+  expect(!source.includes("<WorkSequenceLinks work={work} />"), "Work detail pages should not render repeated previous/next module entries below the product.");
   expect(!source.includes('gridTemplateColumns: "112px minmax(0, 1fr)"') && !source.includes("height: 88"), "Work detail pages must not reintroduce related-module preview cards.");
   expect(source.includes("conceptInputQuality"), "Concept explainer must judge whether learner inputs are complete enough.");
   expect(source.includes("concept-agent-input-grid"), "Concept explainer context inputs must be visible in the initial agent panel.");
@@ -468,18 +467,17 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes('id="work-primary-tool"') && workDetailSource.includes("tabIndex={-1}"), "Work detail primary tool anchor must be focusable.");
   const workHeroRenderIndex = workDetailSource.indexOf("<WorkHero work={work} compact />");
   const primaryToolRenderIndex = workDetailSource.indexOf('id="work-primary-tool"');
-  const sequenceLinksRenderIndex = workDetailSource.indexOf("<WorkSequenceLinks work={work} />");
-  expect(workHeroRenderIndex !== -1 && primaryToolRenderIndex !== -1 && sequenceLinksRenderIndex !== -1, "Work detail pages must render title, primary tool, and compact previous/next navigation.");
-  expect(workHeroRenderIndex < primaryToolRenderIndex && primaryToolRenderIndex < sequenceLinksRenderIndex, "Work detail pages must place the primary product directly after the compact title bar, followed by previous/next navigation.");
+  expect(workHeroRenderIndex !== -1 && primaryToolRenderIndex !== -1, "Work detail pages must render title and primary tool.");
+  expect(workHeroRenderIndex < primaryToolRenderIndex, "Work detail pages must place the primary product directly after the compact title bar.");
   for (const retiredWorkArticleBlock of ["pairedArticleSlugsByWorkSlug", "function WorkPairedReading", "配套文章", "work-paired-reading-link", "article.actionSteps[0]", "aria-label={`打开配套文章：${article.title}`", "全部文章 →"]) {
     expect(!workDetailSource.includes(retiredWorkArticleBlock), `Work detail pages should not reintroduce a separate paired-article entrance: ${retiredWorkArticleBlock}.`);
   }
   for (const slug of ["gene-expression", "concept-explainer", "research-prompt-kit", "plant-evolution-stories", "crispr-interactive"]) {
     expect(workDetailSource.includes(`"${slug}"`), `Work detail page routing must include ${slug}.`);
   }
-  expect(workDetailSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Work detail related work links must use the direct-to-tool href helper.");
-  expect(workDetailSource.includes("const toolHref = getWorkToolHref(item.work.href)"), "Work detail previous/next cards must derive direct-to-tool hrefs.");
-  expect(workDetailSource.includes("aria-label={`${item.label}模块：${item.work.title}`}"), "Work detail previous/next links must use short accessible labels.");
+  expect(!workDetailSource.includes("getWorkToolHref"), "Work detail pages should not keep related-work direct-link helper code when bottom entries are removed.");
+  expect(!workDetailSource.includes("学习模块前后导航"), "Work detail pages should not reintroduce previous/next module navigation copy.");
+  expect(!workDetailSource.includes("work-sequence-card"), "Work detail pages should not reintroduce previous/next module cards.");
   for (const retiredWorkTailBlock of ["function WorkContinueLinks", "<WorkContinueLinks work={work} />", "work-next-card", "继续探索", "全部学习模块 →", "继续探索${item.title}", "先做这个：{item.work.starter}"]) {
     expect(!workDetailSource.includes(retiredWorkTailBlock), `Work detail pages should not reintroduce duplicate long related-module cards: ${retiredWorkTailBlock}.`);
   }

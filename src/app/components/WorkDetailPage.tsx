@@ -5,8 +5,7 @@ import { works } from "./Works";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { EmptyStateCard } from "./EmptyStateCard";
 import { copyText } from "../clipboard";
-import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
-import { preloadRouteForHref } from "../routePrefetch";
+import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 type Work = (typeof works)[number];
 
@@ -1283,6 +1282,9 @@ ${localPreviewOutput}`;
               </div>
             </div>
 
+            <details className="research-agent-workflow-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem", marginBottom: "0.9rem" }}>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>流程与练习案例 · 2 项</summary>
+
             <details className="prompt-workflow-details" style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem", marginBottom: "0.9rem" }}>
               <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem", cursor: "pointer" }}>任务流程</summary>
               <div className="prompt-workflow-grid" role="group" aria-label="科研 Agent 任务流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.5rem", marginTop: "0.58rem" }}>
@@ -1350,6 +1352,7 @@ ${localPreviewOutput}`;
               </div>
               </div>
             </details>
+            </details>
 
             <textarea
               value={material}
@@ -1366,6 +1369,9 @@ ${localPreviewOutput}`;
                 清空材料
               </button>
             </div>
+
+            <details className="research-agent-review-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem", marginBottom: "0.9rem" }}>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>任务路由与复核记录 · 2 项</summary>
 
             <details className="research-route-suggestion-details" style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.62rem", marginBottom: "0.9rem" }}>
               <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>任务路由建议 · {suggestedRoute.title} · {routeConfidence}</summary>
@@ -1436,6 +1442,7 @@ ${localPreviewOutput}`;
                   </label>
                 ))}
               </div>
+            </details>
             </details>
 
             <div style={{ background: hasRunPreview ? "var(--cherry-sage-light)" : "var(--muted)", border: hasRunPreview ? "1.5px solid rgba(93,140,101,0.32)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
@@ -1591,7 +1598,10 @@ ${localPreviewOutput}`;
               )}
             </div>
 
-            <details className="research-agent-prompt-preview-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 8, padding: "0.62rem" }}>
+            <details className="research-agent-output-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem" }}>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>生成指令、质控与任务包 · 3 项</summary>
+
+            <details className="research-agent-prompt-preview-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 8, padding: "0.62rem", marginTop: "0.62rem" }}>
               <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>生成指令预览</summary>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.7rem", margin: "0.68rem 0 0.9rem" }}>
                 {[...activePrompt.output, ...activeMode.outputs].map((item, index) => (
@@ -1605,7 +1615,6 @@ ${localPreviewOutput}`;
                 {finalPrompt}
               </code>
             </details>
-          </div>
 
           <details className="research-agent-quality-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>质控清单与使用提醒</summary>
@@ -1638,7 +1647,9 @@ ${localPreviewOutput}`;
               {taskPackOutput}
             </code>
           </details>
+          </details>
         </div>
+      </div>
       </div>
 
       <style>
@@ -5778,67 +5789,6 @@ ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：
   );
 }
 
-function WorkSequenceLinks({ work }: { work: Work }) {
-  const currentIndex = works.findIndex((item) => item.slug === work.slug);
-  const previousWork = currentIndex > 0 ? works[currentIndex - 1] : null;
-  const nextWork = currentIndex >= 0 && currentIndex < works.length - 1 ? works[currentIndex + 1] : null;
-
-  if (!previousWork && !nextWork) return null;
-
-  function openWork(href: string, event: React.MouseEvent<HTMLAnchorElement>) {
-    if (!shouldUseClientNavigation(event)) return;
-    event.preventDefault();
-    navigateClient(href);
-  }
-
-  const navItems = [
-    previousWork ? { label: "上一个", direction: "←", work: previousWork, align: "left" as const } : null,
-    nextWork ? { label: "下一个", direction: "→", work: nextWork, align: "right" as const } : null,
-  ].filter((item): item is { label: string; direction: string; work: Work; align: "left" | "right" } => Boolean(item));
-
-  return (
-    <section style={{ padding: "0 1.5rem 2.5rem", fontFamily: "'Nunito', sans-serif" }}>
-      <nav aria-label="学习模块前后导航" style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.55rem" }}>
-        {navItems.map((item) => {
-          const toolHref = getWorkToolHref(item.work.href);
-          return (
-          <a
-            className="work-sequence-card"
-            key={item.work.slug}
-            href={toolHref}
-            aria-label={`${item.label}模块：${item.work.title}`}
-            onClick={(event) => openWork(toolHref, event)}
-            onMouseEnter={() => preloadRouteForHref(toolHref)}
-            onFocus={() => preloadRouteForHref(toolHref)}
-            onPointerDown={() => preloadRouteForHref(toolHref)}
-            style={{
-              display: "grid",
-              gap: "0.18rem",
-              justifyItems: item.align === "right" ? "end" : "start",
-              textAlign: item.align,
-              background: "transparent",
-              borderTop: "1px solid rgba(94,68,42,0.12)",
-              borderRadius: 0,
-              padding: "0.5rem 0",
-              color: "inherit",
-              textDecoration: "none",
-              minWidth: 0,
-            }}
-          >
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.72rem" }}>
-              {item.align === "left" ? item.direction : null}
-              {item.label}
-              {item.align === "right" ? item.direction : null}
-            </span>
-            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", lineHeight: 1.35, overflowWrap: "anywhere" }}>{item.work.title}</strong>
-          </a>
-          );
-        })}
-      </nav>
-    </section>
-  );
-}
-
 export function WorkDetailPage({ slug }: { slug: string }) {
   const work = works.find((item) => item.slug === slug);
 
@@ -5877,7 +5827,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
       >
         {work.slug === "gene-expression" ? <GeneExpressionTool /> : hasRichWorkContent(work.slug) ? <RichWorkContent slug={work.slug} /> : null}
       </section>
-      <WorkSequenceLinks work={work} />
       <style>
         {`
           .work-detail-back-link:focus-visible {
@@ -5892,14 +5841,12 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
           .work-detail-link:focus-visible,
           #work-primary-tool:focus-visible,
-          .work-sequence-card:focus-visible,
           .work-evidence-copy-button:focus-visible,
           .work-evidence-field-grid textarea:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
           }
 
-          .work-sequence-card,
           .work-evidence-copy-button {
             transition: transform 0.18s ease, box-shadow 0.18s ease;
           }
@@ -5929,8 +5876,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
             }
           }
 
-          .work-sequence-card:hover,
-          .work-sequence-card:focus-visible,
           .work-evidence-copy-button:hover,
           .work-evidence-copy-button:focus-visible {
             transform: translateY(-2px);
@@ -5938,7 +5883,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           }
 
           @media (prefers-reduced-motion: reduce) {
-            .work-sequence-card,
             .work-evidence-copy-button {
               transition: none !important;
               transform: none !important;
