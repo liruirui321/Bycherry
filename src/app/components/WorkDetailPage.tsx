@@ -2469,8 +2469,8 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
     <div id="plant-evolution-explorer" style={{ display: "grid", gap: "1rem" }}>
       <div className="plant-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "1rem", alignItems: "start" }}>
         <div style={{ display: "grid", gap: "0.85rem", alignContent: "start" }}>
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", overflow: "hidden" }}>
-            <svg viewBox="0 0 520 760" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化证据时间轴" style={{ width: "100%", display: "block", borderRadius: 18 }}>
+          <div className="plant-timeline-figure" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", overflow: "hidden" }}>
+            <svg className="plant-timeline-illustration" viewBox="0 0 520 760" preserveAspectRatio="xMidYMid slice" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化证据时间轴" style={{ width: "100%", display: "block", borderRadius: 18 }}>
               <defs>
                 <linearGradient id="plant-evolution-bg" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0" stopColor="#FFF8EA" />
@@ -2625,11 +2625,11 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
           </div>
         </div>
 
-        <aside style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-            <div style={{ color: "var(--cherry-red)", fontWeight: 900, fontSize: "1.05rem", marginBottom: "0.45rem" }}>{activeChapter.time}</div>
-            <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, lineHeight: 1.35, marginBottom: "0.7rem" }}>{activeChapter.title}</h3>
-            <div role="tablist" aria-label="植物演化内容层级" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem", marginBottom: "0.85rem" }}>
+        <aside className="plant-stage-detail-aside" style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
+          <div className="plant-stage-detail-card" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+            <div className="plant-active-time" style={{ color: "var(--cherry-red)", fontWeight: 900, fontSize: "1.05rem", marginBottom: "0.45rem" }}>{activeChapter.time}</div>
+            <h3 className="plant-active-title" style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, lineHeight: 1.35, marginBottom: "0.7rem" }}>{activeChapter.title}</h3>
+            <div className="plant-lens-tablist" role="tablist" aria-label="植物演化内容层级" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem", marginBottom: "0.85rem" }}>
               {plantLenses.map((lens) => {
                 const active = activePlantLens === lens.key;
                 return (
@@ -2936,7 +2936,81 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
 
           @media (max-width: 520px) {
             #plant-evolution-explorer {
-              gap: 0.72rem !important;
+              gap: 0.52rem !important;
+            }
+
+            #plant-evolution-explorer .plant-main-grid {
+              gap: 0.58rem !important;
+            }
+
+            #plant-evolution-explorer .plant-timeline-figure {
+              padding: 0.48rem !important;
+              border-radius: 10px !important;
+              box-shadow: none !important;
+            }
+
+            #plant-evolution-explorer .plant-timeline-illustration {
+              height: 318px !important;
+              border-radius: 8px !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-detail-aside {
+              gap: 0.52rem !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-detail-card {
+              padding: 0.66rem !important;
+              border-radius: 10px !important;
+              box-shadow: none !important;
+            }
+
+            #plant-evolution-explorer .plant-active-time {
+              font-size: 0.72rem !important;
+              line-height: 1.12 !important;
+              margin-bottom: 0.22rem !important;
+            }
+
+            #plant-evolution-explorer .plant-active-title {
+              font-size: 0.9rem !important;
+              line-height: 1.18 !important;
+              margin: 0 0 0.44rem !important;
+              display: -webkit-box !important;
+              -webkit-line-clamp: 2 !important;
+              -webkit-box-orient: vertical !important;
+              overflow: hidden !important;
+            }
+
+            #plant-evolution-explorer .plant-lens-tablist {
+              gap: 0.32rem !important;
+              margin-bottom: 0.46rem !important;
+            }
+
+            #plant-evolution-explorer .plant-lens-tablist button {
+              border-radius: 8px !important;
+              padding: 0.34rem 0.2rem !important;
+              font-size: 0.64rem !important;
+              line-height: 1.12 !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-detail-card [role="tabpanel"] {
+              gap: 0.42rem !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-detail-card p {
+              font-size: 0.76rem !important;
+              line-height: 1.46 !important;
+              margin: 0 !important;
+              display: -webkit-box !important;
+              -webkit-line-clamp: 4 !important;
+              -webkit-box-orient: vertical !important;
+              overflow: hidden !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-detail-card [role="tabpanel"] > div {
+              border-radius: 8px !important;
+              padding: 0.48rem !important;
+              font-size: 0.74rem !important;
+              line-height: 1.42 !important;
             }
 
             #plant-evolution-explorer .plant-stage-picker-grid {
