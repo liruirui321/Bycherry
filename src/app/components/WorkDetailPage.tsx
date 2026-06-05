@@ -1283,7 +1283,7 @@ ${localPreviewOutput}`;
             </div>
 
             <details className="research-agent-workflow-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem", marginBottom: "0.9rem" }}>
-              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>流程与练习案例 · 2 项</summary>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>流程、练习与复核 · 3 项</summary>
 
             <details className="prompt-workflow-details" style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem", marginBottom: "0.9rem" }}>
               <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem", cursor: "pointer" }}>任务流程</summary>
@@ -1352,26 +1352,6 @@ ${localPreviewOutput}`;
               </div>
               </div>
             </details>
-            </details>
-
-            <textarea
-              value={material}
-              onChange={(event) => updateMaterial(event.target.value)}
-              style={{ width: "100%", minHeight: 154, resize: "vertical", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.9rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.9rem", lineHeight: 1.6, boxSizing: "border-box", marginBottom: "0.9rem" }}
-              aria-label="科研材料输入框"
-            />
-
-            <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: "0.9rem" }}>
-              <button type="button" onClick={fillMaterialTemplate} style={{ background: "var(--cherry-sage-light)", color: "var(--cherry-forest)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                套用材料模板
-              </button>
-              <button type="button" onClick={clearMaterial} style={{ background: "var(--muted)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                清空材料
-              </button>
-            </div>
-
-            <details className="research-agent-review-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem", marginBottom: "0.9rem" }}>
-              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>任务路由与复核记录 · 2 项</summary>
 
             <details className="research-route-suggestion-details" style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.62rem", marginBottom: "0.9rem" }}>
               <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>任务路由建议 · {suggestedRoute.title} · {routeConfidence}</summary>
@@ -1444,6 +1424,22 @@ ${localPreviewOutput}`;
               </div>
             </details>
             </details>
+
+            <textarea
+              value={material}
+              onChange={(event) => updateMaterial(event.target.value)}
+              style={{ width: "100%", minHeight: 154, resize: "vertical", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.9rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.9rem", lineHeight: 1.6, boxSizing: "border-box", marginBottom: "0.9rem" }}
+              aria-label="科研材料输入框"
+            />
+
+            <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: "0.9rem" }}>
+              <button type="button" onClick={fillMaterialTemplate} style={{ background: "var(--cherry-sage-light)", color: "var(--cherry-forest)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                套用材料模板
+              </button>
+              <button type="button" onClick={clearMaterial} style={{ background: "var(--muted)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                清空材料
+              </button>
+            </div>
 
             <div style={{ background: hasRunPreview ? "var(--cherry-sage-light)" : "var(--muted)", border: hasRunPreview ? "1.5px solid rgba(93,140,101,0.32)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
@@ -3724,6 +3720,9 @@ If any of these are missing, add them before the final answer.
             输入任意概念，按稳定 skill 流程生成学习卡：先自测，再看类比、机制步骤、常见误区、可视化流程、迁移练习和即时小测。
           </div>
         </div>
+        <details className="concept-input-support-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", fontWeight: 900, cursor: "pointer" }}>输入预设与质量检查 · 2 项</summary>
+
         <details className="concept-input-mode-panel" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.62rem" }}>
           <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", fontWeight: 900, cursor: "pointer" }}>输入模式预设</summary>
           <div style={{ display: "flex", justifyContent: "space-between", gap: "0.7rem", alignItems: "center", flexWrap: "wrap" }}>
@@ -3799,6 +3798,7 @@ If any of these are missing, add them before the final answer.
             </div>
           ))}
         </div>
+        </details>
         </details>
       </div>
 
