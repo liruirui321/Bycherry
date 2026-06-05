@@ -108,6 +108,10 @@ function PromptKitContent() {
   const [copiedResearchSkill, setCopiedResearchSkill] = useState(false);
   const [hasRunPreview, setHasRunPreview] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
+  const [researchQuestionDraft, setResearchQuestionDraft] = useState("");
+  const [unsupportedClaimDraft, setUnsupportedClaimDraft] = useState("");
+  const [citationToVerifyDraft, setCitationToVerifyDraft] = useState("");
+  const [nextResearchActionDraft, setNextResearchActionDraft] = useState("");
   const prompts = [
     {
       title: "文献精读",
@@ -442,7 +446,6 @@ If any gate is missing, add it before the final answer.`;
     reviewer_questions: reviewerQuestions,
     human_boundaries: boundaryItems,
   };
-  const agentRequestJson = JSON.stringify(agentRequestPayload, null, 2);
   const acceptanceChecks = [
     {
       label: "证据可追溯",
@@ -460,6 +463,71 @@ If any gate is missing, add it before the final answer.`;
       detail: "输出必须包含 reviewer_questions，不能把风险判断自动定稿。",
     },
   ];
+  const learnerResearchReviewAnswers = {
+    question: researchQuestionDraft.trim(),
+    unsupportedClaim: unsupportedClaimDraft.trim(),
+    citationToVerify: citationToVerifyDraft.trim(),
+    nextAction: nextResearchActionDraft.trim(),
+  };
+  const learnerResearchReviewFields = [
+    {
+      id: "research-question-draft",
+      label: "我本次要判断",
+      prompt: "写成一个可回答的问题，不要只写主题名。",
+      value: researchQuestionDraft,
+      setter: setResearchQuestionDraft,
+      placeholder: activePrompt.title === "图表解读" ? "这张图能支持哪个观察事实，不能支持哪个机制结论？" : "这段材料能支持哪个结论，哪些信息还不够？",
+      pass: learnerResearchReviewAnswers.question.length >= 18 && /能|不能|是否|为什么|支持|判断|解释/.test(learnerResearchReviewAnswers.question),
+      passText: "问题需要能被证据回答或反驳。",
+    },
+    {
+      id: "unsupported-claim-draft",
+      label: "暂不采信的结论",
+      prompt: "写出一个当前材料还不能支持的说法。",
+      value: unsupportedClaimDraft,
+      setter: setUnsupportedClaimDraft,
+      placeholder: "当前材料还不能直接证明因果机制、统计稳健性或完整实验结论。",
+      pass: learnerResearchReviewAnswers.unsupportedClaim.length >= 18 && /不能|不支持|暂不|缺少|待核查|过度/.test(learnerResearchReviewAnswers.unsupportedClaim),
+      passText: "要明确写出暂不采信或证据不足的结论。",
+    },
+    {
+      id: "citation-to-verify-draft",
+      label: "优先回查来源",
+      prompt: "写出最需要回查的 DOI、图号、方法、样本量或统计标记。",
+      value: citationToVerifyDraft,
+      setter: setCitationToVerifyDraft,
+      placeholder: visibleEvidenceLines[0] ? `先回查：${visibleEvidenceLines[0]}` : "先回查 DOI / 图号 / 样本量 / 统计方法。",
+      pass: learnerResearchReviewAnswers.citationToVerify.length >= 12 && /DOI|PMID|图|表|方法|样本|统计|来源|原文|回查|figure|fig/i.test(learnerResearchReviewAnswers.citationToVerify),
+      passText: "要落到一个可回查来源或材料字段。",
+    },
+    {
+      id: "next-research-action-draft",
+      label: "下一步动作",
+      prompt: "写成下一步马上能做的检查、补充或改写动作。",
+      value: nextResearchActionDraft,
+      setter: setNextResearchActionDraft,
+      placeholder: reviewerQuestions[0],
+      pass: learnerResearchReviewAnswers.nextAction.length >= 12 && /补充|回查|删除|改写|比较|核对|确认|复核|标注|检查/.test(learnerResearchReviewAnswers.nextAction),
+      passText: "下一步要是可执行动作。",
+    },
+  ];
+  const learnerResearchReviewScore = learnerResearchReviewFields.filter((field) => field.pass).length;
+  const filledLearnerResearchReview = {
+    question: learnerResearchReviewAnswers.question || (activePrompt.title === "图表解读" ? "这张图能支持哪个观察事实，不能支持哪个机制结论？" : "这段材料能支持哪个结论，哪些信息还不够？"),
+    unsupportedClaim: learnerResearchReviewAnswers.unsupportedClaim || "当前材料还不能直接证明因果机制、统计稳健性或完整实验结论。",
+    citationToVerify: learnerResearchReviewAnswers.citationToVerify || (visibleEvidenceLines[0] ? `先回查：${visibleEvidenceLines[0]}` : "先回查 DOI / 图号 / 样本量 / 统计方法。"),
+    nextAction: learnerResearchReviewAnswers.nextAction || reviewerQuestions[0],
+  };
+  const agentRequestJson = JSON.stringify({
+    ...agentRequestPayload,
+    learner_review: {
+      completion_score: `${learnerResearchReviewScore}/4`,
+      question: filledLearnerResearchReview.question,
+      unsupported_claim: filledLearnerResearchReview.unsupportedClaim,
+      citation_to_verify: filledLearnerResearchReview.citationToVerify,
+      next_action: filledLearnerResearchReview.nextAction,
+    },
+  }, null, 2);
   const agentResponseContract = {
     version: "research-agent-response-v1",
     required_fields: apiOutputFields,
@@ -519,7 +587,14 @@ ${agentResponseJson}
 ${previewReportRows.map((item) => `${item.label}：${item.body}`).join("\n")}
 
 十、复核问题
-${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
+${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+十一、我的复核记录
+完成度：${learnerResearchReviewScore}/4
+1. 我本次要判断：${filledLearnerResearchReview.question}
+2. 暂不采信的结论：${filledLearnerResearchReview.unsupportedClaim}
+3. 优先回查来源：${filledLearnerResearchReview.citationToVerify}
+4. 下一步动作：${filledLearnerResearchReview.nextAction}`;
   const researchRecordOutput = `【科研 Agent 研究记录】
 任务：${activePrompt.title}
 工作模式：${activeMode.title}
@@ -550,7 +625,14 @@ ${previewReportRows.map((item, index) => `${index + 1}. ${item.label}：${item.b
 ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
 八、下一步动作
-${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
+${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+九、我的复核记录
+完成度：${learnerResearchReviewScore}/4
+1. 我本次要判断：${filledLearnerResearchReview.question}
+2. 暂不采信的结论：${filledLearnerResearchReview.unsupportedClaim}
+3. 优先回查来源：${filledLearnerResearchReview.citationToVerify}
+4. 下一步动作：${filledLearnerResearchReview.nextAction}`;
   const marketNeeds = [
     {
       title: "科研新人",
@@ -856,6 +938,18 @@ ${localPreviewOutput}`;
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  function clearResearchCopyStatus() {
+    setCopied(false);
+    setCopiedPack(false);
+    setCopiedPreview(false);
+    setCopiedJson(false);
+    setCopiedResponseJson(false);
+    setCopiedResearchRecord(false);
+    setCopiedCitationAudit(false);
+    setCopiedResearchSkill(false);
+    setCopyStatus("");
+  }
+
   function updateMaterial(value: string) {
     setMaterial(value);
     setActivePracticeCase("");
@@ -884,6 +978,10 @@ ${localPreviewOutput}`;
     setCopiedResearchRecord(false);
     setCopiedCitationAudit(false);
     setCopiedResearchSkill(false);
+    setResearchQuestionDraft("");
+    setUnsupportedClaimDraft("");
+    setCitationToVerifyDraft("");
+    setNextResearchActionDraft("");
     setHasRunPreview(false);
     setCopyStatus(`已载入${caseItem.title}，可以直接运行本地预览。`);
   }
@@ -906,6 +1004,10 @@ ${localPreviewOutput}`;
     setCopiedResearchRecord(false);
     setCopiedCitationAudit(false);
     setCopiedResearchSkill(false);
+    setResearchQuestionDraft("");
+    setUnsupportedClaimDraft("");
+    setCitationToVerifyDraft("");
+    setNextResearchActionDraft("");
     setHasRunPreview(false);
     setCopyStatus(`已切换到推荐任务：${suggestedRoute.title}。`);
   }
@@ -1231,6 +1333,47 @@ ${localPreviewOutput}`;
               </div>
             </div>
 
+            <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 8, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.72rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
+                <div>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>我的复核记录</div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem", fontWeight: 800 }}>
+                    先写下自己要判断的问题、暂不采信的结论、优先回查来源和下一步动作；复制研究记录时会一起带走。
+                  </div>
+                </div>
+                <span role="status" aria-live="polite" style={{ background: learnerResearchReviewScore === 4 ? "var(--cherry-forest)" : "var(--card)", border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 999, padding: "0.28rem 0.68rem", color: learnerResearchReviewScore === 4 ? "#FAF7F1" : "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+                  填写完成度 {learnerResearchReviewScore}/4
+                </span>
+              </div>
+              <div className="research-review-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.62rem" }}>
+                {learnerResearchReviewFields.map((field) => (
+                  <label key={field.id} htmlFor={field.id} style={{ background: "rgba(250,247,241,0.76)", border: `1px solid ${field.pass ? "rgba(93,140,101,0.28)" : "rgba(94,68,42,0.12)"}`, borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.42rem", alignContent: "start", minHeight: 206 }}>
+                    <span style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem", alignItems: "start" }}>
+                      <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>{field.label}</strong>
+                      <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.66rem", fontWeight: 900, whiteSpace: "nowrap" }}>
+                        {field.pass ? "可写入" : "待补"}
+                      </span>
+                    </span>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 800 }}>{field.prompt}</span>
+                    <textarea
+                      id={field.id}
+                      value={field.value}
+                      onChange={(event) => {
+                        field.setter(event.currentTarget.value);
+                        clearResearchCopyStatus();
+                      }}
+                      rows={4}
+                      placeholder={field.placeholder}
+                      style={{ width: "100%", minHeight: 88, resize: "vertical", border: "1.5px solid rgba(94,68,42,0.16)", borderRadius: 8, padding: "0.58rem", background: "#FAF7F1", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.76rem", lineHeight: 1.52, fontWeight: 800, boxSizing: "border-box" }}
+                    />
+                    <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 900 }}>
+                      {field.pass ? "会进入 API JSON 和研究记录。" : field.passText}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
             <div style={{ background: hasRunPreview ? "var(--cherry-sage-light)" : "var(--muted)", border: hasRunPreview ? "1.5px solid rgba(93,140,101,0.32)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
                 <div>
@@ -1430,6 +1573,11 @@ ${localPreviewOutput}`;
             outline-offset: 4px;
           }
 
+          #prompt-kit-builder textarea:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 3px;
+          }
+
           #prompt-kit-builder button {
             transition: transform 0.18s ease, box-shadow 0.18s ease;
           }
@@ -1445,6 +1593,10 @@ ${localPreviewOutput}`;
             }
 
             #prompt-kit-builder .research-agent-skill-panel {
+              grid-template-columns: 1fr !important;
+            }
+
+            #prompt-kit-builder .research-review-grid {
               grid-template-columns: 1fr !important;
             }
 

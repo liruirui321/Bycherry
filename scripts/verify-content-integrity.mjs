@@ -450,6 +450,16 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "research skill copy button", text: "复制 Skill" },
     { label: "research skill responsive panel", text: "research-agent-skill-panel" },
     { label: "research skill markdown frontmatter", text: "name: research-agent" },
+    { label: "learner research question draft", text: "researchQuestionDraft" },
+    { label: "learner unsupported claim draft", text: "unsupportedClaimDraft" },
+    { label: "learner citation verification draft", text: "citationToVerifyDraft" },
+    { label: "learner next action draft", text: "nextResearchActionDraft" },
+    { label: "learner research review fields", text: "learnerResearchReviewFields" },
+    { label: "learner research review score", text: "learnerResearchReviewScore" },
+    { label: "visible learner review panel", text: "我的复核记录" },
+    { label: "learner review grid", text: "research-review-grid" },
+    { label: "API learner review contract", text: "learner_review" },
+    { label: "research record learner review section", text: "九、我的复核记录" },
   ];
 
   const retiredWorkbenchPatterns = [
