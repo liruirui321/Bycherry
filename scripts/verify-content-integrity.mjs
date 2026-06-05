@@ -860,7 +860,10 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("pitfalls[0]"), "Article quick start must expose the first pitfall to avoid.");
   expect(articleDetailSource.includes("const itemAction = item.article.actionSteps[0]"), "Article previous/next cards must derive the adjacent article first action.");
   expect(articleDetailSource.includes("const itemCheck = item.article.checklist[0]"), "Article previous/next cards must derive the adjacent article completion check.");
+  expect(articleDetailSource.includes("const itemOutput = item.article.starterTemplate[0]"), "Article previous/next cards must derive the adjacent article saved output.");
   expect(articleDetailSource.includes("aria-label={`${item.label}：${item.article.title}。先做这个，${itemAction}。完成后检查，${itemCheck}`}"), "Article previous/next cards must include first action and completion check in accessible labels.");
+  expect(articleDetailSource.includes("article-nav-card-check") && articleDetailSource.includes("{itemCheck}"), "Article previous/next cards must visibly expose adjacent article completion checks.");
+  expect(articleDetailSource.includes("article-nav-card-output") && articleDetailSource.includes("{itemOutput}"), "Article previous/next cards must visibly expose adjacent article saved outputs.");
   expect(appSource.includes("teaches: [article.actionSteps[0], article.checklist[0], article.starterTemplate[0]]"), "Runtime article list JSON-LD must include first action, completion check, and learner output.");
   expect(appSource.includes("teaches: [note?.actionSteps[0] ?? essay?.actionSteps[0], note?.checklist[0] ?? essay?.checklist[0], note?.starterTemplate[0] ?? essay?.starterTemplate[0]]"), "Runtime article detail JSON-LD must include first action, completion check, and learner output.");
   expect(appSource.includes("const articleFirstAction = note?.actionSteps[0] ?? essay?.actionSteps[0] ?? null"), "Runtime article metadata must derive the first action step.");

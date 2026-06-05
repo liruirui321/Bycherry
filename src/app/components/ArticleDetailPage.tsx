@@ -1236,6 +1236,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   const itemBg = "tagBg" in item.article ? item.article.tagBg : item.article.labelBg;
                   const itemAction = item.article.actionSteps[0];
                   const itemCheck = item.article.checklist[0];
+                  const itemOutput = item.article.starterTemplate[0];
 
                   return (
                     <a
@@ -1265,6 +1266,14 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                       <span style={{ display: "block", background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem 0.56rem", color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.74rem", fontWeight: 900 }}>
                         <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.66rem", marginBottom: "0.14rem" }}>先做这个</span>
                         {itemAction}
+                      </span>
+                      <span className="article-nav-card-check" style={{ display: "block", background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem 0.56rem", color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.74rem", fontWeight: 900 }}>
+                        <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.66rem", marginBottom: "0.14rem" }}>完成后检查</span>
+                        {itemCheck}
+                      </span>
+                      <span className="article-nav-card-output" style={{ display: "block", background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem 0.56rem", color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.74rem", fontWeight: 900 }}>
+                        <span style={{ display: "block", color: itemColor, fontSize: "0.66rem", marginBottom: "0.14rem" }}>读完产出</span>
+                        {itemOutput}
                       </span>
                     </a>
                   );
