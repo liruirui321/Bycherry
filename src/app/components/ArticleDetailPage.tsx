@@ -1065,7 +1065,7 @@ ${platformAuditRubricText}
     : [];
   const aiMaterialAuditPromptText = aiMaterialAuditPrompts.length
     ? `【AI 学习材料质检提示词包】
-使用方式：把 AI 生成的学习材料粘贴进去，再逐条运行下面 4 个质检任务。
+操作流程：把 AI 生成的学习材料粘贴进去，再逐条运行下面 4 个质检任务。
 
 ${aiMaterialAuditPrompts.map((item, index) => `${index + 1}. ${item.title}
 提示词：${item.prompt}

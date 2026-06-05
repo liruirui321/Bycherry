@@ -3313,7 +3313,7 @@ ${visualStructureItems.map((item, index) => `${index + 1}. ${item.title}：${ite
 3. 能把概念迁移到一个新例子。
 4. 能说出一个不能直接推出的结论。`;
   const conceptModeGuideText = `【概念解释输入模式】
-使用方式：选最接近当前卡点的一种模式，套入输入框后再生成学习卡。
+操作流程：选最接近当前卡点的一种模式，套入输入框后再生成学习卡。
 
 ${conceptInputModes.map((mode, index) => `${index + 1}. ${mode.title}
 概念：${mode.concept}
@@ -3541,7 +3541,8 @@ If any of these are missing, add them before the final answer.
             输入任意概念，按稳定 skill 流程生成学习卡：先自测，再看类比、机制步骤、常见误区、可视化流程、迁移练习和即时小测。
           </div>
         </div>
-        <div className="concept-input-mode-panel" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.78rem", display: "grid", gap: "0.62rem" }}>
+        <details className="concept-input-mode-panel" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", fontWeight: 900, cursor: "pointer" }}>输入模式预设</summary>
           <div style={{ display: "flex", justifyContent: "space-between", gap: "0.7rem", alignItems: "center", flexWrap: "wrap" }}>
             <div>
               <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", fontWeight: 900 }}>先选一种输入模式</div>
@@ -3563,7 +3564,7 @@ If any of these are missing, add them before the final answer.
               </button>
             ))}
           </div>
-        </div>
+        </details>
         <div className="concept-agent-input-grid" style={{ display: "grid", gridTemplateColumns: "minmax(180px, 0.72fr) minmax(180px, 0.72fr) minmax(0, 1.1fr)", gap: "0.65rem", alignItems: "end" }}>
           <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
             输入概念
@@ -3627,9 +3628,9 @@ If any of these are missing, add them before the final answer.
             {copiedExplanationPack ? "已复制" : "复制解释包"}
           </button>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
+        <div className="concept-pack-card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
           {conceptExplanationPackCards.map((item, index) => (
-            <div key={item.title} style={{ background: index === 0 ? "var(--cherry-yellow-light)" : index === 1 ? "var(--cherry-blue-light)" : index === 2 ? "var(--cherry-sage-light)" : "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.72rem", minHeight: 152 }}>
+            <div className="concept-pack-card" key={item.title} style={{ background: index === 0 ? "var(--cherry-yellow-light)" : index === 1 ? "var(--cherry-blue-light)" : index === 2 ? "var(--cherry-sage-light)" : "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.72rem", minHeight: 152 }}>
               <span style={{ width: 22, height: 22, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900, marginBottom: "0.46rem" }}>{index + 1}</span>
               <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.34rem" }}>{item.title}</strong>
               <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800, marginBottom: "0.44rem" }}>{item.body}</span>
@@ -3639,8 +3640,9 @@ If any of these are missing, add them before the final answer.
         </div>
       </div>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.75rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+      <details className="concept-agent-run-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>Agent 运行面板 · {visualMode}</summary>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap", marginTop: "0.62rem" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>Agent 运行面板</div>
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.2rem", fontWeight: 800 }}>
@@ -3651,16 +3653,16 @@ If any of these are missing, add them before the final answer.
             {visualMode}
           </span>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.58rem" }}>
+        <div className="concept-agent-run-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.58rem" }}>
           {conceptAgentCards.map((item, index) => (
-            <div key={item.title} style={{ background: index === 1 ? "var(--cherry-blue-light)" : index === 3 ? "var(--cherry-sage-light)" : "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.72rem", minHeight: 122 }}>
+            <div className="concept-agent-run-card" key={item.title} style={{ background: index === 1 ? "var(--cherry-blue-light)" : index === 3 ? "var(--cherry-sage-light)" : "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.72rem", minHeight: 122 }}>
               <span style={{ width: 22, height: 22, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900, marginBottom: "0.46rem" }}>{index + 1}</span>
               <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.3rem" }}>{item.title}</strong>
               <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800 }}>{item.body}</span>
             </div>
           ))}
         </div>
-      </div>
+      </details>
 
       <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.75rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
@@ -3676,7 +3678,7 @@ If any of these are missing, add them before the final answer.
         </div>
         <div className="concept-visual-structure" role="group" aria-label={`${concept} 的${visualMode}可视化解释`} style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.65rem", alignItems: "stretch" }}>
           {visualStructureItems.map((item, index) => (
-            <div key={`${item.title}-${index}`} style={{ background: item.tone, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.76rem", minHeight: 142, position: "relative", overflow: "hidden" }}>
+            <div className="concept-visual-node" key={`${item.title}-${index}`} style={{ background: item.tone, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.76rem", minHeight: 142, position: "relative", overflow: "hidden" }}>
               <div aria-hidden="true" style={{ position: "absolute", right: 10, top: 10, width: 42, height: 42, borderRadius: "50%", background: "rgba(250,247,241,0.64)", border: `2px solid ${active.color}`, opacity: 0.68 }} />
               <div style={{ width: 24, height: 24, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.48rem", position: "relative", zIndex: 1 }}>{index + 1}</div>
               <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.34rem", position: "relative", zIndex: 1 }}>{item.title}</strong>
@@ -3703,9 +3705,9 @@ If any of these are missing, add them before the final answer.
             {copiedAudit ? "已复制" : "复制自查记录"}
           </button>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
+        <div className="concept-understanding-check-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>
           {understandingChecks.map((item, index) => (
-            <div key={item.title} style={{ background: index % 2 === 0 ? "var(--cherry-yellow-light)" : "var(--cherry-blue-light)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.72rem", minHeight: 142 }}>
+            <div className="concept-understanding-check-card" key={item.title} style={{ background: index % 2 === 0 ? "var(--cherry-yellow-light)" : "var(--cherry-blue-light)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.72rem", minHeight: 142 }}>
               <span style={{ width: 22, height: 22, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900, marginBottom: "0.46rem" }}>{index + 1}</span>
               <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.34rem" }}>{item.title}</strong>
               <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.55, fontWeight: 800, marginBottom: "0.42rem" }}>{item.prompt}</span>
@@ -3785,8 +3787,9 @@ If any of these are missing, add them before the final answer.
         </div>
       </div>
 
-      <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.04)", display: "grid", gap: "0.75rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
+      <details className="concept-skill-details" style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 18, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.04)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>概念解释 skill 协议</summary>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap", marginTop: "0.62rem" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>概念解释 skill 协议</div>
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.22rem", fontWeight: 800 }}>
@@ -3810,8 +3813,11 @@ If any of these are missing, add them before the final answer.
             </div>
           ))}
         </div>
-      </div>
+      </details>
 
+      <details className="concept-full-explanation-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>完整解释、练习与学习流程</summary>
+        <div style={{ display: "grid", gap: "0.75rem", marginTop: "0.75rem" }}>
       <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.75rem" }}>
         <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem", marginBottom: "0.62rem" }}>先修知识</div>
@@ -3990,18 +3996,21 @@ If any of these are missing, add them before the final answer.
           ))}
         </div>
       </div>
+        </div>
+      </details>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.75rem" }}>
+      <details className="concept-lesson-output-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>可复制学习卡全文</summary>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", margin: "0.68rem 0 0.75rem" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>可复制学习卡</div>
           <button type="button" onClick={copyLessonOutput} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
             {copiedLesson ? "已复制" : "复制"}
           </button>
         </div>
-        <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.95rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.68 }}>
+        <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.95rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.68, maxHeight: 280, overflow: "auto" }}>
           {lessonOutput}
         </code>
-      </div>
+      </details>
 
       <style>
         {`
@@ -4023,10 +4032,15 @@ If any of these are missing, add them before the final answer.
 
           @media (max-width: 860px) {
             #concept-explainer-tool .concept-agent-input-grid,
-            #concept-explainer-tool .concept-understanding-input-grid,
-            #concept-explainer-tool .concept-input-mode-grid,
             #concept-explainer-tool .concept-responsive-grid {
               grid-template-columns: 1fr !important;
+            }
+
+            #concept-explainer-tool .concept-input-mode-grid,
+            #concept-explainer-tool .concept-pack-card-grid,
+            #concept-explainer-tool .concept-understanding-input-grid,
+            #concept-explainer-tool .concept-understanding-check-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
 
             #concept-explainer-tool .concept-input-quality-grid {
@@ -4043,13 +4057,60 @@ If any of these are missing, add them before the final answer.
           }
 
           @media (max-width: 520px) {
-            #concept-explainer-tool .concept-input-quality-grid,
-            #concept-explainer-tool .concept-flow-map {
-              grid-template-columns: 1fr !important;
+            #concept-explainer-tool .concept-explanation-pack,
+            #concept-explainer-tool .concept-responsive-grid,
+            #concept-explainer-tool .concept-agent-run-details,
+            #concept-explainer-tool .concept-skill-details {
+              padding: 0.68rem !important;
+              border-radius: 12px !important;
             }
 
+            #concept-explainer-tool .concept-input-quality-grid,
+            #concept-explainer-tool .concept-flow-map,
+            #concept-explainer-tool .concept-agent-input-grid,
+            #concept-explainer-tool .concept-pack-card-grid,
+            #concept-explainer-tool .concept-understanding-input-grid,
+            #concept-explainer-tool .concept-understanding-check-grid,
             #concept-explainer-tool .concept-visual-structure {
-              grid-template-columns: 1fr !important;
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.44rem !important;
+            }
+
+            #concept-explainer-tool .concept-agent-input-grid textarea,
+            #concept-explainer-tool .concept-agent-input-grid input {
+              min-height: 42px !important;
+              font-size: 0.7rem !important;
+              padding: 0.46rem !important;
+            }
+
+            #concept-explainer-tool .concept-pack-card,
+            #concept-explainer-tool .concept-visual-node,
+            #concept-explainer-tool .concept-understanding-check-card {
+              min-height: 0 !important;
+              padding: 0.54rem !important;
+              border-radius: 10px !important;
+            }
+
+            #concept-explainer-tool .concept-pack-card span,
+            #concept-explainer-tool .concept-visual-node span,
+            #concept-explainer-tool .concept-understanding-check-card span {
+              font-size: 0.66rem !important;
+              line-height: 1.3 !important;
+            }
+
+            #concept-explainer-tool .concept-pack-card > span:nth-of-type(2),
+            #concept-explainer-tool .concept-visual-node > span,
+            #concept-explainer-tool .concept-understanding-check-card > span:nth-of-type(2) {
+              overflow: hidden !important;
+              display: -webkit-box !important;
+              -webkit-line-clamp: 3 !important;
+              -webkit-box-orient: vertical !important;
+            }
+
+            #concept-explainer-tool .concept-understanding-input-grid textarea {
+              min-height: 72px !important;
+              font-size: 0.7rem !important;
+              padding: 0.46rem !important;
             }
 
             #concept-explainer-tool .concept-visual-connector {
@@ -5298,10 +5359,10 @@ ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：
   }
 
   return (
-    <section aria-labelledby="work-completion-evidence-heading" style={{ padding: "1.05rem 1.5rem 1.15rem", fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
-      <div className="work-completion-evidence-panel" style={{ maxWidth: 1060, margin: "0 auto", background: "var(--cherry-sage-light)", border: "1px solid rgba(93,140,101,0.18)", borderRadius: 8, padding: "0.82rem", display: "grid", gap: "0.58rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.72rem", flexWrap: "wrap" }}>
-          <div style={{ display: "grid", gap: "0.16rem" }}>
+    <section aria-labelledby="work-completion-evidence-heading" style={{ padding: "0.62rem 1.5rem 0.68rem", fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
+      <div className="work-completion-evidence-panel" style={{ maxWidth: 1060, margin: "0 auto", background: "var(--cherry-sage-light)", border: "1px solid rgba(93,140,101,0.18)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.42rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.62rem", flexWrap: "wrap" }}>
+          <div style={{ display: "grid", gap: "0.12rem" }}>
             <h2 id="work-completion-evidence-heading" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.3, fontWeight: 900 }}>完成证据</h2>
             <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>
               操作完成后，把观察、产出和下一步问题留在这里。
@@ -5328,16 +5389,16 @@ ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：
             {copiedEvidence ? "已复制" : "复制复盘模板"}
           </button>
         </div>
-        <div role="list" aria-label={`${work.title}完成后需要留下的学习证据`} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.42rem" }}>
+        <div className="work-evidence-item-grid" role="list" aria-label={`${work.title}完成后需要留下的学习证据`} style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.34rem" }}>
           {evidenceItems.map((item, index) => (
-            <span key={item} role="listitem" style={{ background: "rgba(250,247,241,0.66)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.4, fontWeight: 900 }}>
+            <span key={item} role="listitem" style={{ background: "rgba(250,247,241,0.66)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.36rem 0.42rem", color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.32, fontWeight: 900 }}>
               {index + 1}. {item}
             </span>
           ))}
         </div>
-        <div className="work-evidence-field-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.42rem" }}>
+        <div className="work-evidence-field-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.34rem" }}>
           {evidenceFieldItems.map((field) => (
-            <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.26rem", color: "var(--cherry-warm-brown)", fontSize: "0.68rem", fontWeight: 900 }}>
+            <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.22rem", color: "var(--cherry-warm-brown)", fontSize: "0.66rem", fontWeight: 900 }}>
               {field.label}
               <textarea
                 id={field.id}
@@ -5349,34 +5410,34 @@ ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：
                 }}
                 rows={2}
                 placeholder={field.placeholder}
-                style={{ width: "100%", minHeight: 58, boxSizing: "border-box", border: "1px solid rgba(94,68,42,0.14)", borderRadius: 8, background: "rgba(250,247,241,0.72)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800, padding: "0.46rem", resize: "vertical" }}
+                style={{ width: "100%", minHeight: 46, boxSizing: "border-box", border: "1px solid rgba(94,68,42,0.14)", borderRadius: 8, background: "rgba(250,247,241,0.72)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.68rem", lineHeight: 1.35, fontWeight: 800, padding: "0.36rem", resize: "vertical" }}
               />
             </label>
           ))}
         </div>
-        <div style={{ background: "rgba(250,247,241,0.6)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.38rem" }}>
-          {[
-            ["保存", filledEvidence.savedOutput],
-            ["观察", filledEvidence.observedChange],
-            ["证明", filledEvidence.completionProof],
-            ["下一步", filledEvidence.nextQuestion],
-          ].map(([label, body]) => (
-            <span key={label} style={{ display: "grid", gap: "0.12rem" }}>
-              <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>{label}</span>
-              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 900 }}>{body}</span>
-            </span>
-          ))}
-        </div>
-        <div style={{ background: "rgba(250,247,241,0.6)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", display: "grid", gap: "0.24rem" }}>
-          <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.68rem", fontWeight: 900 }}>复盘检查</span>
-          <div role="list" aria-label={`${work.title}复盘检查清单`} style={{ display: "grid", gap: "0.22rem" }}>
+        <details className="work-evidence-review-details" style={{ background: "rgba(250,247,241,0.6)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.42rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.68rem", fontWeight: 900, cursor: "pointer" }}>复盘检查与记录预览</summary>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.38rem", marginTop: "0.38rem" }}>
+            {[
+              ["保存", filledEvidence.savedOutput],
+              ["观察", filledEvidence.observedChange],
+              ["证明", filledEvidence.completionProof],
+              ["下一步", filledEvidence.nextQuestion],
+            ].map(([label, body]) => (
+              <span key={label} style={{ display: "grid", gap: "0.12rem" }}>
+                <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>{label}</span>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.34, fontWeight: 900 }}>{body}</span>
+              </span>
+            ))}
+          </div>
+          <div role="list" aria-label={`${work.title}复盘检查清单`} style={{ display: "grid", gap: "0.2rem", marginTop: "0.38rem" }}>
             {reflectionChecks.slice(0, 3).map((item, index) => (
-              <span key={item} role="listitem" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.38, fontWeight: 900 }}>
+              <span key={item} role="listitem" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.34, fontWeight: 900 }}>
                 {index + 1}. {item}
               </span>
             ))}
           </div>
-        </div>
+        </details>
         <div
           id="work-evidence-copy-status"
           role="status"
@@ -5517,8 +5578,27 @@ export function WorkDetailPage({ slug }: { slug: string }) {
             transition: transform 0.18s ease, box-shadow 0.18s ease;
           }
 
-          @media (max-width: 760px) {
+          @media (max-width: 900px) {
             .work-evidence-field-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+
+            .work-evidence-item-grid {
+              grid-template-columns: 1fr !important;
+            }
+          }
+
+          @media (max-width: 520px) {
+            .work-evidence-field-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+
+            .work-completion-evidence-panel {
+              padding: 0.5rem !important;
+              gap: 0.34rem !important;
+            }
+
+            .work-evidence-review-details > div {
               grid-template-columns: 1fr !important;
             }
           }
