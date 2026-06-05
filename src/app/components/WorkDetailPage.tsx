@@ -3759,6 +3759,8 @@ If any of these are missing, add them before the final answer.
             </button>
           </div>
         </div>
+        <details className="concept-input-quality-details" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.62rem" }}>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>输入质量检查 · {conceptInputQualityScore}/5</summary>
         <div className="concept-input-quality-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: "0.55rem" }}>
           {conceptInputQuality.map((item) => (
             <div key={item.label} style={{ background: item.status === "已填写" || item.status === "可用" ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", minHeight: 92 }}>
@@ -3770,6 +3772,7 @@ If any of these are missing, add them before the final answer.
             </div>
           ))}
         </div>
+        </details>
       </div>
 
       <div className="concept-explanation-pack" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.78rem" }}>
@@ -4197,6 +4200,7 @@ If any of these are missing, add them before the final answer.
           }
 
           #concept-explainer-tool .concept-understanding-check-details[open],
+          #concept-explainer-tool .concept-input-quality-details[open],
           #concept-explainer-tool .concept-understanding-record-details[open] {
             display: grid;
             gap: 0.65rem;
@@ -4233,6 +4237,7 @@ If any of these are missing, add them before the final answer.
             #concept-explainer-tool .concept-responsive-grid,
             #concept-explainer-tool .concept-agent-run-details,
             #concept-explainer-tool .concept-skill-details,
+            #concept-explainer-tool .concept-input-quality-details,
             #concept-explainer-tool .concept-understanding-check-details,
             #concept-explainer-tool .concept-understanding-record-details {
               padding: 0.68rem !important;
