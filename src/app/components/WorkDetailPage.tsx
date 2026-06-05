@@ -5516,15 +5516,15 @@ function WorkPairedReading({ work }: { work: Work }) {
           </div>
           <a
             className="work-detail-link"
-            href="/#notes"
+            href="/#research"
             onClick={(event) => {
               if (!shouldUseClientNavigation(event)) return;
               event.preventDefault();
-              navigateHome("#notes");
+              navigateHome("#research");
             }}
             style={{ color: "var(--cherry-forest)", textDecoration: "none", fontWeight: 900, fontSize: "0.78rem" }}
           >
-            全部学习资料 →
+            全部文章 →
           </a>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "0.72rem" }}>

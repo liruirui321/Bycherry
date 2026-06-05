@@ -256,9 +256,9 @@ function verifyArticleCardsStayStructured() {
 
   expect(appSource.includes("<HomeLibrary />"), "Homepage must render the short article index.");
   expect(!appSource.includes("<ResearchEssays />") && !appSource.includes("<Notes />"), "Homepage should not render separate long Research and Notes sections.");
-  expect(homeLibrarySource.includes("home-library-link") && homeLibrarySource.includes("home-library-action") && homeLibrarySource.includes("home-library-output"), "Home library rows must expose compact action and output text.");
-  expect(homeLibrarySource.includes('id="research"') && homeLibrarySource.includes('id="notes"'), "Home library must keep research and notes anchors for existing navigation.");
-  expect(homeLibrarySource.includes("WebkitLineClamp: 2") && homeLibrarySource.includes("WebkitLineClamp: 1"), "Home library rows must clamp text instead of becoming long boxes.");
+  expect(homeLibrarySource.includes("home-library-link") && homeLibrarySource.includes("home-library-meta"), "Home library rows must expose compact article metadata.");
+  expect(homeLibrarySource.includes('id="research"') && !homeLibrarySource.includes('id="notes"'), "Home library must collapse article anchors into one short section.");
+  expect(!homeLibrarySource.includes("WebkitLineClamp"), "Home library rows must avoid long clamped descriptions on the homepage.");
   expect(!homeLibrarySource.includes("note-card") && !homeLibrarySource.includes("research-card"), "Home library must not reintroduce article card layouts.");
 }
 
@@ -437,13 +437,13 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(staticIndexSource.includes("完成标准："), "Static index fallback must expose concrete completion standards.");
   expect(heroSource.includes("{work.starter}"), "Homepage hero work cards must expose first concrete starter actions.");
   expect(heroSource.includes("{work.success}"), "Homepage hero work cards must expose concrete completion standards.");
-  expect(heroSource.includes("hero-work-outcome") && heroSource.includes('{work.outputs.slice(0, 2).join(" / ")}'), "Homepage hero work cards must visibly expose saved outputs.");
+  expect(heroSource.includes("hero-work-outcome") && heroSource.includes("{work.outputs[0]}"), "Homepage hero work cards must visibly expose the primary saved output.");
   expect(heroSource.includes("hero-work-completion") && heroSource.includes("{work.action}"), "Homepage hero work cards must visibly expose the module action without adding another detail panel.");
   expect(heroSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage hero work cards must include starter and completion standard in accessible labels.");
   expect(heroSource.includes('id="works"'), "Homepage #works anchor must point to the first-screen module directory instead of a duplicate section.");
   expect(heroSource.includes('aria-label="首屏学习模块目录"'), "Homepage hero must label the first-screen module directory.");
-  expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(178px, 1fr))"'), "Homepage hero module cards must stay compact enough to reveal multiple modules in the first screen.");
-  expect(heroSource.includes("minHeight: 154"), "Homepage hero module cards must use compact fixed heights.");
+  expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(176px, 1fr))"'), "Homepage hero module cards must stay compact enough to reveal multiple modules in the first screen.");
+  expect(heroSource.includes("minHeight: 94"), "Homepage hero module cards must use short fixed heights.");
   expect(heroSource.includes("scroll-snap-type: x proximity"), "Homepage hero mobile module directory must support horizontal scanning.");
   expect(heroSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Homepage hero must use the direct-to-tool work href helper without duplicate home-section CTAs.");
   expect(heroSource.includes("const toolHref = getWorkToolHref(work.href)") && heroSource.includes("href={toolHref}"), "Homepage first-screen module cards must link directly to work tools.");
@@ -1040,13 +1040,9 @@ function verifyLearnerFacingArticleCopy() {
     "题型：选择题 + 图表题 + 简答题",
     "审核使用",
     "学习资料库",
-    "学习方法库",
-    "科研证据库",
-    "文章索引",
-    "读证据和学方法",
+    "文章",
     "home-library-link",
-    "home-library-action",
-    "home-library-output",
+    "home-library-meta",
     "学习方法、科研证据、AI 创作和科研转译资料",
     "先做这个",
     "完成后检查",
@@ -1137,9 +1133,11 @@ function verifyLearnerFacingArticleCopy() {
   expect(staticIndexSource.includes("teaches: [route.firstAction, route.firstCheck, route.firstOutput].filter(Boolean)"), "Static article JSON-LD must include first action, completion check, and learner output.");
   expect(staticIndexSource.includes("完成后检查："), "Static index fallback must expose article completion checks.");
   expect(staticIndexSource.includes("可保存产出："), "Static index fallback must expose learner outputs.");
-  expect(homeLibrarySource.includes("note.actionSteps[0]") && homeLibrarySource.includes("note.checklist[0]") && homeLibrarySource.includes("note.starterTemplate[0]"), "Learning method home rows must expose first action, completion check, and output.");
-  expect(homeLibrarySource.includes("essay.actionSteps[0]") && homeLibrarySource.includes("essay.checklist[0]") && homeLibrarySource.includes("essay.starterTemplate[0]"), "Research evidence home rows must expose first action, completion check, and output.");
-  expect(homeLibrarySource.includes("aria-label={`打开${item.title}。先做这个，${item.firstAction}。完成后检查，${item.firstCheck}`}"), "Home library rows must include first action and completion check in accessible labels.");
+  expect(homeLibrarySource.includes("const articleItems = [...researchItems, ...noteItems]"), "Home article index must collapse notes and research into one compact list.");
+  expect(homeLibrarySource.includes('aria-label={`打开文章：${item.title}`}'), "Home article index rows must use short accessible labels.");
+  for (const retiredHomeLibraryCopy of ["学习方法库", "科研证据库", "文章索引", "读证据和学方法", "home-library-action", "home-library-output", "item.firstAction", "item.firstCheck", "item.firstOutput"]) {
+    expect(!homeLibrarySource.includes(retiredHomeLibraryCopy), `Home article index should stay short and not include retired long row copy: ${retiredHomeLibraryCopy}.`);
+  }
   for (const retiredNoteBlock of ["methodChecklistText", "copyMethodChecklist", "note-method-checklist-panel", "noteRouteGuides", "methodRouteGuideText", "copyMethodRouteGuide", "note-route-guide-panel", "note-recommended-start"]) {
     expect(!notesSource.includes(retiredNoteBlock), `Learning method library should not repeat route/checklist panels on the homepage: ${retiredNoteBlock}.`);
   }
@@ -1173,12 +1171,10 @@ function verifyLearnerProductPositioning() {
     "science learning lab",
     "首屏学习模块目录",
     "科研转译内容入口",
-    "看生命过程",
+    "生命过程",
     "拆概念",
-    "整理科研",
-    "更多工具",
-    "读证据",
-    "学方法",
+    "科研 Agent",
+    "文章",
     "nav-desktop-links",
   ];
   const retiredProductPatterns = [
@@ -1208,11 +1204,14 @@ function verifyLearnerProductPositioning() {
   expect(!appSource.includes("<About") && !appSource.includes('from "./components/About"'), "Homepage should not render a separate About section.");
   expect(!existsSync(resolve(root, "src/app/components/About.tsx")), "About component should stay removed so homepage remains a short content directory.");
   expect(navSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Navigation work shortcuts must use the direct-to-tool href helper.");
-  expect(navSource.includes('{ label: "看生命过程", href: getWorkToolHref("/works/gene-expression"), matchHref: "/works/gene-expression" }'), "Navigation life-process shortcut must open the gene expression tool directly.");
+  expect(navSource.includes('{ label: "生命过程", href: getWorkToolHref("/works/gene-expression"), matchHref: "/works/gene-expression" }'), "Navigation life-process shortcut must open the gene expression tool directly.");
   expect(navSource.includes('{ label: "拆概念", href: getWorkToolHref("/works/concept-explainer"), matchHref: "/works/concept-explainer" }'), "Navigation concept shortcut must open the concept tool directly.");
-  expect(navSource.includes('{ label: "整理科研", href: getWorkToolHref("/works/research-prompt-kit"), matchHref: "/works/research-prompt-kit" }'), "Navigation research shortcut must open the research tool directly.");
+  expect(navSource.includes('{ label: "科研 Agent", href: getWorkToolHref("/works/research-prompt-kit"), matchHref: "/works/research-prompt-kit" }'), "Navigation research shortcut must open the research tool directly.");
+  expect(navSource.includes('{ label: "文章", href: "/#research", matchHashes: ["#research", "#notes"] }'), "Navigation should collapse research and notes into one article entry.");
   expect(navSource.includes("if (\"matchHref\" in link && pathname === link.matchHref) return true;"), "Navigation active states must still match direct-to-tool shortcuts by pathname.");
-  for (const retiredNavGuide of ["currentRouteGuideText", "copyCurrentRouteGuide", "nav-route-guide-button", "nav-route-guide-status", "当前位置学习路径", "复制当前位置学习路径", 'import { copyText } from "../clipboard"', 'import { works } from "./Works"', 'import { notes } from "./Notes"', 'import { essays } from "./ResearchEssays"']) {
+  expect(navSource.includes('if ("matchHashes" in link && pathname === "/" && link.matchHashes.includes(hash || "#top")) return true;'), "Navigation article entry must track both article homepage anchors.");
+  expect(navSource.includes('if (pathname.startsWith("/notes/") || pathname.startsWith("/research/")) return link.href === "/#research";'), "Navigation article entry must stay active on article detail pages.");
+  for (const retiredNavGuide of ["更多工具", "读证据", "学方法", "看生命过程", "整理科研", "currentRouteGuideText", "copyCurrentRouteGuide", "nav-route-guide-button", "nav-route-guide-status", "当前位置学习路径", "复制当前位置学习路径", 'import { copyText } from "../clipboard"', 'import { works } from "./Works"', 'import { notes } from "./Notes"', 'import { essays } from "./ResearchEssays"']) {
     expect(!navSource.includes(retiredNavGuide), `Navigation should stay compact and not include retired copy-path guide: ${retiredNavGuide}.`);
   }
 }

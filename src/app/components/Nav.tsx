@@ -10,12 +10,10 @@ export function Nav() {
   const firstMobileLinkRef = useRef<HTMLAnchorElement | null>(null);
 
   const links = [
-    { label: "看生命过程", href: getWorkToolHref("/works/gene-expression"), matchHref: "/works/gene-expression" },
+    { label: "生命过程", href: getWorkToolHref("/works/gene-expression"), matchHref: "/works/gene-expression" },
     { label: "拆概念", href: getWorkToolHref("/works/concept-explainer"), matchHref: "/works/concept-explainer" },
-    { label: "整理科研", href: getWorkToolHref("/works/research-prompt-kit"), matchHref: "/works/research-prompt-kit" },
-    { label: "更多工具", href: "/#works" },
-    { label: "读证据", href: "/#research" },
-    { label: "学方法", href: "/#notes" },
+    { label: "科研 Agent", href: getWorkToolHref("/works/research-prompt-kit"), matchHref: "/works/research-prompt-kit" },
+    { label: "文章", href: "/#research", matchHashes: ["#research", "#notes"] },
     { label: "联系", href: "/#contact" },
   ];
 
@@ -71,9 +69,8 @@ export function Nav() {
   function isActiveLink(link: (typeof links)[number]) {
     const { pathname, hash } = window.location;
     if ("matchHref" in link && pathname === link.matchHref) return true;
-    if (pathname.startsWith("/works/")) return link.href === "/#works";
-    if (pathname.startsWith("/notes/")) return link.href === "/#notes";
-    if (pathname.startsWith("/research/")) return link.href === "/#research";
+    if ("matchHashes" in link && pathname === "/" && link.matchHashes.includes(hash || "#top")) return true;
+    if (pathname.startsWith("/notes/") || pathname.startsWith("/research/")) return link.href === "/#research";
     return pathname === "/" && link.href === `/${hash || "#top"}`;
   }
 
