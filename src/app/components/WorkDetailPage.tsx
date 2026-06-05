@@ -1095,24 +1095,24 @@ ${localPreviewOutput}`;
           })}
         </aside>
 
-        <div style={{ display: "grid", gap: "1rem" }}>
-          <div className="research-agent-main-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "1.2rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
-            <div className="research-agent-main-header" style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.8rem" }}>
+        <div style={{ display: "grid", gap: "0.68rem" }}>
+          <div className="research-agent-main-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.82rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
+            <div className="research-agent-main-header" style={{ display: "flex", justifyContent: "space-between", gap: "0.72rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.58rem" }}>
               <div>
                 <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "1.05rem" }}>{activePrompt.title}</div>
                 <div className="research-agent-active-input" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", marginTop: "0.25rem" }}>输入材料：{activePrompt.input}</div>
               </div>
               <div className="research-agent-copy-actions" style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
-                <button type="button" onClick={copyPrompt} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+                <button type="button" onClick={copyPrompt} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                   {copied ? "已复制" : "复制模型指令"}
                 </button>
-                <button type="button" onClick={copyTaskPack} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+                <button type="button" onClick={copyTaskPack} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                   {copiedPack ? "已复制" : "复制任务包"}
                 </button>
-                <button type="button" onClick={copyAgentJson} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+                <button type="button" onClick={copyAgentJson} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                   {copiedJson ? "已复制" : "复制 API JSON"}
                 </button>
-                <button type="button" onClick={copyResponseJson} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
+                <button type="button" onClick={copyResponseJson} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                   {copiedResponseJson ? "已复制" : "复制返回契约"}
                 </button>
               </div>
@@ -1136,7 +1136,7 @@ ${localPreviewOutput}`;
               </div>
             </div>
 
-            <details className="research-agent-workflow-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem", marginBottom: "0.9rem" }}>
+            <details className="research-agent-workflow-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.56rem", marginBottom: "0.62rem" }}>
               <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>流程、练习与复核 · 3 项</summary>
 
             <details className="prompt-workflow-details" style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem", marginBottom: "0.9rem" }}>
@@ -2449,10 +2449,10 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
 
   return (
     <div id="plant-evolution-explorer" style={{ display: "grid", gap: "1rem" }}>
-      <div className="plant-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "1rem", alignItems: "start" }}>
-        <div style={{ display: "grid", gap: "0.85rem", alignContent: "start" }}>
-          <div className="plant-timeline-figure" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", overflow: "hidden" }}>
-            <svg className="plant-timeline-illustration" viewBox="0 0 520 760" preserveAspectRatio="xMidYMid slice" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化证据时间轴" style={{ width: "100%", display: "block", borderRadius: 18 }}>
+      <div className="plant-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "0.68rem", alignItems: "start" }}>
+        <div style={{ display: "grid", gap: "0.58rem", alignContent: "start" }}>
+          <div className="plant-timeline-figure" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", overflow: "hidden" }}>
+            <svg className="plant-timeline-illustration" viewBox="0 0 520 760" preserveAspectRatio="xMidYMid slice" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化证据时间轴" style={{ width: "100%", display: "block", borderRadius: 10 }}>
               <defs>
                 <linearGradient id="plant-evolution-bg" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0" stopColor="#FFF8EA" />
@@ -2607,15 +2607,15 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
           </div>
         </div>
 
-        <aside className="plant-stage-detail-aside" style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
-          <div className="plant-stage-detail-card" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-            <div className="plant-active-time" style={{ color: "var(--cherry-red)", fontWeight: 900, fontSize: "1.05rem", marginBottom: "0.45rem" }}>{activeChapter.time}</div>
-            <h3 className="plant-active-title" style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, lineHeight: 1.35, marginBottom: "0.7rem" }}>{activeChapter.title}</h3>
-            <div className="plant-lens-tablist" role="tablist" aria-label="植物演化内容层级" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem", marginBottom: "0.85rem" }}>
+        <aside className="plant-stage-detail-aside" style={{ display: "grid", gap: "0.68rem", alignContent: "start" }}>
+          <div className="plant-stage-detail-card" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+            <div className="plant-active-time" style={{ color: "var(--cherry-red)", fontWeight: 900, fontSize: "0.86rem", marginBottom: "0.3rem" }}>{activeChapter.time}</div>
+            <h3 className="plant-active-title" style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, lineHeight: 1.26, marginBottom: "0.52rem", fontSize: "1rem" }}>{activeChapter.title}</h3>
+            <div className="plant-lens-tablist" role="tablist" aria-label="植物演化内容层级" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.32rem", marginBottom: "0.62rem" }}>
               {plantLenses.map((lens) => {
                 const active = activePlantLens === lens.key;
                 return (
-                  <button key={lens.key} type="button" role="tab" aria-selected={active} onClick={() => setActivePlantLens(lens.key)} style={{ background: active ? "var(--cherry-forest)" : "var(--muted)", color: active ? "#FAF7F1" : "var(--cherry-warm-mid)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.34rem", fontSize: "0.76rem", fontWeight: 900, cursor: "pointer" }}>
+                  <button key={lens.key} type="button" role="tab" aria-selected={active} onClick={() => setActivePlantLens(lens.key)} style={{ background: active ? "var(--cherry-forest)" : "var(--muted)", color: active ? "#FAF7F1" : "var(--cherry-warm-mid)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 999, padding: "0.34rem 0.28rem", fontSize: "0.7rem", fontWeight: 900, cursor: "pointer" }}>
                     {lens.label}
                   </button>
                 );
@@ -5044,8 +5044,8 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
   return (
     <section id="crispr-simulator" style={{ display: "grid", gap: "1rem" }}>
-      <div className="crispr-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.72fr)", gap: "1rem", alignItems: "stretch" }}>
-        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, overflow: "hidden", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+      <div className="crispr-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.72fr)", gap: "0.68rem", alignItems: "stretch" }}>
+        <div className="crispr-canvas-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, overflow: "hidden", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
           <svg viewBox="0 0 760 430" role="img" aria-label="CRISPR Cas9 识别、剪切和修复示意图" style={{ width: "100%", display: "block", background: "linear-gradient(180deg, #FFF8EA 0%, #F2E9DB 100%)" }}>
             <rect x={24} y={26} width={708} height={382} rx={90} fill="rgba(169,201,172,0.18)" stroke="rgba(93,140,101,0.28)" strokeWidth={2.5} strokeDasharray="8 8" />
             <text x={42} y={60} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>
@@ -5144,7 +5144,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
           </svg>
         </div>
 
-        <aside className="crispr-control-aside" style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
+        <aside className="crispr-control-aside" style={{ display: "grid", gap: "0.68rem", alignContent: "start" }}>
           <div className="crispr-flow-panel" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.68rem", boxShadow: "none" }}>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.46rem" }}>流程控制</div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 6 }}>
