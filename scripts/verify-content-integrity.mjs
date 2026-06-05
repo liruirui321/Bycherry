@@ -258,6 +258,9 @@ function verifyArticleCardsStayStructured() {
   expect(homeLibrarySource.includes('id="research"') && !homeLibrarySource.includes('id="notes"'), "Home library must collapse article anchors into one short section.");
   expect(homeLibrarySource.includes('const visibleArticles = articleItems.slice(0, 4)'), "Home library must show only a short latest-article strip.");
   expect(homeLibrarySource.includes("home-library-list") && homeLibrarySource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"'), "Home library must use one compact article row.");
+  expect(homeLibrarySource.includes('gridTemplateColumns: "minmax(0, 1fr) auto"') && homeLibrarySource.includes("minHeight: 42"), "Home library article entries must stay as short row links rather than long cards.");
+  expect(homeLibrarySource.includes("grid-template-columns: repeat(2, minmax(0, 1fr))"), "Home library mobile article links must show as a two-column compact list.");
+  expect(!homeLibrarySource.includes("overflow-x: auto") && !homeLibrarySource.includes("scroll-snap-type"), "Home library must not hide article links behind horizontal scrolling.");
   expect(!homeLibrarySource.includes("home-library-grid"), "Home library must not reintroduce a two-column long article directory.");
   expect(!homeLibrarySource.includes("visibleArticles.slice(0, Math.ceil"), "Home library must not split articles into repeated columns.");
   expect(!homeLibrarySource.includes("note-card") && !homeLibrarySource.includes("research-card"), "Home library must not reintroduce article card layouts.");
@@ -435,9 +438,12 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("aria-label={`打开${work.title}`}"), "Homepage hero work cards must use short accessible labels.");
   expect(heroSource.includes('id="works"'), "Homepage #works anchor must point to the first-screen module directory instead of a duplicate section.");
   expect(heroSource.includes('aria-label="首屏学习模块目录"'), "Homepage hero must label the first-screen module directory.");
-  expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(148px, 1fr))"'), "Homepage hero module cards must stay compact enough to reveal multiple modules in the first screen.");
-  expect(heroSource.includes("minHeight: 78"), "Homepage hero module cards must use short fixed heights.");
-  expect(heroSource.includes("scroll-snap-type: x proximity"), "Homepage hero mobile module directory must support horizontal scanning.");
+  expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(136px, 1fr))"'), "Homepage hero module cards must stay compact enough to reveal multiple modules in the first screen.");
+  expect(heroSource.includes("minHeight: 62"), "Homepage hero module cards must use short fixed heights.");
+  expect(heroSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr))"), "Homepage hero mobile module directory must show visible two-column entries.");
+  expect(heroSource.includes("width: calc(100vw - 2rem)"), "Homepage hero mobile module directory must stay inside the visible viewport.");
+  expect(heroSource.includes('boxSizing: "border-box"'), "Homepage hero containers must use border-box sizing to avoid mobile overflow.");
+  expect(!heroSource.includes("scroll-snap-type") && !heroSource.includes("overflow-x: auto"), "Homepage hero must not hide module entries behind horizontal scrolling.");
   expect(heroSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Homepage hero must use the direct-to-tool work href helper without duplicate home-section CTAs.");
   expect(heroSource.includes("const toolHref = getWorkToolHref(work.href)") && heroSource.includes("href={toolHref}"), "Homepage first-screen module cards must link directly to work tools.");
   for (const retiredHeroBlock of ["sessionPlans", "materialRoutes", "heroModuleStats", "hero-session-copy-status", "hero-material-route-grid", "hero-actions", "hero-cta", "navigateHomeSection", "science learning lab", "完成标准，", "先做这个，"]) {
