@@ -3830,7 +3830,8 @@ If any of these are missing, add them before the final answer.
         </div>
       </details>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.75rem" }}>
+      <details className="concept-visual-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>可视化解释图 · {visualMode} · {visualStructureItems.length} 个节点</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>可视化解释图</div>
@@ -3857,7 +3858,7 @@ If any of these are missing, add them before the final answer.
             </div>
           ))}
         </div>
-      </div>
+      </details>
 
       <details className="concept-understanding-check-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.04)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>理解验收卡</summary>
@@ -4208,6 +4209,7 @@ If any of these are missing, add them before the final answer.
 
           #concept-explainer-tool .concept-understanding-check-details[open],
           #concept-explainer-tool .concept-input-quality-details[open],
+          #concept-explainer-tool .concept-visual-details[open],
           #concept-explainer-tool .concept-understanding-record-details[open] {
             display: grid;
             gap: 0.65rem;
@@ -4245,6 +4247,7 @@ If any of these are missing, add them before the final answer.
             #concept-explainer-tool .concept-agent-run-details,
             #concept-explainer-tool .concept-skill-details,
             #concept-explainer-tool .concept-input-quality-details,
+            #concept-explainer-tool .concept-visual-details,
             #concept-explainer-tool .concept-understanding-check-details,
             #concept-explainer-tool .concept-understanding-record-details {
               padding: 0.68rem !important;
