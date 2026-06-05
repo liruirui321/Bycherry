@@ -917,6 +917,9 @@ function verifyLearnerFacingArticleCopy() {
     "当前显示",
     "方法执行清单",
     "科研证据执行清单",
+    "按当前卡点选择",
+    "按手头材料选择",
+    "复制路径",
     "查看证据",
     "学习方法、科研证据、AI 创作和科研转译资料",
     "先做这个",
@@ -1017,12 +1020,24 @@ function verifyLearnerFacingArticleCopy() {
   expect(notesSource.includes("note-method-checklist-status"), "Learning method library must expose method checklist copy status.");
   expect(notesSource.includes("note.starterTemplate.slice(0, 4)"), "Learning method checklist must include reusable starter templates.");
   expect(notesSource.includes("note.pitfalls[0]"), "Learning method checklist must include first pitfall reminders.");
+  expect(notesSource.includes("noteRouteGuides"), "Learning method library must provide route guides for learner starting points.");
+  expect(notesSource.includes("methodRouteGuideText"), "Learning method route guides must be copyable.");
+  expect(notesSource.includes("copyMethodRouteGuide"), "Learning method library must expose a route guide copy action.");
+  expect(notesSource.includes("note-route-guide-status"), "Learning method library must expose route guide copy status.");
+  expect(notesSource.includes("按当前卡点选择"), "Learning method library must frame choices around the learner's current blocker.");
+  expect(notesSource.includes("guide.output"), "Learning method route guide cards must expose saved learner outputs.");
   expect(researchSource.includes("aria-label={`打开科研证据：${essay.title}。先做这个，${essay.actionSteps[0]}。完成后检查，${essay.checklist[0]}`}"), "Research evidence cards must include first action and completion check in accessible labels.");
   expect(researchSource.includes("evidenceChecklistText"), "Research evidence library must provide a copyable evidence execution checklist.");
   expect(researchSource.includes("copyEvidenceChecklist"), "Research evidence library must expose an evidence checklist copy action.");
   expect(researchSource.includes("research-evidence-checklist-status"), "Research evidence library must expose evidence checklist copy status.");
   expect(researchSource.includes("essay.starterTemplate.slice(0, 4)"), "Research evidence checklist must include evidence starter templates.");
   expect(researchSource.includes("essay.pitfalls[0]"), "Research evidence checklist must include first pitfall reminders.");
+  expect(researchSource.includes("evidenceRouteGuides"), "Research evidence library must provide route guides for learner materials.");
+  expect(researchSource.includes("evidenceRouteGuideText"), "Research evidence route guides must be copyable.");
+  expect(researchSource.includes("copyEvidenceRouteGuide"), "Research evidence library must expose a route guide copy action.");
+  expect(researchSource.includes("research-route-guide-status"), "Research evidence library must expose route guide copy status.");
+  expect(researchSource.includes("按手头材料选择"), "Research evidence library must frame choices around the learner's available material.");
+  expect(researchSource.includes("guide.output"), "Research evidence route guide cards must expose saved learner outputs.");
 }
 
 function verifyLearnerProductPositioning() {

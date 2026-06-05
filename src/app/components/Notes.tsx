@@ -121,6 +121,33 @@ export const notes = [
   },
 ];
 
+const noteRouteGuides = [
+  {
+    need: "我想检查 AI 生成的学习材料",
+    slug: "ai-course-development",
+    action: "先把目标、误解、练习和复盘拆开审",
+    output: "一张 AI 材料质检表",
+  },
+  {
+    need: "我想读懂一段植物基因组证据",
+    slug: "plant-genome-evidence-chain",
+    action: "先抓住现象、证据、解释和限制四格",
+    output: "一张证据链四格卡",
+  },
+  {
+    need: "我想整理自己的项目学习过程",
+    slug: "pbl-rubric-evidence",
+    action: "先把任务节点和可保存证据对齐",
+    output: "一张项目证据表",
+  },
+  {
+    need: "我想让 AI 创作流程更稳定",
+    slug: "ai-comic-video-workflow",
+    action: "先锁定角色资产、镜头表和坏案例记录",
+    output: "一份可复用生成记录",
+  },
+];
+
 function navigateTo(href: string, event?: React.MouseEvent<HTMLAnchorElement>) {
   if (event && !shouldUseClientNavigation(event)) return;
   event?.preventDefault();
@@ -183,9 +210,29 @@ export function Notes() {
   const [activeTag, setActiveTag] = useState("全部");
   const [copiedMethodChecklist, setCopiedMethodChecklist] = useState(false);
   const [methodChecklistStatus, setMethodChecklistStatus] = useState("");
+  const [copiedMethodRouteGuide, setCopiedMethodRouteGuide] = useState(false);
+  const [methodRouteGuideStatus, setMethodRouteGuideStatus] = useState("");
   const noteTags = ["全部", ...Array.from(new Set(notes.map((note) => note.tag)))];
   const filteredNotes = activeTag === "全部" ? notes : notes.filter((note) => note.tag === activeTag);
   const recommendedNote = notes.find((note) => note.slug === "ai-course-development") ?? notes[0];
+  const visibleRouteGuides = noteRouteGuides
+    .map((guide) => ({ ...guide, note: notes.find((note) => note.slug === guide.slug) }))
+    .filter((guide): guide is (typeof noteRouteGuides)[0] & { note: (typeof notes)[0] } => Boolean(guide.note))
+    .filter((guide) => activeTag === "全部" || guide.note.tag === activeTag);
+  const methodRouteGuideText = `【By Cherry 方法选择路径】
+当前范围：${activeTag === "全部" ? "全部学习方法" : activeTag}
+
+${visibleRouteGuides.map((guide, index) => `${index + 1}. ${guide.need}
+打开：${guide.note.title}
+入口：${guide.note.href}
+先做这个：${guide.action}
+读完留下：${guide.output}
+验收检查：${guide.note.checklist[0]}`).join("\n\n")}
+
+使用方式
+1. 先选最接近当前卡点的一条路径。
+2. 打开对应文章，只完成第一步动作。
+3. 保存读完产出，再决定是否进入下一篇。`;
   const methodChecklistText = `【By Cherry 方法执行清单】
 当前范围：${activeTag === "全部" ? "全部学习方法" : activeTag}
 文章数量：${filteredNotes.length}
@@ -214,6 +261,19 @@ ${note.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
 
     setCopiedMethodChecklist(false);
     setMethodChecklistStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyMethodRouteGuide() {
+    const copiedToClipboard = await copyText(methodRouteGuideText);
+    if (copiedToClipboard) {
+      setCopiedMethodRouteGuide(true);
+      setMethodRouteGuideStatus("方法选择路径已复制到剪贴板。");
+      window.setTimeout(() => setCopiedMethodRouteGuide(false), 1400);
+      return;
+    }
+
+    setCopiedMethodRouteGuide(false);
+    setMethodRouteGuideStatus("复制失败，请手动选中文本复制。");
   }
 
   return (
@@ -278,7 +338,7 @@ ${note.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
               className="note-filter-button"
               key={tag}
               type="button"
-              onClick={() => { setActiveTag(tag); setCopiedMethodChecklist(false); setMethodChecklistStatus(""); }}
+              onClick={() => { setActiveTag(tag); setCopiedMethodChecklist(false); setMethodChecklistStatus(""); setCopiedMethodRouteGuide(false); setMethodRouteGuideStatus(""); }}
               aria-pressed={activeTag === tag}
               style={{
                 background: activeTag === tag ? "var(--cherry-forest)" : "var(--card)",
@@ -298,6 +358,43 @@ ${note.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
         </div>
         <div role="status" aria-live="polite" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800, marginBottom: "1.2rem" }}>
           当前显示 {filteredNotes.length} 篇{activeTag === "全部" ? "学习方法" : activeTag}
+        </div>
+
+        <div className="note-route-guide-panel" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.9rem 0.95rem", marginBottom: "1.15rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", display: "grid", gap: "0.82rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.75rem", alignItems: "start" }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.92rem", fontWeight: 900, marginBottom: "0.22rem" }}>按当前卡点选择</div>
+              <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, fontWeight: 800 }}>
+                先根据自己现在要解决的问题选一条路径。每条路径都对应一篇文章、一个第一步动作和一个可保存产出。
+              </div>
+              <div id="note-route-guide-status" role="status" aria-live="polite" style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900, marginTop: "0.34rem" }}>
+                {methodRouteGuideStatus}
+              </div>
+            </div>
+            <button type="button" className="note-route-guide-button" onClick={copyMethodRouteGuide} aria-describedby="note-route-guide-status" style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.46rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem", whiteSpace: "nowrap" }}>
+              {copiedMethodRouteGuide ? "已复制" : "复制路径"}
+            </button>
+          </div>
+          <div className="note-route-guide-list" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.65rem" }}>
+            {visibleRouteGuides.map((guide) => (
+              <a
+                key={guide.slug}
+                className="note-route-guide-card"
+                href={guide.note.href}
+                aria-label={`按当前卡点打开：${guide.need}。对应文章：${guide.note.title}。读完留下：${guide.output}`}
+                onClick={(event) => navigateTo(guide.note.href, event)}
+                onMouseEnter={() => preloadRouteForHref(guide.note.href)}
+                onFocus={() => preloadRouteForHref(guide.note.href)}
+                onPointerDown={() => preloadRouteForHref(guide.note.href)}
+                style={{ color: "inherit", textDecoration: "none", background: "var(--muted)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.72rem 0.78rem", display: "grid", gap: "0.32rem" }}
+              >
+                <span style={{ color: "var(--cherry-red)", fontSize: "0.7rem", fontWeight: 900 }}>{guide.need}</span>
+                <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", lineHeight: 1.45, fontWeight: 900 }}>{guide.note.title}</span>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>先做：{guide.action}</span>
+                <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 900 }}>产出：{guide.output}</span>
+              </a>
+            ))}
+          </div>
         </div>
 
         <div className="note-method-checklist-panel" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.85rem 0.95rem", marginBottom: "1.15rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.8rem", alignItems: "center" }}>
@@ -409,6 +506,8 @@ ${note.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
           }
 
           #notes .note-recommended-start:focus-visible,
+          #notes .note-route-guide-card:focus-visible,
+          #notes .note-route-guide-button:focus-visible,
           #notes .note-method-checklist-button:focus-visible,
           #notes .note-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
@@ -434,10 +533,16 @@ ${note.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
           }
 
           @media (max-width: 640px) {
+            #notes .note-route-guide-panel > div:first-child,
             #notes .note-method-checklist-panel {
               grid-template-columns: 1fr !important;
             }
 
+            #notes .note-route-guide-list {
+              grid-template-columns: 1fr !important;
+            }
+
+            #notes .note-route-guide-button,
             #notes .note-method-checklist-button {
               width: 100%;
             }
