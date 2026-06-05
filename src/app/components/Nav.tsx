@@ -10,11 +10,11 @@ export function Nav() {
   const firstMobileLinkRef = useRef<HTMLAnchorElement | null>(null);
 
   const links = [
-    { label: "学习模块", href: "/#works" },
-    { label: "科学模拟", href: "/works/gene-expression" },
-    { label: "证据库", href: "/#research" },
-    { label: "方法库", href: "/#notes" },
-    { label: "关于", href: "/#about" },
+    { label: "看生命过程", href: "/works/gene-expression" },
+    { label: "拆概念", href: "/works/concept-explainer" },
+    { label: "整理科研", href: "/works/research-prompt-kit" },
+    { label: "读证据", href: "/#research" },
+    { label: "学方法", href: "/#notes" },
     { label: "联系", href: "/#contact" },
   ];
 
@@ -70,6 +70,8 @@ export function Nav() {
   function isActiveLink(href: string) {
     const { pathname, hash } = window.location;
     if (pathname === "/works/gene-expression") return href === "/works/gene-expression";
+    if (pathname === "/works/concept-explainer") return href === "/works/concept-explainer";
+    if (pathname === "/works/research-prompt-kit") return href === "/works/research-prompt-kit";
     if (pathname.startsWith("/works/")) return href === "/#works";
     if (pathname.startsWith("/notes/")) return href === "/#notes";
     if (pathname.startsWith("/research/")) return href === "/#research";
