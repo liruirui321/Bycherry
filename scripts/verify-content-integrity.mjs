@@ -848,6 +848,12 @@ function verifyLearnerFacingArticleCopy() {
     "复制已填写记录",
     "复制学习记录",
     "30 分钟执行节奏",
+    "读完接着做",
+    "pairedWorkSlugsByArticleSlug",
+    "article-paired-work-panel",
+    "article-paired-work-link",
+    "article-paired-work-step",
+    "article-paired-work-check",
   ];
   const retiredLearnerArticlePatterns = [
     { label: "old AI course title", pattern: /AI 可以参与课程开发/ },
@@ -886,6 +892,10 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("七、完成验收"), "Article learning records must include completion checks.");
   expect(articleDetailSource.includes("验收：${item.output}"), "Article completion cards must show observable pass criteria.");
   expect(articleDetailSource.includes("const articlePracticePlan"), "Article detail pages must derive a short execution plan.");
+  expect(articleDetailSource.includes("const pairedWorks"), "Article detail pages must derive paired work modules for next-step action.");
+  expect(articleDetailSource.includes("八、读完接着做"), "Article learning records must include paired module next actions.");
+  expect(articleDetailSource.includes("work.starter") && articleDetailSource.includes("work.success"), "Article paired module cards must expose starter actions and completion standards.");
+  expect(articleDetailSource.includes("aria-label={`打开配套模块：${work.title}。先做这个，${work.starter}。完成标准，${work.success}`}"), "Article paired module links must include starter and completion standard in accessible labels.");
   expect(articleDetailSource.includes("const learningRecordText"), "Article detail pages must include a copyable learning record.");
   expect(articleDetailSource.includes("copyLearningRecord"), "Article detail pages must provide a learning record copy action.");
   expect(articleDetailSource.includes("record-question-input"), "Article detail pages must expose a learner question input.");

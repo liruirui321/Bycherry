@@ -1,6 +1,7 @@
 import { IconBook, IconCheck, IconCoffee, IconLeafSmall } from "./Icons";
 import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
+import { works } from "./Works";
 import { EmptyStateCard } from "./EmptyStateCard";
 import { copyText } from "../clipboard";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
@@ -62,6 +63,17 @@ function navigateHome(hash: string) {
 function navigateToPath(href: string) {
   navigateClient(href);
 }
+
+const pairedWorkSlugsByArticleSlug: Record<string, string[]> = {
+  "ai-course-development": ["concept-explainer", "research-prompt-kit"],
+  "plant-genome-evidence-chain": ["plant-evolution-stories", "research-prompt-kit"],
+  "pbl-rubric-evidence": ["concept-explainer", "research-prompt-kit"],
+  "ai-comic-video-workflow": ["research-prompt-kit", "concept-explainer"],
+  "science-to-learning-question": ["plant-evolution-stories", "research-prompt-kit"],
+  "genome-assembly-story": ["plant-evolution-stories", "research-prompt-kit"],
+  "barcoding-evidence-chain": ["research-prompt-kit", "plant-evolution-stories"],
+  "ai-assessment-quality-control": ["concept-explainer", "gene-expression"],
+};
 
 export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: string }) {
   const [copiedSummary, setCopiedSummary] = useState(false);
@@ -219,6 +231,11 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
           fallback: pitfalls[0] ?? checklist[0] ?? "写下下一步要补的证据或资料。",
         },
       ]
+    : [];
+  const pairedWorks = article
+    ? (pairedWorkSlugsByArticleSlug[article.slug] ?? [])
+        .map((workSlug) => works.find((work) => work.slug === workSlug))
+        .filter((work): work is (typeof works)[number] => Boolean(work))
     : [];
   const filledRecord = {
     question: recordQuestion.trim() || articleRecordFields[0]?.fallback || "",
@@ -428,7 +445,13 @@ ${pitfalls.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 ${articleCompletionChecks.map((item, index) => `${index + 1}. ${item.title}：${item.body}
 验收：${item.output}`).join("\n\n")}
 
-八、下一步回看
+八、读完接着做
+${pairedWorks.length ? pairedWorks.map((work, index) => `${index + 1}. ${work.title}
+入口：${work.href}
+先做这个：${work.starter}
+完成标准：${work.success}`).join("\n\n") : "回到学习模块总览，选择一个相关工具继续操作。"}
+
+九、下一步回看
 我还需要补充或重做：`
     : "";
   const summaryText = article
@@ -994,6 +1017,64 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                 </div>
               ))}
             </div>
+
+            {pairedWorks.length ? (
+              <div className="article-paired-work-panel" style={{ background: "var(--card)", border: "1.5px solid rgba(58,92,62,0.18)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>读完接着做</div>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginTop: "0.18rem", fontWeight: 800 }}>
+                      文章解决方法和证据，配套模块负责把这一步变成可操作产出。
+                    </div>
+                  </div>
+                  <a
+                    className="article-detail-link"
+                    href="/#works"
+                    onClick={(event) => {
+                      if (!shouldUseClientNavigation(event)) return;
+                      event.preventDefault();
+                      navigateHome("#works");
+                    }}
+                    style={{ background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.34rem 0.68rem", textDecoration: "none", fontWeight: 900, fontSize: "0.74rem", whiteSpace: "nowrap" }}
+                  >
+                    全部学习模块
+                  </a>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.58rem" }}>
+                  {pairedWorks.map((work) => (
+                    <a
+                      key={work.slug}
+                      className="article-paired-work-link"
+                      href={work.href}
+                      aria-label={`打开配套模块：${work.title}。先做这个，${work.starter}。完成标准，${work.success}`}
+                      onMouseEnter={() => preloadRouteForHref(work.href)}
+                      onFocus={() => preloadRouteForHref(work.href)}
+                      onPointerDown={() => preloadRouteForHref(work.href)}
+                      onClick={(event) => {
+                        if (!shouldUseClientNavigation(event)) return;
+                        event.preventDefault();
+                        navigateToPath(work.href);
+                      }}
+                      style={{ background: "var(--muted)", border: `1.5px solid ${work.border}`, borderRadius: 8, padding: "0.7rem", color: "inherit", textDecoration: "none", display: "grid", gap: "0.5rem", minHeight: 166 }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
+                        <span aria-hidden="true" style={{ width: 34, height: 34, borderRadius: 8, background: work.color, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                          {work.icon}
+                        </span>
+                        <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", lineHeight: 1.35, fontWeight: 900 }}>{work.title}</span>
+                      </div>
+                      <div className="article-paired-work-step" style={{ display: "grid", gap: "0.2rem" }}>
+                        <span style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>先做这个</span>
+                        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>{work.starter}</span>
+                      </div>
+                      <div className="article-paired-work-check" style={{ borderTop: "1px solid rgba(94,68,42,0.1)", paddingTop: "0.45rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 900 }}>
+                        完成标准：{work.success}
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : null}
 
             {actionSteps.length ? (
               <div id="article-primary-action" tabIndex={-1} style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem" }}>
