@@ -74,6 +74,7 @@ function PromptKitContent() {
   const [copiedResponseJson, setCopiedResponseJson] = useState(false);
   const [copiedResearchRecord, setCopiedResearchRecord] = useState(false);
   const [copiedCitationAudit, setCopiedCitationAudit] = useState(false);
+  const [copiedResearchSkill, setCopiedResearchSkill] = useState(false);
   const [hasRunPreview, setHasRunPreview] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const prompts = [
@@ -295,6 +296,87 @@ ${visibleEvidenceLines.length ? visibleEvidenceLines.map((line, index) => `${ind
 2. 没有来源标识时，final_report 只能写成待核查摘要。
 3. 每个推断必须连接到 evidence_items 或 missing_fields。
 4. 会影响实验、投稿或署名责任的判断必须人工复核。`;
+  const researchAgentSkillPrompt = `---
+name: research-agent
+description: Use when a learner wants to turn research material into a traceable task route, evidence table, missing-field list, risk flags, reviewer questions, and a conservative report without inventing citations or conclusions.
+---
+
+# Research Agent
+
+## Role
+
+You are a research-learning agent for an adult learner. Help the learner organize research material into traceable evidence, cautious inferences, missing information, and next actions. Do not act as an automatic paper writer, citation generator, statistician, ethics reviewer, or final decision maker.
+
+## Input
+
+Ask for or infer these fields:
+
+- Task: literature reading, figure interpretation, experimental-design check, paper-logic check, reviewer-response planning, or terminology consistency check.
+- Source boundary: DOI, PMID, arXiv, paper title, figure number, table number, draft section, notes, or unknown.
+- Material: abstract, methods, figure legend, results paragraph, design notes, reviewer comments, or draft text.
+- Learner goal: what the learner wants to understand, check, rewrite, or decide.
+- Risk concern: overclaiming, missing control, small sample size, weak statistics, citation mismatch, unclear terminology, or unknown.
+- Output format: evidence table, study record, report outline, revision plan, reviewer questions, or API JSON contract.
+
+If the source boundary or material is missing, ask at most two short questions. If the learner continues without answering, label the source boundary as unknown and keep conclusions conservative.
+
+## Workflow
+
+1. Classify the task route from material signals.
+2. Summarize the provided material in 2-4 sentences without adding outside facts.
+3. Extract evidence_items as direct material lines or paraphrases tied to source locations.
+4. Separate observation, inference, missing_fields, and risk_flags.
+5. Generate reviewer_questions that the learner must answer before trusting the output.
+6. Produce a conservative final_report where every claim links to evidence_items, missing_fields, or risk_flags.
+7. Add a citation_check with source identifiers, figure/table positioning, sample/statistics clues, and conclusion boundaries.
+8. Finish with next_actions that the learner can actually perform.
+
+## Task Routes
+
+- Literature reading: extract research question, hypothesis, methods, evidence, author conclusion, limitations, and source-dependent checks.
+- Figure interpretation: read axes, units, groups, statistics, trend, uncertainty, what the figure supports, and what it cannot support.
+- Experimental-design check: inspect variables, controls, replicates, sample size, statistics, confounders, and conclusions affected by each risk.
+- Paper-logic check: map each conclusion to result evidence, find overclaiming, missing citations, terminology drift, and safer wording.
+- Reviewer response: classify each comment into experiment, analysis, rewrite, clarification, limitation, or impossible-to-complete item.
+- Terminology consistency: scan term variants, abbreviation first use, figure/body consistency, variable names, and proposed unified wording.
+
+## Output Contract
+
+Return these fields in a stable structure:
+
+1. task
+2. source_boundary
+3. material_summary
+4. route_reason
+5. evidence_items
+6. inference_items
+7. missing_fields
+8. risk_flags
+9. citation_check
+10. reviewer_questions
+11. final_report
+12. next_actions
+
+## Evidence Rules
+
+- Every evidence_item must include source_text or source_location.
+- Every inference_item must say which evidence_items support it.
+- If support is weak, mark the inference as tentative.
+- If material is absent, write missing_fields instead of inventing content.
+- Do not invent DOI, PMID, reference titles, figure numbers, sample size, p values, species, methods, or author conclusions.
+- Keep correlation, association, mechanism, causation, and speculation separate.
+
+## Completion Gate
+
+Before finishing, check that the learner has a usable output:
+
+- At least one evidence_item or a clear statement that no evidence line was provided.
+- At least three missing_fields or risk_flags when the material is incomplete.
+- At least three reviewer_questions for manual checking.
+- A final_report that avoids unsupported claims.
+- Next actions written as concrete checks, not vague advice.
+
+If any gate is missing, add it before the final answer.`;
   const boundaryItems = [
     "不保证论文结论正确，只整理材料和证据关系。",
     "不编造引用、DOI、样本量或统计结果；材料没有就标为待补充。",
@@ -613,6 +695,7 @@ ${localPreviewOutput}`;
       setCopiedResponseJson(false);
       setCopiedResearchRecord(false);
       setCopiedCitationAudit(false);
+      setCopiedResearchSkill(false);
       setCopyStatus("模型指令已复制到剪贴板。");
       window.setTimeout(() => setCopied(false), 1400);
       return;
@@ -632,6 +715,7 @@ ${localPreviewOutput}`;
       setCopiedResponseJson(false);
       setCopiedResearchRecord(false);
       setCopiedCitationAudit(false);
+      setCopiedResearchSkill(false);
       setCopyStatus("任务包已复制到剪贴板。");
       window.setTimeout(() => setCopiedPack(false), 1400);
       return;
@@ -651,6 +735,7 @@ ${localPreviewOutput}`;
       setCopiedResponseJson(false);
       setCopiedResearchRecord(false);
       setCopiedCitationAudit(false);
+      setCopiedResearchSkill(false);
       setCopyStatus("本地预览已复制到剪贴板。");
       window.setTimeout(() => setCopiedPreview(false), 1400);
       return;
@@ -670,6 +755,7 @@ ${localPreviewOutput}`;
       setCopiedResponseJson(false);
       setCopiedResearchRecord(false);
       setCopiedCitationAudit(false);
+      setCopiedResearchSkill(false);
       setCopyStatus("API 请求 JSON 已复制到剪贴板。");
       window.setTimeout(() => setCopiedJson(false), 1400);
       return;
@@ -689,6 +775,7 @@ ${localPreviewOutput}`;
       setCopiedJson(false);
       setCopiedResearchRecord(false);
       setCopiedCitationAudit(false);
+      setCopiedResearchSkill(false);
       setCopyStatus("API 返回契约已复制到剪贴板。");
       window.setTimeout(() => setCopiedResponseJson(false), 1400);
       return;
@@ -708,6 +795,7 @@ ${localPreviewOutput}`;
       setCopiedJson(false);
       setCopiedResponseJson(false);
       setCopiedCitationAudit(false);
+      setCopiedResearchSkill(false);
       setCopyStatus("研究记录已复制到剪贴板。");
       window.setTimeout(() => setCopiedResearchRecord(false), 1400);
       return;
@@ -727,6 +815,7 @@ ${localPreviewOutput}`;
       setCopiedJson(false);
       setCopiedResponseJson(false);
       setCopiedResearchRecord(false);
+      setCopiedResearchSkill(false);
       setCopyStatus("引用核查记录已复制到剪贴板。");
       window.setTimeout(() => setCopiedCitationAudit(false), 1400);
       return;
@@ -746,6 +835,7 @@ ${localPreviewOutput}`;
     setCopiedResponseJson(false);
     setCopiedResearchRecord(false);
     setCopiedCitationAudit(false);
+    setCopiedResearchSkill(false);
     setHasRunPreview(false);
     setCopyStatus("");
   }
@@ -762,6 +852,7 @@ ${localPreviewOutput}`;
     setCopiedResponseJson(false);
     setCopiedResearchRecord(false);
     setCopiedCitationAudit(false);
+    setCopiedResearchSkill(false);
     setHasRunPreview(false);
     setCopyStatus(`已载入${caseItem.title}，可以直接运行本地预览。`);
   }
@@ -783,8 +874,29 @@ ${localPreviewOutput}`;
     setCopiedResponseJson(false);
     setCopiedResearchRecord(false);
     setCopiedCitationAudit(false);
+    setCopiedResearchSkill(false);
     setHasRunPreview(false);
     setCopyStatus(`已切换到推荐任务：${suggestedRoute.title}。`);
+  }
+
+  async function copyResearchAgentSkill() {
+    const copiedToClipboard = await copyText(researchAgentSkillPrompt);
+    if (copiedToClipboard) {
+      setCopiedResearchSkill(true);
+      setCopied(false);
+      setCopiedPack(false);
+      setCopiedPreview(false);
+      setCopiedJson(false);
+      setCopiedResponseJson(false);
+      setCopiedResearchRecord(false);
+      setCopiedCitationAudit(false);
+      setCopyStatus("科研 Agent skill 已复制到剪贴板。");
+      window.setTimeout(() => setCopiedResearchSkill(false), 1400);
+      return;
+    }
+
+    setCopiedResearchSkill(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
   return (
@@ -803,6 +915,18 @@ ${localPreviewOutput}`;
               <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800 }}>{card.body}</span>
             </div>
           ))}
+        </div>
+        <div className="research-agent-skill-panel" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto auto", gap: "0.65rem", alignItems: "center" }}>
+          <div>
+            <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.84rem", marginBottom: "0.24rem" }}>科研 Agent skill</strong>
+            <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800 }}>把任务路由、证据表、缺失字段、风险标记、引用核查和复核问题固定成一套可复用协议。</span>
+          </div>
+          <a href="/skills/research-agent/SKILL.md" className="research-agent-skill-link" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", textDecoration: "none", whiteSpace: "nowrap" }}>
+            打开 Skill
+          </a>
+          <button type="button" onClick={copyResearchAgentSkill} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", whiteSpace: "nowrap" }}>
+            {copiedResearchSkill ? "已复制" : "复制 Skill"}
+          </button>
         </div>
         <div style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(93,140,101,0.2)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.65rem" }}>
           <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>能直接完成什么</strong>
@@ -1286,6 +1410,10 @@ ${localPreviewOutput}`;
 
           @media (max-width: 880px) {
             #prompt-kit-builder .prompt-builder-layout {
+              grid-template-columns: 1fr !important;
+            }
+
+            #prompt-kit-builder .research-agent-skill-panel {
               grid-template-columns: 1fr !important;
             }
 

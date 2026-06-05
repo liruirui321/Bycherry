@@ -377,6 +377,7 @@ function verifyWorkJsonLdLearningOutcomes() {
 
 function verifyResearchAgentWorkbenchContract() {
   const workDetailSource = read("src/app/components/WorkDetailPage.tsx");
+  const researchSkillSource = read("public/skills/research-agent/SKILL.md");
   const promptKitMatch = workDetailSource.match(/const promptPracticeCases = \[([\s\S]*?)\nfunction PromptKitContent\(\) \{([\s\S]*?)\nfunction PlantEvolutionContent\(\)/);
 
   expect(Boolean(promptKitMatch), "WorkDetailPage must define promptPracticeCases before PromptKitContent and before PlantEvolutionContent.");
@@ -424,6 +425,14 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "human confirmation framing", text: "人工确认" },
     { label: "review summary mode", text: "复核摘要" },
     { label: "usage level heading", text: "使用层级" },
+    { label: "skill prompt contract", text: "researchAgentSkillPrompt" },
+    { label: "copyable research skill prompt", text: "copyResearchAgentSkill" },
+    { label: "research skill copy state", text: "copiedResearchSkill" },
+    { label: "research skill visible panel", text: "科研 Agent skill" },
+    { label: "public research skill document link", text: "/skills/research-agent/SKILL.md" },
+    { label: "research skill copy button", text: "复制 Skill" },
+    { label: "research skill responsive panel", text: "research-agent-skill-panel" },
+    { label: "research skill markdown frontmatter", text: "name: research-agent" },
   ];
 
   const retiredWorkbenchPatterns = [
@@ -442,6 +451,31 @@ function verifyResearchAgentWorkbenchContract() {
 
   expect(Array.from(practiceCasesSource.matchAll(/\btask:\s*"/g)).length >= 3, "Research Agent workbench should expose at least three practice cases tied to tasks.");
   expect(!promptKitSource.includes('useState("研究问题：\\n样本/材料：\\n已有结果：\\n我最担心的问题：")'), "Research Agent workbench should not open on an empty field-only starter.");
+
+  for (const text of [
+    "name: research-agent",
+    "description: Use when a learner wants to turn research material",
+    "## Role",
+    "## Input",
+    "## Workflow",
+    "## Task Routes",
+    "## Output Contract",
+    "## Evidence Rules",
+    "## Completion Gate",
+    "adult learner",
+    "Classify the task route from material signals",
+    "evidence_items",
+    "missing_fields",
+    "risk_flags",
+    "citation_check",
+    "reviewer_questions",
+    "Do not invent DOI",
+    "Keep correlation, association, mechanism, causation, and speculation separate",
+    "At least one evidence_item",
+    "Next actions written as concrete checks",
+  ]) {
+    expect(researchSkillSource.includes(text), `Public research agent SKILL.md is missing required content: ${text}`);
+  }
 }
 
 function verifyConceptExplainerAgentContract() {

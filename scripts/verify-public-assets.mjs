@@ -104,6 +104,8 @@ for (const illustration of generatedIllustrations) {
 expect(publicExists("site.webmanifest"), "site.webmanifest is missing.");
 expect(publicExists("_redirects"), "Netlify _redirects fallback is missing.");
 expect(publicExists("404.html"), "Static-host 404 fallback is missing.");
+expect(publicExists("skills/concept-explainer/SKILL.md"), "Public concept explainer skill is missing.");
+expect(publicExists("skills/research-agent/SKILL.md"), "Public research agent skill is missing.");
 expect(rootExists("vercel.json"), "Vercel rewrite config is missing.");
 
 const redirects = readPublic("_redirects").trim();
