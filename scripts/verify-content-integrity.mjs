@@ -296,6 +296,20 @@ function verifyPlatformGuideConfigBuilder() {
   expect(articleSource.includes("测后复盘表"), "Platform guide must keep a copyable post-assessment review table.");
 }
 
+function verifyPlantGenomeEvidenceChainBuilder() {
+  const articleSource = read("src/app/components/ArticleDetailPage.tsx");
+
+  expect(articleSource.includes("evidenceChainBuilderEnabled"), "Plant genome evidence article must expose a special evidence-chain builder.");
+  expect(articleSource.includes('article?.slug === "plant-genome-evidence-chain"'), "Evidence-chain builder must target the plant genome evidence article.");
+  expect(articleSource.includes("evidenceChainFields"), "Evidence-chain builder must define learner-fillable fields.");
+  expect(articleSource.includes("evidenceChainCardText"), "Evidence-chain builder must produce a copyable evidence card.");
+  expect(articleSource.includes("copyEvidenceChainCard"), "Evidence-chain builder must expose a copy handler.");
+  expect(articleSource.includes("证据四格卡"), "Evidence-chain builder must visibly name the four-cell evidence card.");
+  expect(articleSource.includes("现象") && articleSource.includes("证据") && articleSource.includes("解释") && articleSource.includes("限制"), "Evidence-chain builder must keep phenomenon, evidence, interpretation, and limit fields.");
+  expect(articleSource.includes("避免把相关线索写成因果结论"), "Evidence-chain builder must explicitly preserve correlation/causation boundaries.");
+  expect(articleSource.includes("plant-evidence-chain-builder") && articleSource.includes("plant-evidence-chain-grid"), "Evidence-chain builder must have stable classes for layout checks.");
+}
+
 function verifyArticleOutcomeSnapshot() {
   const articleSource = read("src/app/components/ArticleDetailPage.tsx");
 
@@ -1281,6 +1295,7 @@ verifyWorkCardActions();
 verifyWorkDetailCardsStayCompact();
 verifyArticleCardsStayStructured();
 verifyPlatformGuideConfigBuilder();
+verifyPlantGenomeEvidenceChainBuilder();
 verifyArticleOutcomeSnapshot();
 verifyWorkJsonLdLearningOutcomes();
 verifyResearchAgentWorkbenchContract();

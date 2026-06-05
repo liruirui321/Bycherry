@@ -84,6 +84,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copiedPlatformConfig, setCopiedPlatformConfig] = useState(false);
   const [copiedPlatformReview, setCopiedPlatformReview] = useState(false);
   const [copiedAiAuditPrompts, setCopiedAiAuditPrompts] = useState(false);
+  const [copiedEvidenceChainCard, setCopiedEvidenceChainCard] = useState(false);
   const [selectedPlatformPlanIndex, setSelectedPlatformPlanIndex] = useState(0);
   const [platformLearnerLevel, setPlatformLearnerLevel] = useState("生物基础入门，已经学过 DNA 和 RNA 基础");
   const [platformKnowledgeRange, setPlatformKnowledgeRange] = useState("基因表达：DNA、mRNA、蛋白质的信息传递关系");
@@ -91,6 +92,10 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [platformQuestionCount, setPlatformQuestionCount] = useState("6 题");
   const [platformTimeBudget, setPlatformTimeBudget] = useState("8 分钟");
   const [platformAuditFocus, setPlatformAuditFocus] = useState("重点检查题目是否混淆 RNA 聚合酶、mRNA、核糖体和蛋白质产物。");
+  const [evidencePhenomenon, setEvidencePhenomenon] = useState("");
+  const [evidenceMaterial, setEvidenceMaterial] = useState("");
+  const [evidenceInterpretation, setEvidenceInterpretation] = useState("");
+  const [evidenceLimit, setEvidenceLimit] = useState("");
   const [recordQuestion, setRecordQuestion] = useState("");
   const [recordEvidence, setRecordEvidence] = useState("");
   const [recordOutput, setRecordOutput] = useState("");
@@ -111,6 +116,11 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     setRecordNextStep("");
     setCopiedLearningRecord(false);
     setCopiedReadingTaskPack(false);
+    setCopiedEvidenceChainCard(false);
+    setEvidencePhenomenon("");
+    setEvidenceMaterial("");
+    setEvidenceInterpretation("");
+    setEvidenceLimit("");
     setCopyStatus("");
   }, [kind, slug]);
   const navArticles = [
@@ -300,6 +310,77 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
       ]
     : [];
   const articleRecordScore = articleRecordQuality.filter((item) => item.pass).length;
+  const evidenceChainBuilderEnabled = article?.slug === "plant-genome-evidence-chain";
+  const evidenceChainFields = evidenceChainBuilderEnabled
+    ? [
+        {
+          id: "evidence-phenomenon",
+          label: "现象",
+          value: evidencePhenomenon,
+          setValue: setEvidencePhenomenon,
+          placeholder: "例如：两种植物在干旱处理后的叶片萎蔫程度不同。",
+          pass: evidencePhenomenon.trim().length >= 12,
+          help: "写成能观察或比较的现象。",
+        },
+        {
+          id: "evidence-material",
+          label: "证据",
+          value: evidenceMaterial,
+          setValue: setEvidenceMaterial,
+          placeholder: "例如：表达图显示某个胁迫响应基因在干旱条件下表达升高。",
+          pass: evidenceMaterial.trim().length >= 18 && /图|数据|表达|比较|样本|证据|结果|显示|说明/.test(evidenceMaterial.trim()),
+          help: "写出来自图表、数据、样本或比较结果的证据。",
+        },
+        {
+          id: "evidence-interpretation",
+          label: "解释",
+          value: evidenceInterpretation,
+          setValue: setEvidenceInterpretation,
+          placeholder: "例如：这些数据提示该基因可能参与干旱响应。",
+          pass: evidenceInterpretation.trim().length >= 14 && /提示|可能|支持|说明|解释|参与|关联/.test(evidenceInterpretation.trim()),
+          help: "用保守语气写出证据可以支持到哪一步。",
+        },
+        {
+          id: "evidence-limit",
+          label: "限制",
+          value: evidenceLimit,
+          setValue: setEvidenceLimit,
+          placeholder: "例如：表达升高不能直接证明因果，还需要敲除、过表达或更多样本验证。",
+          pass: evidenceLimit.trim().length >= 18 && /不能|还需要|限制|验证|样本|因果|不确定|不足/.test(evidenceLimit.trim()),
+          help: "写出这条证据还不能证明什么。",
+        },
+      ]
+    : [];
+  const evidenceChainScore = evidenceChainFields.filter((field) => field.pass).length;
+  const evidenceChainFilled = {
+    phenomenon: evidencePhenomenon.trim() || "两种植物或两种条件下出现了可观察差异。",
+    material: evidenceMaterial.trim() || "一张图表、表达数据、比较结果或样本记录提供了证据线索。",
+    interpretation: evidenceInterpretation.trim() || "这条证据可以提示某个基因、性状或环境响应之间存在关联。",
+    limit: evidenceLimit.trim() || "这条证据还不能直接证明因果，需要更多样本、功能实验或独立证据验证。",
+  };
+  const evidenceChainCardText = evidenceChainBuilderEnabled
+    ? `【植物基因组证据四格卡】
+主题：${article?.title ?? ""}
+填写完成度：${evidenceChainScore}/4
+
+一、现象
+${evidenceChainFilled.phenomenon}
+
+二、证据
+${evidenceChainFilled.material}
+
+三、解释
+${evidenceChainFilled.interpretation}
+
+四、限制
+${evidenceChainFilled.limit}
+
+自查
+1. 现象是否能被观察或比较：${evidenceChainFields[0]?.pass ? "可用" : "待补充"}
+2. 证据是否来自图表、数据或样本：${evidenceChainFields[1]?.pass ? "可用" : "待补充"}
+3. 解释是否没有超过证据范围：${evidenceChainFields[2]?.pass ? "可用" : "待补充"}
+4. 限制是否保留了不确定性：${evidenceChainFields[3]?.pass ? "可用" : "待补充"}`
+    : "";
   const platformUrl = article && "platformUrl" in article ? article.platformUrl : null;
   const platformUsePlans = platformUrl
     ? [
@@ -741,6 +822,28 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     setCopyStatus(`已载入${template.title}照填包，可以复制到平台。`);
   }
 
+  async function copyEvidenceChainCard() {
+    if (!evidenceChainCardText) return;
+    const copiedToClipboard = await copyText(evidenceChainCardText);
+    if (copiedToClipboard) {
+      setCopiedEvidenceChainCard(true);
+      setCopiedSummary(false);
+      setCopiedTemplate(false);
+      setCopiedActionPack(false);
+      setCopiedLearningRecord(false);
+      setCopiedReadingTaskPack(false);
+      setCopiedPlatformConfig(false);
+      setCopiedPlatformReview(false);
+      setCopiedAiAuditPrompts(false);
+      setCopyStatus("证据四格卡已复制到剪贴板。");
+      window.setTimeout(() => setCopiedEvidenceChainCard(false), 1400);
+      return;
+    }
+
+    setCopiedEvidenceChainCard(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
   async function copyPlatformPasteConfig() {
     if (!platformPasteConfigText) return;
     const copiedToClipboard = await copyText(platformPasteConfigText);
@@ -1007,6 +1110,52 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.16rem" }}>先避开</span>
                     <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>{articleQuickStart.pitfall}</span>
                   </div>
+                </div>
+              </div>
+            ) : null}
+
+            {evidenceChainBuilderEnabled ? (
+              <div className="plant-evidence-chain-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>证据四格卡</div>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.16rem", fontWeight: 800 }}>
+                      把植物基因组材料压缩成现象、证据、解释和限制，避免把相关线索写成因果结论。
+                    </div>
+                  </div>
+                  <span style={{ background: evidenceChainScore === 4 ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.26rem 0.62rem", color: evidenceChainScore === 4 ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+                    完成度 {evidenceChainScore}/4
+                  </span>
+                </div>
+                <div className="plant-evidence-chain-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.62rem" }}>
+                  {evidenceChainFields.map((field) => (
+                    <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.34rem", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 900 }}>
+                      {field.label}
+                      <textarea
+                        id={field.id}
+                        value={field.value}
+                        placeholder={field.placeholder}
+                        rows={3}
+                        onChange={(event) => {
+                          field.setValue(event.currentTarget.value);
+                          setCopiedEvidenceChainCard(false);
+                          setCopyStatus("");
+                        }}
+                        style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem 0.66rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, lineHeight: 1.55, resize: "vertical" }}
+                      />
+                      <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.45, fontWeight: 800 }}>
+                        {field.pass ? "可用" : field.help}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.7rem", alignItems: "start" }}>
+                  <code style={{ display: "block", whiteSpace: "pre-wrap", maxHeight: 220, overflow: "auto", background: "var(--cherry-sage-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.7rem", lineHeight: 1.58 }}>
+                    {evidenceChainCardText}
+                  </code>
+                  <button type="button" onClick={copyEvidenceChainCard} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
+                    {copiedEvidenceChainCard ? "已复制" : "复制四格卡"}
+                  </button>
                 </div>
               </div>
             ) : null}
@@ -1617,6 +1766,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           #article-body-points:focus-visible,
           .article-nav-card:focus-visible,
           .article-outcome-snapshot button:focus-visible,
+          .plant-evidence-chain-builder button:focus-visible,
+          .plant-evidence-chain-grid textarea:focus-visible,
           .article-record-grid textarea:focus-visible,
           .platform-custom-config-grid input:focus-visible,
           .platform-custom-config-grid textarea:focus-visible,
@@ -1691,6 +1842,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
           @media (max-width: 759px) {
             .article-record-grid,
+            .plant-evidence-chain-grid,
+            .plant-evidence-chain-builder > div:nth-of-type(3),
             .platform-active-plan-grid,
             .platform-custom-config-grid > div:nth-of-type(2) {
               grid-template-columns: 1fr !important;
