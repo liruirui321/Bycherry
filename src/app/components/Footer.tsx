@@ -98,9 +98,8 @@ export function Footer() {
             }}
           >
             <span style={{ color: "#FAF7F1", fontSize: "0.78rem", fontWeight: 900 }}>{work.title}</span>
-            <span style={{ color: "rgba(245,241,234,0.7)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 800 }}>先做：{work.path[0]} → {work.path[1]}</span>
-            <span style={{ color: "rgba(245,241,234,0.82)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 900 }}>产出：{work.outputs[0]} / {work.outputs[1]}</span>
-            <span style={{ color: "rgba(245,241,234,0.72)", fontSize: "0.66rem", lineHeight: 1.42, fontWeight: 900 }}>完成：{work.success}</span>
+            <span className="footer-work-step" style={{ color: "rgba(245,241,234,0.74)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 800 }}>先做：{work.path[0]} → {work.path[1]}</span>
+            <span className="footer-work-output" style={{ color: "rgba(245,241,234,0.86)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 900 }}>带走：{work.outputs[0]} / {work.outputs[1]}</span>
           </a>
         ))}
       </nav>

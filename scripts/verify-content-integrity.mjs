@@ -354,7 +354,8 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes("function WorkQuickStart"), "Work detail pages must include a quick-start entry component.");
   expect(workDetailSource.includes("<WorkQuickStart work={work} />"), "Work detail pages must render the quick-start entry before deep content.");
   expect(footerSource.includes('"plant-evolution-stories"') && footerSource.includes('"crispr-interactive"'), "Footer continue-learning links must cover all learning modules, not only the first three.");
-  expect(footerSource.includes("完成：{work.success}"), "Footer continue-learning links must visibly expose completion standards.");
+  expect(footerSource.includes("footer-work-step") && footerSource.includes("footer-work-output"), "Footer continue-learning links must stay compact with first step and saved output rows.");
+  expect(!footerSource.includes("完成：{work.success}"), "Footer continue-learning links must not repeat long completion standards visibly.");
   expect(footerSource.includes("完成标准，${work.success}"), "Footer continue-learning accessible labels must include completion standards.");
   expect(footerSource.includes("maxWidth: 960"), "Footer continue-learning grid must have enough width for all five module links.");
 }
