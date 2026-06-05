@@ -1,11 +1,9 @@
 import { IconBook, IconCheck, IconCoffee } from "./Icons";
 import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
-import { works } from "./Works";
 import { EmptyStateCard } from "./EmptyStateCard";
 import { copyText } from "../clipboard";
-import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
-import { preloadRouteForHref } from "../routePrefetch";
+import { navigateClient, shouldUseClientNavigation } from "../navigation";
 import { useEffect, useState } from "react";
 
 type ArticleKind = "note" | "research";
@@ -13,21 +11,6 @@ type ArticleKind = "note" | "research";
 function navigateHome(hash: string) {
   navigateClient(`/${hash}`);
 }
-
-function navigateToPath(href: string) {
-  navigateClient(href);
-}
-
-const pairedWorkSlugsByArticleSlug: Record<string, string[]> = {
-  "ai-course-development": ["concept-explainer", "research-prompt-kit"],
-  "plant-genome-evidence-chain": ["plant-evolution-stories", "research-prompt-kit"],
-  "pbl-rubric-evidence": ["concept-explainer", "research-prompt-kit"],
-  "ai-comic-video-workflow": ["research-prompt-kit", "concept-explainer"],
-  "science-to-learning-question": ["plant-evolution-stories", "research-prompt-kit"],
-  "genome-assembly-story": ["plant-evolution-stories", "research-prompt-kit"],
-  "barcoding-evidence-chain": ["research-prompt-kit", "plant-evolution-stories"],
-  "ai-assessment-quality-control": ["concept-explainer", "gene-expression"],
-};
 
 export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: string }) {
   const [copiedSummary, setCopiedSummary] = useState(false);
@@ -98,9 +81,6 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copyStatus, setCopyStatus] = useState("");
   const collection = kind === "note" ? notes : essays;
   const article = collection.find((item) => item.slug === slug);
-  const articleIndex = collection.findIndex((item) => item.slug === slug);
-  const previousArticle = articleIndex > 0 ? collection[articleIndex - 1] : null;
-  const nextArticle = articleIndex >= 0 && articleIndex < collection.length - 1 ? collection[articleIndex + 1] : null;
   const backHash = "#research";
   const backText = "回到文章";
 
@@ -159,10 +139,6 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     setGenomeStoryConnection("");
     setCopyStatus("");
   }, [kind, slug]);
-  const navArticles = [
-    previousArticle ? { label: "上一篇", arrow: "←", article: previousArticle, align: "left" as const } : null,
-    nextArticle ? { label: "下一篇", arrow: "→", article: nextArticle, align: "right" as const } : null,
-  ].filter((item): item is { label: string; arrow: string; article: NonNullable<typeof article>; align: "left" | "right" } => Boolean(item));
   const readingPath = article
     ? "platformUrl" in article
       ? [
@@ -280,11 +256,6 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
           fallback: pitfalls[0] ?? checklist[0] ?? "写下下一步要补的证据或资料。",
         },
       ]
-    : [];
-  const pairedWorks = article
-    ? (pairedWorkSlugsByArticleSlug[article.slug] ?? [])
-        .map((workSlug) => works.find((work) => work.slug === workSlug))
-        .filter((work): work is (typeof works)[number] => Boolean(work))
     : [];
   const filledRecord = {
     question: recordQuestion.trim() || articleRecordFields[0]?.fallback || "",
@@ -1234,13 +1205,7 @@ ${pitfalls.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 ${articleCompletionChecks.map((item, index) => `${index + 1}. ${item.title}：${item.body}
 验收：${item.output}`).join("\n\n")}
 
-八、读完接着做
-${pairedWorks.length ? pairedWorks.map((work, index) => `${index + 1}. ${work.title}
-入口：${getWorkToolHref(work.href)}
-先做这个：${work.starter}
-完成标准：${work.success}`).join("\n\n") : "回到学习模块总览，选择一个相关工具继续操作。"}
-
-九、下一步回看
+八、下一步回看
 我还需要补充或重做：`
     : "";
   const summaryText = article
@@ -2476,43 +2441,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </div>
             </div>
 
-            {navArticles.length > 0 ? (
-              <nav aria-label="文章前后导航" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.55rem", marginTop: "1rem" }}>
-                {navArticles.map((item) => {
-                  const itemType = "tag" in item.article ? item.article.tag : item.article.label;
-                  const itemReadTime = "readTime" in item.article ? item.article.readTime : item.article.readMin;
-                  const itemColor = "tagColor" in item.article ? item.article.tagColor : item.article.labelColor;
-                  const itemBg = "tagBg" in item.article ? item.article.tagBg : item.article.labelBg;
-
-                  return (
-                    <a
-                      className="article-nav-card"
-                      key={item.article.slug}
-                      href={item.article.href}
-                      aria-label={`${item.label}文章：${item.article.title}`}
-                      onMouseEnter={() => preloadRouteForHref(item.article.href)}
-                      onFocus={() => preloadRouteForHref(item.article.href)}
-                      onPointerDown={() => preloadRouteForHref(item.article.href)}
-                      onClick={(event) => {
-                        if (!shouldUseClientNavigation(event)) return;
-                        event.preventDefault();
-                        navigateToPath(item.article.href);
-                      }}
-                      style={{ display: "grid", gap: "0.18rem", justifyItems: item.align === "right" ? "end" : "start", textAlign: item.align, background: "transparent", borderTop: "1px solid rgba(94,68,42,0.12)", borderRadius: 0, padding: "0.5rem 0", color: "var(--cherry-warm-mid)", textDecoration: "none" }}
-                    >
-                      <span style={{ color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.72rem" }}>
-                        {item.align === "left" ? `${item.arrow} ` : ""}{item.label}{item.align === "right" ? ` ${item.arrow}` : ""}
-                      </span>
-                      <strong style={{ color: "var(--cherry-warm-brown)", lineHeight: 1.35, fontSize: "0.86rem" }}>{item.article.title}</strong>
-                      <span style={{ display: "flex", alignItems: "center", justifyContent: item.align === "right" ? "flex-end" : "flex-start", gap: 6, flexWrap: "wrap" }}>
-                        <span style={{ background: itemBg, color: itemColor, borderRadius: 999, padding: "0.13rem 0.5rem", fontSize: "0.68rem", fontWeight: 900 }}>{itemType}</span>
-                        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", fontWeight: 800 }}>约 {itemReadTime} 分钟</span>
-                      </span>
-                    </a>
-                  );
-                })}
-              </nav>
-            ) : null}
           </article>
         </div>
       </section>
@@ -2523,7 +2451,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           .article-start-action-button:focus-visible,
           #article-primary-action:focus-visible,
           #article-body-points:focus-visible,
-          .article-nav-card:focus-visible,
           .plant-evidence-chain-builder button:focus-visible,
           .plant-evidence-chain-grid textarea:focus-visible,
           .genome-story-frame-builder button:focus-visible,
@@ -2555,22 +2482,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           .article-back-chip:focus-visible {
             background: var(--cherry-yellow-light) !important;
             border-color: var(--cherry-yellow) !important;
-          }
-
-          .article-nav-card {
-            transition: color 0.18s ease;
-          }
-
-          .article-nav-card:hover,
-          .article-nav-card:focus-visible {
-            color: var(--cherry-red) !important;
-          }
-
-          @media (prefers-reduced-motion: reduce) {
-            .article-nav-card {
-              transition: none !important;
-              transform: none !important;
-            }
           }
 
           @media (max-width: 759px) {
