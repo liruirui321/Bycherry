@@ -4933,23 +4933,23 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
           </svg>
         </div>
 
-        <aside style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+        <aside className="crispr-control-aside" style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
+          <div className="crispr-flow-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>流程控制</div>
             <div style={{ display: "grid", gap: 7 }}>
               {stages.map((item, index) => (
-                <button key={item.key} type="button" aria-pressed={step === item.key} onClick={() => chooseCrisprStep(item.key)} style={{ display: "grid", gridTemplateColumns: "26px 1fr", gap: 8, alignItems: "start", textAlign: "left", background: step === item.key ? "var(--cherry-sage-light)" : "var(--muted)", border: step === item.key ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.62rem", cursor: "pointer" }}>
+                <button className="crispr-flow-step-button" key={item.key} type="button" aria-pressed={step === item.key} onClick={() => chooseCrisprStep(item.key)} style={{ display: "grid", gridTemplateColumns: "26px 1fr", gap: 8, alignItems: "start", textAlign: "left", background: step === item.key ? "var(--cherry-sage-light)" : "var(--muted)", border: step === item.key ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.62rem", cursor: "pointer" }}>
                   <span style={{ width: 24, height: 24, borderRadius: "50%", background: stepIndex >= index ? "var(--cherry-forest)" : "rgba(250,247,241,0.9)", color: stepIndex >= index ? "#FAF7F1" : "var(--cherry-warm-mid)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 900 }}>{index + 1}</span>
                   <span>
                     <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>{item.label}</strong>
-                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55 }}>{item.text}</span>
+                    <span className="crispr-flow-step-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55 }}>{item.text}</span>
                   </span>
                 </button>
               ))}
             </div>
           </div>
 
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+          <div className="crispr-guide-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>向导 RNA</div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: "0.75rem" }}>
               {guides.map((guide, index) => (
@@ -4963,19 +4963,19 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
               <div style={{ width: `${activeGuide.score}%`, height: "100%", background: activeGuide.score > 80 ? "var(--cherry-sage)" : activeGuide.score > 50 ? "var(--cherry-yellow)" : "var(--cherry-red)", transition: "width 0.25s ease" }} />
             </div>
             <div style={{ color: "var(--cherry-red)", fontSize: "1.35rem", fontWeight: 900, marginBottom: "0.45rem" }}>{activeGuide.score}%</div>
-            <div role="status" aria-live="polite" style={{ background: guideDecision.bg, border: `1.5px solid ${guideDecision.color}`, borderRadius: 14, padding: "0.68rem", color: "var(--cherry-warm-mid)", lineHeight: 1.58, fontSize: "0.8rem", fontWeight: 800, marginBottom: "0.75rem" }}>
+            <div className="crispr-guide-decision" role="status" aria-live="polite" style={{ background: guideDecision.bg, border: `1.5px solid ${guideDecision.color}`, borderRadius: 14, padding: "0.68rem", color: "var(--cherry-warm-mid)", lineHeight: 1.58, fontSize: "0.8rem", fontWeight: 800, marginBottom: "0.75rem" }}>
               <strong style={{ display: "block", color: guideDecision.color, marginBottom: "0.28rem" }}>{guideDecision.level}</strong>
               {guideDecision.risk}
               <div style={{ marginTop: "0.42rem", color: "var(--cherry-warm-brown)" }}>{guideDecision.nextAction}</div>
             </div>
-            <div style={{ background: "rgba(250,247,241,0.74)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.6rem", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", fontWeight: 800, marginBottom: "0.75rem" }}>
+            <div className="crispr-guide-target-note" style={{ background: "rgba(250,247,241,0.74)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.6rem", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", fontWeight: 800, marginBottom: "0.75rem" }}>
               目标互补序列：<strong style={{ color: "var(--cherry-warm-brown)" }}>{expectedGuideBases.join(" ")}</strong>
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: "0.45rem", color: "var(--cherry-warm-mid)", fontSize: "0.7rem" }}>
                 <span><strong style={{ color: "var(--cherry-forest)" }}>实线</strong> 互补</span>
                 <span><strong style={{ color: "var(--cherry-red)" }}>虚线</strong> 错配</span>
               </div>
             </div>
-            <div style={{ display: "grid", gap: 6, marginBottom: "0.75rem" }}>
+            <div className="crispr-guide-readouts" style={{ display: "grid", gap: 6, marginBottom: "0.75rem" }}>
               {[
                 ["PAM", pamSequence],
                 ["剪切位点", activeGuide.score >= 60 ? `第 ${cutIndex + 1} 个碱基，PAM 上游 ${cutDistanceFromPam} nt` : "匹配不足，不执行剪切"],
@@ -4987,7 +4987,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
                 </div>
               ))}
             </div>
-            <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.82rem" }}>{activeGuide.note}</div>
+            <div className="crispr-guide-note" style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.82rem" }}>{activeGuide.note}</div>
           </div>
         </aside>
       </div>
@@ -5328,6 +5328,87 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
           }
 
           @media (max-width: 520px) {
+            #crispr-simulator .crispr-control-aside {
+              gap: 0.52rem !important;
+            }
+
+            #crispr-simulator .crispr-flow-panel,
+            #crispr-simulator .crispr-guide-panel {
+              padding: 0.68rem !important;
+              border-radius: 12px !important;
+              box-shadow: none !important;
+            }
+
+            #crispr-simulator .crispr-flow-panel > div:last-child {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.44rem !important;
+            }
+
+            #crispr-simulator .crispr-flow-step-button {
+              grid-template-columns: 20px minmax(0, 1fr) !important;
+              gap: 0.42rem !important;
+              padding: 0.44rem !important;
+              border-radius: 10px !important;
+              min-height: 0 !important;
+            }
+
+            #crispr-simulator .crispr-flow-step-button > span:first-child {
+              width: 20px !important;
+              height: 20px !important;
+              font-size: 0.62rem !important;
+            }
+
+            #crispr-simulator .crispr-flow-step-note,
+            #crispr-simulator .crispr-guide-target-note,
+            #crispr-simulator .crispr-guide-note {
+              display: none !important;
+            }
+
+            #crispr-simulator .crispr-guide-panel > div:first-child,
+            #crispr-simulator .crispr-flow-panel > div:first-child {
+              margin-bottom: 0.44rem !important;
+              font-size: 0.82rem !important;
+            }
+
+            #crispr-simulator .crispr-guide-panel > div:nth-of-type(2) {
+              gap: 0.36rem !important;
+              margin-bottom: 0.46rem !important;
+            }
+
+            #crispr-simulator .crispr-guide-panel code {
+              padding: 0.46rem !important;
+              margin-bottom: 0.46rem !important;
+              font-size: 0.68rem !important;
+              border-radius: 10px !important;
+            }
+
+            #crispr-simulator .crispr-guide-panel > div[style*="font-size: 1.35rem"] {
+              font-size: 1rem !important;
+              margin-bottom: 0.34rem !important;
+            }
+
+            #crispr-simulator .crispr-guide-decision {
+              padding: 0.5rem !important;
+              border-radius: 10px !important;
+              font-size: 0.68rem !important;
+              line-height: 1.34 !important;
+              margin-bottom: 0.48rem !important;
+            }
+
+            #crispr-simulator .crispr-guide-decision > div {
+              display: none !important;
+            }
+
+            #crispr-simulator .crispr-guide-readouts {
+              gap: 0.28rem !important;
+              margin-bottom: 0 !important;
+            }
+
+            #crispr-simulator .crispr-guide-readouts > div {
+              font-size: 0.68rem !important;
+              line-height: 1.3 !important;
+            }
+
             #crispr-simulator .crispr-intro-grid,
             #crispr-simulator .crispr-intro-details,
             #crispr-simulator .crispr-practice-panel,

@@ -929,6 +929,11 @@ function verifyCrisprLearnerScenarios() {
     { label: "learner record grid", text: "crispr-learner-record-grid" },
     { label: "learner record completion copy", text: "完成度：${crisprLearnerRecordScore}/4" },
     { label: "learner record report section", text: "11. 我的判读记录" },
+    { label: "compact mobile control aside", text: "crispr-control-aside" },
+    { label: "compact flow step notes", text: "crispr-flow-step-note" },
+    { label: "compact guide decision", text: "crispr-guide-decision" },
+    { label: "compact guide target note", text: "crispr-guide-target-note" },
+    { label: "compact guide readouts", text: "crispr-guide-readouts" },
   ];
 
   for (const item of requiredCrisprFeatures) {
@@ -936,6 +941,7 @@ function verifyCrisprLearnerScenarios() {
   }
 
   expect(Array.from(crisprSource.matchAll(/\bgoal:\s*"/g)).length >= 3, "CRISPR simulator should expose at least three learner scenario goals.");
+  expect(crisprSource.includes("#crispr-simulator .crispr-flow-step-note,") && crisprSource.includes("#crispr-simulator .crispr-guide-note") && crisprSource.includes("display: none !important"), "CRISPR mobile controls must hide long explanatory notes instead of stacking a tall control column.");
   expect(worksSource.includes("查看匹配评分、编辑判定、风险核查和模拟报告。"), "CRISPR work card must describe risk audit output.");
   expect(worksSource.includes('outputs: ["guide 判定", "风险核查", "模拟报告"]'), "CRISPR work card outputs must stay aligned with simulator report.");
   expect(worksSource.includes('path: ["找 PAM", "判 guide", "核查风险"]'), "CRISPR work card path must describe a learner action flow.");
