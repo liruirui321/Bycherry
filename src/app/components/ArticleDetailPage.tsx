@@ -2317,7 +2317,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             ) : null}
 
             {articleRecordFields.length ? (
-              <div style={{ background: "var(--card)", border: "1.5px solid rgba(58,92,62,0.18)", borderRadius: 16, padding: "0.9rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
+              <div className="article-record-panel" style={{ background: "var(--card)", border: "1.5px solid rgba(58,92,62,0.18)", borderRadius: 16, padding: "0.9rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>读完填写</div>
@@ -2352,7 +2352,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                           setCopiedLearningRecord(false);
                           setCopyStatus("");
                         }}
-                        rows={3}
+                        rows={2}
                         placeholder={field.placeholder}
                         style={{ width: "100%", boxSizing: "border-box", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, lineHeight: 1.55, resize: "vertical", minHeight: 92 }}
                       />
@@ -2363,7 +2363,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     );
                   })}
                 </div>
-                <div style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(58,92,62,0.16)", borderRadius: 8, padding: "0.62rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.5rem" }}>
+                <div className="article-record-preview-grid" style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(58,92,62,0.16)", borderRadius: 8, padding: "0.62rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.5rem" }}>
                   {[
                     ["问题", filledRecord.question],
                     ["证据", filledRecord.evidence],
@@ -2471,6 +2471,49 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             .platform-active-plan-grid,
             .platform-custom-config-grid > div:nth-of-type(2) {
               grid-template-columns: 1fr !important;
+            }
+
+            .article-record-panel {
+              padding: 0.72rem !important;
+              gap: 0.5rem !important;
+            }
+
+            .article-record-grid {
+              gap: 0.48rem !important;
+            }
+
+            .article-record-grid label {
+              gap: 0.24rem !important;
+            }
+
+            .article-record-grid textarea {
+              min-height: 64px !important;
+              padding: 0.5rem 0.56rem !important;
+              line-height: 1.42 !important;
+            }
+
+            .article-record-grid label > span:last-child {
+              display: -webkit-box !important;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+            }
+
+            .article-record-preview-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.38rem !important;
+              padding: 0.52rem !important;
+            }
+
+            .article-record-preview-grid > div {
+              min-width: 0;
+            }
+
+            .article-record-preview-grid > div > span:last-child {
+              display: -webkit-box !important;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
             }
 
           }
