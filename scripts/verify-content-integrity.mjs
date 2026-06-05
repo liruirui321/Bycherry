@@ -910,6 +910,10 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("const articleCompletionChecks"), "Article detail pages must derive completion checks.");
   expect(articleDetailSource.includes("const articleRecordFields"), "Article detail pages must provide learner-filled record fields.");
   expect(articleDetailSource.includes("const filledRecord"), "Article detail pages must merge filled record values into copied learning records.");
+  expect(articleDetailSource.includes("const articleRecordQuality"), "Article detail pages must judge learner-filled record quality.");
+  expect(articleDetailSource.includes("const articleRecordScore"), "Article detail pages must expose learner record completion scores.");
+  expect(articleDetailSource.includes("填写完成度：${articleRecordScore}/4"), "Article learning records must include learner record completion scores.");
+  expect(articleDetailSource.includes("填写质量"), "Article learning records must include learner record quality checks.");
   expect(articleDetailSource.includes("完成验收卡"), "Article detail pages must expose a completion card.");
   expect(articleDetailSource.includes("三、我的填写记录"), "Article learning records must include learner-filled notes.");
   expect(articleDetailSource.includes("七、完成验收"), "Article learning records must include completion checks.");
