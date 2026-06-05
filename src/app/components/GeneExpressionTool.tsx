@@ -1449,17 +1449,18 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             </div>
           </details>
 
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: "0.75rem" }}>
+          <details className="gene-compact-details gene-quiz-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>即时小测 · {quizCorrectCount}/{geneQuizItems.length}</summary>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: "0.58rem" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
                 <IconCheck size={18} />
-                即时小测
+                第 {activeQuizIndex + 1} 题
               </div>
               <div style={{ color: "var(--cherry-red)", fontWeight: 900, fontSize: "0.78rem", whiteSpace: "nowrap" }}>
                 {quizCorrectCount}/{geneQuizItems.length}
               </div>
             </div>
-            <div role="group" style={{ display: "flex", gap: 5, marginBottom: "0.8rem" }} aria-label={`已完成 ${quizAnsweredCount} 道小测`}>
+            <div role="group" style={{ display: "flex", gap: 5, marginBottom: "0.62rem" }} aria-label={`已完成 ${quizAnsweredCount} 道小测`}>
               {geneQuizItems.map((item, index) => {
                 const answered = Boolean(quizAnswers[item.id]);
                 const correct = quizAnswers[item.id] === item.answer;
@@ -1483,7 +1484,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
                 );
               })}
             </div>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, lineHeight: 1.45, fontSize: "0.9rem", marginBottom: "0.75rem" }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, lineHeight: 1.45, fontSize: "0.88rem", marginBottom: "0.62rem" }}>
               {activeQuiz.question}
             </div>
             <div style={{ display: "grid", gap: 7 }}>
@@ -1501,8 +1502,8 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
                       textAlign: "left",
                       background: selected ? (correct ? "var(--cherry-sage-light)" : "var(--cherry-peach-light)") : "var(--muted)",
                       border: selected ? `1.5px solid ${correct ? "var(--cherry-forest)" : "var(--cherry-red)"}` : answered && correct ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)",
-                      borderRadius: 14,
-                      padding: "0.58rem 0.72rem",
+                      borderRadius: 10,
+                      padding: "0.48rem 0.62rem",
                       color: "var(--cherry-warm-brown)",
                       fontWeight: 900,
                       cursor: "pointer",
@@ -1515,14 +1516,14 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
               })}
             </div>
             {activeQuizAnswer ? (
-              <div role="status" aria-live="polite" style={{ marginTop: "0.8rem", background: activeQuizAnswer === activeQuiz.answer ? "rgba(169,201,172,0.2)" : "var(--cherry-yellow-light)", border: `1.5px solid ${activeQuizAnswer === activeQuiz.answer ? "rgba(93,140,101,0.22)" : "var(--cherry-yellow)"}`, borderRadius: 16, padding: "0.72rem 0.8rem", color: "var(--cherry-warm-mid)", fontSize: "0.82rem", lineHeight: 1.62, fontWeight: 800 }}>
+              <div role="status" aria-live="polite" style={{ marginTop: "0.62rem", background: activeQuizAnswer === activeQuiz.answer ? "rgba(169,201,172,0.2)" : "var(--cherry-yellow-light)", border: `1.5px solid ${activeQuizAnswer === activeQuiz.answer ? "rgba(93,140,101,0.22)" : "var(--cherry-yellow)"}`, borderRadius: 12, padding: "0.58rem 0.66rem", color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.55, fontWeight: 800 }}>
                 <strong style={{ color: "var(--cherry-warm-brown)" }}>{activeQuizAnswer === activeQuiz.answer ? "答对了：" : "再看一遍："}</strong>{activeQuiz.explain}
               </div>
             ) : null}
-            <button type="button" onClick={nextQuiz} style={{ marginTop: "0.8rem", width: "100%", background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.58rem 0.9rem", fontWeight: 900, cursor: "pointer" }}>
+            <button type="button" onClick={nextQuiz} style={{ marginTop: "0.62rem", width: "100%", background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.5rem 0.8rem", fontWeight: 900, cursor: "pointer" }}>
               下一题
             </button>
-          </div>
+          </details>
 
           <details className="gene-compact-details gene-sequence-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>序列读取</summary>

@@ -433,8 +433,8 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes('id="works"'), "Homepage #works anchor must point to the first-screen module directory instead of a duplicate section.");
   expect(heroSource.includes('aria-label="内容目录"'), "Homepage hero must label the first-screen module directory.");
   expect(heroSource.includes("hero-work-row") && heroSource.includes('gridTemplateColumns: "repeat(5, minmax(0, 1fr))"') && !heroSource.includes("hero-work-card"), "Homepage hero module entries must use a compact module matrix, not long repeated cards.");
-  expect(heroSource.includes("minHeight: 76") && !heroSource.includes("minHeight: 88") && !heroSource.includes("hero-work-summary"), "Homepage hero module entries must stay as short tiles instead of tall summary cards.");
-  expect(heroSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") && heroSource.includes("min-height: 64px !important"), "Homepage hero mobile module directory must use compact two-column tiles instead of long stacked panels.");
+  expect(heroSource.includes("minHeight: 48") && !heroSource.includes("minHeight: 76") && !heroSource.includes("minHeight: 88") && !heroSource.includes("hero-work-summary"), "Homepage hero module entries must stay as short directory rows instead of tall sticky-note cards.");
+  expect(heroSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") && heroSource.includes("min-height: 46px !important"), "Homepage hero mobile module directory must use compact two-column rows instead of long stacked panels.");
   expect(heroSource.includes("width: calc(100vw - 2rem)"), "Homepage hero mobile module directory must stay inside the visible viewport.");
   expect(heroSource.includes('boxSizing: "border-box"'), "Homepage hero containers must use border-box sizing to avoid mobile overflow.");
   expect(!heroSource.includes("scroll-snap-type") && !heroSource.includes("overflow-x: auto"), "Homepage hero must not hide module entries behind horizontal scrolling.");
@@ -821,6 +821,7 @@ function verifyGeneExpressionLearnerContract() {
 
   expect(geneSource.includes('className="gene-readout-panel"') && geneSource.includes('borderRadius: 12') && geneSource.includes('gridTemplateColumns: "repeat(2, minmax(0, 1fr))"'), "Gene expression readout panel must stay as compact two-column metrics instead of a tall readout list.");
   expect(geneSource.includes('className="gene-readout-row"') && geneSource.includes('textOverflow: "ellipsis"') && geneSource.includes('className="gene-rate-list"') && geneSource.includes('marginTop: "0.62rem"'), "Gene expression readout rows and rate bars must stay compact.");
+  expect(geneSource.includes('className="gene-compact-details gene-quiz-details"') && !geneSource.includes('borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)"'), "Gene expression quiz must stay as a compact collapsed panel instead of a long default card.");
 
   for (const item of retiredGenePatterns) {
     expect(!item.pattern.test(geneSource), `Gene expression tool must avoid retired or incorrect copy: ${item.label}`);

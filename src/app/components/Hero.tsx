@@ -27,7 +27,7 @@ export function Hero() {
         minHeight: "auto",
         position: "relative",
         overflow: "hidden",
-        padding: "0.72rem 1.5rem 0.72rem",
+        padding: "0.54rem 1.5rem 0.56rem",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
@@ -35,13 +35,13 @@ export function Hero() {
       }}
     >
       <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1060, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
-        <div className="hero-header-row" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", alignItems: "end", gap: "1rem", marginBottom: "0.48rem" }}>
+        <div className="hero-header-row" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", alignItems: "end", gap: "1rem", marginBottom: "0.36rem" }}>
           <div style={{ minWidth: 0 }}>
             <h1
               id="hero-heading"
               style={{
                 fontFamily: "'Nunito', sans-serif",
-                fontSize: "clamp(1.18rem, 2.5vw, 1.54rem)",
+                fontSize: "clamp(1.02rem, 2vw, 1.28rem)",
                 fontWeight: 800,
                 lineHeight: 1.12,
                 color: "var(--cherry-warm-brown)",
@@ -50,15 +50,15 @@ export function Hero() {
                 overflowWrap: "anywhere",
               }}
             >
-              By Cherry
+              By Cherry · 科学学习与 AI
             </h1>
           </div>
           <span className="hero-count" style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900, whiteSpace: "nowrap" }}>
-            {works.length} 个模块
+            当前 {works.length} 个内容
           </span>
         </div>
 
-        <nav id="works" className="hero-work-list" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: "0.46rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+        <nav id="works" className="hero-work-list" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: "0.34rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
           {works.map((work) => {
             const toolHref = getWorkToolHref(work.href);
             return (
@@ -72,31 +72,28 @@ export function Hero() {
                 onFocus={() => preloadRouteForHref(getWorkToolHref(work.href))}
                 onPointerDown={() => preloadRouteForHref(getWorkToolHref(work.href))}
                 style={{
-                  background: "rgba(250,247,241,0.62)",
-                  border: "1px solid rgba(94,68,42,0.12)",
-                  borderTop: `3px solid ${work.border}`,
-                  borderRadius: 8,
-                  padding: "0.54rem 0.58rem",
+                  background: "rgba(250,247,241,0.38)",
+                  border: "1px solid rgba(94,68,42,0.1)",
+                  borderLeft: `4px solid ${work.border}`,
+                  borderRadius: 6,
+                  padding: "0.42rem 0.48rem",
                   color: "var(--cherry-warm-brown)",
                   textDecoration: "none",
                   textAlign: "left",
                   display: "grid",
                   gridTemplateColumns: "1fr",
                   alignItems: "start",
-                  gap: "0.34rem",
+                  gap: "0.2rem",
                   position: "relative",
                   overflow: "hidden",
                   minWidth: 0,
-                  minHeight: 76,
+                  minHeight: 48,
                   maxWidth: "100%",
                   boxSizing: "border-box",
                 }}
               >
-                <span aria-hidden="true" style={{ width: 24, height: 24, borderRadius: 999, background: work.color, border: `1px solid ${work.border}`, display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--cherry-warm-brown)", fontSize: "0.68rem", fontWeight: 900, flex: "0 0 auto" }}>
-                  {work.id}
-                </span>
-                <strong style={{ fontSize: "0.82rem", lineHeight: 1.18, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
-                <span className="hero-work-status" style={{ color: "var(--cherry-forest)", fontSize: "0.64rem", fontWeight: 900, whiteSpace: "nowrap" }}>{homeWorkStatus[work.slug] ?? work.category}</span>
+                <strong style={{ fontSize: "0.76rem", lineHeight: 1.16, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
+                <span className="hero-work-status" style={{ color: "var(--cherry-forest)", fontSize: "0.6rem", fontWeight: 900, whiteSpace: "nowrap" }}>{homeWorkStatus[work.slug] ?? work.category}</span>
               </a>
             );
           })}
@@ -139,8 +136,8 @@ export function Hero() {
             box-sizing: border-box;
             grid-template-columns: 1fr !important;
             gap: 0.24rem !important;
-            min-height: 64px !important;
-            padding: 0.42rem 0.48rem !important;
+            min-height: 46px !important;
+            padding: 0.36rem 0.42rem !important;
           }
 
           .hero-work-status {
