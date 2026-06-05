@@ -961,6 +961,8 @@ function verifyCrisprLearnerScenarios() {
   }
 
   expect(Array.from(crisprSource.matchAll(/\bgoal:\s*"/g)).length >= 3, "CRISPR simulator should expose at least three learner scenario goals.");
+  expect(crisprSource.includes('className="crispr-flow-panel"') && crisprSource.includes('gridTemplateColumns: "repeat(3, minmax(0, 1fr))"') && crisprSource.includes('minHeight: 42'), "CRISPR desktop flow control must stay as compact three-step buttons.");
+  expect(crisprSource.includes('aria-label={`${item.label}：${item.text}`}') && crisprSource.includes('className="crispr-flow-step-note"') && crisprSource.includes('style={{ display: "none"'), "CRISPR flow step explanatory notes must stay hidden visually while remaining available to assistive labels.");
   expect(crisprSource.includes("#crispr-simulator .crispr-flow-step-note,") && crisprSource.includes("#crispr-simulator .crispr-guide-note") && crisprSource.includes("display: none !important"), "CRISPR mobile controls must hide long explanatory notes instead of stacking a tall control column.");
   expect(worksSource.includes("查看匹配评分、编辑判定、风险核查和模拟报告。"), "CRISPR work card must describe risk audit output.");
   expect(worksSource.includes('outputs: ["guide 判定", "风险核查", "模拟报告"]'), "CRISPR work card outputs must stay aligned with simulator report.");

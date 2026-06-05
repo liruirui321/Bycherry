@@ -5145,15 +5145,15 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
 
         <aside className="crispr-control-aside" style={{ display: "grid", gap: "1rem", alignContent: "start" }}>
-          <div className="crispr-flow-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>流程控制</div>
-            <div style={{ display: "grid", gap: 7 }}>
+          <div className="crispr-flow-panel" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.68rem", boxShadow: "none" }}>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.46rem" }}>流程控制</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 6 }}>
               {stages.map((item, index) => (
-                <button className="crispr-flow-step-button" key={item.key} type="button" aria-pressed={step === item.key} onClick={() => chooseCrisprStep(item.key)} style={{ display: "grid", gridTemplateColumns: "26px 1fr", gap: 8, alignItems: "start", textAlign: "left", background: step === item.key ? "var(--cherry-sage-light)" : "var(--muted)", border: step === item.key ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.62rem", cursor: "pointer" }}>
-                  <span style={{ width: 24, height: 24, borderRadius: "50%", background: stepIndex >= index ? "var(--cherry-forest)" : "rgba(250,247,241,0.9)", color: stepIndex >= index ? "#FAF7F1" : "var(--cherry-warm-mid)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 900 }}>{index + 1}</span>
+                <button className="crispr-flow-step-button" key={item.key} type="button" aria-label={`${item.label}：${item.text}`} aria-pressed={step === item.key} onClick={() => chooseCrisprStep(item.key)} style={{ display: "grid", gridTemplateColumns: "20px minmax(0, 1fr)", gap: 6, alignItems: "center", textAlign: "left", background: step === item.key ? "var(--cherry-sage-light)" : "var(--muted)", border: step === item.key ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.42rem", cursor: "pointer", minHeight: 42 }}>
+                  <span style={{ width: 20, height: 20, borderRadius: "50%", background: stepIndex >= index ? "var(--cherry-forest)" : "rgba(250,247,241,0.9)", color: stepIndex >= index ? "#FAF7F1" : "var(--cherry-warm-mid)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
                   <span>
-                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>{item.label}</strong>
-                    <span className="crispr-flow-step-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55 }}>{item.text}</span>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.15 }}>{item.label}</strong>
+                    <span className="crispr-flow-step-note" style={{ display: "none", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55 }}>{item.text}</span>
                   </span>
                 </button>
               ))}
