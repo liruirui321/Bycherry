@@ -86,6 +86,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copiedAiAuditPrompts, setCopiedAiAuditPrompts] = useState(false);
   const [copiedEvidenceChainCard, setCopiedEvidenceChainCard] = useState(false);
   const [copiedBarcodeEvidenceTable, setCopiedBarcodeEvidenceTable] = useState(false);
+  const [copiedProjectEvidenceTable, setCopiedProjectEvidenceTable] = useState(false);
   const [selectedPlatformPlanIndex, setSelectedPlatformPlanIndex] = useState(0);
   const [platformLearnerLevel, setPlatformLearnerLevel] = useState("生物基础入门，已经学过 DNA 和 RNA 基础");
   const [platformKnowledgeRange, setPlatformKnowledgeRange] = useState("基因表达：DNA、mRNA、蛋白质的信息传递关系");
@@ -110,6 +111,12 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [barcodeBlastEvidence, setBarcodeBlastEvidence] = useState("");
   const [barcodeTreePosition, setBarcodeTreePosition] = useState("");
   const [barcodeConclusionBoundary, setBarcodeConclusionBoundary] = useState("");
+  const [projectDrivingQuestion, setProjectDrivingQuestion] = useState("");
+  const [projectFinalWork, setProjectFinalWork] = useState("");
+  const [projectTaskNode, setProjectTaskNode] = useState("");
+  const [projectProcessEvidence, setProjectProcessEvidence] = useState("");
+  const [projectRubricCriteria, setProjectRubricCriteria] = useState("");
+  const [projectRevisionRecord, setProjectRevisionRecord] = useState("");
   const [recordQuestion, setRecordQuestion] = useState("");
   const [recordEvidence, setRecordEvidence] = useState("");
   const [recordOutput, setRecordOutput] = useState("");
@@ -142,6 +149,13 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     setBarcodeBlastEvidence("");
     setBarcodeTreePosition("");
     setBarcodeConclusionBoundary("");
+    setCopiedProjectEvidenceTable(false);
+    setProjectDrivingQuestion("");
+    setProjectFinalWork("");
+    setProjectTaskNode("");
+    setProjectProcessEvidence("");
+    setProjectRubricCriteria("");
+    setProjectRevisionRecord("");
     setCopiedGenomeStoryFrame(false);
     setGenomeStoryObject("");
     setGenomeStoryQuestion("");
@@ -607,6 +621,105 @@ ${barcodeEvidenceFilled.boundary}
 5. 树图位置是否能支撑候选判断：${barcodeEvidenceFields[4]?.pass ? "可用" : "待补充"}
 6. 结论是否保留确定、可能或仍需验证：${barcodeEvidenceFields[5]?.pass ? "可用" : "待补充"}`
     : "";
+  const projectEvidenceBuilderEnabled = article?.slug === "pbl-rubric-evidence";
+  const projectEvidenceFields = projectEvidenceBuilderEnabled
+    ? [
+        {
+          id: "project-driving-question",
+          label: "驱动问题",
+          value: projectDrivingQuestion,
+          setValue: setProjectDrivingQuestion,
+          placeholder: "例如：城市阳台如何在有限空间里提高可食植物的存活率？",
+          pass: projectDrivingQuestion.trim().length >= 16 && /为什么|如何|能否|怎样|解决|提高|判断/.test(projectDrivingQuestion.trim()),
+          help: "写成能被作品和证据回答的问题。",
+        },
+        {
+          id: "project-final-work",
+          label: "最终作品",
+          value: projectFinalWork,
+          setValue: setProjectFinalWork,
+          placeholder: "例如：一页调查报告 + 一张种植方案图 + 7 天观察记录。",
+          pass: projectFinalWork.trim().length >= 14 && /报告|模型|方案|作品|图|记录|视频|展板|卡片/.test(projectFinalWork.trim()),
+          help: "写清最后要交付什么可看见的作品。",
+        },
+        {
+          id: "project-task-node",
+          label: "任务节点",
+          value: projectTaskNode,
+          setValue: setProjectTaskNode,
+          placeholder: "例如：资料收集、变量设计、观察记录、证据整理、作品修订。",
+          pass: projectTaskNode.trim().length >= 18 && /资料|设计|观察|记录|证据|整理|表达|修订|分析/.test(projectTaskNode.trim()),
+          help: "把过程拆成 3-5 个可执行节点。",
+        },
+        {
+          id: "project-process-evidence",
+          label: "过程证据",
+          value: projectProcessEvidence,
+          setValue: setProjectProcessEvidence,
+          placeholder: "例如：问题草稿、资料卡、原始记录、照片、反馈和修改前后对比。",
+          pass: projectProcessEvidence.trim().length >= 18 && /草稿|资料|记录|照片|反馈|证据|数据|对比|修改/.test(projectProcessEvidence.trim()),
+          help: "写出每个节点要保存的可回看材料。",
+        },
+        {
+          id: "project-rubric-criteria",
+          label: "评价量规",
+          value: projectRubricCriteria,
+          setValue: setProjectRubricCriteria,
+          placeholder: "例如：问题清楚、证据可靠、解释连得上、表达可读、修改有痕迹。",
+          pass: projectRubricCriteria.trim().length >= 18 && /问题|证据|解释|表达|修改|可靠|清楚|量规|标准/.test(projectRubricCriteria.trim()),
+          help: "写成能观察的标准，不只写抽象形容词。",
+        },
+        {
+          id: "project-revision-record",
+          label: "修订记录",
+          value: projectRevisionRecord,
+          setValue: setProjectRevisionRecord,
+          placeholder: "例如：根据反馈把结论从“最适合”改成“在本次记录中更稳定”。",
+          pass: projectRevisionRecord.trim().length >= 20 && /根据|反馈|修改|修订|改成|补充|删除|调整|更可靠/.test(projectRevisionRecord.trim()),
+          help: "写出一次具体修改如何让作品更可靠。",
+        },
+      ]
+    : [];
+  const projectEvidenceScore = projectEvidenceFields.filter((field) => field.pass).length;
+  const projectEvidenceFilled = {
+    question: projectDrivingQuestion.trim() || "驱动问题需要能被最终作品和过程证据回答。",
+    work: projectFinalWork.trim() || "最终作品需要是可展示、可保存、可判断质量的产出。",
+    nodes: projectTaskNode.trim() || "任务节点需要把过程拆成资料、设计、记录、整理、表达或修订。",
+    evidence: projectProcessEvidence.trim() || "过程证据需要保留草稿、资料卡、原始记录、照片、反馈或修改痕迹。",
+    rubric: projectRubricCriteria.trim() || "评价量规需要把问题、证据、解释、表达和修改写成可观察标准。",
+    revision: projectRevisionRecord.trim() || "修订记录需要说明根据什么反馈，把什么内容改成了什么。",
+  };
+  const projectEvidenceTableText = projectEvidenceBuilderEnabled
+    ? `【项目证据表】
+主题：${article?.title ?? ""}
+填写完成度：${projectEvidenceScore}/6
+
+一、驱动问题
+${projectEvidenceFilled.question}
+
+二、最终作品
+${projectEvidenceFilled.work}
+
+三、任务节点
+${projectEvidenceFilled.nodes}
+
+四、过程证据
+${projectEvidenceFilled.evidence}
+
+五、评价量规
+${projectEvidenceFilled.rubric}
+
+六、修订记录
+${projectEvidenceFilled.revision}
+
+自查
+1. 驱动问题是否能被作品回答：${projectEvidenceFields[0]?.pass ? "可用" : "待补充"}
+2. 最终作品是否可展示、可保存：${projectEvidenceFields[1]?.pass ? "可用" : "待补充"}
+3. 任务节点是否可执行：${projectEvidenceFields[2]?.pass ? "可用" : "待补充"}
+4. 过程证据是否可回看：${projectEvidenceFields[3]?.pass ? "可用" : "待补充"}
+5. 评价量规是否可观察：${projectEvidenceFields[4]?.pass ? "可用" : "待补充"}
+6. 修订记录是否说明作品如何变可靠：${projectEvidenceFields[5]?.pass ? "可用" : "待补充"}`
+    : "";
   const platformUrl = article && "platformUrl" in article ? article.platformUrl : null;
   const platformUsePlans = platformUrl
     ? [
@@ -1054,6 +1167,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     if (copiedToClipboard) {
       setCopiedEvidenceChainCard(true);
       setCopiedBarcodeEvidenceTable(false);
+      setCopiedProjectEvidenceTable(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
       setCopiedActionPack(false);
@@ -1077,6 +1191,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     if (copiedToClipboard) {
       setCopiedGenomeStoryFrame(true);
       setCopiedBarcodeEvidenceTable(false);
+      setCopiedProjectEvidenceTable(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1100,6 +1215,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     const copiedToClipboard = await copyText(barcodeEvidenceTableText);
     if (copiedToClipboard) {
       setCopiedBarcodeEvidenceTable(true);
+      setCopiedProjectEvidenceTable(false);
       setCopiedGenomeStoryFrame(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
@@ -1119,12 +1235,38 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  async function copyProjectEvidenceTable() {
+    if (!projectEvidenceTableText) return;
+    const copiedToClipboard = await copyText(projectEvidenceTableText);
+    if (copiedToClipboard) {
+      setCopiedProjectEvidenceTable(true);
+      setCopiedBarcodeEvidenceTable(false);
+      setCopiedGenomeStoryFrame(false);
+      setCopiedEvidenceChainCard(false);
+      setCopiedSummary(false);
+      setCopiedTemplate(false);
+      setCopiedActionPack(false);
+      setCopiedLearningRecord(false);
+      setCopiedReadingTaskPack(false);
+      setCopiedPlatformConfig(false);
+      setCopiedPlatformReview(false);
+      setCopiedAiAuditPrompts(false);
+      setCopyStatus("项目证据表已复制到剪贴板。");
+      window.setTimeout(() => setCopiedProjectEvidenceTable(false), 1400);
+      return;
+    }
+
+    setCopiedProjectEvidenceTable(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
   async function copyPlatformPasteConfig() {
     if (!platformPasteConfigText) return;
     const copiedToClipboard = await copyText(platformPasteConfigText);
     if (copiedToClipboard) {
       setCopiedPlatformConfig(true);
       setCopiedBarcodeEvidenceTable(false);
+      setCopiedProjectEvidenceTable(false);
       setCopiedPlatformReview(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1147,6 +1289,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     if (copiedToClipboard) {
       setCopiedPlatformReview(true);
       setCopiedBarcodeEvidenceTable(false);
+      setCopiedProjectEvidenceTable(false);
       setCopiedPlatformConfig(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1524,6 +1667,52 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   </code>
                   <button type="button" onClick={copyBarcodeEvidenceTable} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
                     {copiedBarcodeEvidenceTable ? "已复制" : "复制证据链表"}
+                  </button>
+                </div>
+              </div>
+            ) : null}
+
+            {projectEvidenceBuilderEnabled ? (
+              <div className="project-evidence-table-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>项目证据表</div>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.16rem", fontWeight: 800 }}>
+                      把驱动问题、最终作品、任务节点、过程证据、评价量规和修订记录对齐，避免活动很多但作品不能证明理解。
+                    </div>
+                  </div>
+                  <span style={{ background: projectEvidenceScore === 6 ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.26rem 0.62rem", color: projectEvidenceScore === 6 ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+                    完成度 {projectEvidenceScore}/6
+                  </span>
+                </div>
+                <div className="project-evidence-table-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.62rem" }}>
+                  {projectEvidenceFields.map((field) => (
+                    <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.34rem", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 900 }}>
+                      {field.label}
+                      <textarea
+                        id={field.id}
+                        value={field.value}
+                        placeholder={field.placeholder}
+                        rows={3}
+                        onChange={(event) => {
+                          field.setValue(event.currentTarget.value);
+                          setCopiedProjectEvidenceTable(false);
+                          setCopyStatus("");
+                        }}
+                        style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem 0.66rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, lineHeight: 1.55, resize: "vertical" }}
+                      />
+                      <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.45, fontWeight: 800 }}>
+                        {field.pass ? "可用" : field.help}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.7rem", alignItems: "start" }}>
+                  <code style={{ display: "block", whiteSpace: "pre-wrap", maxHeight: 240, overflow: "auto", background: "var(--cherry-sage-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.7rem", lineHeight: 1.58 }}>
+                    {projectEvidenceTableText}
+                  </code>
+                  <button type="button" onClick={copyProjectEvidenceTable} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
+                    {copiedProjectEvidenceTable ? "已复制" : "复制项目证据表"}
                   </button>
                 </div>
               </div>
@@ -2141,6 +2330,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           .genome-story-frame-grid textarea:focus-visible,
           .barcode-evidence-table-builder button:focus-visible,
           .barcode-evidence-table-grid textarea:focus-visible,
+          .project-evidence-table-builder button:focus-visible,
+          .project-evidence-table-grid textarea:focus-visible,
           .article-record-grid textarea:focus-visible,
           .platform-custom-config-grid input:focus-visible,
           .platform-custom-config-grid textarea:focus-visible,
@@ -2221,6 +2412,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             .genome-story-frame-builder > div:nth-of-type(3),
             .barcode-evidence-table-grid,
             .barcode-evidence-table-builder > div:nth-of-type(3),
+            .project-evidence-table-grid,
+            .project-evidence-table-builder > div:nth-of-type(3),
             .platform-active-plan-grid,
             .platform-custom-config-grid > div:nth-of-type(2) {
               grid-template-columns: 1fr !important;

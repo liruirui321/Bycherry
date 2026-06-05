@@ -344,6 +344,20 @@ function verifyBarcodingEvidenceTableBuilder() {
   expect(articleSource.includes("barcode-evidence-table-builder") && articleSource.includes("barcode-evidence-table-grid"), "Barcoding evidence builder must have stable classes for layout checks.");
 }
 
+function verifyProjectEvidenceTableBuilder() {
+  const articleSource = read("src/app/components/ArticleDetailPage.tsx");
+
+  expect(articleSource.includes("projectEvidenceBuilderEnabled"), "Project evidence article must expose a special project evidence table builder.");
+  expect(articleSource.includes('article?.slug === "pbl-rubric-evidence"'), "Project evidence builder must target the PBL evidence article.");
+  expect(articleSource.includes("projectEvidenceFields"), "Project evidence builder must define learner-fillable fields.");
+  expect(articleSource.includes("projectEvidenceTableText"), "Project evidence builder must produce a copyable project evidence table.");
+  expect(articleSource.includes("copyProjectEvidenceTable"), "Project evidence builder must expose a copy handler.");
+  expect(articleSource.includes("项目证据表"), "Project evidence builder must visibly name the project evidence table.");
+  expect(articleSource.includes("驱动问题") && articleSource.includes("最终作品") && articleSource.includes("任务节点") && articleSource.includes("过程证据") && articleSource.includes("评价量规") && articleSource.includes("修订记录"), "Project evidence builder must keep driving-question, final-work, task-node, process-evidence, rubric, and revision fields.");
+  expect(articleSource.includes("避免活动很多但作品不能证明理解"), "Project evidence builder must keep the activity-without-evidence caution visible.");
+  expect(articleSource.includes("project-evidence-table-builder") && articleSource.includes("project-evidence-table-grid"), "Project evidence builder must have stable classes for layout checks.");
+}
+
 function verifyArticleOutcomeSnapshot() {
   const articleSource = read("src/app/components/ArticleDetailPage.tsx");
 
@@ -1332,6 +1346,7 @@ verifyPlatformGuideConfigBuilder();
 verifyPlantGenomeEvidenceChainBuilder();
 verifyGenomeAssemblyStoryFrameBuilder();
 verifyBarcodingEvidenceTableBuilder();
+verifyProjectEvidenceTableBuilder();
 verifyArticleOutcomeSnapshot();
 verifyWorkJsonLdLearningOutcomes();
 verifyResearchAgentWorkbenchContract();
