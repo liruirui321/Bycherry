@@ -110,6 +110,7 @@ function verifyVisibleLearningModuleCopy() {
     "src/app/App.tsx",
     "src/app/components/Footer.tsx",
     "src/app/components/Hero.tsx",
+    "src/app/components/HomeLibrary.tsx",
     "src/app/components/Nav.tsx",
     "src/app/components/WorkDetailPage.tsx",
     "src/app/components/Works.tsx",
@@ -192,19 +193,22 @@ function verifyNoLowQualityVisibleContent() {
 
 function verifyWorkCardActions() {
   const worksSource = read("src/app/components/Works.tsx");
+  const heroSource = read("src/app/components/Hero.tsx");
+  const appSource = read("src/app/App.tsx");
   const copyActionMatches = Array.from(worksSource.matchAll(/\baction:\s*"复制[^"]*"/g), (match) => match[0]);
 
   expect(copyActionMatches.length === 0, `Work card entry actions should open or start the tool, not imply direct copy behavior: ${copyActionMatches.join(", ")}`);
   expect(worksSource.includes('title: "科研 Agent 工作台"'), "Research AI work card should be titled 科研 Agent 工作台.");
   expect(!worksSource.includes("科研助手 Prompt Kit"), "Visible work card title must not use the old Prompt Kit naming.");
-  expect(worksSource.includes("work-card-first-step"), "Homepage work cards must use compact first-step scan rows.");
-  expect(worksSource.includes("work-card-output-strip"), "Homepage work cards must use compact output strips.");
-  expect(worksSource.includes("minHeight: 242"), "Homepage work cards must stay compact enough for scanning.");
-  expect(worksSource.includes('aria-label="全部学习模块"'), "Works section must keep one compact all-module index.");
+  expect(heroSource.includes('id="works"') && heroSource.includes('aria-label="首屏学习模块目录"'), "Hero must own the #works anchor and all-module directory.");
+  expect(heroSource.includes("hero-work-outcome") && heroSource.includes("hero-work-completion"), "Hero module cards must expose outputs and direct actions.");
+  expect(!appSource.includes("<Works") && !appSource.includes('import { Works }'), "Homepage should not render a second Works section below the hero.");
+  expect(!worksSource.includes("export function Works") && !worksSource.includes("function WorkCard"), "Works.tsx should stay data-only so module entries are not duplicated on the homepage.");
   for (const retiredWorksEntry of ["work-recommended-start", "work-filter-button", "activeCategory", "recommendedWork"]) {
     expect(!worksSource.includes(retiredWorksEntry), `Works section should not repeat first-screen entries or filters: ${retiredWorksEntry}.`);
   }
-  expect(!worksSource.includes("work-scan-strip"), "Works section should not repeat a second compact scan strip below the first-screen directory.");
+  expect(!worksSource.includes("work-card-first-step") && !worksSource.includes("work-card-output-strip"), "Works data module should not include retired homepage card rendering.");
+  expect(!worksSource.includes("work-scan-strip"), "Works data module should not repeat a second compact scan strip below the first-screen directory.");
   expect(!worksSource.includes("moduleChecklistText") && !worksSource.includes("学习模块清单"), "Works section should not add a homepage-level copy checklist.");
   expect(!worksSource.includes("learningPathBundles") && !worksSource.includes("配套阅读路径"), "Works section should not repeat paired reading paths on the homepage.");
 }
@@ -237,8 +241,7 @@ function verifyWorkDetailCardsStayCompact() {
 
 function verifyArticleCardsStayStructured() {
   const files = [
-    "src/app/components/Notes.tsx",
-    "src/app/components/ResearchEssays.tsx",
+    "src/app/components/HomeLibrary.tsx",
     "src/app/components/ArticleDetailPage.tsx",
     "src/app/components/EmptyStateCard.tsx",
   ];
@@ -249,15 +252,15 @@ function verifyArticleCardsStayStructured() {
     expect(!source.includes("transform: rotate("), `${relativePath} must not use rotated tape or stamp styling.`);
   }
 
-  const notesSource = read("src/app/components/Notes.tsx");
-  const researchSource = read("src/app/components/ResearchEssays.tsx");
+  const appSource = read("src/app/App.tsx");
+  const homeLibrarySource = read("src/app/components/HomeLibrary.tsx");
 
-  expect(notesSource.includes("note-card-action-row"), "Learning method cards must keep a compact first-action row.");
-  expect(notesSource.includes("note-card-compact-evidence"), "Learning method cards must group completion and output into a compact evidence area.");
-  expect(!notesSource.includes("note-card-excerpt") && !notesSource.includes("note-card-illustration"), "Learning method homepage cards should not expand into article previews.");
-  expect(researchSource.includes("research-card-action-row"), "Research evidence cards must keep a compact first-action row.");
-  expect(researchSource.includes("research-card-compact-evidence"), "Research evidence cards must group completion and output into a compact evidence area.");
-  expect(!researchSource.includes("research-essay-excerpt") && !researchSource.includes("research-essay-illustration"), "Research evidence homepage cards should not expand into article previews.");
+  expect(appSource.includes("<HomeLibrary />"), "Homepage must render the short article index.");
+  expect(!appSource.includes("<ResearchEssays />") && !appSource.includes("<Notes />"), "Homepage should not render separate long Research and Notes sections.");
+  expect(homeLibrarySource.includes("home-library-link") && homeLibrarySource.includes("home-library-action") && homeLibrarySource.includes("home-library-output"), "Home library rows must expose compact action and output text.");
+  expect(homeLibrarySource.includes('id="research"') && homeLibrarySource.includes('id="notes"'), "Home library must keep research and notes anchors for existing navigation.");
+  expect(homeLibrarySource.includes("WebkitLineClamp: 2") && homeLibrarySource.includes("WebkitLineClamp: 1"), "Home library rows must clamp text instead of becoming long boxes.");
+  expect(!homeLibrarySource.includes("note-card") && !homeLibrarySource.includes("research-card"), "Home library must not reintroduce article card layouts.");
 }
 
 function verifyPlatformGuideConfigBuilder() {
@@ -430,6 +433,7 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("hero-work-outcome") && heroSource.includes('{work.outputs.slice(0, 2).join(" / ")}'), "Homepage hero work cards must visibly expose saved outputs.");
   expect(heroSource.includes("hero-work-completion") && heroSource.includes("{work.action}"), "Homepage hero work cards must visibly expose the module action without adding another detail panel.");
   expect(heroSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage hero work cards must include starter and completion standard in accessible labels.");
+  expect(heroSource.includes('id="works"'), "Homepage #works anchor must point to the first-screen module directory instead of a duplicate section.");
   expect(heroSource.includes('aria-label="首屏学习模块目录"'), "Homepage hero must label the first-screen module directory.");
   expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(178px, 1fr))"'), "Homepage hero module cards must stay compact enough to reveal multiple modules in the first screen.");
   expect(heroSource.includes("minHeight: 154"), "Homepage hero module cards must use compact fixed heights.");
@@ -439,15 +443,11 @@ function verifyWorkJsonLdLearningOutcomes() {
   for (const retiredHeroBlock of ["sessionPlans", "materialRoutes", "heroModuleStats", "hero-session-copy-status", "hero-material-route-grid"]) {
     expect(!heroSource.includes(retiredHeroBlock), `Homepage hero should stay short and not include retired duplicate block: ${retiredHeroBlock}.`);
   }
-  expect(worksSource.includes("先做这个"), "Homepage work cards must expose a first concrete starter action.");
-  expect(worksSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Works section must use the direct-to-tool work href helper.");
-  expect(worksSource.includes('const href = "href" in work ? getWorkToolHref(work.href) : undefined'), "Homepage work cards must open the primary tool anchor.");
-  expect(worksSource.includes('aria-label="全部学习模块"') && worksSource.includes("works.map((work)"), "Works section must keep one compact all-module index instead of a repeated recommended entry.");
+  expect(!appSource.includes("<Works") && !appSource.includes('import { Works }'), "Homepage must not render a duplicate Works section below the hero.");
   for (const retiredWorksBlock of ["work-scan-strip", "work-module-checklist-panel", "work-reading-path-panel"]) {
-    expect(!worksSource.includes(retiredWorksBlock), `Works section should stay shorter and not include retired duplicate block: ${retiredWorksBlock}.`);
+    expect(!worksSource.includes(retiredWorksBlock), `Works data module should stay shorter and not include retired duplicate block: ${retiredWorksBlock}.`);
   }
-  expect(worksSource.includes("{work.success}"), "Homepage work cards must expose each work completion standard.");
-  expect(worksSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage work cards must include starter and completion standard in accessible labels.");
+  expect(!worksSource.includes("export function Works") && !worksSource.includes("function WorkCard"), "Works module should stay data-only; homepage cards live in Hero.");
   expect(workDetailSource.includes("{work.starter}"), "Work detail quick start must expose each work starter action.");
   expect(workDetailSource.includes("{work.success}"), "Work detail quick start must expose each work completion standard.");
   expect(workDetailSource.includes("workFirstRunCards"), "Work detail quick start must build a first-run route card set.");
@@ -963,12 +963,14 @@ function verifyLearnerFacingArticleCopy() {
   const articleDetailSource = read("src/app/components/ArticleDetailPage.tsx");
   const notesSource = read("src/app/components/Notes.tsx");
   const researchSource = read("src/app/components/ResearchEssays.tsx");
+  const homeLibrarySource = read("src/app/components/HomeLibrary.tsx");
   const learnerArticleSources = [
     "src/app/App.tsx",
     "src/app/components/ArticleDetailPage.tsx",
     "src/app/components/Contact.tsx",
     "src/app/components/Footer.tsx",
     "src/app/components/Hero.tsx",
+    "src/app/components/HomeLibrary.tsx",
     "src/app/components/Nav.tsx",
     "src/app/components/Notes.tsx",
     "src/app/components/ResearchEssays.tsx",
@@ -1032,11 +1034,11 @@ function verifyLearnerFacingArticleCopy() {
     "学习资料库",
     "学习方法库",
     "科研证据库",
-    "按学习方法主题筛选",
-    "按科研证据主题筛选",
-    "当前显示",
-    "note-card-compact-evidence",
-    "research-card-compact-evidence",
+    "文章索引",
+    "读证据和学方法",
+    "home-library-link",
+    "home-library-action",
+    "home-library-output",
     "查看证据",
     "学习方法、科研证据、AI 创作和科研转译资料",
     "先做这个",
@@ -1128,21 +1130,17 @@ function verifyLearnerFacingArticleCopy() {
   expect(staticIndexSource.includes("teaches: [route.firstAction, route.firstCheck, route.firstOutput].filter(Boolean)"), "Static article JSON-LD must include first action, completion check, and learner output.");
   expect(staticIndexSource.includes("完成后检查："), "Static index fallback must expose article completion checks.");
   expect(staticIndexSource.includes("可保存产出："), "Static index fallback must expose learner outputs.");
-  expect(notesSource.includes("note.actionSteps[0]"), "Learning method cards must expose each article's first action step.");
-  expect(notesSource.includes("note-card-completion") && notesSource.includes("{note.checklist[0]}"), "Learning method cards must visibly expose each article's first completion check.");
-  expect(notesSource.includes("note-card-output") && notesSource.includes("{note.starterTemplate[0]}"), "Learning method cards must visibly expose each article's first learner output.");
-  expect(researchSource.includes("essay.actionSteps[0]"), "Research evidence cards must expose each article's first action step.");
-  expect(researchSource.includes("research-card-completion") && researchSource.includes("{essay.checklist[0]}"), "Research evidence cards must visibly expose each article's first completion check.");
-  expect(researchSource.includes("research-card-output") && researchSource.includes("{essay.starterTemplate[0]}"), "Research evidence cards must visibly expose each article's first learner output.");
-  expect(notesSource.includes("aria-label={`打开学习方法：${note.title}。先做这个，${note.actionSteps[0]}。完成后检查，${note.checklist[0]}`}"), "Learning method cards must include first action and completion check in accessible labels.");
-  expect(notesSource.includes("note-filter-button") && notesSource.includes("note-card-compact-evidence"), "Learning method library should keep filters and compact article entries.");
+  expect(homeLibrarySource.includes("note.actionSteps[0]") && homeLibrarySource.includes("note.checklist[0]") && homeLibrarySource.includes("note.starterTemplate[0]"), "Learning method home rows must expose first action, completion check, and output.");
+  expect(homeLibrarySource.includes("essay.actionSteps[0]") && homeLibrarySource.includes("essay.checklist[0]") && homeLibrarySource.includes("essay.starterTemplate[0]"), "Research evidence home rows must expose first action, completion check, and output.");
+  expect(homeLibrarySource.includes("aria-label={`打开${item.title}。先做这个，${item.firstAction}。完成后检查，${item.firstCheck}`}"), "Home library rows must include first action and completion check in accessible labels.");
   for (const retiredNoteBlock of ["methodChecklistText", "copyMethodChecklist", "note-method-checklist-panel", "noteRouteGuides", "methodRouteGuideText", "copyMethodRouteGuide", "note-route-guide-panel", "note-recommended-start"]) {
     expect(!notesSource.includes(retiredNoteBlock), `Learning method library should not repeat route/checklist panels on the homepage: ${retiredNoteBlock}.`);
   }
-  expect(researchSource.includes("aria-label={`打开科研证据：${essay.title}。先做这个，${essay.actionSteps[0]}。完成后检查，${essay.checklist[0]}`}"), "Research evidence cards must include first action and completion check in accessible labels.");
-  expect(researchSource.includes("research-filter-button") && researchSource.includes("research-card-compact-evidence"), "Research evidence library should keep filters and compact article entries.");
   for (const retiredResearchBlock of ["evidenceChecklistText", "copyEvidenceChecklist", "research-evidence-checklist-panel", "evidenceRouteGuides", "evidenceRouteGuideText", "copyEvidenceRouteGuide", "research-route-guide-panel", "research-recommended-start"]) {
     expect(!researchSource.includes(retiredResearchBlock), `Research evidence library should not repeat route/checklist panels on the homepage: ${retiredResearchBlock}.`);
+  }
+  for (const retiredHomeArticleBlock of ["note-filter-button", "research-filter-button", "note-card-compact-evidence", "research-card-compact-evidence", "note-card-action-row", "research-card-action-row"]) {
+    expect(!homeLibrarySource.includes(retiredHomeArticleBlock), `Home library should not use retired long article card block: ${retiredHomeArticleBlock}.`);
   }
 }
 
@@ -1165,7 +1163,6 @@ function verifyLearnerProductPositioning() {
     "植物演化时间轴",
     "CRISPR 编辑模拟器",
     '"学习项目"',
-    "科学学习和 AI 工具",
     "science learning lab",
     "先选一个模块",
     "首屏学习模块目录",

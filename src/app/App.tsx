@@ -1,11 +1,9 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
-import { Works } from "./components/Works";
-import { ResearchEssays } from "./components/ResearchEssays";
 import { essays } from "./components/ResearchEssays";
-import { Notes } from "./components/Notes";
 import { notes } from "./components/Notes";
+import { HomeLibrary } from "./components/HomeLibrary";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
 import { EmptyStateCard } from "./components/EmptyStateCard";
@@ -424,9 +422,7 @@ export default function App() {
       ) : (
         <main id="main-content" tabIndex={-1}>
           <Hero />
-          <Works />
-          <ResearchEssays />
-          <Notes />
+          <HomeLibrary />
           <Contact />
         </main>
       )}

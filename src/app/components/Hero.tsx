@@ -108,7 +108,7 @@ export function Hero() {
           </div>
         </div>
 
-        <nav className="hero-work-grid" aria-label="首屏学习模块目录" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(178px, 1fr))", gap: "0.62rem", minWidth: 0, maxWidth: "100%" }}>
+        <nav id="works" className="hero-work-grid" aria-label="首屏学习模块目录" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(178px, 1fr))", gap: "0.62rem", minWidth: 0, maxWidth: "100%" }}>
           {works.map((work) => {
             const toolHref = getWorkToolHref(work.href);
             return (

@@ -56,6 +56,7 @@ const homeAnchors = new Set([
   ...extractStaticIds("src/app/App.tsx"),
   ...extractStaticIds("src/app/components/Hero.tsx"),
   ...extractStaticIds("src/app/components/Works.tsx"),
+  ...extractStaticIds("src/app/components/HomeLibrary.tsx"),
   ...extractStaticIds("src/app/components/ResearchEssays.tsx"),
   ...extractStaticIds("src/app/components/Notes.tsx"),
   ...extractStaticIds("src/app/components/Contact.tsx"),
