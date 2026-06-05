@@ -2509,63 +2509,42 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             </div>
 
             {pairedWorks.length ? (
-              <div className="article-paired-work-panel" style={{ background: "var(--card)", border: "1.5px solid rgba(58,92,62,0.18)", borderRadius: 16, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
-                  <div>
-                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>读完接着做</div>
-                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginTop: "0.18rem", fontWeight: 800 }}>
-                      文章解决方法和证据，配套模块负责把这一步变成可操作产出。
-                    </div>
-                  </div>
-                  <a
-                    className="article-detail-link"
-                    href="/#works"
-                    onClick={(event) => {
-                      if (!shouldUseClientNavigation(event)) return;
-                      event.preventDefault();
-                      navigateHome("#works");
-                    }}
-                    style={{ background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.34rem 0.68rem", textDecoration: "none", fontWeight: 900, fontSize: "0.74rem", whiteSpace: "nowrap" }}
-                  >
-                    全部学习模块
-                  </a>
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.58rem" }}>
+              <div className="article-paired-work-panel" style={{ marginBottom: "0.9rem", display: "grid", gap: "0.38rem" }}>
+                <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>配套模块</div>
+                <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 0 }}>
                   {pairedWorks.map((work) => {
                     const toolHref = getWorkToolHref(work.href);
                     return (
-                    <a
-                      key={work.slug}
-                      className="article-paired-work-link"
-                      href={toolHref}
-                      aria-label={`打开配套模块：${work.title}。先做这个，${work.starter}。完成标准，${work.success}`}
-                      onMouseEnter={() => preloadRouteForHref(toolHref)}
-                      onFocus={() => preloadRouteForHref(toolHref)}
-                      onPointerDown={() => preloadRouteForHref(toolHref)}
-                      onClick={(event) => {
-                        if (!shouldUseClientNavigation(event)) return;
-                        event.preventDefault();
-                        navigateToPath(toolHref);
-                      }}
-                      style={{ background: "var(--muted)", border: `1.5px solid ${work.border}`, borderRadius: 8, padding: "0.7rem", color: "inherit", textDecoration: "none", display: "grid", gap: "0.5rem", minHeight: 166 }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
-                        <span aria-hidden="true" style={{ width: 34, height: 34, borderRadius: 8, background: work.color, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                          {work.icon}
+                    <li key={work.slug}>
+                      <a
+                        className="article-paired-work-link"
+                        href={toolHref}
+                        aria-label={`打开配套模块：${work.title}`}
+                        onMouseEnter={() => preloadRouteForHref(toolHref)}
+                        onFocus={() => preloadRouteForHref(toolHref)}
+                        onPointerDown={() => preloadRouteForHref(toolHref)}
+                        onClick={(event) => {
+                          if (!shouldUseClientNavigation(event)) return;
+                          event.preventDefault();
+                          navigateToPath(toolHref);
+                        }}
+                        style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.7rem", alignItems: "center", borderTop: "1px solid rgba(94,68,42,0.1)", padding: "0.52rem 0", color: "inherit", textDecoration: "none", minWidth: 0 }}
+                      >
+                        <span style={{ minWidth: 0, display: "grid", gap: "0.18rem" }}>
+                          <span style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0, flexWrap: "wrap" }}>
+                            <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>{work.category}</span>
+                            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", lineHeight: 1.32, fontWeight: 900, overflowWrap: "anywhere" }}>{work.title}</strong>
+                          </span>
+                          <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
+                            {work.starter}
+                          </span>
                         </span>
-                        <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", lineHeight: 1.35, fontWeight: 900 }}>{work.title}</span>
-                      </div>
-                      <div className="article-paired-work-step" style={{ display: "grid", gap: "0.2rem" }}>
-                        <span style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>先做这个</span>
-                        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>{work.starter}</span>
-                      </div>
-                      <div className="article-paired-work-check" style={{ borderTop: "1px solid rgba(94,68,42,0.1)", paddingTop: "0.45rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 900 }}>
-                        完成标准：{work.success}
-                      </div>
-                    </a>
+                        <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900, whiteSpace: "nowrap" }}>打开 →</span>
+                      </a>
+                    </li>
                     );
                   })}
-                </div>
+                </ul>
               </div>
             ) : null}
 
@@ -2803,22 +2782,19 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             </a>
 
             {navArticles.length > 0 ? (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.8rem", marginTop: "1.2rem" }}>
+              <nav aria-label="文章前后导航" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.55rem", marginTop: "1rem" }}>
                 {navArticles.map((item) => {
                   const itemType = "tag" in item.article ? item.article.tag : item.article.label;
                   const itemReadTime = "readTime" in item.article ? item.article.readTime : item.article.readMin;
                   const itemColor = "tagColor" in item.article ? item.article.tagColor : item.article.labelColor;
                   const itemBg = "tagBg" in item.article ? item.article.tagBg : item.article.labelBg;
-                  const itemAction = item.article.actionSteps[0];
-                  const itemCheck = item.article.checklist[0];
-                  const itemOutput = item.article.starterTemplate[0];
 
                   return (
                     <a
                       className="article-nav-card"
                       key={item.article.slug}
                       href={item.article.href}
-                      aria-label={`${item.label}：${item.article.title}。先做这个，${itemAction}。完成后检查，${itemCheck}`}
+                      aria-label={`${item.label}文章：${item.article.title}`}
                       onMouseEnter={() => preloadRouteForHref(item.article.href)}
                       onFocus={() => preloadRouteForHref(item.article.href)}
                       onPointerDown={() => preloadRouteForHref(item.article.href)}
@@ -2827,33 +2803,20 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                         event.preventDefault();
                         navigateToPath(item.article.href);
                       }}
-                      style={{ display: "grid", gap: "0.48rem", justifyItems: item.align === "right" ? "end" : "start", textAlign: item.align, background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.85rem", color: "var(--cherry-warm-mid)", textDecoration: "none" }}
+                      style={{ display: "grid", gap: "0.18rem", justifyItems: item.align === "right" ? "end" : "start", textAlign: item.align, background: "transparent", borderTop: "1px solid rgba(94,68,42,0.12)", borderRadius: 0, padding: "0.5rem 0", color: "var(--cherry-warm-mid)", textDecoration: "none" }}
                     >
-                      <span style={{ color: "var(--cherry-forest)", fontWeight: 900 }}>
+                      <span style={{ color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.72rem" }}>
                         {item.align === "left" ? `${item.arrow} ` : ""}{item.label}{item.align === "right" ? ` ${item.arrow}` : ""}
                       </span>
-                      <strong style={{ color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.9rem" }}>{item.article.title}</strong>
+                      <strong style={{ color: "var(--cherry-warm-brown)", lineHeight: 1.35, fontSize: "0.86rem" }}>{item.article.title}</strong>
                       <span style={{ display: "flex", alignItems: "center", justifyContent: item.align === "right" ? "flex-end" : "flex-start", gap: 6, flexWrap: "wrap" }}>
                         <span style={{ background: itemBg, color: itemColor, borderRadius: 999, padding: "0.13rem 0.5rem", fontSize: "0.68rem", fontWeight: 900 }}>{itemType}</span>
-                        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem" }}>约 {itemReadTime} 分钟</span>
-                      </span>
-                      <span style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.52, fontSize: "0.76rem" }}>{item.article.highlights[0]}</span>
-                      <span style={{ display: "block", background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem 0.56rem", color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.74rem", fontWeight: 900 }}>
-                        <span style={{ display: "block", color: "var(--cherry-red)", fontSize: "0.66rem", marginBottom: "0.14rem" }}>先做这个</span>
-                        {itemAction}
-                      </span>
-                      <span className="article-nav-card-check" style={{ display: "block", background: "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem 0.56rem", color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.74rem", fontWeight: 900 }}>
-                        <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.66rem", marginBottom: "0.14rem" }}>完成后检查</span>
-                        {itemCheck}
-                      </span>
-                      <span className="article-nav-card-output" style={{ display: "block", background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem 0.56rem", color: "var(--cherry-warm-brown)", lineHeight: 1.45, fontSize: "0.74rem", fontWeight: 900 }}>
-                        <span style={{ display: "block", color: itemColor, fontSize: "0.66rem", marginBottom: "0.14rem" }}>读完产出</span>
-                        {itemOutput}
+                        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", fontWeight: 800 }}>约 {itemReadTime} 分钟</span>
                       </span>
                     </a>
                   );
                 })}
-              </div>
+              </nav>
             ) : null}
           </article>
 
@@ -2936,14 +2899,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           }
 
           .article-nav-card {
-            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+            transition: color 0.18s ease;
           }
 
           .article-nav-card:hover,
           .article-nav-card:focus-visible {
-            transform: translateY(-2px);
-            border-color: var(--cherry-sage) !important;
-            box-shadow: 3px 6px 0 rgba(94,68,42,0.08);
+            color: var(--cherry-red) !important;
           }
 
           @media (prefers-reduced-motion: reduce) {

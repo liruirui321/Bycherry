@@ -1051,12 +1051,10 @@ function verifyLearnerFacingArticleCopy() {
     "复制已填写记录",
     "复制学习记录",
     "30 分钟执行节奏",
-    "读完接着做",
+    "配套模块",
     "pairedWorkSlugsByArticleSlug",
     "article-paired-work-panel",
     "article-paired-work-link",
-    "article-paired-work-step",
-    "article-paired-work-check",
   ];
   const retiredLearnerArticlePatterns = [
     { label: "old AI course title", pattern: /AI 可以参与课程开发/ },
@@ -1105,7 +1103,10 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("入口：${getWorkToolHref(work.href)}"), "Article copied next-step records must point directly to work tools.");
   expect(articleDetailSource.includes("const toolHref = getWorkToolHref(work.href)"), "Article paired module cards must derive direct-to-tool hrefs.");
   expect(articleDetailSource.includes("work.starter") && articleDetailSource.includes("work.success"), "Article paired module cards must expose starter actions and completion standards.");
-  expect(articleDetailSource.includes("aria-label={`打开配套模块：${work.title}。先做这个，${work.starter}。完成标准，${work.success}`}"), "Article paired module links must include starter and completion standard in accessible labels.");
+  expect(articleDetailSource.includes("aria-label={`打开配套模块：${work.title}`}"), "Article paired module links must use short accessible labels.");
+  for (const retiredArticlePairedWorkCopy of ["文章解决方法和证据，配套模块负责把这一步变成可操作产出。", "全部学习模块", "article-paired-work-step", "article-paired-work-check", "minHeight: 166", "完成标准：{work.success}"]) {
+    expect(!articleDetailSource.includes(retiredArticlePairedWorkCopy), `Article paired module section should stay compact: ${retiredArticlePairedWorkCopy}.`);
+  }
   expect(articleDetailSource.includes("const learningRecordText"), "Article detail pages must include a copyable learning record.");
   expect(articleDetailSource.includes("copyLearningRecord"), "Article detail pages must provide a learning record copy action.");
   expect(articleDetailSource.includes("record-question-input"), "Article detail pages must expose a learner question input.");
@@ -1115,12 +1116,11 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("actionSteps[0]"), "Article quick start must use the first concrete article action.");
   expect(articleDetailSource.includes("checklist[0]"), "Article quick start must expose the first completion check.");
   expect(articleDetailSource.includes("pitfalls[0]"), "Article quick start must expose the first pitfall to avoid.");
-  expect(articleDetailSource.includes("const itemAction = item.article.actionSteps[0]"), "Article previous/next cards must derive the adjacent article first action.");
-  expect(articleDetailSource.includes("const itemCheck = item.article.checklist[0]"), "Article previous/next cards must derive the adjacent article completion check.");
-  expect(articleDetailSource.includes("const itemOutput = item.article.starterTemplate[0]"), "Article previous/next cards must derive the adjacent article saved output.");
-  expect(articleDetailSource.includes("aria-label={`${item.label}：${item.article.title}。先做这个，${itemAction}。完成后检查，${itemCheck}`}"), "Article previous/next cards must include first action and completion check in accessible labels.");
-  expect(articleDetailSource.includes("article-nav-card-check") && articleDetailSource.includes("{itemCheck}"), "Article previous/next cards must visibly expose adjacent article completion checks.");
-  expect(articleDetailSource.includes("article-nav-card-output") && articleDetailSource.includes("{itemOutput}"), "Article previous/next cards must visibly expose adjacent article saved outputs.");
+  expect(articleDetailSource.includes('aria-label={`${item.label}文章：${item.article.title}`}'), "Article previous/next links must use short accessible labels.");
+  expect(articleDetailSource.includes('aria-label="文章前后导航"'), "Article previous/next navigation must be a compact nav landmark.");
+  for (const retiredArticleNavCardCopy of ["const itemAction = item.article.actionSteps[0]", "const itemCheck = item.article.checklist[0]", "const itemOutput = item.article.starterTemplate[0]", "article-nav-card-check", "article-nav-card-output"]) {
+    expect(!articleDetailSource.includes(retiredArticleNavCardCopy), `Article previous/next navigation should not reintroduce long card details: ${retiredArticleNavCardCopy}.`);
+  }
   expect(appSource.includes("teaches: [article.actionSteps[0], article.checklist[0], article.starterTemplate[0]]"), "Runtime article list JSON-LD must include first action, completion check, and learner output.");
   expect(appSource.includes("teaches: [note?.actionSteps[0] ?? essay?.actionSteps[0], note?.checklist[0] ?? essay?.checklist[0], note?.starterTemplate[0] ?? essay?.starterTemplate[0]]"), "Runtime article detail JSON-LD must include first action, completion check, and learner output.");
   expect(appSource.includes("const articleFirstAction = note?.actionSteps[0] ?? essay?.actionSteps[0] ?? null"), "Runtime article metadata must derive the first action step.");
