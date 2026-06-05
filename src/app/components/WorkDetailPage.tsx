@@ -5174,23 +5174,6 @@ function WorkQuickStart({ work }: { work: Work }) {
     setFirstRunCopyStatus("");
   }, [work.slug]);
 
-  const workFirstRunCards = [
-    {
-      time: "5 分钟",
-      title: "进入操作",
-      body: work.starter,
-    },
-    {
-      time: "15 分钟",
-      title: "跑完整体",
-      body: work.task,
-    },
-    {
-      time: "30 分钟",
-      title: "留下结果",
-      body: `保存 ${work.outputs.join(" / ")}，再写下：${work.success}`,
-    },
-  ];
   const workFirstRunPlanText = `【${work.title}第一次运行卡】
 5 分钟：${work.starter}
 15 分钟：${work.task}
@@ -5226,7 +5209,7 @@ ${work.outputs.map((output, index) => `${index + 1}. ${output}`).join("\n")}`;
     <section
       aria-labelledby="work-quick-start-heading"
       style={{
-        padding: "0.85rem 1.5rem 1rem",
+        padding: "0.46rem 1.5rem 0.58rem",
         background: "var(--background)",
         fontFamily: "'Nunito', sans-serif",
       }}
@@ -5236,30 +5219,35 @@ ${work.outputs.map((output, index) => `${index + 1}. ${output}`).join("\n")}`;
         style={{
           maxWidth: 1060,
           margin: "0 auto",
-          background: "var(--card)",
-          border: "1.5px solid rgba(94,68,42,0.12)",
-          borderTop: `4px solid ${work.border}`,
+          background: "rgba(250,247,241,0.72)",
+          border: "1px solid rgba(94,68,42,0.1)",
           borderRadius: 8,
-          padding: "0.85rem",
+          padding: "0.52rem 0.62rem",
           display: "grid",
-          gridTemplateColumns: "minmax(0, 1.1fr) minmax(220px, 0.9fr)",
-          gap: "0.85rem",
-          alignItems: "stretch",
-          boxShadow: "0 8px 18px rgba(94,68,42,0.06)",
+          gridTemplateColumns: "minmax(0, 1fr) auto",
+          gap: "0.72rem",
+          alignItems: "center",
         }}
       >
-        <div style={{ display: "grid", gap: "0.42rem", alignContent: "start" }}>
-          <div id="work-quick-start-heading" style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900 }}>立即任务</div>
-          <p style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.55, fontWeight: 900 }}>
+        <div className="work-run-summary" style={{ minWidth: 0, display: "grid", gap: "0.22rem" }}>
+          <div id="work-quick-start-heading" style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>立即任务</div>
+          <p style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.82rem", lineHeight: 1.42, fontWeight: 900, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
             {work.task}
           </p>
+          <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.35, fontWeight: 900, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
+            先做：{work.starter} · 完成：{work.success}
+          </span>
+          <span id="work-first-run-copy-status" role="status" aria-live="polite" style={{ minHeight: "0.9rem", color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>
+            {firstRunCopyStatus}
+          </span>
+        </div>
+        <div className="work-run-actions" style={{ display: "inline-flex", alignItems: "center", justifyContent: "flex-end", gap: "0.42rem", flexWrap: "wrap" }}>
           <button
             type="button"
             className="work-start-tool-link"
             aria-label={`开始操作${work.title}。先做这个，${work.starter}`}
             onClick={focusPrimaryTool}
             style={{
-              justifySelf: "start",
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
@@ -5272,80 +5260,31 @@ ${work.outputs.map((output, index) => `${index + 1}. ${output}`).join("\n")}`;
               fontFamily: "'Nunito', sans-serif",
               fontSize: "0.76rem",
               fontWeight: 900,
+              whiteSpace: "nowrap",
             }}
           >
             开始操作 →
           </button>
-          <div className="work-first-run-panel" style={{ marginTop: "0.18rem", background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.64rem", display: "grid", gap: "0.52rem" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.52rem", flexWrap: "wrap" }}>
-              <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>第一次运行卡</span>
-              <button
-                type="button"
-                className="work-first-run-copy-button"
-                onClick={copyFirstRunPlan}
-                aria-describedby="work-first-run-copy-status"
-                style={{
-                  border: "1px solid rgba(58,92,62,0.22)",
-                  borderRadius: 999,
-                  background: "var(--background)",
-                  color: "var(--cherry-forest)",
-                  cursor: "pointer",
-                  fontFamily: "'Nunito', sans-serif",
-                  fontSize: "0.66rem",
-                  fontWeight: 900,
-                  padding: "0.22rem 0.58rem",
-                }}
-              >
-                {copiedFirstRunPlan ? "已复制" : "复制运行卡"}
-              </button>
-            </div>
-            <div className="work-first-run-grid" role="list" aria-label={`${work.title}第一次运行路线`} style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.42rem" }}>
-              {workFirstRunCards.map((card) => (
-                <span key={card.time} role="listitem" style={{ display: "grid", gap: "0.24rem", background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.5rem", minWidth: 0 }}>
-                  <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>{card.time}</span>
-                  <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.35, fontWeight: 900 }}>{card.title}</strong>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.4, fontWeight: 900, overflowWrap: "anywhere" }}>{card.body}</span>
-                </span>
-              ))}
-            </div>
-            <div id="work-first-run-copy-status" role="status" aria-live="polite" style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900 }}>
-              {firstRunCopyStatus}
-            </div>
-          </div>
-        </div>
-        <div className="work-quick-start-meta" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.55rem" }}>
-          <div style={{ background: "var(--cherry-yellow-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem" }}>
-            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>先做这个</span>
-            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.35, fontWeight: 900 }}>
-              {work.starter}
-            </span>
-          </div>
-          <div style={{ background: work.color, border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem" }}>
-            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>三步进入</span>
-            <div role="list" aria-label={`${work.title}三步进入路径`} style={{ display: "grid", gap: "0.25rem" }}>
-              {work.path.map((step, index) => (
-                <span key={step} role="listitem" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.35, fontWeight: 900 }}>
-                  {index + 1}. {step}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div style={{ background: "var(--cherry-peach-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem" }}>
-            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>做到这样算完成</span>
-            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.35, fontWeight: 900 }}>
-              {work.success}
-            </span>
-          </div>
-          <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", display: "grid", gap: "0.34rem" }}>
-            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>你会得到</span>
-            <div role="list" aria-label={`${work.title}学习产出`} style={{ display: "flex", flexWrap: "wrap", gap: "0.28rem" }}>
-              {work.outputs.map((output) => (
-                <span key={output} role="listitem" style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.13rem 0.42rem", color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>
-                  {output}
-                </span>
-              ))}
-            </div>
-          </div>
+          <button
+            type="button"
+            className="work-first-run-copy-button"
+            onClick={copyFirstRunPlan}
+            aria-describedby="work-first-run-copy-status"
+            style={{
+              border: "1px solid rgba(58,92,62,0.22)",
+              borderRadius: 999,
+              background: "var(--card)",
+              color: "var(--cherry-forest)",
+              cursor: "pointer",
+              fontFamily: "'Nunito', sans-serif",
+              fontSize: "0.72rem",
+              fontWeight: 900,
+              padding: "0.4rem 0.72rem",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {copiedFirstRunPlan ? "已复制" : "复制运行卡"}
+          </button>
         </div>
       </div>
     </section>
@@ -5883,16 +5822,12 @@ export function WorkDetailPage({ slug }: { slug: string }) {
               grid-template-columns: 1fr !important;
             }
 
-            .work-quick-start-meta {
-              grid-template-columns: 1fr !important;
-            }
-
             .work-evidence-field-grid {
               grid-template-columns: 1fr !important;
             }
 
-            .work-first-run-grid {
-              grid-template-columns: 1fr !important;
+            .work-run-actions {
+              justify-content: flex-start !important;
             }
           }
 
