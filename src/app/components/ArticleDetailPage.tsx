@@ -89,6 +89,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copiedProjectEvidenceTable, setCopiedProjectEvidenceTable] = useState(false);
   const [copiedCreationRunRecord, setCopiedCreationRunRecord] = useState(false);
   const [copiedResearchQuestionCard, setCopiedResearchQuestionCard] = useState(false);
+  const [copiedAiMaterialAuditTable, setCopiedAiMaterialAuditTable] = useState(false);
   const [selectedPlatformPlanIndex, setSelectedPlatformPlanIndex] = useState(0);
   const [platformLearnerLevel, setPlatformLearnerLevel] = useState("生物基础入门，已经学过 DNA 和 RNA 基础");
   const [platformKnowledgeRange, setPlatformKnowledgeRange] = useState("基因表达：DNA、mRNA、蛋白质的信息传递关系");
@@ -131,6 +132,12 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [researchEvidenceMaterial, setResearchEvidenceMaterial] = useState("");
   const [researchExplanationTask, setResearchExplanationTask] = useState("");
   const [researchBoundaryNextStep, setResearchBoundaryNextStep] = useState("");
+  const [aiAuditLearningGoal, setAiAuditLearningGoal] = useState("");
+  const [aiAuditSourceBoundary, setAiAuditSourceBoundary] = useState("");
+  const [aiAuditMisconception, setAiAuditMisconception] = useState("");
+  const [aiAuditPracticeCheck, setAiAuditPracticeCheck] = useState("");
+  const [aiAuditEvidenceBoundary, setAiAuditEvidenceBoundary] = useState("");
+  const [aiAuditRevisionAction, setAiAuditRevisionAction] = useState("");
   const [recordQuestion, setRecordQuestion] = useState("");
   const [recordEvidence, setRecordEvidence] = useState("");
   const [recordOutput, setRecordOutput] = useState("");
@@ -184,6 +191,13 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     setResearchEvidenceMaterial("");
     setResearchExplanationTask("");
     setResearchBoundaryNextStep("");
+    setCopiedAiMaterialAuditTable(false);
+    setAiAuditLearningGoal("");
+    setAiAuditSourceBoundary("");
+    setAiAuditMisconception("");
+    setAiAuditPracticeCheck("");
+    setAiAuditEvidenceBoundary("");
+    setAiAuditRevisionAction("");
     setCopiedGenomeStoryFrame(false);
     setGenomeStoryObject("");
     setGenomeStoryQuestion("");
@@ -946,6 +960,105 @@ ${researchQuestionFilled.boundary}
 5. 解释任务是否要求判断支持和不支持：${researchQuestionFields[4]?.pass ? "可用" : "待补充"}
 6. 边界是否保留下一步验证：${researchQuestionFields[5]?.pass ? "可用" : "待补充"}`
     : "";
+  const aiMaterialAuditBuilderEnabled = article?.slug === "ai-course-development";
+  const aiMaterialAuditFields = aiMaterialAuditBuilderEnabled
+    ? [
+        {
+          id: "ai-audit-learning-goal",
+          label: "学习目标",
+          value: aiAuditLearningGoal,
+          setValue: setAiAuditLearningGoal,
+          placeholder: "例如：我需要能解释转录和翻译的区别，并用图判断 mRNA 和蛋白质产物。",
+          pass: aiAuditLearningGoal.trim().length >= 18 && /解释|判断|区分|说明|应用|目标|能|会/.test(aiAuditLearningGoal.trim()),
+          help: "写成自己要完成的动作，不只写章节名。",
+        },
+        {
+          id: "ai-audit-source-boundary",
+          label: "资料边界",
+          value: aiAuditSourceBoundary,
+          setValue: setAiAuditSourceBoundary,
+          placeholder: "例如：只依据教材第 2 节、个人记录和基因表达工具记录，不使用未核查网页。",
+          pass: aiAuditSourceBoundary.trim().length >= 18 && /教材|笔记|论文|资料|网页|视频|边界|来源|工具/.test(aiAuditSourceBoundary.trim()),
+          help: "写清 AI 可以依据哪些资料，哪些不能直接采信。",
+        },
+        {
+          id: "ai-audit-misconception",
+          label: "常见误解",
+          value: aiAuditMisconception,
+          setValue: setAiAuditMisconception,
+          placeholder: "例如：容易把 RNA 聚合酶和 DNA 聚合酶混淆，把 mRNA 当成蛋白质产物。",
+          pass: aiAuditMisconception.trim().length >= 18 && /混淆|误解|容易|错误|不清|概念|区分|当成/.test(aiAuditMisconception.trim()),
+          help: "写出这次材料必须暴露或修正的误解。",
+        },
+        {
+          id: "ai-audit-practice-check",
+          label: "练习检查",
+          value: aiAuditPracticeCheck,
+          setValue: setAiAuditPracticeCheck,
+          placeholder: "例如：每道题只检查一个核心判断，干扰项来自真实误解，解析说明为什么错。",
+          pass: aiAuditPracticeCheck.trim().length >= 20 && /题|练习|干扰项|解析|判断|检查|错因|答案/.test(aiAuditPracticeCheck.trim()),
+          help: "写清练习是否能暴露误解，而不是只堆题量。",
+        },
+        {
+          id: "ai-audit-evidence-boundary",
+          label: "证据边界",
+          value: aiAuditEvidenceBoundary,
+          setValue: setAiAuditEvidenceBoundary,
+          placeholder: "例如：AI 生成的解释必须回到图、定义或教材句子；实验结论要标为待核查。",
+          pass: aiAuditEvidenceBoundary.trim().length >= 20 && /证据|不能|待核查|依据|边界|图|定义|结论|实验/.test(aiAuditEvidenceBoundary.trim()),
+          help: "写出哪些内容必须回到资料或证据核查。",
+        },
+        {
+          id: "ai-audit-revision-action",
+          label: "复盘动作",
+          value: aiAuditRevisionAction,
+          setValue: setAiAuditRevisionAction,
+          placeholder: "例如：把错题归类为概念混淆或证据判断，再重写学习卡的机制步骤。",
+          pass: aiAuditRevisionAction.trim().length >= 20 && /复盘|修改|重写|归类|补充|删除|改|下一步|错题/.test(aiAuditRevisionAction.trim()),
+          help: "写出看完 AI 输出后要改哪张卡、哪道题或哪段解释。",
+        },
+      ]
+    : [];
+  const aiMaterialAuditScore = aiMaterialAuditFields.filter((field) => field.pass).length;
+  const aiMaterialAuditFilled = {
+    goal: aiAuditLearningGoal.trim() || "学习目标需要写成自己要完成的解释、判断或应用动作。",
+    source: aiAuditSourceBoundary.trim() || "资料边界需要写清 AI 可以依据哪些资料，哪些内容要标为待核查。",
+    misconception: aiAuditMisconception.trim() || "常见误解需要写出这次材料必须暴露或修正的混淆点。",
+    practice: aiAuditPracticeCheck.trim() || "练习检查需要确认每道题能暴露具体误解，并有清楚解析。",
+    evidence: aiAuditEvidenceBoundary.trim() || "证据边界需要说明哪些解释、数据或结论必须回到资料核查。",
+    revision: aiAuditRevisionAction.trim() || "复盘动作需要写出下一步要修改、补充或删除的材料。",
+  };
+  const aiMaterialAuditTableText = aiMaterialAuditBuilderEnabled
+    ? `【AI 学习材料质检表】
+主题：${article?.title ?? ""}
+填写完成度：${aiMaterialAuditScore}/6
+
+一、学习目标
+${aiMaterialAuditFilled.goal}
+
+二、资料边界
+${aiMaterialAuditFilled.source}
+
+三、常见误解
+${aiMaterialAuditFilled.misconception}
+
+四、练习检查
+${aiMaterialAuditFilled.practice}
+
+五、证据边界
+${aiMaterialAuditFilled.evidence}
+
+六、复盘动作
+${aiMaterialAuditFilled.revision}
+
+自查
+1. 学习目标是否是可完成动作：${aiMaterialAuditFields[0]?.pass ? "可用" : "待补充"}
+2. 资料边界是否清楚：${aiMaterialAuditFields[1]?.pass ? "可用" : "待补充"}
+3. 常见误解是否具体：${aiMaterialAuditFields[2]?.pass ? "可用" : "待补充"}
+4. 练习是否能暴露误解：${aiMaterialAuditFields[3]?.pass ? "可用" : "待补充"}
+5. 证据边界是否保留核查：${aiMaterialAuditFields[4]?.pass ? "可用" : "待补充"}
+6. 复盘动作是否能继续执行：${aiMaterialAuditFields[5]?.pass ? "可用" : "待补充"}`
+    : "";
   const platformUrl = article && "platformUrl" in article ? article.platformUrl : null;
   const platformUsePlans = platformUrl
     ? [
@@ -1396,6 +1509,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedProjectEvidenceTable(false);
       setCopiedCreationRunRecord(false);
       setCopiedResearchQuestionCard(false);
+      setCopiedAiMaterialAuditTable(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
       setCopiedActionPack(false);
@@ -1422,6 +1536,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedProjectEvidenceTable(false);
       setCopiedCreationRunRecord(false);
       setCopiedResearchQuestionCard(false);
+      setCopiedAiMaterialAuditTable(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1448,6 +1563,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedProjectEvidenceTable(false);
       setCopiedCreationRunRecord(false);
       setCopiedResearchQuestionCard(false);
+      setCopiedAiMaterialAuditTable(false);
       setCopiedGenomeStoryFrame(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
@@ -1475,6 +1591,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedBarcodeEvidenceTable(false);
       setCopiedCreationRunRecord(false);
       setCopiedResearchQuestionCard(false);
+      setCopiedAiMaterialAuditTable(false);
       setCopiedGenomeStoryFrame(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
@@ -1502,6 +1619,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedProjectEvidenceTable(false);
       setCopiedBarcodeEvidenceTable(false);
       setCopiedResearchQuestionCard(false);
+      setCopiedAiMaterialAuditTable(false);
       setCopiedGenomeStoryFrame(false);
       setCopiedEvidenceChainCard(false);
       setCopiedSummary(false);
@@ -1531,6 +1649,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedBarcodeEvidenceTable(false);
       setCopiedGenomeStoryFrame(false);
       setCopiedEvidenceChainCard(false);
+      setCopiedAiMaterialAuditTable(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
       setCopiedActionPack(false);
@@ -1548,6 +1667,34 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  async function copyAiMaterialAuditTable() {
+    if (!aiMaterialAuditTableText) return;
+    const copiedToClipboard = await copyText(aiMaterialAuditTableText);
+    if (copiedToClipboard) {
+      setCopiedAiMaterialAuditTable(true);
+      setCopiedResearchQuestionCard(false);
+      setCopiedCreationRunRecord(false);
+      setCopiedProjectEvidenceTable(false);
+      setCopiedBarcodeEvidenceTable(false);
+      setCopiedGenomeStoryFrame(false);
+      setCopiedEvidenceChainCard(false);
+      setCopiedSummary(false);
+      setCopiedTemplate(false);
+      setCopiedActionPack(false);
+      setCopiedLearningRecord(false);
+      setCopiedReadingTaskPack(false);
+      setCopiedPlatformConfig(false);
+      setCopiedPlatformReview(false);
+      setCopiedAiAuditPrompts(false);
+      setCopyStatus("AI 学习材料质检表已复制到剪贴板。");
+      window.setTimeout(() => setCopiedAiMaterialAuditTable(false), 1400);
+      return;
+    }
+
+    setCopiedAiMaterialAuditTable(false);
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
   async function copyPlatformPasteConfig() {
     if (!platformPasteConfigText) return;
     const copiedToClipboard = await copyText(platformPasteConfigText);
@@ -1557,6 +1704,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedProjectEvidenceTable(false);
       setCopiedCreationRunRecord(false);
       setCopiedResearchQuestionCard(false);
+      setCopiedAiMaterialAuditTable(false);
       setCopiedPlatformReview(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1582,6 +1730,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedProjectEvidenceTable(false);
       setCopiedCreationRunRecord(false);
       setCopiedResearchQuestionCard(false);
+      setCopiedAiMaterialAuditTable(false);
       setCopiedPlatformConfig(false);
       setCopiedSummary(false);
       setCopiedTemplate(false);
@@ -1603,6 +1752,13 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     const copiedToClipboard = await copyText(aiMaterialAuditPromptText);
     if (copiedToClipboard) {
       setCopiedAiAuditPrompts(true);
+      setCopiedAiMaterialAuditTable(false);
+      setCopiedResearchQuestionCard(false);
+      setCopiedCreationRunRecord(false);
+      setCopiedProjectEvidenceTable(false);
+      setCopiedBarcodeEvidenceTable(false);
+      setCopiedGenomeStoryFrame(false);
+      setCopiedEvidenceChainCard(false);
       setCopiedPlatformReview(false);
       setCopiedPlatformConfig(false);
       setCopiedSummary(false);
@@ -2097,6 +2253,52 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   </code>
                   <button type="button" onClick={copyResearchQuestionCard} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
                     {copiedResearchQuestionCard ? "已复制" : "复制转译卡"}
+                  </button>
+                </div>
+              </div>
+            ) : null}
+
+            {aiMaterialAuditBuilderEnabled ? (
+              <div className="ai-material-audit-table-builder" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.82rem", marginBottom: "0.9rem", display: "grid", gap: "0.7rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>AI 学习材料质检表</div>
+                    <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.16rem", fontWeight: 800 }}>
+                      把学习目标、资料边界、误解、练习、证据和复盘动作拆开检查，避免把 AI 输出直接当成理解。
+                    </div>
+                  </div>
+                  <span style={{ background: aiMaterialAuditScore === 6 ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.26rem 0.62rem", color: aiMaterialAuditScore === 6 ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+                    完成度 {aiMaterialAuditScore}/6
+                  </span>
+                </div>
+                <div className="ai-material-audit-table-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.62rem" }}>
+                  {aiMaterialAuditFields.map((field) => (
+                    <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.34rem", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 900 }}>
+                      {field.label}
+                      <textarea
+                        id={field.id}
+                        value={field.value}
+                        placeholder={field.placeholder}
+                        rows={3}
+                        onChange={(event) => {
+                          field.setValue(event.currentTarget.value);
+                          setCopiedAiMaterialAuditTable(false);
+                          setCopyStatus("");
+                        }}
+                        style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem 0.66rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, lineHeight: 1.55, resize: "vertical" }}
+                      />
+                      <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.45, fontWeight: 800 }}>
+                        {field.pass ? "可用" : field.help}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.7rem", alignItems: "start" }}>
+                  <code style={{ display: "block", whiteSpace: "pre-wrap", maxHeight: 240, overflow: "auto", background: "var(--cherry-sage-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.7rem", lineHeight: 1.58 }}>
+                    {aiMaterialAuditTableText}
+                  </code>
+                  <button type="button" onClick={copyAiMaterialAuditTable} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
+                    {copiedAiMaterialAuditTable ? "已复制" : "复制质检表"}
                   </button>
                 </div>
               </div>
@@ -2720,6 +2922,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           .creation-run-record-grid textarea:focus-visible,
           .research-question-card-builder button:focus-visible,
           .research-question-card-grid textarea:focus-visible,
+          .ai-material-audit-table-builder button:focus-visible,
+          .ai-material-audit-table-grid textarea:focus-visible,
           .article-record-grid textarea:focus-visible,
           .platform-custom-config-grid input:focus-visible,
           .platform-custom-config-grid textarea:focus-visible,
@@ -2806,6 +3010,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             .creation-run-record-builder > div:nth-of-type(3),
             .research-question-card-grid,
             .research-question-card-builder > div:nth-of-type(3),
+            .ai-material-audit-table-grid,
+            .ai-material-audit-table-builder > div:nth-of-type(3),
             .platform-active-plan-grid,
             .platform-custom-config-grid > div:nth-of-type(2) {
               grid-template-columns: 1fr !important;

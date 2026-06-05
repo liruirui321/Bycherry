@@ -386,6 +386,20 @@ function verifyResearchQuestionTranslationBuilder() {
   expect(articleSource.includes("research-question-card-builder") && articleSource.includes("research-question-card-grid"), "Research question translation builder must have stable classes for layout checks.");
 }
 
+function verifyAiMaterialAuditTableBuilder() {
+  const articleSource = read("src/app/components/ArticleDetailPage.tsx");
+
+  expect(articleSource.includes("aiMaterialAuditBuilderEnabled"), "AI material audit article must expose a special audit table builder.");
+  expect(articleSource.includes('article?.slug === "ai-course-development"'), "AI material audit table builder must target the AI material audit article.");
+  expect(articleSource.includes("aiMaterialAuditFields"), "AI material audit table builder must define learner-fillable fields.");
+  expect(articleSource.includes("aiMaterialAuditTableText"), "AI material audit table builder must produce a copyable audit table.");
+  expect(articleSource.includes("copyAiMaterialAuditTable"), "AI material audit table builder must expose a copy handler.");
+  expect(articleSource.includes("AI 学习材料质检表"), "AI material audit table builder must visibly name the audit table.");
+  expect(articleSource.includes("学习目标") && articleSource.includes("资料边界") && articleSource.includes("常见误解") && articleSource.includes("练习检查") && articleSource.includes("证据边界") && articleSource.includes("复盘动作"), "AI material audit table builder must keep goal, source, misconception, practice, evidence, and revision fields.");
+  expect(articleSource.includes("避免把 AI 输出直接当成理解"), "AI material audit table builder must keep the output-is-not-understanding caution visible.");
+  expect(articleSource.includes("ai-material-audit-table-builder") && articleSource.includes("ai-material-audit-table-grid"), "AI material audit table builder must have stable classes for layout checks.");
+}
+
 function verifyArticleOutcomeSnapshot() {
   const articleSource = read("src/app/components/ArticleDetailPage.tsx");
 
@@ -1377,6 +1391,7 @@ verifyBarcodingEvidenceTableBuilder();
 verifyProjectEvidenceTableBuilder();
 verifyCreationRunRecordBuilder();
 verifyResearchQuestionTranslationBuilder();
+verifyAiMaterialAuditTableBuilder();
 verifyArticleOutcomeSnapshot();
 verifyWorkJsonLdLearningOutcomes();
 verifyResearchAgentWorkbenchContract();
