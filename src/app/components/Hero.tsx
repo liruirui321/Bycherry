@@ -58,7 +58,7 @@ export function Hero() {
           </span>
         </div>
 
-        <nav id="works" className="hero-work-list" aria-label="内容目录" style={{ display: "flex", alignItems: "center", gap: "0.28rem", flexWrap: "wrap", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+        <nav id="works" className="hero-work-list" aria-label="内容目录" style={{ display: "flex", alignItems: "center", gap: "0.24rem", flexWrap: "wrap", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
           {works.map((work) => {
             const toolHref = getWorkToolHref(work.href);
             return (
@@ -73,16 +73,16 @@ export function Hero() {
                 onPointerDown={() => preloadRouteForHref(getWorkToolHref(work.href))}
                 style={{
                   background: "transparent",
-                  border: "1px solid rgba(94,68,42,0.1)",
-                  borderTop: `2px solid ${work.border}`,
-                  borderRadius: 4,
-                  padding: "0.22rem 0.38rem",
+                  border: "none",
+                  borderLeft: `3px solid ${work.border}`,
+                  borderRadius: 0,
+                  padding: "0.16rem 0.32rem",
                   color: "var(--cherry-warm-brown)",
                   textDecoration: "none",
                   textAlign: "left",
                   display: "inline-flex",
                   alignItems: "baseline",
-                  gap: "0.34rem",
+                  gap: "0.3rem",
                   position: "relative",
                   overflow: "hidden",
                   minWidth: 0,
@@ -118,7 +118,7 @@ export function Hero() {
 
 	          .hero-work-list {
 	            display: flex !important;
-	            gap: 0.24rem !important;
+	            gap: 0.2rem 0.28rem !important;
 	            overflow-x: visible;
 	            padding-bottom: 0;
 	            width: calc(100vw - 2rem) !important;
@@ -127,12 +127,12 @@ export function Hero() {
 	          }
 
 	          .hero-work-row {
-	            width: 100% !important;
+	            flex: 0 1 auto !important;
 	            min-width: 0 !important;
-	            max-width: 100% !important;
+	            max-width: calc(50vw - 1.2rem) !important;
 	            box-sizing: border-box;
-	            gap: 0.28rem !important;
-	            padding: 0.2rem 0.34rem !important;
+	            gap: 0.24rem !important;
+	            padding: 0.14rem 0.26rem !important;
 	          }
 
 	          .hero-work-status {
@@ -160,7 +160,7 @@ export function Hero() {
 
 	        .hero-work-row:hover,
 	        .hero-work-row:focus-visible {
-	          background: rgba(250,247,241,0.48) !important;
+		          background: rgba(250,247,241,0.42) !important;
 	        }
 
         @media (prefers-reduced-motion: reduce) {

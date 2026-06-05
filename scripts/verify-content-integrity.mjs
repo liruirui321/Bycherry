@@ -198,6 +198,8 @@ function verifyWorkCardActions() {
   expect(heroSource.includes('id="works"') && heroSource.includes('aria-label="内容目录"'), "Hero must own the #works anchor and all-module directory.");
   expect(heroSource.includes("hero-work-row") && !heroSource.includes("hero-work-open"), "Hero module entries must stay as compact clickable entries without repeated open pills.");
   expect(heroSource.includes('display: "flex"') && heroSource.includes('flexWrap: "wrap"'), "Homepage module entries must render as a short directory strip instead of a card matrix or long stacked rows.");
+  expect(heroSource.includes('border: "none"') && heroSource.includes('borderLeft: `3px solid ${work.border}`'), "Homepage module entries must read as short directory links, not framed sticky-note cards.");
+  expect(!/\.hero-work-row\s*\{[\s\S]{0,240}width:\s*100%\s*!important/.test(heroSource), "Mobile homepage entries must not become full-width long boxes.");
   expect(!appSource.includes("<Works") && !appSource.includes('import { Works }'), "Homepage should not render a second Works section below the hero.");
   expect(!worksSource.includes("export function Works") && !worksSource.includes("function WorkCard"), "Works.tsx should stay data-only so module entries are not duplicated on the homepage.");
   for (const retiredWorksEntry of ["work-recommended-start", "work-filter-button", "activeCategory", "recommendedWork"]) {
@@ -433,7 +435,7 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("aria-label={`打开${work.title}`}"), "Homepage hero work cards must use short accessible labels.");
   expect(heroSource.includes('id="works"'), "Homepage #works anchor must point to the first-screen module directory instead of a duplicate section.");
   expect(heroSource.includes('aria-label="内容目录"'), "Homepage hero must label the first-screen module directory.");
-  expect(heroSource.includes("hero-work-row") && heroSource.includes('display: "inline-flex"') && !heroSource.includes("hero-work-card"), "Homepage hero module entries must use a compact directory strip, not long repeated cards.");
+  expect(heroSource.includes("hero-work-row") && heroSource.includes('display: "inline-flex"') && heroSource.includes("max-width: calc(50vw - 1.2rem)") && !heroSource.includes("hero-work-card"), "Homepage hero module entries must use a compact directory strip, not long repeated cards.");
   expect(!heroSource.includes("minHeight: 48") && !heroSource.includes("minHeight: 76") && !heroSource.includes("minHeight: 88") && !heroSource.includes("hero-work-summary"), "Homepage hero module entries must not use fixed-height sticky-note cards.");
   expect(heroSource.includes("display: flex !important") && !heroSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") && !heroSource.includes("min-height: 46px !important"), "Homepage hero mobile module directory must stay as a short wrapping strip instead of stacked panels.");
   expect(heroSource.includes("width: calc(100vw - 2rem)"), "Homepage hero mobile module directory must stay inside the visible viewport.");
