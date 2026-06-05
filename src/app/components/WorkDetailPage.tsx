@@ -3841,7 +3841,8 @@ If any of these are missing, add them before the final answer.
         </div>
       </div>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.75rem" }}>
+      <details className="concept-understanding-check-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.04)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>理解验收卡</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>理解验收卡</div>
@@ -3863,9 +3864,10 @@ If any of these are missing, add them before the final answer.
             </div>
           ))}
         </div>
-      </div>
+      </details>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.75rem" }}>
+      <details className="concept-understanding-record-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.04)" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>我的理解记录 · {learnerAuditScore}/4</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>我的理解记录</div>
@@ -3901,7 +3903,7 @@ If any of these are missing, add them before the final answer.
             </label>
           ))}
         </div>
-      </div>
+      </details>
 
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
         <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 900 }}>高质量样例</span>
@@ -4178,6 +4180,20 @@ If any of these are missing, add them before the final answer.
             transform: translateY(-2px);
           }
 
+          #concept-explainer-tool details > summary {
+            list-style-position: outside;
+          }
+
+          #concept-explainer-tool details[open] > summary {
+            margin-bottom: 0.65rem;
+          }
+
+          #concept-explainer-tool .concept-understanding-check-details[open],
+          #concept-explainer-tool .concept-understanding-record-details[open] {
+            display: grid;
+            gap: 0.65rem;
+          }
+
           @media (max-width: 860px) {
             #concept-explainer-tool .concept-agent-input-grid,
             #concept-explainer-tool .concept-responsive-grid {
@@ -4208,7 +4224,9 @@ If any of these are missing, add them before the final answer.
             #concept-explainer-tool .concept-explanation-pack,
             #concept-explainer-tool .concept-responsive-grid,
             #concept-explainer-tool .concept-agent-run-details,
-            #concept-explainer-tool .concept-skill-details {
+            #concept-explainer-tool .concept-skill-details,
+            #concept-explainer-tool .concept-understanding-check-details,
+            #concept-explainer-tool .concept-understanding-record-details {
               padding: 0.68rem !important;
               border-radius: 12px !important;
             }
