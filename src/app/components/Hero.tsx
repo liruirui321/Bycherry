@@ -19,6 +19,38 @@ export function Hero() {
     { label: "梳理植物演化证据", href: "/works/plant-evolution-stories", workTitle: "植物演化时间轴" },
     { label: "判断一次编辑风险", href: "/works/crispr-interactive", workTitle: "CRISPR 编辑模拟器" },
   ];
+  const materialRoutes = [
+    {
+      label: "我有一张生命过程图",
+      hint: "先看分子如何移动，再保存过程记录。",
+      href: "/works/gene-expression",
+      output: "表达读数",
+    },
+    {
+      label: "我卡在一个概念",
+      hint: "输入概念、卡点和应用场景，生成学习卡。",
+      href: "/works/concept-explainer",
+      output: "学习卡",
+    },
+    {
+      label: "我有论文摘要或图注",
+      hint: "粘贴材料，拆证据、缺口和复核问题。",
+      href: "/works/research-prompt-kit",
+      output: "研究记录",
+    },
+    {
+      label: "我想读植物演化证据",
+      hint: "沿时间轴判断创新、证据和边界。",
+      href: "/works/plant-evolution-stories",
+      output: "证据判读",
+    },
+    {
+      label: "我想判断编辑风险",
+      hint: "先找 PAM，再判 guide 和修复结果。",
+      href: "/works/crispr-interactive",
+      output: "风险核查",
+    },
+  ];
   const sessionPlans = [
     {
       label: "生命过程",
@@ -74,6 +106,11 @@ export function Hero() {
 
 首屏模块总览
 ${heroModuleStatsText}
+
+按手头材料选择
+${materialRoutes.map((route, index) => `${index + 1}. ${route.label} → ${route.href}
+先做：${route.hint}
+带走：${route.output}`).join("\n")}
 
 1. 5 分钟启动
 ${activeSessionPlan.work.starter}
@@ -217,6 +254,35 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
               >
                 <span>{route.label}</span>
                 <span aria-hidden="true" style={{ color: "var(--cherry-forest)" }}>→</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ background: "rgba(250,247,241,0.82)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 10, padding: "0.72rem", marginBottom: "1rem", display: "grid", gap: "0.55rem" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900 }}>按手头材料选模块</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800, marginTop: "0.16rem" }}>
+              不确定从哪进时，先看你现在手上有什么材料，再进入能产出记录的模块。
+            </div>
+          </div>
+          <div className="hero-material-route-grid" role="list" aria-label="按手头材料选择学习模块" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(162px, 1fr))", gap: "0.46rem" }}>
+            {materialRoutes.map((route) => (
+              <a
+                key={route.href}
+                className="hero-material-route-link"
+                href={route.href}
+                aria-label={`${route.label}：${route.hint}。带走${route.output}`}
+                onClick={(event) => openWork(route.href, event)}
+                onMouseEnter={() => preloadRouteForHref(route.href)}
+                onFocus={() => preloadRouteForHref(route.href)}
+                onPointerDown={() => preloadRouteForHref(route.href)}
+                role="listitem"
+                style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.5rem 0.56rem", color: "inherit", textDecoration: "none", display: "grid", gap: "0.28rem", minHeight: 104 }}
+              >
+                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.34 }}>{route.label}</strong>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 800 }}>{route.hint}</span>
+                <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>带走：{route.output}</span>
               </a>
             ))}
           </div>
@@ -466,10 +532,15 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
             grid-column: 1 / -1;
           }
 
+          .hero-material-route-grid {
+            grid-template-columns: 1fr !important;
+          }
+
         }
 
         .hero-cta:focus-visible,
         .hero-goal-link:focus-visible,
+        .hero-material-route-link:focus-visible,
         .hero-session-action-link:focus-visible,
         .hero-session-button:focus-visible,
         .hero-work-card:focus-visible {
@@ -486,6 +557,17 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
           transform: translateY(-2px);
           background: var(--cherry-yellow-light);
           border-color: var(--cherry-yellow);
+        }
+
+        .hero-material-route-link {
+          transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+
+        .hero-material-route-link:hover,
+        .hero-material-route-link:focus-visible {
+          transform: translateY(-2px);
+          background: var(--cherry-yellow-light) !important;
+          box-shadow: 3px 6px 0 rgba(94,68,42,0.08);
         }
 
         .hero-session-action-link {
@@ -511,6 +593,7 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
         @media (prefers-reduced-motion: reduce) {
           .hero-cta,
           .hero-goal-link,
+          .hero-material-route-link,
           .hero-session-action-link,
           .hero-session-button,
           .hero-work-card {

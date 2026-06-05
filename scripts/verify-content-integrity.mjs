@@ -347,6 +347,13 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("配套阅读：${activeSessionPlan.article.title}"), "Homepage hero session plan must include a paired reading title.");
   expect(heroSource.includes("阅读入口：${activeSessionPlan.article.href}"), "Homepage hero copied session plan must include paired reading route.");
   expect(heroSource.includes("完成检查：${activeSessionPlan.article.checklist[0]}"), "Homepage hero copied session plan must include paired reading completion check.");
+  expect(heroSource.includes("materialRoutes"), "Homepage hero must expose material-based route choices.");
+  expect(heroSource.includes("按手头材料选模块"), "Homepage hero must visibly let learners choose by the material they have.");
+  expect(heroSource.includes("按手头材料选择"), "Homepage copied session plan must include material-based route choices.");
+  expect(heroSource.includes("hero-material-route-grid"), "Homepage material route choices must have a stable grid class.");
+  expect(heroSource.includes("hero-material-route-link"), "Homepage material route choices must expose direct links.");
+  expect(heroSource.includes('aria-label="按手头材料选择学习模块"'), "Homepage material route choices must be labeled for assistive tech.");
+  expect(heroSource.includes("带走：{route.output}"), "Homepage material route choices must show saved outputs.");
   expect(heroSource.includes("配套阅读进入模块"), "Homepage hero visible session copy must mention paired reading.");
   expect(worksSource.includes("先做这个"), "Homepage work cards must expose a first concrete starter action.");
   expect(worksSource.includes("{work.success}"), "Homepage work cards must expose each work completion standard.");
