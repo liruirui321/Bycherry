@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { GeneExpressionTool } from "./GeneExpressionTool";
 import { IconDNA } from "./Icons";
-import { notes } from "./Notes";
-import { essays } from "./ResearchEssays";
 import { works } from "./Works";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { EmptyStateCard } from "./EmptyStateCard";
@@ -11,35 +9,6 @@ import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../n
 import { preloadRouteForHref } from "../routePrefetch";
 
 type Work = (typeof works)[number];
-type PairedArticle = (typeof notes)[number] | (typeof essays)[number];
-
-const articleLibrary: PairedArticle[] = [...notes, ...essays];
-
-const pairedArticleSlugsByWorkSlug: Record<string, string[]> = {
-  "gene-expression": ["ai-course-development", "ai-assessment-quality-control"],
-  "concept-explainer": ["ai-course-development", "science-to-learning-question"],
-  "research-prompt-kit": ["science-to-learning-question", "genome-assembly-story"],
-  "plant-evolution-stories": ["plant-genome-evidence-chain", "science-to-learning-question"],
-  "crispr-interactive": ["barcoding-evidence-chain", "plant-genome-evidence-chain"],
-};
-
-function getPairedArticlesForWork(work: Work) {
-  return (pairedArticleSlugsByWorkSlug[work.slug] ?? [])
-    .map((articleSlug) => articleLibrary.find((article) => article.slug === articleSlug))
-    .filter((article): article is PairedArticle => Boolean(article));
-}
-
-function getArticleLabel(article: PairedArticle) {
-  return "tag" in article ? article.tag : article.label;
-}
-
-function getArticleLabelColor(article: PairedArticle) {
-  return "tagColor" in article ? article.tagColor : article.labelColor;
-}
-
-function getArticleLabelBg(article: PairedArticle) {
-  return "tagBg" in article ? article.tagBg : article.labelBg;
-}
 
 function navigateHome(hash = "") {
   navigateClient(`/${hash}`);
@@ -5367,81 +5336,6 @@ ${reflectionChecks.map((item, index) => `${index + 1}. ${item}：□ / 证据：
   );
 }
 
-function WorkPairedReading({ work }: { work: Work }) {
-  const pairedArticles = getPairedArticlesForWork(work);
-
-  if (pairedArticles.length === 0) return null;
-
-  function openArticle(href: string, event: React.MouseEvent<HTMLAnchorElement>) {
-    if (!shouldUseClientNavigation(event)) return;
-    event.preventDefault();
-    navigateClient(href);
-  }
-
-  return (
-    <section aria-labelledby="work-paired-reading-heading" style={{ padding: "0.65rem 1.5rem 0.75rem", fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
-      <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gap: "0.45rem" }}>
-        <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.8rem", flexWrap: "wrap" }}>
-          <h2 id="work-paired-reading-heading" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.96rem", lineHeight: 1.25, fontWeight: 900 }}>配套文章</h2>
-          <a
-            className="work-detail-link"
-            href="/#research"
-            onClick={(event) => {
-              if (!shouldUseClientNavigation(event)) return;
-              event.preventDefault();
-              navigateHome("#research");
-            }}
-            style={{ color: "var(--cherry-forest)", textDecoration: "none", fontWeight: 900, fontSize: "0.78rem" }}
-          >
-            全部文章 →
-          </a>
-        </div>
-        <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 0 }}>
-          {pairedArticles.map((article) => (
-            <li key={article.slug}>
-              <a
-                className="work-paired-reading-link"
-                href={article.href}
-                aria-label={`打开配套文章：${article.title}`}
-                onClick={(event) => openArticle(article.href, event)}
-                onMouseEnter={() => preloadRouteForHref(article.href)}
-                onFocus={() => preloadRouteForHref(article.href)}
-                onPointerDown={() => preloadRouteForHref(article.href)}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "minmax(0, 1fr) auto",
-                  gap: "0.7rem",
-                  alignItems: "center",
-                  borderTop: "1px solid rgba(94,68,42,0.1)",
-                  padding: "0.5rem 0",
-                  color: "inherit",
-                  textDecoration: "none",
-                  minWidth: 0,
-                }}
-              >
-                <span style={{ minWidth: 0, display: "grid", gap: "0.18rem" }}>
-                  <span style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", minWidth: 0 }}>
-                    <span style={{ color: getArticleLabelColor(article), fontSize: "0.66rem", fontWeight: 900 }}>
-                      {getArticleLabel(article)}
-                    </span>
-                    <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", lineHeight: 1.32, fontWeight: 900, overflowWrap: "anywhere" }}>{article.title}</strong>
-                  </span>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
-                    {article.actionSteps[0]}
-                  </span>
-                </span>
-                <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900, whiteSpace: "nowrap" }}>
-                  阅读 →
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
 function WorkSequenceLinks({ work }: { work: Work }) {
   const currentIndex = works.findIndex((item) => item.slug === work.slug);
   const previousWork = currentIndex > 0 ? works[currentIndex - 1] : null;
@@ -5542,7 +5436,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
         {work.slug === "gene-expression" ? <GeneExpressionTool /> : hasRichWorkContent(work.slug) ? <RichWorkContent slug={work.slug} /> : null}
       </section>
       <WorkCompletionEvidence work={work} />
-      <WorkPairedReading work={work} />
       <WorkSequenceLinks work={work} />
       <style>
         {`
@@ -5557,7 +5450,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           }
 
           .work-detail-link:focus-visible,
-          .work-paired-reading-link:focus-visible,
           #work-primary-tool:focus-visible,
           .work-sequence-card:focus-visible,
           .work-evidence-copy-button:focus-visible,
@@ -5567,7 +5459,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           }
 
           .work-sequence-card,
-          .work-paired-reading-link,
           .work-evidence-copy-button {
             transition: transform 0.18s ease, box-shadow 0.18s ease;
           }
@@ -5580,8 +5471,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
           .work-sequence-card:hover,
           .work-sequence-card:focus-visible,
-          .work-paired-reading-link:hover,
-          .work-paired-reading-link:focus-visible,
           .work-evidence-copy-button:hover,
           .work-evidence-copy-button:focus-visible {
             transform: translateY(-2px);
@@ -5590,7 +5479,6 @@ export function WorkDetailPage({ slug }: { slug: string }) {
 
           @media (prefers-reduced-motion: reduce) {
             .work-sequence-card,
-            .work-paired-reading-link,
             .work-evidence-copy-button {
               transition: none !important;
               transform: none !important;

@@ -470,21 +470,18 @@ function verifyWorkJsonLdLearningOutcomes() {
   const workHeroRenderIndex = workDetailSource.indexOf("<WorkHero work={work} compact />");
   const primaryToolRenderIndex = workDetailSource.indexOf('id="work-primary-tool"');
   const completionEvidenceRenderIndex = workDetailSource.indexOf("<WorkCompletionEvidence work={work} />");
-  const pairedReadingRenderIndex = workDetailSource.indexOf("<WorkPairedReading work={work} />");
-  expect(workHeroRenderIndex !== -1 && primaryToolRenderIndex !== -1 && completionEvidenceRenderIndex !== -1 && pairedReadingRenderIndex !== -1, "Work detail pages must render title, primary tool, completion evidence, and paired reading.");
-  expect(workHeroRenderIndex < primaryToolRenderIndex && primaryToolRenderIndex < completionEvidenceRenderIndex && completionEvidenceRenderIndex < pairedReadingRenderIndex, "Work detail pages must place the primary tool directly after the compact title bar.");
+  const sequenceLinksRenderIndex = workDetailSource.indexOf("<WorkSequenceLinks work={work} />");
+  expect(workHeroRenderIndex !== -1 && primaryToolRenderIndex !== -1 && completionEvidenceRenderIndex !== -1 && sequenceLinksRenderIndex !== -1, "Work detail pages must render title, primary tool, completion evidence, and compact previous/next navigation.");
+  expect(workHeroRenderIndex < primaryToolRenderIndex && primaryToolRenderIndex < completionEvidenceRenderIndex && completionEvidenceRenderIndex < sequenceLinksRenderIndex, "Work detail pages must place the primary tool directly after the compact title bar, followed by evidence and previous/next navigation.");
   expect(workDetailSource.includes("复盘证据"), "Work detail completion evidence template must include a reflection evidence title.");
   expect(workDetailSource.includes("三、我的填写记录"), "Work detail completion evidence template must include learner-filled notes.");
   expect(workDetailSource.includes("五、复盘检查"), "Work detail completion evidence template must include reflection checks.");
   expect(workDetailSource.includes("六、下一步问题"), "Work detail completion evidence template must include a next-question field.");
-  expect(workDetailSource.includes("pairedArticleSlugsByWorkSlug"), "Work detail pages must map each module to paired article reading.");
-  expect(workDetailSource.includes("function WorkPairedReading"), "Work detail pages must include a paired-reading component.");
-  expect(workDetailSource.includes("配套文章"), "Work detail paired reading must use compact paired-article framing.");
-  expect(workDetailSource.includes("work-paired-reading-link"), "Work detail paired reading must expose direct article links.");
-  expect(workDetailSource.includes("article.actionSteps[0]"), "Work detail paired reading must expose the first concrete reading action.");
-  expect(workDetailSource.includes("aria-label={`打开配套文章：${article.title}`}"), "Work detail paired reading links must use short accessible labels.");
+  for (const retiredWorkArticleBlock of ["pairedArticleSlugsByWorkSlug", "function WorkPairedReading", "配套文章", "work-paired-reading-link", "article.actionSteps[0]", "aria-label={`打开配套文章：${article.title}`", "全部文章 →"]) {
+    expect(!workDetailSource.includes(retiredWorkArticleBlock), `Work detail pages should not reintroduce a separate paired-article entrance: ${retiredWorkArticleBlock}.`);
+  }
   for (const slug of ["gene-expression", "concept-explainer", "research-prompt-kit", "plant-evolution-stories", "crispr-interactive"]) {
-    expect(workDetailSource.includes(`"${slug}"`), `Work detail paired reading must include ${slug}.`);
+    expect(workDetailSource.includes(`"${slug}"`), `Work detail page routing must include ${slug}.`);
   }
   expect(workDetailSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Work detail related work links must use the direct-to-tool href helper.");
   expect(workDetailSource.includes("const toolHref = getWorkToolHref(item.work.href)"), "Work detail previous/next cards must derive direct-to-tool hrefs.");
