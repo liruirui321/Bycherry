@@ -123,7 +123,7 @@ function verifyVisibleLearningModuleCopy() {
     "全部学习模块",
     "学习模块前后导航",
     "30 分钟学习路径",
-    "首屏学习模块总览",
+    "首屏学习模块目录",
     "可保存产出",
     "复制路径",
     "页尾继续学习入口",
@@ -204,31 +204,12 @@ function verifyWorkCardActions() {
   expect(copyActionMatches.length === 0, `Work card entry actions should open or start the tool, not imply direct copy behavior: ${copyActionMatches.join(", ")}`);
   expect(worksSource.includes('title: "科研 Agent 工作台"'), "Research AI work card should be titled 科研 Agent 工作台.");
   expect(!worksSource.includes("科研助手 Prompt Kit"), "Visible work card title must not use the old Prompt Kit naming.");
-  expect(worksSource.includes("moduleChecklistText"), "Works section must provide a copyable learning module checklist.");
-  expect(worksSource.includes("copyModuleChecklist"), "Works section must expose a checklist copy action.");
-  expect(worksSource.includes("学习模块清单"), "Works section must show the learning module checklist panel.");
-  expect(worksSource.includes("复制清单"), "Works section must expose the checklist copy button.");
-  expect(worksSource.includes("filteredOutputCount"), "Works section checklist must summarize saved output counts.");
-  expect(worksSource.includes("work-module-checklist-status"), "Works section checklist must expose copy status.");
   expect(worksSource.includes("work-card-first-step"), "Homepage work cards must use compact first-step scan rows.");
   expect(worksSource.includes("work-card-output-strip"), "Homepage work cards must use compact output strips.");
   expect(worksSource.includes("minHeight: 344"), "Homepage work cards must stay compact enough for scanning.");
-  expect(worksSource.includes("work-scan-strip"), "Works section must expose a top scan strip before deeper planning panels.");
-  expect(worksSource.includes("当前范围速览"), "Works section must name the top scan strip for quick module selection.");
-  expect(worksSource.includes("work-scan-link"), "Works section top scan strip must expose direct module links.");
-  expect(worksSource.includes("work-scan-first-step") && worksSource.includes("work-scan-output"), "Works section top scan strip must expose first steps and outputs.");
-  expect(worksSource.includes("learningPathBundles"), "Works section must connect modules with paired reading paths.");
-  expect(worksSource.includes("配套阅读路径"), "Works section must visibly expose paired module and article routes.");
-  expect(worksSource.includes("readingPathPlanText"), "Works section paired reading paths must provide a copyable plan.");
-  expect(worksSource.includes("copyReadingPathPlan"), "Works section must expose a paired reading path copy action.");
-  expect(worksSource.includes("work-reading-path-status"), "Works section paired reading path copy action must expose copy status.");
-  expect(worksSource.includes("work-reading-path-copy-button"), "Works section must expose a paired reading path copy button.");
-  expect(worksSource.includes("work-reading-path-link"), "Works section paired reading links must be keyboard focusable.");
-  expect(worksSource.includes("bundle.article.actionSteps[0]") && worksSource.includes("bundle.article.checklist[0]"), "Works section paired reading links must expose article action and completion checks.");
-  expect(worksSource.includes("pairedWorkCount") && worksSource.includes("{pairedWorkCount}/{works.length}"), "Works section paired reading paths must show full module coverage.");
-  for (const slug of ["gene-expression", "research-prompt-kit", "plant-evolution-stories", "concept-explainer", "crispr-interactive"]) {
-    expect(worksSource.includes(`work.slug === "${slug}"`), `Works paired reading paths must include ${slug}.`);
-  }
+  expect(!worksSource.includes("work-scan-strip"), "Works section should not repeat a second compact scan strip below the first-screen directory.");
+  expect(!worksSource.includes("moduleChecklistText") && !worksSource.includes("学习模块清单"), "Works section should not add a homepage-level copy checklist.");
+  expect(!worksSource.includes("learningPathBundles") && !worksSource.includes("配套阅读路径"), "Works section should not repeat paired reading paths on the homepage.");
 }
 
 function verifyWorkDetailCardsStayCompact() {
@@ -447,60 +428,27 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(staticIndexSource.includes("立即任务："), "Static index fallback must expose immediate learner tasks.");
   expect(staticIndexSource.includes("先做这个："), "Static index fallback must expose first concrete starter actions.");
   expect(staticIndexSource.includes("完成标准："), "Static index fallback must expose concrete completion standards.");
-  expect(heroSource.includes("{work.task}"), "Homepage hero work cards must expose immediate learner tasks.");
   expect(heroSource.includes("{work.starter}"), "Homepage hero work cards must expose first concrete starter actions.");
   expect(heroSource.includes("{work.success}"), "Homepage hero work cards must expose concrete completion standards.");
   expect(heroSource.includes("hero-work-outcome") && heroSource.includes('{work.outputs.slice(0, 2).join(" / ")}'), "Homepage hero work cards must visibly expose saved outputs.");
-  expect(heroSource.includes("hero-work-completion") && heroSource.includes("{work.success}"), "Homepage hero work cards must visibly expose completion standards.");
+  expect(heroSource.includes("hero-work-completion") && heroSource.includes("{work.action}"), "Homepage hero work cards must visibly expose the module action without adding another detail panel.");
   expect(heroSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage hero work cards must include starter and completion standard in accessible labels.");
   expect(heroSource.includes('aria-label="首屏学习模块目录"'), "Homepage hero must label the first-screen module directory.");
-  expect(heroSource.includes("heroModuleStats"), "Homepage hero must summarize module stats before the first-screen directory.");
-  expect(heroSource.includes("heroOutputCount"), "Homepage hero must calculate saved output counts for first-screen scanning.");
-  expect(heroSource.includes("heroPathStepCount"), "Homepage hero must calculate action step counts for first-screen scanning.");
-  expect(heroSource.includes('aria-label="首屏模块总览"'), "Homepage hero must expose the first-screen module summary to assistive tech.");
-  expect(heroSource.includes("首屏模块总览"), "Homepage copied session plan must include the first-screen module summary.");
-  expect(heroSource.includes("可保存产出"), "Homepage hero must show saved-output coverage before opening a module.");
-  expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(154px, 1fr))"'), "Homepage hero module cards must stay compact enough to reveal multiple modules in the first screen.");
-  expect(heroSource.includes("minHeight: 152"), "Homepage hero module cards must use compact fixed heights.");
+  expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(178px, 1fr))"'), "Homepage hero module cards must stay compact enough to reveal multiple modules in the first screen.");
+  expect(heroSource.includes("minHeight: 154"), "Homepage hero module cards must use compact fixed heights.");
   expect(heroSource.includes("scroll-snap-type: x proximity"), "Homepage hero mobile module directory must support horizontal scanning.");
-  expect(heroSource.includes("sessionPlans"), "Homepage hero must offer a first-screen 30-minute session plan selector.");
   expect(heroSource.includes('import { getWorkToolHref, navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation"'), "Homepage hero must use the direct-to-tool work href helper.");
-  expect(heroSource.includes("copySessionPlan"), "Homepage hero must provide a copy action for the session plan.");
-  expect(heroSource.includes("hero-session-copy-status"), "Homepage hero must expose copy status for the session plan.");
-  expect(heroSource.includes("保存产出：${activeSessionPlan.work.outputs.join"), "Homepage hero session plan must include saved outputs.");
-  expect(heroSource.includes("完成标准：${activeSessionPlan.work.success}"), "Homepage hero session plan must include completion standards.");
-  expect(heroSource.includes("入口：${getWorkToolHref(activeSessionPlan.work.href)}"), "Homepage copied session plan must point directly to the work tool.");
-  expect(heroSource.includes("${materialRoutes.map((route, index) => `${index + 1}. ${route.label} → ${getWorkToolHref(route.href)}"), "Homepage copied material routes must point directly to work tools.");
-  expect(heroSource.includes("回到模块页填写复盘证据"), "Homepage hero copied session plan must point learners back to the work evidence fields.");
-  expect(heroSource.includes("hero-session-action-link"), "Homepage hero session plan must expose direct module and paired-reading links.");
-  expect(heroSource.includes("进入模块：{activeSessionPlan.work.title}"), "Homepage hero session plan must include a visible direct module link.");
-  expect(heroSource.includes("配套阅读：{activeSessionPlan.article.title}"), "Homepage hero session plan must include a visible paired-reading link.");
-  expect(heroSource.includes('import { notes } from "./Notes"') && heroSource.includes('import { essays } from "./ResearchEssays"'), "Homepage hero session plans must connect modules to paired reading libraries.");
-  for (const slug of ["gene-expression", "concept-explainer", "research-prompt-kit", "plant-evolution-stories", "crispr-interactive"]) {
-    expect(heroSource.includes(`work.slug === "${slug}"`), `Homepage 30-minute session plans must include ${slug}.`);
+  expect(heroSource.includes("const toolHref = getWorkToolHref(work.href)") && heroSource.includes("href={toolHref}"), "Homepage first-screen module cards must link directly to work tools.");
+  for (const retiredHeroBlock of ["sessionPlans", "materialRoutes", "heroModuleStats", "hero-session-copy-status", "hero-material-route-grid"]) {
+    expect(!heroSource.includes(retiredHeroBlock), `Homepage hero should stay short and not include retired duplicate block: ${retiredHeroBlock}.`);
   }
-  expect(heroSource.includes("配套阅读：${activeSessionPlan.article.title}"), "Homepage hero session plan must include a paired reading title.");
-  expect(heroSource.includes("阅读入口：${activeSessionPlan.article.href}"), "Homepage hero copied session plan must include paired reading route.");
-  expect(heroSource.includes("完成检查：${activeSessionPlan.article.checklist[0]}"), "Homepage hero copied session plan must include paired reading completion check.");
-  expect(heroSource.includes("materialRoutes"), "Homepage hero must expose material-based route choices.");
-  expect(heroSource.includes("按手头材料选模块"), "Homepage hero must visibly let learners choose by the material they have.");
-  expect(heroSource.includes("按手头材料选择"), "Homepage copied session plan must include material-based route choices.");
-  expect(heroSource.includes("hero-material-route-grid"), "Homepage material route choices must have a stable grid class.");
-  expect(heroSource.includes("hero-material-route-link"), "Homepage material route choices must expose direct links.");
-  expect(heroSource.includes("href={getWorkToolHref(route.href)}"), "Homepage material route choices must link directly to work tools.");
-  expect(heroSource.includes("href={getWorkToolHref(work.href)}"), "Homepage first-screen module cards must link directly to work tools.");
-  expect(heroSource.includes("href={activeSessionWorkToolHref}"), "Homepage session action must link directly to the active work tool.");
-  expect(heroSource.includes('aria-label="按手头材料选择学习模块"'), "Homepage material route choices must be labeled for assistive tech.");
-  expect(heroSource.includes("带走：{route.output}"), "Homepage material route choices must show saved outputs.");
-  expect(heroSource.includes("配套阅读进入模块"), "Homepage hero visible session copy must mention paired reading.");
   expect(worksSource.includes("先做这个"), "Homepage work cards must expose a first concrete starter action.");
   expect(worksSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Works section must use the direct-to-tool work href helper.");
   expect(worksSource.includes('const href = "href" in work ? getWorkToolHref(work.href) : undefined'), "Homepage work cards must open the primary tool anchor.");
-  expect(worksSource.includes("入口：${getWorkToolHref(work.href)}"), "Copied work module checklist must point directly to work tools.");
-  expect(worksSource.includes("模块入口：${getWorkToolHref(bundle.work.href)}"), "Copied paired reading paths must point module entries directly to work tools.");
   expect(worksSource.includes("href={getWorkToolHref(recommendedWork.href)}"), "Recommended work entry must link directly to the primary tool.");
-  expect(worksSource.includes("const toolHref = getWorkToolHref(work.href)"), "Works scan links must derive direct-to-tool hrefs.");
-  expect(worksSource.includes("const toolHref = getWorkToolHref(bundle.work.href)"), "Works paired reading module links must derive direct-to-tool hrefs.");
+  for (const retiredWorksBlock of ["work-scan-strip", "work-module-checklist-panel", "work-reading-path-panel"]) {
+    expect(!worksSource.includes(retiredWorksBlock), `Works section should stay shorter and not include retired duplicate block: ${retiredWorksBlock}.`);
+  }
   expect(worksSource.includes("{work.success}"), "Homepage work cards must expose each work completion standard.");
   expect(worksSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage work cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("{work.starter}"), "Work detail quick start must expose each work starter action.");
@@ -1255,10 +1203,9 @@ function verifyLearnerProductPositioning() {
     "科学学习和 AI 工具",
     "science learning lab",
     "先从基因表达可视化开始",
-    "按目标选入口",
-    "看懂一个生命过程",
-    "拆清一个卡住概念",
-    "整理一段科研材料",
+    "先选一个模块",
+    "首屏学习模块目录",
+    "首页只保留目录",
     "看生命过程",
     "拆概念",
     "整理科研",
