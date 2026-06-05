@@ -576,6 +576,7 @@ function verifyResearchAgentWorkbenchContract() {
   expect(promptKitSource.includes('className="research-agent-mode-grid"') && promptKitSource.includes('gridTemplateColumns: "repeat(3, minmax(0, 1fr))"'), "Research Agent mode selector must stay as compact three-column buttons.");
   expect(promptKitSource.includes('className="research-agent-mode-desc"') && promptKitSource.includes('style={{ display: "none"'), "Research Agent mode descriptions must stay hidden visually so the material input appears earlier.");
   expect(promptKitSource.includes('className="research-agent-main-panel"') && promptKitSource.includes('padding: "0.82rem"') && !promptKitSource.includes('className="research-agent-main-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "1.2rem"'), "Research Agent main panel must stay compact instead of a tall framed card.");
+  expect(/className="research-material-textarea"[\s\S]{0,260}minHeight: 104/.test(promptKitSource) && !/className="research-material-textarea"[\s\S]{0,260}minHeight: 154/.test(promptKitSource), "Research Agent material textarea must stay compact on desktop instead of a long default frame.");
 
   for (const item of retiredWorkbenchPatterns) {
     expect(!item.pattern.test(promptKitSource), `Research Agent workbench contains retired copy: ${item.label}`);

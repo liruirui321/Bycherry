@@ -1283,11 +1283,11 @@ ${localPreviewOutput}`;
               className="research-material-textarea"
               value={material}
               onChange={(event) => updateMaterial(event.target.value)}
-              style={{ width: "100%", minHeight: 154, resize: "vertical", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.9rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.9rem", lineHeight: 1.6, boxSizing: "border-box", marginBottom: "0.9rem" }}
+              style={{ width: "100%", minHeight: 104, resize: "vertical", border: "1.5px solid var(--border)", borderRadius: 10, padding: "0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.78rem", lineHeight: 1.45, boxSizing: "border-box", marginBottom: "0.5rem" }}
               aria-label="科研材料输入框"
             />
 
-            <div className="research-material-actions" style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: "0.9rem" }}>
+            <div className="research-material-actions" style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: "0.5rem" }}>
               <button type="button" onClick={fillMaterialTemplate} style={{ background: "var(--cherry-sage-light)", color: "var(--cherry-forest)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                 套用材料模板
               </button>
@@ -1296,7 +1296,7 @@ ${localPreviewOutput}`;
               </button>
             </div>
 
-            <div className="research-agent-preview-panel" style={{ background: hasRunPreview ? "var(--cherry-sage-light)" : "var(--muted)", border: hasRunPreview ? "1.5px solid rgba(93,140,101,0.32)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
+            <div className="research-agent-preview-panel" style={{ background: hasRunPreview ? "var(--cherry-sage-light)" : "var(--muted)", border: hasRunPreview ? "1.5px solid rgba(93,140,101,0.32)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.68rem", marginBottom: "0.62rem", display: "grid", gap: "0.52rem" }}>
               <div className="research-agent-preview-header" style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
                 <div>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>本地 Agent 预览</div>
