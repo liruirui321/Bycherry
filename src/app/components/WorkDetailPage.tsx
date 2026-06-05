@@ -2369,6 +2369,10 @@ function ConceptExplainerContent() {
   const [copiedSkill, setCopiedSkill] = useState(false);
   const [copiedAudit, setCopiedAudit] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
+  const [definitionDraft, setDefinitionDraft] = useState("");
+  const [mechanismDraft, setMechanismDraft] = useState("");
+  const [transferDraft, setTransferDraft] = useState("");
+  const [boundaryDraft, setBoundaryDraft] = useState("");
   type ConceptExplanation = {
     color: string;
     analogy: string;
@@ -2384,6 +2388,14 @@ function ConceptExplainerContent() {
     pitfall: string;
     quiz: { question: string; options: string[]; answer: string; explain: string };
   };
+
+  useEffect(() => {
+    setDefinitionDraft("");
+    setMechanismDraft("");
+    setTransferDraft("");
+    setBoundaryDraft("");
+  }, [concept]);
+
   const explanations: Record<string, ConceptExplanation> = {
     转录: {
       color: "var(--cherry-blue)",
@@ -2706,6 +2718,55 @@ function ConceptExplainerContent() {
       pass: "没有把类比、经验判断或单个例子当成通用事实。",
     },
   ];
+  const learnerAuditAnswers = {
+    definition: definitionDraft.trim(),
+    mechanism: mechanismDraft.trim(),
+    transfer: transferDraft.trim(),
+    boundary: boundaryDraft.trim(),
+  };
+  const learnerAuditFields = [
+    {
+      id: "concept-definition-draft",
+      title: "一句话定义",
+      prompt: `用自己的话写出${concept}解释了什么，不要只复制上面的定义。`,
+      value: definitionDraft,
+      setter: setDefinitionDraft,
+      placeholder: `我理解的${concept}是……它解释了……`,
+      pass: learnerAuditAnswers.definition.length >= 18,
+      passText: "至少写清对象和关系。",
+    },
+    {
+      id: "concept-mechanism-draft",
+      title: "机制复述",
+      prompt: `按 1-4 步写出${concept}如何发生或如何起作用。`,
+      value: mechanismDraft,
+      setter: setMechanismDraft,
+      placeholder: active.mechanism.map((item, index) => `${index + 1}. ${item}`).join("\n"),
+      pass: learnerAuditAnswers.mechanism.length >= 28 && /1|一|①|第一|2|二|②|第二/.test(learnerAuditAnswers.mechanism),
+      passText: "至少有两个连续步骤。",
+    },
+    {
+      id: "concept-transfer-draft",
+      title: "新例子判断",
+      prompt: `把${concept}应用到一个新例子，并说明为什么适用或不适用。`,
+      value: transferDraft,
+      setter: setTransferDraft,
+      placeholder: `新例子：……\n判断：这个例子适合 / 不适合用${concept}解释，因为……`,
+      pass: learnerAuditAnswers.transfer.length >= 28 && /因为|理由|证据|所以/.test(learnerAuditAnswers.transfer),
+      passText: "需要写出判断理由。",
+    },
+    {
+      id: "concept-boundary-draft",
+      title: "边界提醒",
+      prompt: `写出一个不能由${concept}直接推出的结论。`,
+      value: boundaryDraft,
+      setter: setBoundaryDraft,
+      placeholder: `${concept}不能直接证明……还需要查……`,
+      pass: learnerAuditAnswers.boundary.length >= 18 && /不能|不代表|还需要|待核查|边界/.test(learnerAuditAnswers.boundary),
+      passText: "需要保留不能推出或待核查的信息。",
+    },
+  ];
+  const learnerAuditScore = learnerAuditFields.filter((field) => field.pass).length;
   const selfAuditOutput = `【概念理解自查记录】
 概念：${concept}
 学习阶段：${audience}
@@ -2720,10 +2781,14 @@ ${understandingChecks.map((item, index) => `${index + 1}. ${item.title}
 通过标准：${item.pass}`).join("\n\n")}
 
 我的最小产出
-1. 一句话定义：
-2. 机制步骤：
-3. 新例子判断：
-4. 不能直接推出：
+1. 一句话定义：${learnerAuditAnswers.definition || "（未填写）"}
+2. 机制步骤：${learnerAuditAnswers.mechanism || "（未填写）"}
+3. 新例子判断：${learnerAuditAnswers.transfer || "（未填写）"}
+4. 不能直接推出：${learnerAuditAnswers.boundary || "（未填写）"}
+
+我的填写记录
+完成度：${learnerAuditScore}/4
+${learnerAuditFields.map((field, index) => `${index + 1}. ${field.title}：${field.pass ? "可用" : "待补充"}｜${field.passText}`).join("\n")}
 
 证据边界
 ${contextualEvidenceBoundary}`;
@@ -3076,6 +3141,44 @@ If any of these are missing, add them before the final answer.
         </div>
       </div>
 
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.75rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>我的理解记录</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.2rem", fontWeight: 800 }}>
+              解释看完后直接写 4 个最小产出。复制自查记录时，会一起带走你的填写内容。
+            </div>
+          </div>
+          <span style={{ background: learnerAuditScore === 4 ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", border: learnerAuditScore === 4 ? "1.5px solid rgba(93,140,101,0.26)" : "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.3rem 0.68rem", color: learnerAuditScore === 4 ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.74rem", fontWeight: 900 }}>
+            理解记录完成度：{learnerAuditScore}/4 可用
+          </span>
+        </div>
+        <div className="concept-understanding-input-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.68rem" }}>
+          {learnerAuditFields.map((field, index) => (
+            <label key={field.id} htmlFor={field.id} style={{ background: field.pass ? "var(--cherry-sage-light)" : index % 2 === 0 ? "var(--cherry-yellow-light)" : "var(--cherry-blue-light)", border: field.pass ? "1.5px solid rgba(93,140,101,0.24)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.72rem", display: "grid", gap: "0.48rem", alignContent: "start" }}>
+              <span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.6rem" }}>
+                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{field.title}</strong>
+                <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>{field.pass ? "可用" : "待补充"}</span>
+              </span>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>{field.prompt}</span>
+              <textarea
+                id={field.id}
+                value={field.value}
+                onChange={(event) => {
+                  field.setter(event.target.value);
+                  setCopiedAudit(false);
+                  setCopyStatus("");
+                }}
+                rows={4}
+                placeholder={field.placeholder}
+                style={{ width: "100%", boxSizing: "border-box", minHeight: 112, border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 12, background: "rgba(250,247,241,0.72)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800, padding: "0.6rem", resize: "vertical" }}
+              />
+              <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 900 }}>通过标准：{field.passText}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
         <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 900 }}>高质量样例</span>
         {presetConcepts.map((name) => (
@@ -3346,6 +3449,7 @@ If any of these are missing, add them before the final answer.
 
           @media (max-width: 860px) {
             #concept-explainer-tool .concept-agent-input-grid,
+            #concept-explainer-tool .concept-understanding-input-grid,
             #concept-explainer-tool .concept-responsive-grid {
               grid-template-columns: 1fr !important;
             }
