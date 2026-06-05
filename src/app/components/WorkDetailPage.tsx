@@ -3505,6 +3505,10 @@ function CrisprContent() {
   const [reportStatus, setReportStatus] = useState("");
   const [quizIndex, setQuizIndex] = useState(0);
   const [quizChoice, setQuizChoice] = useState<string | null>(null);
+  const [decisionDraft, setDecisionDraft] = useState("");
+  const [evidenceDraft, setEvidenceDraft] = useState("");
+  const [riskBoundaryDraft, setRiskBoundaryDraft] = useState("");
+  const [nextVerificationDraft, setNextVerificationDraft] = useState("");
   const target = "T A C G A T T A C C G T A G G".split(" ");
   const rnaComplement: Record<string, string> = { A: "U", T: "A", C: "G", G: "C" };
   const targetStart = 4;
@@ -3725,6 +3729,62 @@ function CrisprContent() {
       status: quizChoice === activeQuiz.answer ? "已通过" : "待完成",
     },
   ];
+  const crisprLearnerAnswers = {
+    decision: decisionDraft.trim(),
+    evidence: evidenceDraft.trim(),
+    riskBoundary: riskBoundaryDraft.trim(),
+    nextVerification: nextVerificationDraft.trim(),
+  };
+  const crisprLearnerRecordFields = [
+    {
+      id: "crispr-decision-draft",
+      label: "我的总判定",
+      prompt: "写成一句完整结论，必须同时出现判定和至少一个依据。",
+      value: decisionDraft,
+      setter: setDecisionDraft,
+      placeholder: `${guideDecision.level}：因为 PAM=${pamSequence}，${activeGuide.name} 匹配评分 ${activeGuide.score}%，本轮按 ${effectiveRepair.title} 判读。`,
+      pass: crisprLearnerAnswers.decision.length >= 18 && /PAM|guide|匹配|修复|风险|剪切/.test(crisprLearnerAnswers.decision),
+      passText: "结论需要同时写出判定和依据。",
+    },
+    {
+      id: "crispr-evidence-draft",
+      label: "我引用的证据",
+      prompt: "至少写出 PAM、匹配评分、错配或修复结果中的两项。",
+      value: evidenceDraft,
+      setter: setEvidenceDraft,
+      placeholder: `PAM=${pamSequence}；匹配评分=${activeGuide.score}%；错配数=${computedMismatches.length}；修复结果=${effectiveRepair.title}。`,
+      pass: crisprLearnerAnswers.evidence.length >= 20
+        && [pamSequence, `${activeGuide.score}`, `${computedMismatches.length}`, effectiveRepair.title].filter((text) => crisprLearnerAnswers.evidence.includes(text)).length >= 2,
+      passText: "证据里至少要落下两个可核查读数。",
+    },
+    {
+      id: "crispr-risk-boundary-draft",
+      label: "不能直接推出",
+      prompt: "写出这次模拟不能证明的真实研究结论。",
+      value: riskBoundaryDraft,
+      setter: setRiskBoundaryDraft,
+      placeholder: "这不能直接证明真实编辑可靠，还需要脱靶搜索、递送条件和测序验证。",
+      pass: crisprLearnerAnswers.riskBoundary.length >= 18 && /不能|不可|需要|脱靶|验证|真实/.test(crisprLearnerAnswers.riskBoundary),
+      passText: "边界需要明确写出不能推出什么，或还要验证什么。",
+    },
+    {
+      id: "crispr-next-verification-draft",
+      label: "下一步核查",
+      prompt: "写出下一步要查、要比较或要重做的动作。",
+      value: nextVerificationDraft,
+      setter: setNextVerificationDraft,
+      placeholder: guideDecision.nextAction,
+      pass: crisprLearnerAnswers.nextVerification.length >= 12 && /查|比较|更换|复核|验证|搜索|测序/.test(crisprLearnerAnswers.nextVerification),
+      passText: "下一步要写成一个可执行动作。",
+    },
+  ];
+  const crisprLearnerRecordScore = crisprLearnerRecordFields.filter((item) => item.pass).length;
+  const crisprFilledLearnerRecord = {
+    decision: crisprLearnerAnswers.decision || `${guideDecision.level}：因为 PAM=${pamSequence}，${activeGuide.name} 匹配评分 ${activeGuide.score}%，本轮按 ${effectiveRepair.title} 判读。`,
+    evidence: crisprLearnerAnswers.evidence || `PAM=${pamSequence}；匹配评分=${activeGuide.score}%；错配数=${computedMismatches.length}；修复结果=${effectiveRepair.title}。`,
+    riskBoundary: crisprLearnerAnswers.riskBoundary || "这不能直接证明真实编辑可靠，还需要脱靶搜索、递送条件和测序验证。",
+    nextVerification: crisprLearnerAnswers.nextVerification || guideDecision.nextAction,
+  };
   const decisionCardOutput = `【CRISPR 编辑决策卡】
 练习场景：${activeScenario ? activeScenario.title : "自定义判读"}
 目标：${activeScenario ? activeScenario.goal : "自行组合 guide、流程步骤和修复结果，完成一次编辑判读。"}
@@ -3736,7 +3796,14 @@ function CrisprContent() {
 ${decisionRows.map((item, index) => `${index + 1}. ${item.label}：${item.value}｜${item.detail}`).join("\n")}
 
 Go / No-Go
-${goNoGoCriteria.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
+${goNoGoCriteria.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+我的判读记录
+完成度：${crisprLearnerRecordScore}/4
+1. 我的总判定：${crisprFilledLearnerRecord.decision}
+2. 我引用的证据：${crisprFilledLearnerRecord.evidence}
+3. 不能直接推出：${crisprFilledLearnerRecord.riskBoundary}
+4. 下一步核查：${crisprFilledLearnerRecord.nextVerification}`;
   const riskAuditOutput = `【CRISPR 风险核查记录】
 练习场景：${activeScenario ? activeScenario.title : "自定义判读"}
 当前 guide：${activeGuide.name}
@@ -3752,9 +3819,12 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 三、下一步
 ${guideDecision.nextAction}
 
-四、我的判读句
-我会把这次编辑写成：
-我不能直接推出的是：`;
+四、我的判读记录
+完成度：${crisprLearnerRecordScore}/4
+1. 我的总判定：${crisprFilledLearnerRecord.decision}
+2. 我引用的证据：${crisprFilledLearnerRecord.evidence}
+3. 不能直接推出：${crisprFilledLearnerRecord.riskBoundary}
+4. 下一步核查：${crisprFilledLearnerRecord.nextVerification}`;
   const crisprReport = `【CRISPR 模拟报告】
 练习场景：${activeScenario ? activeScenario.title : "自定义判读"}
 学习目标：${activeScenario ? activeScenario.goal : "自行组合 guide、流程步骤和修复结果，完成一次编辑判读。"}
@@ -3804,7 +3874,21 @@ ${interpretationSteps.map((item, index) => `${index + 1}. ${item.title}：${item
 ${qualityChecks.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
 10. 边界说明
-${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
+${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
+
+11. 我的判读记录
+完成度：${crisprLearnerRecordScore}/4
+我的总判定：${crisprFilledLearnerRecord.decision}
+我引用的证据：${crisprFilledLearnerRecord.evidence}
+不能直接推出：${crisprFilledLearnerRecord.riskBoundary}
+下一步核查：${crisprFilledLearnerRecord.nextVerification}`;
+
+  useEffect(() => {
+    setDecisionDraft("");
+    setEvidenceDraft("");
+    setRiskBoundaryDraft("");
+    setNextVerificationDraft("");
+  }, [guideIndex, step, repair, activeScenarioIndex]);
 
   function clearCrisprCopyStatus() {
     setCopiedDecisionCard(false);
@@ -4194,6 +4278,47 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
         </div>
       </div>
 
+      <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.9rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>我的判读记录</div>
+            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 800 }}>
+              先操作模型，再把自己的结论、证据、边界和下一步核查写下来；复制报告时会一起带走。
+            </div>
+          </div>
+          <span role="status" aria-live="polite" style={{ background: crisprLearnerRecordScore === 4 ? "var(--cherry-forest)" : "var(--card)", border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 999, padding: "0.3rem 0.72rem", color: crisprLearnerRecordScore === 4 ? "#FAF7F1" : "var(--cherry-warm-brown)", fontSize: "0.74rem", fontWeight: 900 }}>
+            填写完成度 {crisprLearnerRecordScore}/4
+          </span>
+        </div>
+        <div className="crispr-learner-record-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "0.72rem" }}>
+          {crisprLearnerRecordFields.map((field) => (
+            <label key={field.id} htmlFor={field.id} style={{ background: "rgba(250,247,241,0.78)", border: `1.5px solid ${field.pass ? "rgba(93,140,101,0.34)" : "rgba(94,68,42,0.12)"}`, borderRadius: 16, padding: "0.78rem", display: "grid", gap: "0.48rem", alignContent: "start", minHeight: 230 }}>
+              <span style={{ display: "flex", justifyContent: "space-between", gap: "0.58rem", alignItems: "start" }}>
+                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>{field.label}</strong>
+                <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, whiteSpace: "nowrap" }}>
+                  {field.pass ? "已成句" : "待补全"}
+                </span>
+              </span>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, fontWeight: 800 }}>{field.prompt}</span>
+              <textarea
+                id={field.id}
+                value={field.value}
+                onChange={(event) => {
+                  field.setter(event.currentTarget.value);
+                  clearCrisprCopyStatus();
+                }}
+                rows={5}
+                placeholder={field.placeholder}
+                style={{ width: "100%", minHeight: 106, resize: "vertical", border: "1.5px solid rgba(94,68,42,0.16)", borderRadius: 12, padding: "0.62rem", background: "#FAF7F1", color: "var(--cherry-warm-brown)", fontFamily: "inherit", fontSize: "0.8rem", fontWeight: 800, lineHeight: 1.55 }}
+              />
+              <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 900 }}>
+                {field.pass ? "会写入复制内容。" : field.passText}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
       <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.85rem" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>修复结果</div>
@@ -4290,6 +4415,11 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
             outline-offset: 4px;
           }
 
+          #crispr-simulator textarea:focus-visible {
+            outline: 3px solid var(--cherry-red);
+            outline-offset: 3px;
+          }
+
           #crispr-simulator button {
             transition: transform 0.18s ease, box-shadow 0.18s ease;
           }
@@ -4306,6 +4436,10 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
             }
 
             #crispr-simulator .crispr-quiz-grid {
+              grid-template-columns: 1fr !important;
+            }
+
+            #crispr-simulator .crispr-learner-record-grid {
               grid-template-columns: 1fr !important;
             }
           }

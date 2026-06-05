@@ -764,6 +764,16 @@ function verifyCrisprLearnerScenarios() {
     { label: "quiz completion state", text: "小测待完成" },
     { label: "quiz passed state", text: "小测已通过" },
     { label: "completion report copy", text: "不能把模拟产物写成真实结果" },
+    { label: "learner decision draft", text: "decisionDraft" },
+    { label: "learner evidence draft", text: "evidenceDraft" },
+    { label: "learner risk boundary draft", text: "riskBoundaryDraft" },
+    { label: "learner next verification draft", text: "nextVerificationDraft" },
+    { label: "learner record fields", text: "crisprLearnerRecordFields" },
+    { label: "learner record score", text: "crisprLearnerRecordScore" },
+    { label: "visible learner record panel", text: "我的判读记录" },
+    { label: "learner record grid", text: "crispr-learner-record-grid" },
+    { label: "learner record completion copy", text: "完成度：${crisprLearnerRecordScore}/4" },
+    { label: "learner record report section", text: "11. 我的判读记录" },
   ];
 
   for (const item of requiredCrisprFeatures) {
