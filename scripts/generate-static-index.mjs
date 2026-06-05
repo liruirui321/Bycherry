@@ -92,7 +92,7 @@ function buildJsonLd(routes) {
         publisher: { "@id": `${siteUrl}/#person` },
       },
       itemList("works", "By Cherry 学习模块", worksListDescription, works),
-      itemList("articles", "By Cherry 学习资料库", articlesListDescription, articles),
+      itemList("articles", "By Cherry 文章", articlesListDescription, articles),
     ],
   };
 }
@@ -103,7 +103,7 @@ function listItems(routes) {
       ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">学习路径：${route.pathSteps.map(escapeHtml).join(" → ")}</div>`
       : "";
     const task = route.task
-      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">立即任务：${escapeHtml(route.task)}</div>`
+      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">操作内容：${escapeHtml(route.task)}</div>`
       : "";
     const starter = route.starter
       ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">先做这个：${escapeHtml(route.starter)}</div>`
@@ -149,12 +149,12 @@ function buildNoscript(routes) {
     "      <noscript>",
     "        <main style=\"font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 760px; margin: 0 auto; padding: 2rem 1.25rem; color: #5e442a; line-height: 1.7;\">",
     "          <h1 style=\"font-size: 2rem; line-height: 1.2; margin: 0 0 0.75rem;\">By Cherry</h1>",
-    `          <p>${escapeHtml(siteDescription)}当前浏览器没有启用 JavaScript，下面保留了学习模块、方法库和证据库目录。</p>`,
+    `          <p>${escapeHtml(siteDescription)}当前浏览器没有启用 JavaScript，下面保留了学习模块和文章列表。</p>`,
     "          <h2 style=\"font-size: 1.2rem; margin-top: 1.5rem;\">学习模块</h2>",
     "          <ul>",
     listItems(works),
     "          </ul>",
-    "          <h2 style=\"font-size: 1.2rem; margin-top: 1.5rem;\">学习资料库</h2>",
+    "          <h2 style=\"font-size: 1.2rem; margin-top: 1.5rem;\">文章</h2>",
     "          <ul>",
     listItems(articles),
     "          </ul>",

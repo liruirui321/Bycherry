@@ -118,7 +118,6 @@ function verifyVisibleLearningModuleCopy() {
 
   const requiredCopy = [
     "学习模块",
-    "浏览学习模块",
     "学习模块前后导航",
     "首屏学习模块目录",
   ];
@@ -426,22 +425,21 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(navigationSource.includes("export function getWorkToolHref"), "Navigation helpers must expose a direct-to-tool work href builder.");
   expect(staticIndexSource.includes("learningResourceType: route.category"), "Static work JSON-LD generator must include learningResourceType.");
   expect(staticIndexSource.includes("teaches: [route.task, route.starter, route.success, ...route.pathSteps, ...route.outputs].filter(Boolean)"), "Static work JSON-LD generator must include immediate task, starter action, completion standard, learning path, and output outcomes.");
-  expect(staticIndexSource.includes("立即任务："), "Static index fallback must expose immediate learner tasks.");
+  expect(staticIndexSource.includes("操作内容："), "Static index fallback must expose concise work task labels.");
   expect(staticIndexSource.includes("先做这个："), "Static index fallback must expose first concrete starter actions.");
   expect(staticIndexSource.includes("完成标准："), "Static index fallback must expose concrete completion standards.");
-  expect(heroSource.includes("{work.starter}"), "Homepage hero work cards must expose first concrete starter actions.");
-  expect(heroSource.includes("{work.success}"), "Homepage hero work cards must expose concrete completion standards.");
-  expect(heroSource.includes("hero-work-outcome") && heroSource.includes("{work.outputs[0]}"), "Homepage hero work cards must visibly expose the primary saved output.");
+  expect(!heroSource.includes("{work.starter}") && !heroSource.includes("{work.success}"), "Homepage hero work cards must not repeat long starter or completion text.");
+  expect(!heroSource.includes("{work.outputs[0]}"), "Homepage hero work cards must not repeat saved-output text.");
   expect(heroSource.includes("hero-work-completion") && heroSource.includes("{work.action}"), "Homepage hero work cards must visibly expose the module action without adding another detail panel.");
-  expect(heroSource.includes("aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}"), "Homepage hero work cards must include starter and completion standard in accessible labels.");
+  expect(heroSource.includes("aria-label={`打开${work.title}`}"), "Homepage hero work cards must use short accessible labels.");
   expect(heroSource.includes('id="works"'), "Homepage #works anchor must point to the first-screen module directory instead of a duplicate section.");
   expect(heroSource.includes('aria-label="首屏学习模块目录"'), "Homepage hero must label the first-screen module directory.");
-  expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(176px, 1fr))"'), "Homepage hero module cards must stay compact enough to reveal multiple modules in the first screen.");
-  expect(heroSource.includes("minHeight: 94"), "Homepage hero module cards must use short fixed heights.");
+  expect(heroSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(148px, 1fr))"'), "Homepage hero module cards must stay compact enough to reveal multiple modules in the first screen.");
+  expect(heroSource.includes("minHeight: 78"), "Homepage hero module cards must use short fixed heights.");
   expect(heroSource.includes("scroll-snap-type: x proximity"), "Homepage hero mobile module directory must support horizontal scanning.");
   expect(heroSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Homepage hero must use the direct-to-tool work href helper without duplicate home-section CTAs.");
   expect(heroSource.includes("const toolHref = getWorkToolHref(work.href)") && heroSource.includes("href={toolHref}"), "Homepage first-screen module cards must link directly to work tools.");
-  for (const retiredHeroBlock of ["sessionPlans", "materialRoutes", "heroModuleStats", "hero-session-copy-status", "hero-material-route-grid", "hero-actions", "hero-cta", "navigateHomeSection"]) {
+  for (const retiredHeroBlock of ["sessionPlans", "materialRoutes", "heroModuleStats", "hero-session-copy-status", "hero-material-route-grid", "hero-actions", "hero-cta", "navigateHomeSection", "完成标准，", "先做这个，"]) {
     expect(!heroSource.includes(retiredHeroBlock), `Homepage hero should stay short and not include retired duplicate block: ${retiredHeroBlock}.`);
   }
   expect(!appSource.includes("<Works") && !appSource.includes('import { Works }'), "Homepage must not render a duplicate Works section below the hero.");
@@ -1021,11 +1019,10 @@ function verifyLearnerFacingArticleCopy() {
     "审核重点",
     "题型：选择题 + 图表题 + 简答题",
     "审核使用",
-    "学习资料库",
     "文章",
     "home-library-link",
     "home-library-meta",
-    "学习方法、科研证据、AI 创作和科研转译资料",
+    "学习方法、科研证据、AI 创作和科研转译文章",
     "先做这个",
     "完成后检查",
     "先避开",
@@ -1160,8 +1157,8 @@ function verifyLearnerProductPositioning() {
     "science learning lab",
     "首屏学习模块目录",
     "科研转译内容入口",
-    "生命过程",
-    "拆概念",
+    "基因表达可视化",
+    "概念解释生成器",
     "科研 Agent",
     "文章",
     "nav-desktop-links",
@@ -1192,15 +1189,13 @@ function verifyLearnerProductPositioning() {
   const appSource = read("src/app/App.tsx");
   expect(!appSource.includes("<About") && !appSource.includes('from "./components/About"'), "Homepage should not render a separate About section.");
   expect(!existsSync(resolve(root, "src/app/components/About.tsx")), "About component should stay removed so homepage remains a short content directory.");
-  expect(navSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Navigation work shortcuts must use the direct-to-tool href helper.");
-  expect(navSource.includes('{ label: "生命过程", href: getWorkToolHref("/works/gene-expression"), matchHref: "/works/gene-expression" }'), "Navigation life-process shortcut must open the gene expression tool directly.");
-  expect(navSource.includes('{ label: "拆概念", href: getWorkToolHref("/works/concept-explainer"), matchHref: "/works/concept-explainer" }'), "Navigation concept shortcut must open the concept tool directly.");
-  expect(navSource.includes('{ label: "科研 Agent", href: getWorkToolHref("/works/research-prompt-kit"), matchHref: "/works/research-prompt-kit" }'), "Navigation research shortcut must open the research tool directly.");
+  expect(navSource.includes('import { navigateClient, shouldUseClientNavigation } from "../navigation"'), "Navigation must stay top-level and not duplicate individual work cards.");
+  expect(navSource.includes('{ label: "内容", href: "/#works", matchHashes: ["#works", "#top"] }'), "Navigation should collapse work shortcuts into one content entry.");
   expect(navSource.includes('{ label: "文章", href: "/#research", matchHashes: ["#research"] }'), "Navigation should collapse research and notes into one article entry.");
-  expect(navSource.includes("if (\"matchHref\" in link && pathname === link.matchHref) return true;"), "Navigation active states must still match direct-to-tool shortcuts by pathname.");
   expect(navSource.includes('if ("matchHashes" in link && pathname === "/" && link.matchHashes.includes(hash || "#top")) return true;'), "Navigation article entry must track both article homepage anchors.");
   expect(navSource.includes('if (pathname.startsWith("/notes/") || pathname.startsWith("/research/")) return link.href === "/#research";'), "Navigation article entry must stay active on article detail pages.");
-  for (const retiredNavGuide of ["更多工具", "读证据", "学方法", "看生命过程", "整理科研", 'matchHashes: ["#research", "#notes"]', "currentRouteGuideText", "copyCurrentRouteGuide", "nav-route-guide-button", "nav-route-guide-status", "当前位置学习路径", "复制当前位置学习路径", 'import { copyText } from "../clipboard"', 'import { works } from "./Works"', 'import { notes } from "./Notes"', 'import { essays } from "./ResearchEssays"']) {
+  expect(navSource.includes('if (pathname.startsWith("/works/")) return link.href === "/#works";'), "Navigation content entry must stay active on work detail pages.");
+  for (const retiredNavGuide of ["更多工具", "读证据", "学方法", "看生命过程", "整理科研", "生命过程", "拆概念", "科研 Agent", "getWorkToolHref", "matchHref", 'matchHashes: ["#research", "#notes"]', "currentRouteGuideText", "copyCurrentRouteGuide", "nav-route-guide-button", "nav-route-guide-status", "当前位置学习路径", "复制当前位置学习路径", 'import { copyText } from "../clipboard"', 'import { works } from "./Works"', 'import { notes } from "./Notes"', 'import { essays } from "./ResearchEssays"']) {
     expect(!navSource.includes(retiredNavGuide), `Navigation should stay compact and not include retired copy-path guide: ${retiredNavGuide}.`);
   }
 }

@@ -221,7 +221,7 @@ for (const route of articleRoutes) {
   expect(indexHtml.includes(`可保存产出：${route.firstOutput}`), `index.html noscript content index must include learner output for ${route.path}.`);
 }
 for (const route of workRoutes) {
-  expect(indexHtml.includes(`立即任务：${route.task}`), `index.html noscript content index must include immediate task for ${route.path}.`);
+  expect(indexHtml.includes(`操作内容：${route.task}`), `index.html noscript content index must include concise work task for ${route.path}.`);
   expect(indexHtml.includes(`先做这个：${route.starter}`), `index.html noscript content index must include starter action for ${route.path}.`);
   expect(indexHtml.includes(`完成标准：${route.success}`), `index.html noscript content index must include completion standard for ${route.path}.`);
   expect(indexHtml.includes(`可保存产出：${route.outputs.join(" / ")}`), `index.html noscript content index must include copyable outputs for ${route.path}.`);

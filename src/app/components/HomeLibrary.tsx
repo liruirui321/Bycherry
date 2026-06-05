@@ -77,15 +77,12 @@ export function HomeLibrary() {
     date: note.date,
   }));
   const articleItems = [...researchItems, ...noteItems];
+  const visibleArticles = articleItems.slice(0, 6);
 
   return (
     <section
       aria-labelledby="home-library-heading"
-      style={{
-        fontFamily: "'Nunito', sans-serif",
-        padding: "1.25rem 1.5rem",
-        background: "var(--background)",
-      }}
+      style={{ fontFamily: "'Nunito', sans-serif", padding: "0.8rem 1.5rem 0.9rem", background: "var(--background)" }}
     >
       <div id="research" style={{ maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "end", gap: "1rem", flexWrap: "wrap", marginBottom: "0.55rem" }}>
@@ -95,13 +92,13 @@ export function HomeLibrary() {
             </h2>
           </div>
           <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 900 }}>
-            {articleItems.length} 篇
+            最近 {visibleArticles.length} 篇
           </span>
         </div>
 
         <div className="home-library-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", columnGap: "1.2rem" }}>
-          <LibraryRows items={articleItems.slice(0, Math.ceil(articleItems.length / 2))} />
-          <LibraryRows items={articleItems.slice(Math.ceil(articleItems.length / 2))} />
+          <LibraryRows items={visibleArticles.slice(0, Math.ceil(visibleArticles.length / 2))} />
+          <LibraryRows items={visibleArticles.slice(Math.ceil(visibleArticles.length / 2))} />
         </div>
       </div>
 

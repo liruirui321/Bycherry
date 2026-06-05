@@ -1646,7 +1646,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
         <EmptyStateCard
           eyebrow={kind === "note" ? "学习方法" : "科研证据"}
           title="没有找到这篇内容"
-          body={`这篇内容可能已经移动。可以回到${kind === "note" ? "学习方法库" : "科研证据库"}，继续浏览最近更新。`}
+          body="这篇内容可能已经移动。可以回到文章列表，继续浏览最近更新。"
           href={`/${backHash}`}
           linkText={backText}
           onNavigate={(event) => {

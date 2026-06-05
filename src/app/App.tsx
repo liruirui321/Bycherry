@@ -129,8 +129,8 @@ function buildHomeJsonLd() {
       {
         "@type": "ItemList",
         "@id": articlesListId,
-        name: "By Cherry 学习资料库",
-        description: "学习方法、科研证据、AI 创作和科研转译资料。",
+        name: "By Cherry 文章",
+        description: "学习方法、科研证据、AI 创作和科研转译文章。",
         numberOfItems: articles.length,
         itemListElement: articles.map((article, index) => ({
           "@type": "ListItem",
@@ -210,7 +210,7 @@ function NotFoundPage() {
       <EmptyStateCard
         eyebrow="404"
         title="没有找到这个页面"
-        body="这个地址可能写错了，或者内容已经移动。可以回到首页继续浏览学习模块、方法库和证据库。"
+        body="这个地址可能写错了，或者内容已经移动。可以回到首页继续浏览内容和文章。"
         href="/#top"
         linkText="回到首页"
         onNavigate={(event) => {
@@ -298,7 +298,7 @@ export default function App() {
     const missingRoutedItem = Boolean((detailSlug && !work) || (noteSlug && !note) || (researchSlug && !essay));
     const notFound = unknownPath || missingRoutedItem;
     const title = notFound ? "没有找到页面" : work?.title ?? note?.title ?? essay?.title ?? homeTitle;
-    const baseDescription = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览学习模块、方法库和证据库。" : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
+    const baseDescription = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览内容和文章。" : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
     const workActionDescription = work ? `先做这个：${work.starter}。完成标准：${work.success}` : null;
     const articleFirstAction = note?.actionSteps[0] ?? essay?.actionSteps[0] ?? null;
     const articleFirstCheck = note?.checklist[0] ?? essay?.checklist[0] ?? null;

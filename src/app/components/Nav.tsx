@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { IconCherry, IconMenu, IconClose } from "./Icons";
-import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
+import { navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
 export function Nav() {
@@ -10,9 +10,7 @@ export function Nav() {
   const firstMobileLinkRef = useRef<HTMLAnchorElement | null>(null);
 
   const links = [
-    { label: "生命过程", href: getWorkToolHref("/works/gene-expression"), matchHref: "/works/gene-expression" },
-    { label: "拆概念", href: getWorkToolHref("/works/concept-explainer"), matchHref: "/works/concept-explainer" },
-    { label: "科研 Agent", href: getWorkToolHref("/works/research-prompt-kit"), matchHref: "/works/research-prompt-kit" },
+    { label: "内容", href: "/#works", matchHashes: ["#works", "#top"] },
     { label: "文章", href: "/#research", matchHashes: ["#research"] },
     { label: "联系", href: "/#contact" },
   ];
@@ -68,9 +66,9 @@ export function Nav() {
 
   function isActiveLink(link: (typeof links)[number]) {
     const { pathname, hash } = window.location;
-    if ("matchHref" in link && pathname === link.matchHref) return true;
     if ("matchHashes" in link && pathname === "/" && link.matchHashes.includes(hash || "#top")) return true;
     if (pathname.startsWith("/notes/") || pathname.startsWith("/research/")) return link.href === "/#research";
+    if (pathname.startsWith("/works/")) return link.href === "/#works";
     return pathname === "/" && link.href === `/${hash || "#top"}`;
   }
 

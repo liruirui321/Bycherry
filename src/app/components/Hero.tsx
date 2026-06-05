@@ -77,7 +77,7 @@ export function Hero() {
           </div>
         </div>
 
-        <nav id="works" className="hero-work-grid" aria-label="首屏学习模块目录" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(176px, 1fr))", gap: "0.52rem", minWidth: 0, maxWidth: "100%" }}>
+        <nav id="works" className="hero-work-grid" aria-label="首屏学习模块目录" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(148px, 1fr))", gap: "0.46rem", minWidth: 0, maxWidth: "100%" }}>
           {works.map((work) => {
             const toolHref = getWorkToolHref(work.href);
             return (
@@ -85,7 +85,7 @@ export function Hero() {
                 className="hero-work-card"
                 key={work.slug}
                 href={toolHref}
-                aria-label={`打开${work.title}：先做这个，${work.starter}。完成标准，${work.success}`}
+                aria-label={`打开${work.title}`}
                 onClick={(event) => openWork(toolHref, event)}
                 onMouseEnter={() => preloadRouteForHref(getWorkToolHref(work.href))}
                 onFocus={() => preloadRouteForHref(getWorkToolHref(work.href))}
@@ -94,43 +94,36 @@ export function Hero() {
                   background: work.color,
                   border: `1.5px solid ${work.border}`,
                   borderRadius: 8,
-                  padding: "0.58rem 0.62rem",
+                  padding: "0.52rem 0.56rem",
                   color: "var(--cherry-warm-brown)",
                   textDecoration: "none",
                   textAlign: "left",
-                  minHeight: 94,
-                  display: "grid",
-                  gridTemplateRows: "auto 1fr auto",
-                  gap: "0.28rem",
+                  minHeight: 78,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  gap: "0.32rem",
                   position: "relative",
                   overflow: "hidden",
                   minWidth: 0,
                   maxWidth: "100%",
                 }}
               >
-                <div aria-hidden="true" style={{ position: "absolute", right: -12, bottom: -10, width: 70, height: 54, borderRadius: 8, background: "rgba(250,247,241,0.36)", border: "1px solid rgba(94,68,42,0.08)" }} />
+                <div aria-hidden="true" style={{ position: "absolute", right: -12, bottom: -10, width: 58, height: 44, borderRadius: 8, background: "rgba(250,247,241,0.36)", border: "1px solid rgba(94,68,42,0.08)" }} />
                 <div style={{ display: "flex", alignItems: "center", gap: 7, minWidth: 0, position: "relative", zIndex: 1 }}>
-                  <span style={{ width: 28, height: 28, display: "inline-flex", alignItems: "center", justifyContent: "center", transform: "scale(0.68)", transformOrigin: "center" }}>{work.icon}</span>
-                  <strong style={{ fontSize: "0.88rem", lineHeight: 1.25, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
+                  <span style={{ width: 24, height: 24, display: "inline-flex", alignItems: "center", justifyContent: "center", transform: "scale(0.58)", transformOrigin: "center" }}>{work.icon}</span>
+                  <strong style={{ fontSize: "0.84rem", lineHeight: 1.22, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", alignContent: "start", position: "relative", zIndex: 1, paddingRight: 48 }}>
+                <div className="hero-work-outcome" style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", alignContent: "start", position: "relative", zIndex: 1, paddingRight: 34 }}>
                   <span style={{ background: "rgba(250,247,241,0.7)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.08rem 0.4rem", color: "var(--cherry-forest)", fontSize: "0.61rem", fontWeight: 900 }}>
                     {work.category}
-                  </span>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.62rem", lineHeight: 1.35, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
-                    {work.starter}
-                  </span>
-                </div>
-                <div className="hero-work-outcome" style={{ display: "flex", alignItems: "center", gap: "0.34rem", flexWrap: "wrap", position: "relative", zIndex: 1, paddingRight: 50 }}>
-                  <span style={{ color: "var(--cherry-forest)", fontSize: "0.62rem", fontWeight: 900 }}>
-                    {work.outputs[0]}
                   </span>
                   <span className="hero-work-completion" style={{ background: "var(--cherry-forest)", border: "1px solid var(--cherry-forest)", borderRadius: 999, padding: "0.1rem 0.38rem", color: "#FAF7F1", fontSize: "0.6rem", fontWeight: 900 }}>
                     {work.action}
                   </span>
                 </div>
                 <div className="hero-work-preview" style={{ position: "absolute", right: 2, bottom: -2, display: "flex", justifyContent: "flex-end", opacity: 0.88, zIndex: 0 }}>
-                  <WorkPreviewIllustration slug={work.slug} color={work.border} width={70} height={52} />
+                  <WorkPreviewIllustration slug={work.slug} color={work.border} width={58} height={44} />
                 </div>
               </a>
             );
@@ -166,9 +159,9 @@ export function Hero() {
           }
 
           .hero-work-card {
-            width: min(76vw, 320px) !important;
-            min-width: min(76vw, 320px) !important;
-            max-width: min(76vw, 320px) !important;
+            width: min(52vw, 220px) !important;
+            min-width: min(52vw, 220px) !important;
+            max-width: min(52vw, 220px) !important;
             scroll-snap-align: start;
           }
 

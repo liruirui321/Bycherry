@@ -5234,7 +5234,7 @@ function WorkCompletionEvidence({ work }: { work: Work }) {
     nextQuestion: nextQuestion.trim() || evidenceFieldItems[3].fallback,
   };
   const evidenceTemplate = `【${work.title}复盘证据】
-立即任务：${work.task}
+操作内容：${work.task}
 先做这个：${work.starter}
 完成标准：${work.success}
 
