@@ -2205,6 +2205,7 @@ function ConceptExplainerContent() {
   const [lessonGoal, setLessonGoal] = useState("把概念学清楚，并能用例子判断自己是否真正理解");
   const [sourceBoundary, setSourceBoundary] = useState("未提供具体资料；先按通用教材解释，涉及数据、实验或结论时标为待核查");
   const [stuckPoint, setStuckPoint] = useState("我容易把定义、机制和例子混在一起");
+  const [applicationContext, setApplicationContext] = useState("用这个概念解释一道题、一个图或一个真实现象");
   const [copiedLesson, setCopiedLesson] = useState(false);
   const [copiedSkill, setCopiedSkill] = useState(false);
   const [copiedAudit, setCopiedAudit] = useState(false);
@@ -2379,6 +2380,7 @@ function ConceptExplainerContent() {
   const active = explanations[concept] ?? buildConceptAgentExplanation(concept);
   const sourceBoundaryText = sourceBoundary.trim() || "未提供具体资料；先按通用解释生成，具体事实待核查";
   const stuckPointText = stuckPoint.trim() || "暂未填写卡点；先用诊断问题定位";
+  const applicationContextText = applicationContext.trim() || "暂未填写应用情境；先用通用迁移练习检查";
   const contextualEvidenceBoundary = `${active.evidenceBoundary} 当前资料边界：${sourceBoundaryText}`;
   const conceptInputQuality = [
     {
@@ -2400,6 +2402,11 @@ function ConceptExplainerContent() {
       label: "当前卡点",
       status: stuckPoint.trim().length >= 10 ? "可用" : "偏少",
       detail: stuckPoint.trim().length >= 10 ? stuckPointText : "写出你哪里说不清、容易混淆或不会应用。",
+    },
+    {
+      label: "应用情境",
+      status: applicationContext.trim().length >= 8 ? "可用" : "偏少",
+      detail: applicationContext.trim().length >= 8 ? applicationContextText : "写出要用在哪道题、哪张图、哪段材料或哪个现象里。",
     },
   ];
   const conceptInputQualityScore = conceptInputQuality.filter((item) => item.status === "已填写" || item.status === "可用").length;
@@ -2432,8 +2439,8 @@ function ConceptExplainerContent() {
     },
   ];
   const conceptSkillSteps = [
-    "先锁定概念、学习阶段、资料边界和当前卡点。",
-    "如果缺少学习阶段、目标或来源，最多问 2 个短问题；若继续生成，就把假设写明。",
+    "先锁定概念、学习阶段、资料边界、当前卡点和应用情境。",
+    "如果缺少来源、卡点或应用情境，最多问 2 个短问题；若继续生成，就把假设写明。",
     "再生成一个诊断问题，暴露我可能卡住的地方。",
     "再给出一个低门槛类比，但明确类比不能推出什么。",
     "再选择一种可视化解释：流程图、对照表、三栏概念图、因果链或循环图。",
@@ -2487,7 +2494,7 @@ function ConceptExplainerContent() {
   const conceptAgentCards = [
     {
       title: "输入完整度",
-      body: `${conceptInputQualityScore}/4 项可用。${conceptInputQualityScore < 4 ? "缺少的信息会被标成待核查，不会强行定论。" : "可以生成更贴近当前卡点的解释和练习。"}`,
+      body: `${conceptInputQualityScore}/5 项可用。${conceptInputQualityScore < 5 ? "缺少的信息会被标成待核查，不会强行定论。" : "可以生成更贴近当前卡点和应用情境的解释与练习。"}`,
     },
     {
       title: "资料边界",
@@ -2496,6 +2503,10 @@ function ConceptExplainerContent() {
     {
       title: "当前卡点",
       body: `解释优先解决这个卡点：${stuckPointText}`,
+    },
+    {
+      title: "应用情境",
+      body: `最后要能用在这里：${applicationContextText}`,
     },
     {
       title: "收窄范围",
@@ -2511,7 +2522,7 @@ function ConceptExplainerContent() {
     },
     {
       title: "合格标准",
-      body: `你能用“${concept}”解释一个新情境，并说出它不能直接推出什么。`,
+      body: `你能用“${concept}”解释“${applicationContextText}”，并说出它不能直接推出什么。`,
     },
   ];
   const understandingChecks = [
@@ -2527,7 +2538,7 @@ function ConceptExplainerContent() {
     },
     {
       title: "例子迁移",
-      prompt: `换一个新情境，判断它是否能用${concept}解释。`,
+      prompt: `把${concept}用到“${applicationContextText}”，判断它是否适用。`,
       pass: "能说出适用理由，也能指出至少一个不确定点。",
     },
     {
@@ -2542,6 +2553,7 @@ function ConceptExplainerContent() {
 学习目标：${lessonGoal}
 资料边界：${sourceBoundaryText}
 当前卡点：${stuckPointText}
+应用情境：${applicationContextText}
 
 验收维度
 ${understandingChecks.map((item, index) => `${index + 1}. ${item.title}
@@ -2561,6 +2573,7 @@ ${contextualEvidenceBoundary}`;
 【学习目标】${lessonGoal}
 【资料边界】${sourceBoundaryText}
 【当前卡点】${stuckPointText}
+【应用情境】${applicationContextText}
 
 一、Agent 运行记录
 ${conceptAgentCards.map((item, index) => `${index + 1}. ${item.title}：${item.body}`).join("\n")}
@@ -2634,6 +2647,7 @@ You are a concept explainer for an adult learner. You are here 陪我学习 one 
 - Learning goal: ${lessonGoal}
 - Source boundary: ${sourceBoundaryText}
 - Current confusion: ${stuckPointText}
+- Application context: ${applicationContextText}
 
 ## Input
 
@@ -2644,10 +2658,11 @@ Ask for or infer these fields:
 - Learning goal: what the learner wants to be able to explain, judge, or apply.
 - Source boundary: textbook, notes, paper, article, or unknown.
 - Current confusion: the learner's stuck point, misconception, or example that does not make sense yet.
+- Application context: the question, figure, material, phenomenon, or real use case where the concept must be applied.
 
 If the concept is too broad, narrow it to one chapter, phenomenon, problem type, or use case before explaining.
 
-If any field is missing, ask at most two short questions. Prioritize source boundary and current confusion. If the learner wants to continue without answering, make the smallest safe assumption, label it as "assumption", and keep the source boundary as "unknown".
+If any field is missing, ask at most two short questions. Prioritize source boundary and current confusion, then capture application context. If the learner wants to continue without answering, make the smallest safe assumption, label it as "assumption", and keep the source boundary as "unknown".
 
 ## Workflow
 
@@ -2685,7 +2700,7 @@ Before finishing, make sure the answer gives the learner a minimum usable output
 
 - A one-sentence explanation in the learner's own words.
 - A mechanism retelling in 1-4 steps.
-- One transfer example where the concept is applied to a new case.
+- One transfer example where the concept is applied to a new case, preferably close to the stated application context.
 - One boundary statement saying what the concept cannot directly prove.
 
 If any of these are missing, add them before the final answer.
@@ -2796,6 +2811,10 @@ If any of these are missing, add them before the final answer.
             当前卡点
             <textarea value={stuckPoint} onChange={(event) => { setStuckPoint(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopiedSkill(false); setCopyStatus(""); }} rows={3} placeholder="例如：会背定义，但不会判断例子是否成立" style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, resize: "vertical" }} />
           </label>
+          <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
+            应用情境
+            <textarea value={applicationContext} onChange={(event) => { setApplicationContext(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopiedSkill(false); setCopyStatus(""); }} rows={3} placeholder="例如：解释一道题、一张图、一个实验现象或一段材料" style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, resize: "vertical" }} />
+          </label>
           <div style={{ display: "grid", gap: "0.5rem" }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem" }}>
             {["自测", "类比", "机制", "练习"].map((item, index) => (
@@ -2809,7 +2828,7 @@ If any of these are missing, add them before the final answer.
             </button>
           </div>
         </div>
-        <div className="concept-input-quality-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.55rem" }}>
+        <div className="concept-input-quality-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: "0.55rem" }}>
           {conceptInputQuality.map((item) => (
             <div key={item.label} style={{ background: item.status === "已填写" || item.status === "可用" ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", minHeight: 92 }}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.45rem", alignItems: "center", marginBottom: "0.3rem" }}>
@@ -2916,7 +2935,7 @@ If any of these are missing, add them before the final answer.
         <div>
           <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", fontWeight: 900, marginBottom: "0.24rem" }}>保存这次学习产出</div>
           <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800 }}>
-            学习卡会带上概念、当前水平、目标、资料边界、卡点、可视化节点、练习和验收标准。
+            学习卡会带上概念、当前水平、目标、资料边界、卡点、应用情境、可视化节点、练习和验收标准。
           </div>
         </div>
         <button type="button" onClick={copyLessonOutput} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.62rem 0.95rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap" }}>

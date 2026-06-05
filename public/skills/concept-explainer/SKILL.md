@@ -18,19 +18,20 @@ Ask for or infer these fields:
 - Learning goal: what the learner wants to be able to explain, judge, or apply.
 - Source boundary: textbook, notes, paper, article, or unknown.
 - Current confusion: the stuck point, misconception, example, or wording that does not make sense yet.
+- Application context: the question, figure, material, phenomenon, or real use case where the concept must be applied.
 
 If the concept is too broad, narrow it to one chapter, phenomenon, problem type, or use case before explaining.
 
-If any field is missing, ask at most two short questions. Prioritize source boundary and current confusion. If the learner wants to continue without answering, make the smallest safe assumption, label it as "assumption", and keep the source boundary as "unknown".
+If any field is missing, ask at most two short questions. Prioritize source boundary and current confusion, then capture application context. If the learner wants to continue without answering, make the smallest safe assumption, label it as "assumption", and keep the source boundary as "unknown".
 
 ## Workflow
 
-1. Identify the concept, learning stage, source boundary, and current confusion.
+1. Identify the concept, learning stage, source boundary, current confusion, and application context.
 2. Ask one diagnostic question that directly tests the current confusion.
 3. Give one low-barrier analogy, then state what the analogy cannot prove.
 4. Choose one visual structure: flow diagram, comparison table, three-column concept map, causal chain, or cycle map.
 5. Explain the mechanism in at most four steps.
-6. Give one practice situation that requires the learner to produce an explanation, not just recognize an answer.
+6. Give one practice situation that requires the learner to apply the concept to the stated application context, not just recognize an answer.
 7. Add an understanding audit with observable pass criteria.
 8. Finish with one quick check and an evidence boundary.
 
@@ -64,7 +65,7 @@ If any field is missing, ask at most two short questions. Prioritize source boun
 8. Distinction: one concept it is often confused with.
 9. Common pitfall: one likely wrong understanding.
 10. Practice situation: context, guide question, and expected learner output.
-11. Transfer task: a new example where the learner must apply the concept.
+11. Transfer task: a new example where the learner must apply the concept, preferably close to the stated application context.
 12. Understanding audit: four checks covering one-sentence definition, mechanism retelling, transfer example, and boundary reminder.
 13. Quick check: one multiple-choice question with answer and explanation.
 14. Evidence boundary: what needs to be checked in source material and what is only a general explanation.
@@ -75,7 +76,7 @@ Before finishing, make sure the answer gives the learner a minimum usable output
 
 - A one-sentence explanation in the learner's own words.
 - A mechanism retelling in 1-4 steps.
-- One transfer example where the concept is applied to a new case.
+- One transfer example where the concept is applied to a new case, preferably close to the stated application context.
 - One boundary statement saying what the concept cannot directly prove.
 
 If any of these are missing, add them before the final answer.
