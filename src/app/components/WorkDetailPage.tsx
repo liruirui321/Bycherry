@@ -1271,9 +1271,11 @@ ${localPreviewOutput}`;
               </div>
             </div>
 
-            <div className="prompt-workflow-grid" role="group" aria-label="科研 Agent 任务流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.62rem", marginBottom: "0.9rem" }}>
+            <details className="prompt-workflow-details" style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem", marginBottom: "0.9rem" }}>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem", cursor: "pointer" }}>任务流程</summary>
+              <div className="prompt-workflow-grid" role="group" aria-label="科研 Agent 任务流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.5rem", marginTop: "0.58rem" }}>
               {workflowSteps.map((item, index) => (
-                <div key={item.label} style={{ background: item.color, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.72rem", minHeight: 104, position: "relative", overflow: "hidden" }}>
+                <div key={item.label} style={{ background: item.color, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.58rem", minHeight: 92, position: "relative", overflow: "hidden" }}>
                   <svg width="72" height="58" viewBox="0 0 72 58" fill="none" aria-hidden="true" focusable="false" style={{ position: "absolute", right: -8, bottom: -8, opacity: 0.72 }}>
                     {index === 0 ? (
                       <>
@@ -1307,9 +1309,12 @@ ${localPreviewOutput}`;
                   <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 800, position: "relative", zIndex: 1, paddingRight: 26 }}>{item.body}</div>
                 </div>
               ))}
-            </div>
+              </div>
+            </details>
 
-            <div style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.78rem", marginBottom: "0.9rem", display: "grid", gap: "0.62rem" }}>
+            <details className="prompt-practice-details" style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem", marginBottom: "0.9rem" }}>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem", cursor: "pointer" }}>练习案例</summary>
+              <div style={{ display: "grid", gap: "0.58rem", marginTop: "0.58rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.7rem", alignItems: "center", flexWrap: "wrap" }}>
                 <div>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>练习案例</div>
@@ -1331,7 +1336,8 @@ ${localPreviewOutput}`;
                   );
                 })}
               </div>
-            </div>
+              </div>
+            </details>
 
             <textarea
               value={material}
@@ -1391,7 +1397,7 @@ ${localPreviewOutput}`;
               </div>
               <div className="research-review-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.62rem" }}>
                 {learnerResearchReviewFields.map((field) => (
-                  <label key={field.id} htmlFor={field.id} style={{ background: "rgba(250,247,241,0.76)", border: `1px solid ${field.pass ? "rgba(93,140,101,0.28)" : "rgba(94,68,42,0.12)"}`, borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.42rem", alignContent: "start", minHeight: 206 }}>
+                  <label key={field.id} htmlFor={field.id} style={{ background: "rgba(250,247,241,0.76)", border: `1px solid ${field.pass ? "rgba(93,140,101,0.28)" : "rgba(94,68,42,0.12)"}`, borderRadius: 8, padding: "0.52rem", display: "grid", gap: "0.34rem", alignContent: "start", minHeight: 154 }}>
                     <span style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem", alignItems: "start" }}>
                       <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>{field.label}</strong>
                       <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.66rem", fontWeight: 900, whiteSpace: "nowrap" }}>
@@ -1408,7 +1414,7 @@ ${localPreviewOutput}`;
                       }}
                       rows={4}
                       placeholder={field.placeholder}
-                      style={{ width: "100%", minHeight: 88, resize: "vertical", border: "1.5px solid rgba(94,68,42,0.16)", borderRadius: 8, padding: "0.58rem", background: "#FAF7F1", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.76rem", lineHeight: 1.52, fontWeight: 800, boxSizing: "border-box" }}
+                      style={{ width: "100%", minHeight: 62, resize: "vertical", border: "1.5px solid rgba(94,68,42,0.16)", borderRadius: 8, padding: "0.46rem", background: "#FAF7F1", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 800, boxSizing: "border-box" }}
                     />
                     <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 900 }}>
                       {field.pass ? "会进入 API JSON 和研究记录。" : field.passText}
@@ -1575,12 +1581,14 @@ ${localPreviewOutput}`;
               ))}
             </div>
 
-            <code style={{ display: "block", whiteSpace: "pre-wrap", color: "var(--cherry-warm-brown)", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.9rem", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65 }}>
+            <code style={{ display: "block", whiteSpace: "pre-wrap", color: "var(--cherry-warm-brown)", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.9rem", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65, maxHeight: 260, overflow: "auto" }}>
               {finalPrompt}
             </code>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.8rem" }}>
+          <details className="research-agent-quality-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>质控清单与使用提醒</summary>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.8rem", marginTop: "0.68rem" }}>
             <ContentCard title="质控清单">
               <div style={{ display: "grid", gap: "0.45rem" }}>
                 {activePrompt.checks.map((check, index) => (
@@ -1595,9 +1603,11 @@ ${localPreviewOutput}`;
               先放入原文、图注或实验设计，再把生成的 prompt 发给 AI。涉及论文结论时，要求模型标出“原文未说明”，可以减少凭空补充。
             </ContentCard>
           </div>
+          </details>
 
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "1.2rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.75rem" }}>
+          <details className="research-agent-taskpack-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>可复制任务包</summary>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", margin: "0.68rem 0 0.75rem" }}>
               <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>可复制任务包</div>
               <button type="button" onClick={copyTaskPack} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.8rem" }}>
                 {copiedPack ? "已复制" : "复制任务包"}
@@ -1606,7 +1616,7 @@ ${localPreviewOutput}`;
             <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.9rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65, maxHeight: 260, overflow: "auto" }}>
               {taskPackOutput}
             </code>
-          </div>
+          </details>
         </div>
       </div>
 
@@ -1703,8 +1713,39 @@ ${localPreviewOutput}`;
               display: none !important;
             }
 
+            #prompt-kit-builder .research-agent-skill-panel {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.42rem !important;
+            }
+
+            #prompt-kit-builder .research-agent-skill-panel > div {
+              grid-column: 1 / -1 !important;
+            }
+
+            #prompt-kit-builder .research-agent-skill-link,
+            #prompt-kit-builder .research-agent-skill-panel button {
+              text-align: center !important;
+              padding: 0.4rem 0.5rem !important;
+            }
+
             #prompt-kit-builder .research-agent-check-strip {
-              grid-template-columns: 1fr !important;
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+
+            #prompt-kit-builder .research-review-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.44rem !important;
+            }
+
+            #prompt-kit-builder .research-review-grid label {
+              padding: 0.46rem !important;
+              min-height: 0 !important;
+            }
+
+            #prompt-kit-builder .research-review-grid textarea {
+              min-height: 58px !important;
+              font-size: 0.68rem !important;
+              padding: 0.4rem !important;
             }
 
             #prompt-kit-builder .prompt-workflow-grid {
