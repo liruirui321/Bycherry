@@ -466,7 +466,7 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}`;
     },
     {
       title: "证据表比长总结更可靠",
-      body: "科研用户真正需要的是材料来源、证据字段、缺失信息和引用边界，而不是一段无法回查的流畅总结。",
+      body: "整理科研材料时，真正要保留的是材料来源、证据字段、缺失信息和引用边界，而不是一段无法回查的流畅总结。",
     },
     {
       title: "引用和参考文献需要单独核查",
@@ -832,7 +832,7 @@ ${localPreviewOutput}`;
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.75rem" }}>
           <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.55rem" }}>
-            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>市场需求</strong>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>常见卡点</strong>
             <div style={{ display: "grid", gap: "0.5rem" }}>
               {marketNeeds.map((item) => (
                 <div key={item.title} style={{ display: "grid", gridTemplateColumns: "72px minmax(0, 1fr)", gap: "0.55rem", alignItems: "start" }}>
@@ -863,7 +863,7 @@ ${localPreviewOutput}`;
           ))}
         </div>
         <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.62rem" }}>
-          <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>产品判断</strong>
+          <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>使用原则</strong>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.58rem" }}>
             {marketSignals.map((item) => (
               <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.65rem" }}>
@@ -888,7 +888,7 @@ ${localPreviewOutput}`;
             </div>
           </div>
           <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.55rem", alignContent: "start" }}>
-            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>参考工具</strong>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>延伸查证</strong>
             {productReferences.map((item) => (
               <a key={item.href} href={item.href} target="_blank" rel="noreferrer" style={{ color: "var(--cherry-forest)", fontSize: "0.74rem", lineHeight: 1.45, fontWeight: 900, textDecoration: "none" }}>
                 {item.title} →
@@ -897,7 +897,7 @@ ${localPreviewOutput}`;
           </div>
         </div>
         <div style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.78rem", display: "grid", gap: "0.62rem" }}>
-          <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>需求依据</strong>
+          <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>方法依据</strong>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.58rem" }}>
             {sourceGroundedSignals.map((item) => (
               <a key={item.href} href={item.href} target="_blank" rel="noreferrer" style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.65rem", textDecoration: "none" }}>
