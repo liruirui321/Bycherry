@@ -91,6 +91,36 @@ const promptPracticeCases = [
 统计方法：计划使用 t 检验比较两组均值。
 我担心的问题：是否需要加入空载体对照、是否需要独立株系、统计方法是否能同时处理基因型和处理因素。`,
   },
+  {
+    title: "查讨论逻辑练习",
+    task: "论文逻辑检查",
+    material: `材料来源：练习材料，用于学习论文逻辑检查，不当作真实论文引用
+目标期刊/风格：植物分子生物学方向，表达需要克制、证据要能回到结果。
+结果摘要：干旱处理 24 小时后，候选 NAC-like gene A 在根系中表达升高；qPCR 结果与 RNA-seq 趋势一致；没有敲除、过表达或蛋白互作数据。
+讨论段落：这些结果证明 NAC-like gene A 是控制干旱耐受的关键调控因子，并且可以作为改良作物抗旱性的核心靶点。该基因表达升高说明它直接启动了下游抗旱通路。
+我想检查：哪些句子结论过度，哪些可以改成更保守的表达，哪些地方需要补引用或补实验。`,
+  },
+  {
+    title: "回审稿意见练习",
+    task: "审稿意见回应",
+    material: `材料来源：练习材料，用于学习审稿回应结构，不当作真实审稿记录
+审稿人意见：作者声称候选 NAC-like gene A 调控干旱耐受，但目前只有表达升高和 qPCR 验证，缺少功能验证。请补充证据或降低结论强度。
+原文位置：讨论第 2 段，第 4-6 句。
+已完成修改/补充分析：重新检查了表达图，补充了候选基因在不同处理时间点的表达趋势；暂时没有功能验证实验。
+还不能补做的内容：短期内不能完成敲除株系或过表达株系构建。
+希望语气：克制、礼貌、逐条回应，承认证据边界。`,
+  },
+  {
+    title: "统一术语练习",
+    task: "术语一致性检查",
+    material: `材料来源：练习材料，用于学习术语一致性检查，不当作真实稿件
+章节/全文：结果与讨论节选。
+重点术语：drought stress response、water deficit response、NAC-like transcription factor、NAC-like gene A、NAC-A。
+已有缩写表：RNA-seq 已定义；qPCR 已定义；NAC-A 未定义。
+正文片段：In response to drought stress, NAC-like gene A was upregulated. The water deficit response gene NAC-A showed a similar trend in qPCR. We therefore focused on the NAC-like transcription factor in the following analysis.
+图表标签：Figure 2 标注为 NAC-like gene A；补充图 S3 标注为 NAC-A。
+需要统一的写法：确认 NAC-like gene A 和 NAC-A 是否指同一对象，统一首次定义、图表标签和正文写法。`,
+  },
 ];
 
 function PromptKitContent() {

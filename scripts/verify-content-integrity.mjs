@@ -435,6 +435,9 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "paper reading case", text: "读论文练习" },
     { label: "chart reading case", text: "讲图表练习" },
     { label: "experiment design case", text: "查实验设计练习" },
+    { label: "discussion logic case", text: "查讨论逻辑练习" },
+    { label: "review response case", text: "回审稿意见练习" },
+    { label: "terminology consistency case", text: "统一术语练习" },
     { label: "material source boundary", text: "材料来源：练习材料，用于学习证据拆解" },
     { label: "direct local preview cue", text: "可以直接运行本地预览" },
     { label: "method evidence section", text: "方法依据" },
@@ -500,7 +503,10 @@ function verifyResearchAgentWorkbenchContract() {
     expect(!item.pattern.test(promptKitSource), `Research Agent workbench contains retired copy: ${item.label}`);
   }
 
-  expect(Array.from(practiceCasesSource.matchAll(/\btask:\s*"/g)).length >= 3, "Research Agent workbench should expose at least three practice cases tied to tasks.");
+  expect(Array.from(practiceCasesSource.matchAll(/\btask:\s*"/g)).length >= 6, "Research Agent workbench should expose practice cases for all six task routes.");
+  for (const task of ["文献精读", "实验设计检查", "图表解读", "论文逻辑检查", "审稿意见回应", "术语一致性检查"]) {
+    expect(practiceCasesSource.includes(`task: "${task}"`), `Research Agent practice cases must cover task route: ${task}`);
+  }
   expect(!promptKitSource.includes('useState("研究问题：\\n样本/材料：\\n已有结果：\\n我最担心的问题：")'), "Research Agent workbench should not open on an empty field-only starter.");
 
   for (const text of [
