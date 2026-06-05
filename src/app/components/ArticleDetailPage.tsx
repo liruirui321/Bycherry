@@ -262,6 +262,20 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
       ]
     : [];
   const platformUsePlansText = platformUsePlans.map((plan) => `${plan.title}\n${plan.fields.map((field) => `- ${field}`).join("\n")}\n- ${plan.output}`).join("\n\n");
+  const platformQuestionAuditRubric = platformUrl
+    ? [
+        { title: "题干", pass: "只问一个核心判断，条件足够，不靠猜题意作答。", fix: "题干同时问多个概念时，拆成两题；缺少条件时补充材料或删题。" },
+        { title: "答案", pass: "正确答案唯一，能从题干和知识点范围直接推出。", fix: "如果两个选项都说得通，改题干限定条件，或把题改成开放辨析题。" },
+        { title: "干扰项", pass: "来自真实误解，例如混淆对象、方向、条件、因果或适用范围。", fix: "明显错误或无关选项要重写，避免题目只是在考排除法。" },
+        { title: "解析", pass: "说明为什么对、为什么错，并指出对应知识点或错因。", fix: "只重复答案的解析不保留，要求补上推理步骤和边界提醒。" },
+      ]
+    : [];
+  const platformWrongReasonTags = platformUrl
+    ? ["概念混淆", "过程顺序", "条件遗漏", "读题偏差", "图表证据", "因果外推", "术语不稳", "题目歧义"]
+    : [];
+  const platformAuditRubricText = platformQuestionAuditRubric.map((item, index) => `${index + 1}. ${item.title}
+通过标准：${item.pass}
+不合格处理：${item.fix}`).join("\n\n");
   const activePlatformPlanText = activePlatformPlan
     ? `【SciFusion 当前照填方案】
 平台入口：${platformUrl}
@@ -276,10 +290,14 @@ ${activePlatformPlan.fields.map((field, index) => `${index + 1}. ${field}`).join
 审核清单
 ${activePlatformPlan.audit.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
+题目验收量规
+${platformAuditRubricText}
+
 使用节奏
 1. 先把上面字段照填进平台。
 2. 少量生成后逐题审核，不合格题直接删掉或重写。
-3. 作答后记录最高频错因，再回到学习卡补薄弱点。`
+3. 作答后用错因标签记录：${platformWrongReasonTags.join("、")}。
+4. 回到学习卡补最高频薄弱点。`
     : "";
   const aiMaterialAuditPrompts = article?.slug === "ai-course-development"
     ? [
@@ -329,7 +347,13 @@ ${platformUsePlansText}
 1. 先少量生成，不一次生成过多题。
 2. 生成后逐题审核题干、答案、干扰项和解析。
 3. 删除跑题、歧义、超纲或解析空泛的题。
-4. 做完后记录最高频错因，再回到学习卡补薄弱点。`
+4. 做完后记录最高频错因，再回到学习卡补薄弱点。
+
+题目验收量规
+${platformAuditRubricText}
+
+错因标签
+${platformWrongReasonTags.join("、")}`
     : "";
   const platformReviewText = platformUrl
     ? `【SciFusion 测后复盘记录】
@@ -349,8 +373,9 @@ ${platformUsePlansText}
 作答复盘
 1. 我错了哪些题：
 2. 高频错因：
-3. 是题目表达问题，还是我没有掌握：
-4. 下一步要修改的学习卡或补充资料：
+3. 错因标签：${platformWrongReasonTags.join(" / ")}
+4. 是题目表达问题，还是我没有掌握：
+5. 下一步要修改的学习卡或补充资料：
 
 保留结论
 这次测评真正证明我已经掌握的是：
@@ -813,6 +838,41 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                             <IconCheck size={15} color="var(--cherry-forest)" />
                             <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.75rem", lineHeight: 1.5, fontWeight: 800 }}>{item}</span>
                           </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+                {platformQuestionAuditRubric.length ? (
+                  <div style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.75rem", display: "grid", gap: "0.65rem" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", gap: "0.7rem", alignItems: "center", flexWrap: "wrap" }}>
+                      <div>
+                        <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.84rem" }}>生成后逐题验收</div>
+                        <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem", fontWeight: 800 }}>
+                          题目不是越多越好。每道题先过题干、答案、干扰项和解析四关，再决定保留。
+                        </div>
+                      </div>
+                      <span style={{ background: "var(--cherry-peach-light)", border: "1.5px solid rgba(214,91,74,0.24)", borderRadius: 999, padding: "0.26rem 0.62rem", color: "var(--cherry-red)", fontSize: "0.72rem", fontWeight: 900 }}>
+                        4 项量规
+                      </span>
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.55rem" }}>
+                      {platformQuestionAuditRubric.map((item, index) => (
+                        <div key={item.title} style={{ background: index % 2 === 0 ? "var(--cherry-yellow-light)" : "var(--cherry-blue-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", display: "grid", gap: "0.34rem", minHeight: 142 }}>
+                          <span aria-hidden="true" style={{ width: 22, height: 22, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900 }}>{index + 1}</span>
+                          <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>{item.title}</strong>
+                          <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>通过：{item.pass}</span>
+                          <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.48, fontWeight: 900 }}>处理：{item.fix}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ background: "var(--cherry-sage-light)", border: "1px solid rgba(58,92,62,0.16)", borderRadius: 8, padding: "0.62rem", display: "grid", gap: "0.42rem" }}>
+                      <strong style={{ color: "var(--cherry-forest)", fontSize: "0.76rem" }}>错因标签</strong>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.36rem" }}>
+                        {platformWrongReasonTags.map((tag) => (
+                          <span key={tag} style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.18rem 0.52rem", color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 900 }}>
+                            {tag}
+                          </span>
                         ))}
                       </div>
                     </div>
