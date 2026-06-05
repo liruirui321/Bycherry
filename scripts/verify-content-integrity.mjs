@@ -286,6 +286,11 @@ function verifyPlatformGuideConfigBuilder() {
   expect(articleSource.includes("platformKnowledgeRange"), "Platform guide must collect the knowledge range before copying a config.");
   expect(articleSource.includes("platformLearningGoal"), "Platform guide must collect an observable learning goal before copying a config.");
   expect(articleSource.includes("platformQuestionCount") && articleSource.includes("platformTimeBudget"), "Platform guide must collect question count and time budget.");
+  expect(articleSource.includes("platformTopicTemplates"), "Platform guide must provide one-click topic fill packages.");
+  expect(articleSource.includes("applyPlatformTopicTemplate"), "Platform guide must let learners load a topic package into the platform config.");
+  expect(articleSource.includes("常用主题照填包"), "Platform guide must visibly expose reusable topic packages.");
+  expect(articleSource.includes("platformAuditFocus"), "Platform guide must collect the learner's question-audit focus.");
+  expect(articleSource.includes("审核重点：${platformAuditFocus"), "Platform copied configs must include the audit focus.");
   expect(articleSource.includes("我的照填配置"), "Platform guide must visibly expose the learner's custom config builder.");
   expect(articleSource.includes("即将复制到平台的字段"), "Platform guide must preview the exact fields that will be copied to the platform.");
   expect(articleSource.includes("测后复盘表"), "Platform guide must keep a copyable post-assessment review table.");

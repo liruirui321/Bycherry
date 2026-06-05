@@ -90,6 +90,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [platformLearningGoal, setPlatformLearningGoal] = useState("我能说明 DNA、mRNA、蛋白质之间的信息传递关系");
   const [platformQuestionCount, setPlatformQuestionCount] = useState("6 题");
   const [platformTimeBudget, setPlatformTimeBudget] = useState("8 分钟");
+  const [platformAuditFocus, setPlatformAuditFocus] = useState("重点检查题目是否混淆 RNA 聚合酶、mRNA、核糖体和蛋白质产物。");
   const [recordQuestion, setRecordQuestion] = useState("");
   const [recordEvidence, setRecordEvidence] = useState("");
   const [recordOutput, setRecordOutput] = useState("");
@@ -331,6 +332,7 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
         `测评目标：${platformLearningGoal.trim() || "请写成“我能……”的可观察动作"}`,
         `题量：${platformQuestionCount.trim() || "请填写题量"}`,
         `预计完成时间：${platformTimeBudget.trim() || "请填写预计完成时间"}`,
+        `审核重点：${platformAuditFocus.trim() || "请填写本次最容易出错的题目质量风险"}`,
         "生成要求：题干清楚，答案唯一，干扰项来自真实误解，解析说明为什么对、为什么错",
       ]
     : [];
@@ -345,6 +347,50 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     : [];
   const platformWrongReasonTags = platformUrl
     ? ["概念混淆", "过程顺序", "条件遗漏", "读题偏差", "图表证据", "因果外推", "术语不稳", "题目歧义"]
+    : [];
+  const platformTopicTemplates = platformUrl
+    ? [
+        {
+          title: "基因表达",
+          planIndex: 1,
+          learnerLevel: "生物基础入门，已经学过 DNA 和 RNA 基础",
+          knowledgeRange: "DNA、mRNA、蛋白质的信息传递关系；转录、翻译、密码子",
+          learningGoal: "我能区分转录产物和翻译产物，并说明一个密码子如何对应一个氨基酸",
+          questionCount: "6 题",
+          timeBudget: "8 分钟",
+          auditFocus: "重点检查题目是否混淆 RNA 聚合酶、mRNA、核糖体和蛋白质产物。",
+        },
+        {
+          title: "植物演化",
+          planIndex: 2,
+          learnerLevel: "已经知道藻类、苔藓、蕨类、裸子植物和被子植物的大致顺序",
+          knowledgeRange: "淡水绿藻到开花结果的关键创新、证据类型和结论边界",
+          learningGoal: "我能按时间顺序解释植物登陆、维管束、种子、花和果实分别解决了什么问题",
+          questionCount: "8 题",
+          timeBudget: "10 分钟",
+          auditFocus: "重点检查题目是否区分化石记录、现生基因组、系统发育和分子钟证据。",
+        },
+        {
+          title: "概念解释",
+          planIndex: 1,
+          learnerLevel: "刚学完一个概念，但还不能稳定复述机制和边界",
+          knowledgeRange: "一个容易混淆的概念；定义、机制、例子、反例和适用范围",
+          learningGoal: "我能用一句话解释概念，再用 3 个步骤说明它如何发生或如何判断",
+          questionCount: "4 题",
+          timeBudget: "6 分钟",
+          auditFocus: "重点检查题目是否能暴露误解，而不是只考定义背诵。",
+        },
+        {
+          title: "图表证据",
+          planIndex: 2,
+          learnerLevel: "能读基础坐标轴，但容易把趋势、相关和因果混在一起",
+          knowledgeRange: "图号、坐标轴、单位、分组、显著性标记和图注结论",
+          learningGoal: "我能先描述图中的观察事实，再判断它支持什么、不能支持什么",
+          questionCount: "5 题",
+          timeBudget: "7 分钟",
+          auditFocus: "重点检查题目是否要求读图证据，而不是直接跳到机制结论。",
+        },
+      ]
     : [];
   const platformAuditRubricText = platformQuestionAuditRubric.map((item, index) => `${index + 1}. ${item.title}
 通过标准：${item.pass}
@@ -436,6 +482,7 @@ ${platformWrongReasonTags.join("、")}`
 知识点范围：${platformKnowledgeRange}
 测评目标：${platformLearningGoal}
 题量 / 时间：${platformQuestionCount} / ${platformTimeBudget}
+审核重点：${platformAuditFocus}
 
 题目审核
 1. 题干是否只问一个核心问题：
@@ -679,6 +726,19 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     const target = document.getElementById(actionSteps.length ? "article-primary-action" : "article-body-points");
     target?.scrollIntoView({ behavior: "smooth", block: "start" });
     target?.focus({ preventScroll: true });
+  }
+
+  function applyPlatformTopicTemplate(template: (typeof platformTopicTemplates)[number]) {
+    setSelectedPlatformPlanIndex(template.planIndex);
+    setPlatformLearnerLevel(template.learnerLevel);
+    setPlatformKnowledgeRange(template.knowledgeRange);
+    setPlatformLearningGoal(template.learningGoal);
+    setPlatformQuestionCount(template.questionCount);
+    setPlatformTimeBudget(template.timeBudget);
+    setPlatformAuditFocus(template.auditFocus);
+    setCopiedPlatformConfig(false);
+    setCopiedPlatformReview(false);
+    setCopyStatus(`已载入${template.title}照填包，可以复制到平台。`);
   }
 
   async function copyPlatformPasteConfig() {
@@ -982,6 +1042,25 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     );
                   })}
                 </div>
+                {platformTopicTemplates.length ? (
+                  <div className="platform-topic-template-panel" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.75rem", display: "grid", gap: "0.65rem" }}>
+                    <div>
+                      <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.84rem" }}>常用主题照填包</div>
+                      <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem", fontWeight: 800 }}>
+                        选择一个主题，自动填入学习阶段、知识点范围、目标、题量和时间。
+                      </div>
+                    </div>
+                    <div className="platform-topic-template-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.55rem" }}>
+                      {platformTopicTemplates.map((template) => (
+                        <button key={template.title} type="button" onClick={() => applyPlatformTopicTemplate(template)} aria-describedby="article-summary-copy-status" style={{ textAlign: "left", background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.65rem", display: "grid", gap: "0.34rem", cursor: "pointer" }}>
+                          <strong style={{ color: "var(--cherry-forest)", fontSize: "0.78rem" }}>{template.title}</strong>
+                          <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 900 }}>{template.learningGoal}</span>
+                          <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 800 }}>{template.auditFocus}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
                 {activePlatformPlan ? (
                   <div className="platform-active-plan-grid" style={{ background: "var(--card)", border: "1.5px solid rgba(58,92,62,0.18)", borderRadius: 8, padding: "0.75rem", display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(210px, 0.72fr)", gap: "0.75rem" }}>
                     <div>
@@ -1076,6 +1155,10 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                       <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.74rem", fontWeight: 900, gridColumn: "1 / -1" }}>
                         测评目标
                         <textarea value={platformLearningGoal} onChange={(event) => { setPlatformLearningGoal(event.target.value); setCopiedPlatformConfig(false); setCopiedPlatformReview(false); setCopyStatus(""); }} rows={2} style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.52rem 0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, resize: "vertical" }} />
+                      </label>
+                      <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.74rem", fontWeight: 900, gridColumn: "1 / -1" }}>
+                        审核重点
+                        <textarea value={platformAuditFocus} onChange={(event) => { setPlatformAuditFocus(event.target.value); setCopiedPlatformConfig(false); setCopiedPlatformReview(false); setCopyStatus(""); }} rows={2} style={{ border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.52rem 0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, resize: "vertical" }} />
                       </label>
                     </div>
                     <div style={{ background: "var(--cherry-blue-light)", border: "1px solid rgba(85,137,179,0.18)", borderRadius: 8, padding: "0.62rem", display: "grid", gap: "0.34rem" }}>
