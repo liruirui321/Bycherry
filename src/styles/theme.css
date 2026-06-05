@@ -188,6 +188,10 @@
     display: block;
   }
 
+  details:not([open]) > :not(summary) {
+    display: none !important;
+  }
+
   .skip-link {
     position: fixed;
     top: 0.75rem;
