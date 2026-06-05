@@ -325,6 +325,10 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("hero-session-copy-status"), "Homepage hero must expose copy status for the session plan.");
   expect(heroSource.includes("保存产出：${activeSessionPlan.work.outputs.join"), "Homepage hero session plan must include saved outputs.");
   expect(heroSource.includes("完成标准：${activeSessionPlan.work.success}"), "Homepage hero session plan must include completion standards.");
+  expect(heroSource.includes("回到模块页填写复盘证据"), "Homepage hero copied session plan must point learners back to the work evidence fields.");
+  expect(heroSource.includes("hero-session-action-link"), "Homepage hero session plan must expose direct module and paired-reading links.");
+  expect(heroSource.includes("进入模块：{activeSessionPlan.work.title}"), "Homepage hero session plan must include a visible direct module link.");
+  expect(heroSource.includes("配套阅读：{activeSessionPlan.article.title}"), "Homepage hero session plan must include a visible paired-reading link.");
   expect(heroSource.includes('import { notes } from "./Notes"') && heroSource.includes('import { essays } from "./ResearchEssays"'), "Homepage hero session plans must connect modules to paired reading libraries.");
   expect(heroSource.includes("配套阅读：${activeSessionPlan.article.title}"), "Homepage hero session plan must include a paired reading title.");
   expect(heroSource.includes("阅读入口：${activeSessionPlan.article.href}"), "Homepage hero copied session plan must include paired reading route.");

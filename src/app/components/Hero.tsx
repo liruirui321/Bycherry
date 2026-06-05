@@ -77,6 +77,9 @@ ${activeSessionPlan.work.task}
 ${activeSessionPlan.article.actionSteps[0]}
 完成检查：${activeSessionPlan.article.checklist[0]}
 
+完成后
+回到模块页填写复盘证据：保存了什么、观察到什么变化、如何证明完成、下一步问题。
+
 模块学习路径
 ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join("\n")}`
     : "";
@@ -227,6 +230,32 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
                   </button>
                 );
               })}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.48rem" }}>
+              <a
+                className="hero-session-action-link"
+                href={activeSessionPlan.work.href}
+                aria-label={`进入当前学习模块：${activeSessionPlan.work.title}。先做这个，${activeSessionPlan.work.starter}`}
+                onClick={(event) => openWork(activeSessionPlan.work.href, event)}
+                onMouseEnter={() => preloadRouteForHref(activeSessionPlan.work.href)}
+                onFocus={() => preloadRouteForHref(activeSessionPlan.work.href)}
+                onPointerDown={() => preloadRouteForHref(activeSessionPlan.work.href)}
+                style={{ background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 8, padding: "0.48rem 0.58rem", textDecoration: "none", fontSize: "0.74rem", lineHeight: 1.42, fontWeight: 900 }}
+              >
+                进入模块：{activeSessionPlan.work.title}
+              </a>
+              <a
+                className="hero-session-action-link"
+                href={activeSessionPlan.article.href}
+                aria-label={`打开配套阅读：${activeSessionPlan.article.title}。先做这个，${activeSessionPlan.article.actionSteps[0]}。完成后检查，${activeSessionPlan.article.checklist[0]}`}
+                onClick={(event) => openWork(activeSessionPlan.article.href, event)}
+                onMouseEnter={() => preloadRouteForHref(activeSessionPlan.article.href)}
+                onFocus={() => preloadRouteForHref(activeSessionPlan.article.href)}
+                onPointerDown={() => preloadRouteForHref(activeSessionPlan.article.href)}
+                style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.2)", borderRadius: 8, padding: "0.46rem 0.56rem", textDecoration: "none", fontSize: "0.74rem", lineHeight: 1.42, fontWeight: 900 }}
+              >
+                配套阅读：{activeSessionPlan.article.title}
+              </a>
             </div>
             <div style={{ display: "grid", gap: "0.42rem" }}>
               {activeSessionSteps.map((item) => (
@@ -421,10 +450,15 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
             transform-origin: right bottom;
           }
 
+          .hero-session-action-link {
+            grid-column: 1 / -1;
+          }
+
         }
 
         .hero-cta:focus-visible,
         .hero-goal-link:focus-visible,
+        .hero-session-action-link:focus-visible,
         .hero-session-button:focus-visible,
         .hero-work-card:focus-visible {
           outline: 3px solid var(--cherry-red);
@@ -442,6 +476,16 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
           border-color: var(--cherry-yellow);
         }
 
+        .hero-session-action-link {
+          transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .hero-session-action-link:hover,
+        .hero-session-action-link:focus-visible {
+          transform: translateY(-2px);
+          box-shadow: 3px 6px 0 rgba(94,68,42,0.1);
+        }
+
         .hero-work-card {
           transition: transform 0.18s ease, box-shadow 0.18s ease;
         }
@@ -455,6 +499,7 @@ ${activeSessionPlan.work.path.map((step, index) => `${index + 1}. ${step}`).join
         @media (prefers-reduced-motion: reduce) {
           .hero-cta,
           .hero-goal-link,
+          .hero-session-action-link,
           .hero-session-button,
           .hero-work-card {
             transition: none !important;
