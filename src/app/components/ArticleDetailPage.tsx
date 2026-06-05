@@ -10,52 +10,6 @@ import { useEffect, useState } from "react";
 
 type ArticleKind = "note" | "research";
 
-function ArticleIllustration({ slug, color }: { slug: string; color: string }) {
-  const isAi = slug.includes("ai") || slug.includes("workflow") || slug.includes("assessment");
-  const isPlant = slug.includes("plant") || slug.includes("genome") || slug.includes("science");
-
-  if (isAi) {
-    return (
-      <svg width="144" height="108" viewBox="0 0 144 108" fill="none" aria-hidden="true" focusable="false">
-        <rect x="18" y="29" width="82" height="52" rx="14" fill="rgba(250,247,241,0.86)" stroke={color} strokeWidth="2.4" />
-        <rect x="29" y="40" width="47" height="7" rx="3.5" fill="var(--cherry-blue-light)" />
-        <path d="M30 56 H82 M30 66 H72" stroke="var(--cherry-warm-mid)" strokeWidth="3" strokeLinecap="round" opacity="0.45" />
-        <path d="M42 82 H94" stroke="var(--cherry-warm-brown)" strokeWidth="4" strokeLinecap="round" opacity="0.18" />
-        <path d="M103 24 L108 35 L120 39 L109 45 L105 57 L99 46 L87 42 L98 36Z" fill="var(--cherry-yellow)" stroke="rgba(94,68,42,0.16)" strokeWidth="1.4" />
-        <rect x="104" y="61" width="30" height="26" rx="7" fill="var(--cherry-peach-light)" stroke="var(--cherry-red)" strokeWidth="2.2" />
-        <path d="M112 71 H126 M112 79 H122" stroke="var(--cherry-warm-brown)" strokeWidth="2.4" strokeLinecap="round" opacity="0.5" />
-        <path d="M106 71 L109 74 L114 68" stroke="var(--cherry-red)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="130" cy="64" r="4.2" fill="var(--cherry-red)" opacity="0.8" />
-      </svg>
-    );
-  }
-
-  if (isPlant) {
-    return (
-      <svg width="144" height="108" viewBox="0 0 144 108" fill="none" aria-hidden="true" focusable="false">
-        <path d="M15 88 C34 72 55 76 71 65 C93 50 111 61 132 43 V102 H15Z" fill="var(--cherry-sage-light)" opacity="0.72" />
-        <path d="M23 91 C43 98 98 98 125 88" stroke="rgba(58,92,62,0.2)" strokeWidth="5" strokeLinecap="round" />
-        <path d="M47 90 C43 65 50 45 65 25" stroke="var(--cherry-forest)" strokeWidth="5" strokeLinecap="round" />
-        <path d="M59 34 C75 17 101 22 109 42 C85 53 68 49 59 34Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
-        <path d="M50 58 C31 49 18 58 16 77 C34 82 46 75 50 58Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
-        <circle cx="96" cy="39" r="8" fill="var(--cherry-red)" opacity="0.84" />
-        <path d="M88 18 C99 10 113 12 121 22" stroke="var(--cherry-yellow)" strokeWidth="6" strokeLinecap="round" opacity="0.75" />
-        <path d="M24 31 C35 20 48 20 60 32" stroke="var(--cherry-blue)" strokeWidth="5" strokeLinecap="round" opacity="0.28" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg width="144" height="108" viewBox="0 0 144 108" fill="none" aria-hidden="true" focusable="false">
-      <rect x="24" y="22" width="74" height="66" rx="16" fill="rgba(250,247,241,0.88)" stroke={color} strokeWidth="2.4" />
-      <path d="M38 42 H82 M38 55 H78 M38 68 H70" stroke="var(--cherry-warm-mid)" strokeWidth="3.4" strokeLinecap="round" opacity="0.42" />
-      <circle cx="101" cy="34" r="15" fill="var(--cherry-yellow)" opacity="0.78" />
-      <path d="M92 70 C105 57 125 61 132 77 C113 89 99 84 92 70Z" fill="var(--cherry-sage)" stroke="var(--cherry-forest)" strokeWidth="2" />
-      <path d="M108 25 L113 33 L122 35 L115 41 L113 50 L108 42 L99 39 L106 34Z" fill="var(--cherry-peach)" />
-    </svg>
-  );
-}
-
 function navigateHome(hash: string) {
   navigateClient(`/${hash}`);
 }
@@ -80,7 +34,6 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
   const [copiedTemplate, setCopiedTemplate] = useState(false);
   const [copiedActionPack, setCopiedActionPack] = useState(false);
   const [copiedLearningRecord, setCopiedLearningRecord] = useState(false);
-  const [copiedReadingTaskPack, setCopiedReadingTaskPack] = useState(false);
   const [copiedPlatformConfig, setCopiedPlatformConfig] = useState(false);
   const [copiedPlatformReview, setCopiedPlatformReview] = useState(false);
   const [copiedAiAuditPrompts, setCopiedAiAuditPrompts] = useState(false);
@@ -157,7 +110,6 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     setRecordOutput("");
     setRecordNextStep("");
     setCopiedLearningRecord(false);
-    setCopiedReadingTaskPack(false);
     setCopiedEvidenceChainCard(false);
     setEvidencePhenomenon("");
     setEvidenceMaterial("");
@@ -333,35 +285,6 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
     ? (pairedWorkSlugsByArticleSlug[article.slug] ?? [])
         .map((workSlug) => works.find((work) => work.slug === workSlug))
         .filter((work): work is (typeof works)[number] => Boolean(work))
-    : [];
-  const articleReadingTaskPackCards = article
-    ? [
-        {
-          title: "先做",
-          body: articleQuickStart?.step ?? actionSteps[0] ?? "先读正文，圈出一个要解决的问题。",
-          output: "开始前写下本篇要解决的一个卡点。",
-        },
-        {
-          title: "抓证据",
-          body: article.highlights.slice(0, 2).join("；") || "从正文中抓 2 条能支撑理解的证据。",
-          output: "每条证据都要能回答一个子问题。",
-        },
-        {
-          title: "留产出",
-          body: starterTemplate[0] ?? "保存一份学习记录或证据卡。",
-          output: "把模板填成自己的材料，而不是只复制空表。",
-        },
-        {
-          title: "验收",
-          body: checklist[0] ?? "完成后确认自己留下了可检查结果。",
-          output: "用一句话说明这篇内容是否真的被用上。",
-        },
-        {
-          title: "接着做",
-          body: pairedWorks[0] ? `${pairedWorks[0].title}：${pairedWorks[0].starter}` : "回到学习模块总览，选择一个相关工具继续操作。",
-          output: pairedWorks[0] ? `完成标准：${pairedWorks[0].success}` : "继续留下一个可保存产出。",
-        },
-      ]
     : [];
   const filledRecord = {
     question: recordQuestion.trim() || articleRecordFields[0]?.fallback || "",
@@ -1320,29 +1243,6 @@ ${pairedWorks.length ? pairedWorks.map((work, index) => `${index + 1}. ${work.ti
 九、下一步回看
 我还需要补充或重做：`
     : "";
-  const readingTaskPackText = article
-    ? `【阅读任务包】${article.title}
-
-一、先按 5 张卡执行
-${articleReadingTaskPackCards.map((item, index) => `${index + 1}. ${item.title}
-任务：${item.body}
-产出：${item.output}`).join("\n\n")}
-
-二、30 分钟执行节奏
-${articlePracticePlan.map((item) => `${item.label}：${item.body}`).join("\n")}
-
-三、正文抓取顺序
-${readingPath.map((item, index) => `${index + 1}. ${item.label}：${item.body}`).join("\n")}
-
-四、可套用模板
-${starterTemplateText}
-
-五、读完接着做
-${pairedWorks.length ? pairedWorks.map((work, index) => `${index + 1}. ${work.title}
-入口：${getWorkToolHref(work.href)}
-先做这个：${work.starter}
-完成标准：${work.success}`).join("\n\n") : "回到学习模块总览，选择一个相关工具继续操作。"}`
-    : "";
   const summaryText = article
     ? `【阅读摘要】
 标题：${article.title}
@@ -1384,7 +1284,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
-      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -1405,7 +1304,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedSummary(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
-      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -1426,7 +1324,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedSummary(false);
       setCopiedTemplate(false);
       setCopiedLearningRecord(false);
-      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -1447,7 +1344,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedSummary(false);
       setCopiedTemplate(false);
       setCopiedActionPack(false);
-      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -1457,27 +1353,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     }
 
     setCopiedLearningRecord(false);
-    setCopyStatus("复制失败，请手动选中文本复制。");
-  }
-
-  async function copyReadingTaskPack() {
-    if (!readingTaskPackText) return;
-    const copiedToClipboard = await copyText(readingTaskPackText);
-    if (copiedToClipboard) {
-      setCopiedReadingTaskPack(true);
-      setCopiedSummary(false);
-      setCopiedTemplate(false);
-      setCopiedActionPack(false);
-      setCopiedLearningRecord(false);
-      setCopiedPlatformConfig(false);
-      setCopiedPlatformReview(false);
-      setCopiedAiAuditPrompts(false);
-      setCopyStatus("阅读任务包已复制到剪贴板。");
-      window.setTimeout(() => setCopiedReadingTaskPack(false), 1400);
-      return;
-    }
-
-    setCopiedReadingTaskPack(false);
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
@@ -1514,7 +1389,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
-      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -1542,7 +1416,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
-      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -1570,7 +1443,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
-      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -1598,7 +1470,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
-      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -1626,7 +1497,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
-      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -1654,7 +1524,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
-      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -1682,7 +1551,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
-      setCopiedReadingTaskPack(false);
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
@@ -1710,7 +1578,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
-      setCopiedReadingTaskPack(false);
       setCopiedAiAuditPrompts(false);
       setCopyStatus("平台照填配置已复制到剪贴板。");
       window.setTimeout(() => setCopiedPlatformConfig(false), 1400);
@@ -1736,7 +1603,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
-      setCopiedReadingTaskPack(false);
       setCopiedAiAuditPrompts(false);
       setCopyStatus("测后复盘记录已复制到剪贴板。");
       window.setTimeout(() => setCopiedPlatformReview(false), 1400);
@@ -1765,7 +1631,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
-      setCopiedReadingTaskPack(false);
       setCopyStatus("AI 质检提示词包已复制到剪贴板。");
       window.setTimeout(() => setCopiedAiAuditPrompts(false), 1400);
       return;
@@ -1796,7 +1661,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
   return (
     <main id="main-content" tabIndex={-1} style={{ fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
-      <section style={{ padding: "0.45rem 1.5rem 1.2rem" }}>
+      <section style={{ padding: "0.35rem 1.5rem 1rem" }}>
         <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <article
             className="article-detail-card"
@@ -1804,17 +1669,13 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               background: "var(--card)",
               border: "1.5px solid var(--border)",
               borderRadius: 8,
-              padding: "0.78rem 1.05rem 1.1rem",
+              padding: "0.68rem 0.92rem 1rem",
               boxShadow: "0 8px 18px rgba(94,68,42,0.06)",
               position: "relative",
               overflow: "hidden",
             }}
           >
-            <div className="article-illustration-stamp" style={{ background: article.tagBg ?? article.labelBg, borderColor: article.tagColor ?? article.labelColor }}>
-              <ArticleIllustration slug={article.slug} color={article.tagColor ?? article.labelColor} />
-            </div>
-
-            <div className="article-meta-row" style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: "0.38rem", paddingRight: 162 }}>
+            <div className="article-meta-row" style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: "0.3rem" }}>
               <a
                 className="article-detail-link article-back-chip"
                 href={`/${backHash}`}
@@ -1864,11 +1725,11 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </span>
             </div>
 
-            <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.18rem, 2.8vw, 1.62rem)", fontWeight: 900, lineHeight: 1.22, marginBottom: "0.42rem", maxWidth: 720 }}>
+            <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.12rem, 2.5vw, 1.46rem)", fontWeight: 900, lineHeight: 1.18, marginBottom: "0.32rem", maxWidth: 760 }}>
               {article.title}
             </h1>
 
-            <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.88rem", lineHeight: 1.65, margin: "0 0 0.65rem", maxWidth: 760 }}>
+            <p style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", lineHeight: 1.5, margin: "0 0 0.5rem", maxWidth: 760, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
               {article.excerpt ?? article.body}
             </p>
 
@@ -1889,7 +1750,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   textDecoration: "none",
                   fontWeight: 900,
                   fontSize: "0.82rem",
-                  marginBottom: "0.85rem",
+                  marginBottom: "0.6rem",
                 }}
               >
                 打开平台：scifusion.top
@@ -1897,22 +1758,16 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             ) : null}
 
             {articleOutcomeSnapshot.length ? (
-              <div className="article-outcome-snapshot article-reading-task-pack" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.54rem 0.62rem", marginBottom: "0.68rem", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.62rem", alignItems: "center" }}>
+              <div className="article-outcome-snapshot article-reading-task-pack" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.42rem 0.52rem", marginBottom: "0.56rem", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.52rem", alignItems: "center" }}>
                 <div style={{ minWidth: 0, display: "grid", gap: "0.18rem" }}>
-                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem" }}>读完带走 · 阅读任务包</div>
-                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.38, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
-                    目标是带走可执行材料，而不是只浏览。先做、抓证据、留产出、验收、接着做。
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.8rem" }}>读完带走</div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.34, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
+                    先读正文，再填写记录和复制材料。
                   </div>
                 </div>
                 <div className="article-outcome-actions" style={{ display: "inline-flex", gap: "0.38rem", flexWrap: "wrap", justifyContent: "flex-end" }}>
                   <button type="button" className="article-start-action-button" onClick={focusArticleStart} aria-label={`开始执行${article.title}。先做这个，${articleQuickStart?.step ?? actionSteps[0] ?? "阅读正文要点"}`} style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.72rem", whiteSpace: "nowrap" }}>
                     开始执行
-                  </button>
-                  <button type="button" onClick={copyActionPack} aria-label={`复制${article.title}的行动包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.72rem", whiteSpace: "nowrap" }}>
-                    {copiedActionPack ? "已复制行动包" : "复制行动包"}
-                  </button>
-                  <button type="button" onClick={copyReadingTaskPack} aria-label={`复制${article.title}的阅读任务包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.32rem 0.66rem", fontWeight: 900, cursor: "pointer", fontSize: "0.72rem", whiteSpace: "nowrap" }}>
-                    {copiedReadingTaskPack ? "已复制任务包" : "复制任务包"}
                   </button>
                   <button type="button" onClick={copyLearningRecord} aria-label={`复制${article.title}的学习记录`} aria-describedby="article-summary-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.22)", borderRadius: 999, padding: "0.32rem 0.66rem", fontWeight: 900, cursor: "pointer", fontSize: "0.72rem", whiteSpace: "nowrap" }}>
                     {copiedLearningRecord ? "已复制记录" : "复制学习记录"}
@@ -2856,37 +2711,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             outline-offset: 4px;
           }
 
-          .article-illustration-stamp {
-            position: absolute;
-            top: 2.7rem;
-            right: 1.05rem;
-            width: 144px;
-            height: 108px;
-            border: 1px solid;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 18px rgba(94,68,42,0.07);
-            overflow: hidden;
-          }
-
-          .article-illustration-stamp svg {
-            width: 100%;
-            height: 100%;
-            display: block;
-          }
-
-          @media (min-width: 760px) {
-            .article-detail-card {
-              padding-right: 10.5rem !important;
-            }
-
-            .article-meta-row {
-              padding-right: 0 !important;
-            }
-          }
-
           .article-detail-link:hover,
           .article-detail-link:focus-visible {
             color: var(--cherry-red) !important;
@@ -2908,10 +2732,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           }
 
           @media (prefers-reduced-motion: reduce) {
-            .article-illustration-stamp {
-              transform: none !important;
-            }
-
             .article-nav-card {
               transition: none !important;
               transform: none !important;
@@ -2947,18 +2767,6 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               grid-template-columns: 1fr !important;
             }
 
-            .article-illustration-stamp {
-              position: relative;
-              top: auto;
-              right: auto;
-              width: min(100%, 178px);
-              height: 88px;
-              margin: 0 0 0.48rem auto;
-            }
-
-            .article-meta-row {
-              padding-right: 0 !important;
-            }
           }
         `}
       </style>

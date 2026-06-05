@@ -385,22 +385,17 @@ function verifyArticleOutcomeSnapshot() {
   expect(articleSource.includes("articleOutcomeSnapshot"), "Article detail pages must derive a read-before-output snapshot.");
   expect(articleSource.includes("读完带走"), "Article detail pages must visibly tell learners what they will take away.");
   expect(articleSource.includes("article-outcome-snapshot"), "Article detail output snapshot must have a stable class for focus and layout checks.");
-  expect(articleSource.includes("copyActionPack") && articleSource.includes("copyLearningRecord"), "Article detail output snapshot must expose action pack and learning record copy actions.");
-  expect(articleSource.includes("目标是带走可执行材料，而不是只浏览"), "Article detail output snapshot must frame reading as producing reusable material.");
+  expect(articleSource.includes("copyActionPack") && articleSource.includes("copyLearningRecord"), "Article detail pages must still expose action pack and learning record copy actions.");
+  expect(articleSource.includes("先读正文，再填写记录和复制材料。"), "Article detail output snapshot must use short reading guidance.");
   expect(articleSource.includes("article-start-action-button"), "Article detail output snapshot must expose a direct start action.");
   expect(articleSource.includes("focusArticleStart"), "Article detail direct start action must focus the primary action or body anchor.");
   expect(articleSource.includes('id="article-primary-action"') && articleSource.includes('id="article-body-points"'), "Article detail pages must expose focusable action and body anchors.");
-  expect(articleSource.includes("articleReadingTaskPackCards"), "Article detail pages must derive a five-card reading task pack.");
-  expect(articleSource.includes("readingTaskPackText"), "Article detail pages must provide a copyable reading task pack.");
-  expect(articleSource.includes("copyReadingTaskPack"), "Article detail pages must expose a reading task pack copy action.");
   expect(articleSource.includes("article-reading-task-pack"), "Article detail reading task pack must have a stable class for layout checks.");
-  expect(articleSource.includes("阅读任务包"), "Article detail pages must visibly name the reading task pack.");
-  expect(articleSource.includes("先做、抓证据、留产出、验收、接着做"), "Article detail reading task pack must show the learner execution sequence.");
   expect(articleSource.includes("article-outcome-actions"), "Article detail task pack actions must stay in a compact top strip.");
   expect(!articleSource.includes('articleReadingTaskPackCards.map((item, index) => (') && !articleSource.includes('minHeight: 136'), "Article detail task pack must not render a front-loaded five-card grid before the body.");
-  expect(articleSource.includes("【阅读任务包】"), "Article copied task pack must include a clear title.");
-  expect(articleSource.includes("三、正文抓取顺序"), "Article copied task pack must include the reading path.");
-  expect(articleSource.includes("五、读完接着做"), "Article copied task pack must include paired next actions.");
+  for (const retiredArticleHeaderBlock of ["function ArticleIllustration", "article-illustration-stamp", "paddingRight: 162", "padding-right: 10.5rem", "articleReadingTaskPackCards", "readingTaskPackText", "copyReadingTaskPack", "copiedReadingTaskPack", "目标是带走可执行材料，而不是只浏览", "先做、抓证据、留产出、验收、接着做", "【阅读任务包】", "已复制任务包", "复制任务包", "已复制行动包"]) {
+    expect(!articleSource.includes(retiredArticleHeaderBlock), `Article detail header should stay short and not reintroduce retired top chrome: ${retiredArticleHeaderBlock}.`);
+  }
   const bodyPointsRenderIndex = articleSource.indexOf('id="article-body-points"');
   const primaryActionRenderIndex = articleSource.indexOf('id="article-primary-action"');
   const pairedWorkRenderIndex = articleSource.indexOf('className="article-paired-work-panel"');
