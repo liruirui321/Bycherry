@@ -442,9 +442,9 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes("aria-label={`打开${work.title}`}"), "Homepage hero work cards must use short accessible labels.");
   expect(heroSource.includes('id="works"'), "Homepage #works anchor must point to the first-screen module directory instead of a duplicate section.");
   expect(heroSource.includes('aria-label="内容目录"'), "Homepage hero must label the first-screen module directory.");
-  expect(heroSource.includes("hero-work-row") && heroSource.includes('gridTemplateColumns: "repeat(5, minmax(0, 1fr))"') && !heroSource.includes("hero-work-card"), "Homepage hero module entries must use a short first-screen grid, not long repeated cards.");
-  expect(!heroSource.includes("minHeight: 58") && !heroSource.includes("hero-work-summary"), "Homepage hero module entries must not return to fixed-height summary cards.");
-  expect(heroSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "Homepage hero mobile module directory must use compact two-column tiles instead of long stacked panels.");
+  expect(heroSource.includes("hero-work-row") && heroSource.includes('gridTemplateColumns: "1fr"') && !heroSource.includes("hero-work-card"), "Homepage hero module entries must use a compact directory list, not long repeated cards.");
+  expect(heroSource.includes("minHeight: 48") && !heroSource.includes("minHeight: 88") && !heroSource.includes("hero-work-summary"), "Homepage hero module entries must stay as short rows instead of tall summary cards.");
+  expect(heroSource.includes("grid-template-columns: 1fr !important") && heroSource.includes("min-height: 46px !important"), "Homepage hero mobile module directory must use compact single-row entries instead of long stacked panels.");
   expect(heroSource.includes("width: calc(100vw - 2rem)"), "Homepage hero mobile module directory must stay inside the visible viewport.");
   expect(heroSource.includes('boxSizing: "border-box"'), "Homepage hero containers must use border-box sizing to avoid mobile overflow.");
   expect(!heroSource.includes("scroll-snap-type") && !heroSource.includes("overflow-x: auto"), "Homepage hero must not hide module entries behind horizontal scrolling.");
