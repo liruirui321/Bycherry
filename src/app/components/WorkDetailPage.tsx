@@ -2772,6 +2772,44 @@ function ConceptExplainerContent() {
     "再给出一个情境练习，让我产出一句解释或一张小表。",
     "最后生成即时小测、证据边界和完成门槛，提醒哪些内容需要查教材或资料。",
   ];
+  const conceptInputModes = [
+    {
+      title: "只会背定义",
+      concept: "生态位",
+      level: "成人自学者，已经看过定义但还不会判断例子",
+      goal: "能用一个新例子判断概念是否适用，并说明理由",
+      boundary: "来自教材或笔记；先按通用解释生成，具体案例需要回到原资料核查",
+      stuck: "我能背出定义，但看到两个相似概念时不知道该用哪一个",
+      context: "判断同一片森林里两种鸟的生态位是否完全相同",
+    },
+    {
+      title: "过程顺序混乱",
+      concept: "转录",
+      level: "成人自学者，已经学过 DNA 和 RNA 基础",
+      goal: "能按步骤解释信息如何从 DNA 转写到 mRNA",
+      boundary: "来自分子生物学基础材料；本次只处理转录主线，不展开全部调控细节",
+      stuck: "我容易把模板链、编码链、mRNA 和翻译产物混在一起",
+      context: "根据一段 DNA 序列判断 mRNA 如何生成，以及它后面如何被读取",
+    },
+    {
+      title: "证据边界不清",
+      concept: "端粒",
+      level: "成人自学者，能理解细胞分裂但容易把细胞现象扩大成个体结论",
+      goal: "能区分细胞层面的证据和不能直接推出的整体结论",
+      boundary: "来自教材、资料文章或论文摘要；涉及寿命、疾病和干预效果时必须回到来源核查",
+      stuck: "我看到端粒缩短就会直接联想到衰老，但说不清这个推断哪里越界",
+      context: "判断端粒缩短图能支持什么，不能直接证明什么",
+    },
+    {
+      title: "图表看不懂",
+      concept: "凋亡",
+      level: "成人自学者，能识别细胞结构但不熟悉死亡类型辨析",
+      goal: "能根据图像或现象判断更支持哪种细胞死亡过程",
+      boundary: "来自图示材料或实验结果；本次先解释凋亡主线，不覆盖所有细胞死亡分类",
+      stuck: "我看到细胞死亡现象时，不知道哪些证据支持凋亡，哪些更像坏死",
+      context: "根据细胞收缩、DNA 片段化、膜破裂和炎症反应判断现象类型",
+    },
+  ];
   const visualMode = /循环|周期|轮回|代谢/.test(concept)
     ? "循环图"
     : /比较|差异|分类|类型|区别/.test(concept)
@@ -3061,6 +3099,22 @@ ${visualStructureItems.map((item, index) => `${index + 1}. ${item.title}：${ite
 2. 能按 1-4 步复述机制。
 3. 能把概念迁移到一个新例子。
 4. 能说出一个不能直接推出的结论。`;
+  const conceptModeGuideText = `【概念解释输入模式】
+使用方式：选最接近当前卡点的一种模式，套入输入框后再生成学习卡。
+
+${conceptInputModes.map((mode, index) => `${index + 1}. ${mode.title}
+概念：${mode.concept}
+当前水平：${mode.level}
+学习目标：${mode.goal}
+资料边界：${mode.boundary}
+当前卡点：${mode.stuck}
+应用情境：${mode.context}`).join("\n\n")}
+
+完成后检查
+1. 能写出一句话解释。
+2. 能画出可视化结构。
+3. 能用新例子判断适用或不适用。
+4. 能写出一个不能直接推出的结论。`;
   const conceptSkillPrompt = `---
 name: concept-explainer
 description: Use when a learner wants to understand any concept through diagnosis, analogy, mechanism steps, visual structure, transfer practice, and a quick check without skipping the reasoning process.
@@ -3160,6 +3214,22 @@ If any of these are missing, add them before the final answer.
     setCopyStatus("");
   }
 
+  function applyConceptInputMode(mode: (typeof conceptInputModes)[0]) {
+    setConcept(mode.concept);
+    setConceptInput(mode.concept);
+    setAudience(mode.level);
+    setLessonGoal(mode.goal);
+    setSourceBoundary(mode.boundary);
+    setStuckPoint(mode.stuck);
+    setApplicationContext(mode.context);
+    setQuizChoice(null);
+    setCopiedLesson(false);
+    setCopiedSkill(false);
+    setCopiedAudit(false);
+    setCopiedExplanationPack(false);
+    setCopyStatus(`${mode.title}输入模式已套用，可以直接生成学习卡。`);
+  }
+
   function runConceptAgent() {
     const nextConcept = conceptInput.trim() || "待学习概念";
     setConcept(nextConcept);
@@ -3235,6 +3305,20 @@ If any of these are missing, add them before the final answer.
     setCopyStatus("复制失败，请手动选中文本复制。");
   }
 
+  async function copyConceptModeGuide() {
+    const copiedToClipboard = await copyText(conceptModeGuideText);
+    if (copiedToClipboard) {
+      setCopiedExplanationPack(false);
+      setCopiedLesson(false);
+      setCopiedSkill(false);
+      setCopiedAudit(false);
+      setCopyStatus("概念输入模式已复制到剪贴板。");
+      return;
+    }
+
+    setCopyStatus("复制失败，请手动选中文本复制。");
+  }
+
   return (
     <section id="concept-explainer-tool" style={{ display: "grid", gap: "1rem" }}>
       <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.75rem" }}>
@@ -3242,6 +3326,29 @@ If any of these are missing, add them before the final answer.
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.28rem" }}>概念解释 Agent</div>
           <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.58, fontWeight: 800 }}>
             输入任意概念，按稳定 skill 流程生成学习卡：先自测，再看类比、机制步骤、常见误区、可视化流程、迁移练习和即时小测。
+          </div>
+        </div>
+        <div className="concept-input-mode-panel" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.78rem", display: "grid", gap: "0.62rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: "0.7rem", alignItems: "center", flexWrap: "wrap" }}>
+            <div>
+              <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", fontWeight: 900 }}>先选一种输入模式</div>
+              <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, fontWeight: 800, marginTop: "0.16rem" }}>
+                不确定怎么填时，先选最像当前卡点的模式；页面会自动补齐概念、目标、资料边界和应用情境。
+              </div>
+            </div>
+            <button type="button" onClick={copyConceptModeGuide} aria-describedby="concept-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.42rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem", whiteSpace: "nowrap" }}>
+              复制输入模式
+            </button>
+          </div>
+          <div className="concept-input-mode-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.52rem" }}>
+            {conceptInputModes.map((mode) => (
+              <button key={mode.title} type="button" onClick={() => applyConceptInputMode(mode)} aria-describedby="concept-copy-status" style={{ textAlign: "left", background: concept === mode.concept && stuckPoint === mode.stuck ? "var(--cherry-yellow-light)" : "var(--card)", border: concept === mode.concept && stuckPoint === mode.stuck ? "1.5px solid var(--cherry-yellow)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.68rem", cursor: "pointer", minHeight: 138, display: "grid", gap: "0.32rem" }}>
+                <span style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>{mode.title}</span>
+                <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", lineHeight: 1.35, fontWeight: 900 }}>{mode.concept}</span>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 800 }}>{mode.stuck}</span>
+                <span style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", lineHeight: 1.4, fontWeight: 900 }}>产出：学习卡 + 可视化 + 验收记录</span>
+              </button>
+            ))}
           </div>
         </div>
         <div className="concept-agent-input-grid" style={{ display: "grid", gridTemplateColumns: "minmax(180px, 0.72fr) minmax(180px, 0.72fr) minmax(0, 1.1fr)", gap: "0.65rem", alignItems: "end" }}>
@@ -3704,6 +3811,7 @@ If any of these are missing, add them before the final answer.
           @media (max-width: 860px) {
             #concept-explainer-tool .concept-agent-input-grid,
             #concept-explainer-tool .concept-understanding-input-grid,
+            #concept-explainer-tool .concept-input-mode-grid,
             #concept-explainer-tool .concept-responsive-grid {
               grid-template-columns: 1fr !important;
             }
