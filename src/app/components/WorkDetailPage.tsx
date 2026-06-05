@@ -7,7 +7,7 @@ import { works } from "./Works";
 import { WorkPreviewIllustration } from "./WorkPreviewIllustration";
 import { EmptyStateCard } from "./EmptyStateCard";
 import { copyText } from "../clipboard";
-import { navigateClient, shouldUseClientNavigation } from "../navigation";
+import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
 type Work = (typeof works)[number];
@@ -5678,16 +5678,18 @@ function WorkContinueLinks({ work }: { work: Work }) {
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "0.85rem" }}>
-          {relatedWorks.map((item) => (
+          {relatedWorks.map((item) => {
+            const toolHref = getWorkToolHref(item.href);
+            return (
               <a
                 className="work-next-card"
                 key={item.slug}
-                href={item.href}
+                href={toolHref}
                 aria-label={`继续探索${item.title}：先做这个，${item.starter}。完成标准，${item.success}`}
-                onClick={(event) => openWork(item.href, event)}
-                onMouseEnter={() => preloadRouteForHref(item.href)}
-                onFocus={() => preloadRouteForHref(item.href)}
-                onPointerDown={() => preloadRouteForHref(item.href)}
+                onClick={(event) => openWork(toolHref, event)}
+                onMouseEnter={() => preloadRouteForHref(toolHref)}
+                onFocus={() => preloadRouteForHref(toolHref)}
+                onPointerDown={() => preloadRouteForHref(toolHref)}
                 style={{
                   display: "grid",
                   gridTemplateColumns: "112px minmax(0, 1fr)",
@@ -5726,7 +5728,8 @@ function WorkContinueLinks({ work }: { work: Work }) {
                   </span>
                 </span>
               </a>
-            ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -5754,16 +5757,18 @@ function WorkSequenceLinks({ work }: { work: Work }) {
   return (
     <section style={{ padding: "0 1.5rem 1rem", fontFamily: "'Nunito', sans-serif" }}>
       <nav aria-label="学习模块前后导航" style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.85rem" }}>
-        {navItems.map((item) => (
+        {navItems.map((item) => {
+          const toolHref = getWorkToolHref(item.work.href);
+          return (
           <a
             className="work-sequence-card"
             key={item.work.slug}
-            href={item.work.href}
+            href={toolHref}
             aria-label={`${item.label}：${item.work.title}。先做这个，${item.work.starter}。完成标准，${item.work.success}`}
-            onClick={(event) => openWork(item.work.href, event)}
-            onMouseEnter={() => preloadRouteForHref(item.work.href)}
-            onFocus={() => preloadRouteForHref(item.work.href)}
-            onPointerDown={() => preloadRouteForHref(item.work.href)}
+            onClick={(event) => openWork(toolHref, event)}
+            onMouseEnter={() => preloadRouteForHref(toolHref)}
+            onFocus={() => preloadRouteForHref(toolHref)}
+            onPointerDown={() => preloadRouteForHref(toolHref)}
             style={{
               display: "grid",
               gap: "0.45rem",
@@ -5790,7 +5795,8 @@ function WorkSequenceLinks({ work }: { work: Work }) {
               先做这个：{item.work.starter}
             </span>
           </a>
-        ))}
+          );
+        })}
       </nav>
     </section>
   );

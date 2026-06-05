@@ -4,7 +4,7 @@ import { essays } from "./ResearchEssays";
 import { works } from "./Works";
 import { EmptyStateCard } from "./EmptyStateCard";
 import { copyText } from "../clipboard";
-import { navigateClient, shouldUseClientNavigation } from "../navigation";
+import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 import { useEffect, useState } from "react";
 
@@ -1313,7 +1313,7 @@ ${articleCompletionChecks.map((item, index) => `${index + 1}. ${item.title}：${
 
 八、读完接着做
 ${pairedWorks.length ? pairedWorks.map((work, index) => `${index + 1}. ${work.title}
-入口：${work.href}
+入口：${getWorkToolHref(work.href)}
 先做这个：${work.starter}
 完成标准：${work.success}`).join("\n\n") : "回到学习模块总览，选择一个相关工具继续操作。"}
 
@@ -1339,7 +1339,7 @@ ${starterTemplateText}
 
 五、读完接着做
 ${pairedWorks.length ? pairedWorks.map((work, index) => `${index + 1}. ${work.title}
-入口：${work.href}
+入口：${getWorkToolHref(work.href)}
 先做这个：${work.starter}
 完成标准：${work.success}`).join("\n\n") : "回到学习模块总览，选择一个相关工具继续操作。"}`
     : "";
@@ -2559,19 +2559,21 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   </a>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.58rem" }}>
-                  {pairedWorks.map((work) => (
+                  {pairedWorks.map((work) => {
+                    const toolHref = getWorkToolHref(work.href);
+                    return (
                     <a
                       key={work.slug}
                       className="article-paired-work-link"
-                      href={work.href}
+                      href={toolHref}
                       aria-label={`打开配套模块：${work.title}。先做这个，${work.starter}。完成标准，${work.success}`}
-                      onMouseEnter={() => preloadRouteForHref(work.href)}
-                      onFocus={() => preloadRouteForHref(work.href)}
-                      onPointerDown={() => preloadRouteForHref(work.href)}
+                      onMouseEnter={() => preloadRouteForHref(toolHref)}
+                      onFocus={() => preloadRouteForHref(toolHref)}
+                      onPointerDown={() => preloadRouteForHref(toolHref)}
                       onClick={(event) => {
                         if (!shouldUseClientNavigation(event)) return;
                         event.preventDefault();
-                        navigateToPath(work.href);
+                        navigateToPath(toolHref);
                       }}
                       style={{ background: "var(--muted)", border: `1.5px solid ${work.border}`, borderRadius: 8, padding: "0.7rem", color: "inherit", textDecoration: "none", display: "grid", gap: "0.5rem", minHeight: 166 }}
                     >
@@ -2589,7 +2591,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                         完成标准：{work.success}
                       </div>
                     </a>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             ) : null}

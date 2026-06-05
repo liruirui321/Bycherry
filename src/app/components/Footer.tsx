@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IconCherry, IconLeafSmall } from "./Icons";
 import { works } from "./Works";
 import { copyText } from "../clipboard";
-import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
+import { getWorkToolHref, navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
 const footerLinks = [
@@ -24,7 +24,7 @@ export function Footer() {
 适用场景：已经浏览到页面底部，需要选一个下一步继续做。
 
 ${footerWorkLinks.map((work, index) => `${index + 1}. ${work.title}
-入口：${work.href}
+入口：${getWorkToolHref(work.href)}
 先做：${work.starter}
 路径：${work.path.join(" → ")}
 带走：${work.outputs.join(" / ")}
@@ -101,19 +101,21 @@ ${footerWorkLinks.map((work, index) => `${index + 1}. ${work.title}
       </nav>
 
       <nav aria-label="页尾继续学习入口" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.55rem", maxWidth: 960, margin: "0 auto 0.95rem" }}>
-        {footerWorkLinks.map((work) => (
+        {footerWorkLinks.map((work) => {
+          const toolHref = getWorkToolHref(work.href);
+          return (
           <a
             className="footer-work-link"
             key={work.slug}
-            href={work.href}
+            href={toolHref}
             aria-label={`继续学习${work.title}：先做这个，${work.starter}。可保存产出，${work.outputs.join("、")}。完成标准，${work.success}`}
-            onMouseEnter={() => preloadRouteForHref(work.href)}
-            onFocus={() => preloadRouteForHref(work.href)}
-            onPointerDown={() => preloadRouteForHref(work.href)}
+            onMouseEnter={() => preloadRouteForHref(toolHref)}
+            onFocus={() => preloadRouteForHref(toolHref)}
+            onPointerDown={() => preloadRouteForHref(toolHref)}
             onClick={(event) => {
               if (!shouldUseClientNavigation(event)) return;
               event.preventDefault();
-              navigateClient(work.href);
+              navigateClient(toolHref);
             }}
             style={{
               display: "grid",
@@ -132,7 +134,8 @@ ${footerWorkLinks.map((work, index) => `${index + 1}. ${work.title}
             <span className="footer-work-step" style={{ color: "rgba(245,241,234,0.74)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 800 }}>先做：{work.path[0]} → {work.path[1]}</span>
             <span className="footer-work-output" style={{ color: "rgba(245,241,234,0.86)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 900 }}>带走：{work.outputs[0]} / {work.outputs[1]}</span>
           </a>
-        ))}
+          );
+        })}
       </nav>
 
       <div className="footer-next-plan-panel" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.65rem", alignItems: "center", maxWidth: 960, margin: "0 auto 0.95rem", border: "1px solid rgba(245,241,234,0.18)", background: "rgba(250,247,241,0.07)", borderRadius: 8, padding: "0.62rem 0.72rem", textAlign: "left" }}>

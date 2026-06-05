@@ -3,7 +3,7 @@ import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
 import { works } from "./Works";
 import { copyText } from "../clipboard";
-import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
+import { getWorkToolHref, navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 import { useState } from "react";
 
@@ -118,7 +118,7 @@ export function About() {
 一、先选一个入口，不同时展开多个方向
 ${useGuideCards.map((item, index) => `${index + 1}. ${item.goal}
 模块：${item.work.title}
-入口：${item.work.href}
+入口：${getWorkToolHref(item.work.href)}
 先做：${item.work.starter}
 产出：${item.work.outputs.join(" / ")}
 检查：${item.checkpoint}
@@ -271,19 +271,21 @@ ${workbenchLoop.map((item, index) => `${index + 1}. ${item.step}：${item.body}`
           <div style={{ display: "grid", gap: "0.65rem", marginTop: "1.15rem" }}>
             <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", fontWeight: 900 }}>怎么开始</div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.6rem" }}>
-              {useGuideCards.map((item) => (
+              {useGuideCards.map((item) => {
+                const toolHref = getWorkToolHref(item.work.href);
+                return (
                 <a
                   key={item.goal}
                   className="about-use-card"
-                  href={item.work.href}
+                  href={toolHref}
                   aria-label={`${item.goal}：打开${item.work.title}。先做这个，${item.work.starter}。完成检查，${item.checkpoint}。完成标准，${item.work.success}`}
-                  onMouseEnter={() => preloadRouteForHref(item.work.href)}
-                  onFocus={() => preloadRouteForHref(item.work.href)}
-                  onPointerDown={() => preloadRouteForHref(item.work.href)}
+                  onMouseEnter={() => preloadRouteForHref(toolHref)}
+                  onFocus={() => preloadRouteForHref(toolHref)}
+                  onPointerDown={() => preloadRouteForHref(toolHref)}
                   onClick={(event) => {
                     if (!shouldUseClientNavigation(event)) return;
                     event.preventDefault();
-                    navigateClient(item.work.href);
+                    navigateClient(toolHref);
                   }}
                   style={{
                     display: "grid",
@@ -312,7 +314,8 @@ ${workbenchLoop.map((item, index) => `${index + 1}. ${item.step}：${item.body}`
                     完成：{item.work.success}
                   </span>
                 </a>
-              ))}
+                );
+              })}
             </div>
           </div>
 

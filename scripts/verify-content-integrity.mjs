@@ -550,12 +550,18 @@ function verifyWorkJsonLdLearningOutcomes() {
   for (const slug of ["gene-expression", "concept-explainer", "research-prompt-kit", "plant-evolution-stories", "crispr-interactive"]) {
     expect(workDetailSource.includes(`"${slug}"`), `Work detail paired reading must include ${slug}.`);
   }
+  expect(workDetailSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Work detail related work links must use the direct-to-tool href helper.");
+  expect(workDetailSource.includes("const toolHref = getWorkToolHref(item.href)"), "Work detail related cards must derive direct-to-tool hrefs.");
+  expect(workDetailSource.includes("const toolHref = getWorkToolHref(item.work.href)"), "Work detail previous/next cards must derive direct-to-tool hrefs.");
   expect(workDetailSource.includes("aria-label={`继续探索${item.title}：先做这个，${item.starter}。完成标准，${item.success}`}"), "Work detail related cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("先做这个：{item.work.starter}"), "Work detail previous/next cards must expose each adjacent module starter action.");
   expect(workDetailSource.includes("aria-label={`${item.label}：${item.work.title}。先做这个，${item.work.starter}。完成标准，${item.work.success}`}"), "Work detail previous/next cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("function WorkQuickStart"), "Work detail pages must include a quick-start entry component.");
   expect(workDetailSource.includes("<WorkQuickStart work={work} />"), "Work detail pages must render the quick-start entry before the primary tool.");
   expect(footerSource.includes('"plant-evolution-stories"') && footerSource.includes('"crispr-interactive"'), "Footer continue-learning links must cover all learning modules, not only the first three.");
+  expect(footerSource.includes('import { getWorkToolHref, navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation"'), "Footer continue-learning links must use the direct-to-tool href helper.");
+  expect(footerSource.includes("入口：${getWorkToolHref(work.href)}"), "Footer copied continue-learning plan must point directly to work tools.");
+  expect(footerSource.includes("const toolHref = getWorkToolHref(work.href)"), "Footer continue-learning links must derive direct-to-tool hrefs.");
   expect(footerSource.includes("footer-work-step") && footerSource.includes("footer-work-output"), "Footer continue-learning links must stay compact with first step and saved output rows.");
   expect(!footerSource.includes("完成：{work.success}"), "Footer continue-learning links must not repeat long completion standards visibly.");
   expect(footerSource.includes("完成标准，${work.success}"), "Footer continue-learning accessible labels must include completion standards.");
@@ -1162,6 +1168,9 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("const articlePracticePlan"), "Article detail pages must derive a short execution plan.");
   expect(articleDetailSource.includes("const pairedWorks"), "Article detail pages must derive paired work modules for next-step action.");
   expect(articleDetailSource.includes("八、读完接着做"), "Article learning records must include paired module next actions.");
+  expect(articleDetailSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Article paired module links must use the direct-to-tool href helper.");
+  expect(articleDetailSource.includes("入口：${getWorkToolHref(work.href)}"), "Article copied next-step records must point directly to work tools.");
+  expect(articleDetailSource.includes("const toolHref = getWorkToolHref(work.href)"), "Article paired module cards must derive direct-to-tool hrefs.");
   expect(articleDetailSource.includes("work.starter") && articleDetailSource.includes("work.success"), "Article paired module cards must expose starter actions and completion standards.");
   expect(articleDetailSource.includes("aria-label={`打开配套模块：${work.title}。先做这个，${work.starter}。完成标准，${work.success}`}"), "Article paired module links must include starter and completion standard in accessible labels.");
   expect(articleDetailSource.includes("const learningRecordText"), "Article detail pages must include a copyable learning record.");
@@ -1308,10 +1317,12 @@ function verifyLearnerProductPositioning() {
   for (const slug of ["gene-expression", "concept-explainer", "research-prompt-kit", "plant-evolution-stories", "crispr-interactive"]) {
     expect(aboutSource.includes(`findWork("${slug}")`), `About start guide must include ${slug}.`);
   }
-  expect(aboutSource.includes('import { navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation"'), "About start guide cards must use client-side navigation.");
+  expect(aboutSource.includes('import { getWorkToolHref, navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation"'), "About start guide cards must use client-side direct-to-tool navigation.");
+  expect(aboutSource.includes("入口：${getWorkToolHref(item.work.href)}"), "About copied start guide must point directly to work tools.");
+  expect(aboutSource.includes("const toolHref = getWorkToolHref(item.work.href)"), "About start guide cards must derive direct-to-tool hrefs.");
   expect(aboutSource.includes('import { preloadRouteForHref } from "../routePrefetch"'), "About start guide cards must preload work detail routes.");
-  expect(aboutSource.includes("onPointerDown={() => preloadRouteForHref(item.work.href)}"), "About start guide cards must preload routes on pointer down.");
-  expect(aboutSource.includes("navigateClient(item.work.href)"), "About start guide cards must navigate without a full page reload.");
+  expect(aboutSource.includes("onPointerDown={() => preloadRouteForHref(toolHref)}"), "About start guide cards must preload direct-to-tool routes on pointer down.");
+  expect(aboutSource.includes("navigateClient(toolHref)"), "About start guide cards must navigate directly to tools without a full page reload.");
   expect(aboutSource.includes("完成标准，${item.work.success}"), "About start guide accessible labels must include completion standards.");
   const navSource = read("src/app/components/Nav.tsx");
   expect(navSource.includes('import { works } from "./Works"') && navSource.includes('import { notes } from "./Notes"') && navSource.includes('import { essays } from "./ResearchEssays"'), "Navigation route guide must derive current work and article context.");
