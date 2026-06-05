@@ -891,6 +891,7 @@ function verifyPlantEvolutionLearnerContract() {
   }
 
   expect(plantSource.includes("#plant-evolution-explorer .plant-stage-picker-grid") && plantSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Plant evolution mobile stage picker must stay as a compact three-column selector.");
+  expect(plantSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(116px, 1fr))"') && plantSource.includes('className="plant-stage-picker-innovation"') && plantSource.includes('className="plant-stage-picker-refs"') && plantSource.includes('style={{ display: "none"'), "Plant evolution desktop stage picker must stay as short timeline buttons without long note text or reference chips.");
   expect(plantSource.includes("#plant-evolution-explorer .plant-stage-picker-card > div:nth-child(3)") && plantSource.includes("display: none !important"), "Plant evolution mobile stage buttons must not expose long innovation text in the picker.");
   expect(worksSource.includes("演化时间轴串联关键创新、证据、自测问题、作答提示和延伸练习。"), "Plant evolution work card must describe the learner-facing self-study flow.");
   expect(worksSource.includes('outputs: ["学习卡", "阶段比较", "证据判读"]'), "Plant evolution work card outputs must be learner-facing.");
