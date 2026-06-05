@@ -1079,7 +1079,7 @@ ${localPreviewOutput}`;
       <div className="research-agent-top-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.86rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)", display: "grid", gap: "0.7rem" }}>
         <div>
           <div style={{ color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.78rem", marginBottom: "0.3rem" }}>科研 Agent 工作台</div>
-          <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.88rem", margin: 0 }}>
+          <p className="research-agent-top-copy" style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.88rem", margin: 0 }}>
             这个工作台直接提供科研任务编排：选择任务、材料和工作模式后，页面会生成结构化指令、证据边界、质控清单、报告框架和 API JSON 契约。当前可用于本地整理材料，也可把复制的任务包交给外部模型执行。
           </p>
         </div>
@@ -1105,13 +1105,13 @@ ${localPreviewOutput}`;
         </aside>
 
         <div style={{ display: "grid", gap: "1rem" }}>
-          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "1.2rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.8rem" }}>
+          <div className="research-agent-main-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "1.2rem", boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
+            <div className="research-agent-main-header" style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.8rem" }}>
               <div>
                 <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "1.05rem" }}>{activePrompt.title}</div>
-                <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", marginTop: "0.25rem" }}>输入材料：{activePrompt.input}</div>
+                <div className="research-agent-active-input" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", marginTop: "0.25rem" }}>输入材料：{activePrompt.input}</div>
               </div>
-              <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
+              <div className="research-agent-copy-actions" style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
                 <button type="button" onClick={copyPrompt} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.55rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
                   {copied ? "已复制" : "复制模型指令"}
                 </button>
@@ -1130,15 +1130,15 @@ ${localPreviewOutput}`;
               {copyStatus}
             </div>
 
-            <div style={{ display: "grid", gap: "0.55rem", marginBottom: "0.9rem" }}>
+            <div className="research-agent-mode-section" style={{ display: "grid", gap: "0.55rem", marginBottom: "0.9rem" }}>
               <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem" }}>工作模式</div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(154px, 1fr))", gap: "0.55rem" }}>
+              <div className="research-agent-mode-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(154px, 1fr))", gap: "0.55rem" }}>
                 {promptModes.map((mode, index) => {
                   const active = activeModeIndex === index;
                   return (
-                    <button key={mode.title} type="button" aria-pressed={active} onClick={() => { setActiveModeIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setCopiedCitationAudit(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.68rem", cursor: "pointer" }}>
+                    <button className="research-agent-mode-button" key={mode.title} type="button" aria-pressed={active} onClick={() => { setActiveModeIndex(index); setCopied(false); setCopiedPack(false); setCopiedPreview(false); setCopiedJson(false); setCopiedResponseJson(false); setCopiedResearchRecord(false); setCopiedCitationAudit(false); setHasRunPreview(false); setCopyStatus(""); }} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 14, padding: "0.68rem", cursor: "pointer" }}>
                       <strong style={{ display: "block", color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.8rem", marginBottom: "0.24rem" }}>{mode.title}</strong>
-                      <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>{mode.description}</span>
+                      <span className="research-agent-mode-desc" style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>{mode.description}</span>
                     </button>
                   );
                 })}
@@ -1289,13 +1289,14 @@ ${localPreviewOutput}`;
             </details>
 
             <textarea
+              className="research-material-textarea"
               value={material}
               onChange={(event) => updateMaterial(event.target.value)}
               style={{ width: "100%", minHeight: 154, resize: "vertical", border: "1.5px solid var(--border)", borderRadius: 16, padding: "0.9rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.9rem", lineHeight: 1.6, boxSizing: "border-box", marginBottom: "0.9rem" }}
               aria-label="科研材料输入框"
             />
 
-            <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: "0.9rem" }}>
+            <div className="research-material-actions" style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: "0.9rem" }}>
               <button type="button" onClick={fillMaterialTemplate} style={{ background: "var(--cherry-sage-light)", color: "var(--cherry-forest)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                 套用材料模板
               </button>
@@ -1304,15 +1305,15 @@ ${localPreviewOutput}`;
               </button>
             </div>
 
-            <div style={{ background: hasRunPreview ? "var(--cherry-sage-light)" : "var(--muted)", border: hasRunPreview ? "1.5px solid rgba(93,140,101,0.32)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
+            <div className="research-agent-preview-panel" style={{ background: hasRunPreview ? "var(--cherry-sage-light)" : "var(--muted)", border: hasRunPreview ? "1.5px solid rgba(93,140,101,0.32)" : "1.5px solid var(--border)", borderRadius: 8, padding: "0.85rem", marginBottom: "0.9rem", display: "grid", gap: "0.68rem" }}>
+              <div className="research-agent-preview-header" style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
                 <div>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>本地 Agent 预览</div>
-                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem" }}>
+                  <div className="research-agent-preview-copy" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem" }}>
                     不调用 API，只根据当前材料做任务路由和证据边界预判。
                   </div>
                 </div>
-                <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
+                <div className="research-agent-preview-actions" style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
                   <button type="button" onClick={() => setHasRunPreview(true)} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                     运行本地预览
                   </button>
@@ -1717,8 +1718,105 @@ ${localPreviewOutput}`;
 
           @media (max-width: 520px) {
             #prompt-kit-builder .research-agent-top-panel {
+              padding: 0.54rem 0.62rem !important;
+              gap: 0.34rem !important;
+            }
+
+            #prompt-kit-builder .research-agent-top-copy {
+              display: none !important;
+            }
+
+            #prompt-kit-builder .research-agent-main-panel {
               padding: 0.68rem !important;
-              gap: 0.58rem !important;
+            }
+
+            #prompt-kit-builder .research-agent-main-header {
+              display: grid !important;
+              grid-template-columns: 1fr !important;
+              gap: 0.48rem !important;
+              margin-bottom: 0.48rem !important;
+            }
+
+            #prompt-kit-builder .research-agent-active-input {
+              display: none !important;
+            }
+
+            #prompt-kit-builder .research-agent-copy-actions,
+            #prompt-kit-builder .research-agent-preview-actions,
+            #prompt-kit-builder .research-material-actions {
+              display: grid !important;
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.38rem !important;
+              width: 100% !important;
+            }
+
+            #prompt-kit-builder .research-agent-copy-actions button,
+            #prompt-kit-builder .research-agent-preview-actions button,
+            #prompt-kit-builder .research-material-actions button {
+              width: 100% !important;
+              padding: 0.4rem 0.42rem !important;
+              border-radius: 8px !important;
+              font-size: 0.68rem !important;
+              line-height: 1.2 !important;
+            }
+
+            #prompt-kit-builder .research-agent-mode-section {
+              gap: 0.36rem !important;
+              margin-bottom: 0.56rem !important;
+            }
+
+            #prompt-kit-builder .research-agent-mode-grid {
+              grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+              gap: 0.34rem !important;
+            }
+
+            #prompt-kit-builder .research-agent-mode-button {
+              border-radius: 8px !important;
+              padding: 0.42rem !important;
+            }
+
+            #prompt-kit-builder .research-agent-mode-button strong {
+              margin-bottom: 0 !important;
+              font-size: 0.68rem !important;
+              line-height: 1.18 !important;
+            }
+
+            #prompt-kit-builder .research-agent-mode-desc {
+              display: none !important;
+            }
+
+            #prompt-kit-builder .research-material-textarea {
+              min-height: 104px !important;
+              border-radius: 10px !important;
+              padding: 0.62rem !important;
+              font-size: 0.78rem !important;
+              line-height: 1.45 !important;
+              margin-bottom: 0.5rem !important;
+            }
+
+            #prompt-kit-builder .research-material-actions {
+              margin-bottom: 0.5rem !important;
+            }
+
+            #prompt-kit-builder .research-agent-preview-panel {
+              padding: 0.58rem !important;
+              gap: 0.46rem !important;
+              margin-bottom: 0.56rem !important;
+            }
+
+            #prompt-kit-builder .research-agent-preview-header {
+              display: grid !important;
+              grid-template-columns: 1fr !important;
+              gap: 0.44rem !important;
+            }
+
+            #prompt-kit-builder .research-agent-preview-copy {
+              display: none !important;
+            }
+
+            #prompt-kit-builder #prompt-copy-status {
+              min-height: 0.8rem !important;
+              margin-bottom: 0.42rem !important;
             }
 
             #prompt-kit-builder .research-agent-route-recipes,
