@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { IconDNA, IconMicroscope, IconFlask, IconResearch, IconArrowRight, IconLeafSmall, IconStar } from "./Icons";
-import { copyText } from "../clipboard";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
@@ -116,33 +115,6 @@ export const essays = [
     checklist: ["我已经打开平台入口：https://scifusion.top", "测评目标写成自己可完成的具体动作", "每道题只考一个核心问题，条件足够支撑答案", "正确答案唯一，干扰项对应真实误解", "解析说明了为什么对、为什么错、对应哪个知识点", "题量和完成时间符合自学节奏", "测后复盘了高频错因，而不是只看分数"],
     starterTemplate: ["平台入口：https://scifusion.top", "使用场景：预习诊断 / 概念检查 / 复习巩固", "学习阶段：当前基础、学科、章节、已学过什么", "测评目标：我需要证明自己能……", "知识点范围：本次只覆盖……", "题目设置：题型、难度、题量、预计完成时间", "生成要求：题干清楚，答案唯一，干扰项来自真实误解，解析说明原因", "人工审核：删掉跑题、歧义、超纲或解析空泛的题", "作答复盘：最高频错因是什么，下一步改学习卡还是补资料"],
     pitfalls: ["不要把平台当成自动出题后直接相信的黑箱", "不要只写章节名，要写清楚自己需要完成的动作", "不要只检查答案而忽略题干歧义和解析质量", "不要把所有错因都归为粗心", "不要一次生成太多题，先用小题量把流程跑顺"],
-  },
-];
-
-const evidenceRouteGuides = [
-  {
-    need: "我有一个前沿主题，但不知道怎么开始",
-    slug: "science-to-learning-question",
-    action: "先把主题改写成可观察、可比较的问题",
-    output: "一个可进入问题",
-  },
-  {
-    need: "我有组装、注释或比较图表",
-    slug: "genome-assembly-story",
-    action: "先标出每张图回答的子问题",
-    output: "一段科学故事骨架",
-  },
-  {
-    need: "我有样本、序列或 BLAST 结果",
-    slug: "barcoding-evidence-chain",
-    action: "先把样本、实验、比对和树图串成证据链",
-    output: "一张鉴定证据链表",
-  },
-  {
-    need: "我想生成一组靠谱的自测题",
-    slug: "ai-assessment-quality-control",
-    action: "先打开 SciFusion，再写清楚目标动作和审核标准",
-    output: "一份可复盘自测配置",
   },
 ];
 
@@ -384,71 +356,9 @@ function EssayCard({ essay }: {
 
 export function ResearchEssays() {
   const [activeLabel, setActiveLabel] = useState("全部");
-  const [copiedEvidenceChecklist, setCopiedEvidenceChecklist] = useState(false);
-  const [evidenceChecklistStatus, setEvidenceChecklistStatus] = useState("");
-  const [copiedEvidenceRouteGuide, setCopiedEvidenceRouteGuide] = useState(false);
-  const [evidenceRouteGuideStatus, setEvidenceRouteGuideStatus] = useState("");
   const researchLabels = ["全部", ...Array.from(new Set(essays.map((essay) => essay.label)))];
   const filteredEssays = activeLabel === "全部" ? essays : essays.filter((essay) => essay.label === activeLabel);
   const recommendedEssay = essays.find((essay) => essay.slug === "science-to-learning-question") ?? essays[0];
-  const visibleEvidenceRouteGuides = evidenceRouteGuides
-    .map((guide) => ({ ...guide, essay: essays.find((essay) => essay.slug === guide.slug) }))
-    .filter((guide): guide is (typeof evidenceRouteGuides)[0] & { essay: (typeof essays)[0] } => Boolean(guide.essay))
-    .filter((guide) => activeLabel === "全部" || guide.essay.label === activeLabel);
-  const evidenceRouteGuideText = `【By Cherry 科研证据选择路径】
-当前范围：${activeLabel === "全部" ? "全部科研证据" : activeLabel}
-
-${visibleEvidenceRouteGuides.map((guide, index) => `${index + 1}. ${guide.need}
-打开：${guide.essay.title}
-入口：${guide.essay.href}
-先做这个：${guide.action}
-读完留下：${guide.output}
-验收检查：${guide.essay.checklist[0]}`).join("\n\n")}
-
-使用方式
-1. 先判断自己手里已有的是主题、图表、样本结果还是自测需求。
-2. 打开对应文章，只完成第一步动作。
-3. 保存读完产出，再用验收检查判断是否能继续推进。`;
-  const evidenceChecklistText = `【By Cherry 科研证据执行清单】
-当前范围：${activeLabel === "全部" ? "全部科研证据" : activeLabel}
-文章数量：${filteredEssays.length}
-
-${filteredEssays.map((essay, index) => `${index + 1}. ${essay.title}
-入口：${essay.href}
-先做这个：${essay.actionSteps[0]}
-完成后检查：${essay.checklist[0]}
-证据模板：
-${essay.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
-避坑提醒：${essay.pitfalls[0]}`).join("\n\n")}
-
-使用方式
-1. 先选 1 篇科研证据，不要一次执行全部。
-2. 做完后复制文章页里的学习记录或行动包。
-3. 回到这张清单，记录哪条证据链已经能解释清楚。`;
-
-  async function copyEvidenceChecklist() {
-    const copiedToClipboard = await copyText(evidenceChecklistText);
-    if (copiedToClipboard) {
-      setCopiedEvidenceChecklist(true);
-      setEvidenceChecklistStatus("科研证据执行清单已复制到剪贴板。");
-      window.setTimeout(() => setCopiedEvidenceChecklist(false), 1400);
-      return;
-    }
-    setCopiedEvidenceChecklist(false);
-    setEvidenceChecklistStatus("复制失败，请手动选中文本复制。");
-  }
-
-  async function copyEvidenceRouteGuide() {
-    const copiedToClipboard = await copyText(evidenceRouteGuideText);
-    if (copiedToClipboard) {
-      setCopiedEvidenceRouteGuide(true);
-      setEvidenceRouteGuideStatus("科研证据选择路径已复制到剪贴板。");
-      window.setTimeout(() => setCopiedEvidenceRouteGuide(false), 1400);
-      return;
-    }
-    setCopiedEvidenceRouteGuide(false);
-    setEvidenceRouteGuideStatus("复制失败，请手动选中文本复制。");
-  }
 
   return (
     <section
@@ -516,13 +426,7 @@ ${essay.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
             className="research-filter-button"
             key={label}
             type="button"
-            onClick={() => {
-              setActiveLabel(label);
-              setCopiedEvidenceChecklist(false);
-              setEvidenceChecklistStatus("");
-              setCopiedEvidenceRouteGuide(false);
-              setEvidenceRouteGuideStatus("");
-            }}
+            onClick={() => setActiveLabel(label)}
             aria-pressed={activeLabel === label}
             style={{
               background: activeLabel === label ? "var(--cherry-forest)" : "var(--card)",
@@ -542,130 +446,6 @@ ${essay.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
       </div>
       <div role="status" aria-live="polite" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 800, marginBottom: "1.2rem" }}>
         当前显示 {filteredEssays.length} 篇{activeLabel === "全部" ? "科研证据" : activeLabel}
-      </div>
-
-      <div
-        className="research-route-guide-panel"
-        style={{
-          background: "var(--card)",
-          border: "1.5px solid rgba(94,68,42,0.12)",
-          borderRadius: 8,
-          padding: "0.9rem 0.95rem",
-          marginBottom: "1.15rem",
-          boxShadow: "0 8px 18px rgba(94,68,42,0.05)",
-          display: "grid",
-          gap: "0.82rem",
-        }}
-      >
-        <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.75rem", alignItems: "start" }}>
-          <div style={{ minWidth: 0 }}>
-            <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.92rem", fontWeight: 900, marginBottom: "0.22rem" }}>
-              按手头材料选择
-            </div>
-            <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, fontWeight: 800 }}>
-              先判断自己现在拥有的是主题、图表、实验结果还是自测需求，再进入对应证据路径。
-            </div>
-            <div
-              id="research-route-guide-status"
-              role="status"
-              aria-live="polite"
-              style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900, marginTop: "0.34rem" }}
-            >
-              {evidenceRouteGuideStatus}
-            </div>
-          </div>
-          <button
-            type="button"
-            className="research-route-guide-button"
-            onClick={copyEvidenceRouteGuide}
-            aria-describedby="research-route-guide-status"
-            style={{
-              background: "var(--cherry-red)",
-              color: "#FAF7F1",
-              border: "none",
-              borderRadius: 999,
-              padding: "0.46rem 0.82rem",
-              fontWeight: 900,
-              cursor: "pointer",
-              fontSize: "0.8rem",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {copiedEvidenceRouteGuide ? "已复制" : "复制路径"}
-          </button>
-        </div>
-        <div className="research-route-guide-list" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.65rem" }}>
-          {visibleEvidenceRouteGuides.map((guide) => (
-            <a
-              key={guide.slug}
-              className="research-route-guide-card"
-              href={guide.essay.href}
-              aria-label={`按手头材料打开：${guide.need}。对应文章：${guide.essay.title}。读完留下：${guide.output}`}
-              onClick={(event) => navigateTo(guide.essay.href, event)}
-              onMouseEnter={() => preloadRouteForHref(guide.essay.href)}
-              onFocus={() => preloadRouteForHref(guide.essay.href)}
-              onPointerDown={() => preloadRouteForHref(guide.essay.href)}
-              style={{ color: "inherit", textDecoration: "none", background: "var(--muted)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.72rem 0.78rem", display: "grid", gap: "0.32rem" }}
-            >
-              <span style={{ color: "var(--cherry-red)", fontSize: "0.7rem", fontWeight: 900 }}>{guide.need}</span>
-              <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", lineHeight: 1.45, fontWeight: 900 }}>{guide.essay.title}</span>
-              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>先做：{guide.action}</span>
-              <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 900 }}>产出：{guide.output}</span>
-            </a>
-          ))}
-        </div>
-      </div>
-
-      <div
-        className="research-evidence-checklist-panel"
-        style={{
-          background: "var(--card)",
-          border: "1.5px solid rgba(94,68,42,0.12)",
-          borderRadius: 8,
-          padding: "0.85rem 0.95rem",
-          marginBottom: "1.15rem",
-          boxShadow: "0 8px 18px rgba(94,68,42,0.05)",
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) auto",
-          gap: "0.8rem",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ minWidth: 0 }}>
-          <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.9rem", fontWeight: 900, marginBottom: "0.2rem" }}>
-            科研证据执行清单
-          </div>
-          <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, fontWeight: 800 }}>
-            当前范围包含 {filteredEssays.length} 篇科研证据。复制后会带出先做动作、完成检查、证据模板和避坑提醒。
-          </div>
-          <div
-            id="research-evidence-checklist-status"
-            role="status"
-            aria-live="polite"
-            style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900, marginTop: "0.34rem" }}
-          >
-            {evidenceChecklistStatus}
-          </div>
-        </div>
-        <button
-          type="button"
-          className="research-evidence-checklist-button"
-          onClick={copyEvidenceChecklist}
-          aria-describedby="research-evidence-checklist-status"
-          style={{
-            background: "var(--cherry-forest)",
-            color: "#FAF7F1",
-            border: "none",
-            borderRadius: 999,
-            padding: "0.46rem 0.82rem",
-            fontWeight: 900,
-            cursor: "pointer",
-            fontSize: "0.8rem",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {copiedEvidenceChecklist ? "已复制" : "复制清单"}
-        </button>
       </div>
 
       {/* Two-column grid */}
@@ -691,9 +471,6 @@ ${essay.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
           }
 
           #research .research-recommended-start:focus-visible,
-          #research .research-route-guide-card:focus-visible,
-          #research .research-route-guide-button:focus-visible,
-          #research .research-evidence-checklist-button:focus-visible,
           #research .research-filter-button:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
@@ -733,20 +510,6 @@ ${essay.starterTemplate.slice(0, 4).map((line) => `- ${line}`).join("\n")}
           }
 
           @media (max-width: 640px) {
-            #research .research-route-guide-panel > div:first-child,
-            #research .research-evidence-checklist-panel {
-              grid-template-columns: 1fr !important;
-            }
-
-            #research .research-route-guide-list {
-              grid-template-columns: 1fr !important;
-            }
-
-            #research .research-route-guide-button,
-            #research .research-evidence-checklist-button {
-              width: 100%;
-            }
-
             #research .research-card-quick-evidence {
               grid-template-columns: 1fr !important;
             }
