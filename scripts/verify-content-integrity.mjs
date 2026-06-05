@@ -1327,6 +1327,12 @@ function verifyLearnerProductPositioning() {
   const navSource = read("src/app/components/Nav.tsx");
   expect(navSource.includes('import { works } from "./Works"') && navSource.includes('import { notes } from "./Notes"') && navSource.includes('import { essays } from "./ResearchEssays"'), "Navigation route guide must derive current work and article context.");
   expect(navSource.includes('import { copyText } from "../clipboard"'), "Navigation route guide must use the shared clipboard helper.");
+  expect(navSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Navigation work shortcuts must use the direct-to-tool href helper.");
+  expect(navSource.includes('{ label: "看生命过程", href: getWorkToolHref("/works/gene-expression"), matchHref: "/works/gene-expression" }'), "Navigation life-process shortcut must open the gene expression tool directly.");
+  expect(navSource.includes('{ label: "拆概念", href: getWorkToolHref("/works/concept-explainer"), matchHref: "/works/concept-explainer" }'), "Navigation concept shortcut must open the concept tool directly.");
+  expect(navSource.includes('{ label: "整理科研", href: getWorkToolHref("/works/research-prompt-kit"), matchHref: "/works/research-prompt-kit" }'), "Navigation research shortcut must open the research tool directly.");
+  expect(navSource.includes("入口：${getWorkToolHref(currentWork.href)}"), "Navigation copied current-work guide must point directly to the work tool.");
+  expect(navSource.includes("if (\"matchHref\" in link && pathname === link.matchHref) return true;"), "Navigation active states must still match direct-to-tool shortcuts by pathname.");
   expect(navSource.includes("currentWork") && navSource.includes("currentArticle"), "Navigation route guide must detect work and article pages.");
   expect(navSource.includes("currentHomeSection"), "Navigation route guide must handle homepage sections.");
   expect(navSource.includes("role=\"status\"") && navSource.includes("aria-live=\"polite\""), "Navigation route guide must expose copy status accessibly.");

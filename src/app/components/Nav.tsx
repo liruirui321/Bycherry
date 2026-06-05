@@ -4,7 +4,7 @@ import { works } from "./Works";
 import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
 import { copyText } from "../clipboard";
-import { navigateClient, shouldUseClientNavigation } from "../navigation";
+import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
 export function Nav() {
@@ -16,9 +16,9 @@ export function Nav() {
   const firstMobileLinkRef = useRef<HTMLAnchorElement | null>(null);
 
   const links = [
-    { label: "看生命过程", href: "/works/gene-expression" },
-    { label: "拆概念", href: "/works/concept-explainer" },
-    { label: "整理科研", href: "/works/research-prompt-kit" },
+    { label: "看生命过程", href: getWorkToolHref("/works/gene-expression"), matchHref: "/works/gene-expression" },
+    { label: "拆概念", href: getWorkToolHref("/works/concept-explainer"), matchHref: "/works/concept-explainer" },
+    { label: "整理科研", href: getWorkToolHref("/works/research-prompt-kit"), matchHref: "/works/research-prompt-kit" },
     { label: "更多工具", href: "/#works" },
     { label: "读证据", href: "/#research" },
     { label: "学方法", href: "/#notes" },
@@ -32,7 +32,7 @@ export function Nav() {
   const currentRouteGuideText = currentWork
     ? `【当前位置学习路径】
 页面：${currentWork.title}
-入口：${currentWork.href}
+入口：${getWorkToolHref(currentWork.href)}
 类型：学习模块
 
 先做这个
@@ -147,15 +147,13 @@ ${links.slice(0, 6).map((link, index) => `${index + 1}. ${link.label}：${link.h
     };
   }, [open]);
 
-  function isActiveLink(href: string) {
+  function isActiveLink(link: (typeof links)[number]) {
     const { pathname, hash } = window.location;
-    if (pathname === "/works/gene-expression") return href === "/works/gene-expression";
-    if (pathname === "/works/concept-explainer") return href === "/works/concept-explainer";
-    if (pathname === "/works/research-prompt-kit") return href === "/works/research-prompt-kit";
-    if (pathname.startsWith("/works/")) return href === "/#works";
-    if (pathname.startsWith("/notes/")) return href === "/#notes";
-    if (pathname.startsWith("/research/")) return href === "/#research";
-    return pathname === "/" && href === `/${hash || "#top"}`;
+    if ("matchHref" in link && pathname === link.matchHref) return true;
+    if (pathname.startsWith("/works/")) return link.href === "/#works";
+    if (pathname.startsWith("/notes/")) return link.href === "/#notes";
+    if (pathname.startsWith("/research/")) return link.href === "/#research";
+    return pathname === "/" && link.href === `/${hash || "#top"}`;
   }
 
   function desktopLinkStyle(active: boolean): React.CSSProperties {
@@ -229,7 +227,7 @@ ${links.slice(0, 6).map((link, index) => `${index + 1}. ${link.label}：${link.h
         {/* Desktop links */}
         <div className="nav-desktop-links" style={{ gap: "0.75rem", alignItems: "center" }}>
           {links.map((l) => {
-            const active = isActiveLink(l.href);
+            const active = isActiveLink(l);
             return (
               <a
                 className="nav-link"
@@ -303,7 +301,7 @@ ${links.slice(0, 6).map((link, index) => `${index + 1}. ${link.label}：${link.h
       {open && (
         <div id="mobile-navigation" role="navigation" aria-label="移动端导航菜单" style={{ background: "var(--cherry-cream)", borderTop: "1.5px solid var(--border)", padding: "1rem 1.5rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem", maxHeight: "calc(100vh - 62px)", overflowY: "auto" }}>
           {links.map((l, index) => {
-            const active = isActiveLink(l.href);
+            const active = isActiveLink(l);
             return (
               <a
                 ref={index === 0 ? firstMobileLinkRef : undefined}
