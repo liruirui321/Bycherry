@@ -702,6 +702,12 @@ export function GeneExpressionTool() {
   const [quizAnswers, setQuizAnswers] = useState<Record<string, string>>({});
   const [copiedProcessRecord, setCopiedProcessRecord] = useState(false);
   const [processRecordStatus, setProcessRecordStatus] = useState("");
+  const [copiedExperimentRecord, setCopiedExperimentRecord] = useState(false);
+  const [experimentRecordStatus, setExperimentRecordStatus] = useState("");
+  const [experimentVariableDraft, setExperimentVariableDraft] = useState("");
+  const [experimentObservationDraft, setExperimentObservationDraft] = useState("");
+  const [experimentExplanationDraft, setExperimentExplanationDraft] = useState("");
+  const [experimentNextDraft, setExperimentNextDraft] = useState("");
 
   const model = useMemo(() => {
     const tfBound = molecules.filter((molecule) => molecule.type === "tf" && inBox(molecule, zones.promoter)).length;
@@ -814,6 +820,57 @@ export function GeneExpressionTool() {
   ];
   const activeProcessFocus = processFocusCards.find((item) => item.active)?.title ?? "等待启动";
   const accessibleSummary = `基因表达仿真。启动子上有 ${model.tfBound} 个转录因子，基因区有 ${model.polBound} 个 RNA 聚合酶，核糖体入口有 ${model.ribBound} 个核糖体。当前 mRNA 数量 ${visibleMrnaCount}，已接入氨基酸 ${visibleProteinCount}。当前过程焦点：${activeProcessFocus}。当前状态：${currentStatus} 下一步：${nextTask}`;
+  const expressionExperimentFields = [
+    {
+      id: "gene-experiment-variable",
+      label: "我改变的变量",
+      value: experimentVariableDraft,
+      setValue: setExperimentVariableDraft,
+      placeholder: "例如：把核糖体从 1 个增加到 3 个，其他分子保持不变。",
+    },
+    {
+      id: "gene-experiment-observation",
+      label: "观察到的变化",
+      value: experimentObservationDraft,
+      setValue: setExperimentObservationDraft,
+      placeholder: `例如：mRNA ${visibleMrnaCount}/${mrnaReadoutMax}，已接入氨基酸 ${visibleProteinCount}/${proteinReadoutMax}，多肽链更快变长。`,
+    },
+    {
+      id: "gene-experiment-explanation",
+      label: "我的解释",
+      value: experimentExplanationDraft,
+      setValue: setExperimentExplanationDraft,
+      placeholder: "例如：mRNA 是模板，核糖体数量影响同一段 mRNA 被读取的效率。",
+    },
+    {
+      id: "gene-experiment-next",
+      label: "下一次要验证",
+      value: experimentNextDraft,
+      setValue: setExperimentNextDraft,
+      placeholder: "例如：只移走 TF，看看已有 mRNA 是否还能继续被核糖体读取。",
+    },
+  ];
+  const expressionExperimentScore = expressionExperimentFields.filter((field) => field.value.trim().length >= 8).length;
+  const expressionExperimentRecord = `【基因表达变量实验记录】
+当前读数：TF ${model.tfBound}，RNA 聚合酶 ${model.polBound}，核糖体 ${model.ribBound}
+mRNA：${visibleMrnaCount}/${mrnaReadoutMax}
+已接入氨基酸：${visibleProteinCount}/${proteinReadoutMax}
+过程焦点：${activeProcessFocus}
+多肽片段：${peptidePreview}
+
+一、我改变的变量
+${experimentVariableDraft.trim() || "未填写"}
+
+二、观察到的变化
+${experimentObservationDraft.trim() || "未填写"}
+
+三、我的解释
+${experimentExplanationDraft.trim() || "未填写"}
+
+四、下一次要验证
+${experimentNextDraft.trim() || "未填写"}
+
+填写完成度：${expressionExperimentScore}/${expressionExperimentFields.length}`;
   const expressionProcessRecord = `【基因表达过程记录】
 当前状态：${currentStatus}
 下一步：${nextTask}
@@ -902,6 +959,13 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
     return point.matrixTransform(matrix.inverse());
   }
 
+  function clearRecordCopyState() {
+    setCopiedProcessRecord(false);
+    setProcessRecordStatus("");
+    setCopiedExperimentRecord(false);
+    setExperimentRecordStatus("");
+  }
+
   function startDrag(event: React.PointerEvent<SVGGElement>, molecule: Molecule) {
     event.preventDefault();
     const point = svgPoint(event);
@@ -949,8 +1013,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
     setIsPaused(false);
     setDisplayedMrnaCount(0);
     setDisplayedProteinCount(0);
-    setCopiedProcessRecord(false);
-    setProcessRecordStatus("");
+    clearRecordCopyState();
   }
 
   function resetScene() {
@@ -961,8 +1024,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
 
   function chooseQuizAnswer(option: string) {
     setQuizAnswers((answers) => ({ ...answers, [activeQuiz.id]: option }));
-    setCopiedProcessRecord(false);
-    setProcessRecordStatus("");
+    clearRecordCopyState();
   }
 
   function nextQuiz() {
@@ -989,8 +1051,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
           : molecule
       )
     );
-    setCopiedProcessRecord(false);
-    setProcessRecordStatus("");
+    clearRecordCopyState();
   }
 
   function toggleMoleculeDocking(molecule: Molecule) {
@@ -1008,8 +1069,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
           : item
       )
     );
-    setCopiedProcessRecord(false);
-    setProcessRecordStatus("");
+    clearRecordCopyState();
   }
 
   async function copyExpressionProcessRecord() {
@@ -1023,6 +1083,19 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
 
     setCopiedProcessRecord(false);
     setProcessRecordStatus("复制失败，请手动选中文本复制。");
+  }
+
+  async function copyExpressionExperimentRecord() {
+    const copiedToClipboard = await copyText(expressionExperimentRecord);
+    if (copiedToClipboard) {
+      setCopiedExperimentRecord(true);
+      setExperimentRecordStatus("变量实验记录已复制到剪贴板。");
+      window.setTimeout(() => setCopiedExperimentRecord(false), 1400);
+      return;
+    }
+
+    setCopiedExperimentRecord(false);
+    setExperimentRecordStatus("复制失败，请手动选中文本复制。");
   }
 
   function isMoleculeDocked(molecule: Molecule) {
@@ -1273,6 +1346,46 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
                   </span>
                 </div>
               ))}
+            </div>
+          </div>
+
+          <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", display: "grid", gap: "0.75rem" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
+                <IconMicroscope size={18} />
+                变量实验记录
+              </div>
+              <span style={{ background: expressionExperimentScore === expressionExperimentFields.length ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.22rem 0.58rem", color: expressionExperimentScore === expressionExperimentFields.length ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.72rem", fontWeight: 900 }}>
+                填写完成度 {expressionExperimentScore}/{expressionExperimentFields.length}
+              </span>
+            </div>
+            <div style={{ background: "rgba(169,201,172,0.16)", border: "1.5px solid rgba(93,140,101,0.18)", borderRadius: 16, padding: "0.72rem 0.8rem", color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.58, fontWeight: 800 }}>
+              调节分子数量后，先写下改变了什么，再记录 mRNA、氨基酸和多肽链变化。
+            </div>
+            <div className="gene-experiment-record-grid" style={{ display: "grid", gap: "0.68rem" }}>
+              {expressionExperimentFields.map((field) => (
+                <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.36rem" }}>
+                  <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>{field.label}</span>
+                  <textarea
+                    id={field.id}
+                    value={field.value}
+                    placeholder={field.placeholder}
+                    rows={3}
+                    onChange={(event) => {
+                      field.setValue(event.currentTarget.value);
+                      setCopiedExperimentRecord(false);
+                      setExperimentRecordStatus("");
+                    }}
+                    style={{ width: "100%", resize: "vertical", minHeight: 76, background: "rgba(250,247,241,0.82)", border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 16, padding: "0.68rem 0.72rem", color: "var(--cherry-warm-brown)", fontFamily: "inherit", fontWeight: 800, lineHeight: 1.55, outlineColor: "var(--cherry-forest)" }}
+                  />
+                </label>
+              ))}
+            </div>
+            <button type="button" onClick={copyExpressionExperimentRecord} aria-describedby="gene-experiment-record-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.52rem 0.88rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+              {copiedExperimentRecord ? "已复制" : "复制实验记录"}
+            </button>
+            <div id="gene-experiment-record-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 900 }}>
+              {experimentRecordStatus}
             </div>
           </div>
 
