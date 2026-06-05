@@ -44,22 +44,10 @@
         text-align: center;
         background: var(--card);
         border: 1.5px solid var(--border);
-        border-radius: 24px;
+        border-radius: 8px;
         padding: 2rem 1.5rem;
         box-shadow: 5px 8px 0 rgba(94, 68, 42, 0.08);
         overflow: hidden;
-      }
-
-      .tape {
-        position: absolute;
-        top: -10px;
-        left: 50%;
-        width: 82px;
-        height: 20px;
-        border-radius: 4px;
-        background: var(--yellow);
-        opacity: 0.7;
-        transform: translateX(-50%) rotate(-3deg);
       }
 
       h1 {
@@ -79,7 +67,7 @@
         align-items: center;
         justify-content: center;
         margin-top: 0.25rem;
-        border-radius: 999px;
+        border-radius: 8px;
         padding: 0.62rem 1.05rem;
         background: var(--forest);
         color: #FAF7F1;
@@ -95,7 +83,7 @@
 
       svg {
         display: block;
-        width: min(100%, 210px);
+        width: min(100%, 220px);
         height: auto;
         margin: 0 auto 0.9rem;
       }
@@ -114,16 +102,14 @@
   </head>
   <body>
     <main>
-      <div class="tape" aria-hidden="true"></div>
       <svg viewBox="0 0 210 118" fill="none" aria-hidden="true" focusable="false">
-        <path d="M20 90 C48 69 78 82 104 63 C136 40 162 56 193 29 V112 H20Z" fill="var(--sage)" opacity="0.56" />
-        <path d="M38 96 C72 106 152 104 180 90" stroke="rgba(94,68,42,0.15)" stroke-width="6" stroke-linecap="round" />
-        <rect x="57" y="29" width="96" height="62" rx="16" fill="#FFF8EA" stroke="var(--peach)" stroke-width="2.5" />
-        <path d="M59 42 L105 67 L151 42" stroke="var(--peach)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-        <path d="M132 20 L138 31 L151 35 L140 42 L137 55 L131 44 L118 40 L129 33Z" fill="var(--yellow)" stroke="rgba(94,68,42,0.14)" stroke-width="1.2" />
-        <path d="M34 47 C46 35 60 36 71 48" stroke="#7AAFC8" stroke-width="5" stroke-linecap="round" opacity="0.36" />
-        <path d="M153 78 C162 64 179 67 186 82 C170 91 159 88 153 78Z" fill="#5D8C65" stroke="var(--forest)" stroke-width="1.8" />
-        <circle cx="70" cy="31" r="6" fill="#B84433" opacity="0.74" />
+        <rect x="28" y="22" width="154" height="78" rx="10" fill="#FFF8EA" stroke="var(--forest)" stroke-width="2.5" />
+        <path d="M47 78 H163" stroke="rgba(94,68,42,0.18)" stroke-width="6" stroke-linecap="round" />
+        <path d="M58 48 H118" stroke="var(--forest)" stroke-width="5" stroke-linecap="round" />
+        <path d="M58 64 H148" stroke="var(--sage)" stroke-width="5" stroke-linecap="round" />
+        <path d="M143 38 L163 58 L143 78" stroke="var(--peach)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="47" cy="48" r="5" fill="var(--yellow)" />
+        <circle cx="47" cy="64" r="5" fill="#7AAFC8" />
       </svg>
       <h1>正在返回 By Cherry</h1>
       <p>正在把这个地址交回主页应用处理，稍后会恢复你刚才打开的内容。</p>

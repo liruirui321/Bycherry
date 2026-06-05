@@ -115,6 +115,13 @@ const staticFallback = readPublic("404.html");
 expect(staticFallback.includes('<meta name="robots" content="noindex" />'), "public/404.html must be noindex.");
 expect(staticFallback.includes('sessionStorage.setItem(') && staticFallback.includes('"bycherry-redirect-path"'), "public/404.html must preserve the requested route in sessionStorage.");
 expect(staticFallback.includes('window.location.replace("/")'), "public/404.html must redirect back to the app root.");
+for (const retiredFallbackCopy of ["class=\"tape\"", ".tape", "rotate(", "信封", "便签", "手账", "washi"]) {
+  expect(!staticFallback.includes(retiredFallbackCopy), `public/404.html must not keep retired note-style fallback decoration: ${retiredFallbackCopy}.`);
+}
+
+const fontsCss = readRoot("src/styles/fonts.css");
+expect(fontsCss.includes("family=Nunito"), "src/styles/fonts.css must load the primary Nunito family.");
+expect(!fontsCss.includes("Caveat"), "src/styles/fonts.css must not load the retired hand-written Caveat font.");
 
 const vercel = JSON.parse(readRoot("vercel.json"));
 expect(Array.isArray(vercel.rewrites), "vercel.json must declare rewrites.");
