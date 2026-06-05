@@ -3892,18 +3892,15 @@ If any of these are missing, add them before the final answer.
   }
 
   return (
-    <section id="concept-explainer-tool" style={{ display: "grid", gap: "1rem" }}>
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.95rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)", display: "grid", gap: "0.75rem" }}>
+    <section id="concept-explainer-tool" style={{ display: "grid", gap: "0.68rem" }}>
+      <div className="concept-main-input-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)", display: "grid", gap: "0.58rem" }}>
         <div>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.28rem" }}>概念解释 Agent</div>
           <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.58, fontWeight: 800 }}>
             输入任意概念，按稳定 skill 流程生成学习卡：先自测，再看类比、机制步骤、常见误区、可视化流程、迁移练习和即时小测。
           </div>
         </div>
-        <details className="concept-input-support-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.62rem" }}>
-          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", fontWeight: 900, cursor: "pointer" }}>输入预设与质量检查 · 2 项</summary>
-
-        <details className="concept-input-mode-panel" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.62rem" }}>
+        <details className="concept-input-mode-panel" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.56rem" }}>
           <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", fontWeight: 900, cursor: "pointer" }}>输入模式预设</summary>
           <div style={{ display: "flex", justifyContent: "space-between", gap: "0.7rem", alignItems: "center", flexWrap: "wrap" }}>
             <div>
@@ -3918,7 +3915,7 @@ If any of these are missing, add them before the final answer.
           </div>
           <div className="concept-input-mode-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.52rem" }}>
             {conceptInputModes.map((mode) => (
-              <button key={mode.title} type="button" onClick={() => applyConceptInputMode(mode)} aria-describedby="concept-copy-status" style={{ textAlign: "left", background: concept === mode.concept && stuckPoint === mode.stuck ? "var(--cherry-yellow-light)" : "var(--card)", border: concept === mode.concept && stuckPoint === mode.stuck ? "1.5px solid var(--cherry-yellow)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.68rem", cursor: "pointer", minHeight: 138, display: "grid", gap: "0.32rem" }}>
+              <button key={mode.title} type="button" onClick={() => applyConceptInputMode(mode)} aria-describedby="concept-copy-status" style={{ textAlign: "left", background: concept === mode.concept && stuckPoint === mode.stuck ? "var(--cherry-yellow-light)" : "var(--card)", border: concept === mode.concept && stuckPoint === mode.stuck ? "1.5px solid var(--cherry-yellow)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 10, padding: "0.54rem", cursor: "pointer", minHeight: 104, display: "grid", gap: "0.24rem" }}>
                 <span style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>{mode.title}</span>
                 <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", lineHeight: 1.35, fontWeight: 900 }}>{mode.concept}</span>
                 <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 800 }}>{mode.stuck}</span>
@@ -3927,30 +3924,30 @@ If any of these are missing, add them before the final answer.
             ))}
           </div>
         </details>
-        <div className="concept-agent-input-grid" style={{ display: "grid", gridTemplateColumns: "minmax(180px, 0.72fr) minmax(180px, 0.72fr) minmax(0, 1.1fr)", gap: "0.65rem", alignItems: "end" }}>
+        <div className="concept-agent-input-grid" style={{ display: "grid", gridTemplateColumns: "minmax(180px, 0.72fr) minmax(180px, 0.72fr) minmax(0, 1.1fr)", gap: "0.52rem", alignItems: "end" }}>
           <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
             输入概念
-            <input value={conceptInput} onChange={(event) => { setConceptInput(event.target.value); setCopiedAudit(false); setCopyStatus(""); }} onKeyDown={(event) => { if (event.key === "Enter") runConceptAgent(); }} placeholder="例如：光合作用、细胞周期、孟德尔遗传" style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
+            <input value={conceptInput} onChange={(event) => { setConceptInput(event.target.value); setCopiedAudit(false); setCopyStatus(""); }} onKeyDown={(event) => { if (event.key === "Enter") runConceptAgent(); }} placeholder="例如：光合作用、细胞周期、孟德尔遗传" style={{ border: "1.5px solid var(--border)", borderRadius: 10, padding: "0.48rem 0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
           </label>
           <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
             当前水平
-            <input value={audience} onChange={(event) => { setAudience(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopiedSkill(false); setCopyStatus(""); }} placeholder="例如：本科入门 / 论文初读 / 复习" style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
+            <input value={audience} onChange={(event) => { setAudience(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopiedSkill(false); setCopyStatus(""); }} placeholder="例如：本科入门 / 论文初读 / 复习" style={{ border: "1.5px solid var(--border)", borderRadius: 10, padding: "0.48rem 0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
           </label>
           <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
             学习目标
-            <input value={lessonGoal} onChange={(event) => { setLessonGoal(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopiedSkill(false); setCopyStatus(""); }} placeholder="例如：能用例子判断是否适用" style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
+            <input value={lessonGoal} onChange={(event) => { setLessonGoal(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopiedSkill(false); setCopyStatus(""); }} placeholder="例如：能用例子判断是否适用" style={{ border: "1.5px solid var(--border)", borderRadius: 10, padding: "0.48rem 0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800 }} />
           </label>
           <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
             资料边界
-            <textarea value={sourceBoundary} onChange={(event) => { setSourceBoundary(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopiedSkill(false); setCopyStatus(""); }} rows={3} placeholder="教材章节、笔记、论文、视频，或暂时未知" style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, resize: "vertical" }} />
+            <textarea value={sourceBoundary} onChange={(event) => { setSourceBoundary(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopiedSkill(false); setCopyStatus(""); }} rows={2} placeholder="教材章节、笔记、论文、视频，或暂时未知" style={{ border: "1.5px solid var(--border)", borderRadius: 10, padding: "0.48rem 0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, resize: "vertical" }} />
           </label>
           <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
             当前卡点
-            <textarea value={stuckPoint} onChange={(event) => { setStuckPoint(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopiedSkill(false); setCopyStatus(""); }} rows={3} placeholder="例如：会背定义，但不会判断例子是否成立" style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, resize: "vertical" }} />
+            <textarea value={stuckPoint} onChange={(event) => { setStuckPoint(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopiedSkill(false); setCopyStatus(""); }} rows={2} placeholder="例如：会背定义，但不会判断例子是否成立" style={{ border: "1.5px solid var(--border)", borderRadius: 10, padding: "0.48rem 0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, resize: "vertical" }} />
           </label>
           <label style={{ display: "grid", gap: 5, color: "var(--cherry-warm-brown)", fontSize: "0.78rem", fontWeight: 900 }}>
             应用情境
-            <textarea value={applicationContext} onChange={(event) => { setApplicationContext(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopiedSkill(false); setCopyStatus(""); }} rows={3} placeholder="例如：解释一道题、一张图、一个实验现象或一段材料" style={{ border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.58rem 0.72rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, resize: "vertical" }} />
+            <textarea value={applicationContext} onChange={(event) => { setApplicationContext(event.target.value); setCopiedLesson(false); setCopiedAudit(false); setCopiedSkill(false); setCopyStatus(""); }} rows={2} placeholder="例如：解释一道题、一张图、一个实验现象或一段材料" style={{ border: "1.5px solid var(--border)", borderRadius: 10, padding: "0.48rem 0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontWeight: 800, resize: "vertical" }} />
           </label>
           <div style={{ display: "grid", gap: "0.5rem" }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem" }}>
@@ -3960,7 +3957,7 @@ If any of these are missing, add them before the final answer.
               </span>
             ))}
             </div>
-            <button type="button" onClick={runConceptAgent} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.62rem 0.95rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap" }}>
+            <button type="button" onClick={runConceptAgent} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.5rem 0.8rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap" }}>
               生成学习卡
             </button>
           </div>
@@ -3978,7 +3975,6 @@ If any of these are missing, add them before the final answer.
             </div>
           ))}
         </div>
-        </details>
         </details>
       </div>
 

@@ -716,6 +716,7 @@ function verifyConceptExplainerAgentContract() {
   }
 
   expect(conceptSource.includes("#concept-explainer-tool .concept-pack-card-grid") && conceptSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Concept explainer mobile explanation pack must stay as compact three-column cards.");
+  expect(conceptSource.includes('className="concept-main-input-panel"') && conceptSource.includes('padding: "0.78rem"') && !conceptSource.includes("concept-input-support-pack-details"), "Concept explainer must expose the arbitrary concept input form directly instead of hiding it in a collapsed support panel.");
   expect(conceptSource.includes('className="concept-explanation-pack"') && conceptSource.includes('background: "transparent"') && conceptSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))"') && conceptSource.includes("minHeight: 98"), "Concept explainer desktop explanation pack must stay as short result tiles without a long outer frame.");
   expect(conceptSource.includes("#concept-explainer-tool .concept-pack-header-copy,") && conceptSource.includes("#concept-explainer-tool .concept-pack-output") && conceptSource.includes("display: none !important"), "Concept explainer mobile explanation pack must hide repeated helper/output lines.");
   expect(worksSource.includes("输入任意概念或选择样例"), "Concept explainer work card must advertise arbitrary concept input.");
