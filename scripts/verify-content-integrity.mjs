@@ -126,9 +126,7 @@ function verifyVisibleLearningModuleCopy() {
     "首屏学习模块目录",
     "可保存产出",
     "复制路径",
-    "页尾继续学习入口",
-    "footerWorkLinks",
-    "footer-work-link",
+    "bycherry.me",
   ];
 
   const retiredCopyPatterns = [
@@ -506,21 +504,12 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workDetailSource.includes("aria-label={`${item.label}：${item.work.title}。先做这个，${item.work.starter}。完成标准，${item.work.success}`}"), "Work detail previous/next cards must include starter and completion standard in accessible labels.");
   expect(workDetailSource.includes("function WorkQuickStart"), "Work detail pages must include a quick-start entry component.");
   expect(workDetailSource.includes("<WorkQuickStart work={work} />"), "Work detail pages must render the quick-start entry before the primary tool.");
-  expect(footerSource.includes('"plant-evolution-stories"') && footerSource.includes('"crispr-interactive"'), "Footer continue-learning links must cover all learning modules, not only the first three.");
-  expect(footerSource.includes('import { getWorkToolHref, navigateClient, navigateHomeSection, shouldUseClientNavigation } from "../navigation"'), "Footer continue-learning links must use the direct-to-tool href helper.");
-  expect(footerSource.includes("入口：${getWorkToolHref(work.href)}"), "Footer copied continue-learning plan must point directly to work tools.");
-  expect(footerSource.includes("const toolHref = getWorkToolHref(work.href)"), "Footer continue-learning links must derive direct-to-tool hrefs.");
-  expect(footerSource.includes("footer-work-step") && footerSource.includes("footer-work-output"), "Footer continue-learning links must stay compact with first step and saved output rows.");
-  expect(!footerSource.includes("完成：{work.success}"), "Footer continue-learning links must not repeat long completion standards visibly.");
-  expect(footerSource.includes("完成标准，${work.success}"), "Footer continue-learning accessible labels must include completion standards.");
-  expect(footerSource.includes("maxWidth: 960"), "Footer continue-learning grid must have enough width for all five module links.");
-  expect(footerSource.includes("footerNextPlanText"), "Footer must provide a copyable continue-learning plan.");
-  expect(footerSource.includes("copyFooterNextPlan"), "Footer must expose a copy action for the continue-learning plan.");
-  expect(footerSource.includes("页尾继续学习清单"), "Footer must visibly name the continue-learning plan.");
-  expect(footerSource.includes("footer-next-plan-panel"), "Footer continue-learning plan must have a stable panel class.");
-  expect(footerSource.includes("footer-plan-copy-status"), "Footer continue-learning copy action must expose copy status.");
-  expect(footerSource.includes("复制清单"), "Footer continue-learning plan must expose a visible copy button.");
-  expect(footerSource.includes("结束前复制模块页的记录、报告或复盘模板"), "Footer copied plan must direct learners to save evidence before stopping.");
+  expect(footerSource.includes('import { navigateHomeSection } from "../navigation"'), "Footer should keep lightweight home-section navigation.");
+  expect(footerSource.includes("externalLinks"), "Footer should keep compact external contact links.");
+  expect(footerSource.includes("bycherry.me"), "Footer should show the public domain without adding another module directory.");
+  for (const retiredFooterBlock of ["footerWorkLinks", "footer-work-link", "footerNextPlanText", "copyFooterNextPlan", "页尾继续学习清单", "footer-next-plan-panel"]) {
+    expect(!footerSource.includes(retiredFooterBlock), `Footer should stay short and not include retired duplicate block: ${retiredFooterBlock}.`);
+  }
 }
 
 function verifyResearchAgentWorkbenchContract() {
