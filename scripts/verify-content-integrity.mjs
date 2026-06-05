@@ -213,6 +213,10 @@ function verifyWorkCardActions() {
   expect(worksSource.includes("work-card-first-step"), "Homepage work cards must use compact first-step scan rows.");
   expect(worksSource.includes("work-card-output-strip"), "Homepage work cards must use compact output strips.");
   expect(worksSource.includes("minHeight: 344"), "Homepage work cards must stay compact enough for scanning.");
+  expect(worksSource.includes("work-scan-strip"), "Works section must expose a top scan strip before deeper planning panels.");
+  expect(worksSource.includes("当前范围速览"), "Works section must name the top scan strip for quick module selection.");
+  expect(worksSource.includes("work-scan-link"), "Works section top scan strip must expose direct module links.");
+  expect(worksSource.includes("work-scan-first-step") && worksSource.includes("work-scan-output"), "Works section top scan strip must expose first steps and outputs.");
   expect(worksSource.includes("learningPathBundles"), "Works section must connect modules with paired reading paths.");
   expect(worksSource.includes("配套阅读路径"), "Works section must visibly expose paired module and article routes.");
   expect(worksSource.includes("readingPathPlanText"), "Works section paired reading paths must provide a copyable plan.");

@@ -419,6 +419,51 @@ ${learningPathBundles.map((bundle, index) => `${index + 1}. ${bundle.goal}
           当前显示 {filtered.length} 个{activeCategory === "全部" ? "学习模块" : activeCategory}
         </div>
 
+        <div className="work-scan-strip" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.85rem 0.95rem", marginBottom: "1rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", display: "grid", gap: "0.68rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
+            <div>
+              <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.9rem", fontWeight: 900 }}>当前范围速览</div>
+              <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginTop: "0.16rem", fontWeight: 800 }}>
+                不先读说明，直接从下面选一个模块进入；每个入口都带首步和可保存产出。
+              </div>
+            </div>
+            <span style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.24rem 0.62rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
+              {filtered.length} 个入口
+            </span>
+          </div>
+          <div className="work-scan-strip-grid" role="list" aria-label="当前筛选下的学习模块速览" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.55rem" }}>
+            {filtered.map((work) => (
+              <a
+                key={work.slug}
+                role="listitem"
+                className="work-scan-link"
+                href={work.href}
+                aria-label={`打开${work.title}。先做这个，${work.starter}。可保存产出，${work.outputs.join("、")}`}
+                onMouseEnter={() => preloadRouteForHref(work.href)}
+                onFocus={() => preloadRouteForHref(work.href)}
+                onPointerDown={() => preloadRouteForHref(work.href)}
+                onClick={(event) => {
+                  if (!shouldUseClientNavigation(event)) return;
+                  event.preventDefault();
+                  navigateClient(work.href);
+                }}
+                style={{ background: work.color, border: `1.5px solid ${work.border}`, borderRadius: 8, padding: "0.62rem", color: "inherit", textDecoration: "none", display: "grid", gap: "0.36rem", minHeight: 118 }}
+              >
+                <span style={{ display: "flex", alignItems: "center", gap: 7, minWidth: 0 }}>
+                  <span aria-hidden="true" style={{ width: 28, height: 28, borderRadius: 8, background: "rgba(250,247,241,0.7)", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transform: "scale(0.72)", transformOrigin: "center" }}>
+                    {work.icon}
+                  </span>
+                  <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem", lineHeight: 1.35, fontWeight: 900, overflowWrap: "anywhere" }}>{work.title}</strong>
+                </span>
+                <span className="work-scan-first-step" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800 }}>{work.starter}</span>
+                <span className="work-scan-output" style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", lineHeight: 1.35, fontWeight: 900 }}>
+                  产出：{work.outputs.slice(0, 2).join(" / ")}
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+
         <div className="work-module-checklist-panel" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.85rem 0.95rem", marginBottom: "1.1rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.8rem", alignItems: "center" }}>
           <div style={{ minWidth: 0 }}>
             <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.9rem", fontWeight: 900, marginBottom: "0.2rem" }}>学习模块清单</div>
@@ -512,6 +557,7 @@ ${learningPathBundles.map((bundle, index) => `${index + 1}. ${bundle.goal}
         {`
           #works .work-card:focus-visible,
           #works .work-recommended-start:focus-visible,
+          #works .work-scan-link:focus-visible,
           #works .work-reading-path-link:focus-visible,
           #works .work-reading-path-copy-button:focus-visible,
           #works .work-module-checklist-button:focus-visible,
@@ -541,6 +587,10 @@ ${learningPathBundles.map((bundle, index) => `${index + 1}. ${bundle.goal}
             #works .work-reading-path-copy-button,
             #works .work-module-checklist-button {
               width: 100%;
+            }
+
+            #works .work-scan-strip-grid {
+              grid-template-columns: 1fr !important;
             }
           }
         `}
