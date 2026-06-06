@@ -744,6 +744,12 @@ function verifyConceptExplainerAgentContract() {
     { label: "concept scope diagnostic data", text: "conceptScopeHints" },
     { label: "visible concept scope diagnostic", text: "concept-scope-hint-strip" },
     { label: "concept narrowing status", text: "建议收窄" },
+    { label: "concept narrowing questions data", text: "conceptNarrowingQuestions" },
+    { label: "visible concept narrowing questions", text: "concept-narrowing-question-strip" },
+    { label: "concept narrowing label", text: "概念收窄问法" },
+    { label: "scope narrowing question", text: "限定范围" },
+    { label: "confusion narrowing question", text: "锁定卡点" },
+    { label: "output narrowing question", text: "确定产出" },
     { label: "scope output acceptance", text: "输出验收" },
     { label: "source boundary prioritization", text: "Prioritize source boundary and current confusion" },
     { label: "cycle visual option", text: "循环图" },
@@ -791,6 +797,7 @@ function verifyConceptExplainerAgentContract() {
 
   expect(conceptSource.includes("#concept-explainer-tool .concept-pack-card-grid") && conceptSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Concept explainer mobile explanation pack must stay as compact three-column cards.");
   expect(conceptSource.includes("#concept-explainer-tool .concept-scope-hint-strip") && conceptSource.includes("concept-scope-hint-card") && conceptSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Concept explainer scope diagnostics must stay visible and compact on mobile.");
+  expect(conceptSource.includes("#concept-explainer-tool .concept-narrowing-question-strip") && conceptSource.includes("concept-narrowing-question-card") && conceptSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Concept explainer narrowing questions must stay visible and compact on mobile.");
   expect(conceptSource.includes('className="concept-main-input-panel"') && conceptSource.includes('padding: "0.78rem"') && !conceptSource.includes("concept-input-support-pack-details"), "Concept explainer must expose the arbitrary concept input form directly instead of hiding it in a collapsed support panel.");
   expect(conceptSource.includes('className="concept-explanation-pack"') && conceptSource.includes('background: "transparent"') && conceptSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))"') && conceptSource.includes("minHeight: 98"), "Concept explainer desktop explanation pack must stay as short result tiles without a long outer frame.");
   expect(conceptSource.includes('className="concept-save-actions concept-responsive-grid"') && conceptSource.includes('background: "transparent"') && conceptSource.includes('boxShadow: "none"') && !conceptSource.includes("保存这次学习产出"), "Concept explainer export actions must stay as a short action strip instead of a repeated long save card.");
@@ -829,6 +836,10 @@ function verifyConceptExplainerAgentContract() {
     "## Visual Structure Rules",
     "## Visual Mode Selection",
     "If any field is missing, ask at most two short questions",
+    "Use three narrowing questions",
+    "Scope: Which chapter, figure, task, or phenomenon",
+    "Confusion: Which nearby concept, process, or example",
+    "Output: Does the learner need a one-sentence explanation",
     "Cycle map",
     "at least 4 labeled nodes",
     "Do not draw a decorative diagram",

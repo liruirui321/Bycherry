@@ -3537,6 +3537,20 @@ function ConceptExplainerContent() {
       body: "必须带走一句话解释、机制步骤、迁移练习和不能直接推出的边界。",
     },
   ];
+  const conceptNarrowingQuestions = [
+    {
+      label: "限定范围",
+      body: `我现在要学的“${concept}”属于哪个章节、图表、题目或现象？`,
+    },
+    {
+      label: "锁定卡点",
+      body: `我最容易把“${concept}”和哪个相邻概念、过程或例子混在一起？`,
+    },
+    {
+      label: "确定产出",
+      body: "我这次要产出一句解释、一个流程图、一张对照表，还是一次例子判断？",
+    },
+  ];
   const conceptAgentCards = [
     {
       title: "输入完整度",
@@ -3830,7 +3844,11 @@ Ask for or infer these fields:
 - Current confusion: the learner's stuck point, misconception, or example that does not make sense yet.
 - Application context: the question, figure, material, phenomenon, or real use case where the concept must be applied.
 
-If the concept is too broad, narrow it to one chapter, phenomenon, problem type, or use case before explaining.
+If the concept is too broad, narrow it to one chapter, phenomenon, problem type, or use case before explaining. Use three narrowing questions:
+
+1. Scope: Which chapter, figure, task, or phenomenon is this concept being used in?
+2. Confusion: Which nearby concept, process, or example is it being confused with?
+3. Output: Does the learner need a one-sentence explanation, flow diagram, comparison table, or example judgment?
 
 If any field is missing, ask at most two short questions. Prioritize source boundary and current confusion, then capture application context. If the learner wants to continue without answering, make the smallest safe assumption, label it as "assumption", and keep the source boundary as "unknown".
 
@@ -4093,6 +4111,17 @@ If any of these are missing, add them before the final answer.
                 <span style={{ color: item.status === "建议收窄" || item.status === "待填写" ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900, whiteSpace: "nowrap" }}>{item.status}</span>
               </span>
               <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.46, fontWeight: 800 }}>{item.body}</span>
+            </div>
+          ))}
+        </div>
+        <div className="concept-narrowing-question-strip" role="list" aria-label="概念收窄问法" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.42rem" }}>
+          {conceptNarrowingQuestions.map((item, index) => (
+            <div key={item.label} className="concept-narrowing-question-card" role="listitem" style={{ background: index === 0 ? "var(--cherry-blue-light)" : index === 1 ? "var(--cherry-yellow-light)" : "var(--cherry-sage-light)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 10, padding: "0.48rem", display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.42rem", alignItems: "start", minWidth: 0 }}>
+              <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+              <span style={{ display: "grid", gap: "0.16rem", minWidth: 0 }}>
+                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.2 }}>{item.label}</strong>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.38, fontWeight: 800 }}>{item.body}</span>
+              </span>
             </div>
           ))}
         </div>
@@ -4553,6 +4582,17 @@ If any of these are missing, add them before the final answer.
             #concept-explainer-tool .concept-scope-hint-strip {
               grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
               gap: 0.42rem !important;
+            }
+
+            #concept-explainer-tool .concept-narrowing-question-strip {
+              grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+              gap: 0.36rem !important;
+            }
+
+            #concept-explainer-tool .concept-narrowing-question-card {
+              grid-template-columns: 1fr !important;
+              gap: 0.24rem !important;
+              padding: 0.38rem !important;
             }
 
             #concept-explainer-tool .concept-input-mode-grid,

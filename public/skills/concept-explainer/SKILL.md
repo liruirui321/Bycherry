@@ -20,7 +20,11 @@ Ask for or infer these fields:
 - Current confusion: the stuck point, misconception, example, or wording that does not make sense yet.
 - Application context: the question, figure, material, phenomenon, or real use case where the concept must be applied.
 
-If the concept is too broad, narrow it to one chapter, phenomenon, problem type, or use case before explaining.
+If the concept is too broad, narrow it to one chapter, phenomenon, problem type, or use case before explaining. Use three narrowing questions:
+
+1. Scope: Which chapter, figure, task, or phenomenon is this concept being used in?
+2. Confusion: Which nearby concept, process, or example is it being confused with?
+3. Output: Does the learner need a one-sentence explanation, flow diagram, comparison table, or example judgment?
 
 If any field is missing, ask at most two short questions. Prioritize source boundary and current confusion, then capture application context. If the learner wants to continue without answering, make the smallest safe assumption, label it as "assumption", and keep the source boundary as "unknown".
 
