@@ -91,7 +91,7 @@ export function Hero() {
     border: "var(--cherry-yellow)",
     color: "var(--cherry-yellow-light)",
     desc: "科研证据、学习方法和 AI 创作工作流文章。",
-    icon: <IconBook size={36} color="var(--cherry-yellow)" />,
+    icon: <IconBook size={30} color="var(--cherry-yellow)" />,
     outputs: ["行动清单", "检查项", "可套用模板"],
     path: ["选主题", "做记录", "留产出"],
     featuredImage: null,
@@ -130,7 +130,7 @@ export function Hero() {
         minHeight: "calc(100vh - 50px)",
         position: "relative",
         overflow: "hidden",
-        padding: "1.1rem clamp(1rem, 2.2vw, 2rem) 1.25rem",
+        padding: "2rem clamp(1rem, 3vw, 2.4rem) 1.6rem",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
@@ -140,13 +140,11 @@ export function Hero() {
       }}
     >
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
-        <div className="hero-technical-grid" style={{ position: "absolute", inset: "0 0 auto 0", height: 260, opacity: 0.62 }} />
+        <div className="hero-technical-grid" style={{ position: "absolute", inset: "0 0 auto 0", height: 260, opacity: 0.54 }} />
         <div className="hero-soft-blob hero-soft-blob-sage" />
         <div className="hero-soft-blob hero-soft-blob-yellow" />
         <div className="hero-soft-blob hero-soft-blob-blue" />
         <div className="hero-soft-blob hero-soft-blob-peach" />
-        <div style={{ position: "absolute", width: "46vw", maxWidth: 720, height: 1, background: "rgba(58,92,62,0.18)", right: "2rem", top: "5.8rem" }} />
-        <div style={{ position: "absolute", width: "38vw", maxWidth: 520, height: 1, background: "rgba(122,175,200,0.24)", left: "2rem", bottom: "2.2rem" }} />
         <div className="hero-dot-field" style={{ position: "absolute", width: 128, height: 112, left: "0.8rem", top: "6.1rem", opacity: 0.16 }} />
         <div className="hero-dot-field" style={{ position: "absolute", width: 148, height: 120, right: "3.2rem", bottom: "2rem", opacity: 0.18 }} />
         <div className="hero-stem hero-stem-left" />
@@ -157,9 +155,9 @@ export function Hero() {
         <div className="hero-float-deco hero-float-leaf"><IconLeafSmall size={28} color="var(--cherry-sage)" /></div>
       </div>
 
-      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1560, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
-        <div className="hero-layout" style={{ display: "grid", gridTemplateColumns: "minmax(340px, 0.78fr) minmax(720px, 1.22fr)", gap: "1.2rem", alignItems: "stretch", justifyItems: "stretch", minWidth: 0 }}>
-          <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.78rem", alignContent: "center", justifyItems: "start", textAlign: "left", maxWidth: 560 }}>
+      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1180, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
+        <div className="hero-layout" style={{ display: "grid", gap: "1.05rem", justifyItems: "center", minWidth: 0 }}>
+          <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.72rem", justifyItems: "center", textAlign: "center", maxWidth: 760 }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.32rem 0.92rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 850, background: "rgba(250,247,241,0.72)", letterSpacing: 0 }}>
               <IconBranch size={13} color="var(--cherry-forest)" />
               By Cherry · Science Tools
@@ -169,9 +167,9 @@ export function Hero() {
               className="hero-title"
               style={{
                 fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-                fontSize: "clamp(3rem, 4.2vw, 5.1rem)",
+                fontSize: "clamp(2.7rem, 5vw, 4.75rem)",
                 fontWeight: 900,
-                lineHeight: 1.02,
+                lineHeight: 1.03,
                 color: "var(--cherry-warm-brown)",
                 margin: "0",
                 letterSpacing: 0,
@@ -185,16 +183,16 @@ export function Hero() {
               {" & "}
               <span style={{ color: "var(--cherry-blue)" }}>AI</span>
             </h1>
-            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.25vw, 1.12rem)", lineHeight: 1.62, fontWeight: 760, maxWidth: 520 }}>
+            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.2vw, 1.1rem)", lineHeight: 1.58, fontWeight: 760, maxWidth: 620 }}>
               科学模拟、科研阅读和 AI 学习工具，打开后直接操作、记录和复盘。
             </p>
-            <div className="hero-scope-strip" role="list" aria-label="内容范围" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.52rem", width: "min(100%, 520px)" }}>
+            <div className="hero-scope-strip" role="list" aria-label="内容范围" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.52rem", width: "min(100%, 560px)" }}>
               {[
                 { label: "模拟", detail: "看见过程", icon: <IconMicroscope size={19} color="var(--cherry-blue)" /> },
                 { label: "科研", detail: "核查证据", icon: <IconTestTube size={18} color="var(--cherry-peach)" /> },
                 { label: "AI", detail: "生成卡片", icon: <IconDNA size={19} color1="var(--cherry-red)" color2="var(--cherry-blue)" /> },
               ].map((item) => (
-                <span key={item.label} className="hero-scope-item" role="listitem" style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", alignItems: "center", gap: "0.45rem", minWidth: 0, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 14, padding: "0.54rem 0.62rem", background: "rgba(250,247,241,0.66)", boxShadow: "0 8px 20px rgba(94,68,42,0.06)" }}>
+                <span key={item.label} className="hero-scope-item" role="listitem" style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", alignItems: "center", gap: "0.45rem", minWidth: 0, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 14, padding: "0.5rem 0.62rem", background: "rgba(250,247,241,0.66)", boxShadow: "0 8px 20px rgba(94,68,42,0.06)", textAlign: "left" }}>
                   <span aria-hidden="true" style={{ display: "grid", placeItems: "center", width: 30, height: 30, borderRadius: 999, background: "rgba(250,247,241,0.78)" }}>{item.icon}</span>
                   <span style={{ display: "grid", gap: "0.08rem", minWidth: 0 }}>
                     <strong style={{ fontSize: "0.78rem", lineHeight: 1.1, color: "var(--cherry-warm-brown)", fontWeight: 950 }}>{item.label}</strong>
@@ -205,9 +203,9 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.62rem", width: "100%", alignContent: "center" }}>
-            <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.03rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>内容目录</h2>
-            <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(152px, auto)", gap: "0.76rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+          <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.56rem", width: "100%" }}>
+            <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.98rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>内容目录</h2>
+            <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(104px, auto)", gap: "0.58rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
               {entries.map((entry, index) => (
                 <a
                   className={`hero-entry-row ${entry.featuredImage ? "hero-entry-row-image" : ""}`}
@@ -222,57 +220,54 @@ export function Hero() {
                     background: entry.color,
                     border: `2px solid ${entry.border}`,
                     borderRadius: 12,
-                    padding: entry.featuredImage ? "0.72rem 7.35rem 0.68rem 0.72rem" : "0.72rem 0.72rem 0.68rem",
+                    padding: entry.featuredImage ? "0.64rem 5.5rem 0.62rem 0.68rem" : "0.64rem 0.68rem 0.62rem",
                     color: "var(--cherry-warm-brown)",
                     textDecoration: "none",
                     textAlign: "left",
                     display: "grid",
                     gridTemplateColumns: "minmax(0, 1fr)",
                     alignItems: "stretch",
-                    gap: "0.5rem",
+                    gap: "0.34rem",
                     position: "relative",
                     overflow: "hidden",
                     minWidth: 0,
                     maxWidth: "100%",
-                    minHeight: 152,
+                    minHeight: 104,
                     boxSizing: "border-box",
-                    boxShadow: "0 12px 26px rgba(94,68,42,0.07)",
+                    boxShadow: "0 10px 22px rgba(94,68,42,0.07)",
                     transform: "none",
                   }}
                 >
-                  <span aria-hidden="true" style={{ position: "absolute", left: "0.74rem", right: "0.74rem", top: 0, height: 4, borderRadius: "0 0 999px 999px", background: entry.border, opacity: 0.82 }} />
-                  <span style={{ minWidth: 0, display: "grid", gap: "0.44rem", alignContent: "start" }}>
-                    <span style={{ display: "flex", alignItems: "center", gap: "0.48rem", minWidth: 0 }}>
-                      <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: 30, height: 30, borderRadius: 999, background: "rgba(250,247,241,0.64)", flexShrink: 0 }}>
+                  <span aria-hidden="true" style={{ position: "absolute", left: "0.68rem", right: "0.68rem", top: 0, height: 3, borderRadius: "0 0 999px 999px", background: entry.border, opacity: 0.82 }} />
+                  <span style={{ minWidth: 0, display: "grid", gap: "0.32rem", alignContent: "start" }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: "0.42rem", minWidth: 0 }}>
+                      <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: 28, height: 28, borderRadius: 999, background: "rgba(250,247,241,0.64)", flexShrink: 0 }}>
                         {entry.icon}
                       </span>
-                      <strong style={{ fontSize: "0.96rem", lineHeight: 1.18, minWidth: 0, overflowWrap: "anywhere" }}>{entry.title}</strong>
-                      <span aria-hidden="true" style={{ marginLeft: "auto", flexShrink: 0, color: "rgba(62,42,26,0.34)", fontSize: "0.64rem", lineHeight: 1, fontWeight: 950, letterSpacing: 0 }}>{String(index + 1).padStart(2, "0")}</span>
+                      <strong style={{ fontSize: "0.9rem", lineHeight: 1.15, minWidth: 0, overflowWrap: "anywhere" }}>{entry.title}</strong>
+                      <span aria-hidden="true" style={{ marginLeft: "auto", flexShrink: 0, color: "rgba(62,42,26,0.34)", fontSize: "0.62rem", lineHeight: 1, fontWeight: 950, letterSpacing: 0 }}>{String(index + 1).padStart(2, "0")}</span>
                     </span>
-                    <span style={{ display: "flex", gap: "0.44rem", flexWrap: "wrap", alignItems: "center" }}>
-                      <span style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.2rem 0.46rem", color: "var(--cherry-forest)", fontSize: "0.7rem", fontWeight: 950 }}>{entry.kind}</span>
-                    </span>
-                    <span className="hero-entry-desc" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.45, fontWeight: 820 }}>
+                    <span className="hero-entry-desc" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.35, fontWeight: 820 }}>
                       {entry.desc}
                     </span>
-                    <span className="hero-entry-path" style={{ display: "flex", gap: "0.28rem", flexWrap: "wrap", alignItems: "center", color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.2, fontWeight: 900 }}>
+                    <span className="hero-entry-path" style={{ display: "flex", gap: "0.24rem", flexWrap: "wrap", alignItems: "center", color: "var(--cherry-warm-mid)", fontSize: "0.62rem", lineHeight: 1.2, fontWeight: 900 }}>
                       {entry.path.map((step, index) => (
-                        <span key={`${entry.key}-${step}`} style={{ display: "inline-flex", alignItems: "center", gap: "0.28rem" }}>
+                        <span key={`${entry.key}-${step}`} style={{ display: "inline-flex", alignItems: "center", gap: "0.24rem" }}>
                           <span>{step}</span>
                           {index < entry.path.length - 1 ? <span aria-hidden="true" style={{ opacity: 0.58 }}>→</span> : null}
                         </span>
                       ))}
                     </span>
-                    <span style={{ display: "flex", gap: "0.38rem", flexWrap: "wrap" }}>
+                    <span className="hero-entry-output-row" style={{ display: "flex", gap: "0.3rem", flexWrap: "wrap" }}>
                       {entry.outputs.slice(0, 3).map((output) => (
-                        <span key={output} style={{ background: "rgba(250,247,241,0.72)", borderRadius: 999, padding: "0.24rem 0.48rem", color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 950 }}>
+                        <span key={output} style={{ background: "rgba(250,247,241,0.72)", borderRadius: 999, padding: "0.18rem 0.4rem", color: "var(--cherry-warm-brown)", fontSize: "0.62rem", fontWeight: 950 }}>
                           {output}
                         </span>
                       ))}
                     </span>
                   </span>
                   {entry.featuredImage ? (
-                    <img src={entry.featuredImage} alt="" aria-hidden="true" loading="eager" style={{ position: "absolute", right: "0.58rem", bottom: "0.58rem", width: 96, height: 66, objectFit: "cover", borderRadius: 13, border: "1.5px solid rgba(250,247,241,0.72)" }} />
+                    <img src={entry.featuredImage} alt="" aria-hidden="true" loading="eager" style={{ position: "absolute", right: "0.54rem", bottom: "0.54rem", width: 70, height: 52, objectFit: "cover", borderRadius: 10, border: "1.5px solid rgba(250,247,241,0.72)" }} />
                   ) : entry.visualKind ? (
                     <span className="hero-entry-visual-row" aria-hidden="true">
                       <HeroMiniVisual kind={entry.visualKind} />
@@ -307,34 +302,34 @@ export function Hero() {
         }
 
         .hero-soft-blob-sage {
-          width: min(34vw, 540px);
-          height: 300px;
-          right: 3%;
+          width: min(32vw, 520px);
+          height: 285px;
+          right: 4%;
           top: 7%;
           background: var(--cherry-sage-light);
         }
 
         .hero-soft-blob-yellow {
-          width: min(28vw, 420px);
-          height: 230px;
+          width: min(26vw, 390px);
+          height: 220px;
           left: 2%;
           bottom: 7%;
           background: var(--cherry-yellow-light);
         }
 
         .hero-soft-blob-blue {
-          width: min(24vw, 360px);
-          height: 220px;
-          right: 14%;
-          bottom: 12%;
+          width: min(22vw, 330px);
+          height: 210px;
+          right: 15%;
+          bottom: 10%;
           background: var(--cherry-blue-light);
         }
 
         .hero-soft-blob-peach {
-          width: min(18vw, 280px);
-          height: 180px;
-          left: 5%;
-          top: 22%;
+          width: min(18vw, 270px);
+          height: 170px;
+          left: 6%;
+          top: 21%;
           background: var(--cherry-peach-light);
         }
 
@@ -383,8 +378,8 @@ export function Hero() {
           position: absolute;
           display: grid;
           place-items: center;
-          width: 3.4rem;
-          height: 3.4rem;
+          width: 3.25rem;
+          height: 3.25rem;
           border-radius: 999px;
           background: rgba(250,247,241,0.58);
           border: 1px solid rgba(94,68,42,0.1);
@@ -393,13 +388,13 @@ export function Hero() {
         }
 
         .hero-float-microscope {
-          left: 30%;
+          left: 19%;
           top: 22%;
         }
 
         .hero-float-dna {
-          left: 19%;
-          bottom: 19%;
+          left: 14%;
+          bottom: 23%;
           animation-delay: -1.2s;
         }
 
@@ -410,8 +405,8 @@ export function Hero() {
         }
 
         .hero-float-leaf {
-          right: 31%;
-          top: 16%;
+          right: 24%;
+          top: 18%;
           animation-delay: -1.8s;
         }
 
@@ -420,103 +415,11 @@ export function Hero() {
           50% { transform: translateY(-8px); }
         }
 
-        @media (min-width: 1180px) {
-          .hero-featured-panel {
-            max-width: 820px !important;
-            justify-self: end !important;
-          }
-
-          .hero-entry-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            gap: 0.7rem !important;
-          }
-
-          .hero-entry-row {
-            min-height: 152px !important;
-          }
-        }
-
-        @media (max-width: 860px) {
-          .hero-shell {
-            min-height: auto !important;
-            padding: 0.8rem 1rem 1rem !important;
-          }
-
-          .hero-inner,
-          .hero-layout {
-            width: 100% !important;
-            max-width: calc(100vw - 2rem) !important;
-            grid-template-columns: 1fr !important;
-            gap: 0.82rem !important;
-            overflow-wrap: anywhere;
-          }
-
-          .hero-copy-panel {
-            grid-template-columns: 1fr !important;
-            gap: 0.7rem !important;
-            align-items: start !important;
-          }
-
-          .hero-title {
-            font-size: 2.6rem !important;
-            line-height: 1.02 !important;
-          }
-
-          .hero-scope-strip {
-            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-            gap: 0.42rem !important;
-          }
-
-          .hero-scope-item {
-            padding: 0.42rem !important;
-            border-radius: 12px !important;
-          }
-
-          .hero-entry-grid {
-            display: grid !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            gap: 0.52rem !important;
-            width: calc(100vw - 2rem) !important;
-            max-width: calc(100vw - 2rem) !important;
-            box-sizing: border-box;
-          }
-
-          .hero-entry-row {
-            min-width: 0 !important;
-            box-sizing: border-box;
-            grid-template-columns: minmax(0, 1fr) !important;
-            padding: 0.56rem !important;
-            min-height: 150px !important;
-            border-radius: 14px !important;
-            transform: none !important;
-          }
-
-          .hero-entry-row-image img {
-            display: none !important;
-          }
-
-          .hero-entry-row strong,
-          .hero-entry-row span {
-            overflow-wrap: anywhere;
-          }
-
-          .hero-float-deco,
-          .hero-stem-right {
-            display: none !important;
-          }
-        }
-
         .hero-entry-desc {
           overflow: hidden;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
-        }
-
-        @media (max-width: 520px) {
-          .hero-entry-desc {
-            -webkit-line-clamp: 2 !important;
-          }
         }
 
         .hero-entry-row:focus-visible {
@@ -528,13 +431,20 @@ export function Hero() {
           transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
         }
 
+        .hero-entry-row:hover,
+        .hero-entry-row:focus-visible {
+          background: rgba(250,247,241,0.42) !important;
+          transform: translateY(-2px) rotate(0deg) !important;
+          box-shadow: 5px 10px 0 rgba(94,68,42,0.1), 0 18px 34px rgba(94,68,42,0.08) !important;
+        }
+
         .hero-mini-visual {
           position: relative;
           display: block;
-          width: 5.3rem;
-          height: 3.12rem;
+          width: 4.7rem;
+          height: 2.6rem;
           border: 1px solid rgba(94,68,42,0.1);
-          border-radius: 14px;
+          border-radius: 12px;
           background: rgba(250,247,241,0.56);
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
           pointer-events: none;
@@ -542,41 +452,43 @@ export function Hero() {
         }
 
         .hero-entry-visual-row {
+          position: absolute;
+          right: 0.54rem;
+          bottom: 0.48rem;
           display: flex;
           justify-content: flex-end;
           align-items: end;
-          gap: 0.58rem;
-          margin-top: auto;
+          pointer-events: none;
         }
 
         .hero-mini-visual-gene .hero-mini-dna {
           position: absolute;
-          left: 0.34rem;
-          top: 0.36rem;
+          left: 0.3rem;
+          top: 0.32rem;
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 0.12rem;
-          width: 4.55rem;
+          gap: 0.1rem;
+          width: 4rem;
         }
 
         .hero-mini-visual-gene .hero-mini-dna span {
           display: grid;
           place-items: center;
-          width: 1rem;
-          height: 1rem;
+          width: 0.88rem;
+          height: 0.88rem;
           border-radius: 999px;
           background: rgba(95,145,115,0.18);
           color: var(--cherry-forest);
-          font-size: 0.42rem;
+          font-size: 0.4rem;
           font-weight: 950;
         }
 
         .hero-mini-visual-gene .hero-mini-rna {
           position: absolute;
-          left: 0.62rem;
-          top: 1.54rem;
-          width: 3.1rem;
-          height: 0.92rem;
+          left: 0.56rem;
+          top: 1.3rem;
+          width: 2.8rem;
+          height: 0.82rem;
           border-bottom: 3px solid var(--cherry-blue);
           border-radius: 0 0 80% 70%;
           transform: rotate(-7deg);
@@ -584,87 +496,87 @@ export function Hero() {
 
         .hero-mini-visual-gene .hero-mini-ribosome {
           position: absolute;
-          right: 0.84rem;
-          bottom: 0.52rem;
-          width: 1.04rem;
-          height: 0.74rem;
+          right: 0.72rem;
+          bottom: 0.44rem;
+          width: 0.92rem;
+          height: 0.66rem;
           border-radius: 999px 999px 0.7rem 0.7rem;
           background: rgba(94,68,42,0.54);
         }
 
         .hero-mini-visual-gene .hero-mini-chain {
           position: absolute;
-          right: 0.32rem;
-          bottom: 1.18rem;
+          right: 0.3rem;
+          bottom: 1.02rem;
           display: flex;
-          gap: 0.12rem;
+          gap: 0.1rem;
           transform: rotate(-22deg);
         }
 
         .hero-mini-visual-gene .hero-mini-chain i {
-          width: 0.36rem;
-          height: 0.36rem;
+          width: 0.32rem;
+          height: 0.32rem;
           border-radius: 999px;
           background: var(--cherry-red);
         }
 
         .hero-mini-visual-research .hero-mini-paper {
           position: absolute;
-          left: 0.44rem;
-          top: 0.34rem;
-          width: 2.1rem;
-          height: 2.42rem;
-          border-radius: 0.42rem;
+          left: 0.4rem;
+          top: 0.32rem;
+          width: 1.86rem;
+          height: 2rem;
+          border-radius: 0.36rem;
           background: rgba(255,255,255,0.72);
           border: 1px solid rgba(94,68,42,0.13);
           display: grid;
-          gap: 0.18rem;
+          gap: 0.14rem;
           align-content: center;
-          padding: 0.32rem;
+          padding: 0.28rem;
         }
 
         .hero-mini-visual-research .hero-mini-paper i {
-          height: 0.22rem;
+          height: 0.2rem;
           border-radius: 999px;
           background: rgba(94,68,42,0.28);
         }
 
         .hero-mini-visual-research .hero-mini-checklist {
           position: absolute;
-          right: 0.42rem;
-          top: 0.66rem;
+          right: 0.38rem;
+          top: 0.58rem;
           display: grid;
-          gap: 0.36rem;
+          gap: 0.3rem;
         }
 
         .hero-mini-visual-research .hero-mini-checklist i {
-          width: 1.58rem;
-          height: 0.36rem;
+          width: 1.38rem;
+          height: 0.3rem;
           border-radius: 999px;
-          background: linear-gradient(90deg, var(--cherry-forest) 0 0.36rem, rgba(94,68,42,0.22) 0.36rem);
+          background: linear-gradient(90deg, var(--cherry-forest) 0 0.32rem, rgba(94,68,42,0.22) 0.32rem);
         }
 
         .hero-mini-visual-concept {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.18rem;
+          gap: 0.16rem;
         }
 
         .hero-mini-visual-concept span {
           display: grid;
           place-items: center;
-          width: 1.28rem;
-          height: 1.28rem;
+          width: 1.12rem;
+          height: 1.12rem;
           border-radius: 999px;
           background: rgba(123,108,196,0.15);
           color: #5F548F;
-          font-size: 0.44rem;
+          font-size: 0.4rem;
           font-weight: 950;
         }
 
         .hero-mini-visual-concept i {
-          width: 0.48rem;
+          width: 0.42rem;
           height: 2px;
           border-radius: 999px;
           background: rgba(94,68,42,0.28);
@@ -673,19 +585,19 @@ export function Hero() {
         .hero-mini-visual-crispr::before {
           content: "";
           position: absolute;
-          left: 0.46rem;
-          right: 0.46rem;
-          top: 1.5rem;
-          height: 0.34rem;
+          left: 0.4rem;
+          right: 0.4rem;
+          top: 1.24rem;
+          height: 0.3rem;
           border-radius: 999px;
-          background: repeating-linear-gradient(90deg, var(--cherry-blue) 0 0.42rem, rgba(250,247,241,0.85) 0.42rem 0.58rem, var(--cherry-red) 0.58rem 1rem);
+          background: repeating-linear-gradient(90deg, var(--cherry-blue) 0 0.38rem, rgba(250,247,241,0.85) 0.38rem 0.52rem, var(--cherry-red) 0.52rem 0.9rem);
         }
 
         .hero-mini-visual-crispr .hero-mini-guide {
           position: absolute;
-          left: 0.88rem;
-          top: 1.04rem;
-          width: 2.72rem;
+          left: 0.78rem;
+          top: 0.9rem;
+          width: 2.36rem;
           height: 0.18rem;
           border-radius: 999px;
           background: var(--cherry-red);
@@ -693,56 +605,128 @@ export function Hero() {
 
         .hero-mini-visual-crispr .hero-mini-cas {
           position: absolute;
-          right: 1.02rem;
-          top: 0.92rem;
-          width: 1rem;
-          height: 1rem;
+          right: 0.9rem;
+          top: 0.78rem;
+          width: 0.9rem;
+          height: 0.9rem;
           border-radius: 45% 55% 50% 50%;
           background: rgba(95,145,115,0.7);
         }
 
         .hero-mini-visual-crispr .hero-mini-cut {
           position: absolute;
-          right: 0.86rem;
-          top: 1rem;
-          width: 0.48rem;
-          height: 1.28rem;
+          right: 0.74rem;
+          top: 0.88rem;
+          width: 0.42rem;
+          height: 1.1rem;
           border-left: 2px solid rgba(94,68,42,0.44);
           transform: rotate(26deg);
         }
 
         .hero-mini-visual-reading .hero-mini-book {
           position: absolute;
-          left: 0.5rem;
-          top: 0.48rem;
-          width: 1.58rem;
-          height: 2rem;
-          border-radius: 0.22rem 0.42rem 0.42rem 0.22rem;
+          left: 0.44rem;
+          top: 0.4rem;
+          width: 1.34rem;
+          height: 1.72rem;
+          border-radius: 0.2rem 0.36rem 0.36rem 0.2rem;
           background: rgba(250,247,241,0.82);
           border: 1px solid rgba(94,68,42,0.14);
-          box-shadow: inset 0.28rem 0 0 rgba(213,182,85,0.38);
+          box-shadow: inset 0.24rem 0 0 rgba(213,182,85,0.38);
         }
 
         .hero-mini-visual-reading .hero-mini-lines {
           position: absolute;
-          right: 0.54rem;
-          top: 0.72rem;
+          right: 0.48rem;
+          top: 0.62rem;
           display: grid;
-          gap: 0.32rem;
-          width: 2.36rem;
+          gap: 0.26rem;
+          width: 2.04rem;
         }
 
         .hero-mini-visual-reading .hero-mini-lines i {
-          height: 0.28rem;
+          height: 0.24rem;
           border-radius: 999px;
           background: rgba(94,68,42,0.24);
         }
 
-        .hero-entry-row:hover,
-        .hero-entry-row:focus-visible {
-          background: rgba(250,247,241,0.42) !important;
-          transform: translateY(-2px) rotate(0deg) !important;
-          box-shadow: 5px 10px 0 rgba(94,68,42,0.1), 0 18px 34px rgba(94,68,42,0.08) !important;
+        @media (max-width: 980px) {
+          .hero-shell {
+            min-height: auto !important;
+            padding: 1.25rem 1rem 1rem !important;
+          }
+
+          .hero-inner,
+          .hero-layout {
+            width: 100% !important;
+            max-width: calc(100vw - 2rem) !important;
+            overflow-wrap: anywhere;
+          }
+
+          .hero-title {
+            font-size: 2.55rem !important;
+            line-height: 1.04 !important;
+          }
+
+          .hero-entry-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            grid-auto-rows: minmax(100px, auto) !important;
+            gap: 0.52rem !important;
+            width: calc(100vw - 2rem) !important;
+            max-width: calc(100vw - 2rem) !important;
+            box-sizing: border-box;
+          }
+
+          .hero-entry-row {
+            min-width: 0 !important;
+            box-sizing: border-box;
+            padding: 0.56rem !important;
+            min-height: 100px !important;
+            border-radius: 12px !important;
+            transform: none !important;
+          }
+
+          .hero-entry-row-image {
+            padding-right: 0.56rem !important;
+          }
+
+          .hero-entry-row-image img,
+          .hero-mini-visual,
+          .hero-float-deco,
+          .hero-stem-right {
+            display: none !important;
+          }
+
+          .hero-entry-row strong,
+          .hero-entry-row span {
+            overflow-wrap: anywhere;
+          }
+        }
+
+        @media (max-width: 560px) {
+          .hero-scope-strip {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 0.36rem !important;
+          }
+
+          .hero-scope-item {
+            grid-template-columns: 1fr !important;
+            justify-items: center !important;
+            text-align: center !important;
+            padding: 0.42rem 0.32rem !important;
+          }
+
+          .hero-entry-grid {
+            grid-template-columns: 1fr !important;
+          }
+
+          .hero-entry-desc {
+            -webkit-line-clamp: 1 !important;
+          }
+
+          .hero-entry-output-row {
+            display: none !important;
+          }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -750,12 +734,6 @@ export function Hero() {
           .hero-float-deco {
             transition: none !important;
             animation: none !important;
-          }
-        }
-
-        @media (max-width: 860px) {
-          .hero-mini-visual {
-            display: none !important;
           }
         }
       `}</style>
