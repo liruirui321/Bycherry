@@ -116,9 +116,9 @@ export function ArticleLibraryPage() {
                       border: "none",
                       borderLeft: "3px solid rgba(93,140,101,0.5)",
                       borderRadius: 0,
-                      padding: "0.28rem 0.52rem",
+                      padding: "0.3rem 0.52rem",
                       display: "grid",
-                      gridTemplateColumns: "minmax(0, 1fr) minmax(180px, 0.72fr)",
+                      gridTemplateColumns: "minmax(0, 1fr) auto",
                       gap: "0.52rem",
                       alignItems: "center",
                     }}
@@ -126,13 +126,10 @@ export function ArticleLibraryPage() {
                     <span style={{ display: "grid", gap: "0.12rem", minWidth: 0 }}>
                       <span style={{ display: "flex", alignItems: "center", gap: "0.34rem", flexWrap: "wrap" }}>
                         <strong style={{ fontSize: "0.86rem", lineHeight: 1.25, fontWeight: 900 }}>{article.title}</strong>
-                        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.25, fontWeight: 900 }}>{article.label} · {article.readTime} · {article.date}</span>
                       </span>
-                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.34, fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{article.desc}</span>
                     </span>
-                    <span className="article-library-actions" style={{ display: "grid", gap: "0.12rem", color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.28, fontWeight: 800 }}>
-                      <span className="article-library-action-line"><strong style={{ color: "var(--cherry-forest)" }}>先做：</strong>{article.firstAction}</span>
-                      <span className="article-library-output-line"><strong style={{ color: "var(--cherry-warm-brown)" }}>产出：</strong>{article.firstOutput}</span>
+                    <span className="article-library-meta" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.2, fontWeight: 900, whiteSpace: "nowrap" }}>
+                      {article.label} · {article.date}
                     </span>
                   </a>
                 ))}
@@ -158,23 +155,13 @@ export function ArticleLibraryPage() {
 
         @media (max-width: 860px) {
           .article-library-row {
-            grid-template-columns: 1fr !important;
-            gap: 0.18rem !important;
+            grid-template-columns: minmax(0, 1fr) auto !important;
+            gap: 0.34rem !important;
             padding: 0.24rem 0.42rem !important;
           }
 
-          .article-library-actions {
-            display: grid !important;
-            grid-template-columns: 1fr !important;
-            gap: 0.08rem !important;
-          }
-
-          .article-library-action-line,
-          .article-library-output-line {
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
+          .article-library-meta {
+            font-size: 0.62rem !important;
           }
         }
 
