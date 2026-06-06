@@ -1156,6 +1156,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
         width: "100%",
         maxWidth: 1180,
         margin: "0 auto",
+        boxSizing: "border-box",
         overflowX: "hidden",
         scrollMarginTop: 76,
       }}
@@ -1292,7 +1293,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
           </svg>
           <div className="gene-model-boundary-strip" role="note" style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", gap: "0.48rem", alignItems: "start", background: "rgba(250,247,241,0.82)", borderTop: "1px solid rgba(94,68,42,0.12)", padding: "0.52rem 0.68rem", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 850 }}>
             <strong style={{ color: "var(--cherry-forest)", whiteSpace: "nowrap" }}>模型边界</strong>
-            <span>{geneModelBoundaryText}</span>
+            <span style={{ minWidth: 0, overflowWrap: "anywhere" }}>{geneModelBoundaryText}</span>
           </div>
         </div>
 
@@ -1349,6 +1350,25 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
                 </div>
               ))}
             </div>
+            <div className="gene-peptide-readout-strip" role="group" aria-label={`当前多肽链：${peptidePreview}`} style={{ display: "grid", gap: "0.36rem", marginTop: "0.62rem", background: "rgba(169,201,172,0.16)", border: "1px solid rgba(93,140,101,0.18)", borderRadius: 10, padding: "0.48rem 0.52rem" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.5rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 930 }}>
+                <span>多肽链</span>
+                <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>{peptidePreview}</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 0, minHeight: 26 }}>
+                {codons.map((codon, index) => {
+                  const active = index < peptidePreviewCount;
+                  return (
+                    <span key={codon.amino} style={{ display: "inline-flex", alignItems: "center", opacity: active ? 1 : 0.24 }}>
+                      {index > 0 ? <span aria-hidden="true" style={{ width: 16, height: 3, borderRadius: 999, background: "var(--cherry-forest)", opacity: active ? 0.64 : 0.28 }} /> : null}
+                      <span style={{ width: 25, height: 25, borderRadius: 999, display: "inline-grid", placeItems: "center", background: codon.color, border: "1.5px solid rgba(94,68,42,0.16)", color: "var(--cherry-warm-brown)", fontSize: "0.58rem", fontWeight: 950 }}>
+                        {active ? codon.amino : ""}
+                      </span>
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
             <div className="gene-action-row" style={{ display: "flex", gap: 7, flexWrap: "wrap", marginTop: "0.72rem" }}>
               <button type="button" onClick={runExpressionPreset} aria-label="放入所有分子并从头运行表达过程" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.58rem 0.95rem", fontWeight: 900, cursor: "pointer" }}>
                 运行表达
@@ -1382,10 +1402,10 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             ) : null}
           </div>
 
-          <details className="gene-support-pack-details gene-compact-details" style={{ background: "transparent", border: "none", borderRadius: 0, padding: "0.2rem 0", boxShadow: "none" }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>练习与记录</summary>
+          <section className="gene-support-pack-panel" aria-labelledby="gene-support-pack-title" style={{ display: "grid", gap: "0.58rem", minWidth: 0 }}>
+            <h2 id="gene-support-pack-title" style={{ color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.2, fontWeight: 930, margin: 0 }}>练习与记录</h2>
 
-          <details className="gene-compact-details gene-process-focus-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
+          <details open className="gene-compact-details gene-process-focus-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>过程追踪</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, color: "var(--cherry-warm-brown)", fontWeight: 900, flexWrap: "wrap" }}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
@@ -1658,7 +1678,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             </div>
           </div>
           </details>
-          </details>
+          </section>
         </aside>
       </div>
 
@@ -1701,6 +1721,16 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
               padding-right: 1rem !important;
             }
 
+            #gene-expression,
+            #gene-expression .gene-expression-main-grid,
+            #gene-expression .gene-canvas-card,
+            #gene-expression .gene-control-aside {
+              width: 100% !important;
+              max-width: 100% !important;
+              min-width: 0 !important;
+              box-sizing: border-box !important;
+            }
+
             #gene-expression .gene-control-aside {
               gap: 0.52rem !important;
             }
@@ -1717,6 +1747,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             }
 
             #gene-expression .gene-readout-list {
+              grid-template-columns: 1fr !important;
               gap: 0.3rem !important;
             }
 
@@ -1748,16 +1779,16 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             }
 
             #gene-expression .gene-readout-row {
-              grid-template-columns: minmax(0, 1fr) auto !important;
-              gap: 0.44rem !important;
+              grid-template-columns: 1fr !important;
+              gap: 0.14rem !important;
               font-size: 0.72rem !important;
               line-height: 1.25 !important;
               min-height: 0 !important;
             }
 
             #gene-expression .gene-readout-value {
-              text-align: right !important;
-              white-space: nowrap !important;
+              text-align: left !important;
+              white-space: normal !important;
               overflow-wrap: anywhere;
             }
 

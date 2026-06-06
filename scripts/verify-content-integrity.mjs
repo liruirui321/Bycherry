@@ -244,7 +244,8 @@ function verifyWorkDetailCardsStayCompact() {
     const supportPackPattern = new RegExp(`className="${className}[\\s\\S]{0,220}background: "transparent"[\\s\\S]{0,120}border: "none"[\\s\\S]{0,120}boxShadow: "none"`);
     expect(supportPackPattern.test(source), `${className} must stay as a lightweight folded row instead of a framed card.`);
   }
-  expect(/className="gene-support-pack-details[\s\S]{0,220}background: "transparent"[\s\S]{0,120}border: "none"[\s\S]{0,120}boxShadow: "none"/.test(geneSource), "gene-support-pack-details must stay as a lightweight folded row instead of a framed card.");
+  expect(geneSource.includes('className="gene-support-pack-panel"') && geneSource.includes('id="gene-support-pack-title"') && geneSource.includes("<details open className=\"gene-compact-details gene-process-focus-details\""), "Gene expression practice and record tools must be directly visible, with process tracking open by default.");
+  expect(geneSource.includes('className="gene-peptide-readout-strip"') && geneSource.includes("当前多肽链") && geneSource.includes("peptidePreviewCount"), "Gene expression readout must expose a visible bead-chain polypeptide strip.");
   for (const retiredSupportPackCopy of ["说明、可视化与导出 · 7 项", "说明、练习、记录与报告 · 10 项", "记录、复盘与文献 · 6 项", "练习、记录与状态 · 9 项"]) {
     expect(!source.includes(retiredSupportPackCopy) && !geneSource.includes(retiredSupportPackCopy), `Support pack summaries should not expose item-count chrome: ${retiredSupportPackCopy}.`);
   }
@@ -1002,7 +1003,7 @@ function verifyGeneExpressionLearnerContract() {
     expect(!item.pattern.test(geneSource), `Gene expression tool must avoid retired or incorrect copy: ${item.label}`);
   }
 
-  expect(geneSource.includes("#gene-expression .gene-readout-row") && geneSource.includes("grid-template-columns: minmax(0, 1fr) auto !important"), "Gene expression mobile readouts must stay as compact two-column rows.");
+  expect(geneSource.includes("#gene-expression .gene-readout-list") && geneSource.includes("grid-template-columns: 1fr !important") && geneSource.includes("#gene-expression .gene-readout-row") && geneSource.includes("grid-template-columns: 1fr !important") && geneSource.includes("white-space: normal !important"), "Gene expression mobile readouts must stack labels and values so long codon text is not clipped.");
   expect(geneSource.includes("#gene-expression .gene-action-row") && geneSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Gene expression mobile actions must stay as a short three-button row.");
   expect(worksSource.includes('outputs: ["表达读数", "过程记录", "即时小测"]'), "Gene expression work card outputs must include the copyable process record.");
   expect(worksSource.includes('path: ["调节分子", "观察过程", "复制记录"]'), "Gene expression work card path must describe the learner action flow.");
