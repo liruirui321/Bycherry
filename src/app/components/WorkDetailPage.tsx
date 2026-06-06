@@ -5725,7 +5725,7 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
   return (
     <section
       style={{
-        padding: compact ? "0.3rem 1.5rem" : "1.15rem 1.5rem 0.75rem",
+        padding: compact ? "0.22rem 1.5rem" : "1.15rem 1.5rem 0.75rem",
         background: "var(--background)",
         fontFamily: "'Nunito', sans-serif",
         borderBottom: "1px solid rgba(94,68,42,0.1)",
@@ -5760,9 +5760,9 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
           className="work-detail-hero-row"
           style={{
             display: "grid",
-            gridTemplateColumns: compact ? "auto minmax(0, 1fr) auto" : "auto minmax(0, 1fr)",
+            gridTemplateColumns: compact ? "22px minmax(0, 1fr)" : "auto minmax(0, 1fr)",
             alignItems: "center",
-            gap: compact ? "0.48rem" : "0.75rem",
+            gap: compact ? "0.36rem" : "0.75rem",
           }}
         >
           {compact ? (
@@ -5779,15 +5779,15 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: 32,
-                height: 32,
+                width: 22,
+                height: 22,
                 color: "var(--cherry-forest)",
-                background: "var(--card)",
-                border: "1.5px solid var(--border)",
-                borderRadius: 999,
+                background: "transparent",
+                border: "none",
+                borderRadius: 6,
                 textDecoration: "none",
                 fontWeight: 900,
-                fontSize: "1rem",
+                fontSize: "0.86rem",
               }}
             >
               ←
@@ -5862,22 +5862,6 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
               </p>
             )}
           </div>
-          {compact ? (
-            <span
-              style={{
-                background: work.color,
-                color: "var(--cherry-forest)",
-                border: `1px solid ${work.border}`,
-                borderRadius: 999,
-                padding: "0.11rem 0.48rem",
-                fontSize: "0.66rem",
-                fontWeight: 900,
-                whiteSpace: "nowrap",
-              }}
-            >
-              {work.category}
-            </span>
-          ) : null}
         </div>
       </div>
     </section>

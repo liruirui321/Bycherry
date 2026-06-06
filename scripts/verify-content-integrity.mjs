@@ -465,8 +465,9 @@ function verifyWorkJsonLdLearningOutcomes() {
   const primaryToolRenderIndex = workDetailSource.indexOf('id="work-primary-tool"');
   expect(workHeroRenderIndex !== -1 && primaryToolRenderIndex !== -1, "Work detail pages must render title and primary tool.");
   expect(workHeroRenderIndex < primaryToolRenderIndex, "Work detail pages must place the primary product directly after the compact title bar.");
-  expect(workDetailSource.includes('padding: compact ? "0.3rem 1.5rem"') && workDetailSource.includes('gridTemplateColumns: compact ? "auto minmax(0, 1fr) auto"'), "Work detail compact title bar must stay short so the product appears immediately.");
+  expect(workDetailSource.includes('padding: compact ? "0.22rem 1.5rem"') && workDetailSource.includes('gridTemplateColumns: compact ? "22px minmax(0, 1fr)"'), "Work detail compact title bar must stay short so the product appears immediately.");
   expect(workDetailSource.includes("{compact ? null : (") && workDetailSource.includes("{work.tags.map((tag) => (") && !workDetailSource.includes("work.tags.slice(0, compact ? 2"), "Work detail compact title bar must not show multi-tag chrome.");
+  expect(!workDetailSource.includes('padding: "0.11rem 0.48rem"') && !workDetailSource.includes("whiteSpace: \"nowrap\",\n              }}\n            >\n              {work.category}"), "Work detail compact title bar must not show a right-side category pill.");
   for (const retiredWorkArticleBlock of ["pairedArticleSlugsByWorkSlug", "function WorkPairedReading", "配套文章", "work-paired-reading-link", "article.actionSteps[0]", "aria-label={`打开配套文章：${article.title}`", "全部文章 →"]) {
     expect(!workDetailSource.includes(retiredWorkArticleBlock), `Work detail pages should not reintroduce a separate paired-article entrance: ${retiredWorkArticleBlock}.`);
   }
