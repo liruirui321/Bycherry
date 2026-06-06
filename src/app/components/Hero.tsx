@@ -74,7 +74,6 @@ export function Hero() {
     kind: "阅读",
     title: "阅读库",
     href: "/reading",
-    action: "进入阅读库",
     border: "var(--cherry-yellow)",
     color: "var(--cherry-yellow-light)",
     desc: "科研证据、学习方法和 AI 创作工作流文章。",
@@ -89,7 +88,6 @@ export function Hero() {
       kind: work.category,
       title: work.title,
       href: getWorkToolHref(work.href),
-      action: work.action,
       border: work.border,
       color: work.color,
       desc: work.desc,
@@ -218,15 +216,11 @@ export function Hero() {
                         </span>
                       ))}
                     </span>
-                    {entry.featuredImage ? (
-                      <span className="hero-entry-action" style={{ width: "fit-content", background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.42rem 0.72rem", fontSize: "0.74rem", lineHeight: 1.1, fontWeight: 950 }}>{entry.action}</span>
-                    ) : null}
                   </span>
                   {entry.featuredImage ? (
                     <img src={entry.featuredImage} alt="" aria-hidden="true" loading="eager" style={{ width: "100%", height: 72, objectFit: "cover", borderRadius: 12, border: "1.5px solid rgba(250,247,241,0.72)", alignSelf: "end" }} />
                   ) : entry.visualKind ? (
                     <span className="hero-entry-visual-row" aria-hidden="true">
-                      <span className="hero-entry-action" style={{ width: "fit-content", background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.42rem 0.72rem", fontSize: "0.74rem", lineHeight: 1.1, fontWeight: 950 }}>{entry.action}</span>
                       <HeroMiniVisual kind={entry.visualKind} />
                     </span>
                   ) : null}
@@ -295,8 +289,7 @@ export function Hero() {
             border-radius: 14px !important;
           }
 
-          .hero-entry-row-image img,
-          .hero-entry-action {
+          .hero-entry-row-image img {
             display: none !important;
           }
 
