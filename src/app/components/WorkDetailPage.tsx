@@ -2576,7 +2576,7 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             {chapters.map((chapter, index) => {
               const active = activeChapterIndex === index;
               return (
-                <button className="plant-stage-picker-card" key={chapter.title} type="button" aria-label={`查看${chapter.title}：${chapter.innovation}`} aria-pressed={active} onClick={() => choosePlantChapter(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "rgba(250,247,241,0.72)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.36rem", boxShadow: "none", cursor: "pointer", display: "grid", gap: "0.18rem", alignContent: "start" }}>
+                <button className="plant-stage-picker-card" key={chapter.title} type="button" aria-label={`查看${chapter.title}：生存问题是${chapter.challenge}；关键创新是${chapter.innovation}`} aria-pressed={active} onClick={() => choosePlantChapter(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "rgba(250,247,241,0.72)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.42rem", boxShadow: "none", cursor: "pointer", display: "grid", gap: "0.26rem", alignContent: "start" }}>
                   <div style={{ display: "grid", gridTemplateColumns: "26px minmax(0, 1fr)", gap: "0.28rem", alignItems: "center" }}>
                     <span aria-hidden="true" style={{ width: 26, height: 26, borderRadius: 7, background: active ? "rgba(250,247,241,0.86)" : "rgba(250,247,241,0.56)", border: active ? "1.5px solid rgba(58,92,62,0.28)" : "1.5px dashed rgba(94,68,42,0.13)", display: "grid", placeItems: "center", overflow: "hidden" }}>
                       <svg viewBox="-58 -54 116 104" width="28" height="26" fill="none" focusable="false">
@@ -2588,8 +2588,10 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
                       <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.56rem", fontWeight: 900, marginTop: "0.06rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{plantStageLabels[index]}</span>
                     </span>
                   </div>
-                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.64rem", lineHeight: 1.15, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>{chapter.title}</div>
-                  <div className="plant-stage-picker-innovation" style={{ display: "none", color: "var(--cherry-warm-mid)", lineHeight: 1.5, fontSize: "0.74rem", marginBottom: "0.5rem" }}>{chapter.innovation}</div>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.64rem", lineHeight: 1.18, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>{chapter.title}</div>
+                  <div className="plant-stage-picker-innovation" style={{ display: "-webkit-box", color: "var(--cherry-warm-mid)", lineHeight: 1.34, fontSize: "0.64rem", fontWeight: 820, overflow: "hidden", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                    压力：{chapter.challenge} → 创新：{chapter.innovation}
+                  </div>
                   <div className="plant-stage-picker-refs" style={{ display: "none", gap: 5, flexWrap: "wrap" }}>
                     {chapter.refs.map((ref) => (
                       <span key={ref} style={{ background: "rgba(250,247,241,0.78)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.15rem 0.45rem", color: "var(--cherry-forest)", fontWeight: 900, fontSize: "0.65rem" }}>
