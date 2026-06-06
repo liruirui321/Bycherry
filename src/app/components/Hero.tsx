@@ -136,20 +136,27 @@ export function Hero() {
         boxSizing: "border-box",
         background: "#F7F5EF",
         display: "grid",
-        alignItems: "start",
+        alignItems: "center",
       }}
     >
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
         <div className="hero-technical-grid" style={{ position: "absolute", inset: "0 0 auto 0", height: 260, opacity: 0.62 }} />
+        <div className="hero-soft-blob hero-soft-blob-sage" />
+        <div className="hero-soft-blob hero-soft-blob-yellow" />
+        <div className="hero-soft-blob hero-soft-blob-blue" />
+        <div className="hero-soft-blob hero-soft-blob-peach" />
         <div style={{ position: "absolute", width: "44vw", maxWidth: 620, height: 1, background: "rgba(58,92,62,0.18)", right: "2rem", top: "6.4rem" }} />
         <div style={{ position: "absolute", width: "34vw", maxWidth: 460, height: 1, background: "rgba(122,175,200,0.24)", left: "2rem", bottom: "2.6rem" }} />
+        <div className="hero-dot-field" style={{ position: "absolute", width: 128, height: 112, left: "0.8rem", top: "6.1rem", opacity: 0.16 }} />
         <div className="hero-dot-field" style={{ position: "absolute", width: 148, height: 120, right: "3.2rem", bottom: "2rem", opacity: 0.18 }} />
+        <div className="hero-stem hero-stem-left" />
+        <div className="hero-stem hero-stem-right" />
       </div>
 
       <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1320, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
-        <div className="hero-layout" style={{ display: "grid", gap: "0.82rem", alignItems: "start" }}>
-          <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.42rem" }}>
-            <div style={{ display: "grid", gap: "0.42rem", minWidth: 0 }}>
+        <div className="hero-layout" style={{ display: "grid", gridTemplateColumns: "minmax(320px, 0.72fr) minmax(0, 1.28fr)", gap: "1.6rem", alignItems: "center" }}>
+          <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "1.05rem", alignContent: "center" }}>
+            <div style={{ display: "grid", gap: "0.74rem", minWidth: 0 }}>
               <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px solid rgba(58,92,62,0.22)", borderRadius: 999, padding: "0.28rem 0.68rem", color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 850, background: "rgba(250,247,241,0.72)", letterSpacing: 0 }}>
                 <IconBranch size={13} color="var(--cherry-forest)" />
                 By Cherry · Science Tools
@@ -159,19 +166,23 @@ export function Hero() {
               className="hero-title"
               style={{
                 fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-                fontSize: "clamp(1.7rem, 2.9vw, 2.85rem)",
+                fontSize: "clamp(2.8rem, 5.2vw, 5.25rem)",
                 fontWeight: 900,
-                lineHeight: 1.08,
+                lineHeight: 1.04,
                 color: "var(--cherry-warm-brown)",
                 margin: "0",
                 letterSpacing: 0,
                 overflowWrap: "anywhere",
               }}
             >
-              科学学习工作台
+              <span style={{ color: "var(--cherry-red)", textDecoration: "underline", textDecorationColor: "var(--cherry-peach)", textDecorationThickness: "0.08em", textUnderlineOffset: "0.12em" }}>Science</span>
+              <br />
+              learning
+              <br />
+              <span style={{ color: "var(--cherry-blue)" }}>AI</span>
             </h1>
-            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "0.96rem", lineHeight: 1.55, fontWeight: 760, maxWidth: 780 }}>
-              首屏直接进入模拟、概念解释、科研学习和阅读库；点开就是可操作内容。
+            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.5vw, 1.18rem)", lineHeight: 1.72, fontWeight: 760, maxWidth: 520 }}>
+              科学模拟、科研阅读和 AI 学习工具，打开后直接操作、记录和复盘。
             </p>
             </div>
           </div>
@@ -269,6 +280,86 @@ export function Hero() {
           background-size: 22px 22px;
         }
 
+        .hero-soft-blob {
+          position: absolute;
+          border-radius: 58% 42% 52% 48% / 46% 58% 42% 54%;
+          filter: blur(1px);
+          opacity: 0.34;
+        }
+
+        .hero-soft-blob-sage {
+          width: min(34vw, 540px);
+          height: 300px;
+          right: 3%;
+          top: 7%;
+          background: var(--cherry-sage-light);
+        }
+
+        .hero-soft-blob-yellow {
+          width: min(28vw, 420px);
+          height: 230px;
+          left: 2%;
+          bottom: 7%;
+          background: var(--cherry-yellow-light);
+        }
+
+        .hero-soft-blob-blue {
+          width: min(24vw, 360px);
+          height: 220px;
+          right: 14%;
+          bottom: 12%;
+          background: var(--cherry-blue-light);
+        }
+
+        .hero-soft-blob-peach {
+          width: min(18vw, 280px);
+          height: 180px;
+          left: 5%;
+          top: 22%;
+          background: var(--cherry-peach-light);
+        }
+
+        .hero-stem {
+          position: absolute;
+          width: 58px;
+          height: 86px;
+          opacity: 0.44;
+        }
+
+        .hero-stem::before {
+          content: "";
+          position: absolute;
+          left: 28px;
+          bottom: 0;
+          width: 2px;
+          height: 76px;
+          border-radius: 999px;
+          background: var(--cherry-forest);
+        }
+
+        .hero-stem::after {
+          content: "";
+          position: absolute;
+          left: 8px;
+          top: 24px;
+          width: 28px;
+          height: 38px;
+          border-radius: 80% 20% 70% 30%;
+          background: var(--cherry-sage);
+          transform: rotate(-24deg);
+        }
+
+        .hero-stem-left {
+          left: 2rem;
+          bottom: 0;
+        }
+
+        .hero-stem-right {
+          right: 1.8rem;
+          bottom: 0.3rem;
+          transform: scaleX(-1);
+        }
+
         @media (max-width: 860px) {
           .hero-shell {
             min-height: auto !important;
@@ -291,7 +382,7 @@ export function Hero() {
           }
 
           .hero-title {
-            font-size: 2rem !important;
+            font-size: 2.6rem !important;
             line-height: 1.02 !important;
           }
 
