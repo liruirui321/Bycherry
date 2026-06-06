@@ -601,6 +601,12 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "learner review grid", text: "research-review-grid" },
     { label: "API learner review contract", text: "learner_review" },
     { label: "research record learner review section", text: "九、我的复核记录" },
+    { label: "visible research start path", text: "本次阅读路径" },
+    { label: "research start path data", text: "researchStartPath" },
+    { label: "research start path class", text: "research-start-path-strip" },
+    { label: "research start path evidence step", text: "抽证据" },
+    { label: "research start path citation step", text: "核引用" },
+    { label: "research start path record step", text: "留记录" },
     { label: "compact route grid", text: "research-prompt-route-grid" },
     { label: "compact route button", text: "research-prompt-route-button" },
     { label: "compact route hidden input", text: "research-prompt-route-input" },
@@ -631,6 +637,7 @@ function verifyResearchAgentWorkbenchContract() {
   expect(promptKitSource.includes("min-height: 84px !important") && !promptKitSource.includes("min-height: 104px !important"), "Research Agent mobile material textarea must not be stretched into a tall default frame.");
   expect(!researchReviewSource.includes("minHeight: 154") && researchReviewSource.includes("minHeight: 54"), "Research Agent learner review fields must not use fixed tall card heights.");
   expect(promptKitSource.includes('className="research-agent-preview-panel"') && promptKitSource.includes('background: hasRunPreview ? "var(--cherry-sage-light)" : "transparent"') && promptKitSource.includes('padding: hasRunPreview ? "0.68rem" : 0') && !promptKitSource.includes("点击运行后，这里会显示材料状态、证据边界和下一步分析顺序。"), "Research Agent local preview must not render an empty default result card before the learner runs it.");
+  expect(promptKitSource.includes("#prompt-kit-builder .research-start-path-strip") && promptKitSource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"') && promptKitSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "Research Agent visible start path must stay compact across desktop and mobile.");
 
   for (const item of retiredWorkbenchPatterns) {
     expect(!item.pattern.test(promptKitSource), `Research Agent workbench contains retired copy: ${item.label}`);

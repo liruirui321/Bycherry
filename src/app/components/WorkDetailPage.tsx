@@ -610,7 +610,7 @@ ${visibleEvidenceLines.length ? visibleEvidenceLines.map((line, index) => `${ind
 ${missingFields.length ? missingFields.map((field, index) => `${index + 1}. ${field}`).join("\n") : "当前材料具备初步分析线索，仍需回查原文来源。"}
 
 四、风险标记
-${acceptanceChecks.map((item, index) => `${index + 1}. ${item.label}：${item.passed ? "通过" : "待补"}。${item.detail}`).join("\n")}
+${acceptanceChecks.map((item, index) => `${index + 1}. ${item.label}：${item.passed ? "通过" : "待填写"}。${item.detail}`).join("\n")}
 
 五、引用核查
 ${citationAuditItems.map((item, index) => `${index + 1}. ${item.label}：${item.status}。${item.action}`).join("\n")}
@@ -803,6 +803,12 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
     { label: "模式", body: activeMode.title, color: "var(--cherry-yellow-light)" },
     { label: "质控", body: `${activePrompt.checks.length} 项检查`, color: "var(--cherry-sage-light)" },
     { label: "任务包", body: `${activePrompt.output.length} 个栏目`, color: "var(--cherry-peach-light)" },
+  ];
+  const researchStartPath = [
+    { label: "判断任务", body: `${suggestedRoute.title} · 置信度${routeConfidence}`, color: "var(--cherry-blue-light)" },
+    { label: "抽证据", body: visibleEvidenceLines.length ? `${visibleEvidenceLines.length} 条候选材料行` : "先填材料行", color: "var(--cherry-sage-light)" },
+    { label: "核引用", body: citationAuditItems.filter((item) => item.status === "已出现").length ? `${citationAuditItems.filter((item) => item.status === "已出现").length}/4 项已出现` : "先填来源标识", color: "var(--cherry-yellow-light)" },
+    { label: "留记录", body: `复核记录 ${learnerResearchReviewScore}/4`, color: "var(--cherry-peach-light)" },
   ];
   const finalPrompt = `${activePrompt.text}
 
@@ -1136,6 +1142,18 @@ ${localPreviewOutput}`;
               </div>
             </div>
 
+            <div className="research-start-path-strip" role="list" aria-label="本次阅读路径" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem", marginBottom: "0.62rem" }}>
+              {researchStartPath.map((item, index) => (
+                <div className="research-start-path-card" key={item.label} role="listitem" style={{ background: item.color, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.52rem", display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.42rem", alignItems: "start", minHeight: 68 }}>
+                  <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+                  <span style={{ display: "grid", gap: "0.14rem", minWidth: 0 }}>
+                    <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.2 }}>{item.label}</strong>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 800 }}>{item.body}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
+
             <details className="research-agent-workflow-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.56rem", marginBottom: "0.62rem" }}>
               <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>流程、练习与复核 · 3 项</summary>
 
@@ -1255,7 +1273,7 @@ ${localPreviewOutput}`;
                     <span style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem", alignItems: "start" }}>
                       <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>{field.label}</strong>
                       <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.66rem", fontWeight: 900, whiteSpace: "nowrap" }}>
-                        {field.pass ? "可写入" : "待补"}
+                        {field.pass ? "可写入" : "待填写"}
                       </span>
                     </span>
                     <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 800 }}>{field.prompt}</span>
@@ -1399,7 +1417,7 @@ ${localPreviewOutput}`;
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.48rem" }}>
                       {acceptanceChecks.map((item) => (
                         <div key={item.label} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.58rem" }}>
-                          <strong style={{ display: "block", color: item.passed ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.72rem", marginBottom: "0.24rem" }}>{item.passed ? "通过" : "待补"} · {item.label}</strong>
+                          <strong style={{ display: "block", color: item.passed ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.72rem", marginBottom: "0.24rem" }}>{item.passed ? "通过" : "待填写"} · {item.label}</strong>
                           <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.5, fontWeight: 800 }}>{item.detail}</span>
                         </div>
                       ))}
@@ -1685,7 +1703,8 @@ ${localPreviewOutput}`;
             }
 
             #prompt-kit-builder .research-agent-status-strip,
-            #prompt-kit-builder .research-agent-check-strip {
+            #prompt-kit-builder .research-agent-check-strip,
+            #prompt-kit-builder .research-start-path-strip {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
 
