@@ -762,9 +762,14 @@ function verifyConceptExplainerAgentContract() {
   const conceptInputModeSource = conceptSource.slice(conceptSource.indexOf('className="concept-input-mode-grid"'), conceptSource.indexOf('className="concept-agent-input-grid"'));
   const conceptSupportSource = conceptSource.slice(conceptSource.indexOf('className="concept-support-pack-details"'), conceptSource.indexOf('className="concept-full-explanation-details"'));
   const conceptRecordSource = conceptSource.slice(conceptSource.indexOf('className="concept-understanding-record-details"'), conceptSource.indexOf('className="concept-save-actions concept-responsive-grid"'));
+  const conceptSelfAuditOutputSource = conceptSource.slice(conceptSource.indexOf("const selfAuditOutput"), conceptSource.indexOf("const lessonOutput"));
+  const conceptInputQualitySource = conceptSource.slice(conceptSource.indexOf("const conceptInputQuality"), conceptSource.indexOf("const conceptAgentCards"));
   expect(!conceptInputModeSource.includes("minHeight: 104") && conceptInputModeSource.includes('padding: "0.46rem"'), "Concept explainer input mode preset buttons must not use fixed tall card heights.");
   expect(!conceptSupportSource.includes('boxShadow: "3px 5px') && !conceptSupportSource.includes("borderRadius: 18"), "Concept explainer support folds must stay light instead of thick sticky-note panels.");
   expect(conceptRecordSource.includes("minHeight: 84") && !conceptRecordSource.includes("minHeight: 112") && conceptRecordSource.includes('padding: "0.6rem"'), "Concept explainer learner record inputs must stay compact.");
+  expect(conceptInputQualitySource.includes("待填写") && !conceptInputQualitySource.includes("待补充"), "Concept explainer input quality statuses must read as user input state, not unfinished site content.");
+  expect(conceptRecordSource.includes("待填写") && !conceptRecordSource.includes("待补充"), "Concept explainer learner record status must read as user input state.");
+  expect(conceptSelfAuditOutputSource.includes("待完善") && !conceptSelfAuditOutputSource.includes('field.pass ? "可用" : "待补充"'), "Concept explainer copied self-audit record must use improvement language.");
   const fullExplanationSource = conceptSource.slice(conceptSource.indexOf('className="concept-full-explanation-details"'), conceptSource.indexOf('className="concept-lesson-output-details"'));
   expect(/className="concept-full-explanation-details"[\s\S]{0,220}borderRadius: 12[\s\S]{0,120}padding: "0\.68rem"[\s\S]{0,160}boxShadow: "0 8px 18px/.test(conceptSource), "Concept explainer full explanation fold must stay visually compact.");
   expect(!conceptSource.includes('borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)"'), "Concept explainer full explanation content must not return to oversized heavy cards.");

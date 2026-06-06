@@ -3277,12 +3277,12 @@ function ConceptExplainerContent() {
   const conceptInputQuality = [
     {
       label: "概念",
-      status: conceptInput.trim().length >= 2 ? "已填写" : "待补充",
+      status: conceptInput.trim().length >= 2 ? "已填写" : "待填写",
       detail: conceptInput.trim().length >= 2 ? conceptInput.trim() : "至少写出一个具体名词或短语。",
     },
     {
       label: "当前水平",
-      status: audience.trim().length >= 2 ? "已填写" : "待补充",
+      status: audience.trim().length >= 2 ? "已填写" : "待填写",
       detail: audience.trim().length >= 2 ? audience.trim() : "写出你现在的学习背景或章节位置。",
     },
     {
@@ -3574,7 +3574,7 @@ ${understandingChecks.map((item, index) => `${index + 1}. ${item.title}
 
 我的填写记录
 完成度：${learnerAuditScore}/4
-${learnerAuditFields.map((field, index) => `${index + 1}. ${field.title}：${field.pass ? "可用" : "待补充"}｜${field.passText}`).join("\n")}
+${learnerAuditFields.map((field, index) => `${index + 1}. ${field.title}：${field.pass ? "可用" : "待完善"}｜${field.passText}`).join("\n")}
 
 证据边界
 ${contextualEvidenceBoundary}`;
@@ -4098,7 +4098,7 @@ If any of these are missing, add them before the final answer.
             <label key={field.id} htmlFor={field.id} style={{ background: field.pass ? "var(--cherry-sage-light)" : index % 2 === 0 ? "var(--cherry-yellow-light)" : "var(--cherry-blue-light)", border: field.pass ? "1.5px solid rgba(93,140,101,0.24)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.6rem", display: "grid", gap: "0.38rem", alignContent: "start" }}>
               <span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.6rem" }}>
                 <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{field.title}</strong>
-                <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>{field.pass ? "可用" : "待补充"}</span>
+                <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>{field.pass ? "可用" : "待填写"}</span>
               </span>
               <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 800 }}>{field.prompt}</span>
               <textarea
