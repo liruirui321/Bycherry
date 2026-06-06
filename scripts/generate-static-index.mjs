@@ -99,43 +99,12 @@ function buildJsonLd(routes) {
 
 function listItems(routes) {
   return routes.map((route) => {
-    const pathSteps = route.pathSteps?.length
-      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">学习路径：${route.pathSteps.map(escapeHtml).join(" → ")}</div>`
-      : "";
-    const task = route.task
-      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">操作内容：${escapeHtml(route.task)}</div>`
-      : "";
-    const starter = route.starter
-      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">先做这个：${escapeHtml(route.starter)}</div>`
-      : "";
-    const success = route.success
-      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">完成标准：${escapeHtml(route.success)}</div>`
-      : "";
-    const workOutputs = route.outputs?.length
-      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">可保存产出：${route.outputs.map(escapeHtml).join(" / ")}</div>`
-      : "";
-    const firstAction = route.firstAction
-      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">先做这个：${escapeHtml(route.firstAction)}</div>`
-      : "";
-    const firstCheck = route.firstCheck
-      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">完成后检查：${escapeHtml(route.firstCheck)}</div>`
-      : "";
-    const firstOutput = route.firstOutput
-      ? `              <div style="font-size: 0.92rem; margin-top: 0.2rem;">可保存产出：${escapeHtml(route.firstOutput)}</div>`
-      : "";
+    const label = route.type === "work" ? route.category : route.type === "research" ? "科研证据" : "学习方法";
 
     return [
-      `            <li style="margin-bottom: 0.9rem;">`,
+      `            <li style="margin-bottom: 0.35rem; display: flex; align-items: baseline; gap: 0.55rem; flex-wrap: wrap;">`,
       `              <a href="${escapeHtml(route.path)}">${escapeHtml(route.title)}</a>`,
-      `              <p style="margin: 0.2rem 0 0; color: #73583b;">${escapeHtml(route.description)}</p>`,
-      task,
-      starter,
-      success,
-      workOutputs,
-      firstAction,
-      firstCheck,
-      firstOutput,
-      pathSteps,
+      `              <span style="font-size: 0.82rem; color: #73583b;">${escapeHtml(label)}</span>`,
       "            </li>",
     ].filter(Boolean).join("\n");
   }).join("\n");
@@ -149,7 +118,7 @@ function buildNoscript(routes) {
     "      <noscript>",
     "        <main style=\"font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 760px; margin: 0 auto; padding: 2rem 1.25rem; color: #5e442a; line-height: 1.7;\">",
     "          <h1 style=\"font-size: 2rem; line-height: 1.2; margin: 0 0 0.75rem;\">By Cherry</h1>",
-    `          <p>${escapeHtml(siteDescription)}当前浏览器没有启用 JavaScript，下面保留了工具、项目和文章列表。</p>`,
+    `          <p>${escapeHtml(siteDescription)}当前浏览器没有启用 JavaScript，下面保留短目录链接。</p>`,
     "          <h2 style=\"font-size: 1.2rem; margin-top: 1.5rem;\">工具与项目</h2>",
     "          <ul>",
     listItems(works),
