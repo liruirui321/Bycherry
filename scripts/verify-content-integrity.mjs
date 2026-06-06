@@ -655,6 +655,10 @@ function verifyResearchAgentWorkbenchContract() {
   expect(promptKitSource.includes('className="research-agent-preview-panel"') && promptKitSource.includes('background: hasRunPreview ? "var(--cherry-sage-light)" : "transparent"') && promptKitSource.includes('padding: hasRunPreview ? "0.68rem" : 0') && !promptKitSource.includes("点击运行后，这里会显示材料状态、证据边界和下一步分析顺序。"), "Research Agent local preview must not render an empty default result card before the learner runs it.");
   expect(promptKitSource.includes("#prompt-kit-builder .research-start-path-strip") && promptKitSource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"') && promptKitSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "Research Agent visible start path must stay compact across desktop and mobile.");
   expect(promptKitSource.includes("#prompt-kit-builder .research-material-gate-strip") && promptKitSource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"') && promptKitSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "Research Agent material gate must stay compact across desktop and mobile.");
+  for (const retiredResearchSummaryChrome of ["流程、练习与复核 ·", "任务路由建议 ·", "我的复核记录 ·", "生成指令、质控与任务包 ·", "进阶设置 ·"]) {
+    expect(!promptKitSource.includes(retiredResearchSummaryChrome), `Research Agent summaries should stay short and not expose status chrome: ${retiredResearchSummaryChrome}.`);
+  }
+  expect(promptKitSource.includes("{suggestedRoute.title}") && promptKitSource.includes("{routeConfidence}") && promptKitSource.includes("填写完成度 {learnerResearchReviewScore}/4"), "Research Agent expanded panels must keep route and learner-review status after summary chrome is removed.");
 
   for (const item of retiredWorkbenchPatterns) {
     expect(!item.pattern.test(promptKitSource), `Research Agent workbench contains retired copy: ${item.label}`);

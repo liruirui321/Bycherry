@@ -1196,7 +1196,7 @@ ${localPreviewOutput}`;
             </div>
 
             <details className="research-agent-workflow-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.56rem", marginBottom: "0.62rem" }}>
-              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>流程、练习与复核 · 3 项</summary>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>流程、练习与复核</summary>
 
             <details className="prompt-workflow-details" style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem", marginBottom: "0.9rem" }}>
               <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem", cursor: "pointer" }}>任务流程</summary>
@@ -1267,7 +1267,7 @@ ${localPreviewOutput}`;
             </details>
 
             <details className="research-route-suggestion-details" style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.62rem", marginBottom: "0.9rem" }}>
-              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>任务路由建议 · {suggestedRoute.title} · {routeConfidence}</summary>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>任务路由建议</summary>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
                 <div>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>任务路由建议</div>
@@ -1296,7 +1296,7 @@ ${localPreviewOutput}`;
             </details>
 
             <details className="research-review-details" style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 8, padding: "0.62rem", marginBottom: "0.9rem" }}>
-              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>我的复核记录 · {learnerResearchReviewScore}/4</summary>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>我的复核记录</summary>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
                 <div>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>我的复核记录</div>
@@ -1505,7 +1505,7 @@ ${localPreviewOutput}`;
             </div>
 
             <details className="research-agent-output-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem" }}>
-              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>生成指令、质控与任务包 · 3 项</summary>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>生成指令、质控与任务包</summary>
 
             <details className="research-agent-prompt-preview-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 8, padding: "0.62rem", marginTop: "0.62rem" }}>
               <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>生成指令预览</summary>
@@ -1559,7 +1559,7 @@ ${localPreviewOutput}`;
       </div>
 
       <details className="research-agent-reference-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>进阶设置 · 路由、接入、协议</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>进阶设置</summary>
         <details className="research-agent-status-details research-agent-compact-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
           <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>版本状态与接入边界</summary>
           <div className="research-agent-status-strip" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.48rem" }}>
