@@ -1,8 +1,72 @@
 import type { MouseEvent } from "react";
 import { works } from "./Works";
-import { IconBook, IconBranch, IconSparkle } from "./Icons";
+import { IconBook, IconBranch } from "./Icons";
 import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
+
+type HeroVisualKind =
+  | "gene-expression"
+  | "research-prompt-kit"
+  | "concept-explainer"
+  | "crispr-interactive";
+
+function HeroMiniVisual({ kind }: { kind: HeroVisualKind }) {
+  if (kind === "gene-expression") {
+    return (
+      <span className="hero-mini-visual hero-mini-visual-gene" aria-hidden="true">
+        <span className="hero-mini-dna">
+          {["A", "T", "G", "C"].map((base, index) => (
+            <span key={`${base}-${index}`}>{base}</span>
+          ))}
+        </span>
+        <span className="hero-mini-rna" />
+        <span className="hero-mini-ribosome" />
+        <span className="hero-mini-chain">
+          {[0, 1, 2, 3].map((dot) => (
+            <i key={dot} />
+          ))}
+        </span>
+      </span>
+    );
+  }
+
+  if (kind === "research-prompt-kit") {
+    return (
+      <span className="hero-mini-visual hero-mini-visual-research" aria-hidden="true">
+        <span className="hero-mini-paper">
+          <i />
+          <i />
+          <i />
+        </span>
+        <span className="hero-mini-checklist">
+          <i />
+          <i />
+          <i />
+        </span>
+      </span>
+    );
+  }
+
+  if (kind === "concept-explainer") {
+    return (
+      <span className="hero-mini-visual hero-mini-visual-concept" aria-hidden="true">
+        <span>定义</span>
+        <i />
+        <span>机制</span>
+        <i />
+        <span>迁移</span>
+      </span>
+    );
+  }
+
+  return (
+    <span className="hero-mini-visual hero-mini-visual-crispr" aria-hidden="true">
+      <span className="hero-mini-guide" />
+      <span className="hero-mini-cas" />
+      <span className="hero-mini-cut" />
+    </span>
+  );
+}
 
 export function Hero() {
   const entries = works.map((work) => ({
@@ -18,6 +82,7 @@ export function Hero() {
       outputs: work.outputs,
       updated: work.updated,
       featuredImage: work.slug === "plant-evolution-stories" ? "/illustrations/plant-evolution-story.webp" : null,
+      visualKind: work.slug === "plant-evolution-stories" ? null : (work.slug as HeroVisualKind),
   }));
   const readingEntry = {
     href: "/reading",
@@ -35,70 +100,68 @@ export function Hero() {
       className="hero-shell"
       aria-labelledby="hero-heading"
       style={{
-        fontFamily: "'Nunito', sans-serif",
+        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         minHeight: "calc(100vh - 50px)",
         position: "relative",
         overflow: "hidden",
-        padding: "1.35rem 1.5rem 1.2rem",
+        padding: "1.05rem 1.5rem 1rem",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
-        background: "var(--background)",
+        background: "#F7F5EF",
         display: "grid",
         alignItems: "center",
       }}
     >
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
-        <div style={{ position: "absolute", width: 520, height: 360, borderRadius: "50%", background: "rgba(169,201,172,0.28)", right: "-6rem", top: "5.8rem", transform: "rotate(-12deg)" }} />
-        <div style={{ position: "absolute", width: 340, height: 220, borderRadius: "50%", background: "rgba(221,185,90,0.18)", left: "-5rem", bottom: "0.8rem" }} />
-        <div className="hero-dot-field" style={{ position: "absolute", width: 160, height: 170, right: "3.2rem", bottom: "2.6rem", opacity: 0.38 }} />
+        <div className="hero-technical-grid" style={{ position: "absolute", inset: "0 0 auto 0", height: 260, opacity: 0.62 }} />
+        <div style={{ position: "absolute", width: "44vw", maxWidth: 620, height: 1, background: "rgba(58,92,62,0.18)", right: "2rem", top: "7.2rem" }} />
+        <div style={{ position: "absolute", width: "34vw", maxWidth: 460, height: 1, background: "rgba(122,175,200,0.24)", left: "2rem", bottom: "3.4rem" }} />
+        <div className="hero-dot-field" style={{ position: "absolute", width: 148, height: 120, right: "3.2rem", bottom: "2.6rem", opacity: 0.22 }} />
       </div>
 
       <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1320, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
         <div className="hero-layout" style={{ display: "grid", gridTemplateColumns: "minmax(310px, 0.72fr) minmax(0, 1.28fr)", gap: "1.6rem", alignItems: "center" }}>
           <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "1.05rem", alignContent: "center" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 9, width: "fit-content", border: "2px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 1rem", color: "var(--cherry-warm-brown)", fontSize: "0.86rem", fontWeight: 900, background: "rgba(250,247,241,0.62)" }}>
-              <IconSparkle size={15} color="var(--cherry-yellow)" />
-              By Cherry
-              <IconSparkle size={15} color="var(--cherry-yellow)" />
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 9, width: "fit-content", border: "1.5px solid rgba(58,92,62,0.26)", borderRadius: 999, padding: "0.4rem 0.9rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 850, background: "rgba(250,247,241,0.76)", letterSpacing: 0 }}>
+              <IconBranch size={15} color="var(--cherry-forest)" />
+              By Cherry · Science Tools
             </div>
             <h1
               id="hero-heading"
               className="hero-title"
               style={{
-                fontFamily: "'Nunito', sans-serif",
-                fontSize: "clamp(3rem, 5.2vw, 5.9rem)",
-                fontWeight: 950,
-                lineHeight: 0.98,
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                fontSize: "clamp(2.7rem, 4.7vw, 4.85rem)",
+                fontWeight: 900,
+                lineHeight: 1.06,
                 color: "var(--cherry-warm-brown)",
                 margin: "0",
                 letterSpacing: 0,
                 overflowWrap: "anywhere",
               }}
             >
-              science,
+              科学学习
               <br />
-              learning
-              <br />
-              <span style={{ color: "var(--cherry-blue)" }}>& AI</span>
+              <span style={{ color: "var(--cherry-forest)" }}>工作台</span>
             </h1>
-            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1.08rem, 2vw, 1.42rem)", lineHeight: 1.65, fontWeight: 850 }}>
-              科学模拟、学习工具和笔记入口，打开后直接操作、记录和复盘。
+            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.55vw, 1.2rem)", lineHeight: 1.72, fontWeight: 760, maxWidth: 520 }}>
+              科学模拟、AI 学习工具和科研札记集中在首屏。点开就是可操作页面、记录表和复盘产出。
             </p>
             <div className="hero-primary-links" style={{ display: "flex", gap: "0.8rem", flexWrap: "wrap" }}>
-              <a href="#works" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.86rem 1.24rem", textDecoration: "none", fontWeight: 950, boxShadow: "0 8px 0 rgba(58,92,62,0.16)" }}>
+              <a href="#works" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.8rem 1.12rem", textDecoration: "none", fontWeight: 880, boxShadow: "0 8px 18px rgba(58,92,62,0.16)" }}>
                 <IconBranch size={20} color="#FAF7F1" />
-                浏览内容目录
+                查看内容
               </a>
               <a
                 href={readingEntry.href}
                 onClick={(event) => openEntry(readingEntry.href, event)}
                 onMouseEnter={() => preloadRouteForHref(readingEntry.href)}
                 onFocus={() => preloadRouteForHref(readingEntry.href)}
-                style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "rgba(250,247,241,0.7)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.86rem 1.1rem", textDecoration: "none", fontWeight: 950 }}
+                style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "rgba(250,247,241,0.78)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.8rem 1rem", textDecoration: "none", fontWeight: 880 }}
               >
                 <IconBook size={19} color="var(--cherry-yellow)" />
-                读读笔记
+                科研札记
               </a>
             </div>
           </div>
@@ -166,6 +229,8 @@ export function Hero() {
                   </span>
                   {entry.featuredImage ? (
                     <img src={entry.featuredImage} alt="" aria-hidden="true" loading="eager" style={{ width: "100%", height: 168, objectFit: "cover", borderRadius: 16, border: "1.5px solid rgba(250,247,241,0.72)", alignSelf: "end" }} />
+                  ) : entry.visualKind ? (
+                    <HeroMiniVisual kind={entry.visualKind} />
                   ) : null}
                 </a>
               ))}
@@ -175,6 +240,14 @@ export function Hero() {
       </div>
 
       <style>{`
+        .hero-technical-grid {
+          background:
+            linear-gradient(rgba(58,92,62,0.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(58,92,62,0.07) 1px, transparent 1px);
+          background-size: 42px 42px;
+          mask-image: linear-gradient(to bottom, rgba(0,0,0,0.72), transparent);
+        }
+
         .hero-dot-field {
           background-image: radial-gradient(circle, rgba(94,68,42,0.22) 2px, transparent 2px);
           background-size: 22px 22px;
@@ -260,6 +333,187 @@ export function Hero() {
           transition: color 0.18s ease, background 0.18s ease;
         }
 
+        .hero-mini-visual {
+          position: absolute;
+          right: 0.55rem;
+          bottom: 0.5rem;
+          width: 5.7rem;
+          height: 3.7rem;
+          border: 1px solid rgba(94,68,42,0.1);
+          border-radius: 16px;
+          background: rgba(250,247,241,0.48);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
+          pointer-events: none;
+          z-index: 1;
+        }
+
+        .hero-entry-row > span:first-child {
+          position: relative;
+          z-index: 2;
+        }
+
+        .hero-mini-visual-gene .hero-mini-dna {
+          position: absolute;
+          left: 0.42rem;
+          top: 0.48rem;
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0.12rem;
+          width: 4.8rem;
+        }
+
+        .hero-mini-visual-gene .hero-mini-dna span {
+          display: grid;
+          place-items: center;
+          width: 1rem;
+          height: 1rem;
+          border-radius: 999px;
+          background: rgba(95,145,115,0.18);
+          color: var(--cherry-forest);
+          font-size: 0.42rem;
+          font-weight: 950;
+        }
+
+        .hero-mini-visual-gene .hero-mini-rna {
+          position: absolute;
+          left: 0.74rem;
+          top: 1.9rem;
+          width: 3.4rem;
+          height: 1.1rem;
+          border-bottom: 3px solid var(--cherry-blue);
+          border-radius: 0 0 80% 70%;
+          transform: rotate(-7deg);
+        }
+
+        .hero-mini-visual-gene .hero-mini-ribosome {
+          position: absolute;
+          right: 1rem;
+          bottom: 0.72rem;
+          width: 1.18rem;
+          height: 0.82rem;
+          border-radius: 999px 999px 0.7rem 0.7rem;
+          background: rgba(94,68,42,0.54);
+        }
+
+        .hero-mini-visual-gene .hero-mini-chain {
+          position: absolute;
+          right: 0.42rem;
+          bottom: 1.48rem;
+          display: flex;
+          gap: 0.12rem;
+          transform: rotate(-22deg);
+        }
+
+        .hero-mini-visual-gene .hero-mini-chain i {
+          width: 0.36rem;
+          height: 0.36rem;
+          border-radius: 999px;
+          background: var(--cherry-red);
+        }
+
+        .hero-mini-visual-research .hero-mini-paper {
+          position: absolute;
+          left: 0.55rem;
+          top: 0.46rem;
+          width: 2.3rem;
+          height: 2.72rem;
+          border-radius: 0.42rem;
+          background: rgba(255,255,255,0.72);
+          border: 1px solid rgba(94,68,42,0.13);
+          display: grid;
+          gap: 0.18rem;
+          align-content: center;
+          padding: 0.32rem;
+        }
+
+        .hero-mini-visual-research .hero-mini-paper i {
+          height: 0.22rem;
+          border-radius: 999px;
+          background: rgba(94,68,42,0.28);
+        }
+
+        .hero-mini-visual-research .hero-mini-checklist {
+          position: absolute;
+          right: 0.5rem;
+          top: 0.82rem;
+          display: grid;
+          gap: 0.36rem;
+        }
+
+        .hero-mini-visual-research .hero-mini-checklist i {
+          width: 1.72rem;
+          height: 0.36rem;
+          border-radius: 999px;
+          background: linear-gradient(90deg, var(--cherry-forest) 0 0.36rem, rgba(94,68,42,0.22) 0.36rem);
+        }
+
+        .hero-mini-visual-concept {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.18rem;
+        }
+
+        .hero-mini-visual-concept span {
+          display: grid;
+          place-items: center;
+          width: 1.4rem;
+          height: 1.4rem;
+          border-radius: 999px;
+          background: rgba(123,108,196,0.15);
+          color: #5F548F;
+          font-size: 0.44rem;
+          font-weight: 950;
+        }
+
+        .hero-mini-visual-concept i {
+          width: 0.48rem;
+          height: 2px;
+          border-radius: 999px;
+          background: rgba(94,68,42,0.28);
+        }
+
+        .hero-mini-visual-crispr::before {
+          content: "";
+          position: absolute;
+          left: 0.55rem;
+          right: 0.55rem;
+          top: 1.8rem;
+          height: 0.34rem;
+          border-radius: 999px;
+          background: repeating-linear-gradient(90deg, var(--cherry-blue) 0 0.42rem, rgba(250,247,241,0.85) 0.42rem 0.58rem, var(--cherry-red) 0.58rem 1rem);
+        }
+
+        .hero-mini-visual-crispr .hero-mini-guide {
+          position: absolute;
+          left: 1.08rem;
+          top: 1.26rem;
+          width: 3rem;
+          height: 0.18rem;
+          border-radius: 999px;
+          background: var(--cherry-red);
+        }
+
+        .hero-mini-visual-crispr .hero-mini-cas {
+          position: absolute;
+          right: 1.22rem;
+          top: 1.12rem;
+          width: 1.1rem;
+          height: 1.1rem;
+          border-radius: 45% 55% 50% 50%;
+          background: rgba(95,145,115,0.7);
+        }
+
+        .hero-mini-visual-crispr .hero-mini-cut {
+          position: absolute;
+          right: 1rem;
+          top: 1.2rem;
+          width: 0.48rem;
+          height: 1.28rem;
+          border-left: 2px solid rgba(94,68,42,0.44);
+          transform: rotate(26deg);
+        }
+
         .hero-entry-row:hover,
         .hero-entry-row:focus-visible {
           background: rgba(250,247,241,0.42) !important;
@@ -268,6 +522,12 @@ export function Hero() {
         @media (prefers-reduced-motion: reduce) {
           .hero-entry-row {
             transition: none !important;
+          }
+        }
+
+        @media (max-width: 860px) {
+          .hero-mini-visual {
+            display: none !important;
           }
         }
       `}</style>

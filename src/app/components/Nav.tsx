@@ -19,11 +19,11 @@ export function Nav() {
   return (
     <nav
       style={{
-        fontFamily: "'Nunito', sans-serif",
+        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         position: "sticky",
         top: 0,
         zIndex: 50,
-        background: "rgba(245,241,234,0.92)",
+        background: "rgba(247,245,239,0.94)",
         backdropFilter: "blur(14px)",
         borderBottom: "1.5px solid var(--border)",
       }}
@@ -53,7 +53,7 @@ export function Nav() {
           style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}
         >
           <IconCherry size={24} />
-          <span style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--cherry-warm-brown)", letterSpacing: 0 }}>
+          <span style={{ fontSize: "1rem", fontWeight: 780, color: "var(--cherry-warm-brown)", letterSpacing: 0 }}>
             By Cherry
           </span>
         </a>
@@ -63,7 +63,7 @@ export function Nav() {
               key={item.href}
               href={item.href}
               onClick={(event) => openMenuItem(item.href, event)}
-              style={{ color: "var(--cherry-warm-brown)", textDecoration: "none", fontSize: "0.92rem", fontWeight: 950, whiteSpace: "nowrap" }}
+              style={{ color: "var(--cherry-warm-brown)", textDecoration: "none", fontSize: "0.86rem", fontWeight: 820, whiteSpace: "nowrap" }}
             >
               {item.label}
             </a>
