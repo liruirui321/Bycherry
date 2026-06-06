@@ -1,7 +1,21 @@
+import type { MouseEvent } from "react";
 import { IconCherry } from "./Icons";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 export function Nav() {
+  const menuItems = [
+    { label: "精选", href: "/#works" },
+    { label: "科学模拟", href: "/works/gene-expression" },
+    { label: "AI 工具", href: "/works/concept-explainer" },
+    { label: "笔记", href: "/reading" },
+  ];
+
+  function openMenuItem(href: string, event: MouseEvent<HTMLAnchorElement>) {
+    if (!shouldUseClientNavigation(event)) return;
+    event.preventDefault();
+    navigateClient(href);
+  }
+
   return (
     <nav
       style={{
@@ -17,7 +31,7 @@ export function Nav() {
       <div
         style={{
           width: "100%",
-          maxWidth: 1100,
+          maxWidth: 1320,
           margin: "0 auto",
           padding: "0 1.5rem",
           boxSizing: "border-box",
@@ -43,13 +57,35 @@ export function Nav() {
             By Cherry
           </span>
         </a>
+        <div className="nav-menu" role="group" aria-label="主要内容入口" style={{ display: "flex", alignItems: "center", gap: "1.4rem" }}>
+          {menuItems.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              onClick={(event) => openMenuItem(item.href, event)}
+              style={{ color: "var(--cherry-warm-brown)", textDecoration: "none", fontSize: "0.92rem", fontWeight: 950, whiteSpace: "nowrap" }}
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
       </div>
 
       <style>
         {`
-          nav .nav-logo:focus-visible {
+          nav .nav-logo:focus-visible,
+          nav .nav-menu a:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
+          }
+
+          nav .nav-menu a {
+            transition: color 0.18s ease;
+          }
+
+          nav .nav-menu a:hover,
+          nav .nav-menu a:focus-visible {
+            color: var(--cherry-forest) !important;
           }
 
           @media (max-width: 860px) {
@@ -58,6 +94,16 @@ export function Nav() {
               padding-left: 1rem !important;
               padding-right: 1rem !important;
               gap: 0.55rem !important;
+            }
+
+            nav .nav-menu {
+              gap: 0.78rem !important;
+              max-width: 58vw !important;
+              overflow: hidden !important;
+            }
+
+            nav .nav-menu a {
+              font-size: 0.76rem !important;
             }
 
             nav .nav-logo {
@@ -71,6 +117,12 @@ export function Nav() {
             nav .nav-logo svg {
 	              width: 22px !important;
 	              height: 22px !important;
+            }
+          }
+
+          @media (max-width: 560px) {
+            nav .nav-menu {
+              display: none !important;
             }
           }
         `}
