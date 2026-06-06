@@ -203,7 +203,7 @@ function verifyWorkCardActions() {
   expect(heroSource.includes("hero-entry-desc") && heroSource.includes("-webkit-line-clamp: 2"), "Hero featured cards must show compact clamped module descriptions without becoming long pages.");
   expect(heroSource.includes('className="hero-entry-grid"') && heroSource.includes('gridTemplateColumns: "repeat(3, minmax(0, 1fr))"') && heroSource.includes('gridAutoRows: "minmax(154px, auto)"'), "Homepage module entries must render as a three-column first-screen featured directory, not repeated sections.");
   expect(heroSource.includes("border: `2px solid ${entry.border}`") && heroSource.includes("minHeight: 154") && !heroSource.includes("minHeight: 230") && !heroSource.includes("minHeight: 260"), "Homepage module entries must stay as compact featured cards instead of long sticky-note panels.");
-  expect(heroSource.includes('gridRow: entry.featuredImage ? "span 2" : undefined') && heroSource.includes('height: 168'), "Homepage plant evolution card must stay as a vertical featured card with a visible illustration.");
+  expect(!heroSource.includes('gridRow: entry.featuredImage ? "span 2" : undefined') && heroSource.includes('height: 72'), "Homepage plant evolution entry must stay compact and avoid a two-row sticky-note card.");
   expect(!/\.hero-entry-row\s*\{[\s\S]{0,260}width:\s*100%\s*!important/.test(heroSource), "Mobile homepage entries must not become full-width long boxes.");
   expect(!heroSource.includes("hero-count") && !heroSource.includes("homeWorkStatus") && !heroSource.includes("hero-work-status"), "Homepage first-screen directory must not add duplicate count or status labels beside each entry.");
   expect(!heroSource.includes('import { notes } from "./Notes"') && !heroSource.includes('import { essays } from "./ResearchEssays"'), "Homepage first screen must not import article data just to create another entry group.");
@@ -1306,7 +1306,7 @@ function verifyLearnerProductPositioning() {
   expect(navSource.includes('import { navigateClient, shouldUseClientNavigation } from "../navigation"'), "Navigation logo must keep client-side home navigation.");
   expect(navSource.includes('href="/#works"') && navSource.includes('navigateClient("/#works")') && !navSource.includes('href="/#top"') && !navSource.includes('navigateClient("/#top")'), "Navigation logo must return to the content directory instead of a generic top anchor.");
   expect(navSource.includes('className="nav-menu"') && navSource.includes('aria-label="主要内容入口"'), "Navigation should expose a compact top menu for real content destinations.");
-  for (const requiredNavEntry of ['label: "精选"', 'label: "科学模拟"', 'label: "AI 工具"', 'label: "笔记"', 'href: "/works/gene-expression"', 'href: "/works/concept-explainer"', 'href: "/reading"']) {
+  for (const requiredNavEntry of ['label: "目录"', 'label: "模拟"', 'label: "AI 工具"', 'label: "阅读"', 'href: "/works/gene-expression"', 'href: "/works/concept-explainer"', 'href: "/reading"']) {
     expect(navSource.includes(requiredNavEntry), `Navigation compact menu is missing: ${requiredNavEntry}`);
   }
   expect(!navSource.includes('className="nav-links"') && !navSource.includes('className="nav-link"'), "Navigation must not restore the old repeated nav-link system.");

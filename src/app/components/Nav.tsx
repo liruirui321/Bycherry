@@ -4,10 +4,10 @@ import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 export function Nav() {
   const menuItems = [
-    { label: "精选", href: "/#works" },
-    { label: "科学模拟", href: "/works/gene-expression" },
+    { label: "目录", href: "/#works" },
+    { label: "模拟", href: "/works/gene-expression" },
     { label: "AI 工具", href: "/works/concept-explainer" },
-    { label: "笔记", href: "/reading" },
+    { label: "阅读", href: "/reading" },
   ];
 
   function openMenuItem(href: string, event: MouseEvent<HTMLAnchorElement>) {
