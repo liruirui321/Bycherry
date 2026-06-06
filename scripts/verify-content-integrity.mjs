@@ -493,6 +493,7 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(workHeroRenderIndex !== -1 && primaryToolRenderIndex !== -1, "Work detail pages must render title and primary tool.");
   expect(workHeroRenderIndex < primaryToolRenderIndex, "Work detail pages must place the primary product directly after the compact title bar.");
   expect(workDetailSource.includes('padding: compact ? "0.22rem 1.5rem"') && workDetailSource.includes('gridTemplateColumns: compact ? "22px minmax(0, 1fr)"'), "Work detail compact title bar must stay short so the product appears immediately.");
+  expect(workDetailSource.includes("回到内容目录") && !workDetailSource.includes("回到学习模块"), "Work detail return copy must point to the shared content directory.");
   expect(workDetailSource.includes("{compact ? null : (") && workDetailSource.includes("{work.tags.map((tag) => (") && !workDetailSource.includes("work.tags.slice(0, compact ? 2"), "Work detail compact title bar must not show multi-tag chrome.");
   expect(!workDetailSource.includes('padding: "0.11rem 0.48rem"') && !workDetailSource.includes("whiteSpace: \"nowrap\",\n              }}\n            >\n              {work.category}"), "Work detail compact title bar must not show a right-side category pill.");
   for (const retiredWorkArticleBlock of ["pairedArticleSlugsByWorkSlug", "function WorkPairedReading", "配套文章", "work-paired-reading-link", "article.actionSteps[0]", "aria-label={`打开配套文章：${article.title}`", "全部文章 →"]) {

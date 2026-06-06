@@ -5752,7 +5752,7 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
               marginBottom: "0.65rem",
             }}
           >
-            ← 回到学习模块
+            ← 回到内容目录
           </a>
         ) : null}
 
@@ -5774,7 +5774,7 @@ function WorkHero({ work, compact = false }: { work: Work; compact?: boolean }) 
                 event.preventDefault();
                 navigateHome("#works");
               }}
-              aria-label="回到学习模块"
+              aria-label="回到内容目录"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -5875,11 +5875,11 @@ export function WorkDetailPage({ slug }: { slug: string }) {
     return (
       <section id="main-content" tabIndex={-1} style={{ minHeight: "58vh", padding: "5rem 1.5rem", display: "grid", placeItems: "center", fontFamily: "'Nunito', sans-serif" }}>
         <EmptyStateCard
-          eyebrow="学习模块"
-          title="没有找到这个学习模块"
-          body="这个学习模块地址可能已经移动。可以回到学习模块区，继续浏览科学模拟、学习项目和 AI 工具。"
+          eyebrow="内容目录"
+          title="没有找到这个内容"
+          body="这个地址可能已经移动。可以回到内容目录，继续浏览科学模拟、学习项目和 AI 工具。"
           href="/#works"
-          linkText="回到学习模块"
+          linkText="回到内容目录"
           onNavigate={(event) => {
             if (!shouldUseClientNavigation(event)) return;
             event.preventDefault();
