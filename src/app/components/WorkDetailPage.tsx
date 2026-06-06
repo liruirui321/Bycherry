@@ -4178,7 +4178,7 @@ If any of these are missing, add them before the final answer.
           ))}
         </div>
         <details className="concept-input-quality-details" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.62rem" }}>
-          <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>输入质量检查 · {conceptInputQualityScore}/5</summary>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>输入质量检查</summary>
         <div className="concept-input-quality-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: "0.55rem" }}>
           {conceptInputQuality.map((item) => (
             <div key={item.label} style={{ background: item.status === "已填写" || item.status === "可用" ? "var(--cherry-sage-light)" : "var(--cherry-yellow-light)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.58rem", minHeight: 92 }}>
@@ -4221,7 +4221,7 @@ If any of these are missing, add them before the final answer.
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>说明与导出</summary>
 
       <details className="concept-agent-run-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>解释流程面板 · {visualMode}</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>解释流程面板</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap", marginTop: "0.62rem" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>解释流程面板</div>
@@ -4245,7 +4245,7 @@ If any of these are missing, add them before the final answer.
       </details>
 
       <details className="concept-visual-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>可视化解释图 · {visualMode} · {visualStructureItems.length} 个节点</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>可视化解释图</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>可视化解释图</div>
@@ -4300,7 +4300,7 @@ If any of these are missing, add them before the final answer.
       </details>
 
       <details className="concept-understanding-record-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>我的理解记录 · {learnerAuditScore}/4</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>我的理解记录</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>我的理解记录</div>
