@@ -59,8 +59,8 @@ export function ArticleLibraryPage() {
   return (
     <main id="main-content" tabIndex={-1} style={{ fontFamily: "'Nunito', sans-serif", background: "var(--background)", minHeight: "calc(100vh - 50px)" }}>
       <section style={{ padding: "0.72rem 1.5rem 1.2rem" }}>
-        <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gap: "0.72rem" }}>
-          <header style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", alignItems: "center", gap: "0.62rem", borderBottom: "1px solid rgba(94,68,42,0.1)", paddingBottom: "0.58rem" }}>
+        <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gap: "0.58rem" }}>
+          <header style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", alignItems: "center", gap: "0.62rem", borderBottom: "1px solid rgba(94,68,42,0.1)", paddingBottom: "0.46rem" }}>
             <a
               href="/#works"
               onClick={(event) => openContent("/#works", event)}
@@ -83,22 +83,22 @@ export function ArticleLibraryPage() {
               <h1 style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.08rem, 2.2vw, 1.36rem)", lineHeight: 1.16, margin: 0, fontWeight: 900 }}>
                 阅读库
               </h1>
-              <p style={{ margin: "0.18rem 0 0", color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.45, fontWeight: 800 }}>
-                {essays.length + notes.length} 篇内容，按用途进入；每篇都保留行动、检查和可保存产出。
+              <p style={{ margin: "0.12rem 0 0", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.35, fontWeight: 800 }}>
+                {essays.length + notes.length} 篇内容，直接进入文章和练习。
               </p>
             </div>
           </header>
 
           {articleGroups.map((group) => (
-            <section key={group.title} aria-labelledby={`reading-${group.title}`} style={{ display: "grid", gap: "0.48rem" }}>
+            <section key={group.title} aria-labelledby={`reading-${group.title}`} style={{ display: "grid", gap: "0.34rem" }}>
               <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "0.72rem", flexWrap: "wrap" }}>
                 <h2 id={`reading-${group.title}`} style={{ margin: 0, color: "var(--cherry-forest)", fontSize: "0.92rem", lineHeight: 1.2, fontWeight: 900 }}>
                   {group.title}
                 </h2>
-                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.35, fontWeight: 900 }}>{group.desc}</span>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.25, fontWeight: 900 }}>{group.desc}</span>
               </div>
 
-              <div className="article-library-list" style={{ display: "grid", gap: "0.42rem" }}>
+              <div className="article-library-list" style={{ display: "grid", gap: "0.22rem" }}>
                 {group.articles.map((article) => (
                   <a
                     key={article.href}
@@ -108,31 +108,30 @@ export function ArticleLibraryPage() {
                     onMouseEnter={() => preloadRouteForHref(article.href)}
                     onFocus={() => preloadRouteForHref(article.href)}
                     onPointerDown={() => preloadRouteForHref(article.href)}
-                    aria-label={`打开${article.title}：${article.desc}`}
+                    aria-label={`打开${article.title}：${article.desc}。先做：${article.firstAction}。检查：${article.firstCheck}。产出：${article.firstOutput}`}
                     style={{
                       color: "var(--cherry-warm-brown)",
                       textDecoration: "none",
-                      background: "var(--card)",
-                      border: "1.5px solid rgba(94,68,42,0.12)",
-                      borderRadius: 8,
-                      padding: "0.66rem 0.72rem",
+                      background: "transparent",
+                      border: "none",
+                      borderLeft: "3px solid rgba(93,140,101,0.5)",
+                      borderRadius: 0,
+                      padding: "0.28rem 0.52rem",
                       display: "grid",
-                      gridTemplateColumns: "minmax(0, 1fr) minmax(220px, 0.9fr)",
-                      gap: "0.68rem",
-                      alignItems: "start",
-                      boxShadow: "0 8px 18px rgba(94,68,42,0.04)",
+                      gridTemplateColumns: "minmax(0, 1fr) minmax(180px, 0.72fr)",
+                      gap: "0.52rem",
+                      alignItems: "center",
                     }}
                   >
-                    <span style={{ display: "grid", gap: "0.24rem", minWidth: 0 }}>
+                    <span style={{ display: "grid", gap: "0.12rem", minWidth: 0 }}>
                       <span style={{ display: "flex", alignItems: "center", gap: "0.34rem", flexWrap: "wrap" }}>
                         <strong style={{ fontSize: "0.86rem", lineHeight: 1.25, fontWeight: 900 }}>{article.title}</strong>
                         <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.25, fontWeight: 900 }}>{article.label} · {article.readTime} · {article.date}</span>
                       </span>
-                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{article.desc}</span>
+                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.34, fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{article.desc}</span>
                     </span>
-                    <span className="article-library-actions" style={{ display: "grid", gap: "0.24rem", color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.42, fontWeight: 800 }}>
+                    <span className="article-library-actions" style={{ display: "grid", gap: "0.12rem", color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.28, fontWeight: 800 }}>
                       <span className="article-library-action-line"><strong style={{ color: "var(--cherry-forest)" }}>先做：</strong>{article.firstAction}</span>
-                      <span className="article-library-action-line"><strong style={{ color: "var(--cherry-red)" }}>检查：</strong>{article.firstCheck}</span>
                       <span className="article-library-output-line"><strong style={{ color: "var(--cherry-warm-brown)" }}>产出：</strong>{article.firstOutput}</span>
                     </span>
                   </a>
@@ -149,28 +148,25 @@ export function ArticleLibraryPage() {
         }
 
         .article-library-row {
-          transition: transform 0.18s ease, background 0.18s ease;
+          transition: color 0.18s ease, background 0.18s ease;
         }
 
         .article-library-row:hover,
         .article-library-row:focus-visible {
-          background: var(--cherry-yellow-light) !important;
-          transform: translateY(-1px);
+          background: rgba(250,247,241,0.54) !important;
         }
 
         @media (max-width: 860px) {
           .article-library-row {
             grid-template-columns: 1fr !important;
-            gap: 0.42rem !important;
-            padding: 0.62rem !important;
+            gap: 0.18rem !important;
+            padding: 0.24rem 0.42rem !important;
           }
 
           .article-library-actions {
             display: grid !important;
             grid-template-columns: 1fr !important;
-            gap: 0.18rem !important;
-            border-top: 1px solid rgba(94,68,42,0.1);
-            padding-top: 0.4rem;
+            gap: 0.08rem !important;
           }
 
           .article-library-action-line,
@@ -189,7 +185,7 @@ export function ArticleLibraryPage() {
 
           .article-library-row:hover,
           .article-library-row:focus-visible {
-            transform: none !important;
+            background: rgba(250,247,241,0.54) !important;
           }
         }
       `}</style>
