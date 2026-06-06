@@ -1064,11 +1064,11 @@ ${platformAuditRubricText}
       ]
     : [];
   const aiMaterialAuditPromptText = aiMaterialAuditPrompts.length
-    ? `【AI 学习材料质检提示词包】
+    ? `【AI 学习材料质检流程卡】
 操作流程：把 AI 生成的学习材料粘贴进去，再逐条运行下面 4 个质检任务。
 
 ${aiMaterialAuditPrompts.map((item, index) => `${index + 1}. ${item.title}
-提示词：${item.prompt}
+对 AI 说：${item.prompt}
 检查产出：${item.output}`).join("\n\n")}
 
 最终判断
@@ -1562,7 +1562,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedTemplate(false);
       setCopiedActionPack(false);
       setCopiedLearningRecord(false);
-      setCopyStatus("AI 质检提示词包已复制到剪贴板。");
+      setCopyStatus("AI 质检流程卡已复制到剪贴板。");
       window.setTimeout(() => setCopiedAiAuditPrompts(false), 1400);
       return;
     }
@@ -2223,16 +2223,16 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {aiMaterialAuditPrompts.length ? (
               <details className="article-compact-tool-details ai-material-audit-prompt-details" style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.22)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
-                <summary>AI 质检提示词包</summary>
+                <summary>AI 质检流程卡</summary>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
                   <div>
-                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>AI 质检提示词包</div>
+                    <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>AI 质检流程卡</div>
                     <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, marginTop: "0.18rem", fontWeight: 800 }}>
                       拿到 AI 生成的学习材料后，先跑这四个检查，再决定保留、重写或回到资料核查。
                     </div>
                   </div>
                   <button type="button" onClick={copyAiMaterialAuditPrompts} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.38rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
-                    {copiedAiAuditPrompts ? "已复制" : "复制质检提示词"}
+                    {copiedAiAuditPrompts ? "已复制" : "复制质检流程"}
                   </button>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.58rem" }}>

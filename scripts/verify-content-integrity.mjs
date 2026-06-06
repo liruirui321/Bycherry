@@ -1208,8 +1208,8 @@ function verifyLearnerFacingArticleCopy() {
     "aiMaterialAuditPrompts",
     "aiMaterialAuditPromptText",
     "copyAiMaterialAuditPrompts",
-    "AI 质检提示词包",
-    "复制质检提示词",
+    "AI 质检流程卡",
+    "复制质检流程",
     "目标对齐",
     "误解扫描",
     "证据边界",
@@ -1280,6 +1280,8 @@ function verifyLearnerFacingArticleCopy() {
   for (const text of requiredLearnerCopy) {
     expect(combinedSource.includes(text), `Learner-facing article copy should include: ${text}`);
   }
+
+  expect(combinedSource.includes("对 AI 说：${item.prompt}") && !combinedSource.includes("AI 质检提示词包") && !combinedSource.includes("复制质检提示词"), "AI material audit article must present the reusable aid as a learner-facing quality-check workflow, not a prompt pack.");
 
   for (const [relativePath, source] of learnerArticleSources) {
     for (const item of retiredLearnerArticlePatterns) {
