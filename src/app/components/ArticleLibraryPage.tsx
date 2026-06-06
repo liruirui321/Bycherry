@@ -84,7 +84,7 @@ export function ArticleLibraryPage() {
                 阅读库
               </h1>
               <p style={{ margin: "0.12rem 0 0", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.35, fontWeight: 800 }}>
-                {essays.length + notes.length} 篇内容，直接进入文章和练习。
+                {essays.length + notes.length} 篇内容，点标题进入正文。
               </p>
             </div>
           </header>
@@ -129,7 +129,7 @@ export function ArticleLibraryPage() {
                       </span>
                     </span>
                     <span className="article-library-meta" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.2, fontWeight: 900, whiteSpace: "nowrap" }}>
-                      {article.label} · {article.date}
+                      {article.label}<span className="article-library-date"> · {article.date}</span>
                     </span>
                   </a>
                 ))}
@@ -162,6 +162,10 @@ export function ArticleLibraryPage() {
 
           .article-library-meta {
             font-size: 0.62rem !important;
+          }
+
+          .article-library-date {
+            display: none !important;
           }
         }
 
