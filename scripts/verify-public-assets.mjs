@@ -20,6 +20,8 @@ const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const publicRoot = resolve(root, "public");
 const retiredShareCopy = "可打开、可阅读、可操作";
 const retiredSiteDescription = "清爽科普风的个人网站";
+const retiredHomepageReadingCopy = "首页直接进入科学模拟、AI 工具、阅读库和可保存记录";
+const retiredManifestReadingCopy = "直接进入模拟、工具、阅读库和记录";
 const retiredSharePositioning = "主题作品集";
 const appThemeColor = "#F5F1EA";
 const retainedIllustrations = [
@@ -110,6 +112,7 @@ const staticFallback = readPublic("404.html");
 expect(staticFallback.includes('<meta name="robots" content="noindex" />'), "public/404.html must be noindex.");
 expect(staticFallback.includes('sessionStorage.setItem(') && staticFallback.includes('"bycherry-redirect-path"'), "public/404.html must preserve the requested route in sessionStorage.");
 expect(staticFallback.includes('window.location.replace("/")'), "public/404.html must redirect back to the app root.");
+expect(staticFallback.includes("返回内容目录") && !staticFallback.includes("返回首页"), "public/404.html visible fallback link must return to the content directory, not generic homepage copy.");
 for (const retiredFallbackCopy of ["class=\"tape\"", ".tape", "rotate(", "信封", "便签", "手账", "washi"]) {
   expect(!staticFallback.includes(retiredFallbackCopy), `public/404.html must not keep retired note-style fallback decoration: ${retiredFallbackCopy}.`);
 }
@@ -129,6 +132,7 @@ const manifest = JSON.parse(readPublic("site.webmanifest"));
 expect(manifest.name === "By Cherry", "site.webmanifest must use the By Cherry app name.");
 expect(manifest.short_name === "By Cherry", "site.webmanifest must use the By Cherry short name.");
 expect(manifest.description === manifestDescription, "site.webmanifest description must match the current share description.");
+expect(!manifest.description.includes(retiredManifestReadingCopy), "site.webmanifest must not describe the homepage as a reading-library entrance.");
 expect(manifest.start_url === "/", "site.webmanifest start_url must be /.");
 expect(manifest.scope === "/", "site.webmanifest scope must be /.");
 expect(manifest.display === "standalone", "site.webmanifest display must be standalone.");
@@ -208,6 +212,7 @@ expect(indexHtml.includes(`<meta property="og:image:alt" content="${shareImageAl
 expect(indexHtml.includes(`<meta name="twitter:image:alt" content="${shareImageAlt}" />`), "index.html must include the current Twitter image alt text.");
 expect(!indexHtml.includes(retiredShareCopy), "index.html must not include retired share copy.");
 expect(!indexHtml.includes(retiredSiteDescription), "index.html must not include the retired personal-site description.");
+expect(!indexHtml.includes(retiredHomepageReadingCopy), "index.html must not describe the compact homepage as a reading-library entrance.");
 expect(!indexHtml.includes(retiredSharePositioning), "index.html must not include the retired share positioning.");
 expect(indexHtml.includes(`<meta property="og:image" content="${siteUrl}/social-preview.png" />`), "index.html must include the current OG image URL.");
 expect(indexHtml.includes(`<meta property="og:image:secure_url" content="${siteUrl}/social-preview.png" />`), "index.html must include og:image:secure_url.");
