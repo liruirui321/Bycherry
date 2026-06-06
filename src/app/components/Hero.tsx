@@ -80,7 +80,6 @@ export function Hero() {
     desc: "科研证据、学习方法和 AI 创作工作流文章。",
     icon: <IconBook size={36} color="var(--cherry-yellow)" />,
     outputs: ["文章索引", "行动清单"],
-    updated: "2026-06-04",
     featuredImage: null,
     visualKind: null,
   };
@@ -96,7 +95,6 @@ export function Hero() {
       desc: work.desc,
       icon: work.icon,
       outputs: work.outputs,
-      updated: work.updated,
       featuredImage: work.slug === "plant-evolution-stories" ? "/illustrations/plant-evolution-story.webp" : null,
       visualKind: work.slug === "plant-evolution-stories" ? null : (work.slug as HeroVisualKind),
     })),
@@ -209,7 +207,6 @@ export function Hero() {
                     </span>
                     <span style={{ display: "flex", gap: "0.44rem", flexWrap: "wrap", alignItems: "center" }}>
                       <span style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.2rem 0.46rem", color: "var(--cherry-forest)", fontSize: "0.7rem", fontWeight: 950 }}>{entry.kind}</span>
-                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.1, fontWeight: 950 }}>{entry.updated}</span>
                     </span>
                     <span className="hero-entry-desc" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.45, fontWeight: 820 }}>
                       {entry.desc}
