@@ -417,10 +417,8 @@ function verifyArticleOutcomeSnapshot() {
   expect(articleSource.includes("copyActionPack") && articleSource.includes("copyLearningRecord"), "Article detail pages must still expose action pack and learning record copy actions.");
   expect(articleSource.includes("focusArticleStart"), "Article detail direct start action must focus the primary action or body anchor.");
   expect(articleSource.includes('id="article-primary-action"') && articleSource.includes('id="article-body-points"'), "Article detail pages must expose focusable action and body anchors.");
-  expect(articleSource.includes(">正文<"), "Article detail pages must move directly from the header into article content.");
-  expect(articleSource.includes("const articleReadingSteps") && articleSource.includes('className="article-reading-steps-strip"') && articleSource.includes('aria-label="文章阅读步骤"'), "Article detail pages must turn the body into a compact learner reading sequence after the text.");
-  expect(articleSource.includes("定位问题") && articleSource.includes("抓证据") && articleSource.includes("写记录") && articleSource.includes("复盘边界"), "Article detail reading sequence must expose concrete learner actions.");
-  expect(articleSource.includes(".article-reading-steps-strip") && articleSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "Article detail reading sequence must stay compact on mobile.");
+  expect(articleSource.includes('className="article-first-action-strip"') && articleSource.includes("先做这个") && articleSource.includes(">正文<"), "Article detail pages must show one compact first action before the body, then move directly into article content.");
+  expect(!articleSource.includes("const articleReadingSteps") && !articleSource.includes('className="article-reading-steps-strip"') && !articleSource.includes('aria-label="文章阅读步骤"'), "Article detail pages must not reintroduce a separate four-card reading-step strip.");
   expect(articleSource.includes('className="article-detail-card"') && articleSource.includes('background: "transparent"') && articleSource.includes('border: "none"') && articleSource.includes('boxShadow: "none"'), "Article detail page must not wrap the whole article in a long visible card frame.");
   expect(!articleSource.includes("articleOutcomeSnapshot") && !articleSource.includes("readingPath"), "Article detail pages must not keep dead top-task derivations after removing the repeated task strip.");
   expect(!articleSource.includes("article-outcome-snapshot") && !articleSource.includes("article-reading-task-pack"), "Article detail pages must not reintroduce a duplicate top task strip.");
@@ -444,10 +442,10 @@ function verifyArticleOutcomeSnapshot() {
     expect(!articleSource.includes(retiredArticleHeaderBlock), `Article detail header should stay short and not reintroduce retired top chrome: ${retiredArticleHeaderBlock}.`);
   }
   const bodyPointsRenderIndex = articleSource.indexOf('id="article-body-points"');
-  const readingStepsRenderIndex = articleSource.indexOf('className="article-reading-steps-strip"');
   const primaryActionRenderIndex = articleSource.indexOf('id="article-primary-action"');
   expect(bodyPointsRenderIndex !== -1 && primaryActionRenderIndex !== -1 && bodyPointsRenderIndex < primaryActionRenderIndex, "Article body points must appear before action/checklist panels.");
-  expect(bodyPointsRenderIndex !== -1 && readingStepsRenderIndex !== -1 && primaryActionRenderIndex !== -1 && bodyPointsRenderIndex < readingStepsRenderIndex && readingStepsRenderIndex < primaryActionRenderIndex, "Article reading sequence must appear after the body and before action/checklist panels.");
+  const firstActionRenderIndex = articleSource.indexOf('className="article-first-action-strip"');
+  expect(firstActionRenderIndex !== -1 && bodyPointsRenderIndex !== -1 && primaryActionRenderIndex !== -1 && firstActionRenderIndex < bodyPointsRenderIndex && bodyPointsRenderIndex < primaryActionRenderIndex, "Article first action, body, and practice panels must appear in that order.");
 }
 
 function verifyWorkJsonLdLearningOutcomes() {
