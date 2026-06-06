@@ -21,6 +21,7 @@ const navSource = read("src/app/components/Nav.tsx");
 const indexCss = read("src/styles/index.css");
 const tailwindCss = read("src/styles/tailwind.css");
 const viteConfig = read("vite.config.ts");
+const deployWorkflow = read(".github/workflows/deploy.yml");
 const failures = [];
 const expectedDependencies = ["react", "react-dom", "tw-animate-css"];
 const expectedDevDependencies = ["@tailwindcss/vite", "@vitejs/plugin-react", "tailwindcss", "vite"];
@@ -104,6 +105,12 @@ expect(viteConfig.includes("import tailwindcss from '@tailwindcss/vite'"), "vite
 expect(viteConfig.includes("import react from '@vitejs/plugin-react'"), "vite.config.ts must import the React Vite plugin.");
 expect(viteConfig.includes("react()"), "vite.config.ts must enable the React plugin.");
 expect(viteConfig.includes("tailwindcss()"), "vite.config.ts must enable the Tailwind plugin.");
+
+expect(deployWorkflow.includes("FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true"), "Deploy workflow must force JavaScript actions to Node 24 while older GitHub Pages actions are still transitioning.");
+expect(deployWorkflow.includes("uses: actions/checkout@v5"), "Deploy workflow must use checkout@v5 for Node 24 action runtime.");
+expect(deployWorkflow.includes("uses: actions/setup-node@v6"), "Deploy workflow must use setup-node@v6 for Node 24 action runtime.");
+expect(deployWorkflow.includes("node-version: 24"), "Deploy workflow must build with Node 24.");
+expect(deployWorkflow.includes("uses: actions/deploy-pages@v5"), "Deploy workflow must use deploy-pages@v5 for Node 24 action runtime.");
 
 if (failures.length) {
   console.error("Project wiring verification failed.");
