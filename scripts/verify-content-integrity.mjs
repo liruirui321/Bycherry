@@ -1068,7 +1068,9 @@ function verifyCrisprLearnerScenarios() {
   expect(crisprSource.includes('className="crispr-guide-panel"') && crisprSource.includes('className="crispr-guide-next-action"') && crisprSource.includes('className="crispr-guide-target-note"') && crisprSource.includes('className="crispr-guide-note"'), "CRISPR guide panel must keep stable compact sub-sections.");
   expect(crisprSource.includes('aria-label={`${guide.name}：${guide.note}`}') && crisprSource.includes('className="crispr-guide-target-note" style={{ display: "none"') && crisprSource.includes('className="crispr-guide-note" style={{ display: "none"'), "CRISPR guide panel must hide long target notes visually while preserving them in labels.");
   expect(crisprSource.includes("#crispr-simulator .crispr-flow-step-note,") && crisprSource.includes("#crispr-simulator .crispr-guide-note") && crisprSource.includes("display: none !important"), "CRISPR mobile controls must hide long explanatory notes instead of stacking a tall control column.");
-  expect(worksSource.includes("查看匹配评分、编辑判定、风险核查和模拟报告。"), "CRISPR work card must describe risk audit output.");
+  expect(worksSource.includes("在概念模型里调整 guide RNA、Cas 蛋白和修复结果"), "CRISPR work card must present the tool as a concept model, not a wet-lab action.");
+  expect(worksSource.includes("查看 PAM、匹配评分、风险核查和模拟报告。"), "CRISPR work card must describe risk audit output.");
+  expect(worksSource.includes('action: "运行模拟"') && !worksSource.includes('action: "运行编辑"'), "CRISPR work card action must describe simulation instead of real editing.");
   expect(worksSource.includes('outputs: ["guide 判定", "风险核查", "模拟报告"]'), "CRISPR work card outputs must stay aligned with simulator report.");
   expect(worksSource.includes('path: ["找 PAM", "判 guide", "核查风险"]'), "CRISPR work card path must describe a learner action flow.");
 }
@@ -1256,7 +1258,7 @@ function verifyLearnerProductPositioning() {
     "科学学习与 AI",
     "演化时间轴",
     "植物演化时间轴",
-    "CRISPR 编辑模拟器",
+    "CRISPR 概念模拟器",
     '"学习项目"',
     "内容目录",
     "基因表达可视化",
