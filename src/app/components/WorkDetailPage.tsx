@@ -5487,7 +5487,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
       </details>
 
       <details className="crispr-practice-panel crispr-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>练习场景 · {activeScenario ? activeScenario.title : "自定义判读"}</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>练习场景</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>练习场景</div>
@@ -5514,7 +5514,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
       </details>
 
       <details className="crispr-result-check-panel" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>结果检查 · {quizChoice === activeQuiz.answer ? "小测已通过" : "小测待完成"}</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>结果检查</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>结果检查</div>
@@ -5601,7 +5601,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
       </details>
 
       <details className="crispr-learner-panel crispr-compact-details" style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.28)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>我的判读记录 · {crisprLearnerRecordScore}/4</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>我的判读记录</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.24rem" }}>我的判读记录</div>
@@ -5643,7 +5643,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
       </details>
 
       <details className="crispr-quality-panel crispr-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>修复结果 · {effectiveRepair.title}</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>修复结果</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", margin: "0.72rem 0 0.68rem" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>切换模拟结果</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
@@ -5678,7 +5678,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
       </details>
 
       <details className="crispr-quiz-details crispr-compact-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>判读练习 · {quizChoice === activeQuiz.answer ? "当前题已通过" : "待作答"}</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>判读练习</summary>
       <div className="crispr-quiz-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 0.72fr) minmax(0, 1fr)", gap: "1rem", alignItems: "stretch" }}>
         <div className="crispr-quiz-list-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>判读练习</div>
