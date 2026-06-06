@@ -1386,10 +1386,15 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>练习与记录</summary>
 
           <details className="gene-compact-details gene-process-focus-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>过程追踪 · {activeProcessFocus}</summary>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
-              <IconSparkle size={18} />
-              过程追踪
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>过程追踪</summary>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, color: "var(--cherry-warm-brown)", fontWeight: 900, flexWrap: "wrap" }}>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
+                <IconSparkle size={18} />
+                过程追踪
+              </span>
+              <span style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.2)", borderRadius: 999, padding: "0.22rem 0.58rem", color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900 }}>
+                当前：{activeProcessFocus}
+              </span>
             </div>
             <div style={{ display: "grid", gap: "0.58rem" }}>
               {processFocusCards.map((item, index) => (
@@ -1407,7 +1412,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
           </details>
 
           <details className="gene-compact-details gene-result-check-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>结果检查 · {expressionCompletionChecks.filter((item) => item.done).length}/{expressionCompletionChecks.length}</summary>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>结果检查</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: "0.85rem", flexWrap: "wrap" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
                 <IconCheck size={18} />
@@ -1433,7 +1438,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
           </details>
 
           <details className="gene-compact-details gene-experiment-record-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>变量实验记录 · {expressionExperimentScore}/{expressionExperimentFields.length}</summary>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>变量实验记录</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
                 <IconMicroscope size={18} />
@@ -1497,7 +1502,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
           </details>
 
           <details className="gene-compact-details gene-translation-lens-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>翻译放大镜 · {focusedCodon?.rna ?? "---"} → {focusedCodon?.amino ?? "---"}</summary>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>翻译放大镜</summary>
             <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
               <IconSparkle size={18} />
               翻译放大镜
@@ -1528,7 +1533,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
           </details>
 
           <details className="gene-compact-details gene-quiz-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>即时小测 · {quizCorrectCount}/{geneQuizItems.length}</summary>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>即时小测</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: "0.58rem" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
                 <IconCheck size={18} />
@@ -1627,7 +1632,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
           </details>
 
           <details className="gene-compact-details gene-task-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.82rem", color: "var(--cherry-warm-mid)", lineHeight: 1.7 }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>操作任务 · {taskStatuses.filter((item) => item.done).length}/{taskStatuses.length}</summary>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>操作任务</summary>
             <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.65rem" }}>
               <IconSparkle size={18} />
               操作任务
