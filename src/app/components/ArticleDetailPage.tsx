@@ -1,4 +1,4 @@
-import { IconBook, IconCheck, IconCoffee } from "./Icons";
+import { IconBook, IconCheck } from "./Icons";
 import { notes } from "./Notes";
 import { essays } from "./ResearchEssays";
 import { EmptyStateCard } from "./EmptyStateCard";
@@ -1625,7 +1625,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               overflow: "visible",
             }}
           >
-            <div className="article-meta-row" style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: "0.3rem" }}>
+            <div className="article-title-row" style={{ display: "grid", gridTemplateColumns: "26px minmax(0, 1fr)", alignItems: "start", gap: "0.42rem", marginBottom: "0.24rem" }}>
               <a
                 className="article-detail-link article-back-chip"
                 href={`/${backHash}`}
@@ -1639,12 +1639,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  width: 30,
-                  height: 30,
+                  width: 26,
+                  height: 26,
                   color: "var(--cherry-forest)",
-                  background: "var(--muted)",
-                  border: "1.5px solid var(--border)",
-                  borderRadius: 999,
+                  background: "transparent",
+                  border: "none",
+                  borderRadius: 6,
                   textDecoration: "none",
                   fontWeight: 900,
                   fontSize: "0.95rem",
@@ -1652,32 +1652,10 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               >
                 ←
               </a>
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 5,
-                  background: article.tagBg ?? article.labelBg,
-                  color: article.tagColor ?? article.labelColor,
-                  borderRadius: 999,
-                  padding: "0.18rem 0.62rem",
-                  fontSize: "0.74rem",
-                  fontWeight: 900,
-                }}
-              >
-                {article.icon} {"tag" in article ? article.tag : article.label}
-              </span>
-              <span style={{ color: "var(--cherry-warm-mid)", fontWeight: 700 }}>
-                {article.date}
-              </span>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 5, color: "var(--cherry-warm-mid)" }}>
-                <IconCoffee size={16} /> 约 {"readTime" in article ? article.readTime : article.readMin} 分钟
-              </span>
+              <h1 className="article-detail-title" style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.12rem, 2.5vw, 1.46rem)", fontWeight: 900, lineHeight: 1.18, margin: 0, maxWidth: 760 }}>
+                {article.title}
+              </h1>
             </div>
-
-            <h1 className="article-detail-title" style={{ color: "var(--cherry-warm-brown)", fontSize: "clamp(1.12rem, 2.5vw, 1.46rem)", fontWeight: 900, lineHeight: 1.18, marginBottom: "0.32rem", maxWidth: 760 }}>
-              {article.title}
-            </h1>
 
             <p className="article-detail-lede" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", lineHeight: 1.5, margin: "0 0 0.5rem", maxWidth: 760, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
               {article.excerpt ?? article.body}
@@ -2518,39 +2496,22 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               padding: 0.2rem 0 0.72rem !important;
             }
 
-            .article-meta-row {
-              display: grid !important;
-              grid-template-columns: 30px minmax(0, 1fr) !important;
-              align-items: center !important;
-              gap: 0.34rem !important;
-              margin-bottom: 0.22rem !important;
-            }
-
-            .article-meta-row > span:nth-of-type(2),
-            .article-meta-row > span:nth-of-type(3) {
-              display: none !important;
-            }
-
-            .article-meta-row > span:nth-of-type(1) {
-              min-width: 0 !important;
-              overflow: hidden !important;
-              text-overflow: ellipsis !important;
-              white-space: nowrap !important;
-              border-radius: 8px !important;
-              padding: 0.18rem 0.44rem !important;
-              font-size: 0.68rem !important;
+            .article-title-row {
+              grid-template-columns: 22px minmax(0, 1fr) !important;
+              gap: 0.32rem !important;
+              margin-bottom: 0.18rem !important;
             }
 
             .article-back-chip {
-              width: 28px !important;
-              height: 28px !important;
-              font-size: 0.86rem !important;
+              width: 22px !important;
+              height: 22px !important;
+              font-size: 0.82rem !important;
             }
 
             .article-detail-title {
               font-size: 1.02rem !important;
               line-height: 1.14 !important;
-              margin: 0 0 0.2rem !important;
+              margin: 0 !important;
             }
 
             .article-detail-lede {

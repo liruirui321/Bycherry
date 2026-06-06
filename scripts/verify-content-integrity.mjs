@@ -389,6 +389,8 @@ function verifyArticleOutcomeSnapshot() {
   expect(articleSource.includes('className="article-detail-card"') && articleSource.includes('background: "transparent"') && articleSource.includes('border: "none"') && articleSource.includes('boxShadow: "none"'), "Article detail page must not wrap the whole article in a long visible card frame.");
   expect(!articleSource.includes("articleOutcomeSnapshot") && !articleSource.includes("readingPath"), "Article detail pages must not keep dead top-task derivations after removing the repeated task strip.");
   expect(!articleSource.includes("article-outcome-snapshot") && !articleSource.includes("article-reading-task-pack"), "Article detail pages must not reintroduce a duplicate top task strip.");
+  expect(articleSource.includes('className="article-title-row"') && articleSource.includes('gridTemplateColumns: "26px minmax(0, 1fr)"'), "Article detail header must place the back action and title in one compact row.");
+  expect(!articleSource.includes("article-meta-row") && !articleSource.includes("IconCoffee") && !articleSource.includes('约 {"readTime" in article ? article.readTime : article.readMin} 分钟'), "Article detail header must not show a separate category/date/read-time metadata row before content.");
   expect(!articleSource.includes("读完带走") && !articleSource.includes("读完产出"), "Article detail pages must avoid repeated output-summary blocks.");
   expect(!articleSource.includes('className="article-paired-work-panel"') && !articleSource.includes('className="article-paired-work-link"'), "Article detail pages must not repeat paired module entrances inside articles.");
   expect(!articleSource.includes("配套模块"), "Article detail pages must avoid repeated module entrances inside articles.");
