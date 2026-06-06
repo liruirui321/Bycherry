@@ -130,7 +130,7 @@ export function Hero() {
         minHeight: "calc(100vh - 50px)",
         position: "relative",
         overflow: "hidden",
-        padding: "1rem 1.5rem 1.08rem",
+        padding: "1.1rem clamp(1rem, 2.2vw, 2rem) 1.25rem",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
@@ -157,9 +157,9 @@ export function Hero() {
         <div className="hero-float-deco hero-float-leaf"><IconLeafSmall size={28} color="var(--cherry-sage)" /></div>
       </div>
 
-      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1220, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
-        <div className="hero-layout" style={{ display: "grid", gap: "1rem", alignItems: "center", justifyItems: "center", minWidth: 0 }}>
-          <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.72rem", justifyItems: "center", textAlign: "center", maxWidth: 820 }}>
+      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1560, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
+        <div className="hero-layout" style={{ display: "grid", gridTemplateColumns: "minmax(340px, 0.78fr) minmax(720px, 1.22fr)", gap: "1.2rem", alignItems: "stretch", justifyItems: "stretch", minWidth: 0 }}>
+          <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.78rem", alignContent: "center", justifyItems: "start", textAlign: "left", maxWidth: 560 }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.32rem 0.92rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 850, background: "rgba(250,247,241,0.72)", letterSpacing: 0 }}>
               <IconBranch size={13} color="var(--cherry-forest)" />
               By Cherry · Science Tools
@@ -169,7 +169,7 @@ export function Hero() {
               className="hero-title"
               style={{
                 fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-                fontSize: "clamp(3rem, 5.4vw, 5.2rem)",
+                fontSize: "clamp(3rem, 4.2vw, 5.1rem)",
                 fontWeight: 900,
                 lineHeight: 1.02,
                 color: "var(--cherry-warm-brown)",
@@ -185,10 +185,10 @@ export function Hero() {
               {" & "}
               <span style={{ color: "var(--cherry-blue)" }}>AI</span>
             </h1>
-            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.35vw, 1.14rem)", lineHeight: 1.62, fontWeight: 760, maxWidth: 660 }}>
+            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.25vw, 1.12rem)", lineHeight: 1.62, fontWeight: 760, maxWidth: 520 }}>
               科学模拟、科研阅读和 AI 学习工具，打开后直接操作、记录和复盘。
             </p>
-            <div className="hero-scope-strip" role="list" aria-label="内容范围" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.52rem", width: "min(100%, 560px)" }}>
+            <div className="hero-scope-strip" role="list" aria-label="内容范围" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.52rem", width: "min(100%, 520px)" }}>
               {[
                 { label: "模拟", detail: "看见过程", icon: <IconMicroscope size={19} color="var(--cherry-blue)" /> },
                 { label: "科研", detail: "核查证据", icon: <IconTestTube size={18} color="var(--cherry-peach)" /> },
@@ -205,8 +205,8 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.62rem", width: "100%" }}>
-            <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.03rem", lineHeight: 1.2, fontWeight: 950, textAlign: "center" }}>内容目录</h2>
+          <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.62rem", width: "100%", alignContent: "center" }}>
+            <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.03rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>内容目录</h2>
             <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(152px, auto)", gap: "0.76rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
               {entries.map((entry, index) => (
                 <a
@@ -221,7 +221,7 @@ export function Hero() {
                   style={{
                     background: entry.color,
                     border: `2px solid ${entry.border}`,
-                    borderRadius: 18,
+                    borderRadius: 12,
                     padding: entry.featuredImage ? "0.72rem 7.35rem 0.68rem 0.72rem" : "0.72rem 0.72rem 0.68rem",
                     color: "var(--cherry-warm-brown)",
                     textDecoration: "none",
@@ -236,8 +236,8 @@ export function Hero() {
                     maxWidth: "100%",
                     minHeight: 152,
                     boxSizing: "border-box",
-                    boxShadow: "4px 8px 0 rgba(94,68,42,0.08), 0 14px 28px rgba(94,68,42,0.05)",
-                    transform: `rotate(${[-0.7, 0.52, -0.36, 0.44, -0.48, 0.28][index % 6]}deg)`,
+                    boxShadow: "0 12px 26px rgba(94,68,42,0.07)",
+                    transform: "none",
                   }}
                 >
                   <span aria-hidden="true" style={{ position: "absolute", left: "0.74rem", right: "0.74rem", top: 0, height: 4, borderRadius: "0 0 999px 999px", background: entry.border, opacity: 0.82 }} />
@@ -418,6 +418,22 @@ export function Hero() {
         @keyframes heroFloatDeco {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-8px); }
+        }
+
+        @media (min-width: 1180px) {
+          .hero-featured-panel {
+            max-width: 820px !important;
+            justify-self: end !important;
+          }
+
+          .hero-entry-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 0.7rem !important;
+          }
+
+          .hero-entry-row {
+            min-height: 152px !important;
+          }
         }
 
         @media (max-width: 860px) {
