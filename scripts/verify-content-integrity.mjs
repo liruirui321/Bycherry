@@ -414,6 +414,8 @@ function verifyArticleOutcomeSnapshot() {
   expect(!articleSource.includes("配套模块"), "Article detail pages must avoid repeated module entrances inside articles.");
   expect(!articleSource.includes("完成验收卡"), "Article detail pages must not add a second completion card after the main checklist.");
   expect(articleSource.includes("article-record-panel") && articleSource.includes("article-record-preview-grid"), "Article detail learning record panel must expose stable compact layout classes.");
+  expect(/className="article-practice-pack-details article-compact-tool-details"[\s\S]{0,240}background: "transparent"[\s\S]{0,120}border: "none"[\s\S]{0,120}boxShadow: "none"/.test(articleSource), "Article practice pack wrapper must stay a lightweight folded row instead of a nested framed card.");
+  expect(!articleSource.includes("练习、模板与记录 · {practicePackItemCount} 项"), "Article practice pack summary must not expose item-count chrome.");
   expect(articleSource.includes("min-height: 64px !important"), "Article detail mobile learning record textareas must stay compact.");
   expect(!articleSource.includes('articleReadingTaskPackCards.map((item, index) => (') && !articleSource.includes('minHeight: 136'), "Article detail task pack must not render a front-loaded five-card grid before the body.");
   for (const retiredArticleHeaderBlock of ["function ArticleIllustration", "article-illustration-stamp", "paddingRight: 162", "padding-right: 10.5rem", "articleReadingTaskPackCards", "readingTaskPackText", "copyReadingTaskPack", "copiedReadingTaskPack", "目标是带走可执行材料，而不是只浏览", "先做、抓证据、留产出、验收、接着做", "【阅读任务包】", "已复制任务包", "复制任务包", "已复制行动包"]) {

@@ -1709,8 +1709,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             ) : null}
 
             {practicePackAvailable ? (
-              <details className="article-practice-pack-details article-compact-tool-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.72rem" }}>
-                <summary>练习、模板与记录 · {practicePackItemCount} 项</summary>
+              <details className="article-practice-pack-details article-compact-tool-details" style={{ background: "transparent", border: "none", borderRadius: 0, padding: "0.2rem 0", marginBottom: "0.56rem", boxShadow: "none" }}>
+                <summary>练习与记录</summary>
 
             {evidenceChainBuilderEnabled ? (
               <details className="plant-evidence-chain-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
