@@ -130,7 +130,7 @@ export function Hero() {
         minHeight: "calc(100vh - 50px)",
         position: "relative",
         overflow: "hidden",
-        padding: "0.9rem 1.5rem 1rem",
+        padding: "1rem 1.5rem 1.08rem",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
@@ -145,8 +145,8 @@ export function Hero() {
         <div className="hero-soft-blob hero-soft-blob-yellow" />
         <div className="hero-soft-blob hero-soft-blob-blue" />
         <div className="hero-soft-blob hero-soft-blob-peach" />
-        <div style={{ position: "absolute", width: "44vw", maxWidth: 620, height: 1, background: "rgba(58,92,62,0.18)", right: "2rem", top: "6.4rem" }} />
-        <div style={{ position: "absolute", width: "34vw", maxWidth: 460, height: 1, background: "rgba(122,175,200,0.24)", left: "2rem", bottom: "2.6rem" }} />
+        <div style={{ position: "absolute", width: "46vw", maxWidth: 720, height: 1, background: "rgba(58,92,62,0.18)", right: "2rem", top: "5.8rem" }} />
+        <div style={{ position: "absolute", width: "38vw", maxWidth: 520, height: 1, background: "rgba(122,175,200,0.24)", left: "2rem", bottom: "2.2rem" }} />
         <div className="hero-dot-field" style={{ position: "absolute", width: 128, height: 112, left: "0.8rem", top: "6.1rem", opacity: 0.16 }} />
         <div className="hero-dot-field" style={{ position: "absolute", width: 148, height: 120, right: "3.2rem", bottom: "2rem", opacity: 0.18 }} />
         <div className="hero-stem hero-stem-left" />
@@ -157,38 +157,38 @@ export function Hero() {
         <div className="hero-float-deco hero-float-leaf"><IconLeafSmall size={28} color="var(--cherry-sage)" /></div>
       </div>
 
-      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1320, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
-        <div className="hero-layout" style={{ display: "grid", gridTemplateColumns: "minmax(320px, 0.72fr) minmax(0, 1.28fr)", gap: "1.6rem", alignItems: "center" }}>
-          <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "1.05rem", alignContent: "center" }}>
-            <div style={{ display: "grid", gap: "0.74rem", minWidth: 0 }}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px solid rgba(58,92,62,0.22)", borderRadius: 999, padding: "0.28rem 0.68rem", color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 850, background: "rgba(250,247,241,0.72)", letterSpacing: 0 }}>
-                <IconBranch size={13} color="var(--cherry-forest)" />
-                By Cherry · Science Tools
-              </div>
+      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1220, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
+        <div className="hero-layout" style={{ display: "grid", gap: "1rem", alignItems: "center", justifyItems: "center", minWidth: 0 }}>
+          <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.72rem", justifyItems: "center", textAlign: "center", maxWidth: 820 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.32rem 0.92rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 850, background: "rgba(250,247,241,0.72)", letterSpacing: 0 }}>
+              <IconBranch size={13} color="var(--cherry-forest)" />
+              By Cherry · Science Tools
+            </div>
             <h1
               id="hero-heading"
               className="hero-title"
               style={{
                 fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-                fontSize: "clamp(2.8rem, 5.2vw, 5.25rem)",
+                fontSize: "clamp(3rem, 5.4vw, 5.2rem)",
                 fontWeight: 900,
-                lineHeight: 1.04,
+                lineHeight: 1.02,
                 color: "var(--cherry-warm-brown)",
                 margin: "0",
                 letterSpacing: 0,
                 overflowWrap: "anywhere",
               }}
             >
-              <span style={{ color: "var(--cherry-red)", textDecoration: "underline", textDecorationColor: "var(--cherry-peach)", textDecorationThickness: "0.08em", textUnderlineOffset: "0.12em" }}>Science</span>
-              <br />
-              learning
-              <br />
+              A tiny studio for{" "}
+              <span style={{ color: "var(--cherry-red)", textDecoration: "underline", textDecorationColor: "var(--cherry-peach)", textDecorationThickness: "0.08em", textUnderlineOffset: "0.12em" }}>science</span>
+              ,{" "}
+              <span style={{ color: "var(--cherry-sage)" }}>learning</span>
+              {" & "}
               <span style={{ color: "var(--cherry-blue)" }}>AI</span>
             </h1>
-            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.5vw, 1.18rem)", lineHeight: 1.72, fontWeight: 760, maxWidth: 520 }}>
+            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.35vw, 1.14rem)", lineHeight: 1.62, fontWeight: 760, maxWidth: 660 }}>
               科学模拟、科研阅读和 AI 学习工具，打开后直接操作、记录和复盘。
             </p>
-            <div className="hero-scope-strip" role="list" aria-label="内容范围" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.52rem", maxWidth: 560 }}>
+            <div className="hero-scope-strip" role="list" aria-label="内容范围" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.52rem", width: "min(100%, 560px)" }}>
               {[
                 { label: "模拟", detail: "看见过程", icon: <IconMicroscope size={19} color="var(--cherry-blue)" /> },
                 { label: "科研", detail: "核查证据", icon: <IconTestTube size={18} color="var(--cherry-peach)" /> },
@@ -203,14 +203,11 @@ export function Hero() {
                 </span>
               ))}
             </div>
-            </div>
           </div>
 
-          <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.74rem" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.8rem", flexWrap: "wrap" }}>
-              <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.12rem", lineHeight: 1.2, fontWeight: 950 }}>内容目录</h2>
-            </div>
-            <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(188px, auto)", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+          <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.62rem", width: "100%" }}>
+            <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.03rem", lineHeight: 1.2, fontWeight: 950, textAlign: "center" }}>内容目录</h2>
+            <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(152px, auto)", gap: "0.76rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
               {entries.map((entry, index) => (
                 <a
                   className={`hero-entry-row ${entry.featuredImage ? "hero-entry-row-image" : ""}`}
@@ -224,8 +221,8 @@ export function Hero() {
                   style={{
                     background: entry.color,
                     border: `2px solid ${entry.border}`,
-                    borderRadius: 14,
-                    padding: "0.74rem",
+                    borderRadius: 18,
+                    padding: entry.featuredImage ? "0.72rem 7.35rem 0.68rem 0.72rem" : "0.72rem 0.72rem 0.68rem",
                     color: "var(--cherry-warm-brown)",
                     textDecoration: "none",
                     textAlign: "left",
@@ -237,19 +234,19 @@ export function Hero() {
                     overflow: "hidden",
                     minWidth: 0,
                     maxWidth: "100%",
-                    minHeight: 188,
+                    minHeight: 152,
                     boxSizing: "border-box",
                     boxShadow: "4px 8px 0 rgba(94,68,42,0.08), 0 14px 28px rgba(94,68,42,0.05)",
-                    transform: `rotate(${[-0.55, 0.42, -0.28, 0.36, -0.4, 0.22][index % 6]}deg)`,
+                    transform: `rotate(${[-0.7, 0.52, -0.36, 0.44, -0.48, 0.28][index % 6]}deg)`,
                   }}
                 >
                   <span aria-hidden="true" style={{ position: "absolute", left: "0.74rem", right: "0.74rem", top: 0, height: 4, borderRadius: "0 0 999px 999px", background: entry.border, opacity: 0.82 }} />
                   <span style={{ minWidth: 0, display: "grid", gap: "0.44rem", alignContent: "start" }}>
                     <span style={{ display: "flex", alignItems: "center", gap: "0.48rem", minWidth: 0 }}>
-                      <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: 32, height: 32, borderRadius: 999, background: "rgba(250,247,241,0.64)", flexShrink: 0 }}>
+                      <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: 30, height: 30, borderRadius: 999, background: "rgba(250,247,241,0.64)", flexShrink: 0 }}>
                         {entry.icon}
                       </span>
-                      <strong style={{ fontSize: "0.98rem", lineHeight: 1.18, minWidth: 0, overflowWrap: "anywhere" }}>{entry.title}</strong>
+                      <strong style={{ fontSize: "0.96rem", lineHeight: 1.18, minWidth: 0, overflowWrap: "anywhere" }}>{entry.title}</strong>
                       <span aria-hidden="true" style={{ marginLeft: "auto", flexShrink: 0, color: "rgba(62,42,26,0.34)", fontSize: "0.64rem", lineHeight: 1, fontWeight: 950, letterSpacing: 0 }}>{String(index + 1).padStart(2, "0")}</span>
                     </span>
                     <span style={{ display: "flex", gap: "0.44rem", flexWrap: "wrap", alignItems: "center" }}>
@@ -275,7 +272,7 @@ export function Hero() {
                     </span>
                   </span>
                   {entry.featuredImage ? (
-                    <img src={entry.featuredImage} alt="" aria-hidden="true" loading="eager" style={{ width: "100%", height: 88, objectFit: "cover", borderRadius: 12, border: "1.5px solid rgba(250,247,241,0.72)", alignSelf: "end" }} />
+                    <img src={entry.featuredImage} alt="" aria-hidden="true" loading="eager" style={{ position: "absolute", right: "0.58rem", bottom: "0.58rem", width: 96, height: 66, objectFit: "cover", borderRadius: 13, border: "1.5px solid rgba(250,247,241,0.72)" }} />
                   ) : entry.visualKind ? (
                     <span className="hero-entry-visual-row" aria-hidden="true">
                       <HeroMiniVisual kind={entry.visualKind} />
