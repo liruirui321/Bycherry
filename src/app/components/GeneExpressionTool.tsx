@@ -90,8 +90,8 @@ const geneQuizItems = [
 ];
 
 const initialCycleProgress = 0.42;
-const ribosomeStartFraction = 0.18;
-const ribosomeTravelSpan = 0.72;
+const ribosomeStartFraction = 0.08;
+const ribosomeTravelSpan = 0.86;
 
 function inBox(molecule: Molecule, box: { x: number; y: number; w: number; h: number }) {
   return molecule.x >= box.x && molecule.x <= box.x + box.w && molecule.y >= box.y && molecule.y <= box.y + box.h;
@@ -291,14 +291,14 @@ function fullPolylinePath(points: Point[]) {
 function buildNascentMrnaPath(polymerasePoint: Point, progress: number, offset: Point = { x: 0, y: 0 }) {
   const exit = { x: polymerasePoint.x + 10 + offset.x, y: polymerasePoint.y + 31 + offset.y };
   const boundedProgress = clamp01(progress);
-  const tailLength = 46 + boundedProgress * 245;
+  const tailLength = 78 + boundedProgress * 335;
 
   return [
-    { x: exit.x - tailLength, y: exit.y + 86 },
-    { x: exit.x - tailLength * 0.86, y: exit.y + 36 },
-    { x: exit.x - tailLength * 0.64, y: exit.y + 110 },
-    { x: exit.x - tailLength * 0.43, y: exit.y + 58 },
-    { x: exit.x - tailLength * 0.23, y: exit.y + 94 },
+    { x: exit.x - tailLength, y: exit.y + 90 },
+    { x: exit.x - tailLength * 0.86, y: exit.y + 42 },
+    { x: exit.x - tailLength * 0.64, y: exit.y + 118 },
+    { x: exit.x - tailLength * 0.43, y: exit.y + 62 },
+    { x: exit.x - tailLength * 0.23, y: exit.y + 98 },
     exit,
   ];
 }
@@ -335,20 +335,22 @@ function maxVisibleTranscribedProgress(progress: number, polBound: number) {
 
 function buildRibosomeTracks(progress: number, ribBound: number, canRead: boolean, maxTranscribedProgress: number, path: Point[] = transcriptPath) {
   return Array.from({ length: ribBound }).map((_, index) => {
-    const activeStart = 0.24;
-    const activeEnd = 0.94;
-    const phase = (progress + index * 0.18) % 1;
-    const localProgress = phase >= activeStart && phase < activeEnd ? (phase - activeStart) / (activeEnd - activeStart) : 0;
-    const readProgress = ribosomeStartFraction + localProgress * ribosomeTravelSpan;
-    const readableLimit = Math.max(ribosomeStartFraction + 0.06, maxTranscribedProgress - 0.06);
-    const onReadableSegment = canRead && phase >= activeStart && phase < activeEnd && readProgress <= readableLimit;
-    const entryOpacity = clamp01((phase - activeStart) / 0.07);
-    const exitOpacity = clamp01((activeEnd - phase) / 0.08);
+    const readableLimit = clamp01(maxTranscribedProgress - 0.08);
+    const readableSpan = Math.max(0, readableLimit - ribosomeStartFraction);
+    const hasReadableSegment = canRead && readableSpan > 0.05;
+    const phase = (progress * 0.92 + index * 0.22) % 1;
+    const localProgress = hasReadableSegment ? phase : 0;
+    const readProgress = hasReadableSegment
+      ? ribosomeStartFraction + readableSpan * localProgress
+      : ribosomeStartFraction;
+    const translationProgress = clamp01((readProgress - ribosomeStartFraction) / ribosomeTravelSpan);
+    const entryOpacity = clamp01(readableSpan / 0.12) * clamp01(phase / 0.08);
+    const exitOpacity = phase > 0.92 ? clamp01((1 - phase) / 0.08) : 1;
     return {
       point: pointOnPolyline(path, readProgress),
-      progress: localProgress,
+      progress: translationProgress,
       readProgress,
-      opacity: onReadableSegment ? Math.min(entryOpacity, exitOpacity) : 0,
+      opacity: hasReadableSegment ? Math.min(entryOpacity, exitOpacity) : 0,
     };
   });
 }
@@ -423,13 +425,14 @@ function LiveExpressionProcess({
             <text x={36} y={-27} textAnchor="middle" fill="var(--cherry-forest)" fontSize={7} fontWeight={900}>
               出口
             </text>
-            <path d="M13 -42 C13 -30 13 -16 13 -7" fill="none" stroke={currentCodon?.color ?? "var(--cherry-yellow)"} strokeWidth={3.4} strokeLinecap="round" opacity={0.82} />
-            <circle cx={13} cy={-43} r={9.5} fill={currentCodon?.color ?? "var(--cherry-yellow)"} stroke="#FAF7F1" strokeWidth={2.2}>
-              {prefersReducedMotion ? null : <animate attributeName="cy" values="-46;-40;-43" dur="0.8s" repeatCount="indefinite" />}
-            </circle>
-            <text x={13} y={-40} textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={6.5} fontWeight={900}>
-              {currentCodon?.amino ?? ""}
-            </text>
+            <g transform="translate(13 -42)" opacity={0.92}>
+              <path d="M-13 1 Q0 -14 13 1 Q0 13 -13 1Z" fill={currentCodon?.color ?? "var(--cherry-yellow)"} stroke="#FAF7F1" strokeWidth={2}>
+                {prefersReducedMotion ? null : <animateTransform attributeName="transform" type="translate" values="0 -2;0 3;0 0" dur="0.8s" repeatCount="indefinite" />}
+              </path>
+              <text y={4} textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={6.5} fontWeight={900}>
+                tRNA
+              </text>
+            </g>
             <text x={-13} y={0} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={7} fontWeight={900}>
               P
             </text>
