@@ -131,9 +131,9 @@ export function ArticleLibraryPage() {
                       <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{article.desc}</span>
                     </span>
                     <span className="article-library-actions" style={{ display: "grid", gap: "0.24rem", color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.42, fontWeight: 800 }}>
-                      <span><strong style={{ color: "var(--cherry-forest)" }}>先做：</strong>{article.firstAction}</span>
-                      <span><strong style={{ color: "var(--cherry-red)" }}>检查：</strong>{article.firstCheck}</span>
-                      <span><strong style={{ color: "var(--cherry-warm-brown)" }}>产出：</strong>{article.firstOutput}</span>
+                      <span className="article-library-action-line"><strong style={{ color: "var(--cherry-forest)" }}>先做：</strong>{article.firstAction}</span>
+                      <span className="article-library-action-line"><strong style={{ color: "var(--cherry-red)" }}>检查：</strong>{article.firstCheck}</span>
+                      <span className="article-library-output-line"><strong style={{ color: "var(--cherry-warm-brown)" }}>产出：</strong>{article.firstOutput}</span>
                     </span>
                   </a>
                 ))}
@@ -166,7 +166,19 @@ export function ArticleLibraryPage() {
           }
 
           .article-library-actions {
-            display: none !important;
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 0.18rem !important;
+            border-top: 1px solid rgba(94,68,42,0.1);
+            padding-top: 0.4rem;
+          }
+
+          .article-library-action-line,
+          .article-library-output-line {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
           }
         }
 

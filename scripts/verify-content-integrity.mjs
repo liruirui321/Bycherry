@@ -1068,10 +1068,12 @@ function verifyLearnerFacingArticleCopy() {
   const staticIndexSource = read("scripts/generate-static-index.mjs");
   const contentRoutesSource = read("scripts/content-routes.mjs");
   const articleDetailSource = read("src/app/components/ArticleDetailPage.tsx");
+  const articleLibrarySource = read("src/app/components/ArticleLibraryPage.tsx");
   const notesSource = read("src/app/components/Notes.tsx");
   const researchSource = read("src/app/components/ResearchEssays.tsx");
   const learnerArticleSources = [
     "src/app/App.tsx",
+    "src/app/components/ArticleLibraryPage.tsx",
     "src/app/components/ArticleDetailPage.tsx",
     "src/app/components/Footer.tsx",
     "src/app/components/Hero.tsx",
@@ -1214,6 +1216,8 @@ function verifyLearnerFacingArticleCopy() {
   expect(staticIndexSource.includes("teaches: [route.firstAction, route.firstCheck, route.firstOutput].filter(Boolean)"), "Static article JSON-LD must include first action, completion check, and learner output.");
   expect(staticIndexSource.includes("完成后检查："), "Static index fallback must expose article completion checks.");
   expect(staticIndexSource.includes("可保存产出："), "Static index fallback must expose learner outputs.");
+  expect(articleLibrarySource.includes("article-library-action-line") && articleLibrarySource.includes("article-library-output-line"), "Reading library entries must expose first action, completion check, and learner output.");
+  expect(!/article-library-actions[\s\S]{0,180}display:\s*none\s*!important/.test(articleLibrarySource), "Reading library mobile entries must not hide article action/check/output guidance.");
   expect(!existsSync(resolve(root, "src/app/components/HomeLibrary.tsx")), "Home article index component must stay removed; articles are reached by direct routes and generated index metadata.");
   for (const retiredNoteBlock of ["methodChecklistText", "copyMethodChecklist", "note-method-checklist-panel", "noteRouteGuides", "methodRouteGuideText", "copyMethodRouteGuide", "note-route-guide-panel", "note-recommended-start"]) {
     expect(!notesSource.includes(retiredNoteBlock), `Learning method library should not repeat route/checklist panels on the homepage: ${retiredNoteBlock}.`);
