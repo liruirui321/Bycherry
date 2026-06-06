@@ -103,7 +103,7 @@ function PromptKitContent() {
   const [copiedResearchRecord, setCopiedResearchRecord] = useState(false);
   const [copiedCitationAudit, setCopiedCitationAudit] = useState(false);
   const [copiedResearchSkill, setCopiedResearchSkill] = useState(false);
-  const [hasRunPreview, setHasRunPreview] = useState(false);
+  const [hasRunPreview, setHasRunPreview] = useState(true);
   const [copyStatus, setCopyStatus] = useState("");
   const [researchQuestionDraft, setResearchQuestionDraft] = useState("");
   const [unsupportedClaimDraft, setUnsupportedClaimDraft] = useState("");
@@ -1132,17 +1132,11 @@ ${localPreviewOutput}`;
                 <div className="research-agent-active-input" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", marginTop: "0.25rem" }}>输入材料：{activePrompt.input}</div>
               </div>
               <div className="research-agent-copy-actions" style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
-                <button type="button" onClick={copyPrompt} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                  {copied ? "已复制" : "复制模型指令"}
+                <button type="button" onClick={copyResearchRecord} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                  {copiedResearchRecord ? "已复制" : "复制研究记录"}
                 </button>
-                <button type="button" onClick={copyTaskPack} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                  {copiedPack ? "已复制" : "复制任务包"}
-                </button>
-                <button type="button" onClick={copyAgentJson} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                  {copiedJson ? "已复制" : "复制进阶结构"}
-                </button>
-                <button type="button" onClick={copyResponseJson} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                  {copiedResponseJson ? "已复制" : "复制返回模板"}
+                <button type="button" onClick={copyCitationAudit} aria-describedby="prompt-copy-status" style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                  {copiedCitationAudit ? "已复制" : "复制引用核查"}
                 </button>
               </div>
             </div>
@@ -1164,6 +1158,30 @@ ${localPreviewOutput}`;
                 })}
               </div>
             </div>
+
+            <section className="research-live-preview-panel" aria-labelledby="research-live-preview-title" style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(58,92,62,0.22)", borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.5rem", marginBottom: "0.62rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "baseline", flexWrap: "wrap" }}>
+                <div>
+                  <h3 id="research-live-preview-title" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.9rem", lineHeight: 1.2, fontWeight: 950 }}>本地预览结果</h3>
+                  <p style={{ margin: "0.2rem 0 0", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 820 }}>根据当前材料实时给出任务路由、证据候选、风险边界和下一步动作。</p>
+                </div>
+                <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 950 }}>材料不会离开浏览器</span>
+              </div>
+              <div className="research-live-preview-grid" role="list" aria-label="本地预览结果" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.44rem" }}>
+                {[
+                  { label: "推荐任务", value: `${suggestedRoute.title} · ${routeConfidence}`, body: routeMatchedSignals, color: "var(--cherry-blue-light)" },
+                  { label: "证据候选", value: visibleEvidenceLines.length ? `${visibleEvidenceLines.length} 条材料行` : "待填写", body: visibleEvidenceLines[0] ?? "先粘贴摘要、图注、方法或结果句。", color: "rgba(250,247,241,0.72)" },
+                  { label: "风险边界", value: missingFields.length ? `${missingFields.length} 项待补` : "可初步分析", body: missingFields.length ? `缺少：${missingFields.join("、")}` : "仍需人工回查来源和统计信息。", color: "var(--cherry-yellow-light)" },
+                  { label: "下一步", value: activeTaskActions[0]?.replace("。", "") ?? activePrompt.title, body: reviewerQuestions[0], color: "var(--cherry-peach-light)" },
+                ].map((item) => (
+                  <div key={item.label} role="listitem" className="research-live-preview-card" style={{ background: item.color, border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.54rem", display: "grid", gap: "0.2rem", minHeight: 76 }}>
+                    <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", lineHeight: 1.2, fontWeight: 950 }}>{item.label}</span>
+                    <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.76rem", lineHeight: 1.24, fontWeight: 950 }}>{item.value}</strong>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.34, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item.body}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
 
             <div className="research-start-path-strip" role="list" aria-label="本次阅读路径" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem", marginBottom: "0.62rem" }}>
               {researchStartPath.map((item, index) => (
@@ -1746,6 +1764,7 @@ ${localPreviewOutput}`;
             #prompt-kit-builder .research-agent-status-strip,
             #prompt-kit-builder .research-agent-check-strip,
             #prompt-kit-builder .research-material-gate-strip,
+            #prompt-kit-builder .research-live-preview-grid,
             #prompt-kit-builder .research-start-path-strip {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
@@ -1822,6 +1841,21 @@ ${localPreviewOutput}`;
 
             #prompt-kit-builder .research-agent-mode-desc {
               display: none !important;
+            }
+
+            #prompt-kit-builder .research-live-preview-panel {
+              padding: 0.58rem !important;
+              margin-bottom: 0.54rem !important;
+            }
+
+            #prompt-kit-builder .research-live-preview-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.36rem !important;
+            }
+
+            #prompt-kit-builder .research-live-preview-card {
+              min-height: 68px !important;
+              padding: 0.46rem !important;
             }
 
             #prompt-kit-builder .research-material-textarea {

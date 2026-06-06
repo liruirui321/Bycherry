@@ -633,6 +633,13 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "material gate method", text: "样本方法" },
     { label: "material gate evidence", text: "结果证据" },
     { label: "material gate boundary", text: "边界语句" },
+    { label: "default visible local preview", text: "useState(true)" },
+    { label: "visible local preview result panel", text: "research-live-preview-panel" },
+    { label: "visible local preview result title", text: "本地预览结果" },
+    { label: "local preview result grid", text: "research-live-preview-grid" },
+    { label: "local preview result card", text: "research-live-preview-card" },
+    { label: "learner-first top copy action", text: "copiedResearchRecord ? \"已复制\" : \"复制研究记录\"" },
+    { label: "citation-first top copy action", text: "copiedCitationAudit ? \"已复制\" : \"复制引用核查\"" },
     { label: "compact route grid", text: "research-prompt-route-grid" },
     { label: "compact route button", text: "research-prompt-route-button" },
     { label: "compact route hidden input", text: "research-prompt-route-input" },
@@ -658,6 +665,8 @@ function verifyResearchAgentWorkbenchContract() {
   expect(promptKitSource.includes('className="research-agent-mode-grid"') && promptKitSource.includes('gridTemplateColumns: "repeat(3, minmax(0, 1fr))"'), "Research Agent mode selector must stay as compact three-column buttons.");
   expect(promptKitSource.includes('className="research-agent-mode-desc"') && promptKitSource.includes('style={{ display: "none"'), "Research Agent mode descriptions must stay hidden visually so the material input appears earlier.");
   expect(promptKitSource.includes('className="research-agent-main-panel"') && promptKitSource.includes('padding: "0.82rem"') && !promptKitSource.includes('className="research-agent-main-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "1.2rem"'), "Research Agent main panel must stay compact instead of a tall framed card.");
+  expect(promptKitSource.includes('const [hasRunPreview, setHasRunPreview] = useState(true)') && promptKitSource.includes('aria-labelledby="research-live-preview-title"') && promptKitSource.includes("根据当前材料实时给出任务路由、证据候选、风险边界和下一步动作"), "Research Agent first screen must show live local preview results instead of waiting behind a run button.");
+  expect(promptKitSource.includes("#prompt-kit-builder .research-live-preview-grid") && promptKitSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "Research Agent live local preview must stay compact on mobile.");
   const researchReviewSource = promptKitSource.slice(promptKitSource.indexOf('className="research-review-grid"'), promptKitSource.indexOf('className="research-material-textarea"'));
   expect(/className="research-material-textarea"[\s\S]{0,260}minHeight: 84/.test(promptKitSource) && !/className="research-material-textarea"[\s\S]{0,260}minHeight: 104/.test(promptKitSource), "Research Agent material textarea must stay compact on desktop instead of a long default frame.");
   expect(promptKitSource.includes("min-height: 84px !important") && !promptKitSource.includes("min-height: 104px !important"), "Research Agent mobile material textarea must not be stretched into a tall default frame.");
