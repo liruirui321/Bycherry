@@ -1,63 +1,7 @@
-import { useEffect, useState } from "react";
 import { IconCherry } from "./Icons";
 import { navigateClient, shouldUseClientNavigation } from "../navigation";
-import { preloadRouteForHref } from "../routePrefetch";
 
 export function Nav() {
-  const [locationKey, setLocationKey] = useState(`${window.location.pathname}${window.location.hash}`);
-
-  const links = [
-    { label: "内容", href: "/#works", matchHashes: ["#works", "#top"] },
-    { label: "联系", href: "/#contact" },
-  ];
-
-  function navigate(href: string) {
-    if (href.startsWith("/")) {
-      navigateClient(href);
-      return;
-    }
-
-    if (window.location.pathname !== "/") {
-      navigateClient(`/${href}`);
-      return;
-    }
-
-    window.location.hash = href;
-  }
-
-  useEffect(() => {
-    function handleLocationChange() {
-      setLocationKey(`${window.location.pathname}${window.location.hash}`);
-    }
-
-    window.addEventListener("popstate", handleLocationChange);
-    window.addEventListener("hashchange", handleLocationChange);
-    return () => {
-      window.removeEventListener("popstate", handleLocationChange);
-      window.removeEventListener("hashchange", handleLocationChange);
-    };
-  }, []);
-
-  function isActiveLink(link: (typeof links)[number]) {
-    const { pathname, hash } = window.location;
-    if ("matchHashes" in link && pathname === "/" && link.matchHashes.includes(hash || "#top")) return true;
-    if (pathname.startsWith("/works/")) return link.href === "/#works";
-    return pathname === "/" && link.href === `/${hash || "#top"}`;
-  }
-
-  function desktopLinkStyle(active: boolean): React.CSSProperties {
-    return {
-      textDecoration: "none",
-      color: active ? "var(--cherry-red)" : "var(--cherry-warm-mid)",
-      fontSize: "0.92rem",
-      fontWeight: active ? 900 : 600,
-      transition: "color 0.2s, background 0.2s",
-      background: active ? "rgba(232,144,124,0.16)" : "transparent",
-      borderRadius: 999,
-      padding: "0.28rem 0.58rem",
-    };
-  }
-
   return (
     <nav
       style={{
@@ -84,14 +28,13 @@ export function Nav() {
           position: "relative",
         }}
       >
-        {/* Logo */}
         <a
           className="nav-logo"
           href="/#top"
           onClick={(event) => {
             if (!shouldUseClientNavigation(event)) return;
             event.preventDefault();
-            navigate("#top");
+            navigateClient("/#top");
           }}
           style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}
         >
@@ -100,45 +43,13 @@ export function Nav() {
             By Cherry
           </span>
         </a>
-
-        <div className="nav-links" style={{ position: "fixed", top: 12, left: "max(8.2rem, calc((100vw - 1100px) / 2 + 8.2rem))", zIndex: 80, display: "flex", gap: "0.48rem", alignItems: "center", justifyContent: "flex-start", minWidth: 0 }}>
-          {links.map((l) => {
-            const active = isActiveLink(l);
-            return (
-              <a
-                className="nav-link"
-                key={l.label}
-                href={l.href}
-                aria-current={active ? "page" : undefined}
-                onMouseEnter={() => preloadRouteForHref(l.href)}
-                onFocus={() => preloadRouteForHref(l.href)}
-                onPointerDown={() => preloadRouteForHref(l.href)}
-                onClick={(event) => {
-                  if (!shouldUseClientNavigation(event)) return;
-                  event.preventDefault();
-                  navigate(l.href);
-                }}
-                style={desktopLinkStyle(active)}
-              >
-                {l.label}
-              </a>
-            );
-          })}
-        </div>
       </div>
 
       <style>
         {`
-          nav .nav-logo:focus-visible,
-          nav .nav-link:focus-visible,
-          nav button:focus-visible {
+          nav .nav-logo:focus-visible {
             outline: 3px solid var(--cherry-red);
             outline-offset: 4px;
-          }
-
-          nav .nav-link:hover,
-          nav .nav-link:focus-visible {
-            color: var(--cherry-red) !important;
           }
 
           @media (max-width: 860px) {
@@ -160,24 +71,6 @@ export function Nav() {
             nav .nav-logo svg {
 	              width: 22px !important;
 	              height: 22px !important;
-            }
-
-            nav .nav-links {
-	              top: 12px !important;
-	              left: 7.8rem !important;
-              gap: 0.28rem !important;
-            }
-
-            nav .nav-link {
-              font-size: 0.72rem !important;
-              padding: 0.2rem 0.32rem !important;
-            }
-          }
-
-          @media (prefers-reduced-motion: reduce) {
-            nav .nav-link {
-              transition: none !important;
-              transform: none !important;
             }
           }
         `}

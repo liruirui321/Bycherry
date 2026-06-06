@@ -86,8 +86,8 @@ expect(!appSource.includes("<Works") && !workCardsSource.includes("export functi
 expect(heroSource.includes("preloadRouteForHref(getWorkToolHref(work.href))"), "Hero work cards must prefetch direct-to-tool detail routes on hover or focus.");
 expect(!noteCardsSource.includes("export function Notes") && !noteCardsSource.includes("note-card"), "Notes.tsx must stay data-only so old homepage card code is not bundled.");
 expect(!researchCardsSource.includes("export function ResearchEssays") && !researchCardsSource.includes("research-essay-card"), "ResearchEssays.tsx must stay data-only so old homepage card code is not bundled.");
-expect(navSource.includes("preloadRouteForHref(l.href)"), "Navigation links must prefetch route chunks on hover, focus, or pointer down.");
-expect([heroSource, navSource].every((source) => source.includes("onPointerDown")), "Primary route entrypoints must prefetch on pointer down for touch devices.");
+expect(!navSource.includes("preloadRouteForHref") && !navSource.includes("nav-link"), "Navigation must not keep prefetch wiring for removed repeated homepage entries.");
+expect(heroSource.includes("onPointerDown"), "Homepage content-directory entries must prefetch on pointer down for touch devices.");
 
 expect(indexCss.includes("@import './fonts.css';"), "src/styles/index.css must import fonts.css.");
 expect(indexCss.includes("@import './tailwind.css';"), "src/styles/index.css must import tailwind.css.");

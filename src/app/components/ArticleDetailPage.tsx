@@ -2128,7 +2128,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     </div>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.55rem" }}>
                       {platformQuestionAuditRubric.map((item, index) => (
-                        <div key={item.title} style={{ background: index % 2 === 0 ? "var(--cherry-yellow-light)" : "var(--cherry-blue-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", display: "grid", gap: "0.34rem", minHeight: 142 }}>
+                        <div key={item.title} style={{ background: index % 2 === 0 ? "var(--cherry-yellow-light)" : "var(--cherry-blue-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem", display: "grid", gap: "0.34rem" }}>
                           <span aria-hidden="true" style={{ width: 22, height: 22, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900 }}>{index + 1}</span>
                           <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>{item.title}</strong>
                           <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>通过：{item.pass}</span>

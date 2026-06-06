@@ -996,6 +996,17 @@ function verifyCrisprLearnerScenarios() {
   expect(crisprSource.includes('className="crispr-flow-panel"') && crisprSource.includes('gridTemplateColumns: "repeat(3, minmax(0, 1fr))"') && crisprSource.includes('minHeight: 42'), "CRISPR desktop flow control must stay as compact three-step buttons.");
   expect(crisprSource.includes('className="crispr-canvas-panel"') && crisprSource.includes('borderRadius: 12') && !crisprSource.includes('borderRadius: 22, overflow: "hidden", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)"'), "CRISPR canvas frame must stay compact instead of a heavy long card.");
   expect(crisprSource.includes('<details className="crispr-quality-panel crispr-compact-details"') && crisprSource.includes('修复结果 · {effectiveRepair.title}') && !crisprSource.includes('className="crispr-quality-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem"'), "CRISPR repair result selector must stay folded and compact instead of a default-open long card.");
+  expect(/className="crispr-intro-sequence-panel"[\s\S]{0,220}borderRadius: 12[\s\S]{0,120}padding: "0\.78rem"[\s\S]{0,160}boxShadow: "0 8px 18px/.test(crisprSource), "CRISPR intro sequence panel must stay compact.");
+  expect(/className="crispr-intro-boundary-panel"[\s\S]{0,220}borderRadius: 12[\s\S]{0,120}padding: "0\.78rem"[\s\S]{0,160}boxShadow: "0 8px 18px/.test(crisprSource), "CRISPR intro boundary panel must stay compact.");
+  expect(/className="crispr-quiz-list-panel"[\s\S]{0,220}borderRadius: 12[\s\S]{0,120}padding: "0\.78rem"[\s\S]{0,160}boxShadow: "0 8px 18px/.test(crisprSource), "CRISPR quiz list panel must stay compact.");
+  expect(/className="crispr-quiz-answer-panel"[\s\S]{0,220}borderRadius: 12[\s\S]{0,120}padding: "0\.78rem"[\s\S]{0,160}boxShadow: "0 8px 18px/.test(crisprSource), "CRISPR quiz answer panel must stay compact.");
+  const crisprIntroSource = crisprSource.slice(crisprSource.indexOf('className="crispr-intro-details"'), crisprSource.indexOf("crispr-practice-panel"));
+  const crisprQuizSource = crisprSource.slice(crisprSource.indexOf('className="crispr-quiz-details"'), crisprSource.indexOf("crispr-report-details"));
+  expect(!crisprIntroSource.includes("minHeight: 118"), "CRISPR intro step cards must not use fixed tall minimum heights.");
+  expect(!crisprIntroSource.includes("borderRadius: 22") && !crisprIntroSource.includes('padding: "1.1rem"') && !crisprIntroSource.includes('boxShadow: "4px 7px'), "CRISPR intro panels must not return to heavy cards.");
+  expect(!crisprQuizSource.includes("borderRadius: 22") && !crisprQuizSource.includes('padding: "1.1rem"') && !crisprQuizSource.includes('boxShadow: "4px 7px'), "CRISPR quiz panels must not return to heavy cards.");
+  const crisprSupportDetailsSource = crisprSource.slice(crisprSource.indexOf('className="crispr-support-pack-details"'), crisprSource.indexOf("</details>\n      </section>"));
+  expect(!crisprSupportDetailsSource.includes('boxShadow: "4px 7px') && !crisprSupportDetailsSource.includes("borderRadius: 22") && !crisprSupportDetailsSource.includes("minHeight: 230"), "CRISPR support folds must not use long sticky-note panels.");
   expect(crisprSource.includes('aria-label={`${item.label}：${item.text}`}') && crisprSource.includes('className="crispr-flow-step-note"') && crisprSource.includes('style={{ display: "none"'), "CRISPR flow step explanatory notes must stay hidden visually while remaining available to assistive labels.");
   expect(crisprSource.includes('className="crispr-guide-panel"') && crisprSource.includes('className="crispr-guide-next-action"') && crisprSource.includes('className="crispr-guide-target-note"') && crisprSource.includes('className="crispr-guide-note"'), "CRISPR guide panel must keep stable compact sub-sections.");
   expect(crisprSource.includes('aria-label={`${guide.name}：${guide.note}`}') && crisprSource.includes('className="crispr-guide-target-note" style={{ display: "none"') && crisprSource.includes('className="crispr-guide-note" style={{ display: "none"'), "CRISPR guide panel must hide long target notes visually while preserving them in labels.");
@@ -1189,7 +1200,6 @@ function verifyLearnerProductPositioning() {
     "概念解释生成器",
     "科研 Agent",
     "文章",
-    "nav-links",
   ];
   const retiredProductPatterns = [
     { label: "course-heavy home title", pattern: /科学、课程/ },
@@ -1217,16 +1227,12 @@ function verifyLearnerProductPositioning() {
   const appSource = read("src/app/App.tsx");
   expect(!appSource.includes("<About") && !appSource.includes('from "./components/About"'), "Homepage should not render a separate About section.");
   expect(!existsSync(resolve(root, "src/app/components/About.tsx")), "About component should stay removed so homepage remains a short content directory.");
-  expect(navSource.includes('import { navigateClient, shouldUseClientNavigation } from "../navigation"'), "Navigation must stay top-level and not duplicate individual work cards.");
-  expect(navSource.includes('{ label: "内容", href: "/#works", matchHashes: ["#works", "#top"] }'), "Navigation should collapse work shortcuts into one content entry.");
-  expect(!navSource.includes('{ label: "文章", href: "/#research", matchHashes: ["#research"] }'), "Navigation must not expose a repeated article entry on the compact homepage.");
-  expect(navSource.includes('{ label: "联系", href: "/#contact" }'), "Navigation must keep one compact contact entry.");
-  expect(navSource.includes('if ("matchHashes" in link && pathname === "/" && link.matchHashes.includes(hash || "#top")) return true;'), "Navigation content entry must track the first-screen module anchor.");
-  expect(!navSource.includes('if (pathname.startsWith("/notes/") || pathname.startsWith("/research/")) return link.href === "/#research";'), "Navigation must not keep article-detail active state for a removed homepage article entry.");
-  expect(navSource.includes('if (pathname.startsWith("/works/")) return link.href === "/#works";'), "Navigation content entry must stay active on work detail pages.");
-  expect(navSource.includes('className="nav-links"') && navSource.includes('position: "fixed"') && navSource.includes('display: "flex"'), "Navigation entries must stay directly visible instead of hiding behind a mobile menu.");
-  expect(navSource.includes("@media (max-width: 860px)") && navSource.includes("nav .nav-link"), "Navigation must include compact small-screen link sizing aligned with the homepage card breakpoint.");
-  expect(navSource.includes("nav .nav-links") && navSource.includes("left: 7.8rem !important"), "Small-screen navigation links must sit beside the compact logo so all entries stay visible in the left viewport.");
+  expect(navSource.includes('import { navigateClient, shouldUseClientNavigation } from "../navigation"'), "Navigation logo must keep client-side home navigation.");
+  expect(!navSource.includes('className="nav-links"') && !navSource.includes('className="nav-link"'), "Navigation must not repeat homepage content/contact entries above the first-screen directory.");
+  for (const retiredNavEntry of ['label: "内容"', 'label: "联系"', 'href: "/#works"', 'href: "/#contact"', 'aria-current']) {
+    expect(!navSource.includes(retiredNavEntry), `Navigation should not reintroduce repeated homepage entry: ${retiredNavEntry}.`);
+  }
+  expect(appSource.includes("{isHome ? null : <Footer />}"), "Homepage should not render the footer so the first screen stays short and content-only.");
   for (const retiredNavGuide of ["更多工具", "读证据", "学方法", "看生命过程", "整理科研", "生命过程", "拆概念", "科研 Agent", "getWorkToolHref", "matchHref", "nav-mobile-toggle", "mobile-navigation", "mobile-nav-link", "IconMenu", "IconClose", 'matchHashes: ["#research", "#notes"]', "currentRouteGuideText", "copyCurrentRouteGuide", "nav-route-guide-button", "nav-route-guide-status", "当前位置学习路径", "复制当前位置学习路径", 'import { copyText } from "../clipboard"', 'import { works } from "./Works"', 'import { notes } from "./Notes"', 'import { essays } from "./ResearchEssays"']) {
     expect(!navSource.includes(retiredNavGuide), `Navigation should stay compact and not include retired copy-path guide: ${retiredNavGuide}.`);
   }

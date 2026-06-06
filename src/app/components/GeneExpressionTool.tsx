@@ -1307,7 +1307,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
           <details className="gene-support-pack-details gene-compact-details" style={{ background: "transparent", border: "none", borderRadius: 0, padding: "0.2rem 0", boxShadow: "none" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>练习与记录</summary>
 
-          <details className="gene-compact-details gene-process-focus-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+          <details className="gene-compact-details gene-process-focus-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>过程追踪 · {activeProcessFocus}</summary>
             <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
               <IconSparkle size={18} />
@@ -1328,7 +1328,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             </div>
           </details>
 
-          <details className="gene-compact-details gene-result-check-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.04)" }}>
+          <details className="gene-compact-details gene-result-check-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>结果检查 · {expressionCompletionChecks.filter((item) => item.done).length}/{expressionCompletionChecks.length}</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: "0.85rem", flexWrap: "wrap" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
@@ -1354,7 +1354,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             </div>
           </details>
 
-          <details className="gene-compact-details gene-experiment-record-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+          <details className="gene-compact-details gene-experiment-record-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>变量实验记录 · {expressionExperimentScore}/{expressionExperimentFields.length}</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
@@ -1395,7 +1395,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             </div>
           </details>
 
-          <details className="gene-compact-details gene-process-record-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+          <details className="gene-compact-details gene-process-record-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>表达过程记录</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
@@ -1418,7 +1418,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             </code>
           </details>
 
-          <details className="gene-compact-details gene-translation-lens-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+          <details className="gene-compact-details gene-translation-lens-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>翻译放大镜 · {focusedCodon?.rna ?? "---"} → {focusedCodon?.amino ?? "---"}</summary>
             <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
               <IconSparkle size={18} />
@@ -1449,7 +1449,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             </div>
           </details>
 
-          <details className="gene-compact-details gene-quiz-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+          <details className="gene-compact-details gene-quiz-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>即时小测 · {quizCorrectCount}/{geneQuizItems.length}</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: "0.58rem" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900 }}>
@@ -1525,7 +1525,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             </button>
           </details>
 
-          <details className="gene-compact-details gene-sequence-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
+          <details className="gene-compact-details gene-sequence-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>序列读取</summary>
             <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.85rem" }}>
               <IconDNA size={18} />

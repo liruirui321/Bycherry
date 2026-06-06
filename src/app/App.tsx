@@ -247,6 +247,7 @@ export default function App() {
     return match?.[1] ?? null;
   }, [locationKey]);
   const unknownPath = useMemo(() => window.location.pathname !== "/" && !detailSlug && !noteSlug && !researchSlug, [detailSlug, noteSlug, researchSlug, locationKey]);
+  const isHome = !detailSlug && !noteSlug && !researchSlug && !unknownPath;
 
   useEffect(() => {
     function handleLocationChange() {
@@ -422,7 +423,7 @@ export default function App() {
           <Hero />
         </main>
       )}
-      <Footer />
+      {isHome ? null : <Footer />}
     </div>
   );
 }
