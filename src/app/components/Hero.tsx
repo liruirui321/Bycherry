@@ -8,7 +8,8 @@ type HeroVisualKind =
   | "gene-expression"
   | "research-prompt-kit"
   | "concept-explainer"
-  | "crispr-interactive";
+  | "crispr-interactive"
+  | "reading-library";
 
 function HeroMiniVisual({ kind }: { kind: HeroVisualKind }) {
   if (kind === "gene-expression") {
@@ -59,6 +60,19 @@ function HeroMiniVisual({ kind }: { kind: HeroVisualKind }) {
     );
   }
 
+  if (kind === "reading-library") {
+    return (
+      <span className="hero-mini-visual hero-mini-visual-reading" aria-hidden="true">
+        <span className="hero-mini-book" />
+        <span className="hero-mini-lines">
+          <i />
+          <i />
+          <i />
+        </span>
+      </span>
+    );
+  }
+
   return (
     <span className="hero-mini-visual hero-mini-visual-crispr" aria-hidden="true">
       <span className="hero-mini-guide" />
@@ -78,9 +92,10 @@ export function Hero() {
     color: "var(--cherry-yellow-light)",
     desc: "科研证据、学习方法和 AI 创作工作流文章。",
     icon: <IconBook size={36} color="var(--cherry-yellow)" />,
-    outputs: ["文章索引", "行动清单"],
+    outputs: ["行动清单", "检查项", "可套用模板"],
+    path: ["选主题", "做记录", "留产出"],
     featuredImage: null,
-    visualKind: null,
+    visualKind: "reading-library" as HeroVisualKind,
   };
   const entries = [
     ...works.map((work) => ({
@@ -93,6 +108,7 @@ export function Hero() {
       desc: work.desc,
       icon: work.icon,
       outputs: work.outputs,
+      path: work.path,
       featuredImage: work.slug === "plant-evolution-stories" ? "/illustrations/plant-evolution-story.webp" : null,
       visualKind: work.slug === "plant-evolution-stories" ? null : (work.slug as HeroVisualKind),
     })),
@@ -164,7 +180,7 @@ export function Hero() {
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.8rem", flexWrap: "wrap" }}>
               <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.12rem", lineHeight: 1.2, fontWeight: 950 }}>内容目录</h2>
             </div>
-            <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(154px, auto)", gap: "0.68rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+            <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(178px, auto)", gap: "0.68rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
               {entries.map((entry) => (
                 <a
                   className={`hero-entry-row ${entry.featuredImage ? "hero-entry-row-image" : ""}`}
@@ -191,7 +207,7 @@ export function Hero() {
                     overflow: "hidden",
                     minWidth: 0,
                     maxWidth: "100%",
-                    minHeight: 154,
+                    minHeight: 178,
                     boxSizing: "border-box",
                     boxShadow: "0 7px 16px rgba(94,68,42,0.07)",
                   }}
@@ -209,8 +225,16 @@ export function Hero() {
                     <span className="hero-entry-desc" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.45, fontWeight: 820 }}>
                       {entry.desc}
                     </span>
+                    <span className="hero-entry-path" style={{ display: "flex", gap: "0.28rem", flexWrap: "wrap", alignItems: "center", color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.2, fontWeight: 900 }}>
+                      {entry.path.map((step, index) => (
+                        <span key={`${entry.key}-${step}`} style={{ display: "inline-flex", alignItems: "center", gap: "0.28rem" }}>
+                          <span>{step}</span>
+                          {index < entry.path.length - 1 ? <span aria-hidden="true" style={{ opacity: 0.58 }}>→</span> : null}
+                        </span>
+                      ))}
+                    </span>
                     <span style={{ display: "flex", gap: "0.38rem", flexWrap: "wrap" }}>
-                      {entry.outputs.slice(0, 2).map((output) => (
+                      {entry.outputs.slice(0, 3).map((output) => (
                         <span key={output} style={{ background: "rgba(250,247,241,0.72)", borderRadius: 999, padding: "0.24rem 0.48rem", color: "var(--cherry-warm-brown)", fontSize: "0.7rem", fontWeight: 950 }}>
                           {output}
                         </span>
@@ -218,7 +242,7 @@ export function Hero() {
                     </span>
                   </span>
                   {entry.featuredImage ? (
-                    <img src={entry.featuredImage} alt="" aria-hidden="true" loading="eager" style={{ width: "100%", height: 72, objectFit: "cover", borderRadius: 12, border: "1.5px solid rgba(250,247,241,0.72)", alignSelf: "end" }} />
+                    <img src={entry.featuredImage} alt="" aria-hidden="true" loading="eager" style={{ width: "100%", height: 88, objectFit: "cover", borderRadius: 12, border: "1.5px solid rgba(250,247,241,0.72)", alignSelf: "end" }} />
                   ) : entry.visualKind ? (
                     <span className="hero-entry-visual-row" aria-hidden="true">
                       <HeroMiniVisual kind={entry.visualKind} />
@@ -285,7 +309,7 @@ export function Hero() {
             box-sizing: border-box;
             grid-template-columns: minmax(0, 1fr) !important;
             padding: 0.56rem !important;
-            min-height: 138px !important;
+            min-height: 150px !important;
             border-radius: 14px !important;
           }
 
@@ -302,7 +326,7 @@ export function Hero() {
         .hero-entry-desc {
           overflow: hidden;
           display: -webkit-box;
-          -webkit-line-clamp: 1;
+          -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
         }
 
@@ -502,6 +526,33 @@ export function Hero() {
           height: 1.28rem;
           border-left: 2px solid rgba(94,68,42,0.44);
           transform: rotate(26deg);
+        }
+
+        .hero-mini-visual-reading .hero-mini-book {
+          position: absolute;
+          left: 0.5rem;
+          top: 0.48rem;
+          width: 1.58rem;
+          height: 2rem;
+          border-radius: 0.22rem 0.42rem 0.42rem 0.22rem;
+          background: rgba(250,247,241,0.82);
+          border: 1px solid rgba(94,68,42,0.14);
+          box-shadow: inset 0.28rem 0 0 rgba(213,182,85,0.38);
+        }
+
+        .hero-mini-visual-reading .hero-mini-lines {
+          position: absolute;
+          right: 0.54rem;
+          top: 0.72rem;
+          display: grid;
+          gap: 0.32rem;
+          width: 2.36rem;
+        }
+
+        .hero-mini-visual-reading .hero-mini-lines i {
+          height: 0.28rem;
+          border-radius: 999px;
+          background: rgba(94,68,42,0.24);
         }
 
         .hero-entry-row:hover,
