@@ -8,9 +8,7 @@ type LibraryArticle = {
   href: string;
   title: string;
   desc: string;
-  date: string;
   label: string;
-  readTime: string;
   firstAction: string;
   firstCheck: string;
   firstOutput: string;
@@ -24,9 +22,7 @@ const articleGroups = [
       href: article.href,
       title: article.title,
       desc: article.body,
-      date: article.date,
       label: article.label,
-      readTime: article.readMin,
       firstAction: article.actionSteps[0],
       firstCheck: article.checklist[0],
       firstOutput: article.starterTemplate[0],
@@ -39,9 +35,7 @@ const articleGroups = [
       href: article.href,
       title: article.title,
       desc: article.excerpt,
-      date: article.date,
       label: article.tag,
-      readTime: article.readTime,
       firstAction: article.actionSteps[0],
       firstCheck: article.checklist[0],
       firstOutput: article.starterTemplate[0],
@@ -84,7 +78,7 @@ export function ArticleLibraryPage() {
                 阅读库
               </h1>
               <p style={{ margin: "0.12rem 0 0", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.35, fontWeight: 800 }}>
-                {essays.length + notes.length} 篇内容，点标题进入正文；每篇都给出行动、检查和产出。
+                每篇都给出先做、检查和产出，按当前任务直接进入。
               </p>
             </div>
           </header>
@@ -140,7 +134,7 @@ export function ArticleLibraryPage() {
                       </span>
                     </span>
                     <span className="article-library-meta" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.2, fontWeight: 900, whiteSpace: "nowrap" }}>
-                      {article.label}<span className="article-library-date"> · {article.date}</span><span className="article-library-read-time"> · {article.readTime} min</span>
+                      {article.label}
                     </span>
                   </a>
                 ))}
@@ -171,8 +165,7 @@ export function ArticleLibraryPage() {
             padding: 0.24rem 0.42rem !important;
           }
 
-          .article-library-proof-strip,
-          .article-library-read-time {
+          .article-library-proof-strip {
             display: none !important;
           }
 
@@ -182,10 +175,6 @@ export function ArticleLibraryPage() {
 
           .article-library-first-action {
             font-size: 0.66rem !important;
-          }
-
-          .article-library-date {
-            display: none !important;
           }
         }
 
