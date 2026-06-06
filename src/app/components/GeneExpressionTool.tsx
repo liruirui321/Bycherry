@@ -92,6 +92,13 @@ const geneQuizItems = [
 const initialCycleProgress = 0.42;
 const ribosomeStartFraction = 0.08;
 const ribosomeTravelSpan = 0.86;
+const processLegendItems = [
+  { label: "mRNA", detail: "红色曲线", color: "var(--cherry-red)" },
+  { label: "可读片段", detail: "绿色虚线", color: "var(--cherry-forest)" },
+  { label: "RNA 聚合酶", detail: "蓝色椭圆", color: "var(--cherry-blue)" },
+  { label: "核糖体", detail: "橙色椭圆", color: "var(--cherry-peach)" },
+  { label: "多肽出口", detail: "绿色小圆", color: "var(--cherry-sage)" },
+];
 
 function inBox(molecule: Molecule, box: { x: number; y: number; w: number; h: number }) {
   return molecule.x >= box.x && molecule.x <= box.x + box.w && molecule.y >= box.y && molecule.y <= box.y + box.h;
@@ -1192,6 +1199,24 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             <text x={42} y={58} fill="var(--cherry-forest)" fontSize={18} fontWeight={900}>
               基因表达实验台
             </text>
+            <g className="gene-process-legend" role="list" aria-label="画布图例" transform="translate(660 40)">
+              <rect width={274} height={84} rx={18} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.12)" strokeWidth={1.5} />
+              {processLegendItems.map((item, index) => {
+                const x = 14 + (index % 2) * 134;
+                const y = 20 + Math.floor(index / 2) * 24;
+                return (
+                  <g key={item.label} role="listitem" transform={`translate(${x} ${y})`}>
+                    <circle cx={0} cy={0} r={6.5} fill={item.color} stroke="#FAF7F1" strokeWidth={2} />
+                    <text x={12} y={4} fill="var(--cherry-warm-brown)" fontSize={10.5} fontWeight={900}>
+                      {item.label}
+                    </text>
+                    <text x={68} y={4} fill="var(--cherry-warm-mid)" fontSize={9.5} fontWeight={800}>
+                      {item.detail}
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
             <g transform="translate(42 72)">
               <rect width={162} height={26} rx={999} fill="rgba(250,247,241,0.78)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.4} />
               <text x={81} y={18} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={11} fontWeight={900}>
