@@ -91,6 +91,7 @@ export function Hero() {
     border: "var(--cherry-yellow)",
     color: "var(--cherry-yellow-light)",
     desc: "科研证据、学习方法和 AI 创作工作流文章。",
+    task: "按卡点选择文章，读完后留下行动清单、检查项和可复用模板。",
     icon: <IconBook size={30} color="var(--cherry-yellow)" />,
     outputs: ["行动清单", "检查项", "可套用模板"],
     path: ["选主题", "做记录", "留产出"],
@@ -106,6 +107,7 @@ export function Hero() {
       border: work.border,
       color: work.color,
       desc: work.desc,
+      task: work.task,
       icon: work.icon,
       outputs: work.outputs,
       path: work.path,
@@ -129,13 +131,13 @@ export function Hero() {
         minHeight: "calc(100vh - 50px)",
         position: "relative",
         overflow: "hidden",
-        padding: "clamp(1rem, 1.8vw, 1.55rem) clamp(1rem, 3vw, 2.35rem) 1.25rem",
+        padding: "clamp(1.55rem, 3.2vh, 2.35rem) clamp(1rem, 3.4vw, 3rem) 1.25rem",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
         background: "#F7F5EF",
         display: "grid",
-        alignItems: "center",
+        alignItems: "start",
       }}
     >
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
@@ -154,7 +156,7 @@ export function Hero() {
         <div className="hero-float-deco hero-float-leaf"><IconLeafSmall size={28} color="var(--cherry-sage)" /></div>
       </div>
 
-      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1480, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box", display: "grid", gap: "0.88rem", alignContent: "center" }}>
+      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 2060, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box", display: "grid", gap: "0.88rem", alignContent: "start" }}>
         <div className="hero-heading-strip" style={{ display: "grid", gridTemplateColumns: "minmax(330px, 0.78fr) minmax(420px, 1fr)", gap: "1rem", alignItems: "end", minWidth: 0 }}>
           <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.58rem", justifyItems: "start", textAlign: "left", alignContent: "start", maxWidth: 660 }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.32rem 0.92rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 850, background: "rgba(250,247,241,0.72)", letterSpacing: 0 }}>
@@ -175,10 +177,12 @@ export function Hero() {
                 overflowWrap: "anywhere",
               }}
             >
-              A tiny studio for{" "}
+              A tiny studio for
+              <br className="hero-title-break" />
               <span style={{ color: "var(--cherry-red)", textDecoration: "underline", textDecorationColor: "var(--cherry-peach)", textDecorationThickness: "0.08em", textUnderlineOffset: "0.12em" }}>science</span>
               ,{" "}
               <span style={{ color: "var(--cherry-sage)" }}>learning</span>
+              <br className="hero-title-mobile-break" />
               {" & "}
               <span style={{ color: "var(--cherry-blue)" }}>AI</span>
             </h1>
@@ -198,9 +202,9 @@ export function Hero() {
         <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.62rem", width: "100%", alignContent: "start" }}>
           <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.75rem", minWidth: 0 }}>
             <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.02rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>精选内容</h2>
-            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>直接打开工具和文章</span>
+            <span className="hero-entry-grid-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>直接打开工具和文章</span>
           </div>
-          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(168px, 1fr)", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(224px, 1fr)", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
             {entries.map((entry, index) => (
               <a
                 className={`hero-entry-row ${entry.featuredImage ? "hero-entry-row-image" : ""}`}
@@ -227,7 +231,7 @@ export function Hero() {
                   overflow: "hidden",
                   minWidth: 0,
                   maxWidth: "100%",
-                  minHeight: 168,
+                  minHeight: 224,
                   boxSizing: "border-box",
                   boxShadow: "0 12px 24px rgba(94,68,42,0.08)",
                   transform: "none",
@@ -244,6 +248,9 @@ export function Hero() {
                   </span>
                   <span className="hero-entry-desc" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.42, fontWeight: 820 }}>
                     {entry.desc}
+                  </span>
+                  <span className="hero-entry-task" style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.48, fontWeight: 820, background: "rgba(250,247,241,0.46)", border: "1px solid rgba(94,68,42,0.08)", borderRadius: 8, padding: "0.42rem 0.5rem" }}>
+                    {entry.task}
                   </span>
                   <span className="hero-entry-path" style={{ display: "flex", gap: "0.24rem", flexWrap: "wrap", alignItems: "center", color: "var(--cherry-warm-mid)", fontSize: "0.65rem", lineHeight: 1.2, fontWeight: 900 }}>
                     {entry.path.map((step, index) => (
@@ -414,6 +421,17 @@ export function Hero() {
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
+        }
+
+        .hero-entry-task {
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+
+        .hero-title-mobile-break {
+          display: none;
         }
 
         .hero-entry-row:focus-visible {
@@ -671,13 +689,13 @@ export function Hero() {
           }
 
           .hero-title {
-            font-size: 2.28rem !important;
+            font-size: 2.02rem !important;
             line-height: 1.04 !important;
           }
 
           .hero-entry-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            grid-auto-rows: minmax(124px, auto) !important;
+            grid-auto-rows: minmax(142px, auto) !important;
             gap: 0.52rem !important;
             width: calc(100vw - 2rem) !important;
             max-width: calc(100vw - 2rem) !important;
@@ -688,7 +706,7 @@ export function Hero() {
             min-width: 0 !important;
             box-sizing: border-box;
             padding: 0.56rem !important;
-            min-height: 124px !important;
+            min-height: 142px !important;
             border-radius: 12px !important;
             transform: none !important;
           }
@@ -711,15 +729,56 @@ export function Hero() {
         }
 
         @media (max-width: 560px) {
+          .hero-shell {
+            padding-left: 0.85rem !important;
+            padding-right: 0.85rem !important;
+          }
+
+          .hero-inner,
+          .hero-heading-strip,
+          .hero-featured-panel,
+          .hero-summary-panel,
+          .hero-entry-grid {
+            width: calc(100vw - 3rem) !important;
+            max-width: calc(100vw - 3rem) !important;
+          }
+
+          .hero-title {
+            font-size: 1.58rem !important;
+            line-height: 1.06 !important;
+          }
+
+          .hero-title-mobile-break {
+            display: block;
+          }
+
           .hero-entry-grid {
             grid-template-columns: 1fr !important;
+            justify-items: stretch !important;
+          }
+
+          .hero-summary-panel,
+          .hero-entry-row {
+            max-width: 20rem !important;
+          }
+
+          .hero-entry-row {
+            justify-self: start !important;
+          }
+
+          .hero-entry-grid-note {
+            display: none !important;
           }
 
           .hero-entry-desc {
-            -webkit-line-clamp: 1 !important;
+            -webkit-line-clamp: 2 !important;
           }
 
           .hero-entry-output-row {
+            display: none !important;
+          }
+
+          .hero-entry-task {
             display: none !important;
           }
         }
