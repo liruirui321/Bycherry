@@ -257,13 +257,13 @@ function NotFoundPage() {
       <EmptyStateCard
         eyebrow="404"
         title="没有找到这个页面"
-        body="这个地址可能写错了，或者内容已经移动。可以回到首页继续浏览内容和文章。"
-        href="/#top"
-        linkText="回到首页"
+        body="这个地址可能写错了，或者内容已经移动。可以回到内容目录继续浏览工具、项目和阅读库。"
+        href="/#works"
+        linkText="回到内容目录"
         onNavigate={(event) => {
           if (!shouldUseClientNavigation(event)) return;
           event.preventDefault();
-          navigateClient("/#top");
+          navigateClient("/#works");
         }}
       />
     </main>
@@ -358,7 +358,7 @@ export default function App() {
     const notFound = unknownPath || missingRoutedItem;
     const readingLibraryDescription = "By Cherry 阅读库集中整理科研证据和学习方法文章，每篇都给出行动、检查和可保存产出。";
     const title = notFound ? "没有找到页面" : isReadingLibrary ? "阅读库" : work?.title ?? note?.title ?? essay?.title ?? homeTitle;
-    const baseDescription = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览内容和文章。" : isReadingLibrary ? readingLibraryDescription : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
+    const baseDescription = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到内容目录继续浏览工具、项目和阅读库。" : isReadingLibrary ? readingLibraryDescription : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
     const workActionDescription = work ? `先做这个：${work.starter}。完成标准：${work.success}` : null;
     const articleFirstAction = note?.actionSteps[0] ?? essay?.actionSteps[0] ?? null;
     const articleFirstCheck = note?.checklist[0] ?? essay?.checklist[0] ?? null;
