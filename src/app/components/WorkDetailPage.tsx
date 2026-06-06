@@ -3898,6 +3898,17 @@ If any of these are missing, add them before the final answer.
             输入任意概念，按稳定解释流程生成学习卡：先自测，再看类比、机制步骤、常见误区、可视化流程、迁移练习和即时小测。
           </div>
         </div>
+        <div className="concept-quick-start-strip" style={{ display: "grid", gridTemplateColumns: "auto repeat(4, minmax(0, 1fr))", gap: "0.42rem", alignItems: "center", background: "rgba(250,247,241,0.62)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 10, padding: "0.44rem" }}>
+          <span className="concept-quick-start-label" style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.18, fontWeight: 900, whiteSpace: "nowrap" }}>快速开始</span>
+          {conceptInputModes.map((mode) => {
+            const active = concept === mode.concept && stuckPoint === mode.stuck;
+            return (
+              <button key={`quick-${mode.title}`} type="button" aria-label={`套用${mode.title}模式：${mode.concept}`} aria-pressed={active} onClick={() => applyConceptInputMode(mode)} style={{ background: active ? "var(--cherry-forest)" : "var(--card)", color: active ? "#FAF7F1" : "var(--cherry-warm-brown)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.38rem 0.4rem", fontSize: "0.68rem", lineHeight: 1.16, fontWeight: 900, cursor: "pointer", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {mode.title}
+              </button>
+            );
+          })}
+        </div>
         <details className="concept-input-mode-panel" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.56rem" }}>
           <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", fontWeight: 900, cursor: "pointer" }}>输入模式预设</summary>
           <div style={{ display: "flex", justifyContent: "space-between", gap: "0.7rem", alignItems: "center", flexWrap: "wrap" }}>
@@ -4431,6 +4442,15 @@ If any of these are missing, add them before the final answer.
 
             #concept-explainer-tool .concept-visual-structure {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+
+            #concept-explainer-tool .concept-quick-start-strip {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.36rem !important;
+            }
+
+            #concept-explainer-tool .concept-quick-start-label {
+              grid-column: 1 / -1 !important;
             }
           }
 
