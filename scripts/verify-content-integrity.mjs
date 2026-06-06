@@ -379,9 +379,15 @@ function verifyResearchQuestionTranslationBuilder() {
 
 function verifyAiMaterialAuditTableBuilder() {
   const articleSource = read("src/app/components/ArticleDetailPage.tsx");
+  const appSource = read("src/app/App.tsx");
+  const notesSource = read("src/app/components/Notes.tsx");
 
   expect(articleSource.includes("aiMaterialAuditBuilderEnabled"), "AI material audit article must expose a special audit table builder.");
-  expect(articleSource.includes('article?.slug === "ai-course-development"'), "AI material audit table builder must target the AI material audit article.");
+  expect(articleSource.includes('article?.slug === "ai-learning-material-audit"'), "AI material audit table builder must target the AI material audit article.");
+  expect(!articleSource.includes('article?.slug === "ai-course-development"'), "AI material audit table builder must not use the retired course-framed slug.");
+  expect(notesSource.includes('slug: "ai-learning-material-audit"') && notesSource.includes('href: "/notes/ai-learning-material-audit"'), "AI material audit article must use the learner-facing slug.");
+  expect(!notesSource.includes('slug: "ai-course-development"') && !notesSource.includes('href: "/notes/ai-course-development"'), "AI material audit article data must not expose the retired course-framed slug.");
+  expect(appSource.includes('"ai-course-development": "ai-learning-material-audit"'), "App router must keep a compatibility rewrite from the retired slug to the learner-facing slug.");
   expect(articleSource.includes("aiMaterialAuditFields"), "AI material audit table builder must define learner-fillable fields.");
   expect(articleSource.includes("aiMaterialAuditTableText"), "AI material audit table builder must produce a copyable audit table.");
   expect(articleSource.includes("copyAiMaterialAuditTable"), "AI material audit table builder must expose a copy handler.");

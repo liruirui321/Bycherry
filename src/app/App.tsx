@@ -12,6 +12,10 @@ import { homeTitle, shareImageAlt, siteDescription, siteTitle, siteUrl, socialIm
 const WorkDetailPage = lazy(() => import("./components/WorkDetailPage").then((module) => ({ default: module.WorkDetailPage })));
 const ArticleDetailPage = lazy(() => import("./components/ArticleDetailPage").then((module) => ({ default: module.ArticleDetailPage })));
 
+const legacyNoteSlugMap: Record<string, string> = {
+  "ai-course-development": "ai-learning-material-audit",
+};
+
 function upsertMeta(selector: string, attributes: Record<string, string>, content: string) {
   let element = document.head.querySelector<HTMLMetaElement>(selector);
   if (!element) {
@@ -242,12 +246,13 @@ export default function App() {
     const match = window.location.pathname.match(/^\/notes\/([^/]+)\/?$/);
     return match?.[1] ?? null;
   }, [locationKey]);
+  const canonicalNoteSlug = useMemo(() => (noteSlug ? legacyNoteSlugMap[noteSlug] ?? noteSlug : null), [noteSlug]);
   const researchSlug = useMemo(() => {
     const match = window.location.pathname.match(/^\/research\/([^/]+)\/?$/);
     return match?.[1] ?? null;
   }, [locationKey]);
   const unknownPath = useMemo(() => window.location.pathname !== "/" && !detailSlug && !noteSlug && !researchSlug, [detailSlug, noteSlug, researchSlug, locationKey]);
-  const isHome = !detailSlug && !noteSlug && !researchSlug && !unknownPath;
+  const isHome = !detailSlug && !canonicalNoteSlug && !researchSlug && !unknownPath;
 
   useEffect(() => {
     function handleLocationChange() {
@@ -274,10 +279,19 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    if (!noteSlug) return;
+    const canonicalSlug = legacyNoteSlugMap[noteSlug];
+    if (!canonicalSlug) return;
+
+    window.history.replaceState(null, "", `/notes/${canonicalSlug}${window.location.search}${window.location.hash}`);
+    setLocationKey(getLocationKey());
+  }, [noteSlug]);
+
+  useEffect(() => {
     const shouldMoveFocus = hasNavigated.current;
     hasNavigated.current = true;
 
-    if (detailSlug || noteSlug || researchSlug || unknownPath) {
+    if (detailSlug || canonicalNoteSlug || researchSlug || unknownPath) {
       if (!unknownPath && scrollToHashTarget(shouldMoveFocus)) return;
 
       window.scrollTo({ top: 0, behavior: getScrollBehavior() });
@@ -288,13 +302,13 @@ export default function App() {
     }
 
     scrollToHashTarget(shouldMoveFocus);
-  }, [detailSlug, noteSlug, researchSlug, unknownPath, locationKey]);
+  }, [detailSlug, canonicalNoteSlug, researchSlug, unknownPath, locationKey]);
 
   useEffect(() => {
     const work = detailSlug ? works.find((item) => item.slug === detailSlug) : null;
-    const note = noteSlug ? notes.find((item) => item.slug === noteSlug) : null;
+    const note = canonicalNoteSlug ? notes.find((item) => item.slug === canonicalNoteSlug) : null;
     const essay = researchSlug ? essays.find((item) => item.slug === researchSlug) : null;
-    const missingRoutedItem = Boolean((detailSlug && !work) || (noteSlug && !note) || (researchSlug && !essay));
+    const missingRoutedItem = Boolean((detailSlug && !work) || (canonicalNoteSlug && !note) || (researchSlug && !essay));
     const notFound = unknownPath || missingRoutedItem;
     const title = notFound ? "没有找到页面" : work?.title ?? note?.title ?? essay?.title ?? homeTitle;
     const baseDescription = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览内容和文章。" : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
@@ -390,7 +404,7 @@ export default function App() {
     setOptionalMeta('meta[name="keywords"]', { name: "keywords" }, keywords);
     upsertCanonical(canonicalUrl);
     upsertJsonLd(jsonLd);
-  }, [detailSlug, noteSlug, researchSlug, unknownPath, locationKey]);
+  }, [detailSlug, canonicalNoteSlug, researchSlug, unknownPath, locationKey]);
 
   return (
     <div
@@ -408,9 +422,9 @@ export default function App() {
         <Suspense fallback={<RouteLoading />}>
           <WorkDetailPage slug={detailSlug} />
         </Suspense>
-      ) : noteSlug ? (
+      ) : canonicalNoteSlug ? (
         <Suspense fallback={<RouteLoading />}>
-          <ArticleDetailPage kind="note" slug={noteSlug} />
+          <ArticleDetailPage kind="note" slug={canonicalNoteSlug} />
         </Suspense>
       ) : researchSlug ? (
         <Suspense fallback={<RouteLoading />}>

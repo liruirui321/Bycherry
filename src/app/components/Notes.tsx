@@ -3,8 +3,8 @@ import { IconBook, IconAI, IconLeaf, IconResearch } from "./Icons";
 export const notes = [
   {
     id: 1,
-    slug: "ai-course-development",
-    href: "/notes/ai-course-development",
+    slug: "ai-learning-material-audit",
+    href: "/notes/ai-learning-material-audit",
     date: "2026-06-03",
     tag: "AI学习",
     tagColor: "var(--cherry-blue)",

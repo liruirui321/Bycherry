@@ -822,7 +822,7 @@ ${researchQuestionFilled.boundary}
 5. 解释任务是否要求判断支持和不支持：${researchQuestionFields[4]?.pass ? "可用" : "待补充"}
 6. 边界是否保留下一步验证：${researchQuestionFields[5]?.pass ? "可用" : "待补充"}`
     : "";
-  const aiMaterialAuditBuilderEnabled = article?.slug === "ai-course-development";
+  const aiMaterialAuditBuilderEnabled = article?.slug === "ai-learning-material-audit";
   const aiMaterialAuditFields = aiMaterialAuditBuilderEnabled
     ? [
         {
@@ -1039,7 +1039,7 @@ ${platformAuditRubricText}
 3. 作答后用错因标签记录：${platformWrongReasonTags.join("、")}。
 4. 回到学习卡补最高频薄弱点。`
     : "";
-  const aiMaterialAuditPrompts = article?.slug === "ai-course-development"
+  const aiMaterialAuditPrompts = article?.slug === "ai-learning-material-audit"
     ? [
         {
           title: "目标对齐",
