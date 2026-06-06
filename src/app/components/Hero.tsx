@@ -93,19 +93,24 @@ export function Hero() {
                 textDecoration: "none",
                 textAlign: "left",
                 display: "grid",
-                gridTemplateColumns: "3.4rem minmax(0, 1fr) auto",
+                gridTemplateColumns: "3.25rem minmax(0, 1fr) auto",
                 alignItems: "center",
                 gap: "0.42rem",
                 position: "relative",
                 overflow: "hidden",
                 minWidth: 0,
                 maxWidth: "100%",
-                minHeight: 38,
+                minHeight: 56,
                 boxSizing: "border-box",
               }}
             >
               <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.1, fontWeight: 900 }}>{entry.kind}</span>
-              <strong style={{ fontSize: "0.78rem", lineHeight: 1.12, minWidth: 0, overflowWrap: "anywhere" }}>{entry.title}</strong>
+              <span style={{ minWidth: 0, display: "grid", gap: "0.18rem" }}>
+                <strong style={{ fontSize: "0.78rem", lineHeight: 1.12, minWidth: 0, overflowWrap: "anywhere" }}>{entry.title}</strong>
+                <span className="hero-entry-desc" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.28, fontWeight: 800 }}>
+                  {entry.desc}
+                </span>
+              </span>
               <span className="hero-entry-action" style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", lineHeight: 1.1, fontWeight: 900, whiteSpace: "nowrap" }}>{entry.action}</span>
             </a>
           ))}
@@ -140,6 +145,7 @@ export function Hero() {
             box-sizing: border-box;
             grid-template-columns: 2.8rem minmax(0, 1fr) !important;
             padding: 0.38rem 0.42rem !important;
+            min-height: 58px !important;
           }
 
           .hero-entry-action {
@@ -149,6 +155,19 @@ export function Hero() {
           .hero-entry-row strong,
           .hero-entry-row span {
             overflow-wrap: anywhere;
+          }
+        }
+
+        .hero-entry-desc {
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+        }
+
+        @media (max-width: 520px) {
+          .hero-entry-desc {
+            -webkit-line-clamp: 2;
           }
         }
 
