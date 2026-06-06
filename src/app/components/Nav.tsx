@@ -4,9 +4,10 @@ import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 export function Nav() {
   const menuItems = [
-    { label: "目录", href: "/#works" },
+    { label: "主题", href: "/#works" },
     { label: "模拟", href: "/works/gene-expression" },
-    { label: "AI 工具", href: "/works/concept-explainer" },
+    { label: "科研", href: "/works/research-prompt-kit" },
+    { label: "AI", href: "/works/concept-explainer" },
     { label: "阅读", href: "/reading" },
   ];
 
@@ -57,7 +58,7 @@ export function Nav() {
             By Cherry
           </span>
         </a>
-        <div className="nav-menu" role="group" aria-label="主要内容入口" style={{ display: "flex", alignItems: "center", gap: "1.4rem" }}>
+        <div className="nav-menu" role="group" aria-label="主要内容入口" style={{ display: "flex", alignItems: "center", gap: "1.18rem" }}>
           {menuItems.map((item) => (
             <a
               key={item.href}

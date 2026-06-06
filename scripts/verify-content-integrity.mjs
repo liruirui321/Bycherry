@@ -1312,7 +1312,7 @@ function verifyLearnerProductPositioning() {
   expect(navSource.includes('import { navigateClient, shouldUseClientNavigation } from "../navigation"'), "Navigation logo must keep client-side home navigation.");
   expect(navSource.includes('href="/#works"') && navSource.includes('navigateClient("/#works")') && !navSource.includes('href="/#top"') && !navSource.includes('navigateClient("/#top")'), "Navigation logo must return to the content directory instead of a generic top anchor.");
   expect(navSource.includes('className="nav-menu"') && navSource.includes('aria-label="主要内容入口"'), "Navigation should expose a compact top menu for real content destinations.");
-  for (const requiredNavEntry of ['label: "目录"', 'label: "模拟"', 'label: "AI 工具"', 'label: "阅读"', 'href: "/works/gene-expression"', 'href: "/works/concept-explainer"', 'href: "/reading"']) {
+  for (const requiredNavEntry of ['label: "主题"', 'label: "模拟"', 'label: "科研"', 'label: "AI"', 'label: "阅读"', 'href: "/works/gene-expression"', 'href: "/works/research-prompt-kit"', 'href: "/works/concept-explainer"', 'href: "/reading"']) {
     expect(navSource.includes(requiredNavEntry), `Navigation compact menu is missing: ${requiredNavEntry}`);
   }
   expect(!navSource.includes('className="nav-links"') && !navSource.includes('className="nav-link"'), "Navigation must not restore the old repeated nav-link system.");
