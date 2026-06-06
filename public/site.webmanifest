@@ -1,7 +1,7 @@
 {
   "name": "By Cherry",
   "short_name": "By Cherry",
-  "description": "科学与 AI 学习工作台，直接进入工具、模拟和记录。",
+  "description": "科学与 AI 学习工作台，直接进入模拟、工具、阅读库和记录。",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

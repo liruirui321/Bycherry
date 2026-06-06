@@ -116,7 +116,7 @@ function verifyVisibleLearningModuleCopy() {
   ].map((relativePath) => [relativePath, read(relativePath)]);
 
   const requiredCopy = [
-    "学习模块",
+    "工具与项目",
     "内容目录",
   ];
 
