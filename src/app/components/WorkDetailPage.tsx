@@ -2609,6 +2609,18 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
           <div className="plant-stage-detail-card" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
             <div className="plant-active-time" style={{ color: "var(--cherry-red)", fontWeight: 900, fontSize: "0.86rem", marginBottom: "0.3rem" }}>{activeChapter.time}</div>
             <h3 className="plant-active-title" style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, lineHeight: 1.26, marginBottom: "0.52rem", fontSize: "1rem" }}>{activeChapter.title}</h3>
+            <div className="plant-stage-relation-strip" role="list" aria-label="当前阶段关系速览" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.34rem", marginBottom: "0.62rem" }}>
+              {[
+                { label: "压力", body: activeChapter.challenge },
+                { label: "创新", body: activeChapter.innovation },
+                { label: "边界", body: activeChapter.claimBoundary },
+              ].map((item) => (
+                <div key={item.label} role="listitem" className="plant-stage-relation-item" style={{ background: item.label === "边界" ? "var(--cherry-yellow-light)" : "rgba(250,247,241,0.72)", border: item.label === "边界" ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.42rem 0.46rem", display: "grid", gap: "0.16rem", minWidth: 0 }}>
+                  <strong style={{ color: item.label === "边界" ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.66rem", lineHeight: 1.12 }}>{item.label}</strong>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.64rem", lineHeight: 1.3, fontWeight: 820, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item.body}</span>
+                </div>
+              ))}
+            </div>
             <div className="plant-lens-tablist" role="tablist" aria-label="植物演化内容层级" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.32rem", marginBottom: "0.62rem" }}>
               {plantLenses.map((lens) => {
                 const active = activePlantLens === lens.key;
@@ -2958,6 +2970,22 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
               -webkit-line-clamp: 2 !important;
               -webkit-box-orient: vertical !important;
               overflow: hidden !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-relation-strip {
+              grid-template-columns: 1fr !important;
+              gap: 0.26rem !important;
+              margin-bottom: 0.46rem !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-relation-item {
+              padding: 0.38rem 0.42rem !important;
+            }
+
+            #plant-evolution-explorer .plant-stage-relation-item span {
+              -webkit-line-clamp: 1 !important;
+              font-size: 0.62rem !important;
+              line-height: 1.22 !important;
             }
 
             #plant-evolution-explorer .plant-lens-tablist {

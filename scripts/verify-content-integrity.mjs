@@ -969,6 +969,10 @@ function verifyPlantEvolutionLearnerContract() {
     { label: "completion pass criteria", text: "通过标准：${item.pass}" },
     { label: "completion location task", text: "阶段定位" },
     { label: "completion evidence boundary task", text: "证据边界" },
+    { label: "stage relation strip", text: "plant-stage-relation-strip" },
+    { label: "stage relation pressure", text: "压力" },
+    { label: "stage relation innovation", text: "创新" },
+    { label: "stage relation boundary", text: "边界" },
     { label: "compact stage picker grid", text: "plant-stage-picker-grid" },
     { label: "compact stage picker card", text: "plant-stage-picker-card" },
   ];
