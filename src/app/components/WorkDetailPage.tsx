@@ -3451,6 +3451,28 @@ function ConceptExplainerContent() {
               { title: "机制", body: active.mechanism.slice(0, 2).join("；"), tone: "var(--cherry-sage-light)" },
               { title: "边界", body: contextualEvidenceBoundary, tone: "var(--cherry-peach-light)" },
             ];
+  const broadConceptSignals = /生物|遗传|免疫|生态|进化|代谢|细胞|植物|动物|科学|医学|基因|蛋白|学习|AI/.test(concept) && concept.length <= 4;
+  const conceptScopeHints = [
+    {
+      label: "概念范围",
+      status: isPresetConcept ? "可直接生成" : broadConceptSignals ? "建议收窄" : "可直接生成",
+      body: isPresetConcept
+        ? `“${concept}”已有完整学习卡，可以直接从诊断问题进入。`
+        : broadConceptSignals
+          ? `把“${concept}”限定到章节、过程、图表、题目或真实现象，再生成学习卡。`
+          : `当前“${concept}”可以先按${visualMode}生成，再用资料边界修正事实细节。`,
+    },
+    {
+      label: "资料边界",
+      status: sourceBoundary.trim().length >= 12 ? "可用" : "待填写",
+      body: sourceBoundary.trim().length >= 12 ? sourceBoundaryText : "写清资料来自教材、笔记、论文、视频，或明确暂时未知。",
+    },
+    {
+      label: "输出验收",
+      status: "固定",
+      body: "必须带走一句话解释、机制步骤、迁移练习和不能直接推出的边界。",
+    },
+  ];
   const conceptAgentCards = [
     {
       title: "输入完整度",
@@ -3999,6 +4021,17 @@ If any of these are missing, add them before the final answer.
             </button>
           </div>
         </div>
+        <div className="concept-scope-hint-strip" role="list" aria-label="概念范围诊断" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.5rem" }}>
+          {conceptScopeHints.map((item) => (
+            <div className="concept-scope-hint-card" key={item.label} role="listitem" style={{ background: item.status === "建议收窄" ? "var(--cherry-yellow-light)" : item.status === "待填写" ? "var(--cherry-peach-light)" : "rgba(250,247,241,0.72)", border: item.status === "建议收窄" ? "1.5px solid var(--cherry-yellow)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 10, padding: "0.56rem", display: "grid", gap: "0.26rem", minHeight: 86 }}>
+              <span style={{ display: "flex", justifyContent: "space-between", gap: "0.42rem", alignItems: "center" }}>
+                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.2 }}>{item.label}</strong>
+                <span style={{ color: item.status === "建议收窄" || item.status === "待填写" ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900, whiteSpace: "nowrap" }}>{item.status}</span>
+              </span>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.46, fontWeight: 800 }}>{item.body}</span>
+            </div>
+          ))}
+        </div>
         <details className="concept-input-quality-details" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.62rem" }}>
           <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>输入质量检查 · {conceptInputQualityScore}/5</summary>
         <div className="concept-input-quality-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: "0.55rem" }}>
@@ -4453,6 +4486,11 @@ If any of these are missing, add them before the final answer.
               grid-template-columns: 1fr !important;
             }
 
+            #concept-explainer-tool .concept-scope-hint-strip {
+              grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+              gap: 0.42rem !important;
+            }
+
             #concept-explainer-tool .concept-input-mode-grid,
             #concept-explainer-tool .concept-pack-card-grid,
             #concept-explainer-tool .concept-understanding-input-grid,
@@ -4496,6 +4534,7 @@ If any of these are missing, add them before the final answer.
             }
 
             #concept-explainer-tool .concept-input-quality-grid,
+            #concept-explainer-tool .concept-scope-hint-strip,
             #concept-explainer-tool .concept-flow-map,
             #concept-explainer-tool .concept-agent-input-grid,
             #concept-explainer-tool .concept-pack-card-grid,
@@ -4514,6 +4553,7 @@ If any of these are missing, add them before the final answer.
             }
 
             #concept-explainer-tool .concept-pack-card,
+            #concept-explainer-tool .concept-scope-hint-card,
             #concept-explainer-tool .concept-visual-node,
             #concept-explainer-tool .concept-understanding-check-card {
               min-height: 0 !important;

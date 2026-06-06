@@ -729,6 +729,10 @@ function verifyConceptExplainerAgentContract() {
     { label: "missing input handling", text: "最多问 2 个短问题" },
     { label: "source boundary visible field", text: "资料边界" },
     { label: "current stuck point visible field", text: "当前卡点" },
+    { label: "concept scope diagnostic data", text: "conceptScopeHints" },
+    { label: "visible concept scope diagnostic", text: "concept-scope-hint-strip" },
+    { label: "concept narrowing status", text: "建议收窄" },
+    { label: "scope output acceptance", text: "输出验收" },
     { label: "source boundary prioritization", text: "Prioritize source boundary and current confusion" },
     { label: "cycle visual option", text: "循环图" },
     { label: "completion gate copy", text: "完成门槛" },
@@ -774,6 +778,7 @@ function verifyConceptExplainerAgentContract() {
   }
 
   expect(conceptSource.includes("#concept-explainer-tool .concept-pack-card-grid") && conceptSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Concept explainer mobile explanation pack must stay as compact three-column cards.");
+  expect(conceptSource.includes("#concept-explainer-tool .concept-scope-hint-strip") && conceptSource.includes("concept-scope-hint-card") && conceptSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Concept explainer scope diagnostics must stay visible and compact on mobile.");
   expect(conceptSource.includes('className="concept-main-input-panel"') && conceptSource.includes('padding: "0.78rem"') && !conceptSource.includes("concept-input-support-pack-details"), "Concept explainer must expose the arbitrary concept input form directly instead of hiding it in a collapsed support panel.");
   expect(conceptSource.includes('className="concept-explanation-pack"') && conceptSource.includes('background: "transparent"') && conceptSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))"') && conceptSource.includes("minHeight: 98"), "Concept explainer desktop explanation pack must stay as short result tiles without a long outer frame.");
   expect(conceptSource.includes('className="concept-save-actions concept-responsive-grid"') && conceptSource.includes('background: "transparent"') && conceptSource.includes('boxShadow: "none"') && !conceptSource.includes("保存这次学习产出"), "Concept explainer export actions must stay as a short action strip instead of a repeated long save card.");
