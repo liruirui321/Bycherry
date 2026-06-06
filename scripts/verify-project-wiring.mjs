@@ -110,6 +110,8 @@ expect(deployWorkflow.includes("FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true"), "Dep
 expect(deployWorkflow.includes("uses: actions/checkout@v5"), "Deploy workflow must use checkout@v5 for Node 24 action runtime.");
 expect(deployWorkflow.includes("uses: actions/setup-node@v6"), "Deploy workflow must use setup-node@v6 for Node 24 action runtime.");
 expect(deployWorkflow.includes("node-version: 24"), "Deploy workflow must build with Node 24.");
+expect(deployWorkflow.includes("uses: actions/configure-pages@v6"), "Deploy workflow must use configure-pages@v6 for Node 24 action runtime.");
+expect(deployWorkflow.includes("uses: actions/upload-pages-artifact@v5"), "Deploy workflow must use upload-pages-artifact@v5 for Node 24 action runtime.");
 expect(deployWorkflow.includes("uses: actions/deploy-pages@v5"), "Deploy workflow must use deploy-pages@v5 for Node 24 action runtime.");
 
 if (failures.length) {
