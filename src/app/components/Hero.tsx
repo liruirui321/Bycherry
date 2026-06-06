@@ -193,7 +193,7 @@ export function Hero() {
                     display: "grid",
                     gridTemplateColumns: "minmax(0, 1fr)",
                     alignItems: "stretch",
-                    gap: "0.68rem",
+                    gap: "0.58rem",
                     position: "relative",
                     overflow: "hidden",
                     minWidth: 0,
@@ -204,7 +204,7 @@ export function Hero() {
                     boxShadow: "0 8px 18px rgba(94,68,42,0.08)",
                   }}
                 >
-                  <span style={{ minWidth: 0, display: "grid", gap: "0.46rem", alignContent: "start" }}>
+                  <span style={{ minWidth: 0, display: "grid", gap: "0.44rem", alignContent: "start" }}>
                     <span style={{ display: "flex", alignItems: "center", gap: "0.48rem", minWidth: 0 }}>
                       <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: 32, height: 32, borderRadius: 999, background: "rgba(250,247,241,0.64)", flexShrink: 0 }}>
                         {entry.icon}
@@ -225,12 +225,17 @@ export function Hero() {
                         </span>
                       ))}
                     </span>
-                    <span className="hero-entry-action" style={{ width: "fit-content", background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.42rem 0.72rem", fontSize: "0.74rem", lineHeight: 1.1, fontWeight: 950 }}>{entry.action}</span>
+                    {entry.featuredImage ? (
+                      <span className="hero-entry-action" style={{ width: "fit-content", background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.42rem 0.72rem", fontSize: "0.74rem", lineHeight: 1.1, fontWeight: 950 }}>{entry.action}</span>
+                    ) : null}
                   </span>
                   {entry.featuredImage ? (
                     <img src={entry.featuredImage} alt="" aria-hidden="true" loading="eager" style={{ width: "100%", height: 168, objectFit: "cover", borderRadius: 16, border: "1.5px solid rgba(250,247,241,0.72)", alignSelf: "end" }} />
                   ) : entry.visualKind ? (
-                    <HeroMiniVisual kind={entry.visualKind} />
+                    <span className="hero-entry-visual-row" aria-hidden="true">
+                      <span className="hero-entry-action" style={{ width: "fit-content", background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.42rem 0.72rem", fontSize: "0.74rem", lineHeight: 1.1, fontWeight: 950 }}>{entry.action}</span>
+                      <HeroMiniVisual kind={entry.visualKind} />
+                    </span>
                   ) : null}
                 </a>
               ))}
@@ -334,32 +339,34 @@ export function Hero() {
         }
 
         .hero-mini-visual {
-          position: absolute;
-          right: 0.55rem;
-          bottom: 0.5rem;
-          width: 5.7rem;
-          height: 3.7rem;
+          position: relative;
+          display: block;
+          width: 5.3rem;
+          height: 3.12rem;
           border: 1px solid rgba(94,68,42,0.1);
-          border-radius: 16px;
-          background: rgba(250,247,241,0.48);
+          border-radius: 14px;
+          background: rgba(250,247,241,0.56);
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
           pointer-events: none;
-          z-index: 1;
+          flex: 0 0 auto;
         }
 
-        .hero-entry-row > span:first-child {
-          position: relative;
-          z-index: 2;
+        .hero-entry-visual-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: end;
+          gap: 0.58rem;
+          margin-top: auto;
         }
 
         .hero-mini-visual-gene .hero-mini-dna {
           position: absolute;
-          left: 0.42rem;
-          top: 0.48rem;
+          left: 0.34rem;
+          top: 0.36rem;
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 0.12rem;
-          width: 4.8rem;
+          width: 4.55rem;
         }
 
         .hero-mini-visual-gene .hero-mini-dna span {
@@ -376,10 +383,10 @@ export function Hero() {
 
         .hero-mini-visual-gene .hero-mini-rna {
           position: absolute;
-          left: 0.74rem;
-          top: 1.9rem;
-          width: 3.4rem;
-          height: 1.1rem;
+          left: 0.62rem;
+          top: 1.54rem;
+          width: 3.1rem;
+          height: 0.92rem;
           border-bottom: 3px solid var(--cherry-blue);
           border-radius: 0 0 80% 70%;
           transform: rotate(-7deg);
@@ -387,18 +394,18 @@ export function Hero() {
 
         .hero-mini-visual-gene .hero-mini-ribosome {
           position: absolute;
-          right: 1rem;
-          bottom: 0.72rem;
-          width: 1.18rem;
-          height: 0.82rem;
+          right: 0.84rem;
+          bottom: 0.52rem;
+          width: 1.04rem;
+          height: 0.74rem;
           border-radius: 999px 999px 0.7rem 0.7rem;
           background: rgba(94,68,42,0.54);
         }
 
         .hero-mini-visual-gene .hero-mini-chain {
           position: absolute;
-          right: 0.42rem;
-          bottom: 1.48rem;
+          right: 0.32rem;
+          bottom: 1.18rem;
           display: flex;
           gap: 0.12rem;
           transform: rotate(-22deg);
@@ -413,10 +420,10 @@ export function Hero() {
 
         .hero-mini-visual-research .hero-mini-paper {
           position: absolute;
-          left: 0.55rem;
-          top: 0.46rem;
-          width: 2.3rem;
-          height: 2.72rem;
+          left: 0.44rem;
+          top: 0.34rem;
+          width: 2.1rem;
+          height: 2.42rem;
           border-radius: 0.42rem;
           background: rgba(255,255,255,0.72);
           border: 1px solid rgba(94,68,42,0.13);
@@ -434,14 +441,14 @@ export function Hero() {
 
         .hero-mini-visual-research .hero-mini-checklist {
           position: absolute;
-          right: 0.5rem;
-          top: 0.82rem;
+          right: 0.42rem;
+          top: 0.66rem;
           display: grid;
           gap: 0.36rem;
         }
 
         .hero-mini-visual-research .hero-mini-checklist i {
-          width: 1.72rem;
+          width: 1.58rem;
           height: 0.36rem;
           border-radius: 999px;
           background: linear-gradient(90deg, var(--cherry-forest) 0 0.36rem, rgba(94,68,42,0.22) 0.36rem);
@@ -457,8 +464,8 @@ export function Hero() {
         .hero-mini-visual-concept span {
           display: grid;
           place-items: center;
-          width: 1.4rem;
-          height: 1.4rem;
+          width: 1.28rem;
+          height: 1.28rem;
           border-radius: 999px;
           background: rgba(123,108,196,0.15);
           color: #5F548F;
@@ -476,9 +483,9 @@ export function Hero() {
         .hero-mini-visual-crispr::before {
           content: "";
           position: absolute;
-          left: 0.55rem;
-          right: 0.55rem;
-          top: 1.8rem;
+          left: 0.46rem;
+          right: 0.46rem;
+          top: 1.5rem;
           height: 0.34rem;
           border-radius: 999px;
           background: repeating-linear-gradient(90deg, var(--cherry-blue) 0 0.42rem, rgba(250,247,241,0.85) 0.42rem 0.58rem, var(--cherry-red) 0.58rem 1rem);
@@ -486,9 +493,9 @@ export function Hero() {
 
         .hero-mini-visual-crispr .hero-mini-guide {
           position: absolute;
-          left: 1.08rem;
-          top: 1.26rem;
-          width: 3rem;
+          left: 0.88rem;
+          top: 1.04rem;
+          width: 2.72rem;
           height: 0.18rem;
           border-radius: 999px;
           background: var(--cherry-red);
@@ -496,18 +503,18 @@ export function Hero() {
 
         .hero-mini-visual-crispr .hero-mini-cas {
           position: absolute;
-          right: 1.22rem;
-          top: 1.12rem;
-          width: 1.1rem;
-          height: 1.1rem;
+          right: 1.02rem;
+          top: 0.92rem;
+          width: 1rem;
+          height: 1rem;
           border-radius: 45% 55% 50% 50%;
           background: rgba(95,145,115,0.7);
         }
 
         .hero-mini-visual-crispr .hero-mini-cut {
           position: absolute;
-          right: 1rem;
-          top: 1.2rem;
+          right: 0.86rem;
+          top: 1rem;
           width: 0.48rem;
           height: 1.28rem;
           border-left: 2px solid rgba(94,68,42,0.44);
