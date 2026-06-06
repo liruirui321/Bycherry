@@ -5239,7 +5239,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
           {practiceScenarios.map((scenario, index) => {
             const active = activeScenarioIndex === index;
             return (
-              <button key={scenario.title} type="button" aria-pressed={active} onClick={() => chooseCrisprScenario(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 16, padding: "0.72rem", cursor: "pointer", display: "grid", gap: "0.36rem" }}>
+              <button key={scenario.title} type="button" aria-pressed={active} onClick={() => chooseCrisprScenario(index)} style={{ textAlign: "left", background: active ? "var(--cherry-sage-light)" : "var(--muted)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid var(--border)", borderRadius: 12, padding: "0.62rem", cursor: "pointer", display: "grid", gap: "0.32rem" }}>
                 <strong style={{ color: active ? "var(--cherry-forest)" : "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{scenario.title}</strong>
                 <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.5, fontWeight: 800 }}>{scenario.goal}</span>
                 <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.48, fontWeight: 900 }}>{scenario.check}</span>
@@ -5264,7 +5264,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.62rem" }}>
           {crisprCompletionChecks.map((item, index) => (
-            <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 16, padding: "0.72rem", minHeight: 132, display: "grid", gap: "0.42rem", alignContent: "start" }}>
+            <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.62rem", display: "grid", gap: "0.36rem", alignContent: "start" }}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.55rem", alignItems: "start" }}>
                 <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{item.title}</strong>
                 <span style={{ color: index === 2 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 900, whiteSpace: "nowrap" }}>{item.status}</span>
@@ -5290,7 +5290,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.62rem" }}>
           {decisionRows.map((item, index) => (
-            <div key={item.label} style={{ background: index === 0 ? "var(--cherry-sage-light)" : "var(--muted)", border: index === 0 ? "1.5px solid var(--cherry-forest)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.72rem", minHeight: 126 }}>
+            <div key={item.label} style={{ background: index === 0 ? "var(--cherry-sage-light)" : "var(--muted)", border: index === 0 ? "1.5px solid var(--cherry-forest)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.62rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.55rem", alignItems: "start", marginBottom: "0.42rem" }}>
                 <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{item.label}</strong>
                 <span style={{ color: index === 0 ? "var(--cherry-forest)" : guideDecision.color, fontSize: "0.72rem", fontWeight: 900, whiteSpace: "nowrap" }}>{item.value}</span>
@@ -5299,7 +5299,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             </div>
           ))}
         </div>
-        <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.82rem", display: "grid", gap: "0.48rem" }}>
+        <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.68rem", display: "grid", gap: "0.42rem" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem" }}>下一步判定</div>
           {goNoGoCriteria.map((item, index) => (
             <div key={item} style={{ display: "grid", gridTemplateColumns: "24px minmax(0, 1fr)", gap: "0.5rem", alignItems: "start", color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, fontWeight: 800 }}>
@@ -5325,7 +5325,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "0.62rem" }}>
           {riskAuditItems.map((item, index) => (
-            <div key={item.label} style={{ background: index === 1 ? "var(--cherry-peach-light)" : "var(--muted)", border: index === 1 ? "1.5px solid rgba(214,91,74,0.26)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.72rem", display: "grid", gap: "0.42rem", minHeight: 132 }}>
+            <div key={item.label} style={{ background: index === 1 ? "var(--cherry-peach-light)" : "var(--muted)", border: index === 1 ? "1.5px solid rgba(214,91,74,0.26)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.62rem", display: "grid", gap: "0.36rem" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.55rem", flexWrap: "wrap" }}>
                 <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{item.label}</strong>
                 <span style={{ color: index === 1 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.7rem", fontWeight: 900 }}>{item.status}</span>
@@ -5368,7 +5368,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
                 }}
                 rows={5}
                 placeholder={field.placeholder}
-                style={{ width: "100%", minHeight: 106, resize: "vertical", border: "1.5px solid rgba(94,68,42,0.16)", borderRadius: 12, padding: "0.62rem", background: "#FAF7F1", color: "var(--cherry-warm-brown)", fontFamily: "inherit", fontSize: "0.8rem", fontWeight: 800, lineHeight: 1.55 }}
+                style={{ width: "100%", minHeight: 84, resize: "vertical", border: "1.5px solid rgba(94,68,42,0.16)", borderRadius: 10, padding: "0.56rem", background: "#FAF7F1", color: "var(--cherry-warm-brown)", fontFamily: "inherit", fontSize: "0.8rem", fontWeight: 800, lineHeight: 1.5 }}
               />
               <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 900 }}>
                 {field.pass ? "会写入复制内容。" : field.passText}

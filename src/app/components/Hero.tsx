@@ -95,38 +95,43 @@ export function Hero() {
             })}
           </div>
 
-          <div className="hero-directory-group" role="group" aria-label="文章" style={{ display: "flex", alignItems: "center", gap: "0.24rem", flexWrap: "wrap", minWidth: 0 }}>
-            <span className="hero-section-label" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900, lineHeight: 1.14 }}>文章</span>
-            {articleLinks.map((article) => (
-              <a
-                className="hero-article-row"
-                key={article.href}
-                href={article.href}
-                aria-label={`打开${article.title}：${article.desc}`}
-                onClick={(event) => openContent(article.href, event)}
-                onMouseEnter={() => preloadRouteForHref(article.href)}
-                onFocus={() => preloadRouteForHref(article.href)}
-                onPointerDown={() => preloadRouteForHref(article.href)}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  borderLeft: "3px solid rgba(94,68,42,0.2)",
-                  borderRadius: 0,
-                  padding: "0.14rem 0.3rem",
-                  color: "var(--cherry-warm-brown)",
-                  textDecoration: "none",
-                  textAlign: "left",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  minWidth: 0,
-                  maxWidth: "min(18rem, 100%)",
-                  boxSizing: "border-box",
-                }}
-              >
-                <strong style={{ fontSize: "0.7rem", lineHeight: 1.14, minWidth: 0, overflowWrap: "anywhere" }}>{article.title}</strong>
-              </a>
-            ))}
-          </div>
+          <details className="hero-reading-library" style={{ minWidth: 0 }}>
+            <summary style={{ display: "inline-flex", alignItems: "center", gap: "0.34rem", cursor: "pointer", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900, lineHeight: 1.14, padding: "0.12rem 0.32rem", borderLeft: "3px solid rgba(94,68,42,0.2)" }}>
+              阅读库 · {articleLinks.length} 篇
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", fontWeight: 900 }}>科研证据 / 方法文章</span>
+            </summary>
+            <div className="hero-article-list" style={{ display: "flex", alignItems: "center", gap: "0.22rem", flexWrap: "wrap", minWidth: 0, padding: "0.22rem 0 0 0.32rem" }}>
+              {articleLinks.map((article) => (
+                <a
+                  className="hero-article-row"
+                  key={article.href}
+                  href={article.href}
+                  aria-label={`打开${article.title}：${article.desc}`}
+                  onClick={(event) => openContent(article.href, event)}
+                  onMouseEnter={() => preloadRouteForHref(article.href)}
+                  onFocus={() => preloadRouteForHref(article.href)}
+                  onPointerDown={() => preloadRouteForHref(article.href)}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    borderLeft: "3px solid rgba(94,68,42,0.18)",
+                    borderRadius: 0,
+                    padding: "0.12rem 0.28rem",
+                    color: "var(--cherry-warm-brown)",
+                    textDecoration: "none",
+                    textAlign: "left",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    minWidth: 0,
+                    maxWidth: "min(18rem, 100%)",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  <strong style={{ fontSize: "0.68rem", lineHeight: 1.14, minWidth: 0, overflowWrap: "anywhere" }}>{article.title}</strong>
+                </a>
+              ))}
+            </div>
+          </details>
         </nav>
       </div>
 
@@ -154,7 +159,8 @@ export function Hero() {
 	            box-sizing: border-box;
 	          }
 
-            .hero-directory-group {
+            .hero-directory-group,
+            .hero-article-list {
               gap: 0.18rem 0.26rem !important;
             }
 
@@ -167,6 +173,10 @@ export function Hero() {
 	            gap: 0 !important;
 	            padding: 0.14rem 0.26rem !important;
 	          }
+
+            .hero-reading-library summary {
+              padding: 0.12rem 0.26rem !important;
+            }
 
           .hero-work-tags {
             display: none !important;
