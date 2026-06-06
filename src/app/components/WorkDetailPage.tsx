@@ -575,10 +575,10 @@ ${apiOutputFields.join(", ")}
 六、引用核查
 ${citationAuditItems.map((item, index) => `${index + 1}. ${item.label}：${item.status}。${item.evidence}`).join("\n")}
 
-七、进阶请求 JSON
+七、进阶请求结构
 ${agentRequestJson}
 
-八、返回格式
+八、返回模板
 ${agentResponseJson}
 
 九、分析报告草稿
@@ -650,7 +650,7 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
     { title: "证据表", body: "把原文证据、合理推断、缺失信息和风险提醒拆开，要求每个结论都能回到材料行。" },
     { title: "质控闸门", body: "在生成报告前先检查样本、分组、结果证据、统计和人工复核问题，材料不足时不输出强结论。" },
     { title: "报告框架", body: "生成可复制的复核摘要、论文修改建议、图表解读报告、审稿回复结构或术语统一表。" },
-    { title: "进阶接入", body: "定义请求 JSON、返回字段和验收条件，后续接模型时仍保持可追踪、可复核、可拒绝。" },
+    { title: "进阶接入", body: "定义请求结构、返回模板和验收条件，后续接模型时仍保持可追踪、可复核、可拒绝。" },
   ];
   const marketSignals = [
     {
@@ -753,7 +753,7 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
     },
     {
       title: "进阶接入格式",
-      body: "复制进阶 JSON 后可以接入外部模型，返回字段必须包含 evidence_items、missing_fields、risk_flags 和 final_report。",
+      body: "复制进阶结构后可以接入外部模型，返回内容必须包含 evidence_items、missing_fields、risk_flags 和 final_report。",
     },
     {
       title: "引用核查清单",
@@ -788,11 +788,11 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
   const agentCards = [
     {
       title: "当前版本",
-      body: "能直接使用：本地生成模型指令、任务包、证据边界、验收清单和进阶接入格式；材料只在浏览器里编辑，不上传，也不调用 API。",
+      body: "能直接使用：本地生成模型指令、任务包、证据边界、验收清单和进阶接入格式；材料只在浏览器里编辑，不上传。",
     },
     {
       title: "进阶接入方式",
-      body: "复制进阶 JSON 交给外部模型执行，返回内容必须按契约拆成证据、推断、风险、待核查点和汇报摘要。",
+      body: "复制进阶结构交给外部模型执行，返回内容必须按模板拆成证据、推断、风险、待核查点和汇报摘要。",
     },
     {
       title: "不做什么",
@@ -939,7 +939,7 @@ ${localPreviewOutput}`;
       setCopiedResearchRecord(false);
       setCopiedCitationAudit(false);
       setCopiedResearchSkill(false);
-      setCopyStatus("进阶请求 JSON 已复制到剪贴板。");
+      setCopyStatus("进阶请求结构已复制到剪贴板。");
       window.setTimeout(() => setCopiedJson(false), 1400);
       return;
     }
@@ -1139,10 +1139,10 @@ ${localPreviewOutput}`;
                   {copiedPack ? "已复制" : "复制任务包"}
                 </button>
                 <button type="button" onClick={copyAgentJson} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                  {copiedJson ? "已复制" : "复制进阶 JSON"}
+                  {copiedJson ? "已复制" : "复制进阶结构"}
                 </button>
                 <button type="button" onClick={copyResponseJson} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                  {copiedResponseJson ? "已复制" : "复制返回格式"}
+                  {copiedResponseJson ? "已复制" : "复制返回模板"}
                 </button>
               </div>
             </div>
@@ -1330,7 +1330,7 @@ ${localPreviewOutput}`;
                       style={{ width: "100%", minHeight: 54, resize: "vertical", border: "1.5px solid rgba(94,68,42,0.16)", borderRadius: 8, padding: "0.42rem", background: "#FAF7F1", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.72rem", lineHeight: 1.38, fontWeight: 800, boxSizing: "border-box" }}
                     />
                     <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 900 }}>
-                      {field.pass ? "会进入进阶 JSON 和研究记录。" : field.passText}
+                      {field.pass ? "会进入进阶结构和研究记录。" : field.passText}
                     </span>
                   </label>
                 ))}
@@ -1360,7 +1360,7 @@ ${localPreviewOutput}`;
                 <div style={{ display: hasRunPreview ? "block" : "none" }}>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>本地预览</div>
                   <div className="research-agent-preview-copy" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem" }}>
-                    不调用 API，只根据当前材料做任务路由和证据边界预判。
+                    只根据当前材料做任务路由和证据边界预判，材料不会离开浏览器。
                   </div>
                 </div>
                 <div className="research-agent-preview-actions" style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
@@ -1373,10 +1373,10 @@ ${localPreviewOutput}`;
                         {copiedPreview ? "已复制" : "复制预览"}
                       </button>
                       <button type="button" onClick={copyAgentJson} style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                        {copiedJson ? "已复制" : "复制 JSON"}
+                        {copiedJson ? "已复制" : "复制结构"}
                       </button>
                       <button type="button" onClick={copyResponseJson} style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                        {copiedResponseJson ? "已复制" : "复制契约"}
+                        {copiedResponseJson ? "已复制" : "复制返回模板"}
                       </button>
                       <button type="button" onClick={copyResearchRecord} style={{ background: "var(--cherry-yellow-light)", color: "var(--cherry-warm-brown)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
                         {copiedResearchRecord ? "已复制" : "复制研究记录"}
@@ -1438,7 +1438,7 @@ ${localPreviewOutput}`;
                     </code>
                   </div>
                   <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem" }}>
-                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>进阶输出字段</strong>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>进阶输出结构</strong>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: "0.36rem" }}>
                       {apiOutputFields.map((field) => (
                         <span key={field} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.16rem 0.44rem", color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>
@@ -1448,13 +1448,13 @@ ${localPreviewOutput}`;
                     </div>
                   </div>
                   <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem" }}>
-                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>进阶请求 JSON</strong>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>进阶请求结构</strong>
                     <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.6rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.66rem", lineHeight: 1.5, maxHeight: 220, overflow: "auto" }}>
                       {agentRequestJson}
                     </code>
                   </div>
                   <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.55rem" }}>
-                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>返回格式与验收</strong>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>返回模板与验收</strong>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.48rem" }}>
                       {acceptanceChecks.map((item) => (
                         <div key={item.label} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.58rem" }}>

@@ -199,15 +199,15 @@ function verifyWorkCardActions() {
   expect(!worksSource.includes("科研助手 Prompt Kit"), "Visible work card title must not use the old Prompt Kit naming.");
   expect(heroSource.includes('id="works"') && heroSource.includes('aria-label="内容目录"'), "Hero must own the #works anchor and all-module directory.");
   expect(heroSource.includes("hero-entry-row") && !heroSource.includes("hero-work-open") && !heroSource.includes("hero-entry-action"), "Hero module entries must stay as compact clickable entries without repeated open pills.");
-  expect(heroSource.includes("hero-layout") && heroSource.includes("hero-featured-panel") && heroSource.includes("内容目录") && !heroSource.includes("精选内容"), "Hero must use a direct first-screen content directory rather than a featured-summary label.");
-  expect(heroSource.includes("A tiny studio for") && heroSource.includes("hero-soft-blob") && heroSource.includes("hero-stem") && heroSource.includes("hero-float-deco") && heroSource.includes("hero-quick-index"), "Hero must keep the original studio atmosphere while avoiding a large empty slogan-only first screen.");
+  expect(heroSource.includes("hero-heading-strip") && heroSource.includes("hero-featured-panel") && heroSource.includes("精选内容") && heroSource.includes("内容目录"), "Hero must use one compact first-screen content directory.");
+  expect(!heroSource.includes("hero-layout") && !heroSource.includes("hero-quick-index") && !heroSource.includes("hero-flow-board"), "Hero must not reintroduce repeated side indexes or bottom structure strips.");
+  expect(heroSource.includes("A tiny studio for") && heroSource.includes("hero-soft-blob") && heroSource.includes("hero-stem") && heroSource.includes("hero-float-deco"), "Hero must keep the original studio atmosphere while avoiding a large empty slogan-only first screen.");
   expect(heroSource.includes("hero-entry-desc") && heroSource.includes("-webkit-line-clamp: 2"), "Hero featured cards must show compact clamped module descriptions without becoming long pages.");
-  expect(heroSource.includes('gridTemplateColumns: "minmax(260px, 0.38fr) minmax(800px, 1.62fr)"') && heroSource.includes("maxWidth: 1480"), "Homepage must put most first-screen space into the content matrix instead of leaving the page mostly empty.");
-  expect(heroSource.includes('className="hero-entry-grid"') && heroSource.includes('gridTemplateColumns: "repeat(3, minmax(0, 1fr))"') && heroSource.includes('gridAutoRows: "minmax(142px, auto)"'), "Homepage module entries must render as a compact three-column first-screen matrix, not repeated sections.");
-  expect(heroSource.includes("border: `2px solid ${entry.border}`") && heroSource.includes("minHeight: 142") && !heroSource.includes("minHeight: 230") && !heroSource.includes("minHeight: 260"), "Homepage module entries must keep enough content density without returning to long sticky-note panels.");
-  expect(!heroSource.includes('gridRow: entry.featuredImage ? "span 2" : undefined') && heroSource.includes("width: 76") && heroSource.includes("height: 58"), "Homepage plant evolution entry must show a compact illustration without becoming a two-row sticky-note card.");
-  expect(heroSource.includes('aria-label="内容类型"') && heroSource.includes("科学模拟") && heroSource.includes("AI 学习") && heroSource.includes("证据阅读") && !heroSource.includes("阅读笔记") && !heroSource.includes("hero-start-strip") && !heroSource.includes("先选一个卡住的问题") && !heroSource.includes("点卡片直接开始") && !heroSource.includes("hero-scope-strip") && !heroSource.includes("hero-scope-item"), "Homepage should use one compact content-type index instead of repeated usage instructions.");
-  expect(heroSource.includes("hero-flow-board") && heroSource.includes('aria-label="内容结构"') && heroSource.includes("基因表达") && heroSource.includes("科研阅读") && !heroSource.includes("hero-flow-board\" href"), "Homepage should fill the first screen with a non-link content-structure strip rather than more repeated entrances.");
+  expect(heroSource.includes('gridTemplateColumns: "minmax(330px, 0.78fr) minmax(420px, 1fr)"') && heroSource.includes("maxWidth: 1480"), "Homepage header must stay compact so the content matrix gets the first-screen space.");
+  expect(heroSource.includes('className="hero-entry-grid"') && heroSource.includes('gridTemplateColumns: "repeat(3, minmax(0, 1fr))"') && heroSource.includes('gridAutoRows: "minmax(168px, 1fr)"'), "Homepage module entries must render as a compact three-column first-screen matrix, not repeated sections.");
+  expect(heroSource.includes("border: `2px solid ${entry.border}`") && heroSource.includes("minHeight: 168") && !heroSource.includes("minHeight: 230") && !heroSource.includes("minHeight: 260"), "Homepage module entries must keep enough content density without returning to long sticky-note panels.");
+  expect(!heroSource.includes('gridRow: entry.featuredImage ? "span 2" : undefined') && heroSource.includes("width: 86") && heroSource.includes("height: 72"), "Homepage plant evolution entry must show a compact illustration without becoming a two-row sticky-note card.");
+  expect(!heroSource.includes('aria-label="内容类型"') && !heroSource.includes("hero-start-strip") && !heroSource.includes("先选一个卡住的问题") && !heroSource.includes("点卡片直接开始") && !heroSource.includes("hero-scope-strip") && !heroSource.includes("hero-scope-item"), "Homepage should not use repeated usage indexes or instruction strips.");
   expect(!/\.hero-entry-row\s*\{[\s\S]{0,260}width:\s*100%\s*!important/.test(heroSource), "Mobile homepage entries must not become full-width long boxes.");
   expect(!heroSource.includes("hero-count") && !heroSource.includes("homeWorkStatus") && !heroSource.includes("hero-work-status") && !heroSource.includes("个内容入口") && !heroSource.includes("个可直接打开的入口") && !heroSource.includes("首页就是目录"), "Homepage first-screen directory must not add duplicate count or status labels.");
   expect(!heroSource.includes("entry.updated") && !heroSource.includes("updated: work.updated"), "Homepage first-screen cards must not show date metadata that makes the directory feel like an article list.");
@@ -661,6 +661,12 @@ function verifyResearchAgentWorkbenchContract() {
     expect(!promptKitSource.includes(retiredResearchSummaryChrome), `Research Agent summaries should stay short and not expose status chrome: ${retiredResearchSummaryChrome}.`);
   }
   expect(promptKitSource.includes("{suggestedRoute.title}") && promptKitSource.includes("{routeConfidence}") && promptKitSource.includes("填写完成度 {learnerResearchReviewScore}/4"), "Research Agent expanded panels must keep route and learner-review status after summary chrome is removed.");
+  for (const requiredLearnerLabel of ["复制进阶结构", "复制结构", "复制返回模板", "进阶请求结构", "进阶输出结构", "返回模板与验收", "材料不会离开浏览器"]) {
+    expect(promptKitSource.includes(requiredLearnerLabel), `Research Agent workbench must keep learner-facing advanced-copy label: ${requiredLearnerLabel}`);
+  }
+  for (const retiredTechnicalLabel of ["复制进阶 JSON", "复制 JSON", "复制契约", "复制返回格式", "进阶请求 JSON", "进阶输出字段", "返回格式与验收", "不调用 API"]) {
+    expect(!promptKitSource.includes(retiredTechnicalLabel), `Research Agent workbench must not expose technical implementation label: ${retiredTechnicalLabel}`);
+  }
 
   for (const item of retiredWorkbenchPatterns) {
     expect(!item.pattern.test(promptKitSource), `Research Agent workbench contains retired copy: ${item.label}`);
