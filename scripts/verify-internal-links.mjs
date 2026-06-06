@@ -49,6 +49,7 @@ function extractStaticIds(relativePath) {
 
 const publicRoutes = new Set([
   "/",
+  "/reading",
   ...getContentHrefs(),
 ]);
 

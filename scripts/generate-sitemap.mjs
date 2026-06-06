@@ -21,6 +21,7 @@ function escapeXml(value) {
 
 function routeMeta(route) {
   if (route.path === "/") return { changefreq: "weekly", priority: "1.0" };
+  if (route.path === "/reading") return { changefreq: "monthly", priority: "0.8" };
   if (route.path === "/works/gene-expression" || route.path === "/works/crispr-interactive") return { changefreq: "monthly", priority: "0.9" };
   if (route.path.startsWith("/works/")) return { changefreq: "monthly", priority: "0.85" };
   if (route.path.startsWith("/research/")) return { changefreq: "monthly", priority: "0.75" };
@@ -47,6 +48,7 @@ if (!contentRoutes.length) {
 
 const routes = [
   { path: "/", lastmod: maxDate(contentRoutes) },
+  { path: "/reading", lastmod: maxDate(contentRoutes) },
   ...contentRoutes,
 ];
 const sitemap = [

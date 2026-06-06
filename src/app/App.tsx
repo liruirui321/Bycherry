@@ -11,6 +11,7 @@ import { homeTitle, shareImageAlt, siteDescription, siteTitle, siteUrl, socialIm
 
 const WorkDetailPage = lazy(() => import("./components/WorkDetailPage").then((module) => ({ default: module.WorkDetailPage })));
 const ArticleDetailPage = lazy(() => import("./components/ArticleDetailPage").then((module) => ({ default: module.ArticleDetailPage })));
+const ArticleLibraryPage = lazy(() => import("./components/ArticleLibraryPage").then((module) => ({ default: module.ArticleLibraryPage })));
 
 const legacyNoteSlugMap: Record<string, string> = {
   "ai-course-development": "ai-learning-material-audit",
@@ -154,6 +155,50 @@ function buildHomeJsonLd() {
   };
 }
 
+function buildArticleLibraryJsonLd() {
+  const personId = `${siteUrl}/#person`;
+  const articles = [
+    ...essays.map((item) => ({ ...item, kind: "科研证据", description: item.body })),
+    ...notes.map((item) => ({ ...item, kind: "学习方法", description: item.excerpt })),
+  ];
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "阅读库",
+    description: "By Cherry 阅读库集中整理科研证据和学习方法文章，每篇都给出行动、检查和可保存产出。",
+    url: `${siteUrl}/reading`,
+    inLanguage: "zh-CN",
+    publisher: {
+      "@type": "Person",
+      "@id": personId,
+      name: "Cherry",
+      url: siteUrl,
+    },
+    mainEntity: {
+      "@type": "ItemList",
+      "@id": `${siteUrl}/reading#articles`,
+      name: "By Cherry 阅读库",
+      numberOfItems: articles.length,
+      itemListElement: articles.map((article, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: `${siteUrl}${article.href}`,
+        item: {
+          "@type": "Article",
+          headline: article.title,
+          description: article.description,
+          url: `${siteUrl}${article.href}`,
+          datePublished: article.date,
+          articleSection: article.kind,
+          teaches: [article.actionSteps[0], article.checklist[0], article.starterTemplate[0]],
+          author: { "@id": personId },
+        },
+      })),
+    },
+  };
+}
+
 function getScrollBehavior(): ScrollBehavior {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 }
@@ -251,8 +296,9 @@ export default function App() {
     const match = window.location.pathname.match(/^\/research\/([^/]+)\/?$/);
     return match?.[1] ?? null;
   }, [locationKey]);
-  const unknownPath = useMemo(() => window.location.pathname !== "/" && !detailSlug && !noteSlug && !researchSlug, [detailSlug, noteSlug, researchSlug, locationKey]);
-  const isHome = !detailSlug && !canonicalNoteSlug && !researchSlug && !unknownPath;
+  const isReadingLibrary = useMemo(() => /^\/reading\/?$/.test(window.location.pathname), [locationKey]);
+  const unknownPath = useMemo(() => window.location.pathname !== "/" && !detailSlug && !noteSlug && !researchSlug && !isReadingLibrary, [detailSlug, noteSlug, researchSlug, isReadingLibrary, locationKey]);
+  const isHome = !detailSlug && !canonicalNoteSlug && !researchSlug && !isReadingLibrary && !unknownPath;
 
   useEffect(() => {
     function handleLocationChange() {
@@ -291,7 +337,7 @@ export default function App() {
     const shouldMoveFocus = hasNavigated.current;
     hasNavigated.current = true;
 
-    if (detailSlug || canonicalNoteSlug || researchSlug || unknownPath) {
+    if (detailSlug || canonicalNoteSlug || researchSlug || isReadingLibrary || unknownPath) {
       if (!unknownPath && scrollToHashTarget(shouldMoveFocus)) return;
 
       window.scrollTo({ top: 0, behavior: getScrollBehavior() });
@@ -302,7 +348,7 @@ export default function App() {
     }
 
     scrollToHashTarget(shouldMoveFocus);
-  }, [detailSlug, canonicalNoteSlug, researchSlug, unknownPath, locationKey]);
+  }, [detailSlug, canonicalNoteSlug, researchSlug, isReadingLibrary, unknownPath, locationKey]);
 
   useEffect(() => {
     const work = detailSlug ? works.find((item) => item.slug === detailSlug) : null;
@@ -310,8 +356,9 @@ export default function App() {
     const essay = researchSlug ? essays.find((item) => item.slug === researchSlug) : null;
     const missingRoutedItem = Boolean((detailSlug && !work) || (canonicalNoteSlug && !note) || (researchSlug && !essay));
     const notFound = unknownPath || missingRoutedItem;
-    const title = notFound ? "没有找到页面" : work?.title ?? note?.title ?? essay?.title ?? homeTitle;
-    const baseDescription = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览内容和文章。" : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
+    const readingLibraryDescription = "By Cherry 阅读库集中整理科研证据和学习方法文章，每篇都给出行动、检查和可保存产出。";
+    const title = notFound ? "没有找到页面" : isReadingLibrary ? "阅读库" : work?.title ?? note?.title ?? essay?.title ?? homeTitle;
+    const baseDescription = notFound ? "这个地址没有对应的 By Cherry 页面，可以回到首页继续浏览内容和文章。" : isReadingLibrary ? readingLibraryDescription : work?.desc ?? note?.excerpt ?? essay?.body ?? siteDescription;
     const workActionDescription = work ? `先做这个：${work.starter}。完成标准：${work.success}` : null;
     const articleFirstAction = note?.actionSteps[0] ?? essay?.actionSteps[0] ?? null;
     const articleFirstCheck = note?.checklist[0] ?? essay?.checklist[0] ?? null;
@@ -322,7 +369,7 @@ export default function App() {
     const isArticle = Boolean(note || essay);
     const publishedDate = note?.date ?? essay?.date ?? null;
     const workUpdatedDate = work?.updated ?? null;
-    const keywords = work?.tags.join(", ") ?? essay?.tags.join(", ") ?? note?.tag ?? null;
+    const keywords = isReadingLibrary ? "科研证据, 学习方法, AI 学习, 科学学习" : work?.tags.join(", ") ?? essay?.tags.join(", ") ?? note?.tag ?? null;
     const fullTitle = title === homeTitle ? `${siteTitle} | ${title}` : `${title} | ${siteTitle}`;
     const canonicalPath = window.location.pathname === "/" ? "/" : window.location.pathname.replace(/\/$/, "");
     const canonicalUrl = `${siteUrl}${canonicalPath}`;
@@ -348,6 +395,8 @@ export default function App() {
           "@type": "WebPage",
           ...jsonLdBase,
         }
+      : isReadingLibrary
+      ? buildArticleLibraryJsonLd()
       : work
       ? {
           "@context": "https://schema.org",
@@ -404,7 +453,7 @@ export default function App() {
     setOptionalMeta('meta[name="keywords"]', { name: "keywords" }, keywords);
     upsertCanonical(canonicalUrl);
     upsertJsonLd(jsonLd);
-  }, [detailSlug, canonicalNoteSlug, researchSlug, unknownPath, locationKey]);
+  }, [detailSlug, canonicalNoteSlug, researchSlug, isReadingLibrary, unknownPath, locationKey]);
 
   return (
     <div
@@ -429,6 +478,10 @@ export default function App() {
       ) : researchSlug ? (
         <Suspense fallback={<RouteLoading />}>
           <ArticleDetailPage kind="research" slug={researchSlug} />
+        </Suspense>
+      ) : isReadingLibrary ? (
+        <Suspense fallback={<RouteLoading />}>
+          <ArticleLibraryPage />
         </Suspense>
       ) : unknownPath ? (
         <NotFoundPage />

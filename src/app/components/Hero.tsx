@@ -11,7 +11,6 @@ export function Hero() {
     title: article.title,
     desc: "body" in article ? article.body : article.excerpt,
   }));
-  const firstArticle = articleLinks[0];
 
   function openContent(href: string, event: MouseEvent<HTMLAnchorElement>) {
     if (!shouldUseClientNavigation(event)) return;
@@ -97,12 +96,12 @@ export function Hero() {
             <a
               className="hero-reading-library"
               role="listitem"
-              href={firstArticle?.href ?? "/"}
-              aria-label={`打开阅读库：共 ${articleLinks.length} 篇，从${firstArticle?.title ?? "第一篇"}开始`}
-              onClick={(event) => firstArticle ? openContent(firstArticle.href, event) : undefined}
-              onMouseEnter={() => firstArticle ? preloadRouteForHref(firstArticle.href) : undefined}
-              onFocus={() => firstArticle ? preloadRouteForHref(firstArticle.href) : undefined}
-              onPointerDown={() => firstArticle ? preloadRouteForHref(firstArticle.href) : undefined}
+              href="/reading"
+              aria-label={`打开阅读库：共 ${articleLinks.length} 篇`}
+              onClick={(event) => openContent("/reading", event)}
+              onMouseEnter={() => preloadRouteForHref("/reading")}
+              onFocus={() => preloadRouteForHref("/reading")}
+              onPointerDown={() => preloadRouteForHref("/reading")}
               style={{
                 background: "var(--cherry-sage-light)",
                 border: "1.5px solid var(--cherry-sage)",
