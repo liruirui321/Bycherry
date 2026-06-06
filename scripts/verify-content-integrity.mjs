@@ -894,6 +894,7 @@ function verifyGeneExpressionLearnerContract() {
     { label: "legend label", text: 'aria-label="画布图例"' },
     { label: "legend readable segment", text: "可读片段" },
     { label: "legend peptide exit", text: "多肽出口" },
+    { label: "visible model boundary strip", text: "gene-model-boundary-strip" },
     { label: "prokaryotic model boundary", text: "这个仿真显示原核式耦合表达" },
     { label: "eukaryotic boundary", text: "真核细胞通常先在细胞核内转录加工，再到细胞质翻译" },
     { label: "accessible process focus", text: "当前过程焦点" },
@@ -948,6 +949,7 @@ function verifyGeneExpressionLearnerContract() {
 
   expect(geneSource.includes('className="gene-readout-panel"') && geneSource.includes('borderRadius: 12') && geneSource.includes('gridTemplateColumns: "repeat(2, minmax(0, 1fr))"'), "Gene expression readout panel must stay as compact two-column metrics instead of a tall readout list.");
   expect(geneSource.includes('className="gene-canvas-card"') && geneSource.includes('borderRadius: 12') && !geneSource.includes('borderRadius: 28') && !geneSource.includes('6px 10px 0px rgba(94,68,42,0.09)'), "Gene expression canvas frame must stay compact instead of a heavy rounded card.");
+  expect(geneSource.includes("#gene-expression .gene-model-boundary-strip") && geneSource.includes("grid-template-columns: 1fr !important"), "Gene expression visible model boundary must stay compact on mobile.");
   expect(geneSource.includes('className="gene-readout-row"') && geneSource.includes('textOverflow: "ellipsis"') && geneSource.includes('className="gene-rate-list"') && geneSource.includes('marginTop: "0.62rem"'), "Gene expression readout rows and rate bars must stay compact.");
   expect(geneSource.includes('className="gene-compact-details gene-quiz-details"') && !geneSource.includes('borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)"'), "Gene expression quiz must stay as a compact collapsed panel instead of a long default card.");
   expect(geneSource.includes("const transcriptBases = codons.flatMap") && geneSource.includes("pathProgress = 0.08 + baseIndex * 0.066") && geneSource.includes("pointOnPolyline(nascentPath, pathProgress)"), "Gene expression mRNA nucleotides must follow the curved nascent mRNA path attached to RNA polymerase.");

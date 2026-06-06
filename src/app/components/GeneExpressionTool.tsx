@@ -835,6 +835,7 @@ export function GeneExpressionTool() {
     if (visibleProteinCount === 0) return `核糖体正在读取 ${activeCodon?.rna ?? "密码子"}，tRNA 对准 A/P 位点，第一颗氨基酸小圆即将从出口出现。`;
     return `原核式耦合表达正在发生：RNA 聚合酶延伸 mRNA，核糖体读取 ${activeCodon?.rna ?? "密码子"}，多肽链正按 ${activeCodon?.amino ?? "氨基酸"} 紧贴出口长出。`;
   })();
+  const geneModelBoundaryText = "这个仿真显示原核式耦合表达：转录和翻译可以同时发生；真核细胞通常先在细胞核内转录加工，再到细胞质翻译。";
   const processFocusCards = [
     {
       title: "mRNA 生长端",
@@ -854,7 +855,7 @@ export function GeneExpressionTool() {
     {
       title: "模型边界",
       active: true,
-      body: "这个仿真显示原核式耦合表达：转录和翻译可以同时发生；真核细胞通常先在细胞核内转录加工，再到细胞质翻译。",
+      body: geneModelBoundaryText,
     },
   ];
   const activeProcessFocus = processFocusCards.find((item) => item.active)?.title ?? "等待启动";
@@ -1289,6 +1290,10 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
               <MoleculeNode key={molecule.id} molecule={molecule} docked={isMoleculeDocked(molecule)} dragging={dragging?.id === molecule.id} onPointerDown={startDrag} onKeyToggle={toggleMoleculeDocking} />
             ))}
           </svg>
+          <div className="gene-model-boundary-strip" role="note" style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", gap: "0.48rem", alignItems: "start", background: "rgba(250,247,241,0.82)", borderTop: "1px solid rgba(94,68,42,0.12)", padding: "0.52rem 0.68rem", color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 850 }}>
+            <strong style={{ color: "var(--cherry-forest)", whiteSpace: "nowrap" }}>模型边界</strong>
+            <span>{geneModelBoundaryText}</span>
+          </div>
         </div>
 
         <aside className="gene-control-aside" style={{ display: "grid", gap: "0.68rem", alignContent: "start", minWidth: 0 }}>
@@ -1722,6 +1727,13 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             #gene-expression .gene-canvas-card {
               overflow: hidden !important;
               border-radius: 18px !important;
+            }
+
+            #gene-expression .gene-model-boundary-strip {
+              grid-template-columns: 1fr !important;
+              gap: 0.2rem !important;
+              padding: 0.46rem 0.54rem !important;
+              font-size: 0.66rem !important;
             }
 
             #gene-expression .gene-canvas-svg {
