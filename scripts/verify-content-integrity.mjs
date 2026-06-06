@@ -416,6 +416,10 @@ function verifyArticleOutcomeSnapshot() {
   expect(!articleSource.includes("配套模块"), "Article detail pages must avoid repeated module entrances inside articles.");
   expect(!articleSource.includes("完成验收卡"), "Article detail pages must not add a second completion card after the main checklist.");
   expect(articleSource.includes("article-record-panel") && articleSource.includes("article-record-preview-grid"), "Article detail learning record panel must expose stable compact layout classes.");
+  const articleRecordPanelSource = articleSource.slice(articleSource.indexOf('className="article-record-panel'), articleSource.indexOf('className="article-record-preview-grid"'));
+  const learningRecordTextSource = articleSource.slice(articleSource.indexOf("const learningRecordText"), articleSource.indexOf("async function copyActionPack"));
+  expect(articleRecordPanelSource.includes("待填写") && !articleRecordPanelSource.includes("待补充"), "Article learning-record field status must read as user input state, not unfinished site content.");
+  expect(learningRecordTextSource.includes("待完善") && !learningRecordTextSource.includes('item.pass ? "可用" : "待补充"'), "Copied article learning-record quality checks must use learner-facing improvement language.");
   expect(/className="article-practice-pack-details article-compact-tool-details"[\s\S]{0,240}background: "transparent"[\s\S]{0,120}border: "none"[\s\S]{0,120}boxShadow: "none"/.test(articleSource), "Article practice pack wrapper must stay a lightweight folded row instead of a nested framed card.");
   expect(!articleSource.includes("练习、模板与记录 · {practicePackItemCount} 项"), "Article practice pack summary must not expose item-count chrome.");
   expect(articleSource.includes("min-height: 64px !important"), "Article detail mobile learning record textareas must stay compact.");

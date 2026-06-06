@@ -1158,7 +1158,7 @@ ${articleEvidenceItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 4. 下一步要补什么：${filledRecord.nextStep}
 
 填写质量
-${articleRecordQuality.map((item, index) => `${index + 1}. ${item.label}：${item.pass ? "可用" : "待补充"}｜${item.help}`).join("\n")}
+${articleRecordQuality.map((item, index) => `${index + 1}. ${item.label}：${item.pass ? "可用" : "待完善"}｜${item.help}`).join("\n")}
 
 四、30 分钟执行节奏
 ${articlePracticePlan.map((item) => `${item.label}：${item.body}`).join("\n")}
@@ -2351,7 +2351,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                     <label key={field.id} htmlFor={field.id} style={{ display: "grid", gap: "0.36rem", color: "var(--cherry-warm-brown)", fontSize: "0.76rem", fontWeight: 900 }}>
                       <span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.5rem" }}>
                         <span>{field.label}</span>
-                        <span style={{ color: quality?.pass ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>{quality?.pass ? "可用" : "待补充"}</span>
+                        <span style={{ color: quality?.pass ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>{quality?.pass ? "可用" : "待填写"}</span>
                       </span>
                       <textarea
                         id={field.id}
