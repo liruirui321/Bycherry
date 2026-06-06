@@ -43,6 +43,21 @@ const articleGroups = [
   },
 ];
 
+const readingWorkflow = [
+  {
+    label: "选卡点",
+    body: "先选当前最想解决的科研阅读、AI 使用或项目整理问题。",
+  },
+  {
+    label: "带着问题读",
+    body: "进入正文后只先完成第一个动作，不急着把全文看完。",
+  },
+  {
+    label: "留下记录",
+    body: "用页面里的表格或记录区，复制一份能继续复盘的产出。",
+  },
+];
+
 function openContent(href: string, event: MouseEvent<HTMLAnchorElement>) {
   if (!shouldUseClientNavigation(event)) return;
   event.preventDefault();
@@ -82,6 +97,40 @@ export function ArticleLibraryPage() {
               </p>
             </div>
           </header>
+
+          <section className="article-library-start-strip" aria-labelledby="reading-start-title" style={{ display: "grid", gap: "0.34rem", borderBottom: "1px solid rgba(94,68,42,0.09)", paddingBottom: "0.44rem" }}>
+            <h2 id="reading-start-title" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.9rem", lineHeight: 1.2, fontWeight: 920 }}>
+              先按这条路径打开文章
+            </h2>
+            <div role="list" aria-label="阅读库使用路径" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.44rem" }}>
+              {readingWorkflow.map((item, index) => (
+                <div
+                  key={item.label}
+                  role="listitem"
+                  className="article-library-start-item"
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "auto minmax(0, 1fr)",
+                    gap: "0.42rem",
+                    alignItems: "start",
+                    minWidth: 0,
+                    background: "rgba(250,247,241,0.58)",
+                    border: "1px solid rgba(94,68,42,0.1)",
+                    borderRadius: 8,
+                    padding: "0.48rem 0.54rem",
+                  }}
+                >
+                  <span aria-hidden="true" style={{ display: "grid", placeItems: "center", width: 24, height: 24, borderRadius: 999, background: "rgba(93,140,101,0.14)", color: "var(--cherry-forest)", fontSize: "0.68rem", lineHeight: 1, fontWeight: 950 }}>
+                    {index + 1}
+                  </span>
+                  <span style={{ display: "grid", gap: "0.1rem", minWidth: 0 }}>
+                    <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.76rem", lineHeight: 1.16, fontWeight: 930 }}>{item.label}</strong>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.34, fontWeight: 780 }}>{item.body}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
 
           {articleGroups.map((group) => (
             <section key={group.title} aria-labelledby={`reading-${group.title}`} style={{ display: "grid", gap: "0.34rem" }}>
@@ -159,6 +208,16 @@ export function ArticleLibraryPage() {
         }
 
         @media (max-width: 860px) {
+          .article-library-start-strip > div {
+            grid-template-columns: 1fr !important;
+            gap: 0.3rem !important;
+          }
+
+          .article-library-start-item {
+            grid-template-columns: auto minmax(0, 1fr) !important;
+            padding: 0.42rem !important;
+          }
+
           .article-library-row {
             grid-template-columns: minmax(0, 1fr) auto !important;
             gap: 0.34rem !important;
