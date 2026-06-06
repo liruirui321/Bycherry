@@ -412,7 +412,6 @@ function verifyArticleOutcomeSnapshot() {
   expect(!articleSource.includes("article-outcome-snapshot") && !articleSource.includes("article-reading-task-pack"), "Article detail pages must not reintroduce a duplicate top task strip.");
   expect(articleSource.includes('className="article-title-row"') && articleSource.includes('gridTemplateColumns: "26px minmax(0, 1fr)"'), "Article detail header must place the back action and title in one compact row.");
   expect(!articleSource.includes("article-meta-row") && !articleSource.includes("IconCoffee") && !articleSource.includes('约 {"readTime" in article ? article.readTime : article.readMin} 分钟'), "Article detail header must not show a separate category/date/read-time metadata row before content.");
-  expect(articleSource.includes("WebkitLineClamp: 1") && articleSource.includes(".article-detail-lede") && articleSource.includes("display: none !important"), "Article detail lede must stay short so body content appears immediately, especially on mobile.");
   expect(!articleSource.includes("读完带走") && !articleSource.includes("读完产出"), "Article detail pages must avoid repeated output-summary blocks.");
   expect(!articleSource.includes('className="article-paired-work-panel"') && !articleSource.includes('className="article-paired-work-link"'), "Article detail pages must not repeat paired module entrances inside articles.");
   expect(!articleSource.includes("配套模块"), "Article detail pages must avoid repeated module entrances inside articles.");

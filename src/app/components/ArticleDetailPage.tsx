@@ -1657,7 +1657,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </h1>
             </div>
 
-            <p className="article-detail-lede" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.42, margin: "0 0 0.36rem", maxWidth: 760, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
+            <p className="article-detail-lede" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", lineHeight: 1.5, margin: "0 0 0.5rem", maxWidth: 760, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
               {article.excerpt ?? article.body}
             </p>
 
@@ -2515,7 +2515,10 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             }
 
             .article-detail-lede {
-              display: none !important;
+              font-size: 0.74rem !important;
+              line-height: 1.34 !important;
+              -webkit-line-clamp: 1 !important;
+              margin: 0 0 0.34rem !important;
             }
 
             .article-platform-link {
