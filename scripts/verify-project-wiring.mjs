@@ -85,7 +85,7 @@ expect(routePrefetchSource.includes("prefetchedRouteKinds"), "Route prefetch mus
 expect(!appSource.includes("<Works") && !workCardsSource.includes("export function Works"), "Homepage work entries must live in the hero, with Works.tsx kept data-only.");
 expect(heroSource.includes("preloadRouteForHref(getWorkToolHref(work.href))"), "Hero work cards must prefetch direct-to-tool detail routes on hover or focus.");
 expect(heroSource.includes('import { notes } from "./Notes"') && heroSource.includes('import { essays } from "./ResearchEssays"'), "Hero directory must import article data directly without restoring article card sections.");
-expect(heroSource.includes("articleLinks.map") && heroSource.includes("preloadRouteForHref(article.href)") && heroSource.includes("href={article.href}"), "Hero article entries must prefetch article detail routes and link directly.");
+expect(heroSource.includes("const firstArticle = articleLinks[0]") && heroSource.includes("preloadRouteForHref(firstArticle.href)") && heroSource.includes('href={firstArticle?.href ?? "/"}'), "Hero reading-library entry must stay as one compact route with prefetch, not a repeated article list.");
 expect(!noteCardsSource.includes("export function Notes") && !noteCardsSource.includes("note-card"), "Notes.tsx must stay data-only so old homepage card code is not bundled.");
 expect(!researchCardsSource.includes("export function ResearchEssays") && !researchCardsSource.includes("research-essay-card"), "ResearchEssays.tsx must stay data-only so old homepage card code is not bundled.");
 expect(!navSource.includes("preloadRouteForHref") && !navSource.includes("nav-link"), "Navigation must not keep prefetch wiring for removed repeated homepage entries.");

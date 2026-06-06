@@ -3567,10 +3567,10 @@ ${understandingChecks.map((item, index) => `${index + 1}. ${item.title}
 通过标准：${item.pass}`).join("\n\n")}
 
 我的最小产出
-1. 一句话定义：${learnerAuditAnswers.definition || "（未填写）"}
-2. 机制步骤：${learnerAuditAnswers.mechanism || "（未填写）"}
-3. 新例子判断：${learnerAuditAnswers.transfer || "（未填写）"}
-4. 不能直接推出：${learnerAuditAnswers.boundary || "（未填写）"}
+1. 一句话定义：${learnerAuditAnswers.definition || "（待填写）"}
+2. 机制步骤：${learnerAuditAnswers.mechanism || "（待填写）"}
+3. 新例子判断：${learnerAuditAnswers.transfer || "（待填写）"}
+4. 不能直接推出：${learnerAuditAnswers.boundary || "（待填写）"}
 
 我的填写记录
 完成度：${learnerAuditScore}/4
