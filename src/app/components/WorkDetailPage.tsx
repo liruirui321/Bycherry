@@ -3585,7 +3585,7 @@ ${contextualEvidenceBoundary}`;
 【当前卡点】${stuckPointText}
 【应用情境】${applicationContextText}
 
-一、Agent 运行记录
+一、解释流程记录
 ${conceptAgentCards.map((item, index) => `${index + 1}. ${item.title}：${item.body}`).join("\n")}
 
 二、先修知识
@@ -3806,7 +3806,7 @@ If any of these are missing, add them before the final answer.
     setCopiedSkill(false);
     setCopiedAudit(false);
     setCopiedExplanationPack(false);
-    setCopyStatus(explanations[nextConcept] ? "已载入预设高质量解释。" : "已按解释 Agent skill 生成学习卡。");
+    setCopyStatus(explanations[nextConcept] ? "已载入预设高质量解释。" : "已按解释助手 Skill 生成学习卡。");
   }
 
   async function copyLessonOutput() {
@@ -3832,7 +3832,7 @@ If any of these are missing, add them before the final answer.
       setCopiedLesson(false);
       setCopiedAudit(false);
       setCopiedExplanationPack(false);
-      setCopyStatus("概念解释 skill 指令已复制到剪贴板。");
+      setCopyStatus("解释助手 Skill 指令已复制到剪贴板。");
       window.setTimeout(() => setCopiedSkill(false), 1400);
       return;
     }
@@ -3891,9 +3891,9 @@ If any of these are missing, add them before the final answer.
     <section id="concept-explainer-tool" style={{ display: "grid", gap: "0.68rem" }}>
       <div className="concept-main-input-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)", display: "grid", gap: "0.58rem" }}>
         <div>
-          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.28rem" }}>概念解释 Agent</div>
+          <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.28rem" }}>概念解释器</div>
           <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.58, fontWeight: 800 }}>
-            输入任意概念，按稳定 skill 流程生成学习卡：先自测，再看类比、机制步骤、常见误区、可视化流程、迁移练习和即时小测。
+            输入任意概念，按稳定解释流程生成学习卡：先自测，再看类比、机制步骤、常见误区、可视化流程、迁移练习和即时小测。
           </div>
         </div>
         <details className="concept-input-mode-panel" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.56rem" }}>
@@ -4002,10 +4002,10 @@ If any of these are missing, add them before the final answer.
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>说明与导出</summary>
 
       <details className="concept-agent-run-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>Agent 运行面板 · {visualMode}</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>解释流程面板 · {visualMode}</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap", marginTop: "0.62rem" }}>
           <div>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>Agent 运行面板</div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>解释流程面板</div>
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.2rem", fontWeight: 800 }}>
               每次输入概念后，先看它如何锁定资料边界、当前卡点、图形结构和合格标准。
             </div>
@@ -4128,7 +4128,7 @@ If any of these are missing, add them before the final answer.
         ))}
         {!isPresetConcept ? (
           <span style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.2)", borderRadius: 999, padding: "0.26rem 0.62rem", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", fontWeight: 900 }}>
-            当前：Agent 生成
+            当前：自动生成
           </span>
         ) : null}
       </div>
@@ -4147,10 +4147,10 @@ If any of these are missing, add them before the final answer.
       </div>
 
       <details className="concept-skill-details" style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 12, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>概念解释 skill 协议</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>解释助手 Skill 协议</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap", marginTop: "0.62rem" }}>
           <div>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>概念解释 skill 协议</div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>解释助手 Skill 协议</div>
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.22rem", fontWeight: 800 }}>
               这套协议已落成公开 SKILL.md：先诊断，再类比，再机制，再练习，最后补小测和证据边界。
             </div>

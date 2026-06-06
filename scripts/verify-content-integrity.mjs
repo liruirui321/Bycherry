@@ -687,13 +687,13 @@ function verifyConceptExplainerAgentContract() {
     { label: "concept input mode copy button", text: "复制输入模式" },
     { label: "skill prompt contract", text: "conceptSkillPrompt" },
     { label: "copyable skill prompt", text: "copyConceptSkillPrompt" },
-    { label: "visible skill protocol", text: "概念解释 skill 协议" },
+    { label: "visible skill protocol", text: "解释助手 Skill 协议" },
     { label: "arbitrary concept copy", text: "输入任意概念" },
     { label: "direct learner agent role", text: "陪我学习" },
     { label: "anti-shortcut boundary", text: "不要替我跳过判断过程" },
     { label: "anti-fabrication boundary", text: "不编造具体事实" },
     { label: "stable output card", text: "生成学习卡" },
-    { label: "agent run panel", text: "Agent 运行面板" },
+    { label: "explanation run panel", text: "解释流程面板" },
     { label: "visual mode chooser", text: "visualMode" },
     { label: "visual structure node data", text: "visualStructureItems" },
     { label: "visible concept visual structure", text: "可视化解释图" },
@@ -749,6 +749,8 @@ function verifyConceptExplainerAgentContract() {
     { label: "lecture copy", pattern: /教师教案|讲给谁|讲解目标|讲解稿/ },
     { label: "classroom flow heading", pattern: /课堂流程/ },
     { label: "school-level advanced label", pattern: /研究生版/ },
+    { label: "visible old agent labels", pattern: /概念解释 Agent|Agent 运行面板|Agent 运行记录|当前：Agent 生成|解释 Agent skill/ },
+    { label: "lowercase visible skill label", pattern: /概念解释 skill 协议|概念解释 skill 指令/ },
   ];
 
   for (const item of requiredConceptFeatures) {
