@@ -2536,7 +2536,7 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
   }
 
   return (
-    <div id="plant-evolution-explorer" style={{ display: "grid", gap: "1rem" }}>
+    <div id="plant-evolution-explorer" style={{ display: "grid", gap: "1rem", width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box", overflowX: "hidden" }}>
       <div className="plant-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "0.68rem", alignItems: "start" }}>
         <div style={{ display: "grid", gap: "0.58rem", alignContent: "start" }}>
           <div className="plant-timeline-figure" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", overflow: "hidden" }}>
@@ -2832,10 +2832,10 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             ) : null}
           </div>
 
-          <details className="plant-support-pack-details plant-compact-details" style={{ background: "transparent", border: "none", borderRadius: 0, padding: "0.2rem 0", boxShadow: "none" }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>记录与文献</summary>
+          <section className="plant-support-pack-panel" aria-labelledby="plant-support-pack-title" style={{ display: "grid", gap: "0.58rem", minWidth: 0 }}>
+            <h2 id="plant-support-pack-title" style={{ color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.2, fontWeight: 930, margin: 0 }}>记录与文献</h2>
 
-          <details className="plant-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
+          <details open className="plant-compact-details plant-stage-comparison-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>阶段比较记录</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
               <div>
@@ -2868,7 +2868,7 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             </div>
           </details>
 
-          <details className="plant-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
+          <details open className="plant-compact-details plant-evidence-audit-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>证据判读记录</summary>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
               <div>
@@ -2976,7 +2976,7 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
           ))}
         </div>
       </details>
-          </details>
+          </section>
         </aside>
       </div>
 
@@ -3029,6 +3029,19 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
           @media (max-width: 520px) {
             #plant-evolution-explorer {
               gap: 0.52rem !important;
+            }
+
+            #plant-evolution-explorer,
+            #plant-evolution-explorer .plant-main-grid,
+            #plant-evolution-explorer .plant-timeline-figure,
+            #plant-evolution-explorer .plant-stage-picker-grid,
+            #plant-evolution-explorer .plant-stage-detail-aside,
+            #plant-evolution-explorer .plant-stage-detail-card,
+            #plant-evolution-explorer .plant-support-pack-panel {
+              width: 100% !important;
+              max-width: 100% !important;
+              min-width: 0 !important;
+              box-sizing: border-box !important;
             }
 
             #plant-evolution-explorer .plant-main-grid {
@@ -3089,7 +3102,7 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             }
 
             #plant-evolution-explorer .plant-causal-bridge-strip {
-              grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+              grid-template-columns: 1fr !important;
               gap: 0.26rem !important;
               margin-bottom: 0.46rem !important;
             }
@@ -3099,7 +3112,7 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             }
 
             #plant-evolution-explorer .plant-causal-bridge-card span {
-              -webkit-line-clamp: 1 !important;
+              -webkit-line-clamp: 2 !important;
               font-size: 0.58rem !important;
               line-height: 1.2 !important;
             }
@@ -3138,7 +3151,7 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             }
 
             #plant-evolution-explorer .plant-stage-picker-grid {
-              grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
               gap: 0.34rem !important;
             }
 
@@ -3148,6 +3161,7 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
               gap: 0.18rem !important;
               box-shadow: none !important;
               min-height: 0 !important;
+              min-width: 0 !important;
             }
 
             #plant-evolution-explorer .plant-stage-picker-card > div:first-child {
@@ -6171,6 +6185,9 @@ export function WorkDetailPage({ slug }: { slug: string }) {
           maxWidth: work.slug === "gene-expression" ? "none" : 1060,
           margin: "0 auto",
           fontFamily: "'Nunito', sans-serif",
+          boxSizing: "border-box",
+          width: "100%",
+          overflowX: "hidden",
         }}
       >
         {work.slug === "gene-expression" ? <GeneExpressionTool /> : hasRichWorkContent(work.slug) ? <RichWorkContent slug={work.slug} /> : null}

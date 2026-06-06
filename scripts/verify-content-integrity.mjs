@@ -240,10 +240,12 @@ function verifyWorkDetailCardsStayCompact() {
   expect(!source.includes("isPlantEvolution"), "Work detail cards must not use plant-specific tall preview sizing.");
   expect(!source.includes("<WorkSequenceLinks work={work} />"), "Work detail pages should not render repeated previous/next module entries below the product.");
   expect(!source.includes('gridTemplateColumns: "112px minmax(0, 1fr)"') && !source.includes("height: 88"), "Work detail pages must not reintroduce related-module preview cards.");
-  for (const className of ["plant-support-pack-details", "concept-support-pack-details", "crispr-support-pack-details"]) {
+  expect(source.includes('id="work-primary-tool"') && source.includes('boxSizing: "border-box"') && source.includes('width: "100%"') && source.includes('overflowX: "hidden"'), "Work detail primary tool wrapper must not overflow mobile viewports when section padding is applied.");
+  for (const className of ["concept-support-pack-details", "crispr-support-pack-details"]) {
     const supportPackPattern = new RegExp(`className="${className}[\\s\\S]{0,220}background: "transparent"[\\s\\S]{0,120}border: "none"[\\s\\S]{0,120}boxShadow: "none"`);
     expect(supportPackPattern.test(source), `${className} must stay as a lightweight folded row instead of a framed card.`);
   }
+  expect(source.includes('className="plant-support-pack-panel"') && source.includes('id="plant-support-pack-title"') && source.includes('<details open className="plant-compact-details plant-stage-comparison-details"') && source.includes('<details open className="plant-compact-details plant-evidence-audit-details"'), "Plant evolution records and evidence tools must be directly visible instead of hidden behind a wrapper fold.");
   expect(geneSource.includes('className="gene-support-pack-panel"') && geneSource.includes('id="gene-support-pack-title"') && geneSource.includes("<details open className=\"gene-compact-details gene-process-focus-details\""), "Gene expression practice and record tools must be directly visible, with process tracking open by default.");
   expect(geneSource.includes('className="gene-peptide-readout-strip"') && geneSource.includes("当前多肽链") && geneSource.includes("peptidePreviewCount"), "Gene expression readout must expose a visible bead-chain polypeptide strip.");
   for (const retiredSupportPackCopy of ["说明、可视化与导出 · 7 项", "说明、练习、记录与报告 · 10 项", "记录、复盘与文献 · 6 项", "练习、记录与状态 · 9 项"]) {
@@ -1082,8 +1084,9 @@ function verifyPlantEvolutionLearnerContract() {
     expect(!item.pattern.test(plantSource), `Plant evolution page must remain learner-facing and avoid retired copy: ${item.label}`);
   }
 
-  expect(plantSource.includes("#plant-evolution-explorer .plant-stage-picker-grid") && plantSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Plant evolution mobile stage picker must stay as a compact three-column selector.");
-  expect(plantSource.includes("#plant-evolution-explorer .plant-causal-bridge-strip") && plantSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Plant evolution causal bridge must stay as a compact three-column mobile strip.");
+  expect(plantSource.includes("#plant-evolution-explorer .plant-stage-picker-grid") && plantSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "Plant evolution mobile stage picker must use two columns to avoid clipped stage cards.");
+  expect(plantSource.includes('overflowX: "hidden"') && plantSource.includes("#plant-evolution-explorer .plant-support-pack-panel") && plantSource.includes("box-sizing: border-box !important") && plantSource.includes("min-width: 0 !important"), "Plant evolution mobile layout must keep timeline, picker, details and support records inside the viewport.");
+  expect(plantSource.includes("#plant-evolution-explorer .plant-causal-bridge-strip") && plantSource.includes("grid-template-columns: 1fr !important"), "Plant evolution causal bridge must stack on mobile to keep causal text readable.");
   expect(plantSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))"') && plantSource.includes('className="plant-stage-picker-innovation"') && plantSource.includes('className="plant-stage-picker-refs"') && plantSource.includes('style={{ display: "none"') && !plantSource.includes('minHeight: 76'), "Plant evolution desktop stage picker must stay as short timeline buttons without fixed-height cards, long note text, or reference chips.");
   expect(plantSource.includes("#plant-evolution-explorer .plant-stage-picker-card > div:nth-child(3)") && plantSource.includes("display: none !important"), "Plant evolution mobile stage buttons must not expose long innovation text in the picker.");
   expect(plantSource.includes('className="plant-timeline-figure"') && plantSource.includes('borderRadius: 12') && plantSource.includes('padding: "0.72rem"'), "Plant evolution illustration frame must stay compact instead of a tall sticky-note frame.");
