@@ -336,7 +336,7 @@ export function Hero() {
 
         .hero-entry-visual-row {
           display: flex;
-          justify-content: space-between;
+          justify-content: flex-end;
           align-items: end;
           gap: 0.58rem;
           margin-top: auto;
