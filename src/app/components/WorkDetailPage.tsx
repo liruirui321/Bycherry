@@ -3911,7 +3911,7 @@ If any of these are missing, add them before the final answer.
           </div>
           <div className="concept-input-mode-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.52rem" }}>
             {conceptInputModes.map((mode) => (
-              <button key={mode.title} type="button" onClick={() => applyConceptInputMode(mode)} aria-describedby="concept-copy-status" style={{ textAlign: "left", background: concept === mode.concept && stuckPoint === mode.stuck ? "var(--cherry-yellow-light)" : "var(--card)", border: concept === mode.concept && stuckPoint === mode.stuck ? "1.5px solid var(--cherry-yellow)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 10, padding: "0.54rem", cursor: "pointer", minHeight: 104, display: "grid", gap: "0.24rem" }}>
+              <button key={mode.title} type="button" onClick={() => applyConceptInputMode(mode)} aria-describedby="concept-copy-status" style={{ textAlign: "left", background: concept === mode.concept && stuckPoint === mode.stuck ? "var(--cherry-yellow-light)" : "var(--card)", border: concept === mode.concept && stuckPoint === mode.stuck ? "1.5px solid var(--cherry-yellow)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.46rem", cursor: "pointer", display: "grid", gap: "0.2rem", alignContent: "start" }}>
                 <span style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>{mode.title}</span>
                 <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", lineHeight: 1.35, fontWeight: 900 }}>{mode.concept}</span>
                 <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 800 }}>{mode.stuck}</span>
@@ -4001,7 +4001,7 @@ If any of these are missing, add them before the final answer.
       <details className="concept-support-pack-details" style={{ background: "transparent", border: "none", borderRadius: 0, padding: "0.2rem 0", boxShadow: "none" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>说明与导出</summary>
 
-      <details className="concept-agent-run-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
+      <details className="concept-agent-run-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>Agent 运行面板 · {visualMode}</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap", marginTop: "0.62rem" }}>
           <div>
@@ -4025,7 +4025,7 @@ If any of these are missing, add them before the final answer.
         </div>
       </details>
 
-      <details className="concept-visual-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
+      <details className="concept-visual-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>可视化解释图 · {visualMode} · {visualStructureItems.length} 个节点</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
@@ -4055,7 +4055,7 @@ If any of these are missing, add them before the final answer.
         </div>
       </details>
 
-      <details className="concept-understanding-check-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.04)" }}>
+      <details className="concept-understanding-check-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>理解验收卡</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
@@ -4080,7 +4080,7 @@ If any of these are missing, add them before the final answer.
         </div>
       </details>
 
-      <details className="concept-understanding-record-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.04)" }}>
+      <details className="concept-understanding-record-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>我的理解记录 · {learnerAuditScore}/4</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
           <div>
@@ -4095,7 +4095,7 @@ If any of these are missing, add them before the final answer.
         </div>
         <div className="concept-understanding-input-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.68rem" }}>
           {learnerAuditFields.map((field, index) => (
-            <label key={field.id} htmlFor={field.id} style={{ background: field.pass ? "var(--cherry-sage-light)" : index % 2 === 0 ? "var(--cherry-yellow-light)" : "var(--cherry-blue-light)", border: field.pass ? "1.5px solid rgba(93,140,101,0.24)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.72rem", display: "grid", gap: "0.48rem", alignContent: "start" }}>
+            <label key={field.id} htmlFor={field.id} style={{ background: field.pass ? "var(--cherry-sage-light)" : index % 2 === 0 ? "var(--cherry-yellow-light)" : "var(--cherry-blue-light)", border: field.pass ? "1.5px solid rgba(93,140,101,0.24)" : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.6rem", display: "grid", gap: "0.38rem", alignContent: "start" }}>
               <span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.6rem" }}>
                 <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem" }}>{field.title}</strong>
                 <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>{field.pass ? "可用" : "待补充"}</span>
@@ -4111,7 +4111,7 @@ If any of these are missing, add them before the final answer.
                 }}
                 rows={4}
                 placeholder={field.placeholder}
-                style={{ width: "100%", boxSizing: "border-box", minHeight: 112, border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 12, background: "rgba(250,247,241,0.72)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800, padding: "0.6rem", resize: "vertical" }}
+                style={{ width: "100%", boxSizing: "border-box", minHeight: 84, border: "1.5px solid rgba(94,68,42,0.14)", borderRadius: 10, background: "rgba(250,247,241,0.72)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.76rem", lineHeight: 1.45, fontWeight: 800, padding: "0.52rem", resize: "vertical" }}
               />
               <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 900 }}>通过标准：{field.passText}</span>
             </label>
@@ -4146,7 +4146,7 @@ If any of these are missing, add them before the final answer.
         </div>
       </div>
 
-      <details className="concept-skill-details" style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 18, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.04)" }}>
+      <details className="concept-skill-details" style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 12, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>概念解释 skill 协议</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap", marginTop: "0.62rem" }}>
           <div>
