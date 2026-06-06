@@ -58,6 +58,29 @@ const readingWorkflow = [
   },
 ];
 
+const articleChoiceRoutes = [
+  {
+    label: "科研证据读不顺",
+    href: "/research/science-to-learning-question",
+    cue: "先练问题、证据和边界分开。",
+  },
+  {
+    label: "平台不会配置",
+    href: "/research/ai-assessment-quality-control",
+    cue: "直接照填 SciFusion 自测字段。",
+  },
+  {
+    label: "AI 输出不放心",
+    href: "/notes/ai-learning-material-audit",
+    cue: "先做材料质检和边界核查。",
+  },
+  {
+    label: "项目没有证据",
+    href: "/notes/pbl-rubric-evidence",
+    cue: "把任务、量规和作品证据对齐。",
+  },
+];
+
 function openContent(href: string, event: MouseEvent<HTMLAnchorElement>) {
   if (!shouldUseClientNavigation(event)) return;
   event.preventDefault();
@@ -128,6 +151,42 @@ export function ArticleLibraryPage() {
                     <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.34, fontWeight: 780 }}>{item.body}</span>
                   </span>
                 </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="article-choice-route-strip" aria-labelledby="article-choice-title" style={{ display: "grid", gap: "0.34rem", borderBottom: "1px solid rgba(94,68,42,0.09)", paddingBottom: "0.44rem" }}>
+            <h2 id="article-choice-title" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.9rem", lineHeight: 1.2, fontWeight: 920 }}>
+              按卡点选文章
+            </h2>
+            <div role="list" aria-label="按卡点选择文章" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem" }}>
+              {articleChoiceRoutes.map((item) => (
+                <a
+                  key={item.href}
+                  className="article-choice-route-card"
+                  href={item.href}
+                  onClick={(event) => openContent(item.href, event)}
+                  onMouseEnter={() => preloadRouteForHref(item.href)}
+                  onFocus={() => preloadRouteForHref(item.href)}
+                  onPointerDown={() => preloadRouteForHref(item.href)}
+                  role="listitem"
+                  aria-label={`${item.label}：${item.cue}`}
+                  style={{
+                    color: "var(--cherry-warm-brown)",
+                    textDecoration: "none",
+                    background: "rgba(250,247,241,0.62)",
+                    border: "1px solid rgba(94,68,42,0.1)",
+                    borderRadius: 8,
+                    padding: "0.5rem 0.56rem",
+                    minHeight: 72,
+                    display: "grid",
+                    gap: "0.18rem",
+                    alignContent: "start",
+                  }}
+                >
+                  <strong style={{ color: "var(--cherry-forest)", fontSize: "0.76rem", lineHeight: 1.2, fontWeight: 930 }}>{item.label}</strong>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 800 }}>{item.cue}</span>
+                </a>
               ))}
             </div>
           </section>
@@ -203,8 +262,15 @@ export function ArticleLibraryPage() {
         }
 
         .article-library-row:hover,
-        .article-library-row:focus-visible {
+        .article-library-row:focus-visible,
+        .article-choice-route-card:hover,
+        .article-choice-route-card:focus-visible {
           background: rgba(250,247,241,0.54) !important;
+        }
+
+        .article-choice-route-card:focus-visible {
+          outline: 3px solid var(--cherry-red);
+          outline-offset: 4px;
         }
 
         @media (max-width: 860px) {
@@ -215,6 +281,16 @@ export function ArticleLibraryPage() {
 
           .article-library-start-item {
             grid-template-columns: auto minmax(0, 1fr) !important;
+            padding: 0.42rem !important;
+          }
+
+          .article-choice-route-strip > div {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 0.34rem !important;
+          }
+
+          .article-choice-route-card {
+            min-height: 66px !important;
             padding: 0.42rem !important;
           }
 
