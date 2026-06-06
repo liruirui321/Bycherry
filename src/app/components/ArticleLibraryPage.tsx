@@ -66,6 +66,25 @@ const articleChoiceRoutes = [
   },
 ];
 
+const articleLibraryRecordCards = [
+  {
+    title: "问题句",
+    body: "我现在要判断什么？先写成一个能被证据回答的问题。",
+  },
+  {
+    title: "证据句",
+    body: "哪一行材料、哪张图或哪个数据点真的支持这个判断？",
+  },
+  {
+    title: "边界句",
+    body: "这份材料还不能证明什么？哪些结论需要回查来源？",
+  },
+  {
+    title: "下一步",
+    body: "接下来查哪篇文献、哪张图、哪个平台字段或哪个练习产出？",
+  },
+];
+
 function openContent(href: string, event: MouseEvent<HTMLAnchorElement>) {
   if (!shouldUseClientNavigation(event)) return;
   event.preventDefault();
@@ -74,7 +93,7 @@ function openContent(href: string, event: MouseEvent<HTMLAnchorElement>) {
 
 export function ArticleLibraryPage() {
   return (
-    <main id="main-content" tabIndex={-1} style={{ fontFamily: "'Nunito', sans-serif", background: "var(--background)", minHeight: "calc(100vh - 50px)" }}>
+    <main id="main-content" tabIndex={-1} style={{ fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
       <section style={{ padding: "0.72rem 1.5rem 1.2rem" }}>
         <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gap: "0.58rem" }}>
           <header style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", alignItems: "center", gap: "0.62rem", borderBottom: "1px solid rgba(94,68,42,0.1)", paddingBottom: "0.46rem" }}>
@@ -205,6 +224,25 @@ export function ArticleLibraryPage() {
               </div>
             </section>
           ))}
+
+          <section className="article-library-record-strip" aria-labelledby="reading-record-title" style={{ display: "grid", gap: "0.36rem", borderTop: "1px solid rgba(94,68,42,0.1)", paddingTop: "0.56rem" }}>
+            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "0.72rem", flexWrap: "wrap" }}>
+              <h2 id="reading-record-title" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.9rem", lineHeight: 1.2, fontWeight: 920 }}>
+                读完保存四格记录
+              </h2>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.25, fontWeight: 880 }}>
+                不只收藏文章，把判断过程留下来。
+              </span>
+            </div>
+            <div className="article-library-record-grid" role="list" aria-label="阅读记录四格" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem" }}>
+              {articleLibraryRecordCards.map((item, index) => (
+                <div key={item.title} role="listitem" style={{ background: index === 1 ? "var(--cherry-sage-light)" : index === 2 ? "var(--cherry-yellow-light)" : "rgba(250,247,241,0.66)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.54rem 0.58rem", display: "grid", gap: "0.2rem", minHeight: 78 }}>
+                  <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.76rem", lineHeight: 1.2, fontWeight: 930 }}>{item.title}</strong>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.38, fontWeight: 800 }}>{item.body}</span>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
       </section>
       <style>{`
@@ -248,6 +286,11 @@ export function ArticleLibraryPage() {
 
           .article-library-proof-strip {
             display: none !important;
+          }
+
+          .article-library-record-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 0.34rem !important;
           }
 
           .article-library-meta {
