@@ -1177,14 +1177,12 @@ ${articleCompletionChecks.map((item, index) => `${index + 1}. ${item.title}：${
 我还需要补充或重做：`
     : "";
   const summaryText = article
-    ? `【阅读摘要】
+    ? `【学习任务】
 标题：${article.title}
-日期：${article.date}
 类型：${"tag" in article ? article.tag : article.label}
-阅读时间：约 ${"readTime" in article ? article.readTime : article.readMin} 分钟
 ${"platformUrl" in article ? `平台入口：${article.platformUrl}\n` : ""}
 
-一、摘要
+一、要解决的问题
 ${article.excerpt ?? article.body}
 
 二、正文要点
@@ -1220,7 +1218,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
       setCopiedPlatformConfig(false);
       setCopiedPlatformReview(false);
       setCopiedAiAuditPrompts(false);
-      setCopyStatus("阅读摘要已复制到剪贴板。");
+      setCopyStatus("学习任务已复制到剪贴板。");
       window.setTimeout(() => setCopiedSummary(false), 1400);
       return;
     }
@@ -2404,8 +2402,8 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   <IconBook size={18} />
                   可带走的方法
                 </div>
-                <button type="button" onClick={copyArticleSummary} aria-label={`复制${article.title}的阅读摘要`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.4rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                  {copiedSummary ? "已复制" : "复制摘要"}
+                <button type="button" onClick={copyArticleSummary} aria-label={`复制${article.title}的学习任务`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.4rem 0.76rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
+                  {copiedSummary ? "已复制" : "复制学习任务"}
                 </button>
               </div>
               <div id="article-summary-copy-status" role="status" aria-live="polite" style={{ minHeight: "1rem", color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900, marginBottom: "0.42rem" }}>
