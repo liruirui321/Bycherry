@@ -576,9 +576,9 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "skill prompt contract", text: "researchAgentSkillPrompt" },
     { label: "copyable research skill prompt", text: "copyResearchAgentSkill" },
     { label: "research skill copy state", text: "copiedResearchSkill" },
-    { label: "research skill visible panel", text: "研究助手 Skill" },
+    { label: "research protocol visible panel", text: "研究助手协议" },
     { label: "public research skill document link", text: "/skills/research-agent/SKILL.md" },
-    { label: "research skill copy button", text: "复制 Skill" },
+    { label: "research protocol copy button", text: "复制协议" },
     { label: "research skill responsive panel", text: "research-agent-skill-panel" },
     { label: "research skill markdown frontmatter", text: "name: research-agent" },
     { label: "learner research question draft", text: "researchQuestionDraft" },
@@ -604,6 +604,7 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "long top explanation panel", pattern: /research-agent-top-panel|这个工作台直接提供/ },
     { label: "visible old agent labels", pattern: /本地 Agent 预览|科研 Agent 任务包|科研 Agent 研究记录|科研 Agent 引用核查记录|让 Agent|Agent 如何|Agent 只能/ },
     { label: "visible old API labels", pattern: /API 输出字段|API 请求 JSON|API 契约|API 接入契约|说明与边界 · 路由、API、Skill/ },
+    { label: "visible skill jargon", pattern: /研究助手 Skill|打开 Skill|复制 Skill|进阶设置 · 路由、接入、Skill/ },
   ];
 
   for (const item of requiredWorkbenchFeatures) {
@@ -687,7 +688,7 @@ function verifyConceptExplainerAgentContract() {
     { label: "concept input mode copy button", text: "复制输入模式" },
     { label: "skill prompt contract", text: "conceptSkillPrompt" },
     { label: "copyable skill prompt", text: "copyConceptSkillPrompt" },
-    { label: "visible skill protocol", text: "解释助手 Skill 协议" },
+    { label: "visible explainer protocol", text: "解释助手协议" },
     { label: "arbitrary concept copy", text: "输入任意概念" },
     { label: "direct learner agent role", text: "陪我学习" },
     { label: "anti-shortcut boundary", text: "不要替我跳过判断过程" },
@@ -738,7 +739,7 @@ function verifyConceptExplainerAgentContract() {
     { label: "copy audit record button", text: "复制自查记录" },
     { label: "pass criteria copy", text: "通过标准" },
     { label: "public skill document link", text: "/skills/concept-explainer/SKILL.md" },
-    { label: "full skill copy button", text: "复制完整 Skill" },
+    { label: "full protocol copy button", text: "复制完整协议" },
     { label: "skill markdown frontmatter", text: "name: concept-explainer" },
   ];
 
@@ -751,6 +752,7 @@ function verifyConceptExplainerAgentContract() {
     { label: "school-level advanced label", pattern: /研究生版/ },
     { label: "visible old agent labels", pattern: /概念解释 Agent|Agent 运行面板|Agent 运行记录|当前：Agent 生成|解释 Agent skill/ },
     { label: "lowercase visible skill label", pattern: /概念解释 skill 协议|概念解释 skill 指令/ },
+    { label: "visible skill jargon", pattern: /解释助手 Skill|查看 SKILL\.md|复制完整 Skill|按稳定 skill 流程/ },
   ];
 
   for (const item of requiredConceptFeatures) {

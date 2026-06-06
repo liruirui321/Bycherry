@@ -1064,7 +1064,7 @@ ${localPreviewOutput}`;
       setCopiedResponseJson(false);
       setCopiedResearchRecord(false);
       setCopiedCitationAudit(false);
-      setCopyStatus("研究助手 Skill 已复制到剪贴板。");
+      setCopyStatus("研究助手协议已复制到剪贴板。");
       window.setTimeout(() => setCopiedResearchSkill(false), 1400);
       return;
     }
@@ -1500,7 +1500,7 @@ ${localPreviewOutput}`;
       </div>
 
       <details className="research-agent-reference-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>进阶设置 · 路由、接入、Skill</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>进阶设置 · 路由、接入、协议</summary>
         <details className="research-agent-status-details research-agent-compact-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
           <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>版本状态与接入边界</summary>
           <div className="research-agent-status-strip" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.48rem" }}>
@@ -1513,17 +1513,17 @@ ${localPreviewOutput}`;
           </div>
         </details>
         <details className="research-agent-skill-details research-agent-compact-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
-          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>研究助手 Skill</summary>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>研究助手协议</summary>
           <div className="research-agent-skill-panel" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto auto", gap: "0.65rem", alignItems: "center" }}>
             <div>
-              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.84rem", marginBottom: "0.24rem" }}>研究助手 Skill</strong>
+              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.84rem", marginBottom: "0.24rem" }}>研究助手协议</strong>
               <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800 }}>把任务路由、证据表、缺失字段、风险标记、引用核查和复核问题固定成一套可复用协议。</span>
             </div>
             <a href="/skills/research-agent/SKILL.md" className="research-agent-skill-link" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", textDecoration: "none", whiteSpace: "nowrap" }}>
-              打开 Skill
+              打开协议
             </a>
             <button type="button" onClick={copyResearchAgentSkill} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", whiteSpace: "nowrap" }}>
-              {copiedResearchSkill ? "已复制" : "复制 Skill"}
+              {copiedResearchSkill ? "已复制" : "复制协议"}
             </button>
           </div>
         </details>
@@ -3806,7 +3806,7 @@ If any of these are missing, add them before the final answer.
     setCopiedSkill(false);
     setCopiedAudit(false);
     setCopiedExplanationPack(false);
-    setCopyStatus(explanations[nextConcept] ? "已载入预设高质量解释。" : "已按解释助手 Skill 生成学习卡。");
+    setCopyStatus(explanations[nextConcept] ? "已载入预设高质量解释。" : "已按解释助手协议生成学习卡。");
   }
 
   async function copyLessonOutput() {
@@ -3832,7 +3832,7 @@ If any of these are missing, add them before the final answer.
       setCopiedLesson(false);
       setCopiedAudit(false);
       setCopiedExplanationPack(false);
-      setCopyStatus("解释助手 Skill 指令已复制到剪贴板。");
+      setCopyStatus("解释助手协议已复制到剪贴板。");
       window.setTimeout(() => setCopiedSkill(false), 1400);
       return;
     }
@@ -4147,20 +4147,20 @@ If any of these are missing, add them before the final answer.
       </div>
 
       <details className="concept-skill-details" style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 12, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>解释助手 Skill 协议</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>解释助手协议</summary>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap", marginTop: "0.62rem" }}>
           <div>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>解释助手 Skill 协议</div>
+            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>解释助手协议</div>
             <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.22rem", fontWeight: 800 }}>
-              这套协议已落成公开 SKILL.md：先诊断，再类比，再机制，再练习，最后补小测和证据边界。
+              这套协议已落成公开文件：先诊断，再类比，再机制，再练习，最后补小测和证据边界。
             </div>
           </div>
           <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", alignItems: "center" }}>
             <a href="/skills/concept-explainer/SKILL.md" className="work-detail-link" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", textDecoration: "none" }}>
-              查看 SKILL.md
+              打开协议
             </a>
             <button type="button" onClick={copyConceptSkillPrompt} aria-describedby="concept-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-              {copiedSkill ? "已复制" : "复制完整 Skill"}
+              {copiedSkill ? "已复制" : "复制完整协议"}
             </button>
           </div>
         </div>
