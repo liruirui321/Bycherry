@@ -108,7 +108,7 @@ export function Hero() {
               <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.12rem", lineHeight: 1.2, fontWeight: 950 }}>精选内容</h2>
               <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", fontWeight: 950 }}>{works.length} 个内容入口</span>
             </div>
-            <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+            <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(154px, auto)", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
               {entries.map((entry) => (
                 <a
                   className={`hero-entry-row ${entry.featuredImage ? "hero-entry-row-image" : ""}`}
@@ -128,7 +128,7 @@ export function Hero() {
                     textDecoration: "none",
                     textAlign: "left",
                     display: "grid",
-                    gridTemplateColumns: entry.featuredImage ? "minmax(0, 1fr) 112px" : "minmax(0, 1fr)",
+                    gridTemplateColumns: "minmax(0, 1fr)",
                     alignItems: "stretch",
                     gap: "0.68rem",
                     position: "relative",
@@ -136,6 +136,7 @@ export function Hero() {
                     minWidth: 0,
                     maxWidth: "100%",
                     minHeight: 154,
+                    gridRow: entry.featuredImage ? "span 2" : undefined,
                     boxSizing: "border-box",
                     boxShadow: "0 8px 18px rgba(94,68,42,0.08)",
                   }}
@@ -164,7 +165,7 @@ export function Hero() {
                     <span className="hero-entry-action" style={{ width: "fit-content", background: "var(--cherry-forest)", color: "#FAF7F1", borderRadius: 999, padding: "0.42rem 0.72rem", fontSize: "0.74rem", lineHeight: 1.1, fontWeight: 950 }}>{entry.action}</span>
                   </span>
                   {entry.featuredImage ? (
-                    <img src={entry.featuredImage} alt="" aria-hidden="true" loading="eager" style={{ width: "100%", height: "100%", minHeight: 118, objectFit: "cover", borderRadius: 16, border: "1.5px solid rgba(250,247,241,0.72)", alignSelf: "stretch" }} />
+                    <img src={entry.featuredImage} alt="" aria-hidden="true" loading="eager" style={{ width: "100%", height: 168, objectFit: "cover", borderRadius: 16, border: "1.5px solid rgba(250,247,241,0.72)", alignSelf: "end" }} />
                   ) : null}
                 </a>
               ))}
