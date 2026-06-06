@@ -184,12 +184,12 @@ export function Hero() {
               <span style={{ color: "var(--cherry-blue)" }}>AI</span>
             </h1>
             <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(0.98rem, 1.04vw, 1.08rem)", lineHeight: 1.58, fontWeight: 760, maxWidth: 420 }}>
-              科学模拟、科研阅读和 AI 学习工具。首页就是目录，点开后直接操作、记录和复盘。
+              科学模拟、科研阅读和 AI 学习工具。选一张卡片，就能进入可操作页面。
             </p>
             <div className="hero-start-strip" role="list" aria-label="使用方式" style={{ display: "grid", gap: "0.46rem", width: "100%", maxWidth: 420 }}>
               {[
                 { label: "先选一个卡住的问题", detail: "生命过程、科研材料、概念理解或阅读方法。", icon: <IconMicroscope size={18} color="var(--cherry-blue)" /> },
-                { label: "按页面里的步骤操作", detail: "每个入口都有可调控件、问题或检查清单。", icon: <IconTestTube size={17} color="var(--cherry-peach)" /> },
+                { label: "按页面里的步骤操作", detail: "用控件、问题或检查清单把理解落到纸面。", icon: <IconTestTube size={17} color="var(--cherry-peach)" /> },
                 { label: "留下可复盘记录", detail: "把读数、判断、解释或下一步行动保存下来。", icon: <IconDNA size={18} color1="var(--cherry-red)" color2="var(--cherry-blue)" /> },
               ].map((item) => (
                 <span key={item.label} className="hero-start-item" role="listitem" style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", alignItems: "center", gap: "0.46rem", minWidth: 0, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.48rem 0.58rem", background: "rgba(250,247,241,0.68)", boxShadow: "0 8px 20px rgba(94,68,42,0.06)", textAlign: "left" }}>
@@ -206,7 +206,7 @@ export function Hero() {
           <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.64rem", width: "100%", alignContent: "start" }}>
             <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.75rem", minWidth: 0 }}>
               <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.08rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>内容目录</h2>
-              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>6 个可直接打开的入口</span>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>点卡片直接开始</span>
             </div>
             <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(124px, auto)", gap: "0.68rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
               {entries.map((entry, index) => (
