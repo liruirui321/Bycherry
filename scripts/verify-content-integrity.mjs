@@ -883,6 +883,11 @@ function verifyGeneExpressionLearnerContract() {
     { label: "compact readout panel", text: "gene-readout-panel" },
     { label: "compact readout list", text: "gene-readout-list" },
     { label: "compact rate list", text: "gene-rate-list" },
+    { label: "process meter data", text: "processMeters" },
+    { label: "process meter list", text: "gene-process-meter-list" },
+    { label: "mRNA exposure meter", text: "mRNA 露出" },
+    { label: "ribosome read meter", text: "核糖体读带" },
+    { label: "peptide extension meter", text: "多肽延伸" },
     { label: "compact action row", text: "gene-action-row" },
     { label: "compact integrated molecule strip", text: "gene-integrated-strip" },
   ];

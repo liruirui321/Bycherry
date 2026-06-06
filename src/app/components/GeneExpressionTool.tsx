@@ -756,6 +756,29 @@ export function GeneExpressionTool() {
   const visibleProteinCount = Math.min(12, Math.max(displayedProteinCount, instantProteinCount));
   const proteinReadoutMax = Math.max(visibleProteinCount, proteinCapacity);
   const translationRate = activeRibosomeCount > 0 ? Math.min(100, 35 + activeRibosomeCount * 20) : 0;
+  const processMeters = [
+    {
+      label: "mRNA 露出",
+      value: `${Math.round(retainedTranscriptProgress * 100)}%`,
+      width: `${Math.round(retainedTranscriptProgress * 100)}%`,
+      detail: model.transcriptionOn ? "3' 生长端跟随 RNA 聚合酶" : visibleMrnaCount > 0 ? "保留片段可继续被读取" : "等待转录启动",
+      color: "var(--cherry-red)",
+    },
+    {
+      label: "核糖体读带",
+      value: `${Math.round(leadRibosomeProgress * 100)}%`,
+      width: `${Math.round(leadRibosomeProgress * 100)}%`,
+      detail: activeRibosomeCount > 0 ? "沿绿色可读片段移动" : canTranslate ? "等待进入可读片段" : "等待核糖体和 mRNA",
+      color: "var(--cherry-peach)",
+    },
+    {
+      label: "多肽延伸",
+      value: `${proteinReadoutMax > 0 ? Math.round((visibleProteinCount / proteinReadoutMax) * 100) : 0}%`,
+      width: `${proteinReadoutMax > 0 ? Math.round((visibleProteinCount / proteinReadoutMax) * 100) : 0}%`,
+      detail: visibleProteinCount > 0 ? `出口片段：${peptidePreview}` : "等待第一颗氨基酸",
+      color: "var(--cherry-forest)",
+    },
+  ];
   const activeQuiz = geneQuizItems[activeQuizIndex];
   const activeQuizAnswer = quizAnswers[activeQuiz.id];
   const quizAnsweredCount = geneQuizItems.filter((item) => quizAnswers[item.id]).length;
@@ -1276,6 +1299,22 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
                   </div>
                   <div style={{ height: 8, borderRadius: 999, background: "var(--muted)", overflow: "hidden" }}>
                     <div style={{ width: value, height: "100%", borderRadius: 999, background: label === "转录速率" ? "var(--cherry-blue)" : "var(--cherry-peach)" }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="gene-process-meter-list" role="list" aria-label="过程进度" style={{ display: "grid", gap: "0.42rem", marginTop: "0.62rem" }}>
+              {processMeters.map((meter) => (
+                <div key={meter.label} role="listitem" style={{ display: "grid", gap: "0.2rem", background: "rgba(250,247,241,0.58)", border: "1px solid rgba(94,68,42,0.08)", borderRadius: 8, padding: "0.42rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: "0.48rem", alignItems: "baseline", color: "var(--cherry-warm-mid)", fontSize: "0.66rem", fontWeight: 900 }}>
+                    <span>{meter.label}</span>
+                    <span style={{ color: "var(--cherry-warm-brown)" }}>{meter.value}</span>
+                  </div>
+                  <div style={{ height: 7, borderRadius: 999, background: "rgba(94,68,42,0.1)", overflow: "hidden" }}>
+                    <div style={{ width: meter.width, height: "100%", borderRadius: 999, background: meter.color }} />
+                  </div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.62rem", lineHeight: 1.24, fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {meter.detail}
                   </div>
                 </div>
               ))}
