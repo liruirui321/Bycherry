@@ -214,10 +214,19 @@ function verifyWorkCardActions() {
 
 function verifyWorkDetailCardsStayCompact() {
   const source = read("src/app/components/WorkDetailPage.tsx");
+  const geneSource = read("src/app/components/GeneExpressionTool.tsx");
 
   expect(!source.includes("isPlantEvolution"), "Work detail cards must not use plant-specific tall preview sizing.");
   expect(!source.includes("<WorkSequenceLinks work={work} />"), "Work detail pages should not render repeated previous/next module entries below the product.");
   expect(!source.includes('gridTemplateColumns: "112px minmax(0, 1fr)"') && !source.includes("height: 88"), "Work detail pages must not reintroduce related-module preview cards.");
+  for (const className of ["plant-support-pack-details", "concept-support-pack-details", "crispr-support-pack-details"]) {
+    const supportPackPattern = new RegExp(`className="${className}[\\s\\S]{0,220}background: "transparent"[\\s\\S]{0,120}border: "none"[\\s\\S]{0,120}boxShadow: "none"`);
+    expect(supportPackPattern.test(source), `${className} must stay as a lightweight folded row instead of a framed card.`);
+  }
+  expect(/className="gene-support-pack-details[\s\S]{0,220}background: "transparent"[\s\S]{0,120}border: "none"[\s\S]{0,120}boxShadow: "none"/.test(geneSource), "gene-support-pack-details must stay as a lightweight folded row instead of a framed card.");
+  for (const retiredSupportPackCopy of ["说明、可视化与导出 · 7 项", "说明、练习、记录与报告 · 10 项", "记录、复盘与文献 · 6 项", "练习、记录与状态 · 9 项"]) {
+    expect(!source.includes(retiredSupportPackCopy) && !geneSource.includes(retiredSupportPackCopy), `Support pack summaries should not expose item-count chrome: ${retiredSupportPackCopy}.`);
+  }
   expect(source.includes("conceptInputQuality"), "Concept explainer must judge whether learner inputs are complete enough.");
   expect(source.includes("concept-agent-input-grid"), "Concept explainer context inputs must be visible in the initial agent panel.");
   expect(source.includes("资料边界") && source.includes("当前卡点"), "Concept explainer must collect source boundary and current confusion.");

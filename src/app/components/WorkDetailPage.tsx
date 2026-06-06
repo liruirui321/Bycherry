@@ -2718,8 +2718,8 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
             ) : null}
           </div>
 
-          <details className="plant-support-pack-details plant-compact-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.05)" }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>记录、复盘与文献 · 6 项</summary>
+          <details className="plant-support-pack-details plant-compact-details" style={{ background: "transparent", border: "none", borderRadius: 0, padding: "0.2rem 0", boxShadow: "none" }}>
+            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>记录与文献</summary>
 
           <details className="plant-compact-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
             <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>阶段比较记录</summary>
@@ -3998,8 +3998,8 @@ If any of these are missing, add them before the final answer.
         </div>
       </div>
 
-      <details className="concept-support-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.72rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.05)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>说明、可视化与导出 · 7 项</summary>
+      <details className="concept-support-pack-details" style={{ background: "transparent", border: "none", borderRadius: 0, padding: "0.2rem 0", boxShadow: "none" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>说明与导出</summary>
 
       <details className="concept-agent-run-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>Agent 运行面板 · {visualMode}</summary>
@@ -5190,8 +5190,8 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </aside>
       </div>
 
-      <details className="crispr-support-pack-details crispr-compact-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.78rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.05)" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>说明、练习、记录与报告 · 10 项</summary>
+      <details className="crispr-support-pack-details crispr-compact-details" style={{ background: "transparent", border: "none", borderRadius: 0, padding: "0.2rem 0", boxShadow: "none" }}>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>说明与记录</summary>
 
       <details className="crispr-intro-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.06)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>判读顺序与实验边界</summary>
