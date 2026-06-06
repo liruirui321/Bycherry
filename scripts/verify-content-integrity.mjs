@@ -456,8 +456,9 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(navigationSource.includes("export function getWorkToolHref"), "Navigation helpers must expose a direct-to-tool work href builder.");
   expect(staticIndexSource.includes("learningResourceType: route.category"), "Static work JSON-LD generator must include learningResourceType.");
   expect(staticIndexSource.includes("teaches: [route.task, route.starter, route.success, ...route.pathSteps, ...route.outputs].filter(Boolean)"), "Static work JSON-LD generator must include immediate task, starter action, completion standard, learning path, and output outcomes.");
-  expect(staticIndexSource.includes("下面保留短目录链接") && staticIndexSource.includes("const label = route.type === \"work\""), "Static index fallback must stay as a compact link directory.");
-  expect(!staticIndexSource.includes("操作内容：") && !staticIndexSource.includes("完成标准：") && !staticIndexSource.includes("可保存产出："), "Static index fallback must not expand long task, completion, or output details.");
+  expect(staticIndexSource.includes("操作内容："), "Static index fallback must expose concise work task labels.");
+  expect(staticIndexSource.includes("先做这个："), "Static index fallback must expose first concrete starter actions.");
+  expect(staticIndexSource.includes("完成标准："), "Static index fallback must expose concrete completion standards.");
   expect(!heroSource.includes("{work.starter}") && !heroSource.includes("{work.success}"), "Homepage hero work cards must not repeat long starter or completion text.");
   expect(!heroSource.includes("{work.outputs[0]}"), "Homepage hero work cards must not repeat saved-output text.");
   expect(!heroSource.includes("hero-work-open"), "Homepage hero entries must not repeat a separate open pill inside every module.");
@@ -1214,8 +1215,8 @@ function verifyLearnerFacingArticleCopy() {
   expect(appSource.includes("const description = buildMetaDescription(baseDescription, workActionDescription ?? articleActionDescription)"), "Runtime article and work metadata must use the actionable meta description builder.");
   expect(contentRoutesSource.includes("firstAction") && contentRoutesSource.includes("firstCheck") && contentRoutesSource.includes("firstOutput"), "Static content routes must extract article first action, completion check, and learner output.");
   expect(staticIndexSource.includes("teaches: [route.firstAction, route.firstCheck, route.firstOutput].filter(Boolean)"), "Static article JSON-LD must include first action, completion check, and learner output.");
-  expect(staticIndexSource.includes("下面保留短目录链接"), "Static index fallback must keep articles as compact directory links.");
-  expect(!staticIndexSource.includes("完成后检查：") && !staticIndexSource.includes("可保存产出："), "Static index fallback must not expand article completion checks or outputs.");
+  expect(staticIndexSource.includes("完成后检查："), "Static index fallback must expose article completion checks.");
+  expect(staticIndexSource.includes("可保存产出："), "Static index fallback must expose learner outputs.");
   expect(articleLibrarySource.includes('background: "transparent"') && articleLibrarySource.includes('border: "none"') && articleLibrarySource.includes('borderLeft: "3px solid rgba(93,140,101,0.5)"') && !articleLibrarySource.includes('boxShadow: "0 8px 18px rgba(94,68,42,0.04)"'), "Reading library entries must stay as compact directory rows instead of thick cards.");
   expect(articleLibrarySource.includes("检查：${article.firstCheck}") && articleLibrarySource.includes("产出：${article.firstOutput}"), "Reading library entries must preserve first action, completion check, and learner output in accessible labels.");
   expect(articleLibrarySource.includes("article-library-meta") && articleLibrarySource.includes("article-library-date") && articleLibrarySource.includes("点标题进入正文") && !articleLibrarySource.includes("article-library-action-line") && !articleLibrarySource.includes("article-library-output-line") && !articleLibrarySource.includes("article-library-actions"), "Reading library visible rows must stay as short index entries without repeated action/output blocks.");

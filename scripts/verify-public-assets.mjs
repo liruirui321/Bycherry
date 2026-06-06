@@ -219,11 +219,24 @@ expect(indexHtml.includes(`<meta property="og:image:secure_url" content="${siteU
 expect(indexHtml.includes(`<meta name="twitter:image" content="${siteUrl}/social-preview.png" />`), "index.html must include the current Twitter image URL.");
 expect(indexHtml.includes('<link rel="preconnect" href="https://fonts.googleapis.com" />'), "index.html must preconnect to Google Fonts.");
 expect(indexHtml.includes("<noscript>"), "index.html must include a noscript content index.");
-expect(indexHtml.includes("下面保留短目录链接"), "index.html noscript content index must explain the compact fallback.");
-expect(indexHtml.includes("工具与项目") && indexHtml.includes("文章"), "index.html noscript content index must keep compact section labels.");
-expect(!indexHtml.includes("学习路径：") && !indexHtml.includes("操作内容：") && !indexHtml.includes("完成后检查：") && !indexHtml.includes("可保存产出："), "index.html noscript content index must not expand long task/output details.");
+expect(indexHtml.includes("学习路径："), "index.html noscript content index must include work learning paths.");
+expect(indexHtml.includes("拖拽 TF、RNA 聚合酶和核糖体"), "index.html noscript content index must include work descriptions.");
+expect(indexHtml.includes("完成后检查："), "index.html noscript content index must include article completion checks.");
+expect(indexHtml.includes("可保存产出："), "index.html noscript content index must expose copyable learner outputs.");
 for (const href of contentHrefs) {
   expect(indexHtml.includes(`href="${href}"`), `index.html noscript content index must link to ${href}.`);
+}
+for (const route of articleRoutes) {
+  expect(indexHtml.includes(`先做这个：${route.firstAction}`), `index.html noscript content index must include first action for ${route.path}.`);
+  expect(indexHtml.includes(`完成后检查：${route.firstCheck}`), `index.html noscript content index must include completion check for ${route.path}.`);
+  expect(indexHtml.includes(`可保存产出：${route.firstOutput}`), `index.html noscript content index must include learner output for ${route.path}.`);
+}
+for (const route of workRoutes) {
+  expect(indexHtml.includes(`操作内容：${route.task}`), `index.html noscript content index must include concise work task for ${route.path}.`);
+  expect(indexHtml.includes(`先做这个：${route.starter}`), `index.html noscript content index must include starter action for ${route.path}.`);
+  expect(indexHtml.includes(`完成标准：${route.success}`), `index.html noscript content index must include completion standard for ${route.path}.`);
+  expect(indexHtml.includes(`可保存产出：${route.outputs.join(" / ")}`), `index.html noscript content index must include copyable outputs for ${route.path}.`);
+  expect(indexHtml.includes(`学习路径：${route.pathSteps.join(" → ")}`), `index.html noscript content index must include learning path for ${route.path}.`);
 }
 
 const jsonLdMatch = indexHtml.match(/<script type="application\/ld\+json" data-schema="bycherry-page">\s*([\s\S]*?)\s*<\/script>/);
