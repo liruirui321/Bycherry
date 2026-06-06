@@ -886,6 +886,8 @@ function verifyGeneExpressionLearnerContract() {
   expect(geneSource.includes("const transcriptBases = codons.flatMap") && geneSource.includes("pathProgress = 0.08 + baseIndex * 0.066") && geneSource.includes("pointOnPolyline(nascentPath, pathProgress)"), "Gene expression mRNA nucleotides must follow the curved nascent mRNA path attached to RNA polymerase.");
   expect(!geneSource.includes('d="M8 -8 C18 -15 27 -18 36 -16"') && !geneSource.includes('d="M17 7 C29 12 37 17 43 19"'), "Gene expression ribosome body must not show a separate green chain inside the ribosome; peptide beads should leave through the exit port.");
   expect(geneSource.includes('className="live-peptide-bead-chain"') && geneSource.includes("ribosomePeptideExitPoint") && geneSource.includes("peptideBeadPoint(exit"), "Gene expression peptide product must stay as beads connected from the ribosome exit.");
+  const geneExperimentRecordSource = geneSource.slice(geneSource.indexOf("const expressionExperimentRecord"), geneSource.indexOf("const expressionProcessRecord"));
+  expect(geneExperimentRecordSource.includes("待填写") && !geneExperimentRecordSource.includes("未填写"), "Gene expression copied experiment record must use learner input-state wording for empty fields.");
 
   for (const item of retiredGenePatterns) {
     expect(!item.pattern.test(geneSource), `Gene expression tool must avoid retired or incorrect copy: ${item.label}`);

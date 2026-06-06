@@ -865,16 +865,16 @@ mRNA：${visibleMrnaCount}/${mrnaReadoutMax}
 多肽片段：${peptidePreview}
 
 一、我改变的变量
-${experimentVariableDraft.trim() || "未填写"}
+${experimentVariableDraft.trim() || "待填写"}
 
 二、观察到的变化
-${experimentObservationDraft.trim() || "未填写"}
+${experimentObservationDraft.trim() || "待填写"}
 
 三、我的解释
-${experimentExplanationDraft.trim() || "未填写"}
+${experimentExplanationDraft.trim() || "待填写"}
 
 四、下一次要验证
-${experimentNextDraft.trim() || "未填写"}
+${experimentNextDraft.trim() || "待填写"}
 
 填写完成度：${expressionExperimentScore}/${expressionExperimentFields.length}`;
   const expressionProcessRecord = `【基因表达过程记录】
