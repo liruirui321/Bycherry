@@ -127,6 +127,9 @@ export function ArticleLibraryPage() {
                       <span style={{ display: "flex", alignItems: "center", gap: "0.34rem", flexWrap: "wrap" }}>
                         <strong style={{ fontSize: "0.86rem", lineHeight: 1.25, fontWeight: 900 }}>{article.title}</strong>
                       </span>
+                      <span className="article-library-first-action" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.32, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical" }}>
+                        先做：{article.firstAction}
+                      </span>
                     </span>
                     <span className="article-library-meta" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.2, fontWeight: 900, whiteSpace: "nowrap" }}>
                       {article.label}<span className="article-library-date"> · {article.date}</span>
@@ -162,6 +165,10 @@ export function ArticleLibraryPage() {
 
           .article-library-meta {
             font-size: 0.62rem !important;
+          }
+
+          .article-library-first-action {
+            font-size: 0.66rem !important;
           }
 
           .article-library-date {
