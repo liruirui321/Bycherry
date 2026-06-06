@@ -1,7 +1,7 @@
 {
   "name": "By Cherry",
   "short_name": "By Cherry",
-  "description": "科学与 AI 学习工作台，直接进入模拟、基因编辑、科研 Agent 和概念解释工具。",
+  "description": "科学与 AI 学习工作台，直接进入模拟、基因编辑、科研学习和概念解释工具。",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

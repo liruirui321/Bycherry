@@ -193,7 +193,9 @@ function verifyWorkCardActions() {
   const copyActionMatches = Array.from(worksSource.matchAll(/\baction:\s*"复制[^"]*"/g), (match) => match[0]);
 
   expect(copyActionMatches.length === 0, `Work card entry actions should open or start the tool, not imply direct copy behavior: ${copyActionMatches.join(", ")}`);
-  expect(worksSource.includes('title: "科研 Agent 工作台"'), "Research AI work card should be titled 科研 Agent 工作台.");
+  expect(worksSource.includes('title: "科研学习工作台"'), "Research AI work card should be titled 科研学习工作台 for learner-facing clarity.");
+  expect(worksSource.includes('tags: ["AI", "科研阅读", "证据核查"]') && worksSource.includes('outputs: ["研究记录", "引用核查", "复核报告"]'), "Research AI work card must describe learner-facing research reading outputs.");
+  expect(!worksSource.includes('title: "科研 Agent 工作台"') && !worksSource.includes("可复制 API JSON"), "Research AI work card must not lead with agent/API wording.");
   expect(!worksSource.includes("科研助手 Prompt Kit"), "Visible work card title must not use the old Prompt Kit naming.");
   expect(heroSource.includes('id="works"') && heroSource.includes('aria-label="内容目录"'), "Hero must own the #works anchor and all-module directory.");
   expect(heroSource.includes("hero-entry-row") && !heroSource.includes("hero-work-open"), "Hero module entries must stay as compact clickable entries without repeated open pills.");

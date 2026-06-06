@@ -348,7 +348,7 @@ Ask for or infer these fields:
 - Material: abstract, methods, figure legend, results paragraph, design notes, reviewer comments, or draft text.
 - Learner goal: what the learner wants to understand, check, rewrite, or decide.
 - Risk concern: overclaiming, missing control, small sample size, weak statistics, citation mismatch, unclear terminology, or unknown.
-- Output format: evidence table, study record, report outline, revision plan, reviewer questions, or API JSON contract.
+- Output format: evidence table, study record, report outline, revision plan, reviewer questions, or advanced JSON contract.
 
 If the source boundary or material is missing, ask at most two short questions. If the learner continues without answering, label the source boundary as unknown and keep conclusions conservative.
 
@@ -568,7 +568,7 @@ ${missingFields.length ? `需要补充：${missingFields.join("、")}。` : "材
 置信度：${routeConfidence}
 命中线索：${routeMatchedSignals}
 
-五、API Agent 输出字段建议
+五、外部模型输出字段建议
 ${apiOutputFields.join(", ")}
 
 六、引用核查
@@ -577,7 +577,7 @@ ${citationAuditItems.map((item, index) => `${index + 1}. ${item.label}：${item.
 七、API 请求 JSON
 ${agentRequestJson}
 
-八、API 返回契约
+八、返回格式
 ${agentResponseJson}
 
 九、分析报告草稿
@@ -748,11 +748,11 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
   const roadmapItems = [
     {
       title: "本页可直接完成",
-      body: "任务选择、材料模板、模式切换、路由建议、本地预览、任务包复制和 API JSON 契约。",
+      body: "任务选择、材料模板、模式切换、路由建议、本地预览、任务包复制和进阶接入格式。",
     },
     {
       title: "API 接入契约",
-      body: "复制 API JSON 后可以接入外部模型，返回字段必须包含 evidence_items、missing_fields、risk_flags 和 final_report。",
+      body: "复制进阶 JSON 后可以接入外部模型，返回字段必须包含 evidence_items、missing_fields、risk_flags 和 final_report。",
     },
     {
       title: "引用核查清单",
@@ -791,7 +791,7 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
     },
     {
       title: "API 接入方式",
-      body: "复制 API JSON 交给外部模型执行，返回内容必须按契约拆成证据、推断、风险、待核查点和汇报摘要。",
+      body: "复制进阶 JSON 交给外部模型执行，返回内容必须按契约拆成证据、推断、风险、待核查点和汇报摘要。",
     },
     {
       title: "不做什么",
@@ -930,7 +930,7 @@ ${localPreviewOutput}`;
       setCopiedResearchRecord(false);
       setCopiedCitationAudit(false);
       setCopiedResearchSkill(false);
-      setCopyStatus("API 返回契约已复制到剪贴板。");
+      setCopyStatus("返回格式已复制到剪贴板。");
       window.setTimeout(() => setCopiedResponseJson(false), 1400);
       return;
     }
@@ -1110,10 +1110,10 @@ ${localPreviewOutput}`;
                   {copiedPack ? "已复制" : "复制任务包"}
                 </button>
                 <button type="button" onClick={copyAgentJson} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                  {copiedJson ? "已复制" : "复制 API JSON"}
+                  {copiedJson ? "已复制" : "复制进阶 JSON"}
                 </button>
                 <button type="button" onClick={copyResponseJson} aria-describedby="prompt-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid var(--border)", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                  {copiedResponseJson ? "已复制" : "复制返回契约"}
+                  {copiedResponseJson ? "已复制" : "复制返回格式"}
                 </button>
               </div>
             </div>
@@ -1271,7 +1271,7 @@ ${localPreviewOutput}`;
                       style={{ width: "100%", minHeight: 54, resize: "vertical", border: "1.5px solid rgba(94,68,42,0.16)", borderRadius: 8, padding: "0.42rem", background: "#FAF7F1", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.72rem", lineHeight: 1.38, fontWeight: 800, boxSizing: "border-box" }}
                     />
                     <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 900 }}>
-                      {field.pass ? "会进入 API JSON 和研究记录。" : field.passText}
+                      {field.pass ? "会进入进阶 JSON 和研究记录。" : field.passText}
                     </span>
                   </label>
                 ))}
@@ -1395,7 +1395,7 @@ ${localPreviewOutput}`;
                     </code>
                   </div>
                   <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.55rem" }}>
-                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>API 返回契约与验收</strong>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>返回格式与验收</strong>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.48rem" }}>
                       {acceptanceChecks.map((item) => (
                         <div key={item.label} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.58rem" }}>
