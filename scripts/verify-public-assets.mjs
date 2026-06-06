@@ -112,7 +112,7 @@ const staticFallback = readPublic("404.html");
 expect(staticFallback.includes('<meta name="robots" content="noindex" />'), "public/404.html must be noindex.");
 expect(staticFallback.includes('sessionStorage.setItem(') && staticFallback.includes('"bycherry-redirect-path"'), "public/404.html must preserve the requested route in sessionStorage.");
 expect(staticFallback.includes('window.location.replace("/")'), "public/404.html must redirect back to the app root.");
-expect(staticFallback.includes("返回内容目录") && !staticFallback.includes("返回首页"), "public/404.html visible fallback link must return to the content directory, not generic homepage copy.");
+expect(staticFallback.includes('<a href="/#works">如果没有自动跳转，请返回内容目录</a>') && !staticFallback.includes("返回首页"), "public/404.html visible fallback link must target the content directory, not generic homepage copy.");
 for (const retiredFallbackCopy of ["class=\"tape\"", ".tape", "rotate(", "信封", "便签", "手账", "washi"]) {
   expect(!staticFallback.includes(retiredFallbackCopy), `public/404.html must not keep retired note-style fallback decoration: ${retiredFallbackCopy}.`);
 }
