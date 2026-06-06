@@ -42,6 +42,15 @@ const codons = [
   { dna: "CCG", template: "GGC", rna: "CCG", amino: "Pro", anticodon: "GGC", color: "var(--cherry-blue)" },
 ];
 
+const transcriptBases = codons.flatMap((codon, codonIndex) =>
+  codon.rna.split("").map((base, baseIndex) => ({
+    base,
+    codonIndex,
+    baseIndex,
+    color: codon.color,
+  })),
+);
+
 const geneQuizItems = [
   {
     id: "five-end",
@@ -410,10 +419,10 @@ function LiveExpressionProcess({
             <rect x={-42} y={7} width={84} height={20} rx={9} fill="rgba(250,247,241,0.92)" stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} />
             <circle cx={-13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
             <circle cx={13} cy={-3} r={8} fill="rgba(250,247,241,0.72)" stroke="rgba(94,68,42,0.14)" strokeWidth={1.2} />
-            <path d="M10 -2 C21 2 27 10 35 17" fill="none" stroke="var(--cherry-warm-brown)" strokeWidth={3.2} strokeLinecap="round" opacity={0.18} />
-            <path d="M17 7 C29 12 37 17 43 19" fill="none" stroke="var(--cherry-forest)" strokeWidth={5.2} strokeLinecap="round" opacity={0.18} />
-            <path d="M8 -8 C18 -15 27 -18 36 -16" fill="none" stroke="var(--cherry-forest)" strokeWidth={5} strokeLinecap="round" opacity={0.46} />
-            <circle cx={36} cy={-16} r={6.5} fill="var(--cherry-forest)" stroke="#FAF7F1" strokeWidth={2.2} />
+            <circle className="ribosome-peptide-exit-port" cx={36} cy={-16} r={6.5} fill="var(--cherry-forest)" stroke="#FAF7F1" strokeWidth={2.2} />
+            <text x={36} y={-27} textAnchor="middle" fill="var(--cherry-forest)" fontSize={7} fontWeight={900}>
+              出口
+            </text>
             <path d="M13 -42 C13 -30 13 -16 13 -7" fill="none" stroke={currentCodon?.color ?? "var(--cherry-yellow)"} strokeWidth={3.4} strokeLinecap="round" opacity={0.82} />
             <circle cx={13} cy={-43} r={9.5} fill={currentCodon?.color ?? "var(--cherry-yellow)"} stroke="#FAF7F1" strokeWidth={2.2}>
               {prefersReducedMotion ? null : <animate attributeName="cy" values="-46;-40;-43" dur="0.8s" repeatCount="indefinite" />}
@@ -421,9 +430,6 @@ function LiveExpressionProcess({
             <text x={13} y={-40} textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={6.5} fontWeight={900}>
               {currentCodon?.amino ?? ""}
             </text>
-            <path d="M15 -5 C23 -8 28 -12 36 -16" fill="none" stroke="var(--cherry-forest)" strokeWidth={2.8} strokeLinecap="round" strokeDasharray="3 4" opacity={0.7}>
-              {prefersReducedMotion ? null : <animate attributeName="stroke-dashoffset" values="8;0" dur="0.8s" repeatCount="indefinite" />}
-            </path>
             <text x={-13} y={0} textAnchor="middle" fill="var(--cherry-warm-mid)" fontSize={7} fontWeight={900}>
               P
             </text>
@@ -449,7 +455,7 @@ function LiveExpressionProcess({
         const chainPath = [exit, ...beadPoints].map((point, aminoIndex) => `${aminoIndex === 0 ? "M" : "L"}${point.x} ${point.y}`).join(" ");
 
         return (
-          <g key={`live-peptide-chain-${ribosomeIndex}`} opacity={ribosome.opacity}>
+          <g className="live-peptide-bead-chain" key={`live-peptide-chain-${ribosomeIndex}`} opacity={ribosome.opacity}>
             <path
               d={`M${exit.x - 28} ${exit.y + 6} C${exit.x - 18} ${exit.y + 2} ${exit.x - 8} ${exit.y - 2} ${exit.x + 4} ${exit.y - 4}`}
               fill="none"
@@ -584,16 +590,16 @@ function LiveExpressionProcess({
                 核糖体从 5' 端附近开始读
               </text>
             ) : null}
-            {codons.map((codon, baseIndex) => {
-              const baseProgress = 0.14 + baseIndex * 0.18;
-              const visible = polymerase.progress > baseProgress;
-              const basePoint = pointOnPolyline(nascentPath, 0.12 + baseIndex * 0.2);
+            {transcriptBases.map((base, baseIndex) => {
+              const pathProgress = 0.08 + baseIndex * 0.066;
+              const visible = polymerase.progress > 0.1 + baseIndex * 0.052;
+              const basePoint = pointOnPolyline(nascentPath, pathProgress);
 
               return (
-                <g key={`rna-base-${index}-${codon.rna}`} transform={`translate(${basePoint.x} ${basePoint.y})`} opacity={visible ? 1 : 0}>
-                  <circle r={14} fill="rgba(250,247,241,0.92)" stroke="var(--cherry-red)" strokeWidth={2.2} />
-                  <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-red)" fontSize={9} fontWeight={900}>
-                    {codon.rna}
+                <g className="mrna-nucleotide-bead" key={`rna-base-${index}-${base.codonIndex}-${base.baseIndex}`} transform={`translate(${basePoint.x} ${basePoint.y})`} opacity={visible ? 1 : 0}>
+                  <circle r={8.5} fill="rgba(250,247,241,0.94)" stroke={base.color} strokeWidth={2} />
+                  <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-red)" fontSize={7} fontWeight={900}>
+                    {base.base}
                   </text>
                 </g>
               );
