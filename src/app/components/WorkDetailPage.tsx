@@ -1251,7 +1251,7 @@ ${localPreviewOutput}`;
               </div>
               <div className="research-review-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.62rem" }}>
                 {learnerResearchReviewFields.map((field) => (
-                  <label key={field.id} htmlFor={field.id} style={{ background: "rgba(250,247,241,0.76)", border: `1px solid ${field.pass ? "rgba(93,140,101,0.28)" : "rgba(94,68,42,0.12)"}`, borderRadius: 8, padding: "0.52rem", display: "grid", gap: "0.34rem", alignContent: "start", minHeight: 154 }}>
+                  <label key={field.id} htmlFor={field.id} style={{ background: "rgba(250,247,241,0.76)", border: `1px solid ${field.pass ? "rgba(93,140,101,0.28)" : "rgba(94,68,42,0.12)"}`, borderRadius: 8, padding: "0.46rem", display: "grid", gap: "0.3rem", alignContent: "start" }}>
                     <span style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem", alignItems: "start" }}>
                       <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>{field.label}</strong>
                       <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.66rem", fontWeight: 900, whiteSpace: "nowrap" }}>
@@ -1268,7 +1268,7 @@ ${localPreviewOutput}`;
                       }}
                       rows={4}
                       placeholder={field.placeholder}
-                      style={{ width: "100%", minHeight: 62, resize: "vertical", border: "1.5px solid rgba(94,68,42,0.16)", borderRadius: 8, padding: "0.46rem", background: "#FAF7F1", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 800, boxSizing: "border-box" }}
+                      style={{ width: "100%", minHeight: 54, resize: "vertical", border: "1.5px solid rgba(94,68,42,0.16)", borderRadius: 8, padding: "0.42rem", background: "#FAF7F1", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.72rem", lineHeight: 1.38, fontWeight: 800, boxSizing: "border-box" }}
                     />
                     <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 900 }}>
                       {field.pass ? "会进入 API JSON 和研究记录。" : field.passText}
@@ -1283,7 +1283,7 @@ ${localPreviewOutput}`;
               className="research-material-textarea"
               value={material}
               onChange={(event) => updateMaterial(event.target.value)}
-              style={{ width: "100%", minHeight: 104, resize: "vertical", border: "1.5px solid var(--border)", borderRadius: 10, padding: "0.62rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.78rem", lineHeight: 1.45, boxSizing: "border-box", marginBottom: "0.5rem" }}
+              style={{ width: "100%", minHeight: 84, resize: "vertical", border: "1.5px solid var(--border)", borderRadius: 10, padding: "0.56rem", background: "var(--muted)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.78rem", lineHeight: 1.42, boxSizing: "border-box", marginBottom: "0.46rem" }}
               aria-label="科研材料输入框"
             />
 
@@ -1764,12 +1764,12 @@ ${localPreviewOutput}`;
             }
 
             #prompt-kit-builder .research-material-textarea {
-              min-height: 104px !important;
+              min-height: 84px !important;
               border-radius: 10px !important;
-              padding: 0.62rem !important;
+              padding: 0.56rem !important;
               font-size: 0.78rem !important;
-              line-height: 1.45 !important;
-              margin-bottom: 0.5rem !important;
+              line-height: 1.42 !important;
+              margin-bottom: 0.46rem !important;
             }
 
             #prompt-kit-builder .research-material-actions {
