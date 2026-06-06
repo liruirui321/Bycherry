@@ -2053,7 +2053,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   </a>
                 </div>
                 <details className="platform-usage-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.68rem" }}>
-                  <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>照填配置与审核面板 · {activePlatformPlan?.title ?? "选择用途"}</summary>
+                  <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>平台使用面板</summary>
                 <div role="group" aria-label="选择 SciFusion 使用场景" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "0.38rem" }}>
                   {platformUsePlans.map((plan, index) => {
                     const selected = index === selectedPlatformPlanIndex;
