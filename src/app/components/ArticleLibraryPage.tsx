@@ -84,7 +84,7 @@ export function ArticleLibraryPage() {
                 阅读库
               </h1>
               <p style={{ margin: "0.12rem 0 0", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.35, fontWeight: 800 }}>
-                {essays.length + notes.length} 篇内容，点标题进入正文。
+                {essays.length + notes.length} 篇内容，点标题进入正文；每篇都给出行动、检查和产出。
               </p>
             </div>
           </header>
@@ -116,9 +116,9 @@ export function ArticleLibraryPage() {
                       border: "none",
                       borderLeft: "3px solid rgba(93,140,101,0.5)",
                       borderRadius: 0,
-                      padding: "0.3rem 0.52rem",
+                      padding: "0.36rem 0.56rem",
                       display: "grid",
-                      gridTemplateColumns: "minmax(0, 1fr) auto",
+                      gridTemplateColumns: "minmax(0, 1fr) minmax(210px, 0.8fr) auto",
                       gap: "0.52rem",
                       alignItems: "center",
                     }}
@@ -131,8 +131,16 @@ export function ArticleLibraryPage() {
                         先做：{article.firstAction}
                       </span>
                     </span>
+                    <span className="article-library-proof-strip" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.28rem", minWidth: 0 }}>
+                      <span style={{ color: "var(--cherry-warm-mid)", background: "rgba(250,247,241,0.62)", border: "1px solid rgba(94,68,42,0.08)", borderRadius: 8, padding: "0.28rem 0.34rem", fontSize: "0.64rem", lineHeight: 1.24, fontWeight: 820, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                        检查：{article.firstCheck}
+                      </span>
+                      <span style={{ color: "var(--cherry-warm-mid)", background: "rgba(250,247,241,0.62)", border: "1px solid rgba(94,68,42,0.08)", borderRadius: 8, padding: "0.28rem 0.34rem", fontSize: "0.64rem", lineHeight: 1.24, fontWeight: 820, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                        产出：{article.firstOutput}
+                      </span>
+                    </span>
                     <span className="article-library-meta" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.2, fontWeight: 900, whiteSpace: "nowrap" }}>
-                      {article.label}<span className="article-library-date"> · {article.date}</span>
+                      {article.label}<span className="article-library-date"> · {article.date}</span><span className="article-library-read-time"> · {article.readTime} min</span>
                     </span>
                   </a>
                 ))}
@@ -161,6 +169,11 @@ export function ArticleLibraryPage() {
             grid-template-columns: minmax(0, 1fr) auto !important;
             gap: 0.34rem !important;
             padding: 0.24rem 0.42rem !important;
+          }
+
+          .article-library-proof-strip,
+          .article-library-read-time {
+            display: none !important;
           }
 
           .article-library-meta {
