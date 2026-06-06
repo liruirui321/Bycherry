@@ -2151,6 +2151,24 @@ function PlantEvolutionContent() {
     { label: "当前阶段", chapter: activeChapter },
     activeChapterIndex < chapters.length - 1 ? { label: "下一阶段", chapter: chapters[activeChapterIndex + 1] } : null,
   ].filter((item): item is { label: string; chapter: typeof activeChapter } => Boolean(item));
+  const plantCausalBridgeCards = [
+    {
+      label: "上一限制",
+      body: activeChapterIndex > 0
+        ? chapters[activeChapterIndex - 1].challenge
+        : "浅水、强光和间歇干燥先给祖先类群带来选择压力。",
+    },
+    {
+      label: "当前解法",
+      body: activeChapter.innovation,
+    },
+    {
+      label: "留下问题",
+      body: activeChapterIndex < chapters.length - 1
+        ? chapters[activeChapterIndex + 1].challenge
+        : "繁殖系统和动物互动继续影响被子植物多样化。",
+    },
+  ];
   const evidenceAuditCards = [
     {
       title: "证据来源",
@@ -2277,16 +2295,19 @@ ${activeStageQuest.check}
 7. 阶段比较
 ${comparisonStages.map((item, index) => `${index + 1}. ${item.label}：${item.chapter.time}｜${item.chapter.innovation}｜证据状态：${item.chapter.certainty}`).join("\n")}
 
-8. 证据判读
+8. 阶段因果链
+${plantCausalBridgeCards.map((item, index) => `${index + 1}. ${item.label}：${item.body}`).join("\n")}
+
+9. 证据判读
 证据来源：${activeChapter.evidenceTypes.join(" / ")}
 结论边界：${activeChapter.claimBoundary}
 
-9. 完成验收
+10. 完成验收
 ${plantCompletionChecks.map((item, index) => `${index + 1}. ${item.title}
 任务：${item.task}
 通过标准：${item.pass}`).join("\n\n")}
 
-10. 参考文献
+11. 参考文献
 ${activeReferences.map((reference) => `[${reference.key}] ${reference.title}`).join("\n")}`;
   const timelineReviewOutput = `【植物演化全线复盘包】
 
@@ -2636,6 +2657,14 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
               ].map((item) => (
                 <div key={item.label} role="listitem" className="plant-stage-relation-item" style={{ background: item.label === "边界" ? "var(--cherry-yellow-light)" : "rgba(250,247,241,0.72)", border: item.label === "边界" ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.42rem 0.46rem", display: "grid", gap: "0.16rem", minWidth: 0 }}>
                   <strong style={{ color: item.label === "边界" ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.66rem", lineHeight: 1.12 }}>{item.label}</strong>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.64rem", lineHeight: 1.3, fontWeight: 820, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item.body}</span>
+                </div>
+              ))}
+            </div>
+            <div className="plant-causal-bridge-strip" role="list" aria-label="阶段前因后果" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.34rem", marginBottom: "0.62rem" }}>
+              {plantCausalBridgeCards.map((item, index) => (
+                <div key={item.label} role="listitem" className="plant-causal-bridge-card" style={{ background: index === 1 ? "var(--cherry-sage-light)" : "rgba(250,247,241,0.72)", border: index === 1 ? "1.5px solid rgba(93,140,101,0.26)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.42rem 0.46rem", display: "grid", gap: "0.16rem", minWidth: 0 }}>
+                  <strong style={{ color: index === 1 ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.66rem", lineHeight: 1.12 }}>{item.label}</strong>
                   <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.64rem", lineHeight: 1.3, fontWeight: 820, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item.body}</span>
                 </div>
               ))}
@@ -3005,6 +3034,22 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
               -webkit-line-clamp: 1 !important;
               font-size: 0.62rem !important;
               line-height: 1.22 !important;
+            }
+
+            #plant-evolution-explorer .plant-causal-bridge-strip {
+              grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+              gap: 0.26rem !important;
+              margin-bottom: 0.46rem !important;
+            }
+
+            #plant-evolution-explorer .plant-causal-bridge-card {
+              padding: 0.34rem !important;
+            }
+
+            #plant-evolution-explorer .plant-causal-bridge-card span {
+              -webkit-line-clamp: 1 !important;
+              font-size: 0.58rem !important;
+              line-height: 1.2 !important;
             }
 
             #plant-evolution-explorer .plant-lens-tablist {

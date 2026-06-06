@@ -984,10 +984,10 @@ function verifyPlantEvolutionLearnerContract() {
     { label: "visible evidence audit card", text: "证据判读记录" },
     { label: "copy evidence audit button", text: "复制证据判读" },
     { label: "claim boundary visible label", text: "判读边界" },
-    { label: "evidence audit section in study card", text: "8. 证据判读" },
+    { label: "evidence audit section in study card", text: "9. 证据判读" },
     { label: "completion checks data", text: "plantCompletionChecks" },
     { label: "visible stage check", text: "阶段检查" },
-    { label: "completion section in study card", text: "9. 完成验收" },
+    { label: "completion section in study card", text: "10. 完成验收" },
     { label: "completion pass criteria", text: "通过标准：${item.pass}" },
     { label: "completion location task", text: "阶段定位" },
     { label: "completion evidence boundary task", text: "证据边界" },
@@ -995,6 +995,13 @@ function verifyPlantEvolutionLearnerContract() {
     { label: "stage relation pressure", text: "压力" },
     { label: "stage relation innovation", text: "创新" },
     { label: "stage relation boundary", text: "边界" },
+    { label: "stage causal bridge data", text: "plantCausalBridgeCards" },
+    { label: "stage causal bridge strip", text: "plant-causal-bridge-strip" },
+    { label: "stage causal bridge label", text: "阶段前因后果" },
+    { label: "previous limitation label", text: "上一限制" },
+    { label: "current solution label", text: "当前解法" },
+    { label: "remaining problem label", text: "留下问题" },
+    { label: "causal chain in study card", text: "8. 阶段因果链" },
     { label: "compact stage picker grid", text: "plant-stage-picker-grid" },
     { label: "compact stage picker card", text: "plant-stage-picker-card" },
   ];
@@ -1015,6 +1022,7 @@ function verifyPlantEvolutionLearnerContract() {
   }
 
   expect(plantSource.includes("#plant-evolution-explorer .plant-stage-picker-grid") && plantSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Plant evolution mobile stage picker must stay as a compact three-column selector.");
+  expect(plantSource.includes("#plant-evolution-explorer .plant-causal-bridge-strip") && plantSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Plant evolution causal bridge must stay as a compact three-column mobile strip.");
   expect(plantSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))"') && plantSource.includes('className="plant-stage-picker-innovation"') && plantSource.includes('className="plant-stage-picker-refs"') && plantSource.includes('style={{ display: "none"') && !plantSource.includes('minHeight: 76'), "Plant evolution desktop stage picker must stay as short timeline buttons without fixed-height cards, long note text, or reference chips.");
   expect(plantSource.includes("#plant-evolution-explorer .plant-stage-picker-card > div:nth-child(3)") && plantSource.includes("display: none !important"), "Plant evolution mobile stage buttons must not expose long innovation text in the picker.");
   expect(plantSource.includes('className="plant-timeline-figure"') && plantSource.includes('borderRadius: 12') && plantSource.includes('padding: "0.72rem"'), "Plant evolution illustration frame must stay compact instead of a tall sticky-note frame.");
