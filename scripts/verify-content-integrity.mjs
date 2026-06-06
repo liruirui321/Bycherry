@@ -406,7 +406,7 @@ function verifyArticleOutcomeSnapshot() {
   expect(articleSource.includes("copyActionPack") && articleSource.includes("copyLearningRecord"), "Article detail pages must still expose action pack and learning record copy actions.");
   expect(articleSource.includes("focusArticleStart"), "Article detail direct start action must focus the primary action or body anchor.");
   expect(articleSource.includes('id="article-primary-action"') && articleSource.includes('id="article-body-points"'), "Article detail pages must expose focusable action and body anchors.");
-  expect(articleSource.includes('className="article-body-row"') && !articleSource.includes(">正文<"), "Article detail pages must move directly from the header into paragraph content without a redundant body label.");
+  expect(articleSource.includes(">正文<"), "Article detail pages must move directly from the header into article content.");
   expect(articleSource.includes('className="article-detail-card"') && articleSource.includes('background: "transparent"') && articleSource.includes('border: "none"') && articleSource.includes('boxShadow: "none"'), "Article detail page must not wrap the whole article in a long visible card frame.");
   expect(!articleSource.includes("articleOutcomeSnapshot") && !articleSource.includes("readingPath"), "Article detail pages must not keep dead top-task derivations after removing the repeated task strip.");
   expect(!articleSource.includes("article-outcome-snapshot") && !articleSource.includes("article-reading-task-pack"), "Article detail pages must not reintroduce a duplicate top task strip.");

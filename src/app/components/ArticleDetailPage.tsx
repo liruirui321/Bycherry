@@ -1686,8 +1686,9 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             ) : null}
 
             <div id="article-body-points" tabIndex={-1} style={{ display: "grid", gap: "0.48rem", marginBottom: "0.65rem", borderTop: "1px solid rgba(94,68,42,0.12)", paddingTop: "0.55rem" }}>
+              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>正文</div>
               {article.paragraphs.map((paragraph, index) => (
-                <div className="article-body-row" key={paragraph} style={{ display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: 8, alignItems: "start", padding: "0.08rem 0" }}>
+                <div key={paragraph} style={{ display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: 8, alignItems: "start", padding: "0.08rem 0" }}>
                   <span aria-hidden="true" style={{ width: 18, height: 18, borderRadius: "50%", background: article.tagBg ?? article.labelBg, color: article.tagColor ?? article.labelColor, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900, marginTop: 2 }}>
                     {index + 1}
                   </span>
@@ -2533,13 +2534,17 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               margin-bottom: 0.48rem !important;
             }
 
-            .article-body-row {
+            #article-body-points > div:first-child {
+              display: none !important;
+            }
+
+            #article-body-points > div:not(:first-child) {
               grid-template-columns: 18px minmax(0, 1fr) !important;
               gap: 0.36rem !important;
               padding: 0 !important;
             }
 
-            .article-body-row > span:first-child {
+            #article-body-points > div:not(:first-child) > span:first-child {
               width: 16px !important;
               height: 16px !important;
               font-size: 0.56rem !important;
