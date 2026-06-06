@@ -1,6 +1,6 @@
 import type { MouseEvent } from "react";
 import { works } from "./Works";
-import { IconBook, IconBranch } from "./Icons";
+import { IconBook, IconBranch, IconDNA, IconLeafSmall, IconMicroscope, IconTestTube } from "./Icons";
 import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
@@ -151,6 +151,10 @@ export function Hero() {
         <div className="hero-dot-field" style={{ position: "absolute", width: 148, height: 120, right: "3.2rem", bottom: "2rem", opacity: 0.18 }} />
         <div className="hero-stem hero-stem-left" />
         <div className="hero-stem hero-stem-right" />
+        <div className="hero-float-deco hero-float-microscope"><IconMicroscope size={42} color="var(--cherry-blue)" /></div>
+        <div className="hero-float-deco hero-float-dna"><IconDNA size={44} color1="var(--cherry-red)" color2="var(--cherry-blue)" /></div>
+        <div className="hero-float-deco hero-float-tube"><IconTestTube size={34} color="var(--cherry-peach)" /></div>
+        <div className="hero-float-deco hero-float-leaf"><IconLeafSmall size={28} color="var(--cherry-sage)" /></div>
       </div>
 
       <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1320, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box" }}>
@@ -184,6 +188,21 @@ export function Hero() {
             <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.5vw, 1.18rem)", lineHeight: 1.72, fontWeight: 760, maxWidth: 520 }}>
               科学模拟、科研阅读和 AI 学习工具，打开后直接操作、记录和复盘。
             </p>
+            <div className="hero-scope-strip" role="list" aria-label="内容范围" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.52rem", maxWidth: 560 }}>
+              {[
+                { label: "模拟", detail: "看见过程", icon: <IconMicroscope size={19} color="var(--cherry-blue)" /> },
+                { label: "科研", detail: "核查证据", icon: <IconTestTube size={18} color="var(--cherry-peach)" /> },
+                { label: "AI", detail: "生成卡片", icon: <IconDNA size={19} color1="var(--cherry-red)" color2="var(--cherry-blue)" /> },
+              ].map((item) => (
+                <span key={item.label} className="hero-scope-item" role="listitem" style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", alignItems: "center", gap: "0.45rem", minWidth: 0, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 14, padding: "0.54rem 0.62rem", background: "rgba(250,247,241,0.66)", boxShadow: "0 8px 20px rgba(94,68,42,0.06)" }}>
+                  <span aria-hidden="true" style={{ display: "grid", placeItems: "center", width: 30, height: 30, borderRadius: 999, background: "rgba(250,247,241,0.78)" }}>{item.icon}</span>
+                  <span style={{ display: "grid", gap: "0.08rem", minWidth: 0 }}>
+                    <strong style={{ fontSize: "0.78rem", lineHeight: 1.1, color: "var(--cherry-warm-brown)", fontWeight: 950 }}>{item.label}</strong>
+                    <span style={{ fontSize: "0.68rem", lineHeight: 1.2, color: "var(--cherry-warm-mid)", fontWeight: 850 }}>{item.detail}</span>
+                  </span>
+                </span>
+              ))}
+            </div>
             </div>
           </div>
 
@@ -191,8 +210,8 @@ export function Hero() {
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.8rem", flexWrap: "wrap" }}>
               <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.12rem", lineHeight: 1.2, fontWeight: 950 }}>内容目录</h2>
             </div>
-            <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(178px, auto)", gap: "0.68rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
-              {entries.map((entry) => (
+            <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(188px, auto)", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+              {entries.map((entry, index) => (
                 <a
                   className={`hero-entry-row ${entry.featuredImage ? "hero-entry-row-image" : ""}`}
                   key={entry.key}
@@ -206,7 +225,7 @@ export function Hero() {
                     background: entry.color,
                     border: `2px solid ${entry.border}`,
                     borderRadius: 14,
-                    padding: "0.68rem",
+                    padding: "0.74rem",
                     color: "var(--cherry-warm-brown)",
                     textDecoration: "none",
                     textAlign: "left",
@@ -218,17 +237,20 @@ export function Hero() {
                     overflow: "hidden",
                     minWidth: 0,
                     maxWidth: "100%",
-                    minHeight: 178,
+                    minHeight: 188,
                     boxSizing: "border-box",
-                    boxShadow: "0 7px 16px rgba(94,68,42,0.07)",
+                    boxShadow: "4px 8px 0 rgba(94,68,42,0.08), 0 14px 28px rgba(94,68,42,0.05)",
+                    transform: `rotate(${[-0.55, 0.42, -0.28, 0.36, -0.4, 0.22][index % 6]}deg)`,
                   }}
                 >
+                  <span aria-hidden="true" style={{ position: "absolute", left: "0.74rem", right: "0.74rem", top: 0, height: 4, borderRadius: "0 0 999px 999px", background: entry.border, opacity: 0.82 }} />
                   <span style={{ minWidth: 0, display: "grid", gap: "0.44rem", alignContent: "start" }}>
                     <span style={{ display: "flex", alignItems: "center", gap: "0.48rem", minWidth: 0 }}>
                       <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: 32, height: 32, borderRadius: 999, background: "rgba(250,247,241,0.64)", flexShrink: 0 }}>
                         {entry.icon}
                       </span>
                       <strong style={{ fontSize: "0.98rem", lineHeight: 1.18, minWidth: 0, overflowWrap: "anywhere" }}>{entry.title}</strong>
+                      <span aria-hidden="true" style={{ marginLeft: "auto", flexShrink: 0, color: "rgba(62,42,26,0.34)", fontSize: "0.64rem", lineHeight: 1, fontWeight: 950, letterSpacing: 0 }}>{String(index + 1).padStart(2, "0")}</span>
                     </span>
                     <span style={{ display: "flex", gap: "0.44rem", flexWrap: "wrap", alignItems: "center" }}>
                       <span style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 999, padding: "0.2rem 0.46rem", color: "var(--cherry-forest)", fontSize: "0.7rem", fontWeight: 950 }}>{entry.kind}</span>
@@ -360,6 +382,47 @@ export function Hero() {
           transform: scaleX(-1);
         }
 
+        .hero-float-deco {
+          position: absolute;
+          display: grid;
+          place-items: center;
+          width: 3.4rem;
+          height: 3.4rem;
+          border-radius: 999px;
+          background: rgba(250,247,241,0.58);
+          border: 1px solid rgba(94,68,42,0.1);
+          box-shadow: 0 10px 24px rgba(94,68,42,0.08);
+          animation: heroFloatDeco 5.2s ease-in-out infinite;
+        }
+
+        .hero-float-microscope {
+          left: 30%;
+          top: 22%;
+        }
+
+        .hero-float-dna {
+          left: 19%;
+          bottom: 19%;
+          animation-delay: -1.2s;
+        }
+
+        .hero-float-tube {
+          right: 8%;
+          bottom: 25%;
+          animation-delay: -0.7s;
+        }
+
+        .hero-float-leaf {
+          right: 31%;
+          top: 16%;
+          animation-delay: -1.8s;
+        }
+
+        @keyframes heroFloatDeco {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+
         @media (max-width: 860px) {
           .hero-shell {
             min-height: auto !important;
@@ -386,6 +449,16 @@ export function Hero() {
             line-height: 1.02 !important;
           }
 
+          .hero-scope-strip {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 0.42rem !important;
+          }
+
+          .hero-scope-item {
+            padding: 0.42rem !important;
+            border-radius: 12px !important;
+          }
+
           .hero-entry-grid {
             display: grid !important;
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -402,6 +475,7 @@ export function Hero() {
             padding: 0.56rem !important;
             min-height: 150px !important;
             border-radius: 14px !important;
+            transform: none !important;
           }
 
           .hero-entry-row-image img {
@@ -411,6 +485,11 @@ export function Hero() {
           .hero-entry-row strong,
           .hero-entry-row span {
             overflow-wrap: anywhere;
+          }
+
+          .hero-float-deco,
+          .hero-stem-right {
+            display: none !important;
           }
         }
 
@@ -433,7 +512,7 @@ export function Hero() {
         }
 
         .hero-entry-row {
-          transition: color 0.18s ease, background 0.18s ease;
+          transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
         }
 
         .hero-mini-visual {
@@ -649,11 +728,15 @@ export function Hero() {
         .hero-entry-row:hover,
         .hero-entry-row:focus-visible {
           background: rgba(250,247,241,0.42) !important;
+          transform: translateY(-2px) rotate(0deg) !important;
+          box-shadow: 5px 10px 0 rgba(94,68,42,0.1), 0 18px 34px rgba(94,68,42,0.08) !important;
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .hero-entry-row {
+          .hero-entry-row,
+          .hero-float-deco {
             transition: none !important;
+            animation: none !important;
           }
         }
 
