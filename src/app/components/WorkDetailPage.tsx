@@ -552,7 +552,7 @@ If any gate is missing, add it before the final answer.`;
   const localPreviewOutput = `【本地 Agent 预览】
 任务：${activePrompt.title}
 工作模式：${activeMode.title}
-材料状态：${materialText ? `${materialLines.length} 行，${materialText.length} 字符` : "未填写材料"}
+材料状态：${materialText ? `${materialLines.length} 行，${materialText.length} 字符` : "待填写材料"}
 
 一、材料核查
 ${materialChecks.map((item) => `${item.label}：${item.value}。${item.detail}`).join("\n")}
@@ -595,7 +595,7 @@ ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
   const researchRecordOutput = `【科研 Agent 研究记录】
 任务：${activePrompt.title}
 工作模式：${activeMode.title}
-材料状态：${materialText ? `${materialLines.length} 行，${materialText.length} 字符` : "未填写材料"}
+材料状态：${materialText ? `${materialLines.length} 行，${materialText.length} 字符` : "待填写材料"}
 推荐路由：${suggestedRoute.title}
 路由置信度：${routeConfidence}
 命中线索：${routeMatchedSignals}
@@ -3271,8 +3271,8 @@ function ConceptExplainerContent() {
 
   const active = explanations[concept] ?? buildConceptAgentExplanation(concept);
   const sourceBoundaryText = sourceBoundary.trim() || "未提供具体资料；先按通用解释生成，具体事实待核查";
-  const stuckPointText = stuckPoint.trim() || "暂未填写卡点；先用诊断问题定位";
-  const applicationContextText = applicationContext.trim() || "暂未填写应用情境；先用通用迁移练习检查";
+  const stuckPointText = stuckPoint.trim() || "待填写卡点；先用诊断问题定位";
+  const applicationContextText = applicationContext.trim() || "待填写应用情境；先用通用迁移练习检查";
   const contextualEvidenceBoundary = `${active.evidenceBoundary} 当前资料边界：${sourceBoundaryText}`;
   const conceptInputQuality = [
     {
@@ -4120,7 +4120,7 @@ If any of these are missing, add them before the final answer.
       </details>
 
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 900 }}>高质量样例</span>
+        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", fontWeight: 900 }}>常用概念</span>
         {presetConcepts.map((name) => (
           <button key={name} type="button" aria-pressed={concept === name} onClick={() => chooseConcept(name)} style={{ border: concept === name ? `1.5px solid ${active.color}` : "1.5px solid var(--border)", background: concept === name ? "var(--cherry-yellow-light)" : "var(--card)", borderRadius: 999, padding: "0.45rem 0.9rem", color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>
             {name}

@@ -238,6 +238,7 @@ function verifyWorkDetailCardsStayCompact() {
   expect(source.includes("复制自查记录"), "Concept explainer must expose a copyable understanding audit.");
   expect(source.includes("conceptInputQualityScore"), "Concept explainer must surface input quality before generating outputs.");
   expect(source.includes("taskRouteRecipes"), "Research agent workbench must expose task route recipes.");
+  expect(source.includes("待填写材料") && !source.includes("未填写材料"), "Research agent copied records must use learner-facing input-state wording for empty material.");
   expect(source.includes("research-agent-route-recipes"), "Research agent task route recipes must be visible near the top of the workbench.");
   expect(source.includes("任务路由速查"), "Research agent workbench must show a quick route lookup panel.");
   for (const routeName of ["文献精读", "图表解读", "实验设计检查", "论文逻辑检查", "审稿意见回应", "术语一致性检查"]) {
@@ -773,7 +774,7 @@ function verifyConceptExplainerAgentContract() {
   expect(/className="concept-full-explanation-details"[\s\S]{0,220}borderRadius: 12[\s\S]{0,120}padding: "0\.68rem"[\s\S]{0,160}boxShadow: "0 8px 18px/.test(conceptSource), "Concept explainer full explanation fold must stay visually compact.");
   expect(!conceptSource.includes('borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)"'), "Concept explainer full explanation content must not return to oversized heavy cards.");
   expect(!fullExplanationSource.includes("minHeight: 112") && !fullExplanationSource.includes("minHeight: 126") && !fullExplanationSource.includes("minHeight: 142"), "Concept explainer full explanation cards must avoid fixed tall minimum heights.");
-  expect(worksSource.includes("输入任意概念或选择样例"), "Concept explainer work card must advertise arbitrary concept input.");
+  expect(worksSource.includes("输入任意概念或选择常用概念") && !worksSource.includes("选择样例"), "Concept explainer work card must advertise arbitrary concept input without demo-like sample wording.");
   expect(worksSource.includes('outputs: ["学习卡", "可视化流程", "即时小测"]'), "Concept explainer work card outputs must match the learner-facing agent output.");
   expect(worksSource.includes('path: ["输入概念", "看诊断边界", "生成学习卡"]'), "Concept explainer work card path must describe the learner-facing agent flow.");
 
