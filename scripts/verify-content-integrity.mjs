@@ -540,6 +540,7 @@ function verifyResearchAgentWorkbenchContract() {
 
   const practiceCasesSource = promptKitMatch[1];
   const promptKitSource = promptKitMatch[2];
+  expect(promptKitSource.includes('"待填写"') && promptKitSource.includes("写明未提供") && !promptKitSource.includes("待补充"), "Research workbench input statuses must read as user input state, not unfinished site content.");
   const requiredWorkbenchFeatures = [
     { label: "practice cases", text: "promptPracticeCases" },
     { label: "practice case loader", text: "loadPracticeCase" },

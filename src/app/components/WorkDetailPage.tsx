@@ -218,16 +218,16 @@ function PromptKitContent() {
     },
     {
       label: "样本/分组",
-      value: /样本|sample|n\s*=|分组|对照|control|重复|replicate/i.test(materialText) ? "已出现" : "待补充",
+      value: /样本|sample|n\s*=|分组|对照|control|重复|replicate/i.test(materialText) ? "已出现" : "待填写",
       detail: /样本|sample|n\s*=|分组|对照|control|重复|replicate/i.test(materialText) ? "材料中已有样本、分组或对照线索。" : "缺少样本量、分组、对照或重复数，结论边界会很弱。",
     },
     {
       label: "结果证据",
-      value: /结果|figure|fig\.|图|p\s*[<=>]|显著|统计|差异|fold|表达/i.test(materialText) ? "已出现" : "待补充",
+      value: /结果|figure|fig\.|图|p\s*[<=>]|显著|统计|差异|fold|表达/i.test(materialText) ? "已出现" : "待填写",
       detail: /结果|figure|fig\.|图|p\s*[<=>]|显著|统计|差异|fold|表达/i.test(materialText) ? "材料中已有结果、图表或统计线索。" : "缺少结果描述、图注或统计标记，不能判断证据强度。",
     },
   ];
-  const missingFields = materialChecks.filter((item) => item.value === "待补充" || item.value === "偏少").map((item) => item.label);
+  const missingFields = materialChecks.filter((item) => item.value === "待填写" || item.value === "偏少").map((item) => item.label);
   const taskActions: Record<string, string[]> = {
     文献精读: ["先抽取研究问题、核心假设和主要证据。", "把作者结论和材料外推断分开。", "优先标注原文未说明的信息。"],
     实验设计检查: ["先检查变量、对照、重复数和统计方法是否匹配。", "把必须修改项和人工确认项分开。", "说明每个风险会影响哪一种结论。"],
@@ -277,7 +277,7 @@ function PromptKitContent() {
   };
   const previewReportRows = activePrompt.output.map((label, index) => ({
     label,
-    body: (reportDrafts[activePrompt.title] ?? [])[index] ?? "根据材料生成对应栏目，缺少证据时标注待补充。",
+    body: (reportDrafts[activePrompt.title] ?? [])[index] ?? "根据材料生成对应栏目，证据不足时标注未提供。",
   }));
   const reviewerQuestions = [
     missingFields.length ? `需要先补充 ${missingFields.join("、")} 吗？` : "这些材料行是否就是你希望 Agent 重点引用的证据？",
@@ -287,25 +287,25 @@ function PromptKitContent() {
   const citationAuditItems = [
     {
       label: "来源标识",
-      status: /doi|pmid|arxiv|期刊|journal|作者|年份|题目/i.test(materialText) ? "已出现" : "待补充",
+      status: /doi|pmid|arxiv|期刊|journal|作者|年份|题目/i.test(materialText) ? "已出现" : "待填写",
       evidence: /doi|pmid|arxiv|期刊|journal|作者|年份|题目/i.test(materialText) ? "材料里出现题目、作者、年份、期刊、DOI、PMID 或 arXiv 线索。" : "还缺少可回查来源，不能把模型生成内容当成文献事实。",
       action: "记录 DOI/PMID/arXiv、题目、作者年份或原文链接，至少保留一种可回查标识。",
     },
     {
       label: "图表定位",
-      status: /figure|fig\.|图|表|table|图注/i.test(materialText) ? "已出现" : "待补充",
+      status: /figure|fig\.|图|表|table|图注/i.test(materialText) ? "已出现" : "待填写",
       evidence: /figure|fig\.|图|表|table|图注/i.test(materialText) ? "材料里出现图号、图注、表格或图表线索。" : "还缺少图号、图注或表格定位，图表解读难以回到原文。",
       action: "补充图号、图注、坐标轴、单位、分组和统计标记。",
     },
     {
       label: "样本统计",
-      status: /n\s*=|样本|sample|重复|replicate|统计|p\s*[<=>]|显著/i.test(materialText) ? "已出现" : "待补充",
+      status: /n\s*=|样本|sample|重复|replicate|统计|p\s*[<=>]|显著/i.test(materialText) ? "已出现" : "待填写",
       evidence: /n\s*=|样本|sample|重复|replicate|统计|p\s*[<=>]|显著/i.test(materialText) ? "材料里出现样本量、重复数、统计方法或显著性线索。" : "还缺少样本量、重复数或统计信息，不能判断结果稳健性。",
       action: "补充 n 值、重复类型、统计检验、p 值或误差线说明。",
     },
     {
       label: "结论边界",
-      status: /局限|限制|不能|推测|可能|需要验证|correlation|association/i.test(materialText) ? "已出现" : "待补充",
+      status: /局限|限制|不能|推测|可能|需要验证|correlation|association/i.test(materialText) ? "已出现" : "待填写",
       evidence: /局限|限制|不能|推测|可能|需要验证|correlation|association/i.test(materialText) ? "材料里出现局限、推测、相关或待验证提示。" : "还缺少结论边界，容易把相关、推测或单图结果写成定论。",
       action: "写明哪些结论由材料支持，哪些只是推测，哪些必须回到原文或实验验证。",
     },
@@ -411,7 +411,7 @@ Before finishing, check that the learner has a usable output:
 If any gate is missing, add it before the final answer.`;
   const boundaryItems = [
     "不保证论文结论正确，只整理材料和证据关系。",
-    "不编造引用、DOI、样本量或统计结果；材料没有就标为待补充。",
+    "不编造引用、DOI、样本量或统计结果；材料没有就写明未提供。",
     "不替代统计分析、伦理审批、临床/高风险决策或最终署名责任。",
     "接入外部模型时也要保留人工确认，最终结论由用户复核后使用。",
   ];
