@@ -166,8 +166,7 @@ export function Hero() {
 
           <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.74rem" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.8rem", flexWrap: "wrap" }}>
-              <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.12rem", lineHeight: 1.2, fontWeight: 950 }}>精选内容</h2>
-              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.82rem", fontWeight: 950 }}>{entries.length} 个内容入口</span>
+              <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.12rem", lineHeight: 1.2, fontWeight: 950 }}>内容目录</h2>
             </div>
             <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(154px, auto)", gap: "0.68rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
               {entries.map((entry) => (
