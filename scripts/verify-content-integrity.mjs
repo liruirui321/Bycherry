@@ -612,6 +612,13 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "research start path evidence step", text: "抽证据" },
     { label: "research start path citation step", text: "核引用" },
     { label: "research start path record step", text: "留记录" },
+    { label: "material gate data", text: "researchMaterialGateCards" },
+    { label: "visible material gate", text: "材料闸门" },
+    { label: "material gate strip", text: "research-material-gate-strip" },
+    { label: "material gate source", text: "来源标识" },
+    { label: "material gate method", text: "样本方法" },
+    { label: "material gate evidence", text: "结果证据" },
+    { label: "material gate boundary", text: "边界语句" },
     { label: "compact route grid", text: "research-prompt-route-grid" },
     { label: "compact route button", text: "research-prompt-route-button" },
     { label: "compact route hidden input", text: "research-prompt-route-input" },
@@ -643,6 +650,7 @@ function verifyResearchAgentWorkbenchContract() {
   expect(!researchReviewSource.includes("minHeight: 154") && researchReviewSource.includes("minHeight: 54"), "Research Agent learner review fields must not use fixed tall card heights.");
   expect(promptKitSource.includes('className="research-agent-preview-panel"') && promptKitSource.includes('background: hasRunPreview ? "var(--cherry-sage-light)" : "transparent"') && promptKitSource.includes('padding: hasRunPreview ? "0.68rem" : 0') && !promptKitSource.includes("点击运行后，这里会显示材料状态、证据边界和下一步分析顺序。"), "Research Agent local preview must not render an empty default result card before the learner runs it.");
   expect(promptKitSource.includes("#prompt-kit-builder .research-start-path-strip") && promptKitSource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"') && promptKitSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "Research Agent visible start path must stay compact across desktop and mobile.");
+  expect(promptKitSource.includes("#prompt-kit-builder .research-material-gate-strip") && promptKitSource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"') && promptKitSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "Research Agent material gate must stay compact across desktop and mobile.");
 
   for (const item of retiredWorkbenchPatterns) {
     expect(!item.pattern.test(promptKitSource), `Research Agent workbench contains retired copy: ${item.label}`);
@@ -666,6 +674,8 @@ function verifyResearchAgentWorkbenchContract() {
     "## Completion Gate",
     "adult learner",
     "Classify the task route from material signals",
+    "Run a material gate",
+    "source identifier, methods/sample design, result evidence, and boundary statements",
     "evidence_items",
     "missing_fields",
     "risk_flags",

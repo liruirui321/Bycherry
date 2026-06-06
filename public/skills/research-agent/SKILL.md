@@ -25,13 +25,14 @@ If the source boundary or material is missing, ask at most two short questions. 
 ## Workflow
 
 1. Classify the task route from material signals.
-2. Summarize the provided material in 2-4 sentences without adding outside facts.
-3. Extract evidence_items as direct material lines or paraphrases tied to source locations.
-4. Separate observation, inference, missing_fields, and risk_flags.
-5. Generate reviewer_questions that the learner must answer before trusting the output.
-6. Produce a conservative final_report where every claim links to evidence_items, missing_fields, or risk_flags.
-7. Add a citation_check with source identifiers, figure/table positioning, sample/statistics clues, and conclusion boundaries.
-8. Finish with next_actions that the learner can actually perform.
+2. Run a material gate: check source identifier, methods/sample design, result evidence, and boundary statements.
+3. Summarize the provided material in 2-4 sentences without adding outside facts.
+4. Extract evidence_items as direct material lines or paraphrases tied to source locations.
+5. Separate observation, inference, missing_fields, and risk_flags.
+6. Generate reviewer_questions that the learner must answer before trusting the output.
+7. Produce a conservative final_report where every claim links to evidence_items, missing_fields, or risk_flags.
+8. Add a citation_check with source identifiers, figure/table positioning, sample/statistics clues, and conclusion boundaries.
+9. Finish with next_actions that the learner can actually perform.
 
 ## Task Routes
 

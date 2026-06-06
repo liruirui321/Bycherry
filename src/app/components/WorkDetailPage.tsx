@@ -355,13 +355,14 @@ If the source boundary or material is missing, ask at most two short questions. 
 ## Workflow
 
 1. Classify the task route from material signals.
-2. Summarize the provided material in 2-4 sentences without adding outside facts.
-3. Extract evidence_items as direct material lines or paraphrases tied to source locations.
-4. Separate observation, inference, missing_fields, and risk_flags.
-5. Generate reviewer_questions that the learner must answer before trusting the output.
-6. Produce a conservative final_report where every claim links to evidence_items, missing_fields, or risk_flags.
-7. Add a citation_check with source identifiers, figure/table positioning, sample/statistics clues, and conclusion boundaries.
-8. Finish with next_actions that the learner can actually perform.
+2. Run a material gate: check source identifier, methods/sample design, result evidence, and boundary statements.
+3. Summarize the provided material in 2-4 sentences without adding outside facts.
+4. Extract evidence_items as direct material lines or paraphrases tied to source locations.
+5. Separate observation, inference, missing_fields, and risk_flags.
+6. Generate reviewer_questions that the learner must answer before trusting the output.
+7. Produce a conservative final_report where every claim links to evidence_items, missing_fields, or risk_flags.
+8. Add a citation_check with source identifiers, figure/table positioning, sample/statistics clues, and conclusion boundaries.
+9. Finish with next_actions that the learner can actually perform.
 
 ## Task Routes
 
@@ -810,6 +811,28 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
     { label: "核引用", body: citationAuditItems.filter((item) => item.status === "已出现").length ? `${citationAuditItems.filter((item) => item.status === "已出现").length}/4 项已出现` : "先填来源标识", color: "var(--cherry-yellow-light)" },
     { label: "留记录", body: `复核记录 ${learnerResearchReviewScore}/4`, color: "var(--cherry-peach-light)" },
   ];
+  const researchMaterialGateCards = [
+    {
+      label: "来源标识",
+      status: /doi|pmid|arxiv|期刊|journal|作者|年份|题目/i.test(materialText) ? "可追溯" : "待填写",
+      detail: /doi|pmid|arxiv|期刊|journal|作者|年份|题目/i.test(materialText) ? "可以回到题目、作者年份、期刊、DOI、PMID 或 arXiv 线索。" : "先补一种可回查标识；否则只能生成待核查记录。",
+    },
+    {
+      label: "样本方法",
+      status: /样本|sample|n\s*=|分组|对照|control|重复|replicate|方法|method/i.test(materialText) ? "有线索" : "待填写",
+      detail: /样本|sample|n\s*=|分组|对照|control|重复|replicate|方法|method/i.test(materialText) ? "已有方法、样本、分组、对照或重复线索，可继续判断证据强度。" : "缺少方法和样本设计，不能判断结果是否稳健。",
+    },
+    {
+      label: "结果证据",
+      status: /结果|figure|fig\.|图|表|table|p\s*[<=>]|显著|统计|差异|fold|表达/i.test(materialText) ? "有线索" : "待填写",
+      detail: /结果|figure|fig\.|图|表|table|p\s*[<=>]|显著|统计|差异|fold|表达/i.test(materialText) ? "已有结果、图表、统计或差异描述，可抽取证据候选。" : "缺少结果行，输出只能停留在阅读任务框架。",
+    },
+    {
+      label: "边界语句",
+      status: /局限|限制|不能|推测|可能|需要验证|correlation|association/i.test(materialText) ? "有边界" : "待填写",
+      detail: /局限|限制|不能|推测|可能|需要验证|correlation|association/i.test(materialText) ? "材料里已有局限、推测、相关或待验证提示。" : "需要写明哪些结论不能从当前材料直接推出。",
+    },
+  ];
   const finalPrompt = `${activePrompt.text}
 
 【我的材料】
@@ -1152,6 +1175,24 @@ ${localPreviewOutput}`;
                   </span>
                 </div>
               ))}
+            </div>
+
+            <div style={{ display: "grid", gap: "0.36rem", marginBottom: "0.62rem" }}>
+              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.78rem" }}>材料闸门</div>
+              <div className="research-material-gate-strip" role="list" aria-label="材料闸门" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem" }}>
+                {researchMaterialGateCards.map((item) => {
+                  const ready = item.status !== "待填写";
+                  return (
+                    <div className="research-material-gate-card" key={item.label} role="listitem" style={{ background: ready ? "rgba(169,201,172,0.42)" : "rgba(250,247,241,0.78)", border: `1.5px solid ${ready ? "rgba(58,92,62,0.2)" : "rgba(184,68,51,0.16)"}`, borderRadius: 8, padding: "0.5rem", minHeight: 74, display: "grid", gap: "0.2rem", alignContent: "start" }}>
+                      <span style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "0.42rem" }}>
+                        <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.2 }}>{item.label}</strong>
+                        <span style={{ color: ready ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.64rem", lineHeight: 1.2, fontWeight: 900, whiteSpace: "nowrap" }}>{item.status}</span>
+                      </span>
+                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item.detail}</span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             <details className="research-agent-workflow-pack-details" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.56rem", marginBottom: "0.62rem" }}>
@@ -1704,6 +1745,7 @@ ${localPreviewOutput}`;
 
             #prompt-kit-builder .research-agent-status-strip,
             #prompt-kit-builder .research-agent-check-strip,
+            #prompt-kit-builder .research-material-gate-strip,
             #prompt-kit-builder .research-start-path-strip {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
@@ -1876,6 +1918,16 @@ ${localPreviewOutput}`;
 
             #prompt-kit-builder .research-agent-check-strip {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+
+            #prompt-kit-builder .research-material-gate-strip {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.38rem !important;
+            }
+
+            #prompt-kit-builder .research-material-gate-card {
+              min-height: 66px !important;
+              padding: 0.42rem !important;
             }
 
             #prompt-kit-builder .research-review-grid {
