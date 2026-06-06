@@ -4174,11 +4174,11 @@ If any of these are missing, add them before the final answer.
         </div>
       </details>
 
-      <details className="concept-full-explanation-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.78rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
+      <details className="concept-full-explanation-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.68rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>完整解释、练习与学习流程</summary>
         <div style={{ display: "grid", gap: "0.75rem", marginTop: "0.75rem" }}>
       <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.75rem" }}>
-        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 18, padding: "0.9rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.06)" }}>
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem", marginBottom: "0.62rem" }}>先修知识</div>
           <div style={{ display: "grid", gap: "0.46rem" }}>
             {active.prerequisite.map((item, index) => (
@@ -4189,18 +4189,18 @@ If any of these are missing, add them before the final answer.
             ))}
           </div>
         </div>
-        <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 18, padding: "0.9rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.04)" }}>
+        <div style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.78rem", boxShadow: "0 8px 18px rgba(94,68,42,0.03)" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem", marginBottom: "0.48rem" }}>诊断问题</div>
           <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.62, fontWeight: 800 }}>{active.diagnostic}</div>
         </div>
-        <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 18, padding: "0.9rem", boxShadow: "3px 5px 0px rgba(94,68,42,0.04)" }}>
+        <div style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 12, padding: "0.78rem", boxShadow: "0 8px 18px rgba(94,68,42,0.03)" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem", marginBottom: "0.48rem" }}>证据边界</div>
           <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.62, fontWeight: 800 }}>{contextualEvidenceBoundary}</div>
         </div>
       </div>
 
       <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.25fr) minmax(280px, 0.78fr)", gap: "1rem", alignItems: "stretch" }}>
-        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)", position: "relative", overflow: "hidden" }}>
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", position: "relative", overflow: "hidden" }}>
           <div style={{ position: "relative", zIndex: 1 }}>
             <div className="concept-flow-map" role="group" aria-label="概念学习卡生成流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.55rem", marginBottom: "1rem" }}>
               {conceptFlow.map((item, index) => (
@@ -4266,7 +4266,7 @@ If any of these are missing, add them before the final answer.
           </div>
         </div>
 
-        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>即时小测</div>
           <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.9rem", marginBottom: "0.8rem" }}>{active.quiz.question}</div>
           <div style={{ display: "grid", gap: 7 }}>
@@ -4289,11 +4289,11 @@ If any of these are missing, add them before the final answer.
       </div>
 
       <div className="concept-responsive-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(240px, 0.72fr)", gap: "1rem" }}>
-        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+        <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.9rem" }}>机制步骤</div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.75rem" }}>
             {active.mechanism.map((item, index) => (
-              <div key={item} style={{ background: index === levelIndex ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === levelIndex ? `1.5px solid ${active.color}` : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.78rem", minHeight: 112 }}>
+              <div key={item} style={{ background: index === levelIndex ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === levelIndex ? `1.5px solid ${active.color}` : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.68rem" }}>
                 <div style={{ width: 26, height: 26, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.72rem", fontWeight: 900, marginBottom: "0.55rem" }}>{index + 1}</div>
                 <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.58, fontSize: "0.84rem", fontWeight: 800 }}>{item}</div>
               </div>
@@ -4310,7 +4310,7 @@ If any of these are missing, add them before the final answer.
         </div>
       </div>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap", marginBottom: "0.85rem" }}>
           <div>
             <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>练习情境</div>
@@ -4326,7 +4326,7 @@ If any of these are missing, add them before the final answer.
             { title: "引导问题", body: active.workedExample.guideQuestion, bg: "var(--cherry-sage-light)" },
             { title: "你的产出", body: active.workedExample.learnerOutput, bg: "var(--cherry-peach-light)" },
           ].map((item, index) => (
-            <div key={item.title} style={{ background: item.bg, border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.86rem", minHeight: 142 }}>
+            <div key={item.title} style={{ background: item.bg, border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.72rem" }}>
               <span style={{ width: 24, height: 24, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", fontWeight: 900, marginBottom: "0.52rem" }}>
                 {index + 1}
               </span>
@@ -4337,18 +4337,18 @@ If any of these are missing, add them before the final answer.
         </div>
       </div>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
         <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.75rem" }}>迁移任务</div>
         <div style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.22)", borderRadius: 16, padding: "0.86rem", color: "var(--cherry-warm-mid)", lineHeight: 1.68, fontSize: "0.86rem", fontWeight: 800 }}>
           {active.transferTask}
         </div>
       </div>
 
-      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)" }}>
+      <div style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.82rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
         <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.9rem" }}>学习流程</div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.75rem" }}>
           {lessonFlow.map((item, index) => (
-            <div key={item.title} style={{ background: index === 1 ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === 1 ? `1.5px solid ${active.color}` : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 16, padding: "0.82rem", minHeight: 126 }}>
+            <div key={item.title} style={{ background: index === 1 ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === 1 ? `1.5px solid ${active.color}` : "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.68rem" }}>
               <div style={{ color: active.color, fontWeight: 900, marginBottom: "0.45rem", fontSize: "0.82rem" }}>{item.title}</div>
               <div style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.62, fontSize: "0.82rem", fontWeight: 800 }}>{item.body}</div>
             </div>
