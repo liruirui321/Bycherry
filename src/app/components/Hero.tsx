@@ -128,10 +128,10 @@ export function Hero() {
       aria-labelledby="hero-heading"
       style={{
         fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-        minHeight: "calc(100vh - 50px)",
+        minHeight: "auto",
         position: "relative",
         overflow: "hidden",
-        padding: "clamp(1.55rem, 3.2vh, 2.35rem) clamp(1rem, 3.4vw, 3rem) 1.25rem",
+        padding: "clamp(1.15rem, 2.4vh, 1.75rem) clamp(1rem, 3.4vw, 3rem) clamp(1.2rem, 2.6vh, 1.8rem)",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
@@ -156,9 +156,9 @@ export function Hero() {
         <div className="hero-float-deco hero-float-leaf"><IconLeafSmall size={28} color="var(--cherry-sage)" /></div>
       </div>
 
-      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 2060, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box", display: "grid", gap: "0.88rem", alignContent: "start" }}>
-        <div className="hero-heading-strip" style={{ display: "grid", gridTemplateColumns: "minmax(330px, 0.78fr) minmax(420px, 1fr)", gap: "1rem", alignItems: "end", minWidth: 0 }}>
-          <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.58rem", justifyItems: "start", textAlign: "left", alignContent: "start", maxWidth: 660 }}>
+      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1720, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box", display: "grid", gap: "0.78rem", alignContent: "start" }}>
+        <div className="hero-heading-strip" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(240px, 0.34fr)", gap: "0.9rem", alignItems: "center", minWidth: 0 }}>
+          <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.42rem", justifyItems: "start", textAlign: "left", alignContent: "start" }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.32rem 0.92rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 850, background: "rgba(250,247,241,0.72)", letterSpacing: 0 }}>
               <IconBranch size={13} color="var(--cherry-forest)" />
               By Cherry · Science Studio
@@ -168,9 +168,9 @@ export function Hero() {
               className="hero-title"
               style={{
                 fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-                fontSize: "clamp(2rem, 3.2vw, 3.55rem)",
+                fontSize: "clamp(1.74rem, 2.45vw, 2.85rem)",
                 fontWeight: 900,
-                lineHeight: 1.02,
+                lineHeight: 1.04,
                 color: "var(--cherry-warm-brown)",
                 margin: "0",
                 letterSpacing: 0,
@@ -179,6 +179,7 @@ export function Hero() {
             >
               A tiny studio for
               <br className="hero-title-break" />
+              {" "}
               <span style={{ color: "var(--cherry-red)", textDecoration: "underline", textDecorationColor: "var(--cherry-peach)", textDecorationThickness: "0.08em", textUnderlineOffset: "0.12em" }}>science</span>
               ,{" "}
               <span style={{ color: "var(--cherry-sage)" }}>learning</span>
@@ -186,15 +187,15 @@ export function Hero() {
               {" & "}
               <span style={{ color: "var(--cherry-blue)" }}>AI</span>
             </h1>
-            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(0.88rem, 0.96vw, 1.02rem)", lineHeight: 1.54, fontWeight: 760, maxWidth: 360 }}>
-              科学模拟、科研阅读和 AI 学习工具，打开后直接进入可操作内容。
+            <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(0.86rem, 0.9vw, 0.98rem)", lineHeight: 1.5, fontWeight: 760, maxWidth: 760 }}>
+              科学模拟、科研阅读和 AI 学习工具，打开后就是可操作内容。
             </p>
           </div>
 
-          <div className="hero-summary-panel" style={{ minWidth: 0, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 14, background: "rgba(250,247,241,0.72)", padding: "0.78rem 0.86rem", boxShadow: "0 12px 28px rgba(94,68,42,0.06)", display: "grid", gap: "0.36rem" }}>
-            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.2, fontWeight: 950 }}>按一个学习任务开始。</strong>
-            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 780 }}>
-              看分子过程、读科研证据、生成学习卡、核查概念边界，入口都直接进入可操作内容。
+          <div className="hero-summary-panel" style={{ minWidth: 0, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 14, background: "rgba(250,247,241,0.72)", padding: "0.7rem 0.78rem", boxShadow: "0 12px 28px rgba(94,68,42,0.06)", display: "grid", gap: "0.18rem" }}>
+            <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", lineHeight: 1.2, fontWeight: 950 }}>当前内容</strong>
+            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.73rem", lineHeight: 1.42, fontWeight: 780 }}>
+              模拟、时间轴、概念解释和科研阅读。
             </span>
           </div>
         </div>
@@ -202,9 +203,9 @@ export function Hero() {
         <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.62rem", width: "100%", alignContent: "start" }}>
           <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.75rem", minWidth: 0 }}>
             <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.02rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>精选内容</h2>
-            <span className="hero-entry-grid-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>直接打开工具和文章</span>
+            <span className="hero-entry-grid-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>模拟 · 时间轴 · 阅读库</span>
           </div>
-          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(224px, 1fr)", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridAutoRows: "minmax(184px, 1fr)", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
             {entries.map((entry, index) => (
               <a
                 className={`hero-entry-row ${entry.featuredImage ? "hero-entry-row-image" : ""}`}
@@ -219,7 +220,7 @@ export function Hero() {
                   background: entry.color,
                   border: `2px solid ${entry.border}`,
                   borderRadius: 12,
-                  padding: entry.featuredImage ? "0.88rem 6.3rem 0.82rem 0.92rem" : "0.88rem 0.92rem 0.82rem",
+                  padding: entry.featuredImage ? "0.82rem 6.05rem 0.78rem 0.88rem" : "0.82rem 0.88rem 0.78rem",
                   color: "var(--cherry-warm-brown)",
                   textDecoration: "none",
                   textAlign: "left",
@@ -231,7 +232,7 @@ export function Hero() {
                   overflow: "hidden",
                   minWidth: 0,
                   maxWidth: "100%",
-                  minHeight: 224,
+                  minHeight: 184,
                   boxSizing: "border-box",
                   boxShadow: "0 12px 24px rgba(94,68,42,0.08)",
                   transform: "none",
@@ -278,6 +279,29 @@ export function Hero() {
               </a>
             ))}
           </nav>
+          <div className="hero-specimen-band" aria-hidden="true">
+            <span className="hero-specimen hero-specimen-dna">
+              <i />
+              <i />
+              <i />
+              <i />
+            </span>
+            <span className="hero-specimen hero-specimen-cells">
+              <i />
+              <i />
+              <i />
+              <i />
+              <i />
+            </span>
+            <span className="hero-specimen hero-specimen-leaf">
+              <i />
+            </span>
+            <span className="hero-specimen hero-specimen-chart">
+              <i />
+              <i />
+              <i />
+            </span>
+          </div>
         </div>
       </div>
 
@@ -430,6 +454,10 @@ export function Hero() {
           -webkit-box-orient: vertical;
         }
 
+        .hero-title-break {
+          display: none;
+        }
+
         .hero-title-mobile-break {
           display: none;
         }
@@ -449,6 +477,111 @@ export function Hero() {
           transform: translateY(-2px) rotate(0deg) !important;
           box-shadow: 5px 10px 0 rgba(94,68,42,0.1), 0 18px 34px rgba(94,68,42,0.08) !important;
         }
+
+        .hero-specimen-band {
+          display: grid;
+          grid-template-columns: 1.15fr 0.9fr 1fr 0.95fr;
+          gap: 0.72rem;
+          min-height: 86px;
+          margin-top: 0.1rem;
+          border: 1px solid rgba(94,68,42,0.11);
+          border-radius: 16px;
+          padding: 0.7rem;
+          background:
+            linear-gradient(135deg, rgba(250,247,241,0.7), rgba(245,241,234,0.42)),
+            radial-gradient(circle at 13% 30%, rgba(122,175,200,0.18), transparent 28%),
+            radial-gradient(circle at 70% 18%, rgba(95,145,115,0.18), transparent 30%);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.54);
+          overflow: hidden;
+        }
+
+        .hero-specimen {
+          position: relative;
+          min-width: 0;
+          min-height: 66px;
+          border-radius: 12px;
+          background: rgba(250,247,241,0.5);
+          border: 1px solid rgba(94,68,42,0.08);
+          overflow: hidden;
+        }
+
+        .hero-specimen-dna::before,
+        .hero-specimen-dna::after {
+          content: "";
+          position: absolute;
+          left: 0.8rem;
+          right: 0.8rem;
+          top: 1rem;
+          height: 36px;
+          border-top: 3px solid rgba(122,175,200,0.78);
+          border-bottom: 3px solid rgba(184,68,51,0.72);
+          border-radius: 55% 45% 50% 50%;
+          transform: rotate(-4deg);
+        }
+
+        .hero-specimen-dna::after {
+          top: 1.26rem;
+          transform: rotate(4deg);
+          opacity: 0.42;
+        }
+
+        .hero-specimen-dna i {
+          position: absolute;
+          top: 1.1rem;
+          width: 3px;
+          height: 34px;
+          border-radius: 999px;
+          background: rgba(94,68,42,0.26);
+          transform: rotate(18deg);
+        }
+
+        .hero-specimen-dna i:nth-child(1) { left: 20%; }
+        .hero-specimen-dna i:nth-child(2) { left: 38%; transform: rotate(-16deg); }
+        .hero-specimen-dna i:nth-child(3) { left: 57%; }
+        .hero-specimen-dna i:nth-child(4) { left: 76%; transform: rotate(-16deg); }
+
+        .hero-specimen-cells {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.38rem;
+        }
+
+        .hero-specimen-cells i {
+          width: 1.5rem;
+          height: 1.5rem;
+          border-radius: 50%;
+          background: rgba(95,145,115,0.22);
+          border: 2px solid rgba(58,92,62,0.24);
+          box-shadow: inset 0 0 0 0.34rem rgba(250,247,241,0.48);
+        }
+
+        .hero-specimen-leaf i {
+          position: absolute;
+          inset: 0.62rem 1rem;
+          border-radius: 86% 14% 76% 24%;
+          background:
+            linear-gradient(130deg, transparent 47%, rgba(250,247,241,0.62) 48%, rgba(250,247,241,0.62) 52%, transparent 53%),
+            linear-gradient(135deg, rgba(95,145,115,0.5), rgba(169,201,172,0.54));
+          transform: rotate(-16deg);
+        }
+
+        .hero-specimen-chart {
+          display: flex;
+          align-items: end;
+          gap: 0.46rem;
+          padding: 0.7rem 1rem;
+        }
+
+        .hero-specimen-chart i {
+          flex: 1;
+          border-radius: 999px 999px 0 0;
+          background: rgba(184,68,51,0.62);
+        }
+
+        .hero-specimen-chart i:nth-child(1) { height: 32%; background: rgba(122,175,200,0.72); }
+        .hero-specimen-chart i:nth-child(2) { height: 66%; background: rgba(221,185,90,0.78); }
+        .hero-specimen-chart i:nth-child(3) { height: 46%; background: rgba(95,145,115,0.72); }
 
         .hero-mini-visual {
           position: relative;
@@ -693,6 +826,10 @@ export function Hero() {
             line-height: 1.04 !important;
           }
 
+          .hero-title-break {
+            display: block;
+          }
+
           .hero-entry-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             grid-auto-rows: minmax(142px, auto) !important;
@@ -725,6 +862,11 @@ export function Hero() {
           .hero-entry-row strong,
           .hero-entry-row span {
             overflow-wrap: anywhere;
+          }
+
+          .hero-specimen-band {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            min-height: 132px !important;
           }
         }
 
@@ -779,6 +921,10 @@ export function Hero() {
           }
 
           .hero-entry-task {
+            display: none !important;
+          }
+
+          .hero-specimen-band {
             display: none !important;
           }
         }
