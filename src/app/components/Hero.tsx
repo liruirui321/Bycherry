@@ -1,10 +1,18 @@
 import type { MouseEvent } from "react";
 import { works } from "./Works";
+import { notes } from "./Notes";
+import { essays } from "./ResearchEssays";
 import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation";
 import { preloadRouteForHref } from "../routePrefetch";
 
 export function Hero() {
-  function openWork(href: string, event: MouseEvent<HTMLAnchorElement>) {
+  const articleLinks = [...essays, ...notes].map((article) => ({
+    href: article.href,
+    title: article.title,
+    desc: "body" in article ? article.body : article.excerpt,
+  }));
+
+  function openContent(href: string, event: MouseEvent<HTMLAnchorElement>) {
     if (!shouldUseClientNavigation(event)) return;
     event.preventDefault();
     navigateClient(href);
@@ -47,42 +55,78 @@ export function Hero() {
           </div>
         </div>
 
-        <nav id="works" className="hero-work-list" aria-label="内容目录" style={{ display: "flex", alignItems: "center", gap: "0.24rem", flexWrap: "wrap", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
-          {works.map((work) => {
-            const toolHref = getWorkToolHref(work.href);
-            return (
+        <nav id="works" className="hero-work-list" aria-label="内容目录" style={{ display: "grid", gap: "0.22rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+          <div className="hero-directory-group" role="group" aria-label="工具" style={{ display: "flex", alignItems: "center", gap: "0.24rem", flexWrap: "wrap", minWidth: 0 }}>
+            <span className="hero-section-label" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900, lineHeight: 1.14 }}>工具</span>
+            {works.map((work) => {
+              const toolHref = getWorkToolHref(work.href);
+              return (
+                <a
+                  className="hero-work-row"
+                  key={work.slug}
+                  href={toolHref}
+                  aria-label={`打开${work.title}：${work.desc}`}
+                  onClick={(event) => openContent(toolHref, event)}
+                  onMouseEnter={() => preloadRouteForHref(getWorkToolHref(work.href))}
+                  onFocus={() => preloadRouteForHref(getWorkToolHref(work.href))}
+                  onPointerDown={() => preloadRouteForHref(getWorkToolHref(work.href))}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    borderLeft: `3px solid ${work.border}`,
+                    borderRadius: 0,
+                    padding: "0.16rem 0.32rem",
+                    color: "var(--cherry-warm-brown)",
+                    textDecoration: "none",
+                    textAlign: "left",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.22rem",
+                    position: "relative",
+                    overflow: "hidden",
+                    minWidth: 0,
+                    maxWidth: "100%",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  <strong style={{ fontSize: "0.72rem", lineHeight: 1.14, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
+                </a>
+              );
+            })}
+          </div>
+
+          <div className="hero-directory-group" role="group" aria-label="文章" style={{ display: "flex", alignItems: "center", gap: "0.24rem", flexWrap: "wrap", minWidth: 0 }}>
+            <span className="hero-section-label" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900, lineHeight: 1.14 }}>文章</span>
+            {articleLinks.map((article) => (
               <a
-                className="hero-work-row"
-                key={work.slug}
-                href={toolHref}
-                aria-label={`打开${work.title}：${work.desc}`}
-                onClick={(event) => openWork(toolHref, event)}
-                onMouseEnter={() => preloadRouteForHref(getWorkToolHref(work.href))}
-                onFocus={() => preloadRouteForHref(getWorkToolHref(work.href))}
-                onPointerDown={() => preloadRouteForHref(getWorkToolHref(work.href))}
+                className="hero-article-row"
+                key={article.href}
+                href={article.href}
+                aria-label={`打开${article.title}：${article.desc}`}
+                onClick={(event) => openContent(article.href, event)}
+                onMouseEnter={() => preloadRouteForHref(article.href)}
+                onFocus={() => preloadRouteForHref(article.href)}
+                onPointerDown={() => preloadRouteForHref(article.href)}
                 style={{
                   background: "transparent",
                   border: "none",
-                  borderLeft: `3px solid ${work.border}`,
+                  borderLeft: "3px solid rgba(94,68,42,0.2)",
                   borderRadius: 0,
-                  padding: "0.16rem 0.32rem",
+                  padding: "0.14rem 0.3rem",
                   color: "var(--cherry-warm-brown)",
                   textDecoration: "none",
                   textAlign: "left",
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "0.22rem",
-                  position: "relative",
-                  overflow: "hidden",
                   minWidth: 0,
-                  maxWidth: "100%",
+                  maxWidth: "min(18rem, 100%)",
                   boxSizing: "border-box",
                 }}
               >
-                <strong style={{ fontSize: "0.72rem", lineHeight: 1.14, minWidth: 0, overflowWrap: "anywhere" }}>{work.title}</strong>
+                <strong style={{ fontSize: "0.7rem", lineHeight: 1.14, minWidth: 0, overflowWrap: "anywhere" }}>{article.title}</strong>
               </a>
-            );
-          })}
+            ))}
+          </div>
         </nav>
       </div>
 
@@ -101,7 +145,7 @@ export function Hero() {
           }
 
 	          .hero-work-list {
-	            display: flex !important;
+	            display: grid !important;
 	            gap: 0.2rem 0.28rem !important;
 	            overflow-x: visible;
 	            padding-bottom: 0;
@@ -110,7 +154,12 @@ export function Hero() {
 	            box-sizing: border-box;
 	          }
 
-	          .hero-work-row {
+            .hero-directory-group {
+              gap: 0.18rem 0.26rem !important;
+            }
+
+	          .hero-work-row,
+            .hero-article-row {
 	            flex: 0 1 auto !important;
 	            min-width: 0 !important;
 	            max-width: calc(50vw - 1.2rem) !important;
@@ -124,27 +173,33 @@ export function Hero() {
           }
 
           .hero-work-row strong,
+          .hero-article-row strong,
           .hero-work-row span {
             overflow-wrap: anywhere;
           }
         }
 
-        .hero-work-row:focus-visible {
+        .hero-work-row:focus-visible,
+        .hero-article-row:focus-visible {
           outline: 3px solid var(--cherry-red);
           outline-offset: 4px;
         }
 
-        .hero-work-row {
+        .hero-work-row,
+        .hero-article-row {
           transition: color 0.18s ease, background 0.18s ease;
         }
 
 	        .hero-work-row:hover,
-	        .hero-work-row:focus-visible {
+	        .hero-work-row:focus-visible,
+          .hero-article-row:hover,
+          .hero-article-row:focus-visible {
 		          background: rgba(250,247,241,0.42) !important;
 	        }
 
         @media (prefers-reduced-motion: reduce) {
-          .hero-work-row {
+          .hero-work-row,
+          .hero-article-row {
             transition: none !important;
           }
         }

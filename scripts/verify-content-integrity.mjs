@@ -201,6 +201,9 @@ function verifyWorkCardActions() {
   expect(heroSource.includes('border: "none"') && heroSource.includes('borderLeft: `3px solid ${work.border}`'), "Homepage module entries must read as short directory links, not framed sticky-note cards.");
   expect(!/\.hero-work-row\s*\{[\s\S]{0,240}width:\s*100%\s*!important/.test(heroSource), "Mobile homepage entries must not become full-width long boxes.");
   expect(!heroSource.includes("hero-count") && !heroSource.includes("homeWorkStatus") && !heroSource.includes("hero-work-status"), "Homepage first-screen directory must not add duplicate count or status labels beside each entry.");
+  expect(heroSource.includes('import { notes } from "./Notes"') && heroSource.includes('import { essays } from "./ResearchEssays"'), "Homepage first-screen directory must include article data without rendering separate article sections.");
+  expect(heroSource.includes("hero-article-row") && heroSource.includes("articleLinks.map") && heroSource.includes("href={article.href}"), "Homepage must expose article routes as compact first-screen text links.");
+  expect(!heroSource.includes("{article.excerpt}") && !heroSource.includes("{article.body}") && !heroSource.includes("{article.readTime}") && !heroSource.includes("{article.date}"), "Homepage article entries must not expand into repeated article cards.");
   expect(!appSource.includes("<Works") && !appSource.includes('import { Works }'), "Homepage should not render a second Works section below the hero.");
   expect(!worksSource.includes("export function Works") && !worksSource.includes("function WorkCard"), "Works.tsx should stay data-only so module entries are not duplicated on the homepage.");
   for (const retiredWorksEntry of ["work-recommended-start", "work-filter-button", "activeCategory", "recommendedWork"]) {
@@ -448,8 +451,9 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(heroSource.includes('id="works"'), "Homepage #works anchor must point to the first-screen module directory instead of a duplicate section.");
   expect(heroSource.includes('aria-label="内容目录"'), "Homepage hero must label the first-screen module directory.");
   expect(heroSource.includes("hero-work-row") && heroSource.includes('display: "inline-flex"') && heroSource.includes("max-width: calc(50vw - 1.2rem)") && !heroSource.includes("hero-work-card"), "Homepage hero module entries must use a compact directory strip, not long repeated cards.");
+  expect(heroSource.includes("hero-article-row") && heroSource.includes('aria-label={`打开${article.title}：${article.desc}`}'), "Homepage hero must expose article routes as compact first-screen links with accessible descriptions.");
   expect(!heroSource.includes("minHeight: 48") && !heroSource.includes("minHeight: 76") && !heroSource.includes("minHeight: 88") && !heroSource.includes("hero-work-summary"), "Homepage hero module entries must not use fixed-height sticky-note cards.");
-  expect(heroSource.includes("display: flex !important") && !heroSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") && !heroSource.includes("min-height: 46px !important"), "Homepage hero mobile module directory must stay as a short wrapping strip instead of stacked panels.");
+  expect(heroSource.includes("display: grid !important") && heroSource.includes(".hero-directory-group") && !heroSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") && !heroSource.includes("min-height: 46px !important"), "Homepage hero mobile module directory must stay as a short grouped wrapping strip instead of stacked panels.");
   expect(heroSource.includes("width: calc(100vw - 2rem)"), "Homepage hero mobile module directory must stay inside the visible viewport.");
   expect(heroSource.includes('boxSizing: "border-box"'), "Homepage hero containers must use border-box sizing to avoid mobile overflow.");
   expect(!heroSource.includes("scroll-snap-type") && !heroSource.includes("overflow-x: auto"), "Homepage hero must not hide module entries behind horizontal scrolling.");
