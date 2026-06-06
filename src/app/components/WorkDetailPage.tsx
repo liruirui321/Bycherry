@@ -4886,6 +4886,12 @@ function CrisprContent() {
       status: quizChoice === activeQuiz.answer ? "已通过" : "待完成",
     },
   ];
+  const crisprStartPath = [
+    { label: "找 PAM", body: `${pamSequence} · ${pamSequence === "AGG" ? "入口成立" : "待核查"}`, color: "var(--cherry-peach-light)" },
+    { label: "判 guide", body: `${activeGuide.name} · ${activeGuide.score}% · ${computedMismatches.length} 个错配`, color: "var(--cherry-blue-light)" },
+    { label: "看剪切", body: activeGuide.score >= 60 ? `第 ${cutIndex + 1} 位，PAM 上游 ${cutDistanceFromPam} nt` : "匹配不足，不剪切", color: "var(--cherry-yellow-light)" },
+    { label: "核风险", body: `${guideDecision.level} · ${effectiveRepair.title}`, color: "var(--cherry-sage-light)" },
+  ];
   const crisprLearnerAnswers = {
     decision: decisionDraft.trim(),
     evidence: evidenceDraft.trim(),
@@ -5299,6 +5305,18 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         </aside>
       </div>
 
+      <div className="crispr-start-path-strip" role="list" aria-label="CRISPR 判读路径" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.5rem" }}>
+        {crisprStartPath.map((item, index) => (
+          <div className="crispr-start-path-card" key={item.label} role="listitem" style={{ background: item.color, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 10, padding: "0.56rem", display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.42rem", alignItems: "start", minHeight: 72 }}>
+            <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900 }}>{index + 1}</span>
+            <span style={{ display: "grid", gap: "0.14rem", minWidth: 0 }}>
+              <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.2 }}>{item.label}</strong>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 800 }}>{item.body}</span>
+            </span>
+          </div>
+        ))}
+      </div>
+
       <details className="crispr-support-pack-details crispr-compact-details" style={{ background: "transparent", border: "none", borderRadius: 0, padding: "0.2rem 0", boxShadow: "none" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>说明与记录</summary>
 
@@ -5464,7 +5482,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
               <span style={{ display: "flex", justifyContent: "space-between", gap: "0.58rem", alignItems: "start" }}>
                 <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem" }}>{field.label}</strong>
                 <span style={{ color: field.pass ? "var(--cherry-forest)" : "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900, whiteSpace: "nowrap" }}>
-                  {field.pass ? "已成句" : "待补全"}
+                  {field.pass ? "已成句" : "待填写"}
                 </span>
               </span>
               <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, fontWeight: 800 }}>{field.prompt}</span>
@@ -5633,6 +5651,10 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             #crispr-simulator .crispr-learner-record-grid {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
+
+            #crispr-simulator .crispr-start-path-strip {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
           }
 
           @media (max-width: 520px) {
@@ -5718,6 +5740,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             }
 
             #crispr-simulator .crispr-intro-grid,
+            #crispr-simulator .crispr-start-path-strip,
             #crispr-simulator .crispr-intro-details,
             #crispr-simulator .crispr-practice-panel,
             #crispr-simulator .crispr-result-check-panel,

@@ -1048,6 +1048,11 @@ function verifyCrisprLearnerScenarios() {
     { label: "copy risk audit button", text: "复制风险核查" },
     { label: "off-target audit copy", text: "guide 错配与脱靶" },
     { label: "risk audit report section", text: "6. 风险核查" },
+    { label: "visible CRISPR start path", text: "CRISPR 判读路径" },
+    { label: "CRISPR start path data", text: "crisprStartPath" },
+    { label: "CRISPR start path class", text: "crispr-start-path-strip" },
+    { label: "CRISPR start path cut step", text: "看剪切" },
+    { label: "CRISPR start path risk step", text: "核风险" },
     { label: "completion check data", text: "crisprCompletionChecks" },
     { label: "visible result check", text: "结果检查" },
     { label: "completion report section", text: "7. 完成验收" },
@@ -1078,6 +1083,7 @@ function verifyCrisprLearnerScenarios() {
   expect(Array.from(crisprSource.matchAll(/\bgoal:\s*"/g)).length >= 3, "CRISPR simulator should expose at least three learner scenario goals.");
   expect(crisprSource.includes('className="crispr-flow-panel"') && crisprSource.includes('gridTemplateColumns: "repeat(3, minmax(0, 1fr))"') && crisprSource.includes('minHeight: 42'), "CRISPR desktop flow control must stay as compact three-step buttons.");
   expect(crisprSource.includes('className="crispr-canvas-panel"') && crisprSource.includes('borderRadius: 12') && !crisprSource.includes('borderRadius: 22, overflow: "hidden", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)"'), "CRISPR canvas frame must stay compact instead of a heavy long card.");
+  expect(crisprSource.includes("#crispr-simulator .crispr-start-path-strip") && crisprSource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"') && crisprSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "CRISPR visible start path must stay compact across desktop and mobile.");
   expect(crisprSource.includes('<details className="crispr-quality-panel crispr-compact-details"') && crisprSource.includes('修复结果 · {effectiveRepair.title}') && !crisprSource.includes('className="crispr-quality-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem"'), "CRISPR repair result selector must stay folded and compact instead of a default-open long card.");
   expect(/className="crispr-intro-sequence-panel"[\s\S]{0,220}borderRadius: 12[\s\S]{0,120}padding: "0\.78rem"[\s\S]{0,160}boxShadow: "0 8px 18px/.test(crisprSource), "CRISPR intro sequence panel must stay compact.");
   expect(/className="crispr-intro-boundary-panel"[\s\S]{0,220}borderRadius: 12[\s\S]{0,120}padding: "0\.78rem"[\s\S]{0,160}boxShadow: "0 8px 18px/.test(crisprSource), "CRISPR intro boundary panel must stay compact.");
