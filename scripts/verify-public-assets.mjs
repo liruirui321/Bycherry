@@ -158,6 +158,10 @@ for (const illustration of retainedIllustrations) {
 const indexHtml = readRoot("index.html");
 const appSource = readRoot("src/app/App.tsx");
 const appMetadataSource = readRoot("src/app/siteMetadata.ts");
+const packageSource = readRoot("package.json");
+const readmeSource = readRoot("README.md");
+const domainDnsDocSource = readRoot("docs/domain-dns.md");
+const domainDnsVerifierSource = readRoot("scripts/verify-domain-dns.mjs");
 const staticIndexSource = readRoot("scripts/generate-static-index.mjs");
 const sitemapGeneratorSource = readRoot("scripts/generate-sitemap.mjs");
 const sitemapVerifierSource = readRoot("scripts/verify-sitemap.mjs");
@@ -167,6 +171,10 @@ const contentHrefs = getContentHrefs();
 const articleRoutes = contentRoutes.filter((route) => route.type !== "work");
 const workRoutes = contentRoutes.filter((route) => route.type === "work");
 expect(appSource.includes('from "./siteMetadata"'), "App.tsx must import runtime metadata from src/app/siteMetadata.ts.");
+expect(packageSource.includes('"verify:domain": "node scripts/verify-domain-dns.mjs"'), "package.json must expose a manual domain DNS verification script.");
+expect(domainDnsVerifierSource.includes('from "./site-metadata.mjs"') && domainDnsVerifierSource.includes("185.199.108.153") && domainDnsVerifierSource.includes("liruirui321.github.io"), "Domain DNS verifier must use shared metadata and GitHub Pages DNS targets.");
+expect(readmeSource.includes("npm run verify:domain") && readmeSource.includes("docs/domain-dns.md"), "README must point to the domain DNS diagnostic command and docs.");
+expect(domainDnsDocSource.includes("185.199.108.153") && domainDnsDocSource.includes("185.199.111.153") && domainDnsDocSource.includes("liruirui321.github.io"), "Domain DNS docs must list the GitHub Pages apex A records and www CNAME.");
 for (const exportName of ["siteTitle", "homeTitle", "siteDescription", "siteUrl", "socialImageUrl", "shareImageAlt"]) {
   expect(appMetadataSource.includes(`export const ${exportName}`), `src/app/siteMetadata.ts must export ${exportName}.`);
   expect(!new RegExp(`const\\s+${exportName}\\s*=`).test(appSource), `App.tsx must not redeclare ${exportName}; use src/app/siteMetadata.ts.`);

@@ -19,6 +19,7 @@
     "verify:generated": "node scripts/verify-generated-artifacts.mjs",
     "verify:links": "node scripts/verify-internal-links.mjs",
     "verify:public": "node scripts/verify-public-assets.mjs",
+    "verify:domain": "node scripts/verify-domain-dns.mjs",
     "verify:sitemap": "node scripts/verify-sitemap.mjs",
     "verify:wiring": "node scripts/verify-project-wiring.mjs",
     "dev": "vite"

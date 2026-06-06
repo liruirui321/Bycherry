@@ -1,17 +1,16 @@
 # By Cherry
 
-Popular-science personal homepage for `bycherry.me`, built with React, Vite, and Tailwind CSS.
-The app uses custom science visuals and local React components instead of a generated component library.
+Science learning and AI workspace for `bycherry.me`, built with React, Vite, and Tailwind CSS.
+The app opens directly into usable tools, simulations, reading routes, and learner records.
 
 ## Features
 
-- Clean popular-science creator homepage
-- Portfolio cards for science, course design, and AI tools
+- Compact first-screen content directory
 - Interactive gene expression visualization
-- Plant evolution timeline with classroom study cards
-- Research agent workspace, concept explainer, and CRISPR teaching simulator
-- Notes and research essay sections
-- Mailto-based contact form
+- Plant evolution timeline with evidence cards
+- Research agent workspace, concept explainer, and CRISPR simulator
+- `/reading` article library for learning-method and research-evidence routes
+- Static fallbacks for direct deep links
 
 ## Development
 
@@ -46,6 +45,7 @@ npm run verify:content
 npm run verify:a11y
 npm run verify:sitemap
 npm run verify:wiring
+npm run verify:domain
 npm run generate:index
 npm run generate:sitemap
 ```
@@ -57,6 +57,7 @@ Vercel rewrites are configured in `vercel.json`; Netlify fallback is in `public/
 `public/404.html` also preserves direct deep links for static hosts such as GitHub Pages.
 `public/CNAME` keeps the GitHub Pages custom domain set to `bycherry.me`.
 Search crawler hints live in `public/robots.txt` and `public/sitemap.xml`.
+Run `npm run verify:domain` if the deployed GitHub Pages workflow succeeds but `bycherry.me` still shows stale content or fails to load. The expected DNS records are documented in `docs/domain-dns.md`.
 
 ## Content Maintenance
 
