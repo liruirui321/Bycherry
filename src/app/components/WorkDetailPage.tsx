@@ -280,7 +280,7 @@ function PromptKitContent() {
     body: (reportDrafts[activePrompt.title] ?? [])[index] ?? "根据材料生成对应栏目，证据不足时标注未提供。",
   }));
   const reviewerQuestions = [
-    missingFields.length ? `需要先补充 ${missingFields.join("、")} 吗？` : "这些材料行是否就是你希望 Agent 重点引用的证据？",
+    missingFields.length ? `需要先补充 ${missingFields.join("、")} 吗？` : "这些材料行是否就是你希望重点引用的证据？",
     activePrompt.checks[0],
     activeMode.outputs.includes("待确认问题") ? "哪些问题需要放到人工复核清单里确认？" : "哪些结论必须保持保守表述？",
   ];
@@ -333,11 +333,11 @@ name: research-agent
 description: Use when a learner wants to turn research material into a traceable task route, evidence table, missing-field list, risk flags, reviewer questions, and a conservative report without inventing citations or conclusions.
 ---
 
-# Research Agent
+# Research Reading Assistant
 
 ## Role
 
-You are a research-learning agent for an adult learner. Help the learner organize research material into traceable evidence, cautious inferences, missing information, and next actions. Do not act as an automatic paper writer, citation generator, statistician, ethics reviewer, or final decision maker.
+You are a research-reading assistant for an adult learner. Help the learner organize research material into traceable evidence, cautious inferences, missing information, and next actions. Do not act as an automatic paper writer, citation generator, statistician, ethics reviewer, or final decision maker.
 
 ## Input
 
@@ -348,7 +348,7 @@ Ask for or infer these fields:
 - Material: abstract, methods, figure legend, results paragraph, design notes, reviewer comments, or draft text.
 - Learner goal: what the learner wants to understand, check, rewrite, or decide.
 - Risk concern: overclaiming, missing control, small sample size, weak statistics, citation mismatch, unclear terminology, or unknown.
-- Output format: evidence table, study record, report outline, revision plan, reviewer questions, or advanced JSON contract.
+- Output format: evidence table, study record, report outline, revision plan, reviewer questions, or structured handoff template.
 
 If the source boundary or material is missing, ask at most two short questions. If the learner continues without answering, label the source boundary as unknown and keep conclusions conservative.
 
@@ -763,27 +763,27 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
   const sourceGroundedSignals = [
     {
       title: "语义检索与报告生成",
-      source: "Elicit API",
-      body: "公开 API 文档把论文语义检索、临床试验检索和自动报告作为核心能力，说明科研学习工具需要可编排的 search/report 接口。",
+      source: "Elicit 文档",
+      body: "公开文档把论文语义检索、临床试验检索和自动报告作为核心能力，说明科研学习工具需要把检索、筛选和报告步骤拆清楚。",
       href: "https://docs.elicit.com/",
     },
     {
       title: "多步检索与筛选",
-      source: "Consensus Research Agent",
+      source: "Consensus 搜索文档",
       body: "Consensus 的 Pro/Deep 模式强调多步搜索、过滤、跨论文阅读和带引用回答，因此本工具把任务路由、过滤信号和证据字段前置。",
       href: "https://help.consensus.app/en/articles/9922660-how-to-search-best-practices",
     },
     {
       title: "参考文献核查",
-      source: "scite API",
-      body: "scite API 提供引用数据、citation tallies 和 reference check，说明科研工作流不能只生成总结，还要保留引用核查和风险标记。",
+      source: "scite 引用核查文档",
+      body: "scite 文档提供引用数据、citation tallies 和 reference check，说明科研工作流不能只生成总结，还要保留引用核查和风险标记。",
       href: "https://api.scite.ai/docs",
     },
   ];
   const productReferences = [
-    { title: "Elicit systematic review / API", href: "https://docs.elicit.com/" },
+    { title: "Elicit systematic review docs", href: "https://docs.elicit.com/" },
     { title: "Consensus search best practices", href: "https://help.consensus.app/en/articles/9922660-how-to-search-best-practices" },
-    { title: "scite API reference check", href: "https://api.scite.ai/docs" },
+    { title: "scite reference check docs", href: "https://api.scite.ai/docs" },
   ];
   const agentCards = [
     {

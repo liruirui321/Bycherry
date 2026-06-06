@@ -535,6 +535,7 @@ function verifyWorkJsonLdLearningOutcomes() {
     expect(!workDetailSource.includes(retiredWorkTailBlock), `Work detail pages should not reintroduce duplicate long related-module cards: ${retiredWorkTailBlock}.`);
   }
   expect(!footerSource.includes('navigateHomeSection'), "Footer should not repeat homepage section navigation.");
+  expect(appSource.includes('display: "flex"') && appSource.includes('flexDirection: "column"') && appSource.includes('flex: isHome ? "0 0 auto" : "1 0 auto"'), "App shell must use a column layout that pushes footer to the bottom on short non-home pages.");
   expect(footerSource.includes("externalLinks"), "Footer should keep compact external contact links.");
   expect(footerSource.includes("科学学习与 AI · 2026"), "Footer should stay as a compact brand line.");
   expect(footerSource.includes("footer-inner") && footerSource.includes("footer-links"), "Footer should expose mobile-safe layout hooks.");
@@ -574,9 +575,9 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "semantic search demand", text: "语义检索与报告生成" },
     { label: "multi-step search demand", text: "多步检索与筛选" },
     { label: "reference check demand", text: "参考文献核查" },
-    { label: "Elicit API source", text: "https://docs.elicit.com/" },
+    { label: "Elicit source", text: "https://docs.elicit.com/" },
     { label: "Consensus source", text: "https://help.consensus.app/en/articles/9922660-how-to-search-best-practices" },
-    { label: "scite API source", text: "https://api.scite.ai/docs" },
+    { label: "scite source", text: "https://api.scite.ai/docs" },
     { label: "copyable research record output", text: "researchRecordOutput" },
     { label: "research record copy action", text: "copyResearchRecord" },
     { label: "research record copy button", text: "复制研究记录" },
@@ -665,10 +666,10 @@ function verifyResearchAgentWorkbenchContract() {
     expect(!promptKitSource.includes(retiredResearchSummaryChrome), `Research Agent summaries should stay short and not expose status chrome: ${retiredResearchSummaryChrome}.`);
   }
   expect(promptKitSource.includes("{suggestedRoute.title}") && promptKitSource.includes("{routeConfidence}") && promptKitSource.includes("填写完成度 {learnerResearchReviewScore}/4"), "Research Agent expanded panels must keep route and learner-review status after summary chrome is removed.");
-  for (const requiredLearnerLabel of ["复制进阶结构", "复制结构", "复制返回模板", "进阶请求结构", "进阶输出结构", "返回模板与验收", "材料不会离开浏览器"]) {
+  for (const requiredLearnerLabel of ["复制进阶结构", "复制结构", "复制返回模板", "进阶请求结构", "进阶输出结构", "返回模板与验收", "材料不会离开浏览器", "Elicit 文档", "Consensus 搜索文档", "scite 引用核查文档"]) {
     expect(promptKitSource.includes(requiredLearnerLabel), `Research Agent workbench must keep learner-facing advanced-copy label: ${requiredLearnerLabel}`);
   }
-  for (const retiredTechnicalLabel of ["复制进阶 JSON", "复制 JSON", "复制契约", "复制返回格式", "进阶请求 JSON", "进阶输出字段", "返回格式与验收", "不调用 API"]) {
+  for (const retiredTechnicalLabel of ["复制进阶 JSON", "复制 JSON", "复制契约", "复制返回格式", "进阶请求 JSON", "进阶输出字段", "返回格式与验收", "不调用 API", "advanced JSON contract", "API JSON contract", "Elicit API", "scite API", "Elicit systematic review / API", "scite API reference check"]) {
     expect(!promptKitSource.includes(retiredTechnicalLabel), `Research Agent workbench must not expose technical implementation label: ${retiredTechnicalLabel}`);
   }
 
@@ -685,6 +686,7 @@ function verifyResearchAgentWorkbenchContract() {
   for (const text of [
     "name: research-agent",
     "description: Use when a learner wants to turn research material",
+    "# Research Reading Assistant",
     "## Role",
     "## Input",
     "## Workflow",
@@ -705,8 +707,12 @@ function verifyResearchAgentWorkbenchContract() {
     "Keep correlation, association, mechanism, causation, and speculation separate",
     "At least one evidence_item",
     "Next actions written as concrete checks",
+    "structured handoff template",
   ]) {
     expect(researchSkillSource.includes(text), `Public research agent SKILL.md is missing required content: ${text}`);
+  }
+  for (const retiredResearchSkillCopy of ["# Research Agent", "research-learning agent", "API JSON contract"]) {
+    expect(!researchSkillSource.includes(retiredResearchSkillCopy), `Public research agent SKILL.md must not expose retired technical copy: ${retiredResearchSkillCopy}`);
   }
 }
 

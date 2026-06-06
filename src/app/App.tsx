@@ -461,35 +461,39 @@ export default function App() {
         minHeight: "100vh",
         background: "var(--background)",
         fontFamily: "'Nunito', sans-serif",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <a className="skip-link" href="#main-content">
         跳到正文
       </a>
       <Nav />
-      {detailSlug ? (
-        <Suspense fallback={<RouteLoading />}>
-          <WorkDetailPage slug={detailSlug} />
-        </Suspense>
-      ) : canonicalNoteSlug ? (
-        <Suspense fallback={<RouteLoading />}>
-          <ArticleDetailPage kind="note" slug={canonicalNoteSlug} />
-        </Suspense>
-      ) : researchSlug ? (
-        <Suspense fallback={<RouteLoading />}>
-          <ArticleDetailPage kind="research" slug={researchSlug} />
-        </Suspense>
-      ) : isReadingLibrary ? (
-        <Suspense fallback={<RouteLoading />}>
-          <ArticleLibraryPage />
-        </Suspense>
-      ) : unknownPath ? (
-        <NotFoundPage />
-      ) : (
-        <main id="main-content" tabIndex={-1}>
-          <Hero />
-        </main>
-      )}
+      <div style={{ flex: isHome ? "0 0 auto" : "1 0 auto", minWidth: 0 }}>
+        {detailSlug ? (
+          <Suspense fallback={<RouteLoading />}>
+            <WorkDetailPage slug={detailSlug} />
+          </Suspense>
+        ) : canonicalNoteSlug ? (
+          <Suspense fallback={<RouteLoading />}>
+            <ArticleDetailPage kind="note" slug={canonicalNoteSlug} />
+          </Suspense>
+        ) : researchSlug ? (
+          <Suspense fallback={<RouteLoading />}>
+            <ArticleDetailPage kind="research" slug={researchSlug} />
+          </Suspense>
+        ) : isReadingLibrary ? (
+          <Suspense fallback={<RouteLoading />}>
+            <ArticleLibraryPage />
+          </Suspense>
+        ) : unknownPath ? (
+          <NotFoundPage />
+        ) : (
+          <main id="main-content" tabIndex={-1}>
+            <Hero />
+          </main>
+        )}
+      </div>
       {isHome ? null : <Footer />}
     </div>
   );
