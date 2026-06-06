@@ -181,6 +181,30 @@ export function ArticleDetailPage({ kind, slug }: { kind: ArticleKind; slug: str
         },
       ]
     : [];
+  const articleReadingSteps = article
+    ? [
+        {
+          label: "定位问题",
+          body: articleQuickStart?.step ?? actionSteps[0] ?? "先圈出正文要解决的一个具体问题。",
+          color: "var(--cherry-sage-light)",
+        },
+        {
+          label: "抓证据",
+          body: article.highlights[0] ?? checklist[0] ?? "从正文里找出能支撑判断的一条证据。",
+          color: "var(--cherry-blue-light)",
+        },
+        {
+          label: "写记录",
+          body: starterTemplate[0] ?? "把问题、证据、产出和下一步写进学习记录。",
+          color: "var(--cherry-yellow-light)",
+        },
+        {
+          label: "复盘边界",
+          body: articleQuickStart?.pitfall ?? pitfalls[0] ?? "标出这篇内容还不能直接推出什么。",
+          color: "var(--cherry-peach-light)",
+        },
+      ]
+    : [];
   const articlePracticePlan = article
     ? [
         { label: "5 分钟", body: articleQuickStart?.step ?? "先读摘要，圈出一个问题。" },
@@ -1697,6 +1721,19 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               ))}
             </div>
 
+            {articleReadingSteps.length ? (
+              <div className="article-reading-steps-strip" role="list" aria-label="文章阅读步骤" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem", margin: "-0.18rem 0 0.66rem" }}>
+                {articleReadingSteps.map((item) => (
+                  <div key={item.label} className="article-reading-step-card" role="listitem" style={{ display: "grid", gap: "0.2rem", minWidth: 0, background: item.color, border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem 0.52rem" }}>
+                    <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.18, fontWeight: 930 }}>{item.label}</strong>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.64rem", lineHeight: 1.34, fontWeight: 790, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                      {item.body}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+
             {articleQuickStart ? (
               <div style={{ background: "rgba(246,224,141,0.34)", border: "1px solid rgba(212,170,61,0.42)", borderRadius: 8, padding: "0.55rem 0.62rem", marginBottom: "0.72rem", display: "grid", gap: "0.42rem" }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
@@ -2555,6 +2592,17 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             #article-body-points p {
               font-size: 0.8rem !important;
               line-height: 1.48 !important;
+            }
+
+            .article-reading-steps-strip {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.34rem !important;
+              margin: -0.12rem 0 0.48rem !important;
+            }
+
+            .article-reading-step-card {
+              padding: 0.42rem !important;
+              border-radius: 7px !important;
             }
 
             .article-record-grid,
