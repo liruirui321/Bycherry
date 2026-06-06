@@ -196,13 +196,13 @@ function verifyWorkCardActions() {
   expect(worksSource.includes('title: "科研 Agent 工作台"'), "Research AI work card should be titled 科研 Agent 工作台.");
   expect(!worksSource.includes("科研助手 Prompt Kit"), "Visible work card title must not use the old Prompt Kit naming.");
   expect(heroSource.includes('id="works"') && heroSource.includes('aria-label="内容目录"'), "Hero must own the #works anchor and all-module directory.");
-  expect(heroSource.includes("hero-work-row") && !heroSource.includes("hero-work-open"), "Hero module entries must stay as compact clickable entries without repeated open pills.");
-  expect(heroSource.includes('className="hero-work-list"') && heroSource.includes('display: "flex"') && heroSource.includes('flexWrap: "wrap"'), "Homepage module entries must render as one compact first-screen directory, not repeated sections.");
-  expect(heroSource.includes('border: "none"') && heroSource.includes('borderLeft: `3px solid ${work.border}`') && !heroSource.includes("minHeight: 34") && !heroSource.includes("minHeight: 48") && !heroSource.includes("minHeight: 76") && !heroSource.includes("minHeight: 88"), "Homepage module entries must stay as short text links instead of long sticky-note cards.");
-  expect(!/\.hero-work-row\s*\{[\s\S]{0,240}width:\s*100%\s*!important/.test(heroSource), "Mobile homepage entries must not become full-width long boxes.");
+  expect(heroSource.includes("hero-entry-row") && !heroSource.includes("hero-work-open"), "Hero module entries must stay as compact clickable entries without repeated open pills.");
+  expect(heroSource.includes('className="hero-entry-grid"') && heroSource.includes('gridTemplateColumns: "repeat(2, minmax(0, 1fr))"'), "Homepage module entries must render as one compact first-screen directory, not repeated sections.");
+  expect(heroSource.includes('border: "none"') && heroSource.includes('borderLeft: `3px solid ${entry.border}`') && heroSource.includes("minHeight: 38") && !heroSource.includes("minHeight: 48") && !heroSource.includes("minHeight: 76") && !heroSource.includes("minHeight: 88"), "Homepage module entries must stay as short text links instead of long sticky-note cards.");
+  expect(!/\.hero-entry-row\s*\{[\s\S]{0,260}width:\s*100%\s*!important/.test(heroSource), "Mobile homepage entries must not become full-width long boxes.");
   expect(!heroSource.includes("hero-count") && !heroSource.includes("homeWorkStatus") && !heroSource.includes("hero-work-status"), "Homepage first-screen directory must not add duplicate count or status labels beside each entry.");
   expect(!heroSource.includes('import { notes } from "./Notes"') && !heroSource.includes('import { essays } from "./ResearchEssays"'), "Homepage first screen must not import article data just to create another entry group.");
-  expect(!heroSource.includes("hero-reading-library") && !heroSource.includes("阅读库 ·") && !heroSource.includes('href="/reading"'), "Homepage must not add a separate reading-library entry to the first screen.");
+  expect(!heroSource.includes("hero-reading-library") && !heroSource.includes("阅读库 ·") && heroSource.includes('href: "/reading"'), "Homepage may include one compact reading-library directory row, but not a separate repeated reading block.");
   expect(!heroSource.includes("hero-article-row") && !heroSource.includes("articleLinks.map((article)") && !heroSource.includes("const firstArticle = articleLinks[0]"), "Homepage must not expand article entries or jump to the first article.");
   expect(!heroSource.includes('role="group" aria-label="文章"'), "Homepage must not render all article links as a second always-visible entrance row.");
   expect(!heroSource.includes("{article.excerpt}") && !heroSource.includes("{article.body}") && !heroSource.includes("{article.readTime}") && !heroSource.includes("{article.date}"), "Homepage article entries must not expand into repeated article cards.");
@@ -462,17 +462,17 @@ function verifyWorkJsonLdLearningOutcomes() {
   expect(!heroSource.includes("{work.starter}") && !heroSource.includes("{work.success}"), "Homepage hero work cards must not repeat long starter or completion text.");
   expect(!heroSource.includes("{work.outputs[0]}"), "Homepage hero work cards must not repeat saved-output text.");
   expect(!heroSource.includes("hero-work-open"), "Homepage hero entries must not repeat a separate open pill inside every module.");
-  expect(heroSource.includes("aria-label={`打开${work.title}：${work.desc}`}"), "Homepage hero work cards must keep visual labels short while preserving descriptions for assistive labels.");
+  expect(heroSource.includes("aria-label={`打开${entry.title}：${entry.desc}`}"), "Homepage hero work cards must keep visual labels short while preserving descriptions for assistive labels.");
   expect(heroSource.includes('id="works"'), "Homepage #works anchor must point to the first-screen module directory instead of a duplicate section.");
   expect(heroSource.includes('aria-label="内容目录"'), "Homepage hero must label the first-screen module directory.");
-  expect(heroSource.includes("hero-work-row") && heroSource.includes('display: "inline-flex"') && heroSource.includes('border: "none"') && !heroSource.includes("hero-work-card"), "Homepage hero module entries must use one compact directory, not long repeated cards.");
-  expect(!heroSource.includes("hero-reading-library") && !heroSource.includes('href="/reading"') && !heroSource.includes("hero-article-row"), "Homepage hero must not repeat reading-library or article entrances on the first screen.");
+  expect(heroSource.includes("hero-entry-row") && heroSource.includes('display: "grid"') && heroSource.includes('border: "none"') && !heroSource.includes("hero-work-card"), "Homepage hero module entries must use one compact directory, not long repeated cards.");
+  expect(!heroSource.includes("hero-reading-library") && !heroSource.includes("hero-article-row") && heroSource.includes('href: "/reading"'), "Homepage hero may include one compact reading-library row but must not repeat article entrances on the first screen.");
   expect(!heroSource.includes("minHeight: 48") && !heroSource.includes("minHeight: 76") && !heroSource.includes("minHeight: 88") && !heroSource.includes("hero-work-summary"), "Homepage hero module entries must not use tall sticky-note cards.");
-  expect(heroSource.includes(".hero-work-list") && heroSource.includes("max-width: calc(50vw - 1.2rem) !important") && heroSource.includes("padding: 0.14rem 0.26rem !important"), "Homepage hero mobile module directory must remain short while fitting the visible viewport.");
+  expect(heroSource.includes(".hero-entry-grid") && heroSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") && heroSource.includes("padding: 0.38rem 0.42rem !important") && heroSource.includes(".hero-entry-action") && heroSource.includes("display: none !important"), "Homepage hero mobile module directory must remain short while fitting the visible viewport.");
   expect(heroSource.includes('boxSizing: "border-box"'), "Homepage hero containers must use border-box sizing to avoid mobile overflow.");
   expect(!heroSource.includes("scroll-snap-type") && !heroSource.includes("overflow-x: auto"), "Homepage hero must not hide module entries behind horizontal scrolling.");
   expect(heroSource.includes('import { getWorkToolHref, navigateClient, shouldUseClientNavigation } from "../navigation"'), "Homepage hero must use the direct-to-tool work href helper without duplicate home-section CTAs.");
-  expect(heroSource.includes("const toolHref = getWorkToolHref(work.href)") && heroSource.includes("href={toolHref}"), "Homepage first-screen module cards must link directly to work tools.");
+  expect(heroSource.includes("href: getWorkToolHref(work.href)") && heroSource.includes("href={entry.href}"), "Homepage first-screen module cards must link directly to work tools.");
   for (const retiredHeroBlock of ["sessionPlans", "materialRoutes", "heroModuleStats", "hero-session-copy-status", "hero-material-route-grid", "hero-actions", "hero-cta", "navigateHomeSection", "science learning lab", "完成标准，", "先做这个，"]) {
     expect(!heroSource.includes(retiredHeroBlock), `Homepage hero should stay short and not include retired duplicate block: ${retiredHeroBlock}.`);
   }

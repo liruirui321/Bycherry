@@ -85,9 +85,9 @@ expect(routePrefetchSource.includes('import("./components/ArticleDetailPage")'),
 expect(routePrefetchSource.includes('import("./components/ArticleLibraryPage")') && routePrefetchSource.includes('href === "/reading"'), "Route prefetch must warm the compact reading-library route.");
 expect(routePrefetchSource.includes("prefetchedRouteKinds"), "Route prefetch must dedupe repeated hover/focus requests.");
 expect(!appSource.includes("<Works") && !workCardsSource.includes("export function Works"), "Homepage work entries must live in the hero, with Works.tsx kept data-only.");
-expect(heroSource.includes("preloadRouteForHref(getWorkToolHref(work.href))"), "Hero work cards must prefetch direct-to-tool detail routes on hover or focus.");
+expect(heroSource.includes("preloadRouteForHref(entry.href)") && heroSource.includes("href: getWorkToolHref(work.href)"), "Hero work cards must prefetch direct-to-tool detail routes on hover or focus.");
 expect(!heroSource.includes('import { notes } from "./Notes"') && !heroSource.includes('import { essays } from "./ResearchEssays"'), "Hero directory must not import article data or restore repeated article entrance sections.");
-expect(!heroSource.includes('href="/reading"') && !heroSource.includes('preloadRouteForHref("/reading")') && !heroSource.includes("hero-reading-library"), "Hero must not add a repeated reading-library entrance on the first screen.");
+expect(heroSource.includes('href: "/reading"') && !heroSource.includes('href="/reading"') && !heroSource.includes('preloadRouteForHref("/reading")') && !heroSource.includes("hero-reading-library"), "Hero may include one compact reading-library row, but must not add a repeated reading-library entrance block.");
 expect(!noteCardsSource.includes("export function Notes") && !noteCardsSource.includes("note-card"), "Notes.tsx must stay data-only so old homepage card code is not bundled.");
 expect(!researchCardsSource.includes("export function ResearchEssays") && !researchCardsSource.includes("research-essay-card"), "ResearchEssays.tsx must stay data-only so old homepage card code is not bundled.");
 expect(!navSource.includes("preloadRouteForHref") && !navSource.includes("nav-link"), "Navigation must not keep prefetch wiring for removed repeated homepage entries.");
