@@ -1278,8 +1278,11 @@ function verifyLearnerProductPositioning() {
 
   const navSource = read("src/app/components/Nav.tsx");
   const appSource = read("src/app/App.tsx");
+  const heroSource = read("src/app/components/Hero.tsx");
+  const themeSource = read("src/styles/theme.css");
   expect(appSource.includes('href="/#works"') && appSource.includes('linkText="回到内容目录"') && appSource.includes('navigateClient("/#works")'), "App 404 page must return to the shared content directory.");
   expect(!appSource.includes("回到首页") && !appSource.includes('href="/#top"'), "App 404 page must not send users to a generic home/top target.");
+  expect(!heroSource.includes('id="top"') && !themeSource.includes("#top"), "Homepage must not keep a generic top anchor after routing all returns to the content directory.");
   expect(!appSource.includes("<About") && !appSource.includes('from "./components/About"'), "Homepage should not render a separate About section.");
   expect(!existsSync(resolve(root, "src/app/components/About.tsx")), "About component should stay removed so homepage remains a short content directory.");
   expect(navSource.includes('import { navigateClient, shouldUseClientNavigation } from "../navigation"'), "Navigation logo must keep client-side home navigation.");

@@ -12,7 +12,7 @@ export function Hero() {
 
   return (
     <section
-      id="top"
+      className="hero-shell"
       aria-labelledby="hero-heading"
       style={{
         fontFamily: "'Nunito', sans-serif",
@@ -88,7 +88,7 @@ export function Hero() {
 
       <style>{`
         @media (max-width: 860px) {
-          #top {
+          .hero-shell {
             padding: 0.5rem 1rem 0.52rem !important;
           }
 
