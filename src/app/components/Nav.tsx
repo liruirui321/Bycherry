@@ -30,11 +30,11 @@ export function Nav() {
       >
         <a
           className="nav-logo"
-          href="/#top"
+          href="/#works"
           onClick={(event) => {
             if (!shouldUseClientNavigation(event)) return;
             event.preventDefault();
-            navigateClient("/#top");
+            navigateClient("/#works");
           }}
           style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}
         >

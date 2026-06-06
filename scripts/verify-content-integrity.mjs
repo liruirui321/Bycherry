@@ -1283,8 +1283,9 @@ function verifyLearnerProductPositioning() {
   expect(!appSource.includes("<About") && !appSource.includes('from "./components/About"'), "Homepage should not render a separate About section.");
   expect(!existsSync(resolve(root, "src/app/components/About.tsx")), "About component should stay removed so homepage remains a short content directory.");
   expect(navSource.includes('import { navigateClient, shouldUseClientNavigation } from "../navigation"'), "Navigation logo must keep client-side home navigation.");
+  expect(navSource.includes('href="/#works"') && navSource.includes('navigateClient("/#works")') && !navSource.includes('href="/#top"') && !navSource.includes('navigateClient("/#top")'), "Navigation logo must return to the content directory instead of a generic top anchor.");
   expect(!navSource.includes('className="nav-links"') && !navSource.includes('className="nav-link"'), "Navigation must not repeat homepage content/contact entries above the first-screen directory.");
-  for (const retiredNavEntry of ['label: "内容"', 'label: "联系"', 'href: "/#works"', 'href: "/#contact"', 'aria-current']) {
+  for (const retiredNavEntry of ['label: "内容"', 'label: "联系"', 'href: "/#contact"', 'aria-current']) {
     expect(!navSource.includes(retiredNavEntry), `Navigation should not reintroduce repeated homepage entry: ${retiredNavEntry}.`);
   }
   expect(appSource.includes("{isHome ? null : <Footer />}"), "Homepage should not render the footer so the first screen stays short and content-only.");
