@@ -310,7 +310,7 @@ function PromptKitContent() {
       action: "写明哪些结论由材料支持，哪些只是推测，哪些必须回到原文或实验验证。",
     },
   ];
-  const citationAuditOutput = `【科研 Agent 引用核查记录】
+  const citationAuditOutput = `【科研学习引用核查记录】
 任务：${activePrompt.title}
 工作模式：${activeMode.title}
 推荐路由：${suggestedRoute.title}
@@ -549,7 +549,7 @@ If any gate is missing, add it before the final answer.`;
     acceptance_checks: acceptanceChecks,
   };
   const agentResponseJson = JSON.stringify(agentResponseContract, null, 2);
-  const localPreviewOutput = `【本地 Agent 预览】
+  const localPreviewOutput = `【本地预览】
 任务：${activePrompt.title}
 工作模式：${activeMode.title}
 材料状态：${materialText ? `${materialLines.length} 行，${materialText.length} 字符` : "待填写材料"}
@@ -574,7 +574,7 @@ ${apiOutputFields.join(", ")}
 六、引用核查
 ${citationAuditItems.map((item, index) => `${index + 1}. ${item.label}：${item.status}。${item.evidence}`).join("\n")}
 
-七、API 请求 JSON
+七、进阶请求 JSON
 ${agentRequestJson}
 
 八、返回格式
@@ -592,7 +592,7 @@ ${reviewerQuestions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 2. 暂不采信的结论：${filledLearnerResearchReview.unsupportedClaim}
 3. 优先回查来源：${filledLearnerResearchReview.citationToVerify}
 4. 下一步动作：${filledLearnerResearchReview.nextAction}`;
-  const researchRecordOutput = `【科研 Agent 研究记录】
+  const researchRecordOutput = `【科研学习研究记录】
 任务：${activePrompt.title}
 工作模式：${activeMode.title}
 材料状态：${materialText ? `${materialLines.length} 行，${materialText.length} 字符` : "待填写材料"}
@@ -649,7 +649,7 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
     { title: "证据表", body: "把原文证据、合理推断、缺失信息和风险提醒拆开，要求每个结论都能回到材料行。" },
     { title: "质控闸门", body: "在生成报告前先检查样本、分组、结果证据、统计和人工复核问题，材料不足时不输出强结论。" },
     { title: "报告框架", body: "生成可复制的复核摘要、论文修改建议、图表解读报告、审稿回复结构或术语统一表。" },
-    { title: "API 契约", body: "定义请求 JSON、返回字段和验收条件，后续接模型时仍保持可追踪、可复核、可拒绝。" },
+    { title: "进阶接入", body: "定义请求 JSON、返回字段和验收条件，后续接模型时仍保持可追踪、可复核、可拒绝。" },
   ];
   const marketSignals = [
     {
@@ -665,7 +665,7 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
       body: "AI 写作容易出现引用错配或凭空引用，因此外部模型返回也要保留 citation_check 和 reviewer_questions，而不是直接输出终稿。",
     },
     {
-      title: "多步 Agent 适合做研究助理，不适合替代作者",
+      title: "多步工具适合做研究助理，不适合替代作者",
       body: "任务规划、阅读、分析和报告可以自动化一部分，但研究判断、实验伦理、统计解释和最终署名仍必须由人负责。",
     },
   ];
@@ -751,7 +751,7 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
       body: "任务选择、材料模板、模式切换、路由建议、本地预览、任务包复制和进阶接入格式。",
     },
     {
-      title: "API 接入契约",
+      title: "进阶接入格式",
       body: "复制进阶 JSON 后可以接入外部模型，返回字段必须包含 evidence_items、missing_fields、risk_flags 和 final_report。",
     },
     {
@@ -763,7 +763,7 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
     {
       title: "语义检索与报告生成",
       source: "Elicit API",
-      body: "公开 API 文档把论文语义检索、临床试验检索和自动报告作为核心能力，说明科研 Agent 需要可编排的 search/report 接口。",
+      body: "公开 API 文档把论文语义检索、临床试验检索和自动报告作为核心能力，说明科研学习工具需要可编排的 search/report 接口。",
       href: "https://docs.elicit.com/",
     },
     {
@@ -787,10 +787,10 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
   const agentCards = [
     {
       title: "当前版本",
-      body: "能直接使用：本地生成模型指令、任务包、证据边界、验收清单和 API 契约；材料只在浏览器里编辑，不上传，也不调用 API。",
+      body: "能直接使用：本地生成模型指令、任务包、证据边界、验收清单和进阶接入格式；材料只在浏览器里编辑，不上传，也不调用 API。",
     },
     {
-      title: "API 接入方式",
+      title: "进阶接入方式",
       body: "复制进阶 JSON 交给外部模型执行，返回内容必须按契约拆成证据、推断、风险、待核查点和汇报摘要。",
     },
     {
@@ -817,7 +817,7 @@ ${activeMode.title}：${activeMode.instruction}
 
 【质量要求】
 ${activePrompt.checks.map((check, index) => `${index + 1}. ${check}`).join("\n")}`;
-  const taskPackOutput = `【科研 Agent 任务包】
+  const taskPackOutput = `【科研学习任务包】
 任务类型：${activePrompt.title}
 适用材料：${activePrompt.input}
 工作模式：${activeMode.title}
@@ -910,7 +910,7 @@ ${localPreviewOutput}`;
       setCopiedResearchRecord(false);
       setCopiedCitationAudit(false);
       setCopiedResearchSkill(false);
-      setCopyStatus("API 请求 JSON 已复制到剪贴板。");
+      setCopyStatus("进阶请求 JSON 已复制到剪贴板。");
       window.setTimeout(() => setCopiedJson(false), 1400);
       return;
     }
@@ -1064,7 +1064,7 @@ ${localPreviewOutput}`;
       setCopiedResponseJson(false);
       setCopiedResearchRecord(false);
       setCopiedCitationAudit(false);
-      setCopyStatus("科研 Agent skill 已复制到剪贴板。");
+      setCopyStatus("研究助手 Skill 已复制到剪贴板。");
       window.setTimeout(() => setCopiedResearchSkill(false), 1400);
       return;
     }
@@ -1141,7 +1141,7 @@ ${localPreviewOutput}`;
 
             <details className="prompt-workflow-details" style={{ background: "var(--muted)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.58rem", marginBottom: "0.9rem" }}>
               <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.82rem", cursor: "pointer" }}>任务流程</summary>
-              <div className="prompt-workflow-grid" role="group" aria-label="科研 Agent 任务流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.5rem", marginTop: "0.58rem" }}>
+              <div className="prompt-workflow-grid" role="group" aria-label="科研学习任务流程" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.5rem", marginTop: "0.58rem" }}>
               {workflowSteps.map((item, index) => (
                 <div key={item.label} style={{ background: item.color, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.58rem", minHeight: 92, position: "relative", overflow: "hidden" }}>
                   <svg width="72" height="58" viewBox="0 0 72 58" fill="none" aria-hidden="true" focusable="false" style={{ position: "absolute", right: -8, bottom: -8, opacity: 0.72 }}>
@@ -1187,7 +1187,7 @@ ${localPreviewOutput}`;
                 <div>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>练习案例</div>
                   <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem" }}>
-                    先载入一份完整材料，观察 Agent 如何判断任务、证据边界和返回字段。
+                    先载入一份完整材料，观察工作台如何判断任务、证据边界和返回字段。
                   </div>
                 </div>
                 <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", fontWeight: 900 }}>
@@ -1299,7 +1299,7 @@ ${localPreviewOutput}`;
             <div className="research-agent-preview-panel" style={{ background: hasRunPreview ? "var(--cherry-sage-light)" : "transparent", border: hasRunPreview ? "1.5px solid rgba(93,140,101,0.32)" : "none", borderRadius: hasRunPreview ? 8 : 0, padding: hasRunPreview ? "0.68rem" : 0, marginBottom: hasRunPreview ? "0.62rem" : "0.42rem", display: "grid", gap: hasRunPreview ? "0.52rem" : "0.28rem" }}>
               <div className="research-agent-preview-header" style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
                 <div style={{ display: hasRunPreview ? "block" : "none" }}>
-                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>本地 Agent 预览</div>
+                  <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>本地预览</div>
                   <div className="research-agent-preview-copy" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.5, marginTop: "0.18rem" }}>
                     不调用 API，只根据当前材料做任务路由和证据边界预判。
                   </div>
@@ -1354,7 +1354,7 @@ ${localPreviewOutput}`;
                     <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem" }}>
                       <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>证据边界</strong>
                       <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.55, fontWeight: 800 }}>
-                        {missingFields.length ? `当前还缺少 ${missingFields.join("、")}，Agent 只能给出任务框架，不能直接生成强结论。` : "材料已具备进入模型分析的基本线索，但输出仍需要逐条回查原文、图表和实验设计。"}
+                        {missingFields.length ? `当前还缺少 ${missingFields.join("、")}，只能先生成任务框架，不能直接给出强结论。` : "材料已具备进入模型分析的基本线索，但输出仍需要逐条回查原文、图表和实验设计。"}
                       </p>
                     </div>
                   </div>
@@ -1379,7 +1379,7 @@ ${localPreviewOutput}`;
                     </code>
                   </div>
                   <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem" }}>
-                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>API 输出字段</strong>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>进阶输出字段</strong>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: "0.36rem" }}>
                       {apiOutputFields.map((field) => (
                         <span key={field} style={{ background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.16rem 0.44rem", color: "var(--cherry-forest)", fontSize: "0.66rem", fontWeight: 900 }}>
@@ -1389,7 +1389,7 @@ ${localPreviewOutput}`;
                     </div>
                   </div>
                   <div style={{ background: "rgba(250,247,241,0.76)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.66rem" }}>
-                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>API 请求 JSON</strong>
+                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.42rem" }}>进阶请求 JSON</strong>
                     <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--card)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.6rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.66rem", lineHeight: 1.5, maxHeight: 220, overflow: "auto" }}>
                       {agentRequestJson}
                     </code>
@@ -1500,9 +1500,9 @@ ${localPreviewOutput}`;
       </div>
 
       <details className="research-agent-reference-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>说明与边界 · 路由、API、Skill</summary>
+        <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>进阶设置 · 路由、接入、Skill</summary>
         <details className="research-agent-status-details research-agent-compact-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
-          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>版本状态与 API 边界</summary>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>版本状态与接入边界</summary>
           <div className="research-agent-status-strip" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.48rem" }}>
             {agentCards.map((card) => (
               <div key={card.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.52rem" }}>
@@ -1513,10 +1513,10 @@ ${localPreviewOutput}`;
           </div>
         </details>
         <details className="research-agent-skill-details research-agent-compact-details" style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.62rem" }}>
-          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>科研 Agent skill</summary>
+          <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>研究助手 Skill</summary>
           <div className="research-agent-skill-panel" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto auto", gap: "0.65rem", alignItems: "center" }}>
             <div>
-              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.84rem", marginBottom: "0.24rem" }}>科研 Agent skill</strong>
+              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.84rem", marginBottom: "0.24rem" }}>研究助手 Skill</strong>
               <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.55, fontWeight: 800 }}>把任务路由、证据表、缺失字段、风险标记、引用核查和复核问题固定成一套可复用协议。</span>
             </div>
             <a href="/skills/research-agent/SKILL.md" className="research-agent-skill-link" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.24)", borderRadius: 999, padding: "0.48rem 0.82rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem", textDecoration: "none", whiteSpace: "nowrap" }}>
@@ -1531,7 +1531,7 @@ ${localPreviewOutput}`;
           <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", fontWeight: 900, cursor: "pointer" }}>任务路由速查</summary>
           <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "baseline", flexWrap: "wrap" }}>
             <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem" }}>任务路由速查</strong>
-            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 900 }}>先判断材料类型，再决定让 Agent 做抽取、核查、改写还是回应。</span>
+            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 900 }}>先判断材料类型，再决定用哪种流程做抽取、核查、改写还是回应。</span>
           </div>
           <div className="research-agent-route-list" style={{ display: "grid", gap: "0.36rem" }}>
             {taskRouteRecipes.map((item) => (

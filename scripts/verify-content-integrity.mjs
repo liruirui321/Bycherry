@@ -576,7 +576,7 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "skill prompt contract", text: "researchAgentSkillPrompt" },
     { label: "copyable research skill prompt", text: "copyResearchAgentSkill" },
     { label: "research skill copy state", text: "copiedResearchSkill" },
-    { label: "research skill visible panel", text: "科研 Agent skill" },
+    { label: "research skill visible panel", text: "研究助手 Skill" },
     { label: "public research skill document link", text: "/skills/research-agent/SKILL.md" },
     { label: "research skill copy button", text: "复制 Skill" },
     { label: "research skill responsive panel", text: "research-agent-skill-panel" },
@@ -602,6 +602,8 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "implementation roadmap heading", pattern: /落地层级/ },
     { label: "already-landed project copy", pattern: /当前已落地/ },
     { label: "long top explanation panel", pattern: /research-agent-top-panel|这个工作台直接提供/ },
+    { label: "visible old agent labels", pattern: /本地 Agent 预览|科研 Agent 任务包|科研 Agent 研究记录|科研 Agent 引用核查记录|让 Agent|Agent 如何|Agent 只能/ },
+    { label: "visible old API labels", pattern: /API 输出字段|API 请求 JSON|API 契约|API 接入契约|说明与边界 · 路由、API、Skill/ },
   ];
 
   for (const item of requiredWorkbenchFeatures) {
@@ -1255,7 +1257,7 @@ function verifyLearnerProductPositioning() {
     "内容目录",
     "基因表达可视化",
     "概念解释生成器",
-    "科研 Agent",
+    "科研学习工作台",
     "文章",
   ];
   const retiredProductPatterns = [
