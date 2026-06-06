@@ -436,6 +436,10 @@ function verifyArticleOutcomeSnapshot() {
   expect(learningRecordTextSource.includes("待完善") && !learningRecordTextSource.includes('item.pass ? "可用" : "待补充"'), "Copied article learning-record quality checks must use learner-facing improvement language.");
   expect(/className="article-practice-pack-details article-compact-tool-details"[\s\S]{0,240}background: "transparent"[\s\S]{0,120}border: "none"[\s\S]{0,120}boxShadow: "none"/.test(articleSource), "Article practice pack wrapper must stay a lightweight folded row instead of a nested framed card.");
   expect(!articleSource.includes("练习、模板与记录 · {practicePackItemCount} 项"), "Article practice pack summary must not expose item-count chrome.");
+  for (const retiredArticleSummaryChrome of ["证据四格卡 · 完成度", "科学故事骨架 · 完成度", "鉴定证据链表 · 完成度", "项目证据表 · 完成度", "AI 创作生成记录表 · 完成度", "科研问题转译卡 · 完成度", "AI 学习材料质检表 · 完成度", "AI 质检提示词包 ·", "上手步骤 ·", "检查清单 ·", "避坑提醒 ·", "读完填写 · 完成度"]) {
+    expect(!articleSource.includes(retiredArticleSummaryChrome), `Article details summaries should stay short and not expose count/status chrome: ${retiredArticleSummaryChrome}.`);
+  }
+  expect(articleSource.includes("填写完成度：{articleRecordScore}/4") && articleSource.includes("完成度 {evidenceChainScore}/4") && articleSource.includes("完成度 {aiMaterialAuditScore}/6"), "Article detail expanded panels must keep useful completion feedback after removing summary count chrome.");
   expect(articleSource.includes("min-height: 64px !important"), "Article detail mobile learning record textareas must stay compact.");
   expect(!articleSource.includes('articleReadingTaskPackCards.map((item, index) => (') && !articleSource.includes('minHeight: 136'), "Article detail task pack must not render a front-loaded five-card grid before the body.");
   for (const retiredArticleHeaderBlock of ["function ArticleIllustration", "article-illustration-stamp", "paddingRight: 162", "padding-right: 10.5rem", "articleReadingTaskPackCards", "readingTaskPackText", "copyReadingTaskPack", "copiedReadingTaskPack", "目标是带走可执行材料，而不是只浏览", "先做、抓证据、留产出、验收、接着做", "【阅读任务包】", "已复制任务包", "复制任务包", "已复制行动包"]) {

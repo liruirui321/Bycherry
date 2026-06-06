@@ -1712,7 +1712,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {evidenceChainBuilderEnabled ? (
               <details className="plant-evidence-chain-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
-                <summary>证据四格卡 · 完成度 {evidenceChainScore}/4</summary>
+                <summary>证据四格卡</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>证据四格卡</div>
@@ -1759,7 +1759,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {genomeStoryBuilderEnabled ? (
               <details className="genome-story-frame-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
-                <summary>科学故事骨架 · 完成度 {genomeStoryScore}/6</summary>
+                <summary>科学故事骨架</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>科学故事骨架</div>
@@ -1806,7 +1806,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {barcodeEvidenceBuilderEnabled ? (
               <details className="barcode-evidence-table-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
-                <summary>鉴定证据链表 · 完成度 {barcodeEvidenceScore}/6</summary>
+                <summary>鉴定证据链表</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>鉴定证据链表</div>
@@ -1853,7 +1853,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {projectEvidenceBuilderEnabled ? (
               <details className="project-evidence-table-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
-                <summary>项目证据表 · 完成度 {projectEvidenceScore}/6</summary>
+                <summary>项目证据表</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>项目证据表</div>
@@ -1900,7 +1900,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {creationRunBuilderEnabled ? (
               <details className="creation-run-record-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
-                <summary>AI 创作生成记录表 · 完成度 {creationRunScore}/6</summary>
+                <summary>AI 创作生成记录表</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>AI 创作生成记录表</div>
@@ -1947,7 +1947,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {researchQuestionBuilderEnabled ? (
               <details className="research-question-card-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
-                <summary>科研问题转译卡 · 完成度 {researchQuestionScore}/6</summary>
+                <summary>科研问题转译卡</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>科研问题转译卡</div>
@@ -1994,7 +1994,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {aiMaterialAuditBuilderEnabled ? (
               <details className="ai-material-audit-table-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
-                <summary>AI 学习材料质检表 · 完成度 {aiMaterialAuditScore}/6</summary>
+                <summary>AI 学习材料质检表</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>AI 学习材料质检表</div>
@@ -2223,7 +2223,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {aiMaterialAuditPrompts.length ? (
               <details className="article-compact-tool-details ai-material-audit-prompt-details" style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.22)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
-                <summary>AI 质检提示词包 · {aiMaterialAuditPrompts.length} 个检查</summary>
+                <summary>AI 质检提示词包</summary>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>AI 质检提示词包</div>
@@ -2255,7 +2255,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {actionSteps.length ? (
               <details id="article-primary-action" className="article-compact-tool-details article-primary-action-details" tabIndex={-1} style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(93,140,101,0.22)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
-                <summary>上手步骤 · {actionSteps.length} 步</summary>
+                <summary>上手步骤</summary>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
                   <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>上手步骤</div>
                   <button type="button" onClick={copyActionPack} aria-label={`复制${article.title}的行动包`} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.34rem 0.68rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
@@ -2277,7 +2277,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {checklist.length ? (
               <details className="article-compact-tool-details article-checklist-details" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.08)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
-                <summary>检查清单 · {checklist.length} 项</summary>
+                <summary>检查清单</summary>
                 <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem", marginBottom: "0.65rem" }}>检查清单</div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.55rem" }}>
                   {checklist.map((item) => (
@@ -2292,7 +2292,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {pitfalls.length ? (
               <details className="article-compact-tool-details article-pitfalls-details" style={{ background: "var(--cherry-peach-light)", border: "1.5px solid rgba(181,80,51,0.18)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
-                <summary>避坑提醒 · {pitfalls.length} 条</summary>
+                <summary>避坑提醒</summary>
                 <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem", marginBottom: "0.65rem" }}>避坑提醒</div>
                 <div style={{ display: "grid", gap: "0.55rem" }}>
                   {pitfalls.map((item, index) => (
@@ -2324,7 +2324,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
 
             {articleRecordFields.length ? (
               <details className="article-record-panel article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(58,92,62,0.18)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
-                <summary>读完填写 · 完成度 {articleRecordScore}/4</summary>
+                <summary>读完填写</summary>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
                   <div>
                     <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.9rem" }}>读完填写</div>
