@@ -373,12 +373,121 @@ function ribosomePeptideExitPoint(ribosomeCenter: Point) {
 
 function peptideBeadPoint(exit: Point, index: number) {
   const points = [
-    { x: exit.x + 15, y: exit.y + 9 },
-    { x: exit.x + 38, y: exit.y + 21 },
-    { x: exit.x + 63, y: exit.y + 10 },
-    { x: exit.x + 87, y: exit.y + 27 },
+    { x: exit.x + 18, y: exit.y - 2 },
+    { x: exit.x + 45, y: exit.y - 14 },
+    { x: exit.x + 72, y: exit.y - 3 },
+    { x: exit.x + 99, y: exit.y - 17 },
   ];
   return points[index] ?? points[points.length - 1];
+}
+
+function CoupledExpressionLens({
+  transcriptionOn,
+  canTranslate,
+  transcriptionProgress,
+  ribosomeProgress,
+  peptideCount,
+  activeCodon,
+  prefersReducedMotion,
+}: {
+  transcriptionOn: boolean;
+  canTranslate: boolean;
+  transcriptionProgress: number;
+  ribosomeProgress: number;
+  peptideCount: number;
+  activeCodon: (typeof codons)[number] | null;
+  prefersReducedMotion: boolean;
+}) {
+  const lensOrigin = { x: 662, y: 408 };
+  const polymeraseX = 62 + clamp01(transcriptionProgress) * 116;
+  const lensMrnaPath = [
+    { x: 28, y: 102 },
+    { x: 66, y: 123 },
+    { x: 108, y: 82 },
+    { x: polymeraseX, y: 96 },
+  ];
+  const readableProgress = canTranslate ? Math.max(0.06, Math.min(0.86, ribosomeProgress * 0.74 + 0.08)) : 0.06;
+  const ribosomePoint = pointOnPolyline(lensMrnaPath, readableProgress);
+  const peptideStart = { x: ribosomePoint.x + 29, y: ribosomePoint.y - 19 };
+  const activePeptides = codons.slice(0, peptideCount);
+
+  return (
+    <g className="gene-coupled-expression-lens" transform={`translate(${lensOrigin.x} ${lensOrigin.y}) scale(1.14)`}>
+      <rect width={224} height={158} rx={22} fill="rgba(250,247,241,0.88)" stroke="rgba(94,68,42,0.16)" strokeWidth={1.6} />
+      <text x={16} y={24} fill="var(--cherry-warm-brown)" fontSize={12} fontWeight={930}>
+        边转录边翻译放大镜
+      </text>
+      <text x={16} y={41} fill="var(--cherry-warm-mid)" fontSize={9.5} fontWeight={850}>
+        3' 端跟聚合酶，5' 端先被核糖体读取
+      </text>
+
+      <line x1={22} y1={64} x2={194} y2={64} stroke="rgba(122,175,200,0.42)" strokeWidth={8} strokeLinecap="round" />
+      <line x1={22} y1={74} x2={194} y2={74} stroke="rgba(184,68,51,0.24)" strokeWidth={8} strokeLinecap="round" />
+      <text x={24} y={58} fill="var(--cherry-warm-mid)" fontSize={8.5} fontWeight={900}>
+        DNA
+      </text>
+
+      <g transform={`translate(${polymeraseX} 69)`} opacity={transcriptionOn ? 1 : 0.38}>
+        <ellipse rx={24} ry={17} fill="var(--cherry-blue-light)" stroke="var(--cherry-blue)" strokeWidth={2.2} />
+        <circle cx={4} cy={24} r={5.5} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={1.7} />
+        <text textAnchor="middle" y={4} fill="var(--cherry-warm-brown)" fontSize={7.6} fontWeight={930}>
+          RNA pol
+        </text>
+      </g>
+
+      <path d={fullPolylinePath(lensMrnaPath)} fill="none" stroke="rgba(184,68,51,0.16)" strokeWidth={13} strokeLinecap="round" strokeLinejoin="round" opacity={transcriptionOn ? 1 : 0.35} />
+      <path d={fullPolylinePath(lensMrnaPath)} fill="none" stroke="var(--cherry-red)" strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" opacity={transcriptionOn ? 1 : 0.35} />
+      <path d={partialPolylinePath(lensMrnaPath, Math.max(readableProgress, 0.16))} fill="none" stroke="var(--cherry-forest)" strokeWidth={3.2} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="6 6" opacity={canTranslate ? 0.92 : 0.12} />
+      <text x={20} y={122} fill="var(--cherry-red)" fontSize={9} fontWeight={930}>
+        5' 先露出
+      </text>
+      <text x={polymeraseX + 9} y={109} fill="var(--cherry-red)" fontSize={9} fontWeight={930}>
+        3'
+      </text>
+
+      <g transform={`translate(${ribosomePoint.x} ${ribosomePoint.y})`} opacity={canTranslate ? 1 : 0.32}>
+        <ellipse rx={28} ry={18} fill="var(--cherry-peach-light)" stroke="var(--cherry-peach)" strokeWidth={2.3} />
+        <rect x={-22} y={4} width={44} height={13} rx={6.5} fill="rgba(250,247,241,0.92)" stroke="rgba(94,68,42,0.12)" strokeWidth={1} />
+        <circle cx={23} cy={-11} r={4.8} fill="var(--cherry-forest)" stroke="#FAF7F1" strokeWidth={1.6} />
+        <text textAnchor="middle" y={-2} fill="var(--cherry-warm-brown)" fontSize={7.6} fontWeight={930}>
+          核糖体
+        </text>
+        <text textAnchor="middle" y={14} fill="var(--cherry-forest)" fontSize={7.2} fontWeight={930}>
+          {activeCodon?.rna ?? ""}
+        </text>
+      </g>
+
+      {activePeptides.length > 0 ? (
+        <g className="gene-coupled-lens-peptide" opacity={canTranslate ? 1 : 0.28}>
+          <path
+            d={`M${ribosomePoint.x + 23} ${ribosomePoint.y - 11} C${peptideStart.x - 5} ${peptideStart.y + 2} ${peptideStart.x - 2} ${peptideStart.y + 1} ${peptideStart.x} ${peptideStart.y}`}
+            fill="none"
+            stroke="var(--cherry-forest)"
+            strokeWidth={4.4}
+            strokeLinecap="round"
+          />
+          {activePeptides.map((codon, index) => {
+            const x = peptideStart.x + index * 22;
+            const y = peptideStart.y + (index % 2 === 0 ? 0 : -9);
+            return (
+              <g key={`lens-peptide-${codon.amino}`} transform={`translate(${x} ${y})`}>
+                {index > 0 ? <line x1={-22} y1={index % 2 === 0 ? -9 : 9} x2={-10} y2={0} stroke="var(--cherry-forest)" strokeWidth={4} strokeLinecap="round" /> : null}
+                <circle r={10.5} fill={codon.color} stroke="#FAF7F1" strokeWidth={2}>
+                  {prefersReducedMotion ? null : <animate attributeName="r" values="8.5;11.5;10.5" dur="0.8s" begin={`${index * 0.08}s`} repeatCount="1" />}
+                </circle>
+                <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={6.2} fontWeight={930}>
+                  {codon.amino}
+                </text>
+              </g>
+            );
+          })}
+          <text x={peptideStart.x + 6} y={peptideStart.y + 29} fill="var(--cherry-forest)" fontSize={9} fontWeight={930}>
+            多肽链从出口长出
+          </text>
+        </g>
+      ) : null}
+    </g>
+  );
 }
 
 function LiveExpressionProcess({
@@ -470,21 +579,10 @@ function LiveExpressionProcess({
         const exit = ribosomePeptideExitPoint(ribosome.renderPoint);
         const beadPoints = codons.slice(0, aminoCount).map((_, aminoIndex) => peptideBeadPoint(exit, aminoIndex));
         const chainPath = [exit, ...beadPoints].map((point, aminoIndex) => `${aminoIndex === 0 ? "M" : "L"}${point.x} ${point.y}`).join(" ");
-        const calloutX = exit.x + 7;
-        const calloutY = exit.y - 18;
 
         return (
           <g className="live-peptide-bead-chain" key={`live-peptide-chain-${ribosomeIndex}`} opacity={ribosome.opacity}>
-            <rect
-              x={calloutX}
-              y={calloutY}
-              width={116}
-              height={52}
-              rx={17}
-              fill="rgba(169,201,172,0.24)"
-              stroke="rgba(93,140,101,0.24)"
-              strokeWidth={1.4}
-            />
+            <title>多肽链贴着出口长出</title>
             <path
               d={`M${exit.x} ${exit.y} C${exit.x + 6} ${exit.y + 2} ${exit.x + 11} ${exit.y + 6} ${exit.x + 15} ${exit.y + 9}`}
               fill="none"
@@ -494,11 +592,6 @@ function LiveExpressionProcess({
               opacity={0.46}
             />
             {beadPoints.length > 0 ? <path d={chainPath} fill="none" stroke="var(--cherry-forest)" strokeWidth={6.4} strokeLinecap="round" strokeLinejoin="round" opacity={0.86} /> : null}
-            {ribosomeIndex === 0 ? (
-              <text x={calloutX + 12} y={calloutY + 14} fill="var(--cherry-forest)" fontSize={11} fontWeight={900}>
-                多肽链贴着出口长出
-              </text>
-            ) : null}
             {codons.slice(0, aminoCount).map((codon, aminoIndex) => {
               const point = beadPoints[aminoIndex];
 
@@ -1341,6 +1434,16 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             )}
 
             <LiveExpressionProcess model={model} progress={cycleProgress} retainedMrnaCount={visibleMrnaCount} canTranslate={canTranslate} prefersReducedMotion={prefersReducedMotion} />
+
+            <CoupledExpressionLens
+              transcriptionOn={model.transcriptionOn}
+              canTranslate={canTranslate}
+              transcriptionProgress={retainedTranscriptProgress}
+              ribosomeProgress={leadRibosomeProgress}
+              peptideCount={peptidePreviewCount}
+              activeCodon={activeCodon}
+              prefersReducedMotion={prefersReducedMotion}
+            />
 
             <g transform="translate(46 86)">
               <rect width={190} height={28} rx={999} fill="rgba(250,247,241,0.74)" stroke="rgba(94,68,42,0.16)" />
