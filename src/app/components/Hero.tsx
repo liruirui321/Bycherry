@@ -149,8 +149,8 @@ export function Hero() {
         <div className="hero-float-deco hero-float-leaf"><IconLeafSmall size={24} color="var(--cherry-sage)" /></div>
       </div>
 
-      <div className="hero-inner" style={{ position: "relative", top: 0, zIndex: 2, maxWidth: 1440, width: "100%", minWidth: 0, margin: "0 auto", marginTop: "clamp(1.2rem, 3.4vh, 2.2rem)", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(390px, 0.38fr) minmax(760px, 0.62fr)", gap: "clamp(1.4rem, 2.8vw, 2.6rem)", alignItems: "stretch" }}>
-        <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.82rem", justifyItems: "start", textAlign: "left", alignContent: "start", paddingTop: "0.6rem" }}>
+      <div className="hero-inner" style={{ position: "relative", top: 0, zIndex: 2, maxWidth: 1880, width: "100%", minWidth: 0, margin: "0 auto", marginTop: "clamp(0.8rem, 2.7vh, 1.8rem)", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(520px, 0.36fr) minmax(920px, 0.64fr)", gap: "clamp(1.45rem, 2.6vw, 2.8rem)", alignItems: "stretch" }}>
+        <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.78rem", justifyItems: "start", textAlign: "left", alignContent: "start", paddingTop: "0.45rem" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.36rem 1.05rem", color: "var(--cherry-forest)", fontSize: "0.86rem", fontWeight: 850, background: "rgba(250,247,241,0.76)", letterSpacing: 0 }}>
             <IconBranch size={13} color="var(--cherry-forest)" />
             By Cherry · Science Studio
@@ -160,7 +160,7 @@ export function Hero() {
             className="hero-title"
             style={{
               fontFamily: "'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-              fontSize: "clamp(2.72rem, 4.35vw, 4.88rem)",
+              fontSize: "clamp(2.9rem, 4.25vw, 5.18rem)",
               fontWeight: 900,
               lineHeight: 1.04,
               color: "var(--cherry-warm-brown)",
@@ -179,7 +179,7 @@ export function Hero() {
             {" & "}
             <span style={{ color: "var(--cherry-blue)" }}>AI</span>
           </h1>
-          <p className="hero-subtitle" style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.18vw, 1.2rem)", lineHeight: 1.52, fontWeight: 760, maxWidth: 520, overflowWrap: "anywhere", wordBreak: "break-word" }}>
+          <p className="hero-subtitle" style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.08vw, 1.18rem)", lineHeight: 1.5, fontWeight: 760, maxWidth: 620, overflowWrap: "anywhere", wordBreak: "break-word" }}>
             科学模拟、科研阅读和 AI 学习工具，打开后直接进入内容。
           </p>
           <div className="hero-action-row" style={{ display: "flex", gap: "0.72rem", flexWrap: "wrap", alignItems: "center", marginTop: "0.08rem" }}>
@@ -249,10 +249,10 @@ export function Hero() {
 
         <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.72rem", width: "100%", alignContent: "stretch" }}>
           <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.75rem", minWidth: 0 }}>
-            <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.12rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>精选内容</h2>
+            <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.18rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>精选内容</h2>
             <span className="hero-entry-grid-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>{entries.length} 个内容</span>
           </div>
-          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.78rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
             {entries.map((entry, index) => (
               <a
                 className="hero-entry-card"
@@ -268,7 +268,7 @@ export function Hero() {
                   border: `1.5px solid ${entry.border}`,
                   borderLeft: `0.5rem solid ${entry.border}`,
                   borderRadius: 12,
-                  padding: "0.86rem 0.9rem 0.82rem 0.82rem",
+                  padding: "0.92rem 0.96rem 0.88rem 0.88rem",
                   color: "var(--cherry-warm-brown)",
                   textDecoration: "none",
                   textAlign: "left",
@@ -281,7 +281,7 @@ export function Hero() {
                   overflow: "hidden",
                   minWidth: 0,
                   maxWidth: "100%",
-                  minHeight: 176,
+                  minHeight: 188,
                   boxSizing: "border-box",
                   boxShadow: "0 12px 24px rgba(94,68,42,0.07)",
                   transform: "none",

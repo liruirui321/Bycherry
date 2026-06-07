@@ -32,7 +32,7 @@ export function Nav() {
       <div
         style={{
           width: "100%",
-          maxWidth: 1320,
+          maxWidth: 1880,
           margin: "0 auto",
           padding: "0 1.5rem",
           boxSizing: "border-box",

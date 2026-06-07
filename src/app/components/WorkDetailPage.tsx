@@ -4443,6 +4443,32 @@ If any of these are missing, add them before the final answer.
             </button>
           </div>
         </div>
+        <div className="concept-explanation-pack concept-live-result-panel" style={{ background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 10, padding: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.035)", display: "grid", gap: "0.46rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+            <div>
+              <div style={{ display: "flex", gap: "0.45rem", alignItems: "center", flexWrap: "wrap" }}>
+                <span style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", fontWeight: 950, borderRadius: 999, background: "rgba(169,201,172,0.22)", border: "1px solid rgba(93,140,101,0.18)", padding: "0.16rem 0.42rem" }}>当前结果</span>
+                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", lineHeight: 1.2 }}>概念解释包：{concept}</strong>
+              </div>
+              <div className="concept-pack-header-copy" style={{ display: "none", color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.2rem", fontWeight: 800 }}>
+                生成后先看这 5 张卡：一句话解释、图形骨架、机制主线、误区边界和马上练习。
+              </div>
+            </div>
+            <button type="button" onClick={copyConceptExplanationPack} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+              {copiedExplanationPack ? "已复制" : "复制解释包"}
+            </button>
+          </div>
+          <div className="concept-pack-card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(132px, 1fr))", gap: "0.38rem" }}>
+            {conceptExplanationPackCards.map((item, index) => (
+              <div className="concept-pack-card" key={item.title} role="group" aria-label={`${item.title}：${item.body} 要做：${item.output}`} style={{ background: index === 0 ? "var(--cherry-yellow-light)" : index === 1 ? "var(--cherry-blue-light)" : index === 2 ? "var(--cherry-sage-light)" : "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", minHeight: 88 }}>
+                <span style={{ width: 18, height: 18, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.58rem", fontWeight: 900, marginBottom: "0.28rem" }}>{index + 1}</span>
+                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.2, marginBottom: "0.2rem" }}>{item.title}</strong>
+                <span style={{ display: "-webkit-box", color: "var(--cherry-warm-mid)", fontSize: "0.67rem", lineHeight: 1.34, fontWeight: 800, overflow: "hidden", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item.body}</span>
+                <span className="concept-pack-output" style={{ display: "none", color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 900 }}>要做：{item.output}</span>
+              </div>
+            ))}
+          </div>
+        </div>
         <div className="concept-scope-hint-strip" role="list" aria-label="概念范围诊断" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.5rem" }}>
           {conceptScopeHints.map((item) => (
             <div className="concept-scope-hint-card" key={item.label} role="listitem" style={{ background: item.status === "建议收窄" ? "var(--cherry-yellow-light)" : item.status === "待填写" ? "var(--cherry-peach-light)" : "rgba(250,247,241,0.72)", border: item.status === "建议收窄" ? "1.5px solid var(--cherry-yellow)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 10, padding: "0.56rem", display: "grid", gap: "0.26rem", minHeight: 86 }}>
@@ -4479,30 +4505,6 @@ If any of these are missing, add them before the final answer.
           ))}
         </div>
         </details>
-      </div>
-
-      <div className="concept-explanation-pack" style={{ background: "transparent", border: "none", borderRadius: 0, padding: 0, boxShadow: "none", display: "grid", gap: "0.5rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
-          <div>
-            <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900 }}>概念解释包</div>
-            <div className="concept-pack-header-copy" style={{ display: "none", color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.55, marginTop: "0.2rem", fontWeight: 800 }}>
-              生成后先看这 5 张卡：一句话解释、图形骨架、机制主线、误区边界和马上练习。
-            </div>
-          </div>
-          <button type="button" onClick={copyConceptExplanationPack} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.5rem 0.86rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-            {copiedExplanationPack ? "已复制" : "复制解释包"}
-          </button>
-        </div>
-        <div className="concept-pack-card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "0.42rem" }}>
-          {conceptExplanationPackCards.map((item, index) => (
-            <div className="concept-pack-card" key={item.title} role="group" aria-label={`${item.title}：${item.body} 要做：${item.output}`} style={{ background: index === 0 ? "var(--cherry-yellow-light)" : index === 1 ? "var(--cherry-blue-light)" : index === 2 ? "var(--cherry-sage-light)" : "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.52rem", minHeight: 98 }}>
-              <span style={{ width: 18, height: 18, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.58rem", fontWeight: 900, marginBottom: "0.3rem" }}>{index + 1}</span>
-              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.2, marginBottom: "0.22rem" }}>{item.title}</strong>
-              <span style={{ display: "-webkit-box", color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 800, overflow: "hidden", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" }}>{item.body}</span>
-              <span className="concept-pack-output" style={{ display: "none", color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.45, fontWeight: 900 }}>要做：{item.output}</span>
-            </div>
-          ))}
-        </div>
       </div>
 
       <details className="concept-support-pack-details" style={{ background: "transparent", border: "none", borderRadius: 0, padding: "0.2rem 0", boxShadow: "none" }}>
