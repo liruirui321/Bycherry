@@ -2583,6 +2583,25 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
               {activeChapter.challenge}{" -> "}{activeChapter.innovation}
             </span>
           </div>
+          <div className="plant-mobile-stage-focus-card" style={{ display: "none" }}>
+            <span aria-hidden="true" style={{ width: 74, height: 66, borderRadius: 14, background: "rgba(250,247,241,0.74)", border: "1px solid rgba(94,68,42,0.1)", display: "grid", placeItems: "center", overflow: "hidden", flexShrink: 0 }}>
+              <svg viewBox="-66 -58 132 116" width="72" height="62" fill="none" focusable="false">
+                {renderPlantStageIcon(activeChapterIndex, true)}
+              </svg>
+            </span>
+            <span style={{ display: "grid", gap: "0.28rem", minWidth: 0 }}>
+              <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", lineHeight: 1.2, fontWeight: 950, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{plantStageLabels[activeChapterIndex]}</strong>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.38, fontWeight: 840, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                {activeChapter.challenge}
+              </span>
+              <span style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", lineHeight: 1.32, fontWeight: 920, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                创新：{activeChapter.innovation}
+              </span>
+              <span style={{ color: "var(--cherry-red)", fontSize: "0.62rem", lineHeight: 1.16, fontWeight: 930 }}>
+                证据状态：{activeChapter.certainty}
+              </span>
+            </span>
+          </div>
 
           <div className="plant-timeline-figure" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", overflow: "hidden" }}>
             <svg className="plant-timeline-illustration" viewBox="0 0 520 760" preserveAspectRatio="xMidYMid slice" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化证据时间轴" style={{ width: "100%", display: "block", borderRadius: 10 }}>
@@ -3107,6 +3126,18 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
               border-radius: 10px !important;
               padding: 0.58rem 0.64rem !important;
               min-width: 0 !important;
+              box-sizing: border-box !important;
+            }
+
+            #plant-evolution-explorer .plant-mobile-stage-focus-card {
+              display: flex !important;
+              gap: 0.58rem !important;
+              align-items: center !important;
+              min-width: 0 !important;
+              background: rgba(250,247,241,0.76) !important;
+              border: 1.5px solid rgba(93,140,101,0.18) !important;
+              border-radius: 10px !important;
+              padding: 0.58rem 0.64rem !important;
               box-sizing: border-box !important;
             }
 

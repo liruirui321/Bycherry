@@ -1099,6 +1099,9 @@ function verifyPlantEvolutionLearnerContract() {
     { label: "compact stage picker grid", text: "plant-stage-picker-grid" },
     { label: "compact stage picker card", text: "plant-stage-picker-card" },
     { label: "mobile active stage summary", text: "plant-mobile-stage-summary" },
+    { label: "mobile active stage focus card", text: "plant-mobile-stage-focus-card" },
+    { label: "mobile active stage focus icon", text: "renderPlantStageIcon(activeChapterIndex, true)" },
+    { label: "mobile active stage evidence state", text: "证据状态：{activeChapter.certainty}" },
   ];
 
   const retiredPlantPatterns = [
@@ -1121,7 +1124,7 @@ function verifyPlantEvolutionLearnerContract() {
   expect(plantSource.includes("#plant-evolution-explorer .plant-causal-bridge-strip") && plantSource.includes("grid-template-columns: 1fr !important"), "Plant evolution causal bridge must stack on mobile to keep causal text readable.");
   expect(plantSource.includes('gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))"') && plantSource.includes('className="plant-stage-picker-innovation"') && plantSource.includes('className="plant-stage-picker-refs"') && plantSource.includes('style={{ display: "none"') && !plantSource.includes('minHeight: 76'), "Plant evolution desktop stage picker must stay as short timeline buttons without fixed-height cards, long note text, or reference chips.");
   expect(plantSource.includes("#plant-evolution-explorer .plant-stage-picker-card > div:nth-child(3)") && plantSource.includes("display: none !important"), "Plant evolution mobile stage buttons must not expose long innovation text in the picker.");
-  expect(plantSource.includes("#plant-evolution-explorer .plant-mobile-stage-summary") && plantSource.includes("display: grid !important") && plantSource.includes("第 {activeChapterIndex + 1}/6 阶段") && plantSource.includes("height: 238px !important"), "Plant evolution mobile first screen must show active stage context before the reduced-height illustration.");
+  expect(plantSource.includes("#plant-evolution-explorer .plant-mobile-stage-summary") && plantSource.includes("display: grid !important") && plantSource.includes("第 {activeChapterIndex + 1}/6 阶段") && plantSource.includes("#plant-evolution-explorer .plant-mobile-stage-focus-card") && plantSource.includes("display: flex !important") && plantSource.includes("height: 238px !important"), "Plant evolution mobile first screen must show active stage context and a focused active-stage visual before the reduced-height illustration.");
   expect(plantSource.includes('className="plant-timeline-figure"') && plantSource.includes('borderRadius: 12') && plantSource.includes('padding: "0.72rem"'), "Plant evolution illustration frame must stay compact instead of a tall sticky-note frame.");
   expect(plantSource.includes('className="plant-stage-detail-card"') && plantSource.includes('padding: "0.82rem"') && !plantSource.includes('className="plant-stage-detail-card" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.2rem"'), "Plant evolution active stage details must stay as a compact content panel.");
   expect(worksSource.includes("演化时间轴串联关键创新、证据、自测问题、作答提示和延伸练习。"), "Plant evolution work card must describe the learner-facing self-study flow.");
