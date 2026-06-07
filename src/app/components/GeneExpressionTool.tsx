@@ -855,6 +855,28 @@ export function GeneExpressionTool() {
       body: geneModelBoundaryText,
     },
   ];
+  const canvasCompanionHighlights = [
+    {
+      label: "RNA 聚合酶出口",
+      value: model.transcriptionOn ? "3' 端正在接入新碱基" : "等待 TF 和 RNA 聚合酶",
+      active: model.transcriptionOn,
+    },
+    {
+      label: "mRNA 可读片段",
+      value: retainedTranscriptProgress > 0.22 ? "5' 端已露出，绿色虚线可被读取" : "等待 mRNA 露出",
+      active: retainedTranscriptProgress > 0.22,
+    },
+    {
+      label: "核糖体位置",
+      value: activeRibosomeCount > 0 ? "沿已转录片段移动，不越过聚合酶" : "等待核糖体进入入口",
+      active: activeRibosomeCount > 0,
+    },
+    {
+      label: "多肽出口",
+      value: visibleProteinCount > 0 ? `已接出 ${peptidePreview}` : "读到密码子后逐颗接出氨基酸",
+      active: visibleProteinCount > 0,
+    },
+  ];
   const activeProcessFocus = processFocusCards.find((item) => item.active)?.title ?? "等待启动";
   const accessibleSummary = `基因表达仿真。启动子上有 ${model.tfBound} 个转录因子，基因区有 ${model.polBound} 个 RNA 聚合酶，核糖体入口有 ${model.ribBound} 个核糖体。当前 mRNA 数量 ${visibleMrnaCount}，已接入氨基酸 ${visibleProteinCount}。当前过程焦点：${activeProcessFocus}。当前状态：${currentStatus} 下一步：${nextTask}`;
   const expressionExperimentFields = [
@@ -1161,7 +1183,8 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
       <div id="gene-expression-summary" className="gene-sr-only">
         {accessibleSummary}
       </div>
-      <div className="gene-expression-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.7fr)", gap: "0.68rem", alignItems: "stretch", minWidth: 0 }}>
+      <div className="gene-expression-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(286px, 0.7fr)", gap: "0.68rem", alignItems: "start", minWidth: 0 }}>
+        <div className="gene-visual-column" style={{ display: "grid", gap: "0.68rem", minWidth: 0, alignContent: "start" }}>
         <div className="gene-canvas-card" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, boxShadow: "0 8px 18px rgba(94,68,42,0.05)", overflow: "hidden", minWidth: 0 }}>
           <svg
             className="gene-canvas-svg"
@@ -1292,6 +1315,26 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             <strong style={{ color: "var(--cherry-forest)", whiteSpace: "nowrap" }}>模型边界</strong>
             <span style={{ minWidth: 0, overflowWrap: "anywhere" }}>{geneModelBoundaryText}</span>
           </div>
+        </div>
+        <section className="gene-canvas-companion" aria-labelledby="gene-canvas-companion-title" style={{ display: "grid", gap: "0.58rem", background: "rgba(250,247,241,0.72)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 12, padding: "0.72rem", minWidth: 0, boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", gap: "0.75rem", flexWrap: "wrap" }}>
+            <h2 id="gene-canvas-companion-title" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.9rem", lineHeight: 1.2, fontWeight: 930 }}>过程判读</h2>
+            <span style={{ color: "var(--cherry-forest)", background: "rgba(169,201,172,0.2)", border: "1px solid rgba(93,140,101,0.18)", borderRadius: 999, padding: "0.18rem 0.52rem", fontSize: "0.68rem", fontWeight: 920 }}>
+              {activeProcessFocus}
+            </span>
+          </div>
+          <div className="gene-canvas-companion-grid" role="list" aria-label="画布过程判读" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.48rem" }}>
+            {canvasCompanionHighlights.map((item, index) => (
+              <div key={item.label} role="listitem" style={{ display: "grid", gap: "0.24rem", minWidth: 0, background: item.active ? (index === 0 ? "var(--cherry-blue-light)" : index === 1 ? "var(--cherry-yellow-light)" : index === 2 ? "var(--cherry-peach-light)" : "var(--cherry-sage-light)") : "var(--muted)", border: item.active ? "1.5px solid rgba(94,68,42,0.14)" : "1.5px solid rgba(94,68,42,0.08)", borderRadius: 10, padding: "0.54rem" }}>
+                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 940 }}>{item.label}</strong>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.38, fontWeight: 820, overflowWrap: "anywhere" }}>{item.value}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.48, fontWeight: 820 }}>
+            当前状态：{currentStatus}
+          </div>
+        </section>
         </div>
 
         <aside className="gene-control-aside" style={{ display: "grid", gap: "0.68rem", alignContent: "start", minWidth: 0 }}>
@@ -1720,12 +1763,18 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
 
             #gene-expression,
             #gene-expression .gene-expression-main-grid,
+            #gene-expression .gene-visual-column,
             #gene-expression .gene-canvas-card,
+            #gene-expression .gene-canvas-companion,
             #gene-expression .gene-control-aside {
               width: 100% !important;
               max-width: 100% !important;
               min-width: 0 !important;
               box-sizing: border-box !important;
+            }
+
+            #gene-expression .gene-visual-column {
+              gap: 0.52rem !important;
             }
 
             #gene-expression .gene-control-aside {
@@ -1773,6 +1822,16 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
               width: 100% !important;
               max-width: 100% !important;
               min-width: 0 !important;
+            }
+
+            #gene-expression .gene-canvas-companion {
+              padding: 0.62rem !important;
+              box-shadow: none !important;
+            }
+
+            #gene-expression .gene-canvas-companion-grid {
+              grid-template-columns: 1fr !important;
+              gap: 0.38rem !important;
             }
 
             #gene-expression .gene-readout-row {
