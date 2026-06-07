@@ -373,10 +373,10 @@ function ribosomePeptideExitPoint(ribosomeCenter: Point) {
 
 function peptideBeadPoint(exit: Point, index: number) {
   const points = [
-    { x: exit.x + 6, y: exit.y - 5 },
-    { x: exit.x + 19, y: exit.y - 17 },
-    { x: exit.x + 35, y: exit.y - 9 },
-    { x: exit.x + 50, y: exit.y - 23 },
+    { x: exit.x + 5, y: exit.y - 5 },
+    { x: exit.x + 20, y: exit.y - 18 },
+    { x: exit.x + 38, y: exit.y - 8 },
+    { x: exit.x + 56, y: exit.y - 22 },
   ];
   return points[index] ?? points[points.length - 1];
 }
@@ -474,9 +474,9 @@ function LiveExpressionProcess({
               strokeLinecap="round"
               opacity={0.46}
             />
-            {beadPoints.length > 0 ? <path d={chainPath} fill="none" stroke="var(--cherry-forest)" strokeWidth={4.2} strokeLinecap="round" strokeLinejoin="round" opacity={0.78} /> : null}
+            {beadPoints.length > 0 ? <path d={chainPath} fill="none" stroke="var(--cherry-forest)" strokeWidth={5.4} strokeLinecap="round" strokeLinejoin="round" opacity={0.86} /> : null}
             {ribosomeIndex === 0 ? (
-              <text x={exit.x + 24} y={exit.y - 34} fill="var(--cherry-forest)" fontSize={11} fontWeight={900}>
+              <text x={exit.x + 30} y={exit.y - 39} fill="var(--cherry-forest)" fontSize={12} fontWeight={900}>
                 多肽链
               </text>
             ) : null}
@@ -485,10 +485,10 @@ function LiveExpressionProcess({
 
               return (
                 <g key={`live-peptide-${ribosomeIndex}-${codon.amino}`} transform={`translate(${point.x} ${point.y})`}>
-                  <circle r={10.5} fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4}>
-                    {prefersReducedMotion ? null : <animate attributeName="r" values="8;12;10.5" dur="0.7s" begin={`${aminoIndex * 0.08}s`} repeatCount="1" />}
+                  <circle r={12.5} fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.7}>
+                    {prefersReducedMotion ? null : <animate attributeName="r" values="9;14;12.5" dur="0.7s" begin={`${aminoIndex * 0.08}s`} repeatCount="1" />}
                   </circle>
-                  <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={7} fontWeight={900}>
+                  <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={7.4} fontWeight={900}>
                     {codon.amino}
                   </text>
                 </g>
@@ -500,13 +500,12 @@ function LiveExpressionProcess({
 
       {codons.map((codon, index) => {
         const activePoint = activeCodonIndex === index ? leadRibosomePoint : null;
-        const poolX = 540 + index * 42;
-        const poolY = 500 - index * 16;
-        const x = activePoint ? activePoint.x + 2 : poolX;
-        const y = activePoint ? activePoint.y - 48 : poolY;
+        if (!activePoint) return null;
+        const x = activePoint.x + 2;
+        const y = activePoint.y - 48;
         return (
-          <g key={`trna-${codon.rna}`} transform={`translate(${x} ${y})`} opacity={activePoint ? 1 : 0.16}>
-            {activePoint ? <line x1={10} y1={14} x2={10} y2={38} stroke="var(--cherry-peach)" strokeWidth={2.2} strokeLinecap="round" strokeDasharray="4 4" /> : null}
+          <g key={`trna-${codon.rna}`} transform={`translate(${x} ${y})`} opacity={1}>
+            <line x1={10} y1={14} x2={10} y2={38} stroke="var(--cherry-peach)" strokeWidth={2.2} strokeLinecap="round" strokeDasharray="4 4" />
             <path d="M0 0 Q10 -18 20 0 Q10 15 0 0Z" fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.4} />
             <circle cx={10} cy={-18} r={10} fill={codon.color} stroke="rgba(94,68,42,0.16)" strokeWidth={1.4} />
             <text x={10} y={4} textAnchor="middle" fill="var(--cherry-warm-brown)" fontSize={8} fontWeight={900}>
@@ -595,11 +594,6 @@ function LiveExpressionProcess({
                 5' 自由端
               </text>
             </g>
-            {polymerase.progress > 0.16 ? (
-              <text x={fiveEnd.x - 14} y={fiveEnd.y + 39} fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={800}>
-                核糖体从 5' 端附近开始读
-              </text>
-            ) : null}
             {transcriptBases.map((base, baseIndex) => {
               const pathProgress = 0.08 + baseIndex * 0.066;
               const visible = polymerase.progress > 0.1 + baseIndex * 0.052;
@@ -623,12 +617,6 @@ function LiveExpressionProcess({
                 3' 生长端
               </text>
             </g>
-            <text x={growthEnd.x + 14} y={growthEnd.y + 19} fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={800}>
-              贴着 RNA 聚合酶出口
-            </text>
-            <text x={growthEnd.x - 76} y={growthEnd.y + 31} fill="var(--cherry-warm-mid)" fontSize={10} fontWeight={800}>
-              原核模型：只能读取已露出的 mRNA
-            </text>
           </g>
         );
       })}
@@ -636,9 +624,6 @@ function LiveExpressionProcess({
       {ribosomeCanRead ? (
         <g opacity={0.9}>
           <path d={readableMrnaPath} fill="none" stroke="var(--cherry-forest)" strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="8 7" />
-          <text x={438} y={392} fill="var(--cherry-forest)" fontSize={11} fontWeight={900}>
-            绿色虚线：核糖体当前可读取的已转录片段
-          </text>
         </g>
       ) : null}
 
@@ -657,6 +642,7 @@ function LiveExpressionProcess({
         const point = pointOnPolyline(coupledMrnaPath, 0.12 + index * 0.2);
         const visible = maxTranscribedProgress > 0.22 + index * 0.13;
         const active = activeCodonIndex === index;
+        if (!active) return null;
         return (
           <g key={codon.rna} transform={`translate(${point.x - 25} ${point.y + 18})`} opacity={visible ? 1 : 0.16}>
             <rect width={50} height={25} rx={9} fill={active ? "var(--cherry-yellow-light)" : "rgba(250,247,241,0.84)"} stroke={active ? "var(--cherry-red)" : "rgba(94,68,42,0.18)"} strokeWidth={active ? 2.4 : 1.4} />

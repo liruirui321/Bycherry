@@ -927,7 +927,7 @@ function verifyGeneExpressionLearnerContract() {
     { label: "bead-chain explanation", text: "氨基酸小圆" },
     { label: "ribosome start fraction", text: "ribosomeStartFraction" },
     { label: "ribosome readable position", text: "readProgress" },
-    { label: "readable mRNA guide", text: "绿色虚线：核糖体当前可读取的已转录片段" },
+    { label: "readable mRNA guide path", text: "readableMrnaPath" },
     { label: "ribosome cannot outrun polymerase", text: "不能越过 RNA 聚合酶" },
     { label: "mRNA nucleotide bead chain", text: "mrna-nucleotide-bead" },
     { label: "ribosome peptide exit port", text: "ribosome-peptide-exit-port" },
