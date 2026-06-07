@@ -5502,6 +5502,40 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
         ))}
       </div>
 
+      <section className="crispr-live-decision-panel" aria-labelledby="crispr-live-decision-title" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)", display: "grid", gap: "0.62rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <h3 id="crispr-live-decision-title" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.94rem", lineHeight: 1.2, fontWeight: 950 }}>当前判读结果</h3>
+            <p style={{ margin: "0.2rem 0 0", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.45, fontWeight: 820 }}>不用展开说明，也能先得到本轮 go/no-go、证据读数和风险边界。</p>
+          </div>
+          <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
+            <button type="button" onClick={copyDecisionCard} aria-describedby="crispr-report-status" style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem" }}>
+              {copiedDecisionCard ? "已复制" : "复制决策卡"}
+            </button>
+            <button type="button" onClick={copyRiskAudit} aria-describedby="crispr-report-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem" }}>
+              {copiedRiskAudit ? "已复制" : "复制风险核查"}
+            </button>
+          </div>
+        </div>
+        <div className="crispr-live-decision-grid" role="list" aria-label="当前 CRISPR 判读结果" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.5rem" }}>
+          {[
+            { label: "总判定", value: guideDecision.level, body: guideDecision.risk, color: guideDecision.bg },
+            { label: "证据读数", value: `PAM ${pamSequence} · ${activeGuide.score}%`, body: `${activeGuide.name}；错配 ${computedMismatches.length} 个；剪切位点 ${activeGuide.score >= 60 ? `第 ${cutIndex + 1} 位` : "不进入剪切"}`, color: "var(--cherry-blue-light)" },
+            { label: "修复结果", value: effectiveRepair.title, body: reportResult, color: "var(--cherry-yellow-light)" },
+            { label: "风险边界", value: activeGuide.score >= 80 ? "仍需验证" : "先复核", body: "模拟只能说明判读逻辑，真实研究仍需脱靶搜索、递送条件和测序验证。", color: "var(--cherry-peach-light)" },
+          ].map((item) => (
+            <div className="crispr-live-decision-card" key={item.label} role="listitem" style={{ background: item.color, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 10, padding: "0.56rem", display: "grid", gap: "0.22rem", minHeight: 84 }}>
+              <span style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", lineHeight: 1.2, fontWeight: 950 }}>{item.label}</span>
+              <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.8rem", lineHeight: 1.24, fontWeight: 950 }}>{item.value}</strong>
+              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item.body}</span>
+            </div>
+          ))}
+        </div>
+        <div id="crispr-report-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 900 }}>
+          {reportStatus}
+        </div>
+      </section>
+
       <details className="crispr-support-pack-details crispr-compact-details" style={{ background: "transparent", border: "none", borderRadius: 0, padding: "0.2rem 0", boxShadow: "none" }}>
         <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>说明与记录</summary>
 
@@ -5777,9 +5811,6 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             {copiedReport ? "已复制" : "复制报告"}
           </button>
         </div>
-        <div id="crispr-report-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 900, marginBottom: "0.55rem" }}>
-          {reportStatus}
-        </div>
         <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 16, padding: "0.9rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.78rem", lineHeight: 1.65, maxHeight: 280, overflow: "auto" }}>
           {crisprReport}
         </code>
@@ -5834,6 +5865,10 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             }
 
             #crispr-simulator .crispr-learner-record-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+
+            #crispr-simulator .crispr-live-decision-grid {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
 
@@ -5926,6 +5961,7 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
             #crispr-simulator .crispr-intro-grid,
             #crispr-simulator .crispr-start-path-strip,
+            #crispr-simulator .crispr-live-decision-panel,
             #crispr-simulator .crispr-intro-details,
             #crispr-simulator .crispr-practice-panel,
             #crispr-simulator .crispr-result-check-panel,
@@ -5938,6 +5974,17 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             #crispr-simulator .crispr-report-details {
               padding: 0.68rem !important;
               border-radius: 12px !important;
+            }
+
+            #crispr-simulator .crispr-live-decision-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.44rem !important;
+            }
+
+            #crispr-simulator .crispr-live-decision-card {
+              padding: 0.48rem !important;
+              min-height: 70px !important;
+              border-radius: 10px !important;
             }
 
             #crispr-simulator .crispr-intro-grid {
