@@ -119,11 +119,11 @@ export function Hero() {
       className="hero-shell"
       aria-labelledby="hero-heading"
       style={{
-        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        fontFamily: "'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         minHeight: "calc(100svh - 50px)",
         position: "relative",
         overflow: "hidden",
-        padding: "clamp(2.1rem, 4.2vh, 3rem) clamp(1rem, 3vw, 2.3rem) clamp(2.2rem, 4.8vh, 3.2rem)",
+        padding: "clamp(2.4rem, 5vh, 3.4rem) clamp(1rem, 3vw, 2.3rem) clamp(2.2rem, 4.8vh, 3.2rem)",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
@@ -148,9 +148,9 @@ export function Hero() {
         <div className="hero-float-deco hero-float-leaf"><IconLeafSmall size={24} color="var(--cherry-sage)" /></div>
       </div>
 
-      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1900, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(270px, 0.38fr) minmax(900px, 1.62fr)", gap: "clamp(1rem, 2.1vw, 2.4rem)", alignItems: "center" }}>
-        <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.78rem", justifyItems: "start", textAlign: "left", alignContent: "center", paddingTop: "0" }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.36rem 1rem", color: "var(--cherry-forest)", fontSize: "0.8rem", fontWeight: 850, background: "rgba(250,247,241,0.76)", letterSpacing: 0 }}>
+      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1480, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(420px, 0.48fr) minmax(660px, 0.72fr)", gap: "clamp(2rem, 4vw, 4.2rem)", alignItems: "center" }}>
+        <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "1rem", justifyItems: "start", textAlign: "left", alignContent: "center", paddingTop: "0" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.36rem 1.05rem", color: "var(--cherry-forest)", fontSize: "0.86rem", fontWeight: 850, background: "rgba(250,247,241,0.76)", letterSpacing: 0 }}>
             <IconBranch size={13} color="var(--cherry-forest)" />
             By Cherry · Science Studio
           </div>
@@ -158,10 +158,10 @@ export function Hero() {
             id="hero-heading"
             className="hero-title"
             style={{
-              fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-              fontSize: "clamp(2.05rem, 3.15vw, 3.85rem)",
-              fontWeight: 920,
-              lineHeight: 1.03,
+              fontFamily: "'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+              fontSize: "clamp(3.15rem, 4.85vw, 5.45rem)",
+              fontWeight: 900,
+              lineHeight: 1.06,
               color: "var(--cherry-warm-brown)",
               margin: "0",
               letterSpacing: 0,
@@ -178,7 +178,7 @@ export function Hero() {
             {" & "}
             <span style={{ color: "var(--cherry-blue)" }}>AI</span>
           </h1>
-          <p className="hero-subtitle" style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(0.98rem, 1.18vw, 1.22rem)", lineHeight: 1.62, fontWeight: 760, maxWidth: 470, overflowWrap: "anywhere", wordBreak: "break-word" }}>
+          <p className="hero-subtitle" style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1.05rem, 1.28vw, 1.32rem)", lineHeight: 1.62, fontWeight: 760, maxWidth: 560, overflowWrap: "anywhere", wordBreak: "break-word" }}>
             科学模拟、科研阅读和 AI 学习工具，打开后直接阅读、操作和练习。
           </p>
           <div className="hero-scope-row" role="group" aria-label="内容范围" style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
@@ -233,12 +233,12 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.78rem", width: "100%", alignContent: "start" }}>
+        <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.75rem", width: "100%", alignContent: "start" }}>
           <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.75rem", minWidth: 0 }}>
             <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.12rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>精选内容</h2>
             <span className="hero-entry-grid-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>{entries.length} 个内容</span>
           </div>
-          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(6, minmax(0, 1fr))", gap: "0.78rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
             {entries.map((entry, index) => (
               <a
                 className="hero-entry-card"
@@ -267,7 +267,7 @@ export function Hero() {
                   overflow: "hidden",
                   minWidth: 0,
                   maxWidth: "100%",
-                  minHeight: 218,
+                  minHeight: 154,
                   boxSizing: "border-box",
                   boxShadow: "0 12px 24px rgba(94,68,42,0.07)",
                   transform: "none",
@@ -301,7 +301,7 @@ export function Hero() {
                     固定序列 ATG GAA TTT CCG · 看 mRNA 延伸和多肽链生成
                   </span>
                 ) : null}
-                <span className="hero-entry-side" aria-hidden="true" style={{ gridColumn: "1 / 3", display: "flex", justifyContent: "space-between", gap: "0.68rem", alignItems: "end", minHeight: "5.2rem" }}>
+                <span className="hero-entry-side" aria-hidden="true" style={{ gridColumn: "1 / 3", display: "flex", justifyContent: "space-between", gap: "0.68rem", alignItems: "end", minHeight: "3.55rem" }}>
                   {entry.visualKind ? <HeroMiniVisual kind={entry.visualKind} /> : <span style={{ color: "rgba(62,42,26,0.34)", fontSize: "0.74rem", lineHeight: 1, fontWeight: 950 }}>{String(index + 1).padStart(2, "0")}</span>}
                   <span className="hero-entry-output-list" style={{ display: "flex", flexWrap: "wrap", gap: "0.26rem", justifyContent: "flex-end", alignItems: "center", flex: "1 1 auto", minWidth: 0 }}>
                     {entry.outputs.slice(0, 3).map((output) => (
@@ -323,7 +323,7 @@ export function Hero() {
           position: absolute;
           inset: 0 0 auto 0;
           height: 220px;
-          opacity: 0.42;
+          opacity: 0.22;
           background:
             linear-gradient(rgba(58,92,62,0.055) 1px, transparent 1px),
             linear-gradient(90deg, rgba(58,92,62,0.055) 1px, transparent 1px);
@@ -339,10 +339,10 @@ export function Hero() {
         }
 
         .hero-wash-sage {
-          width: min(34vw, 500px);
-          height: 270px;
-          right: 3%;
-          top: 8%;
+          width: min(32vw, 460px);
+          height: 260px;
+          right: 4%;
+          top: 11%;
           background: var(--cherry-sage-light);
         }
 
@@ -355,10 +355,10 @@ export function Hero() {
         }
 
         .hero-wash-blue {
-          width: min(22vw, 320px);
-          height: 205px;
-          right: 18%;
-          bottom: 10%;
+          width: min(21vw, 300px);
+          height: 190px;
+          right: 17%;
+          bottom: 9%;
           background: var(--cherry-blue-light);
         }
 
@@ -366,7 +366,7 @@ export function Hero() {
           position: absolute;
           width: 128px;
           height: 112px;
-          opacity: 0.14;
+          opacity: 0.12;
           background-image: radial-gradient(circle, rgba(94,68,42,0.22) 2px, transparent 2px);
           background-size: 22px 22px;
         }
@@ -519,12 +519,12 @@ export function Hero() {
           flex-direction: column;
           align-items: stretch;
           justify-content: end;
-          min-height: 11.15rem;
+          min-height: 8.7rem;
         }
 
         .hero-entry-card:first-child .hero-mini-visual {
           width: 100%;
-          height: 8.9rem;
+          height: 6.35rem;
         }
 
         .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-dna {
@@ -542,7 +542,7 @@ export function Hero() {
 
         .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-rna {
           left: 1.18rem;
-          top: 4.02rem;
+          top: 3.45rem;
           width: 10.6rem;
           height: 1.9rem;
           border-bottom-width: 4px;
@@ -550,14 +550,14 @@ export function Hero() {
 
         .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-ribosome {
           right: 2.4rem;
-          bottom: 1.24rem;
+          bottom: 0.84rem;
           width: 2rem;
           height: 1.42rem;
         }
 
         .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-chain {
           right: 1.05rem;
-          bottom: 2.36rem;
+          bottom: 1.96rem;
           gap: 0.18rem;
         }
 
@@ -581,7 +581,7 @@ export function Hero() {
           position: relative;
           display: block;
           width: 10.2rem;
-          height: 5.05rem;
+          height: 3.6rem;
           border: 1px solid rgba(94,68,42,0.1);
           border-radius: 11px;
           background:
@@ -618,7 +618,7 @@ export function Hero() {
         .hero-mini-visual-gene .hero-mini-rna {
           position: absolute;
           left: 0.92rem;
-          top: 2.36rem;
+          top: 2.05rem;
           width: 5.4rem;
           height: 1.28rem;
           border-bottom: 3px solid var(--cherry-blue);
@@ -629,7 +629,7 @@ export function Hero() {
         .hero-mini-visual-gene .hero-mini-ribosome {
           position: absolute;
           right: 1.32rem;
-          bottom: 0.88rem;
+          bottom: 0.58rem;
           width: 1.45rem;
           height: 1.04rem;
           border-radius: 999px 999px 0.7rem 0.7rem;
@@ -639,7 +639,7 @@ export function Hero() {
         .hero-mini-visual-gene .hero-mini-chain {
           position: absolute;
           right: 0.52rem;
-          bottom: 1.72rem;
+          bottom: 1.42rem;
           display: flex;
           gap: 0.14rem;
           transform: rotate(-22deg);
