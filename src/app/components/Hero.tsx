@@ -242,7 +242,7 @@ export function Hero() {
                   overflow: "hidden",
                   minWidth: 0,
                   maxWidth: "100%",
-                  minHeight: 156,
+                  minHeight: 180,
                   boxSizing: "border-box",
                   boxShadow: "0 10px 22px rgba(94,68,42,0.06)",
                   transform: "none",
@@ -268,7 +268,7 @@ export function Hero() {
                       </span>
                     ))}
                 </span>
-                <span className="hero-entry-side" aria-hidden="true" style={{ gridColumn: "1 / 3", display: "flex", justifyContent: "space-between", gap: "0.5rem", alignItems: "end", minHeight: "2.2rem" }}>
+                <span className="hero-entry-side" aria-hidden="true" style={{ gridColumn: "1 / 3", display: "flex", justifyContent: "space-between", gap: "0.72rem", alignItems: "end", minHeight: "3.25rem" }}>
                   {entry.visualKind ? <HeroMiniVisual kind={entry.visualKind} /> : <span style={{ color: "rgba(62,42,26,0.34)", fontSize: "0.74rem", lineHeight: 1, fontWeight: 950 }}>{String(index + 1).padStart(2, "0")}</span>}
                   <span className="hero-entry-output-list" style={{ display: "flex", flexWrap: "wrap", gap: "0.26rem", justifyContent: "flex-end", alignItems: "center", flex: "1 1 auto", minWidth: 0 }}>
                     {entry.outputs.slice(0, 3).map((output) => (
@@ -466,8 +466,8 @@ export function Hero() {
         .hero-mini-visual {
           position: relative;
           display: block;
-          width: 4.2rem;
-          height: 2.25rem;
+          width: 6.1rem;
+          height: 3.15rem;
           border: 1px solid rgba(94,68,42,0.1);
           border-radius: 9px;
           background: rgba(250,247,241,0.56);
@@ -478,32 +478,32 @@ export function Hero() {
 
         .hero-mini-visual-gene .hero-mini-dna {
           position: absolute;
-          left: 0.28rem;
-          top: 0.28rem;
+          left: 0.48rem;
+          top: 0.42rem;
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 0.08rem;
-          width: 3.55rem;
+          gap: 0.16rem;
+          width: 4.55rem;
         }
 
         .hero-mini-visual-gene .hero-mini-dna span {
           display: grid;
           place-items: center;
-          width: 0.76rem;
-          height: 0.76rem;
+          width: 0.92rem;
+          height: 0.92rem;
           border-radius: 999px;
           background: rgba(95,145,115,0.18);
           color: var(--cherry-forest);
-          font-size: 0.36rem;
+          font-size: 0.44rem;
           font-weight: 950;
         }
 
         .hero-mini-visual-gene .hero-mini-rna {
           position: absolute;
-          left: 0.52rem;
-          top: 1.12rem;
-          width: 2.46rem;
-          height: 0.7rem;
+          left: 0.78rem;
+          top: 1.55rem;
+          width: 3.2rem;
+          height: 0.9rem;
           border-bottom: 3px solid var(--cherry-blue);
           border-radius: 0 0 80% 70%;
           transform: rotate(-7deg);
@@ -511,36 +511,36 @@ export function Hero() {
 
         .hero-mini-visual-gene .hero-mini-ribosome {
           position: absolute;
-          right: 0.62rem;
-          bottom: 0.38rem;
-          width: 0.82rem;
-          height: 0.58rem;
+          right: 0.86rem;
+          bottom: 0.58rem;
+          width: 1.05rem;
+          height: 0.76rem;
           border-radius: 999px 999px 0.7rem 0.7rem;
           background: rgba(94,68,42,0.54);
         }
 
         .hero-mini-visual-gene .hero-mini-chain {
           position: absolute;
-          right: 0.26rem;
-          bottom: 0.88rem;
+          right: 0.35rem;
+          bottom: 1.08rem;
           display: flex;
-          gap: 0.08rem;
+          gap: 0.1rem;
           transform: rotate(-22deg);
         }
 
         .hero-mini-visual-gene .hero-mini-chain i {
-          width: 0.28rem;
-          height: 0.28rem;
+          width: 0.34rem;
+          height: 0.34rem;
           border-radius: 999px;
           background: var(--cherry-red);
         }
 
         .hero-mini-visual-research .hero-mini-paper {
           position: absolute;
-          left: 0.36rem;
-          top: 0.28rem;
-          width: 1.62rem;
-          height: 1.72rem;
+          left: 0.56rem;
+          top: 0.44rem;
+          width: 2.1rem;
+          height: 2.1rem;
           border-radius: 0.32rem;
           background: rgba(255,255,255,0.72);
           border: 1px solid rgba(94,68,42,0.13);
@@ -558,15 +558,15 @@ export function Hero() {
 
         .hero-mini-visual-research .hero-mini-checklist {
           position: absolute;
-          right: 0.34rem;
-          top: 0.5rem;
+          right: 0.62rem;
+          top: 0.72rem;
           display: grid;
           gap: 0.26rem;
         }
 
         .hero-mini-visual-research .hero-mini-checklist i {
-          width: 1.2rem;
-          height: 0.26rem;
+          width: 1.8rem;
+          height: 0.32rem;
           border-radius: 999px;
           background: linear-gradient(90deg, var(--cherry-forest) 0 0.28rem, rgba(94,68,42,0.22) 0.28rem);
         }
@@ -575,23 +575,23 @@ export function Hero() {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.14rem;
+          gap: 0.22rem;
         }
 
         .hero-mini-visual-concept span {
           display: grid;
           place-items: center;
-          width: 1rem;
-          height: 1rem;
+          width: 1.28rem;
+          height: 1.28rem;
           border-radius: 999px;
           background: rgba(123,108,196,0.15);
           color: #5F548F;
-          font-size: 0.36rem;
+          font-size: 0.44rem;
           font-weight: 950;
         }
 
         .hero-mini-visual-concept i {
-          width: 0.34rem;
+          width: 0.48rem;
           height: 2px;
           border-radius: 999px;
           background: rgba(94,68,42,0.28);
@@ -600,50 +600,50 @@ export function Hero() {
         .hero-mini-visual-crispr::before {
           content: "";
           position: absolute;
-          left: 0.36rem;
-          right: 0.36rem;
-          top: 1.06rem;
-          height: 0.27rem;
+          left: 0.52rem;
+          right: 0.52rem;
+          top: 1.48rem;
+          height: 0.34rem;
           border-radius: 999px;
           background: repeating-linear-gradient(90deg, var(--cherry-blue) 0 0.34rem, rgba(250,247,241,0.85) 0.34rem 0.48rem, var(--cherry-red) 0.48rem 0.82rem);
         }
 
         .hero-mini-visual-crispr .hero-mini-guide {
           position: absolute;
-          left: 0.7rem;
-          top: 0.78rem;
-          width: 2.05rem;
-          height: 0.16rem;
+          left: 0.95rem;
+          top: 1.14rem;
+          width: 3.02rem;
+          height: 0.2rem;
           border-radius: 999px;
           background: var(--cherry-red);
         }
 
         .hero-mini-visual-crispr .hero-mini-cas {
           position: absolute;
-          right: 0.8rem;
-          top: 0.66rem;
-          width: 0.78rem;
-          height: 0.78rem;
+          right: 1.1rem;
+          top: 0.92rem;
+          width: 1rem;
+          height: 1rem;
           border-radius: 45% 55% 50% 50%;
           background: rgba(95,145,115,0.7);
         }
 
         .hero-mini-visual-crispr .hero-mini-cut {
           position: absolute;
-          right: 0.64rem;
-          top: 0.78rem;
-          width: 0.38rem;
-          height: 0.96rem;
+          right: 0.86rem;
+          top: 1.05rem;
+          width: 0.48rem;
+          height: 1.2rem;
           border-left: 2px solid rgba(94,68,42,0.44);
           transform: rotate(26deg);
         }
 
         .hero-mini-visual-reading .hero-mini-book {
           position: absolute;
-          left: 0.4rem;
-          top: 0.34rem;
-          width: 1.2rem;
-          height: 1.48rem;
+          left: 0.62rem;
+          top: 0.48rem;
+          width: 1.58rem;
+          height: 1.94rem;
           border-radius: 0.18rem 0.32rem 0.32rem 0.18rem;
           background: rgba(250,247,241,0.82);
           border: 1px solid rgba(94,68,42,0.14);
@@ -652,55 +652,55 @@ export function Hero() {
 
         .hero-mini-visual-reading .hero-mini-lines {
           position: absolute;
-          right: 0.42rem;
-          top: 0.54rem;
+          right: 0.62rem;
+          top: 0.72rem;
           display: grid;
           gap: 0.22rem;
-          width: 1.76rem;
+          width: 2.56rem;
         }
 
         .hero-mini-visual-reading .hero-mini-lines i {
-          height: 0.22rem;
+          height: 0.28rem;
           border-radius: 999px;
           background: rgba(94,68,42,0.24);
         }
 
         .hero-mini-visual-plant .hero-mini-plant-line {
           position: absolute;
-          left: 0.48rem;
-          right: 0.48rem;
-          bottom: 0.58rem;
-          height: 0.16rem;
+          left: 0.68rem;
+          right: 0.68rem;
+          bottom: 0.78rem;
+          height: 0.2rem;
           border-radius: 999px;
           background: rgba(95,145,115,0.28);
         }
 
         .hero-mini-visual-plant .hero-mini-plant-stage {
           position: absolute;
-          bottom: 0.52rem;
+          bottom: 0.72rem;
           border-radius: 999px;
           background: var(--cherry-sage);
           box-shadow: 0 0 0 2px rgba(250,247,241,0.8);
         }
 
         .hero-mini-visual-plant .hero-mini-plant-algae {
-          left: 0.54rem;
-          width: 0.34rem;
-          height: 0.34rem;
+          left: 0.74rem;
+          width: 0.42rem;
+          height: 0.42rem;
           background: var(--cherry-blue);
         }
 
         .hero-mini-visual-plant .hero-mini-plant-moss {
-          left: 1.42rem;
-          width: 0.42rem;
-          height: 0.52rem;
+          left: 1.92rem;
+          width: 0.54rem;
+          height: 0.68rem;
           border-radius: 60% 40% 45% 55%;
         }
 
         .hero-mini-visual-plant .hero-mini-plant-fern {
-          left: 2.34rem;
-          width: 0.46rem;
-          height: 0.86rem;
+          left: 3.14rem;
+          width: 0.6rem;
+          height: 1.08rem;
           border-radius: 80% 20% 80% 20%;
           transform: rotate(-22deg);
           transform-origin: bottom center;
@@ -708,19 +708,19 @@ export function Hero() {
         }
 
         .hero-mini-visual-plant .hero-mini-plant-flower {
-          right: 0.56rem;
-          width: 0.52rem;
-          height: 0.52rem;
+          right: 0.78rem;
+          width: 0.68rem;
+          height: 0.68rem;
           background: var(--cherry-red);
         }
 
         .hero-mini-visual-plant .hero-mini-plant-flower::before {
           content: "";
           position: absolute;
-          left: 0.22rem;
-          bottom: -0.46rem;
-          width: 0.08rem;
-          height: 0.48rem;
+          left: 0.3rem;
+          bottom: -0.62rem;
+          width: 0.1rem;
+          height: 0.64rem;
           border-radius: 999px;
           background: var(--cherry-forest);
         }
