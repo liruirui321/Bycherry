@@ -1587,6 +1587,25 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
     articleRecordFields.length > 0,
   ].filter(Boolean).length;
   const practicePackAvailable = practicePackItemCount > 0;
+  const primaryPracticeLabel = evidenceChainBuilderEnabled
+    ? "证据四格卡"
+    : genomeStoryBuilderEnabled
+      ? "科学故事骨架"
+      : barcodeEvidenceBuilderEnabled
+        ? "鉴定证据链表"
+        : projectEvidenceBuilderEnabled
+          ? "项目证据表"
+          : creationRunBuilderEnabled
+            ? "AI 创作生成记录表"
+            : researchQuestionBuilderEnabled
+              ? "科研问题转译卡"
+              : aiMaterialAuditBuilderEnabled
+                ? "AI 学习材料质检表"
+                : platformUrl
+                  ? "平台照填配置"
+                  : articleRecordFields.length
+                    ? "读完填写"
+                    : "学习记录";
 
   if (!article) {
     return (
@@ -1610,7 +1629,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
   return (
     <main id="main-content" tabIndex={-1} style={{ fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
       <section className="article-detail-section" style={{ padding: "0.22rem 1.5rem 1rem" }}>
-        <div style={{ maxWidth: 860, margin: "0 auto" }}>
+        <div style={{ maxWidth: 1120, margin: "0 auto" }}>
           <article
             className="article-detail-card"
             style={{
@@ -1692,22 +1711,66 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </div>
             ) : null}
 
-            <div id="article-body-points" tabIndex={-1} style={{ display: "grid", gap: "0.48rem", marginBottom: "0.65rem", borderTop: "1px solid rgba(94,68,42,0.12)", paddingTop: "0.55rem" }}>
-              <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>正文</div>
-              {article.paragraphs.map((paragraph, index) => (
-                <div key={paragraph} style={{ display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: 8, alignItems: "start", padding: "0.08rem 0" }}>
-                  <span aria-hidden="true" style={{ width: 18, height: 18, borderRadius: "50%", background: article.tagBg ?? article.labelBg, color: article.tagColor ?? article.labelColor, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900, marginTop: 2 }}>
-                    {index + 1}
-                  </span>
-                  <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.58, fontSize: "0.86rem", margin: 0 }}>
-                    {paragraph}
-                  </p>
+            <div className="article-above-fold-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(280px, 0.38fr)", gap: "1rem", alignItems: "start", borderTop: "1px solid rgba(94,68,42,0.12)", paddingTop: "0.55rem", marginBottom: "0.65rem" }}>
+              <div id="article-body-points" tabIndex={-1} style={{ display: "grid", gap: "0.48rem", minWidth: 0 }}>
+                <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>正文</div>
+                {article.paragraphs.map((paragraph, index) => (
+                  <div key={paragraph} style={{ display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: 8, alignItems: "start", padding: "0.08rem 0" }}>
+                    <span aria-hidden="true" style={{ width: 18, height: 18, borderRadius: "50%", background: article.tagBg ?? article.labelBg, color: article.tagColor ?? article.labelColor, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 900, marginTop: 2 }}>
+                      {index + 1}
+                    </span>
+                    <p style={{ color: "var(--cherry-warm-mid)", lineHeight: 1.58, fontSize: "0.86rem", margin: 0 }}>
+                      {paragraph}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <aside className="article-execution-panel" aria-labelledby="article-execution-title" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 10, padding: "0.76rem", display: "grid", gap: "0.68rem", boxShadow: "0 10px 22px rgba(94,68,42,0.05)", minWidth: 0 }}>
+                <div style={{ display: "grid", gap: "0.2rem" }}>
+                  <div id="article-execution-title" style={{ color: "var(--cherry-warm-brown)", fontWeight: 930, fontSize: "0.9rem", lineHeight: 1.25 }}>
+                    本篇怎么完成
+                  </div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 820 }}>
+                    读正文只是第一步，最后要留下可复制的 {primaryPracticeLabel}。
+                  </div>
                 </div>
-              ))}
+
+                <div style={{ display: "grid", gap: "0.34rem" }}>
+                  <div style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 930 }}>30 分钟节奏</div>
+                  {articlePracticePlan.map((item) => (
+                    <div key={`${item.label}-${item.body}`} style={{ display: "grid", gridTemplateColumns: "3.4rem minmax(0, 1fr)", gap: "0.38rem", alignItems: "start", background: "rgba(250,247,241,0.68)", border: "1px solid rgba(94,68,42,0.08)", borderRadius: 8, padding: "0.42rem" }}>
+                      <span style={{ color: "var(--cherry-forest)", fontSize: "0.68rem", lineHeight: 1.25, fontWeight: 930 }}>{item.label}</span>
+                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.38, fontWeight: 800 }}>{item.body}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ display: "grid", gap: "0.34rem" }}>
+                  <div style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 930 }}>完成验收</div>
+                  {articleCompletionChecks.slice(0, 3).map((item) => (
+                    <div key={item.title} style={{ display: "grid", gridTemplateColumns: "18px minmax(0, 1fr)", gap: "0.34rem", alignItems: "start" }}>
+                      <IconCheck size={15} color="var(--cherry-forest)" />
+                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.42, fontWeight: 820 }}>
+                        <strong style={{ color: "var(--cherry-warm-brown)" }}>{item.title}：</strong>{item.body}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ display: "flex", gap: "0.42rem", flexWrap: "wrap" }}>
+                  <button type="button" onClick={copyActionPack} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.4rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                    {copiedActionPack ? "已复制" : "复制行动包"}
+                  </button>
+                  <button type="button" onClick={copyLearningRecord} aria-describedby="article-summary-copy-status" style={{ background: "var(--muted)", color: "var(--cherry-forest)", border: "1px solid rgba(94,68,42,0.12)", borderRadius: 999, padding: "0.4rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                    {copiedLearningRecord ? "已复制" : "复制学习记录"}
+                  </button>
+                </div>
+              </aside>
             </div>
 
             {practicePackAvailable ? (
-              <details className="article-practice-pack-details article-compact-tool-details" style={{ background: "transparent", border: "none", borderRadius: 0, padding: "0.2rem 0", marginBottom: "0.56rem", boxShadow: "none" }}>
+              <details open className="article-practice-pack-details article-compact-tool-details" style={{ background: "transparent", border: "none", borderRadius: 0, padding: "0.2rem 0", marginBottom: "0.56rem", boxShadow: "none" }}>
                 <summary>练习与记录</summary>
 
             {evidenceChainBuilderEnabled ? (
@@ -2427,6 +2490,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
         {`
           .article-detail-link:focus-visible,
           .article-start-action-button:focus-visible,
+          .article-execution-panel button:focus-visible,
           #article-primary-action:focus-visible,
           #article-body-points:focus-visible,
           .plant-evidence-chain-builder button:focus-visible,
@@ -2529,9 +2593,22 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               box-sizing: border-box !important;
             }
 
+            .article-above-fold-grid {
+              grid-template-columns: 1fr !important;
+              gap: 0.52rem !important;
+              padding-top: 0.38rem !important;
+              margin-bottom: 0.46rem !important;
+            }
+
+            .article-execution-panel {
+              border-radius: 8px !important;
+              padding: 0.62rem !important;
+              gap: 0.5rem !important;
+            }
+
             #article-body-points {
               gap: 0.36rem !important;
-              padding-top: 0.38rem !important;
+              padding-top: 0 !important;
               margin-bottom: 0.48rem !important;
             }
 

@@ -1371,6 +1371,8 @@ function verifyLearnerFacingArticleCopy() {
   expect(articleDetailSource.includes("三、我的填写记录"), "Article learning records must include learner-filled notes.");
   expect(articleDetailSource.includes("七、完成验收"), "Article learning records must include completion checks.");
   expect(articleDetailSource.includes("const articlePracticePlan"), "Article detail pages must derive a short execution plan.");
+  expect(articleDetailSource.includes("const primaryPracticeLabel") && articleDetailSource.includes("article-above-fold-grid") && articleDetailSource.includes("article-execution-panel") && articleDetailSource.includes("本篇怎么完成") && articleDetailSource.includes("30 分钟节奏"), "Article detail pages must surface the execution path in the first viewport instead of hiding all practice depth below the body.");
+  expect(articleDetailSource.includes('<details open className="article-practice-pack-details article-compact-tool-details"'), "Article practice and record tools must be visible by default as a real content surface, not hidden behind a collapsed shell.");
   expect(articleDetailSource.includes('const backHash = "#works";') && articleDetailSource.includes('const backText = "回到内容";'), "Article detail pages must return to the real homepage content directory.");
   for (const retiredArticleBackTarget of ['"#notes"', "回到方法库", "回到证据库"]) {
     expect(!articleDetailSource.includes(retiredArticleBackTarget), `Article detail back navigation should not target retired split article anchors: ${retiredArticleBackTarget}.`);
