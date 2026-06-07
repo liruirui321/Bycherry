@@ -126,7 +126,7 @@ export function Hero() {
         minHeight: "calc(100vh - 50px)",
         position: "relative",
         overflow: "hidden",
-        padding: "clamp(1.1rem, 3.6vh, 2.6rem) clamp(1rem, 3vw, 2.6rem) clamp(1rem, 2.6vh, 1.8rem)",
+        padding: "clamp(0.72rem, 1.7vh, 1.2rem) clamp(1rem, 3vw, 2.6rem) clamp(1rem, 2.2vh, 1.55rem)",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
@@ -151,8 +151,8 @@ export function Hero() {
         <div className="hero-float-deco hero-float-leaf"><IconLeafSmall size={24} color="var(--cherry-sage)" /></div>
       </div>
 
-      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1280, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(300px, 0.82fr) minmax(520px, 1.18fr)", gap: "clamp(1.1rem, 3vw, 3rem)", alignItems: "center" }}>
-        <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "1rem", justifyItems: "start", textAlign: "left", alignContent: "center" }}>
+      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1360, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(280px, 0.68fr) minmax(600px, 1.32fr)", gap: "clamp(1.1rem, 3vw, 3rem)", alignItems: "start" }}>
+        <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.82rem", justifyItems: "start", textAlign: "left", alignContent: "start", paddingTop: "0.45rem" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.36rem 1rem", color: "var(--cherry-forest)", fontSize: "0.8rem", fontWeight: 850, background: "rgba(250,247,241,0.76)", letterSpacing: 0 }}>
             <IconBranch size={13} color="var(--cherry-forest)" />
             By Cherry · Science Studio
@@ -162,7 +162,7 @@ export function Hero() {
             className="hero-title"
             style={{
               fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-              fontSize: "clamp(2.36rem, 4.5vw, 4.35rem)",
+              fontSize: "clamp(2.05rem, 3.58vw, 3.45rem)",
               fontWeight: 920,
               lineHeight: 1.03,
               color: "var(--cherry-warm-brown)",
@@ -181,7 +181,7 @@ export function Hero() {
             {" & "}
             <span style={{ color: "var(--cherry-blue)" }}>AI</span>
           </h1>
-          <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(0.95rem, 1.1vw, 1.1rem)", lineHeight: 1.62, fontWeight: 760, maxWidth: 500 }}>
+          <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(0.88rem, 0.98vw, 1rem)", lineHeight: 1.58, fontWeight: 760, maxWidth: 430 }}>
             科学模拟、科研阅读和 AI 学习工具，打开后直接阅读、操作和练习。
           </p>
           <div className="hero-scope-row" role="group" aria-label="内容范围" style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
@@ -193,12 +193,12 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.62rem", width: "100%", alignContent: "center" }}>
+        <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.5rem", width: "100%", alignContent: "start" }}>
           <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.75rem", minWidth: 0 }}>
             <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.04rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>内容目录</h2>
             <span className="hero-entry-grid-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>当前可打开的主题和阅读</span>
           </div>
-          <nav id="works" className="hero-entry-list" aria-label="内容目录" style={{ display: "grid", gap: "0.48rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+          <nav id="works" className="hero-entry-list" aria-label="内容目录" style={{ display: "grid", gap: "0.42rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
             {entries.map((entry, index) => (
               <a
                 className="hero-entry-row"
@@ -214,7 +214,7 @@ export function Hero() {
                   border: `1.5px solid ${entry.border}`,
                   borderLeft: `0.42rem solid ${entry.border}`,
                   borderRadius: 10,
-                  padding: "0.54rem 0.66rem 0.54rem 0.58rem",
+                  padding: "0.48rem 0.62rem 0.48rem 0.56rem",
                   color: "var(--cherry-warm-brown)",
                   textDecoration: "none",
                   textAlign: "left",
@@ -226,13 +226,13 @@ export function Hero() {
                   overflow: "hidden",
                   minWidth: 0,
                   maxWidth: "100%",
-                  minHeight: 76,
+                  minHeight: 70,
                   boxSizing: "border-box",
                   boxShadow: "0 8px 18px rgba(94,68,42,0.055)",
                   transform: "none",
                 }}
               >
-                <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: 37, height: 37, borderRadius: 10, background: entry.color, flexShrink: 0 }}>
+                <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: 34, height: 34, borderRadius: 9, background: entry.color, flexShrink: 0 }}>
                   <span style={{ transform: "scale(0.64)", display: "grid", placeItems: "center" }}>{entry.icon}</span>
                 </span>
                 <span style={{ minWidth: 0, display: "grid", gap: "0.25rem", alignContent: "center" }}>
@@ -660,6 +660,7 @@ export function Hero() {
             grid-template-columns: 1fr !important;
             height: auto !important;
             min-height: auto !important;
+            margin: 0 auto !important;
             gap: 0.9rem !important;
           }
 
