@@ -790,6 +790,8 @@ export function Hero() {
             grid-template-columns: 1fr !important;
             gap: 0.5rem !important;
             justify-items: start !important;
+            width: calc(100% - 0.7rem) !important;
+            max-width: calc(100% - 0.7rem) !important;
           }
 
           .hero-title {
@@ -816,12 +818,12 @@ export function Hero() {
 
           .hero-entry-card {
             grid-column: auto !important;
-            grid-template-columns: 2.1rem minmax(0, calc(100vw - 7.6rem)) !important;
+            grid-template-columns: 2.1rem minmax(0, 1fr) !important;
             grid-template-rows: auto auto !important;
             min-height: 106px !important;
             padding: 0.58rem 0.64rem !important;
-            width: calc(100vw - 4rem) !important;
-            max-width: calc(100vw - 4rem) !important;
+            width: 100% !important;
+            max-width: 100% !important;
             justify-self: start !important;
             gap: 0.5rem !important;
             overflow: hidden !important;
