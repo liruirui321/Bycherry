@@ -4,11 +4,11 @@ import { navigateClient, shouldUseClientNavigation } from "../navigation";
 
 export function Nav() {
   const menuItems = [
-    { label: "主题", href: "/#works" },
-    { label: "模拟", href: "/works/gene-expression" },
+    { label: "主题作品", href: "/#works" },
+    { label: "科学模拟", href: "/works/gene-expression" },
     { label: "科研", href: "/works/research-prompt-kit" },
-    { label: "AI", href: "/works/concept-explainer" },
-    { label: "阅读", href: "/reading" },
+    { label: "小工具", href: "/works/concept-explainer" },
+    { label: "笔记", href: "/reading" },
   ];
 
   function openMenuItem(href: string, event: MouseEvent<HTMLAnchorElement>) {
@@ -32,14 +32,14 @@ export function Nav() {
       <div
         style={{
           width: "100%",
-          maxWidth: 1880,
+          maxWidth: 1660,
           margin: "0 auto",
           padding: "0 1.5rem",
           boxSizing: "border-box",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          height: 50,
+          height: 56,
           position: "relative",
         }}
       >
@@ -54,17 +54,17 @@ export function Nav() {
           style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}
         >
           <IconCherry size={24} />
-          <span style={{ fontSize: "1rem", fontWeight: 780, color: "var(--cherry-warm-brown)", letterSpacing: 0 }}>
+          <span style={{ fontSize: "1.04rem", fontWeight: 820, color: "var(--cherry-warm-brown)", letterSpacing: 0 }}>
             By Cherry
           </span>
         </a>
-        <div className="nav-menu" role="group" aria-label="主要内容入口" style={{ display: "flex", alignItems: "center", gap: "1.18rem" }}>
+        <div className="nav-menu" role="group" aria-label="主要内容入口" style={{ display: "flex", alignItems: "center", gap: "1.65rem" }}>
           {menuItems.map((item) => (
             <a
               key={item.href}
               href={item.href}
               onClick={(event) => openMenuItem(item.href, event)}
-              style={{ color: "var(--cherry-warm-brown)", textDecoration: "none", fontSize: "0.86rem", fontWeight: 820, whiteSpace: "nowrap" }}
+              style={{ color: "var(--cherry-warm-brown)", textDecoration: "none", fontSize: "0.9rem", fontWeight: 860, whiteSpace: "nowrap" }}
             >
               {item.label}
             </a>

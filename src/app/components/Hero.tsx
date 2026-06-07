@@ -121,17 +121,17 @@ export function Hero() {
       aria-labelledby="hero-heading"
       style={{
         fontFamily: "'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-        minHeight: "calc(100svh - 50px)",
+        minHeight: "calc(100svh - 56px)",
         position: "relative",
         overflow: "hidden",
-        padding: "clamp(1.2rem, 2.8vh, 2rem) clamp(1rem, 2.6vw, 2.2rem) clamp(1.2rem, 2.8vh, 2rem)",
+        padding: "clamp(1.05rem, 2.4vh, 1.8rem) clamp(1rem, 2.6vw, 2rem) clamp(1.05rem, 2.4vh, 1.8rem)",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
         background: "#F7F5EF",
         display: "grid",
-        alignItems: "start",
-        alignContent: "start",
+        alignItems: "center",
+        alignContent: "center",
       }}
     >
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
@@ -149,8 +149,8 @@ export function Hero() {
         <div className="hero-float-deco hero-float-leaf"><IconLeafSmall size={24} color="var(--cherry-sage)" /></div>
       </div>
 
-      <div className="hero-inner" style={{ position: "relative", top: 0, zIndex: 2, maxWidth: 1880, width: "100%", minWidth: 0, margin: "0 auto", marginTop: "clamp(0.8rem, 2.7vh, 1.8rem)", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(520px, 0.36fr) minmax(920px, 0.64fr)", gap: "clamp(1.45rem, 2.6vw, 2.8rem)", alignItems: "stretch" }}>
-        <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.78rem", justifyItems: "start", textAlign: "left", alignContent: "start", paddingTop: "0.45rem" }}>
+      <div className="hero-inner" style={{ position: "relative", top: 0, zIndex: 2, maxWidth: 1660, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(370px, 0.35fr) minmax(0, 0.65fr)", gap: "clamp(1.2rem, 2.2vw, 2rem)", alignItems: "stretch", minHeight: "min(760px, calc(100svh - 116px))" }}>
+        <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.72rem", justifyItems: "start", textAlign: "left", alignContent: "start", paddingTop: "clamp(4.7rem, 8.5vh, 5.7rem)" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.36rem 1.05rem", color: "var(--cherry-forest)", fontSize: "0.86rem", fontWeight: 850, background: "rgba(250,247,241,0.76)", letterSpacing: 0 }}>
             <IconBranch size={13} color="var(--cherry-forest)" />
             By Cherry · Science Studio
@@ -160,7 +160,7 @@ export function Hero() {
             className="hero-title"
             style={{
               fontFamily: "'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-              fontSize: "clamp(2.9rem, 4.25vw, 5.18rem)",
+              fontSize: "clamp(3rem, 4.7vw, 4.9rem)",
               fontWeight: 900,
               lineHeight: 1.04,
               color: "var(--cherry-warm-brown)",
@@ -179,7 +179,7 @@ export function Hero() {
             {" & "}
             <span style={{ color: "var(--cherry-blue)" }}>AI</span>
           </h1>
-          <p className="hero-subtitle" style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.08vw, 1.18rem)", lineHeight: 1.5, fontWeight: 760, maxWidth: 620, overflowWrap: "anywhere", wordBreak: "break-word" }}>
+          <p className="hero-subtitle" style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.08vw, 1.16rem)", lineHeight: 1.5, fontWeight: 760, maxWidth: 560, overflowWrap: "anywhere", wordBreak: "break-word" }}>
             科学模拟、科研阅读和 AI 学习工具，打开后直接进入内容。
           </p>
           <div className="hero-action-row" style={{ display: "flex", gap: "0.72rem", flexWrap: "wrap", alignItems: "center", marginTop: "0.08rem" }}>
@@ -247,15 +247,15 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.72rem", width: "100%", alignContent: "stretch" }}>
+        <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gridTemplateRows: "auto minmax(0, 1fr)", gap: "0.72rem", width: "100%", alignContent: "stretch" }}>
           <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.75rem", minWidth: 0 }}>
             <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.18rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>精选内容</h2>
             <span className="hero-entry-grid-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>{entries.length} 个内容</span>
           </div>
-          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.78rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gridAutoRows: "minmax(0, 1fr)", gap: "0.78rem", minWidth: 0, maxWidth: "100%", minHeight: 0, boxSizing: "border-box" }}>
             {entries.map((entry, index) => (
               <a
-                className="hero-entry-card"
+                className={`hero-entry-card ${index === entries.length - 1 ? "hero-entry-card-wide" : ""}`}
                 key={entry.key}
                 href={entry.href}
                 aria-label={`打开${entry.title}：${entry.desc}`}
@@ -281,11 +281,10 @@ export function Hero() {
                   overflow: "hidden",
                   minWidth: 0,
                   maxWidth: "100%",
-                  minHeight: 188,
+                  minHeight: 0,
                   boxSizing: "border-box",
                   boxShadow: "0 12px 24px rgba(94,68,42,0.07)",
                   transform: "none",
-                  gridColumn: index === 0 ? "span 2" : undefined,
                 }}
               >
                 <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: 36, height: 36, borderRadius: 10, background: "rgba(250,247,241,0.62)", border: "1px solid rgba(94,68,42,0.08)", flexShrink: 0, gridRow: "1 / span 2" }}>
@@ -484,10 +483,10 @@ export function Hero() {
 
         .hero-workbench-visual {
           position: relative;
-          width: min(100%, 470px);
-          height: clamp(150px, 21vh, 210px);
+          width: min(100%, 430px);
+          height: clamp(118px, 15vh, 150px);
           margin-top: 0.2rem;
-          border-radius: 24px;
+          border-radius: 20px;
           overflow: hidden;
           background:
             radial-gradient(circle at 14% 30%, rgba(184,68,51,0.11) 0 13%, transparent 14%),
@@ -640,62 +639,6 @@ export function Hero() {
         .hero-entry-card > * {
           position: relative;
           z-index: 1;
-        }
-
-        .hero-entry-card:first-child {
-          grid-template-rows: auto auto auto !important;
-        }
-
-        .hero-entry-card:first-child .hero-entry-side {
-          min-height: 5.5rem;
-        }
-
-        .hero-entry-card:first-child .hero-mini-visual {
-          width: min(100%, 17rem);
-          height: 4.55rem;
-        }
-
-        .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-dna {
-          left: 0.8rem;
-          top: 0.72rem;
-          width: 8rem;
-          gap: 0.45rem;
-        }
-
-        .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-dna span {
-          width: 1.42rem;
-          height: 1.42rem;
-          font-size: 0.58rem;
-        }
-
-        .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-rna {
-          left: 1.08rem;
-          top: 2.86rem;
-          width: 10.2rem;
-          height: 1.42rem;
-          border-bottom-width: 4px;
-        }
-
-        .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-ribosome {
-          right: 2.1rem;
-          bottom: 0.72rem;
-          width: 2rem;
-          height: 1.42rem;
-        }
-
-        .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-chain {
-          right: 0.9rem;
-          bottom: 1.72rem;
-          gap: 0.18rem;
-        }
-
-        .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-chain i {
-          width: 0.62rem;
-          height: 0.62rem;
-        }
-
-        .hero-entry-card:first-child .hero-entry-output-list {
-          justify-content: flex-start !important;
         }
 
         .hero-entry-card:hover,
@@ -943,6 +886,42 @@ export function Hero() {
           background: var(--cherry-forest);
         }
 
+        @media (min-width: 981px) and (max-width: 1499px) {
+          .hero-entry-card-wide {
+            grid-column: 1 / -1 !important;
+            grid-template-columns: 2.4rem minmax(0, 1fr) minmax(250px, 0.78fr) !important;
+            grid-template-rows: auto auto auto !important;
+          }
+
+          .hero-entry-card-wide .hero-entry-side {
+            grid-column: 3 / 4 !important;
+            grid-row: 1 / 4 !important;
+            min-height: 100% !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: stretch !important;
+          }
+
+          .hero-entry-card-wide .hero-mini-visual {
+            width: min(100%, 21rem);
+            height: 5.1rem;
+          }
+
+          .hero-entry-card-wide .hero-entry-output-list {
+            justify-content: flex-start !important;
+          }
+        }
+
+        @media (min-width: 1500px) {
+          .hero-entry-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          }
+
+          .hero-entry-card-wide {
+            grid-column: auto !important;
+          }
+        }
+
         @media (max-width: 980px) {
           .hero-shell {
             min-height: auto !important;
@@ -970,6 +949,7 @@ export function Hero() {
           .hero-copy-panel {
             max-width: 100% !important;
             gap: 0.72rem !important;
+            padding-top: 0 !important;
           }
 
           .hero-title {
