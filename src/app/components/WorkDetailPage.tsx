@@ -833,6 +833,28 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
       detail: /局限|限制|不能|推测|可能|需要验证|correlation|association/i.test(materialText) ? "材料里已有局限、推测、相关或待验证提示。" : "需要写明哪些结论不能从当前材料直接推出。",
     },
   ];
+  const researchStarterTemplate = `研究对象/材料：请写论文题目、图号、实验方案或审稿意见来源。
+证据材料：请粘贴摘要、图注、结果句、分组、样本量或统计标记。
+我想判断：这份材料能支持什么结论，不能支持什么结论？
+暂不采信：请写出当前材料还不能证明、需要回查或需要补实验的说法。`;
+  const researchMaterialStarterCards = [
+    {
+      label: "研究对象/材料",
+      body: "先写清材料来自论文、图表、实验方案、讨论段落还是审稿意见。",
+    },
+    {
+      label: "证据材料",
+      body: "粘贴能回查的句子、图注、样本量、分组、统计标记或结果描述。",
+    },
+    {
+      label: "我想判断",
+      body: "写成一个可回答的问题，例如“这张图是否支持机制结论”。",
+    },
+    {
+      label: "暂不采信",
+      body: "先写出当前材料不能直接证明的说法，避免生成过强结论。",
+    },
+  ];
   const finalPrompt = `${activePrompt.text}
 
 【我的材料】
@@ -1060,6 +1082,10 @@ ${localPreviewOutput}`;
     updateMaterial(activePrompt.materialTemplate);
   }
 
+  function fillResearchStarterTemplate() {
+    updateMaterial(researchStarterTemplate);
+  }
+
   function clearMaterial() {
     updateMaterial("");
   }
@@ -1158,6 +1184,28 @@ ${localPreviewOutput}`;
                 })}
               </div>
             </div>
+
+            <section className="research-material-starter-panel" aria-labelledby="research-material-starter-title" style={{ background: "rgba(250,247,241,0.74)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem", marginBottom: "0.62rem", display: "grid", gap: "0.48rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: "0.7rem", alignItems: "center", flexWrap: "wrap" }}>
+                <div>
+                  <div id="research-material-starter-title" style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.86rem" }}>先填四句就能开始</div>
+                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, marginTop: "0.14rem", fontWeight: 800 }}>
+                    不需要先整理完整论文；先把材料来源、证据句、判断问题和不能推出的结论写清楚。
+                  </div>
+                </div>
+                <button type="button" onClick={fillResearchStarterTemplate} style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.76rem" }}>
+                  套用四句起步
+                </button>
+              </div>
+              <div className="research-material-starter-grid" role="list" aria-label="材料起步四句" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem" }}>
+                {researchMaterialStarterCards.map((item, index) => (
+                  <div key={item.label} role="listitem" style={{ background: index === 2 ? "var(--cherry-blue-light)" : index === 3 ? "var(--cherry-peach-light)" : "var(--card)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", display: "grid", gap: "0.2rem", minHeight: 74 }}>
+                    <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.2 }}>{item.label}</strong>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 800 }}>{item.body}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
 
             <section className="research-live-preview-panel" aria-labelledby="research-live-preview-title" style={{ background: "var(--cherry-sage-light)", border: "1.5px solid rgba(58,92,62,0.22)", borderRadius: 8, padding: "0.66rem", display: "grid", gap: "0.5rem", marginBottom: "0.62rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "baseline", flexWrap: "wrap" }}>
@@ -1959,6 +2007,15 @@ ${localPreviewOutput}`;
               gap: 0.38rem !important;
             }
 
+            #prompt-kit-builder .research-material-starter-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.38rem !important;
+            }
+
+            #prompt-kit-builder .research-material-starter-panel {
+              padding: 0.54rem !important;
+            }
+
             #prompt-kit-builder .research-material-gate-card {
               min-height: 66px !important;
               padding: 0.42rem !important;
@@ -1986,7 +2043,7 @@ ${localPreviewOutput}`;
 
             #prompt-kit-builder .research-prompt-route-grid {
               display: grid !important;
-              grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
               gap: 0.34rem !important;
             }
 

@@ -638,6 +638,11 @@ function verifyResearchAgentWorkbenchContract() {
     { label: "material gate method", text: "样本方法" },
     { label: "material gate evidence", text: "结果证据" },
     { label: "material gate boundary", text: "边界语句" },
+    { label: "starter template", text: "researchStarterTemplate" },
+    { label: "starter cards data", text: "researchMaterialStarterCards" },
+    { label: "visible starter panel", text: "先填四句就能开始" },
+    { label: "starter button", text: "套用四句起步" },
+    { label: "starter grid", text: "research-material-starter-grid" },
     { label: "default visible local preview", text: "useState(true)" },
     { label: "visible local preview result panel", text: "research-live-preview-panel" },
     { label: "visible local preview result title", text: "本地预览结果" },
@@ -665,7 +670,7 @@ function verifyResearchAgentWorkbenchContract() {
     expect(`${practiceCasesSource}\n${promptKitSource}`.includes(item.text), `Research Agent workbench is missing ${item.label}: ${item.text}`);
   }
 
-  expect(promptKitSource.includes("#prompt-kit-builder .research-prompt-route-grid") && promptKitSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Research Agent mobile route selector must stay as compact three-column task buttons.");
+  expect(promptKitSource.includes("#prompt-kit-builder .research-prompt-route-grid") && promptKitSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "Research Agent mobile route selector must stay as readable two-column task buttons.");
   expect(promptKitSource.includes("#prompt-kit-builder .research-prompt-route-input,") && promptKitSource.includes("#prompt-kit-builder .research-prompt-route-output") && promptKitSource.includes("display: none !important"), "Research Agent mobile route selector must hide long input/output details.");
   expect(promptKitSource.includes('className="research-agent-mode-grid"') && promptKitSource.includes('gridTemplateColumns: "repeat(3, minmax(0, 1fr))"'), "Research Agent mode selector must stay as compact three-column buttons.");
   expect(promptKitSource.includes('className="research-agent-mode-desc"') && promptKitSource.includes('style={{ display: "none"'), "Research Agent mode descriptions must stay hidden visually so the material input appears earlier.");
@@ -679,6 +684,7 @@ function verifyResearchAgentWorkbenchContract() {
   expect(promptKitSource.includes('className="research-agent-preview-panel"') && promptKitSource.includes('background: hasRunPreview ? "var(--cherry-sage-light)" : "transparent"') && promptKitSource.includes('padding: hasRunPreview ? "0.68rem" : 0') && !promptKitSource.includes("点击运行后，这里会显示材料状态、证据边界和下一步分析顺序。"), "Research Agent local preview must not render an empty default result card before the learner runs it.");
   expect(promptKitSource.includes("#prompt-kit-builder .research-start-path-strip") && promptKitSource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"') && promptKitSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "Research Agent visible start path must stay compact across desktop and mobile.");
   expect(promptKitSource.includes("#prompt-kit-builder .research-material-gate-strip") && promptKitSource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"') && promptKitSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "Research Agent material gate must stay compact across desktop and mobile.");
+  expect(promptKitSource.includes("#prompt-kit-builder .research-material-starter-grid") && promptKitSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "Research Agent starter cards must stay visible and readable on mobile.");
   for (const retiredResearchSummaryChrome of ["流程、练习与复核 ·", "任务路由建议 ·", "我的复核记录 ·", "生成指令、质控与任务包 ·", "进阶设置 ·"]) {
     expect(!promptKitSource.includes(retiredResearchSummaryChrome), `Research Agent summaries should stay short and not expose status chrome: ${retiredResearchSummaryChrome}.`);
   }
