@@ -937,6 +937,8 @@ function verifyGeneExpressionLearnerContract() {
     { label: "readable mRNA guide path", text: "readableMrnaPath" },
     { label: "ribosome cannot outrun polymerase", text: "不能越过 RNA 聚合酶" },
     { label: "mRNA nucleotide bead chain", text: "mrna-nucleotide-bead" },
+    { label: "new base pulse at polymerase outlet", text: "mrna-new-base-pulse" },
+    { label: "newly added base label", text: "新接入碱基" },
     { label: "ribosome peptide exit port", text: "ribosome-peptide-exit-port" },
     { label: "live peptide bead chain", text: "live-peptide-bead-chain" },
     { label: "canvas legend data", text: "processLegendItems" },
@@ -1010,6 +1012,7 @@ function verifyGeneExpressionLearnerContract() {
   }
   expect(geneSource.includes("当前：{activeProcessFocus}") && geneSource.includes("{expressionCompletionChecks.filter((item) => item.done).length}/{expressionCompletionChecks.length}") && geneSource.includes("填写完成度 {expressionExperimentScore}/{expressionExperimentFields.length}") && geneSource.includes("focusedCodon?.rna ?? \"---\"") && geneSource.includes("{quizCorrectCount}/{geneQuizItems.length}") && geneSource.includes("taskStatuses.map((item, index)"), "Gene expression compact summaries must keep current focus, completion counts, codon, quiz, and task status inside expanded content.");
   expect(geneSource.includes("const transcriptBases = codons.flatMap") && geneSource.includes("pathProgress = 0.08 + baseIndex * 0.066") && geneSource.includes("pointOnPolyline(nascentPath, pathProgress)"), "Gene expression mRNA nucleotides must follow the curved nascent mRNA path attached to RNA polymerase.");
+  expect(geneSource.includes('className="mrna-new-base-pulse"') && geneSource.includes("growthEnd.x - 18") && geneSource.includes("polymerase.progress > 0.16"), "Gene expression must mark newly added bases at the moving RNA polymerase outlet.");
   expect(geneSource.includes("readableSpan = Math.max(0, readableLimit - ribosomeStartFraction)") && geneSource.includes("readProgress = hasReadableSegment") && geneSource.includes("ribosomeStartFraction + readableSpan * localProgress"), "Gene expression ribosomes must move only along the exposed transcribed mRNA segment behind RNA polymerase.");
   expect(geneSource.includes("const tailLength = 78 + boundedProgress * 335"), "Gene expression nascent mRNA must keep a visible curved trailing segment behind RNA polymerase.");
   expect(!geneSource.includes('d="M8 -8 C18 -15 27 -18 36 -16"') && !geneSource.includes('d="M17 7 C29 12 37 17 43 19"'), "Gene expression ribosome body must not show a separate green chain inside the ribosome; peptide beads should leave through the exit port.");

@@ -583,10 +583,21 @@ function LiveExpressionProcess({
               d={`M${polymeraseBody.x + 3} ${polymeraseBody.y + 18} C${polymeraseBody.x + 8} ${polymeraseBody.y + 26} ${growthEnd.x - 3} ${growthEnd.y - 5} ${growthEnd.x} ${growthEnd.y}`}
               fill="none"
               stroke="var(--cherry-red)"
-              strokeWidth={4}
+              strokeWidth={6}
               strokeLinecap="round"
               opacity={0.72}
             />
+            <g className="mrna-new-base-pulse" transform={`translate(${growthEnd.x - 18} ${growthEnd.y + 19})`} opacity={polymerase.progress > 0.16 ? 1 : 0}>
+              <path d="M-12 0 C-4 -12 9 -12 18 -1" fill="none" stroke="var(--cherry-red)" strokeWidth={2.4} strokeLinecap="round" opacity={0.62} />
+              {[0, 1, 2].map((dot) => (
+                <circle key={dot} cx={dot * 12 - 3} cy={0} r={5.2} fill="var(--cherry-red)" stroke="#FAF7F1" strokeWidth={1.8}>
+                  {prefersReducedMotion ? null : <animate attributeName="cy" values="0;-5;0" dur="0.72s" begin={`${dot * 0.08}s`} repeatCount="indefinite" />}
+                </circle>
+              ))}
+              <text x={12} y={21} textAnchor="middle" fill="var(--cherry-red)" fontSize={9.5} fontWeight={900}>
+                新接入碱基
+              </text>
+            </g>
             <g transform={`translate(${fiveEnd.x} ${fiveEnd.y})`} opacity={polymerase.progress > 0.12 ? 1 : 0}>
               <circle r={8} fill="#FAF7F1" stroke="var(--cherry-red)" strokeWidth={2.4} />
               <path d="M-15 -6 C-22 -10 -26 -4 -22 1" fill="none" stroke="var(--cherry-red)" strokeWidth={2.2} strokeLinecap="round" opacity={0.62} />
