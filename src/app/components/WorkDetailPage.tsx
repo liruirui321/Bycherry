@@ -2135,6 +2135,7 @@ function PlantEvolutionContent() {
   const [activePlantLens, setActivePlantLens] = useState("story");
   const [activePlantTaskIndex, setActivePlantTaskIndex] = useState(0);
   const [activePlantQuestIndex, setActivePlantQuestIndex] = useState(0);
+  const [activePlantRecordMode, setActivePlantRecordMode] = useState("compare");
   const [copiedStudyCard, setCopiedStudyCard] = useState(false);
   const [copiedStageComparison, setCopiedStageComparison] = useState(false);
   const [copiedEvidenceAudit, setCopiedEvidenceAudit] = useState(false);
@@ -2413,6 +2414,12 @@ function PlantEvolutionContent() {
       body: "化石记录、基因组比较、系统发育和分子钟各自支持的范围不同，复盘时必须保留证据类型。",
     },
   ];
+  const plantRecordModes = [
+    { key: "compare", label: "比较", desc: "看前后阶段" },
+    { key: "evidence", label: "证据", desc: "判读边界" },
+    { key: "review", label: "复盘", desc: "串起全线" },
+    { key: "card", label: "学习卡", desc: "复制整理" },
+  ];
   const evidenceAuditOutput = `【植物演化证据判读记录】
 阶段：${activeChapter.title}
 时间：${activeChapter.time}
@@ -2595,6 +2602,7 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
     setActivePlantLens("story");
     setActivePlantTaskIndex(0);
     setActivePlantQuestIndex(0);
+    setActivePlantRecordMode("compare");
     setCopiedStudyCard(false);
     setCopiedStageComparison(false);
     setCopiedEvidenceAudit(false);
@@ -3002,149 +3010,161 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
           </div>
 
           <section className="plant-support-pack-panel" aria-labelledby="plant-support-pack-title" style={{ display: "grid", gap: "0.58rem", minWidth: 0 }}>
-            <h2 id="plant-support-pack-title" style={{ color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.2, fontWeight: 930, margin: 0 }}>记录与文献</h2>
-
-          <details open className="plant-compact-details plant-stage-comparison-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>阶段比较记录</summary>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
-              <div>
-                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>阶段比较记录</strong>
-                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>比较相邻阶段的生存问题、关键创新和证据状态。</span>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "end", gap: "0.7rem", minWidth: 0 }}>
+              <div style={{ minWidth: 0 }}>
+                <h2 id="plant-support-pack-title" style={{ color: "var(--cherry-warm-brown)", fontSize: "0.92rem", lineHeight: 1.2, fontWeight: 930, margin: 0 }}>学习工作台</h2>
+                <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.35, fontWeight: 820, marginTop: "0.18rem" }}>比较、证据、复盘和学习卡集中在一个面板里。</span>
               </div>
-              <button type="button" onClick={copyStageComparison} aria-describedby="plant-study-card-status" style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                {copiedStageComparison ? "已复制" : "复制比较记录"}
-              </button>
+              <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", lineHeight: 1.2, fontWeight: 950, whiteSpace: "nowrap" }}>第 {activeChapterIndex + 1}/6 阶段</span>
             </div>
-            <div style={{ display: "grid", gap: "0.52rem" }}>
-              {comparisonStages.map((item, index) => (
-                <div key={`${item.label}-${item.chapter.title}`} style={{ background: item.label === "当前阶段" ? "var(--cherry-yellow-light)" : "var(--muted)", border: item.label === "当前阶段" ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.66rem", display: "grid", gap: "0.38rem" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "0.55rem", alignItems: "start", flexWrap: "wrap" }}>
-                    <strong style={{ color: item.label === "当前阶段" ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.78rem" }}>{item.label}</strong>
-                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", fontWeight: 900 }}>{item.chapter.time}</span>
-                  </div>
-                  <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem", lineHeight: 1.42, fontWeight: 900 }}>{item.chapter.title}</div>
-                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.52, fontWeight: 800 }}>
-                    <strong style={{ color: "var(--cherry-warm-brown)" }}>创新：</strong>{item.chapter.innovation}
-                  </div>
-                  <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.52, fontWeight: 800 }}>
-                    <strong style={{ color: "var(--cherry-warm-brown)" }}>证据：</strong>{item.chapter.certainty}
-                  </div>
-                  {index < comparisonStages.length - 1 ? (
-                    <div style={{ color: "var(--cherry-red)", fontSize: "0.68rem", fontWeight: 900 }}>下一步比较：新能力解决了什么限制，又带来什么新问题？</div>
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          </details>
 
-          <details open className="plant-compact-details plant-evidence-audit-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>证据判读记录</summary>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
-              <div>
-                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>证据判读记录</strong>
-                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>先判断证据来源，再写清楚结论边界。</span>
-              </div>
-              <button type="button" onClick={copyEvidenceAudit} aria-describedby="plant-study-card-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                {copiedEvidenceAudit ? "已复制" : "复制证据判读"}
-              </button>
+            <div className="plant-record-tablist" role="tablist" aria-label="植物演化记录模式" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.34rem" }}>
+              {plantRecordModes.map((mode) => {
+                const active = activePlantRecordMode === mode.key;
+                return (
+                  <button key={mode.key} type="button" role="tab" aria-selected={active} onClick={() => setActivePlantRecordMode(mode.key)} style={{ background: active ? "var(--cherry-forest)" : "rgba(250,247,241,0.72)", color: active ? "#FAF7F1" : "var(--cherry-warm-brown)", border: active ? "1.5px solid var(--cherry-forest)" : "1.5px solid rgba(94,68,42,0.12)", borderRadius: 10, padding: "0.42rem 0.4rem", cursor: "pointer", display: "grid", gap: "0.1rem", justifyItems: "start", minWidth: 0 }}>
+                    <strong style={{ fontSize: "0.72rem", lineHeight: 1.12, fontWeight: 950 }}>{mode.label}</strong>
+                    <span style={{ fontSize: "0.58rem", lineHeight: 1.15, fontWeight: 820, opacity: active ? 0.86 : 0.72 }}>{mode.desc}</span>
+                  </button>
+                );
+              })}
             </div>
-            <div style={{ display: "grid", gap: "0.52rem" }}>
-              {evidenceAuditCards.map((item, index) => (
-                <div key={item.title} style={{ background: index === 1 ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === 1 ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.66rem", display: "grid", gap: "0.34rem" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-                    <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: index === 2 ? "var(--cherry-red)" : "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900 }}>{index + 1}</span>
-                    <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem" }}>{item.title}</strong>
+
+            <div className="plant-record-mode-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)", display: "grid", gap: "0.58rem", minWidth: 0 }}>
+              {activePlantRecordMode === "compare" ? (
+                <div role="tabpanel" className="plant-stage-comparison-details" style={{ display: "grid", gap: "0.58rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.65rem", flexWrap: "wrap" }}>
+                    <div>
+                      <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.84rem", marginBottom: "0.16rem" }}>阶段比较记录</strong>
+                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 800 }}>先看上一限制、当前创新和下一问题，再写比较句。</span>
+                    </div>
+                    <button type="button" onClick={copyStageComparison} aria-describedby="plant-study-card-status" style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                      {copiedStageComparison ? "已复制" : "复制比较记录"}
+                    </button>
                   </div>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.52, fontWeight: 900 }}>{item.body}</span>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.52, fontWeight: 800 }}>{item.check}</span>
-                </div>
-              ))}
-            </div>
-          </details>
-
-          <details className="plant-compact-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>阶段检查</summary>
-            <div>
-              <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>阶段检查</strong>
-              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>完成当前阶段前，至少留下定位、压力、创新和证据边界四条可检查回答。</span>
-            </div>
-            <div style={{ display: "grid", gap: "0.52rem" }}>
-              {plantCompletionChecks.map((item, index) => (
-                <div key={item.title} style={{ background: "rgba(250,247,241,0.78)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 14, padding: "0.66rem", display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.5rem", alignItems: "start" }}>
-                  <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: index === 3 ? "var(--cherry-red)" : "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900 }}>{index + 1}</span>
-                  <span>
-                    <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.78rem", marginBottom: "0.24rem" }}>{item.title}</strong>
-                    <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.52, fontWeight: 800, marginBottom: "0.32rem" }}>{item.task}</span>
-                    <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.7rem", lineHeight: 1.48, fontWeight: 900 }}>通过标准：{item.pass}</span>
-                  </span>
-                </div>
-              ))}
-            </div>
-          </details>
-
-          <details className="plant-timeline-review-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.78rem" }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>全线复盘包</summary>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
-              <div>
-                <strong style={{ display: "block", color: "var(--cherry-warm-brown)", marginBottom: "0.18rem" }}>全线复盘包</strong>
-                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.76rem", lineHeight: 1.5, fontWeight: 800 }}>把 6 个阶段连成一条解释主线：压力、创新、证据状态和结论边界都要保留下来。</span>
-              </div>
-              <button type="button" onClick={copyTimelineReview} aria-describedby="plant-study-card-status" style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                {copiedTimelineReview ? "已复制" : "复制全线复盘"}
-              </button>
-            </div>
-            <div className="plant-timeline-review-grid" style={{ display: "grid", gap: "0.34rem" }}>
-              {chapters.map((chapter, index) => (
-                <div className="plant-timeline-review-row" key={chapter.title} style={{ background: index === activeChapterIndex ? "var(--cherry-yellow-light)" : "rgba(250,247,241,0.68)", border: index === activeChapterIndex ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.46rem 0.52rem", display: "grid", gridTemplateColumns: "76px minmax(0, 1fr) 66px", gap: "0.48rem", alignItems: "center" }}>
-                  <div style={{ display: "grid", gap: "0.08rem", minWidth: 0 }}>
-                    <strong style={{ color: index === activeChapterIndex ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.68rem", lineHeight: 1.12 }}>{plantStageLabels[index]}</strong>
-                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.58rem", lineHeight: 1.18, fontWeight: 900 }}>{chapter.time}</span>
+                  <div style={{ display: "grid", gap: "0.34rem" }}>
+                    {comparisonStages.map((item) => (
+                      <div key={`${item.label}-${item.chapter.title}`} style={{ background: item.label === "当前阶段" ? "var(--cherry-yellow-light)" : "var(--muted)", border: item.label === "当前阶段" ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 9, padding: "0.5rem", display: "grid", gap: "0.22rem" }}>
+                        <span style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem", alignItems: "baseline" }}>
+                          <strong style={{ color: item.label === "当前阶段" ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.7rem" }}>{item.label}</strong>
+                          <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.62rem", fontWeight: 900 }}>{item.chapter.time}</span>
+                        </span>
+                        <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.34, fontWeight: 900 }}>{item.chapter.innovation}</span>
+                        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 800 }}>{item.chapter.challenge}</span>
+                      </div>
+                    ))}
                   </div>
-                  <span style={{ minWidth: 0, color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.28, fontWeight: 900, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{chapter.innovation}</span>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.62rem", lineHeight: 1.22, fontWeight: 900, textAlign: "right" }}>{chapter.certainty}</span>
                 </div>
-              ))}
-            </div>
-            <div className="plant-timeline-check-strip" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.38rem" }}>
-              {timelineReviewChecks.map((item, index) => (
-                <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", display: "grid", gap: "0.22rem" }}>
-                  <strong style={{ color: index === 2 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.7rem", lineHeight: 1.18 }}>{index + 1}. {item.title}</strong>
-                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.36, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" }}>{item.body}</span>
-                </div>
-              ))}
-            </div>
-          </details>
+              ) : null}
 
-          <details className="plant-study-card-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
-            <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>本阶段学习卡</summary>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
-              <strong style={{ color: "var(--cherry-warm-brown)" }}>本阶段学习卡</strong>
-              <button type="button" onClick={copyStudyCard} aria-describedby="plant-study-card-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.78rem", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>
-                {copiedStudyCard ? "已复制" : "复制学习卡"}
-              </button>
+              {activePlantRecordMode === "evidence" ? (
+                <div role="tabpanel" className="plant-evidence-audit-details" style={{ display: "grid", gap: "0.58rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.65rem", flexWrap: "wrap" }}>
+                    <div>
+                      <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.84rem", marginBottom: "0.16rem" }}>证据判读记录</strong>
+                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 800 }}>来源、可信范围和不能推出的内容分开看。</span>
+                    </div>
+                    <button type="button" onClick={copyEvidenceAudit} aria-describedby="plant-study-card-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                      {copiedEvidenceAudit ? "已复制" : "复制证据判读"}
+                    </button>
+                  </div>
+                  <div style={{ display: "grid", gap: "0.34rem" }}>
+                    {evidenceAuditCards.map((item, index) => (
+                      <div key={item.title} style={{ background: index === 1 ? "var(--cherry-yellow-light)" : "var(--muted)", border: index === 1 ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 9, padding: "0.5rem", display: "grid", gap: "0.22rem" }}>
+                        <strong style={{ color: index === 2 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.7rem" }}>{index + 1}. {item.title}</strong>
+                        <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.35, fontWeight: 900 }}>{item.body}</span>
+                        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.38, fontWeight: 800 }}>{item.check}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              {activePlantRecordMode === "review" ? (
+                <div role="tabpanel" className="plant-timeline-review-panel" style={{ display: "grid", gap: "0.58rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.65rem", flexWrap: "wrap" }}>
+                    <div>
+                      <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.84rem", marginBottom: "0.16rem" }}>全线复盘包</strong>
+                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 800 }}>把 6 个阶段连成压力、创新和证据边界。</span>
+                    </div>
+                    <button type="button" onClick={copyTimelineReview} aria-describedby="plant-study-card-status" style={{ background: "var(--cherry-red)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                      {copiedTimelineReview ? "已复制" : "复制全线复盘"}
+                    </button>
+                  </div>
+                  <div className="plant-timeline-review-grid" style={{ display: "grid", gap: "0.3rem" }}>
+                    {chapters.map((chapter, index) => (
+                      <div className="plant-timeline-review-row" key={chapter.title} style={{ background: index === activeChapterIndex ? "var(--cherry-yellow-light)" : "rgba(250,247,241,0.68)", border: index === activeChapterIndex ? "1.5px solid var(--cherry-yellow)" : "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.42rem 0.48rem", display: "grid", gridTemplateColumns: "70px minmax(0, 1fr) 58px", gap: "0.42rem", alignItems: "center" }}>
+                        <div style={{ display: "grid", gap: "0.08rem", minWidth: 0 }}>
+                          <strong style={{ color: index === activeChapterIndex ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.66rem", lineHeight: 1.12 }}>{plantStageLabels[index]}</strong>
+                          <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.55rem", lineHeight: 1.18, fontWeight: 900 }}>{chapter.time}</span>
+                        </div>
+                        <span style={{ minWidth: 0, color: "var(--cherry-warm-brown)", fontSize: "0.7rem", lineHeight: 1.28, fontWeight: 900, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{chapter.innovation}</span>
+                        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.58rem", lineHeight: 1.18, fontWeight: 900, textAlign: "right" }}>{chapter.certainty}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="plant-timeline-check-strip" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.34rem" }}>
+                    {timelineReviewChecks.map((item, index) => (
+                      <div key={item.title} style={{ background: "rgba(250,247,241,0.72)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.46rem", display: "grid", gap: "0.2rem" }}>
+                        <strong style={{ color: index === 2 ? "var(--cherry-red)" : "var(--cherry-forest)", fontSize: "0.66rem", lineHeight: 1.16 }}>{index + 1}. {item.title}</strong>
+                        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.62rem", lineHeight: 1.32, fontWeight: 800, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" }}>{item.body}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              {activePlantRecordMode === "card" ? (
+                <div role="tabpanel" className="plant-study-card-details" style={{ display: "grid", gap: "0.58rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.65rem", flexWrap: "wrap" }}>
+                    <div>
+                      <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.84rem", marginBottom: "0.16rem" }}>本阶段学习卡</strong>
+                      <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.42, fontWeight: 800 }}>复制后可以直接放进笔记，再补自己的判断句。</span>
+                    </div>
+                    <button type="button" onClick={copyStudyCard} aria-describedby="plant-study-card-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.42rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem" }}>
+                      {copiedStudyCard ? "已复制" : "复制学习卡"}
+                    </button>
+                  </div>
+                  <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 10, padding: "0.62rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.66rem", lineHeight: 1.48, maxHeight: 168, overflow: "auto" }}>
+                    {studyCardOutput}
+                  </code>
+                </div>
+              ) : null}
             </div>
-            <div id="plant-study-card-status" role="status" aria-live="polite" style={{ minHeight: "1.05rem", color: "var(--cherry-forest)", fontSize: "0.76rem", fontWeight: 900, marginBottom: "0.55rem" }}>
+
+            <div id="plant-study-card-status" role="status" aria-live="polite" style={{ minHeight: studyCardStatus ? "1.05rem" : 0, color: "var(--cherry-forest)", fontSize: "0.74rem", fontWeight: 900 }}>
               {studyCardStatus}
             </div>
-            <code style={{ display: "block", whiteSpace: "pre-wrap", background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 14, padding: "0.75rem", color: "var(--cherry-warm-brown)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "0.72rem", lineHeight: 1.55, maxHeight: 180, overflow: "auto" }}>
-              {studyCardOutput}
-            </code>
-          </details>
 
-          <details className="plant-reference-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem" }}>
-        <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer" }}>证据与参考文献</summary>
-        <h3 style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.8rem" }}>证据与参考文献</h3>
-        <div style={{ background: "var(--muted)", borderRadius: 14, padding: "0.8rem", color: "var(--cherry-warm-mid)", lineHeight: 1.65, fontSize: "0.86rem", marginBottom: "0.8rem" }}>
-          <strong style={{ color: "var(--cherry-warm-brown)" }}>当前阶段证据：</strong>{activeChapter.evidence}
-        </div>
-        <div style={{ display: "grid", gap: "0.65rem" }}>
-          {references.map((reference) => (
-            <a key={reference.key} href={reference.url} target="_blank" rel="noreferrer" aria-label={`${reference.title}，新窗口打开`} style={{ color: "var(--cherry-forest)", textDecoration: "none", lineHeight: 1.6, fontSize: "0.86rem", fontWeight: 800 }}>
-              [{reference.key}] {reference.title} <span aria-hidden="true">↗</span>
-            </a>
-          ))}
-        </div>
-      </details>
+            <details className="plant-compact-details plant-stage-check-details" style={{ background: "var(--cherry-yellow-light)", border: "1.5px solid var(--cherry-yellow)", borderRadius: 10, padding: "0.62rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>阶段检查</summary>
+              <div style={{ display: "grid", gap: "0.42rem" }}>
+                {plantCompletionChecks.map((item, index) => (
+                  <div key={item.title} style={{ background: "rgba(250,247,241,0.78)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 9, padding: "0.5rem", display: "grid", gridTemplateColumns: "20px minmax(0, 1fr)", gap: "0.42rem", alignItems: "start" }}>
+                    <span aria-hidden="true" style={{ width: 18, height: 18, borderRadius: "50%", background: index === 3 ? "var(--cherry-red)" : "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.6rem", fontWeight: 900 }}>{index + 1}</span>
+                    <span>
+                      <strong style={{ display: "block", color: "var(--cherry-warm-brown)", fontSize: "0.72rem", marginBottom: "0.18rem" }}>{item.title}</strong>
+                      <span style={{ display: "block", color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.42, fontWeight: 800, marginBottom: "0.24rem" }}>{item.task}</span>
+                      <span style={{ display: "block", color: "var(--cherry-forest)", fontSize: "0.64rem", lineHeight: 1.36, fontWeight: 900 }}>通过标准：{item.pass}</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </details>
+
+            <details className="plant-reference-details" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 10, padding: "0.62rem" }}>
+              <summary style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, cursor: "pointer", fontSize: "0.78rem" }}>证据与参考文献</summary>
+              <div style={{ background: "var(--muted)", borderRadius: 9, padding: "0.58rem", color: "var(--cherry-warm-mid)", lineHeight: 1.55, fontSize: "0.74rem", marginBottom: "0.58rem" }}>
+                <strong style={{ color: "var(--cherry-warm-brown)" }}>当前阶段证据：</strong>{activeChapter.evidence}
+              </div>
+              <div style={{ display: "grid", gap: "0.5rem" }}>
+                {references.map((reference) => (
+                  <a key={reference.key} href={reference.url} target="_blank" rel="noreferrer" aria-label={`${reference.title}，新窗口打开`} style={{ color: "var(--cherry-forest)", textDecoration: "none", lineHeight: 1.45, fontSize: "0.74rem", fontWeight: 850 }}>
+                    [{reference.key}] {reference.title} <span aria-hidden="true">↗</span>
+                  </a>
+                ))}
+              </div>
+            </details>
           </section>
         </aside>
       </div>
@@ -3319,6 +3339,17 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
               padding: 0.34rem 0.2rem !important;
               font-size: 0.64rem !important;
               line-height: 1.12 !important;
+            }
+
+            #plant-evolution-explorer .plant-record-tablist {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.3rem !important;
+            }
+
+            #plant-evolution-explorer .plant-record-mode-panel {
+              padding: 0.6rem !important;
+              border-radius: 10px !important;
+              box-shadow: none !important;
             }
 
             #plant-evolution-explorer .plant-stage-detail-card [role="tabpanel"] {

@@ -249,7 +249,8 @@ function verifyWorkDetailCardsStayCompact() {
     const supportPackPattern = new RegExp(`className="${className}[\\s\\S]{0,220}background: "transparent"[\\s\\S]{0,120}border: "none"[\\s\\S]{0,120}boxShadow: "none"`);
     expect(supportPackPattern.test(source), `${className} must stay as a lightweight folded row instead of a framed card.`);
   }
-  expect(source.includes('className="plant-support-pack-panel"') && source.includes('id="plant-support-pack-title"') && source.includes('<details open className="plant-compact-details plant-stage-comparison-details"') && source.includes('<details open className="plant-compact-details plant-evidence-audit-details"'), "Plant evolution records and evidence tools must be directly visible instead of hidden behind a wrapper fold.");
+  expect(source.includes('className="plant-support-pack-panel"') && source.includes('id="plant-support-pack-title"') && source.includes("学习工作台") && source.includes("plantRecordModes") && source.includes("plant-record-tablist") && source.includes("plant-record-mode-panel") && source.includes('key: "compare"') && source.includes('key: "evidence"') && source.includes('key: "review"') && source.includes('key: "card"'), "Plant evolution records must use a compact four-mode learner workbench instead of long default-open note panels.");
+  expect(!source.includes('<details open className="plant-compact-details plant-stage-comparison-details"') && !source.includes('<details open className="plant-compact-details plant-evidence-audit-details"'), "Plant evolution comparison and evidence records must not return to long default-open sticky-note panels.");
   expect(geneSource.includes('className="gene-support-pack-panel"') && geneSource.includes('id="gene-support-pack-title"') && geneSource.includes("<details open className=\"gene-compact-details gene-process-focus-details\""), "Gene expression practice and record tools must be directly visible, with process tracking open by default.");
   expect(geneSource.includes('className="gene-peptide-readout-strip"') && geneSource.includes("当前多肽链") && geneSource.includes("peptidePreviewCount"), "Gene expression readout must expose a visible bead-chain polypeptide strip.");
   for (const retiredSupportPackCopy of ["说明、可视化与导出 · 7 项", "说明、练习、记录与报告 · 10 项", "记录、复盘与文献 · 6 项", "练习、记录与状态 · 9 项"]) {
@@ -1135,6 +1136,11 @@ function verifyPlantEvolutionLearnerContract() {
     { label: "mobile active stage focus card", text: "plant-mobile-stage-focus-card" },
     { label: "mobile active stage focus icon", text: "renderPlantStageIcon(activeChapterIndex, true)" },
     { label: "mobile active stage evidence state", text: "证据状态：{activeChapter.certainty}" },
+    { label: "compact learner workbench", text: "学习工作台" },
+    { label: "record mode data", text: "plantRecordModes" },
+    { label: "record tablist", text: "plant-record-tablist" },
+    { label: "record mode panel", text: "plant-record-mode-panel" },
+    { label: "record mode reset", text: 'setActivePlantRecordMode("compare")' },
   ];
 
   const retiredPlantPatterns = [
