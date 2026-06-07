@@ -189,11 +189,11 @@ export function ArticleLibraryPage() {
                     style={{
                       color: "var(--cherry-warm-brown)",
                       textDecoration: "none",
-                      background: "transparent",
-                      border: "none",
-                      borderLeft: "3px solid rgba(93,140,101,0.5)",
-                      borderRadius: 0,
-                      padding: "0.36rem 0.56rem",
+                      background: "rgba(250,247,241,0.58)",
+                      border: "1px solid rgba(94,68,42,0.1)",
+                      borderLeft: "3px solid rgba(93,140,101,0.58)",
+                      borderRadius: 8,
+                      padding: "0.46rem 0.58rem",
                       display: "grid",
                       gridTemplateColumns: "minmax(0, 1fr) minmax(210px, 0.8fr) auto",
                       gap: "0.52rem",
@@ -216,8 +216,9 @@ export function ArticleLibraryPage() {
                         产出：{article.firstOutput}
                       </span>
                     </span>
-                    <span className="article-library-meta" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.2, fontWeight: 900, whiteSpace: "nowrap" }}>
-                      {article.label}
+                    <span className="article-library-meta" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.2, fontWeight: 900, whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: "0.32rem" }}>
+                      <span>{article.label}</span>
+                      <span className="article-library-row-arrow" aria-hidden="true" style={{ color: "var(--cherry-forest)", fontSize: "0.84rem", lineHeight: 1, fontWeight: 950 }}>→</span>
                     </span>
                   </a>
                 ))}
@@ -252,7 +253,7 @@ export function ArticleLibraryPage() {
         }
 
         .article-library-row {
-          transition: color 0.18s ease, background 0.18s ease;
+          transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
         }
 
         .article-library-row:hover,
@@ -260,6 +261,12 @@ export function ArticleLibraryPage() {
         .article-choice-route-card:hover,
         .article-choice-route-card:focus-visible {
           background: rgba(250,247,241,0.54) !important;
+        }
+
+        .article-library-row:hover,
+        .article-library-row:focus-visible {
+          border-color: rgba(93,140,101,0.28) !important;
+          transform: translateY(-1px);
         }
 
         .article-choice-route-card:focus-visible {
