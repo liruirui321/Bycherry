@@ -94,7 +94,7 @@ function openContent(href: string, event: MouseEvent<HTMLAnchorElement>) {
 export function ArticleLibraryPage() {
   return (
     <main id="main-content" tabIndex={-1} style={{ fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
-      <section style={{ padding: "0.72rem 1.5rem 1.2rem" }}>
+      <section className="article-library-shell" style={{ padding: "0.72rem 1.5rem 1.2rem" }}>
         <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gap: "0.58rem" }}>
           <header style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", alignItems: "center", gap: "0.62rem", borderBottom: "1px solid rgba(94,68,42,0.1)", paddingBottom: "0.46rem" }}>
             <a
@@ -130,7 +130,7 @@ export function ArticleLibraryPage() {
               <h2 id="article-choice-title" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.9rem", lineHeight: 1.2, fontWeight: 920 }}>
                 现在卡在哪
               </h2>
-              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.25, fontWeight: 880 }}>
+              <span className="article-choice-helper" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.25, fontWeight: 880 }}>
                 选一个问题，进正文完成第一个动作并留下记录。
               </span>
             </div>
@@ -172,7 +172,7 @@ export function ArticleLibraryPage() {
                 <h2 id={`reading-${group.title}`} style={{ margin: 0, color: "var(--cherry-forest)", fontSize: "0.92rem", lineHeight: 1.2, fontWeight: 900 }}>
                   {group.title}
                 </h2>
-                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.25, fontWeight: 900 }}>{group.desc}</span>
+                <span className="article-group-desc" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.25, fontWeight: 900 }}>{group.desc}</span>
               </div>
 
               <div className="article-library-list" style={{ display: "grid", gap: "0.22rem" }}>
@@ -230,7 +230,7 @@ export function ArticleLibraryPage() {
               <h2 id="reading-record-title" style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "0.9rem", lineHeight: 1.2, fontWeight: 920 }}>
                 读完保存四格记录
               </h2>
-              <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.25, fontWeight: 880 }}>
+              <span className="article-record-helper" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.25, fontWeight: 880 }}>
                 不只收藏文章，把判断过程留下来。
               </span>
             </div>
@@ -299,6 +299,50 @@ export function ArticleLibraryPage() {
 
           .article-library-first-action {
             font-size: 0.66rem !important;
+          }
+        }
+
+        @media (max-width: 560px) {
+          .article-library-shell {
+            padding-left: 0.85rem !important;
+            padding-right: 0.85rem !important;
+          }
+
+          .article-choice-route-strip,
+          .article-choice-route-grid,
+          .article-library-list,
+          .article-library-row,
+          .article-library-record-strip,
+          .article-library-record-grid {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            box-sizing: border-box !important;
+          }
+
+          .article-choice-route-grid,
+          .article-library-record-grid {
+            grid-template-columns: 1fr !important;
+          }
+
+          .article-choice-route-card {
+            min-height: 0 !important;
+          }
+
+          .article-library-row {
+            grid-template-columns: 1fr !important;
+            border-left-width: 2px !important;
+            padding: 0.34rem 0.42rem !important;
+          }
+
+          .article-library-meta {
+            display: none !important;
+          }
+
+          .article-choice-helper,
+          .article-group-desc,
+          .article-record-helper {
+            display: none !important;
           }
         }
 
