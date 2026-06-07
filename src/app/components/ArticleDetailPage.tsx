@@ -322,10 +322,10 @@ ${evidenceChainFilled.interpretation}
 ${evidenceChainFilled.limit}
 
 自查
-1. 现象是否能被观察或比较：${evidenceChainFields[0]?.pass ? "可用" : "待补充"}
-2. 证据是否来自图表、数据或样本：${evidenceChainFields[1]?.pass ? "可用" : "待补充"}
-3. 解释是否没有超过证据范围：${evidenceChainFields[2]?.pass ? "可用" : "待补充"}
-4. 限制是否保留了不确定性：${evidenceChainFields[3]?.pass ? "可用" : "待补充"}`
+1. 现象是否能被观察或比较：${evidenceChainFields[0]?.pass ? "可用" : "待完善"}
+2. 证据是否来自图表、数据或样本：${evidenceChainFields[1]?.pass ? "可用" : "待完善"}
+3. 解释是否没有超过证据范围：${evidenceChainFields[2]?.pass ? "可用" : "待完善"}
+4. 限制是否保留了不确定性：${evidenceChainFields[3]?.pass ? "可用" : "待完善"}`
     : "";
   const genomeStoryBuilderEnabled = article?.slug === "genome-assembly-story";
   const genomeStoryFields = genomeStoryBuilderEnabled
@@ -419,12 +419,12 @@ ${genomeStoryFilled.comparison}
 ${genomeStoryFilled.connection}
 
 自查
-1. 研究对象是否有讲述理由：${genomeStoryFields[0]?.pass ? "可用" : "待补充"}
-2. 主问题是否能被证据回答：${genomeStoryFields[1]?.pass ? "可用" : "待补充"}
-3. 结构证据是否说明数据基础：${genomeStoryFields[2]?.pass ? "可用" : "待补充"}
-4. 功能证据是否提供解释线索：${genomeStoryFields[3]?.pass ? "可用" : "待补充"}
-5. 比较证据是否说明差异：${genomeStoryFields[4]?.pass ? "可用" : "待补充"}
-6. 连接句是否回到主问题：${genomeStoryFields[5]?.pass ? "可用" : "待补充"}`
+1. 研究对象是否有讲述理由：${genomeStoryFields[0]?.pass ? "可用" : "待完善"}
+2. 主问题是否能被证据回答：${genomeStoryFields[1]?.pass ? "可用" : "待完善"}
+3. 结构证据是否说明数据基础：${genomeStoryFields[2]?.pass ? "可用" : "待完善"}
+4. 功能证据是否提供解释线索：${genomeStoryFields[3]?.pass ? "可用" : "待完善"}
+5. 比较证据是否说明差异：${genomeStoryFields[4]?.pass ? "可用" : "待完善"}
+6. 连接句是否回到主问题：${genomeStoryFields[5]?.pass ? "可用" : "待完善"}`
     : "";
   const barcodeEvidenceBuilderEnabled = article?.slug === "barcoding-evidence-chain";
   const barcodeEvidenceFields = barcodeEvidenceBuilderEnabled
@@ -518,12 +518,12 @@ ${barcodeEvidenceFilled.tree}
 ${barcodeEvidenceFilled.boundary}
 
 自查
-1. 样本是否可回溯：${barcodeEvidenceFields[0]?.pass ? "可用" : "待补充"}
-2. 实验记录是否支持继续分析：${barcodeEvidenceFields[1]?.pass ? "可用" : "待补充"}
-3. 序列质量是否说明清楚：${barcodeEvidenceFields[2]?.pass ? "可用" : "待补充"}
-4. BLAST 是否同时看相似度、覆盖度和候选差距：${barcodeEvidenceFields[3]?.pass ? "可用" : "待补充"}
-5. 树图位置是否能支撑候选判断：${barcodeEvidenceFields[4]?.pass ? "可用" : "待补充"}
-6. 结论是否保留确定、可能或仍需验证：${barcodeEvidenceFields[5]?.pass ? "可用" : "待补充"}`
+1. 样本是否可回溯：${barcodeEvidenceFields[0]?.pass ? "可用" : "待完善"}
+2. 实验记录是否支持继续分析：${barcodeEvidenceFields[1]?.pass ? "可用" : "待完善"}
+3. 序列质量是否说明清楚：${barcodeEvidenceFields[2]?.pass ? "可用" : "待完善"}
+4. BLAST 是否同时看相似度、覆盖度和候选差距：${barcodeEvidenceFields[3]?.pass ? "可用" : "待完善"}
+5. 树图位置是否能支撑候选判断：${barcodeEvidenceFields[4]?.pass ? "可用" : "待完善"}
+6. 结论是否保留确定、可能或仍需验证：${barcodeEvidenceFields[5]?.pass ? "可用" : "待完善"}`
     : "";
   const projectEvidenceBuilderEnabled = article?.slug === "pbl-rubric-evidence";
   const projectEvidenceFields = projectEvidenceBuilderEnabled
@@ -617,12 +617,12 @@ ${projectEvidenceFilled.rubric}
 ${projectEvidenceFilled.revision}
 
 自查
-1. 驱动问题是否能被作品回答：${projectEvidenceFields[0]?.pass ? "可用" : "待补充"}
-2. 最终作品是否可展示、可保存：${projectEvidenceFields[1]?.pass ? "可用" : "待补充"}
-3. 任务节点是否可执行：${projectEvidenceFields[2]?.pass ? "可用" : "待补充"}
-4. 过程证据是否可回看：${projectEvidenceFields[3]?.pass ? "可用" : "待补充"}
-5. 评价量规是否可观察：${projectEvidenceFields[4]?.pass ? "可用" : "待补充"}
-6. 修订记录是否说明作品如何变可靠：${projectEvidenceFields[5]?.pass ? "可用" : "待补充"}`
+1. 驱动问题是否能被作品回答：${projectEvidenceFields[0]?.pass ? "可用" : "待完善"}
+2. 最终作品是否可展示、可保存：${projectEvidenceFields[1]?.pass ? "可用" : "待完善"}
+3. 任务节点是否可执行：${projectEvidenceFields[2]?.pass ? "可用" : "待完善"}
+4. 过程证据是否可回看：${projectEvidenceFields[3]?.pass ? "可用" : "待完善"}
+5. 评价量规是否可观察：${projectEvidenceFields[4]?.pass ? "可用" : "待完善"}
+6. 修订记录是否说明作品如何变可靠：${projectEvidenceFields[5]?.pass ? "可用" : "待完善"}`
     : "";
   const creationRunBuilderEnabled = article?.slug === "ai-comic-video-workflow";
   const creationRunFields = creationRunBuilderEnabled
@@ -716,12 +716,12 @@ ${creationRunFilled.failure}
 ${creationRunFilled.edit}
 
 自查
-1. 场景目标是否明确：${creationRunFields[0]?.pass ? "可用" : "待补充"}
-2. 角色锁定是否能减少漂移：${creationRunFields[1]?.pass ? "可用" : "待补充"}
-3. 镜头表是否包含景别、动作和时长：${creationRunFields[2]?.pass ? "可用" : "待补充"}
-4. 资产提示是否能复用：${creationRunFields[3]?.pass ? "可用" : "待补充"}
-5. 失败原因是否变成限制条件：${creationRunFields[4]?.pass ? "可用" : "待补充"}
-6. 剪辑检查是否覆盖成片体验：${creationRunFields[5]?.pass ? "可用" : "待补充"}`
+1. 场景目标是否明确：${creationRunFields[0]?.pass ? "可用" : "待完善"}
+2. 角色锁定是否能减少漂移：${creationRunFields[1]?.pass ? "可用" : "待完善"}
+3. 镜头表是否包含景别、动作和时长：${creationRunFields[2]?.pass ? "可用" : "待完善"}
+4. 资产提示是否能复用：${creationRunFields[3]?.pass ? "可用" : "待完善"}
+5. 失败原因是否变成限制条件：${creationRunFields[4]?.pass ? "可用" : "待完善"}
+6. 剪辑检查是否覆盖成片体验：${creationRunFields[5]?.pass ? "可用" : "待完善"}`
     : "";
   const researchQuestionBuilderEnabled = article?.slug === "science-to-learning-question";
   const researchQuestionFields = researchQuestionBuilderEnabled
@@ -815,12 +815,12 @@ ${researchQuestionFilled.task}
 ${researchQuestionFilled.boundary}
 
 自查
-1. 科研主题是否清楚：${researchQuestionFields[0]?.pass ? "可用" : "待补充"}
-2. 已有经验是否能进入主题：${researchQuestionFields[1]?.pass ? "可用" : "待补充"}
-3. 问题是否可观察或可比较：${researchQuestionFields[2]?.pass ? "可用" : "待补充"}
-4. 证据材料是否有限且可读：${researchQuestionFields[3]?.pass ? "可用" : "待补充"}
-5. 解释任务是否要求判断支持和不支持：${researchQuestionFields[4]?.pass ? "可用" : "待补充"}
-6. 边界是否保留下一步验证：${researchQuestionFields[5]?.pass ? "可用" : "待补充"}`
+1. 科研主题是否清楚：${researchQuestionFields[0]?.pass ? "可用" : "待完善"}
+2. 已有经验是否能进入主题：${researchQuestionFields[1]?.pass ? "可用" : "待完善"}
+3. 问题是否可观察或可比较：${researchQuestionFields[2]?.pass ? "可用" : "待完善"}
+4. 证据材料是否有限且可读：${researchQuestionFields[3]?.pass ? "可用" : "待完善"}
+5. 解释任务是否要求判断支持和不支持：${researchQuestionFields[4]?.pass ? "可用" : "待完善"}
+6. 边界是否保留下一步验证：${researchQuestionFields[5]?.pass ? "可用" : "待完善"}`
     : "";
   const aiMaterialAuditBuilderEnabled = article?.slug === "ai-learning-material-audit";
   const aiMaterialAuditFields = aiMaterialAuditBuilderEnabled
@@ -914,12 +914,12 @@ ${aiMaterialAuditFilled.evidence}
 ${aiMaterialAuditFilled.revision}
 
 自查
-1. 学习目标是否是可完成动作：${aiMaterialAuditFields[0]?.pass ? "可用" : "待补充"}
-2. 资料边界是否清楚：${aiMaterialAuditFields[1]?.pass ? "可用" : "待补充"}
-3. 常见误解是否具体：${aiMaterialAuditFields[2]?.pass ? "可用" : "待补充"}
-4. 练习是否能暴露误解：${aiMaterialAuditFields[3]?.pass ? "可用" : "待补充"}
-5. 证据边界是否保留核查：${aiMaterialAuditFields[4]?.pass ? "可用" : "待补充"}
-6. 复盘动作是否能继续执行：${aiMaterialAuditFields[5]?.pass ? "可用" : "待补充"}`
+1. 学习目标是否是可完成动作：${aiMaterialAuditFields[0]?.pass ? "可用" : "待完善"}
+2. 资料边界是否清楚：${aiMaterialAuditFields[1]?.pass ? "可用" : "待完善"}
+3. 常见误解是否具体：${aiMaterialAuditFields[2]?.pass ? "可用" : "待完善"}
+4. 练习是否能暴露误解：${aiMaterialAuditFields[3]?.pass ? "可用" : "待完善"}
+5. 证据边界是否保留核查：${aiMaterialAuditFields[4]?.pass ? "可用" : "待完善"}
+6. 复盘动作是否能继续执行：${aiMaterialAuditFields[5]?.pass ? "可用" : "待完善"}`
     : "";
   const platformUrl = article && "platformUrl" in article ? article.platformUrl : null;
   const platformUsePlans = platformUrl
