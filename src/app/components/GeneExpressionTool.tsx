@@ -97,7 +97,7 @@ const processLegendItems = [
   { label: "可读片段", detail: "绿色虚线", color: "var(--cherry-forest)" },
   { label: "RNA 聚合酶", detail: "蓝色椭圆", color: "var(--cherry-blue)" },
   { label: "核糖体", detail: "橙色椭圆", color: "var(--cherry-peach)" },
-  { label: "多肽出口", detail: "绿色小圆", color: "var(--cherry-sage)" },
+  { label: "多肽链", detail: "绿色小圆串", color: "var(--cherry-sage)" },
 ];
 
 function inBox(molecule: Molecule, box: { x: number; y: number; w: number; h: number }) {
@@ -368,15 +368,15 @@ function aminoCountForRibosome(progress: number) {
 }
 
 function ribosomePeptideExitPoint(ribosomeCenter: Point) {
-  return { x: ribosomeCenter.x + 42, y: ribosomeCenter.y - 2 };
+  return { x: ribosomeCenter.x + 36, y: ribosomeCenter.y - 16 };
 }
 
 function peptideBeadPoint(exit: Point, index: number) {
   const points = [
-    { x: exit.x + 17, y: exit.y + 17 },
-    { x: exit.x + 40, y: exit.y + 34 },
-    { x: exit.x + 66, y: exit.y + 20 },
-    { x: exit.x + 92, y: exit.y + 39 },
+    { x: exit.x + 15, y: exit.y + 9 },
+    { x: exit.x + 38, y: exit.y + 21 },
+    { x: exit.x + 63, y: exit.y + 10 },
+    { x: exit.x + 87, y: exit.y + 27 },
   ];
   return points[index] ?? points[points.length - 1];
 }
@@ -411,6 +411,12 @@ function LiveExpressionProcess({
     ...ribosome,
     renderPoint: { x: ribosome.point.x, y: ribosome.point.y + index * 8 },
   }));
+  const leadNascentPath = model.transcriptionOn && leadPolymerase
+    ? buildNascentMrnaPath(leadPolymerase.point, leadPolymerase.progress, leadPolymerase.offset)
+    : null;
+  const leadFiveEnd = leadNascentPath?.[0] ?? null;
+  const leadGrowthEnd = leadNascentPath?.[leadNascentPath.length - 1] ?? null;
+  const readableGuidePoint = ribosomeCanRead ? pointOnPolyline(coupledMrnaPath, Math.max(ribosomeStartFraction, readableMrnaProgress * 0.54)) : null;
   const leadRibosome = renderedRibosomes.find((ribosome) => ribosome.opacity > 0);
   const leadRibosomeProgress = leadRibosome?.progress ?? 0;
   const leadRibosomePoint = leadRibosome?.renderPoint ?? null;
@@ -449,7 +455,8 @@ function LiveExpressionProcess({
             <text y={-14} textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={13} fontWeight={900}>
               核糖体
             </text>
-            <text x={0} y={22} textAnchor="middle" fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
+            <rect x={-25} y={14} width={50} height={15} rx={7.5} fill="rgba(250,247,241,0.92)" stroke="rgba(58,92,62,0.22)" strokeWidth={1.1} />
+            <text x={0} y={25} textAnchor="middle" fill="var(--cherry-forest)" fontSize={8.6} fontWeight={900}>
               {currentCodon?.rna ?? ""}
             </text>
           </g>
@@ -464,7 +471,7 @@ function LiveExpressionProcess({
         const beadPoints = codons.slice(0, aminoCount).map((_, aminoIndex) => peptideBeadPoint(exit, aminoIndex));
         const chainPath = [exit, ...beadPoints].map((point, aminoIndex) => `${aminoIndex === 0 ? "M" : "L"}${point.x} ${point.y}`).join(" ");
         const calloutX = exit.x + 7;
-        const calloutY = exit.y + 3;
+        const calloutY = exit.y - 18;
 
         return (
           <g className="live-peptide-bead-chain" key={`live-peptide-chain-${ribosomeIndex}`} opacity={ribosome.opacity}>
@@ -472,14 +479,14 @@ function LiveExpressionProcess({
               x={calloutX}
               y={calloutY}
               width={116}
-              height={58}
+              height={52}
               rx={17}
               fill="rgba(169,201,172,0.24)"
               stroke="rgba(93,140,101,0.24)"
               strokeWidth={1.4}
             />
             <path
-              d={`M${exit.x - 26} ${exit.y + 4} C${exit.x - 12} ${exit.y + 8} ${exit.x + 2} ${exit.y + 13} ${exit.x + 17} ${exit.y + 17}`}
+              d={`M${exit.x} ${exit.y} C${exit.x + 6} ${exit.y + 2} ${exit.x + 11} ${exit.y + 6} ${exit.x + 15} ${exit.y + 9}`}
               fill="none"
               stroke="var(--cherry-forest)"
               strokeWidth={6}
@@ -489,7 +496,7 @@ function LiveExpressionProcess({
             {beadPoints.length > 0 ? <path d={chainPath} fill="none" stroke="var(--cherry-forest)" strokeWidth={6.4} strokeLinecap="round" strokeLinejoin="round" opacity={0.86} /> : null}
             {ribosomeIndex === 0 ? (
               <text x={calloutX + 12} y={calloutY + 14} fill="var(--cherry-forest)" fontSize={11} fontWeight={900}>
-                多肽链从出口长出
+                多肽链贴着出口长出
               </text>
             ) : null}
             {codons.slice(0, aminoCount).map((codon, aminoIndex) => {
@@ -614,7 +621,7 @@ function LiveExpressionProcess({
               <circle r={8} fill="#FAF7F1" stroke="var(--cherry-red)" strokeWidth={2.4} />
               <path d="M-15 -6 C-22 -10 -26 -4 -22 1" fill="none" stroke="var(--cherry-red)" strokeWidth={2.2} strokeLinecap="round" opacity={0.62} />
               <text x={-12} y={24} fill="var(--cherry-red)" fontSize={11} fontWeight={900}>
-                5' 自由端
+                5' 自由端先露出
               </text>
             </g>
             {transcriptBases.map((base, baseIndex) => {
@@ -644,9 +651,32 @@ function LiveExpressionProcess({
         );
       })}
 
+      {leadFiveEnd && leadGrowthEnd ? (
+        <g className="gene-coupled-process-guide" opacity={0.94}>
+          <path d={`M${leadFiveEnd.x - 3} ${leadFiveEnd.y - 16} C${leadFiveEnd.x - 28} ${leadFiveEnd.y - 38} ${leadFiveEnd.x - 82} ${leadFiveEnd.y - 34} ${leadFiveEnd.x - 112} ${leadFiveEnd.y - 10}`} fill="none" stroke="rgba(184,68,51,0.5)" strokeWidth={2.2} strokeLinecap="round" strokeDasharray="5 6" />
+          <rect x={leadFiveEnd.x - 182} y={leadFiveEnd.y - 18} width={112} height={28} rx={999} fill="rgba(250,247,241,0.88)" stroke="rgba(184,68,51,0.22)" strokeWidth={1.4} />
+          <text x={leadFiveEnd.x - 126} y={leadFiveEnd.y} textAnchor="middle" fill="var(--cherry-red)" fontSize={10} fontWeight={900}>
+            先露出，可被读取
+          </text>
+          <path d={`M${leadGrowthEnd.x + 9} ${leadGrowthEnd.y - 6} C${leadGrowthEnd.x + 28} ${leadGrowthEnd.y - 34} ${leadGrowthEnd.x + 54} ${leadGrowthEnd.y - 50} ${leadGrowthEnd.x + 86} ${leadGrowthEnd.y - 46}`} fill="none" stroke="rgba(184,68,51,0.5)" strokeWidth={2.2} strokeLinecap="round" strokeDasharray="5 6" />
+          <rect x={leadGrowthEnd.x + 54} y={leadGrowthEnd.y - 62} width={136} height={28} rx={999} fill="rgba(250,247,241,0.88)" stroke="rgba(184,68,51,0.22)" strokeWidth={1.4} />
+          <text x={leadGrowthEnd.x + 122} y={leadGrowthEnd.y - 44} textAnchor="middle" fill="var(--cherry-red)" fontSize={10} fontWeight={900}>
+            3' 端跟随聚合酶
+          </text>
+        </g>
+      ) : null}
+
       {ribosomeCanRead ? (
         <g opacity={0.9}>
           <path d={readableMrnaPath} fill="none" stroke="var(--cherry-forest)" strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round" strokeDasharray="8 7" />
+          {readableGuidePoint ? (
+            <g className="gene-readable-segment-guide" transform={`translate(${readableGuidePoint.x - 62} ${readableGuidePoint.y - 42})`}>
+              <rect width={124} height={26} rx={999} fill="rgba(250,247,241,0.9)" stroke="rgba(58,92,62,0.22)" strokeWidth={1.4} />
+              <text x={62} y={17} textAnchor="middle" fill="var(--cherry-forest)" fontSize={10} fontWeight={900}>
+                绿色段：核糖体可读
+              </text>
+            </g>
+          ) : null}
         </g>
       ) : null}
 
@@ -1296,8 +1326,6 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
               )}
             </g>
 
-            <LiveExpressionProcess model={model} progress={cycleProgress} retainedMrnaCount={visibleMrnaCount} canTranslate={canTranslate} prefersReducedMotion={prefersReducedMotion} />
-
             <rect x={zones.ribosome.x} y={zones.ribosome.y} width={zones.ribosome.w} height={zones.ribosome.h} rx={22} fill={model.ribBound > 0 ? "rgba(232,121,95,0.15)" : "rgba(250,247,241,0.38)"} stroke="var(--cherry-peach)" strokeWidth={2} strokeDasharray="7 7" />
             <text x={zones.ribosome.x + 22} y={zones.ribosome.y + zones.ribosome.h - 18} fill="var(--cherry-warm-brown)" fontSize={15} fontWeight={900}>
               核糖体入口
@@ -1311,6 +1339,8 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
                 </g>
               )
             )}
+
+            <LiveExpressionProcess model={model} progress={cycleProgress} retainedMrnaCount={visibleMrnaCount} canTranslate={canTranslate} prefersReducedMotion={prefersReducedMotion} />
 
             <g transform="translate(46 86)">
               <rect width={190} height={28} rx={999} fill="rgba(250,247,241,0.74)" stroke="rgba(94,68,42,0.16)" />
