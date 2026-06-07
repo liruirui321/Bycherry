@@ -760,6 +760,16 @@ function verifyConceptExplainerAgentContract() {
     { label: "concept input mode apply handler", text: "applyConceptInputMode" },
     { label: "concept input mode copy guide", text: "copyConceptModeGuide" },
     { label: "visible concept input mode panel", text: "先选一种输入模式" },
+    { label: "freeform concept brief state", text: "rawConceptBrief" },
+    { label: "freeform concept brief template", text: "rawConceptBriefTemplate" },
+    { label: "freeform concept brief parser", text: "applyRawConceptBrief" },
+    { label: "freeform concept brief extractor", text: "extractRawConceptBriefValue" },
+    { label: "visible freeform concept brief panel", text: "整段输入也可以开始" },
+    { label: "visible freeform concept brief class", text: "concept-freeform-brief-panel" },
+    { label: "freeform concept brief paste textarea", text: "concept-freeform-brief-grid" },
+    { label: "freeform concept brief helper cards", text: "concept-freeform-brief-card-grid" },
+    { label: "freeform concept brief template button", text: "套用四句格式" },
+    { label: "freeform concept brief run button", text: "解析并生成" },
     { label: "definition-only input mode", text: "只会背定义" },
     { label: "process confusion input mode", text: "过程顺序混乱" },
     { label: "evidence boundary input mode", text: "证据边界不清" },
@@ -860,6 +870,7 @@ function verifyConceptExplainerAgentContract() {
   expect(conceptSource.includes('className="concept-main-description"') && conceptSource.includes("overflowWrap: \"anywhere\"") && conceptSource.includes("concept-top-route-body") && conceptSource.includes("wordBreak: \"break-word\""), "Concept explainer top copy must wrap safely on narrow screens.");
   expect(conceptSource.includes("#work-primary-tool") && conceptSource.includes("max-width: 100vw !important") && conceptSource.includes("#concept-explainer-tool .concept-main-input-panel") && conceptSource.includes("overflow-x: hidden !important") && conceptSource.includes("#concept-explainer-tool .concept-top-route-strip,\n            #concept-explainer-tool .concept-quick-start-strip") && conceptSource.includes("grid-template-columns: 1fr !important"), "Concept explainer narrow mobile layout must constrain page width and stack top controls to avoid clipping.");
   expect(conceptSource.includes("#concept-explainer-tool .concept-agent-input-grid {\n              grid-template-columns: 1fr !important") && conceptSource.includes("#concept-explainer-tool .concept-agent-input-grid > *") && conceptSource.includes("width: 100% !important") && conceptSource.includes("box-sizing: border-box !important"), "Concept explainer mobile input fields must switch to one column and avoid horizontal overflow.");
+  expect(conceptSource.includes("#concept-explainer-tool .concept-freeform-brief-header,") && conceptSource.includes("#concept-explainer-tool .concept-freeform-brief-grid") && conceptSource.includes("#concept-explainer-tool .concept-freeform-brief-grid textarea") && conceptSource.includes("#concept-explainer-tool .concept-freeform-brief-header button") && conceptSource.includes("width: 100% !important"), "Concept explainer freeform brief parser must stay usable without mobile overflow.");
   expect(conceptSource.includes("#concept-explainer-tool .concept-scope-hint-strip") && conceptSource.includes("concept-scope-hint-card") && conceptSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Concept explainer scope diagnostics must stay visible and compact on mobile.");
   expect(conceptSource.includes("#concept-explainer-tool .concept-narrowing-question-strip") && conceptSource.includes("concept-narrowing-question-card") && conceptSource.includes("grid-template-columns: repeat(3, minmax(0, 1fr)) !important"), "Concept explainer narrowing questions must stay visible and compact on mobile.");
   expect(conceptSource.includes('className="concept-main-input-panel"') && conceptSource.includes('padding: "0.78rem"') && !conceptSource.includes("concept-input-support-pack-details"), "Concept explainer must expose the arbitrary concept input form directly instead of hiding it in a collapsed support panel.");

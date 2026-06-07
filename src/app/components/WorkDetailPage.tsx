@@ -3389,6 +3389,7 @@ function ConceptExplainerContent() {
   const [sourceBoundary, setSourceBoundary] = useState("未提供具体资料；先按通用教材解释，涉及数据、实验或结论时标为待核查");
   const [stuckPoint, setStuckPoint] = useState("我容易把定义、机制和例子混在一起");
   const [applicationContext, setApplicationContext] = useState("用这个概念解释一道题、一个图或一个真实现象");
+  const [rawConceptBrief, setRawConceptBrief] = useState("");
   const [copiedLesson, setCopiedLesson] = useState(false);
   const [copiedSkill, setCopiedSkill] = useState(false);
   const [copiedAudit, setCopiedAudit] = useState(false);
@@ -3680,6 +3681,29 @@ function ConceptExplainerContent() {
       boundary: "来自图示材料或实验结果；本次先解释凋亡主线，不覆盖所有细胞死亡分类",
       stuck: "我看到细胞死亡现象时，不知道哪些证据支持凋亡，哪些更像坏死",
       context: "根据细胞收缩、DNA 片段化、膜破裂和炎症反应判断现象类型",
+    },
+  ];
+  const rawConceptBriefTemplate = `概念：光合作用
+资料边界：来自教材或笔记；不确定的具体数据先标为待核查
+当前卡点：我知道它和能量有关，但说不清光反应和碳反应如何连接
+学习目标：能用一张流程图解释物质和能量怎么变化
+应用情境：解释一道图示题或实验现象`;
+  const rawConceptBriefCards = [
+    {
+      label: "概念",
+      body: "写一个名词或短语，可以是教材概念、论文术语、题目关键词。",
+    },
+    {
+      label: "资料",
+      body: "说明来自教材、笔记、论文、视频，或明确暂时未知。",
+    },
+    {
+      label: "卡点",
+      body: "写出你哪里说不清、容易混淆、不会判断例子。",
+    },
+    {
+      label: "产出",
+      body: "指定想要一句解释、流程图、对照表或例子判断。",
     },
   ];
   const visualMode = /循环|周期|轮回|代谢/.test(concept)
@@ -4148,6 +4172,56 @@ If any of these are missing, add them before the final answer.
     setCopyStatus(`${mode.title}输入模式已套用，可以直接生成学习卡。`);
   }
 
+  function fillRawConceptBriefTemplate() {
+    setRawConceptBrief(rawConceptBriefTemplate);
+    setCopyStatus("四句输入格式已放入，可以改成自己的概念再解析。");
+  }
+
+  function extractRawConceptBriefValue(labels: string[]) {
+    const lines = rawConceptBrief.split(/\n+/).map((line) => line.trim()).filter(Boolean);
+
+    for (const line of lines) {
+      for (const label of labels) {
+        if (line.startsWith(`${label}：`) || line.startsWith(`${label}:`)) {
+          return line.slice(label.length + 1).trim();
+        }
+      }
+    }
+
+    return "";
+  }
+
+  function applyRawConceptBrief() {
+    const brief = rawConceptBrief.trim();
+
+    if (!brief) {
+      setRawConceptBrief(rawConceptBriefTemplate);
+      setCopyStatus("先把四句输入格式放入，再改成自己的概念。");
+      return;
+    }
+
+    const firstLine = brief.split(/\n+/).map((line) => line.trim()).find(Boolean) ?? "";
+    const fallbackConcept = firstLine.replace(/^(概念|我想学|主题|关键词|术语)[:：]\s*/, "").split(/[，。,；;：:]/)[0]?.trim();
+    const nextConcept = extractRawConceptBriefValue(["概念", "我想学", "主题", "关键词", "术语"]) || fallbackConcept || conceptInput.trim() || "待学习概念";
+    const nextSourceBoundary = extractRawConceptBriefValue(["资料边界", "资料", "来源", "source"]) || sourceBoundary;
+    const nextStuckPoint = extractRawConceptBriefValue(["当前卡点", "卡点", "困惑", "confusion"]) || stuckPoint;
+    const nextGoal = extractRawConceptBriefValue(["学习目标", "目标", "产出", "output"]) || lessonGoal;
+    const nextContext = extractRawConceptBriefValue(["应用情境", "情境", "题目", "场景", "context"]) || applicationContext;
+
+    setConcept(nextConcept);
+    setConceptInput(nextConcept);
+    setSourceBoundary(nextSourceBoundary);
+    setStuckPoint(nextStuckPoint);
+    setLessonGoal(nextGoal);
+    setApplicationContext(nextContext);
+    setQuizChoice(null);
+    setCopiedLesson(false);
+    setCopiedSkill(false);
+    setCopiedAudit(false);
+    setCopiedExplanationPack(false);
+    setCopyStatus(`已从整段输入提取“${nextConcept}”，并生成学习卡。`);
+  }
+
   function runConceptAgent() {
     const nextConcept = conceptInput.trim() || "待学习概念";
     setConcept(nextConcept);
@@ -4243,7 +4317,7 @@ If any of these are missing, add them before the final answer.
         <div>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.28rem" }}>概念解释器</div>
           <div className="concept-main-description" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.58, fontWeight: 800, overflowWrap: "anywhere", wordBreak: "break-word" }}>
-            输入任意概念，先得到一条解释路径，再生成学习卡、可视化流程、迁移练习和即时小测。
+            输入任意概念，先得到一条解释路径，再生成学习卡和可视化流程。
           </div>
         </div>
         <div className="concept-top-route-strip" role="group" aria-label="当前概念解释路径" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.44rem" }}>
@@ -4270,6 +4344,42 @@ If any of these are missing, add them before the final answer.
               </button>
             );
           })}
+        </div>
+        <div className="concept-freeform-brief-panel" style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.18)", borderRadius: 12, padding: "0.58rem", display: "grid", gap: "0.48rem" }}>
+          <div className="concept-freeform-brief-header" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto auto", gap: "0.5rem", alignItems: "center" }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", fontWeight: 900 }}>整段输入也可以开始</div>
+              <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.45, fontWeight: 800, marginTop: "0.14rem", overflowWrap: "anywhere", wordBreak: "break-word" }}>
+                粘贴概念、资料、卡点和目标，页面会拆成下方字段。
+              </div>
+            </div>
+            <button type="button" onClick={fillRawConceptBriefTemplate} aria-describedby="concept-copy-status" style={{ background: "var(--card)", color: "var(--cherry-forest)", border: "1.5px solid rgba(58,92,62,0.22)", borderRadius: 999, padding: "0.42rem 0.7rem", fontSize: "0.74rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap" }}>
+              套用四句格式
+            </button>
+            <button type="button" onClick={applyRawConceptBrief} aria-describedby="concept-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.78rem", fontSize: "0.74rem", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap" }}>
+              解析并生成
+            </button>
+          </div>
+          <div className="concept-freeform-brief-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.2fr) minmax(260px, 0.88fr)", gap: "0.52rem", alignItems: "stretch" }}>
+            <textarea
+              value={rawConceptBrief}
+              onChange={(event) => {
+                setRawConceptBrief(event.target.value);
+                setCopyStatus("");
+              }}
+              rows={5}
+              placeholder={"概念：光合作用\n资料边界：来自教材第 3 章，具体实验数据暂时未知\n当前卡点：光反应和碳反应怎么接起来\n学习目标：能画出流程图\n应用情境：解释一道图示题"}
+              style={{ width: "100%", boxSizing: "border-box", minHeight: 116, border: "1.5px solid rgba(85,137,179,0.24)", borderRadius: 10, background: "rgba(250,247,241,0.82)", color: "var(--cherry-warm-brown)", fontFamily: "'Nunito', sans-serif", fontSize: "0.76rem", lineHeight: 1.48, fontWeight: 800, padding: "0.58rem", resize: "vertical" }}
+            />
+            <div className="concept-freeform-brief-card-grid" role="list" aria-label="整段输入需要包含的信息" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.42rem" }}>
+              {rawConceptBriefCards.map((item) => (
+                <div key={item.label} role="listitem" style={{ background: "rgba(250,247,241,0.78)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.48rem", display: "grid", gap: "0.24rem", alignContent: "start" }}>
+                  <strong style={{ color: "var(--cherry-forest)", fontSize: "0.7rem", lineHeight: 1.2 }}>{item.label}</strong>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.38, fontWeight: 800 }}>{item.body}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
         <details className="concept-input-mode-panel" style={{ background: "var(--muted)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 12, padding: "0.56rem" }}>
           <summary style={{ color: "var(--cherry-warm-brown)", fontSize: "0.84rem", fontWeight: 900, cursor: "pointer" }}>输入模式预设</summary>
@@ -4805,6 +4915,7 @@ If any of these are missing, add them before the final answer.
 
           @media (max-width: 860px) {
             #concept-explainer-tool .concept-agent-input-grid,
+            #concept-explainer-tool .concept-freeform-brief-grid,
             #concept-explainer-tool .concept-responsive-grid {
               grid-template-columns: 1fr !important;
             }
@@ -4868,6 +4979,7 @@ If any of these are missing, add them before the final answer.
 
             #concept-explainer-tool,
             #concept-explainer-tool .concept-main-input-panel,
+            #concept-explainer-tool .concept-freeform-brief-panel,
             #concept-explainer-tool details {
               width: 100% !important;
               max-width: 100% !important;
@@ -4889,7 +5001,9 @@ If any of these are missing, add them before the final answer.
             }
 
             #concept-explainer-tool .concept-top-route-strip,
-            #concept-explainer-tool .concept-quick-start-strip {
+            #concept-explainer-tool .concept-quick-start-strip,
+            #concept-explainer-tool .concept-freeform-brief-header,
+            #concept-explainer-tool .concept-freeform-brief-grid {
               grid-template-columns: 1fr !important;
               gap: 0.4rem !important;
             }
@@ -4898,6 +5012,7 @@ If any of these are missing, add them before the final answer.
             #concept-explainer-tool .concept-scope-hint-strip,
             #concept-explainer-tool .concept-flow-map,
             #concept-explainer-tool .concept-pack-card-grid,
+            #concept-explainer-tool .concept-freeform-brief-card-grid,
             #concept-explainer-tool .concept-understanding-input-grid,
             #concept-explainer-tool .concept-understanding-check-grid,
             #concept-explainer-tool .concept-visual-structure {
@@ -4915,12 +5030,32 @@ If any of these are missing, add them before the final answer.
             }
 
             #concept-explainer-tool .concept-agent-input-grid textarea,
-            #concept-explainer-tool .concept-agent-input-grid input {
+            #concept-explainer-tool .concept-agent-input-grid input,
+            #concept-explainer-tool .concept-freeform-brief-grid textarea {
               width: 100% !important;
               box-sizing: border-box !important;
               min-height: 42px !important;
               font-size: 0.7rem !important;
               padding: 0.46rem !important;
+            }
+
+            #concept-explainer-tool .concept-freeform-brief-header button {
+              width: 100% !important;
+              justify-content: center !important;
+            }
+
+            #concept-explainer-tool .concept-freeform-brief-panel * {
+              max-width: 100% !important;
+              overflow-wrap: anywhere !important;
+              word-break: break-word !important;
+            }
+
+            #concept-explainer-tool .concept-top-route-strip > div {
+              min-height: 0 !important;
+            }
+
+            #concept-explainer-tool .concept-top-route-body {
+              display: none !important;
             }
 
             #concept-explainer-tool .concept-pack-card,
