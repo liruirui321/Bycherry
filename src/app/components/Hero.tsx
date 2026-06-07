@@ -9,8 +9,7 @@ type HeroVisualKind =
   | "research-prompt-kit"
   | "concept-explainer"
   | "crispr-interactive"
-  | "plant-evolution-stories"
-  | "reading-library";
+  | "plant-evolution-stories";
 
 function HeroMiniVisual({ kind }: { kind: HeroVisualKind }) {
   if (kind === "gene-expression") {
@@ -61,19 +60,6 @@ function HeroMiniVisual({ kind }: { kind: HeroVisualKind }) {
     );
   }
 
-  if (kind === "reading-library") {
-    return (
-      <span className="hero-mini-visual hero-mini-visual-reading" aria-hidden="true">
-        <span className="hero-mini-book" />
-        <span className="hero-mini-lines">
-          <i />
-          <i />
-          <i />
-        </span>
-      </span>
-    );
-  }
-
   if (kind === "plant-evolution-stories") {
     return (
       <span className="hero-mini-visual hero-mini-visual-plant" aria-hidden="true">
@@ -96,19 +82,7 @@ function HeroMiniVisual({ kind }: { kind: HeroVisualKind }) {
 }
 
 export function Hero() {
-  const readingEntry = {
-    key: "reading",
-    kind: "阅读",
-    title: "阅读库",
-    href: "/reading",
-    border: "var(--cherry-yellow)",
-    color: "var(--cherry-yellow-light)",
-    desc: "科研证据、学习方法和 AI 创作工作流文章。",
-    icon: <IconBook size={23} color="var(--cherry-yellow)" />,
-    path: ["选主题", "做记录", "留产出"],
-    outputs: ["证据笔记", "方法清单", "工作流范文"],
-    visualKind: "reading-library" as HeroVisualKind,
-  };
+  const readingHref = "/reading";
   const entries = [
     ...works.map((work) => ({
       key: work.slug,
@@ -123,7 +97,6 @@ export function Hero() {
       outputs: work.outputs,
       visualKind: work.slug as HeroVisualKind,
     })),
-    readingEntry,
   ];
 
   function openEntry(href: string, event: MouseEvent<HTMLAnchorElement>) {
@@ -138,17 +111,17 @@ export function Hero() {
       aria-labelledby="hero-heading"
       style={{
         fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-        minHeight: "calc(100vh - 50px)",
+        minHeight: "auto",
         position: "relative",
         overflow: "hidden",
-        padding: "clamp(0.82rem, 1.8vh, 1.3rem) clamp(1rem, 3vw, 2.3rem) clamp(0.9rem, 1.9vh, 1.35rem)",
+        padding: "clamp(2.4rem, 5vh, 3.2rem) clamp(1rem, 3vw, 2.3rem) clamp(1.8rem, 4vh, 2.4rem)",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
         background: "#F7F5EF",
         display: "grid",
-        alignItems: "center",
-        alignContent: "center",
+        alignItems: "start",
+        alignContent: "start",
       }}
     >
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
@@ -206,14 +179,57 @@ export function Hero() {
               </span>
             ))}
           </div>
+          <div className="hero-action-row" style={{ display: "flex", gap: "0.62rem", flexWrap: "wrap", alignItems: "center", paddingTop: "0.32rem" }}>
+            <a
+              href="#works"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "var(--cherry-forest)",
+                color: "#FAF7F1",
+                borderRadius: 999,
+                padding: "0.66rem 1.16rem",
+                textDecoration: "none",
+                fontWeight: 900,
+                fontSize: "0.84rem",
+                boxShadow: "3px 5px 0 rgba(58,92,62,0.2)",
+              }}
+            >
+              <IconBranch size={15} color="#FAF7F1" />
+              浏览精选内容
+            </a>
+            <a
+              href={readingHref}
+              onClick={(event) => openEntry(readingHref, event)}
+              onMouseEnter={() => preloadRouteForHref(readingHref)}
+              onFocus={() => preloadRouteForHref(readingHref)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "rgba(250,247,241,0.72)",
+                color: "var(--cherry-warm-brown)",
+                border: "1.5px solid var(--border)",
+                borderRadius: 999,
+                padding: "0.66rem 1.02rem",
+                textDecoration: "none",
+                fontWeight: 900,
+                fontSize: "0.84rem",
+              }}
+            >
+              <IconBook size={15} color="var(--cherry-yellow)" />
+              读读笔记
+            </a>
+          </div>
         </div>
 
         <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.58rem", width: "100%", alignContent: "start" }}>
           <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.75rem", minWidth: 0 }}>
             <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.04rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>精选内容</h2>
-            <span className="hero-entry-grid-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>{entries.length} 个可打开内容</span>
+            <span className="hero-entry-grid-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>{entries.length} 个内容</span>
           </div>
-          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(6, minmax(0, 1fr))", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
             {entries.map((entry, index) => (
               <a
                 className="hero-entry-card"
@@ -242,10 +258,11 @@ export function Hero() {
                   overflow: "hidden",
                   minWidth: 0,
                   maxWidth: "100%",
-                  minHeight: 180,
+                  minHeight: 162,
                   boxSizing: "border-box",
                   boxShadow: "0 10px 22px rgba(94,68,42,0.06)",
                   transform: "none",
+                  gridColumn: index >= 3 ? "span 3" : "span 2",
                 }}
               >
                 <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: 34, height: 34, borderRadius: 9, background: entry.color, flexShrink: 0, gridRow: "1 / span 2" }}>
@@ -638,33 +655,6 @@ export function Hero() {
           transform: rotate(26deg);
         }
 
-        .hero-mini-visual-reading .hero-mini-book {
-          position: absolute;
-          left: 0.62rem;
-          top: 0.48rem;
-          width: 1.58rem;
-          height: 1.94rem;
-          border-radius: 0.18rem 0.32rem 0.32rem 0.18rem;
-          background: rgba(250,247,241,0.82);
-          border: 1px solid rgba(94,68,42,0.14);
-          box-shadow: inset 0.22rem 0 0 rgba(213,182,85,0.38);
-        }
-
-        .hero-mini-visual-reading .hero-mini-lines {
-          position: absolute;
-          right: 0.62rem;
-          top: 0.72rem;
-          display: grid;
-          gap: 0.22rem;
-          width: 2.56rem;
-        }
-
-        .hero-mini-visual-reading .hero-mini-lines i {
-          height: 0.28rem;
-          border-radius: 999px;
-          background: rgba(94,68,42,0.24);
-        }
-
         .hero-mini-visual-plant .hero-mini-plant-line {
           position: absolute;
           left: 0.68rem;
@@ -767,6 +757,7 @@ export function Hero() {
           }
 
           .hero-entry-card {
+            grid-column: auto !important;
             min-width: 0 !important;
             box-sizing: border-box;
             min-height: 132px !important;
@@ -815,6 +806,7 @@ export function Hero() {
           }
 
           .hero-entry-card {
+            grid-column: auto !important;
             grid-template-columns: 2.1rem minmax(0, 1fr) !important;
             grid-template-rows: auto auto !important;
             min-height: 68px !important;
