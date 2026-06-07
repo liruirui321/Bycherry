@@ -272,10 +272,49 @@ function NotFoundPage() {
 
 function RouteLoading() {
   return (
-    <main id="main-content" tabIndex={-1} style={{ minHeight: "52vh", padding: "4rem 1.5rem", display: "grid", placeItems: "center", fontFamily: "'Nunito', sans-serif" }}>
-      <div role="status" aria-live="polite" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 8, padding: "0.9rem 1rem", color: "var(--cherry-warm-mid)", fontWeight: 900, boxShadow: "0 8px 18px rgba(94,68,42,0.06)" }}>
-        正在打开内容…
+    <main id="main-content" tabIndex={-1} style={{ minHeight: "58vh", padding: "0 1.5rem 1.2rem", fontFamily: "'Nunito', sans-serif", background: "var(--background)" }}>
+      <div role="status" aria-live="polite" className="route-loading-shell" style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gap: "0.72rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", color: "var(--cherry-warm-brown)", fontWeight: 950, fontSize: "1rem", lineHeight: 1.2, padding: "0.55rem 0 0.1rem" }}>
+          <span aria-hidden="true" style={{ color: "var(--cherry-forest)", fontSize: "1rem" }}>←</span>
+          正在载入内容
+        </div>
+        <section aria-label="内容载入进度" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.9rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", display: "grid", gap: "0.75rem" }}>
+          <div className="route-loading-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.5fr) minmax(220px, 0.8fr)", gap: "0.75rem", alignItems: "stretch" }}>
+            <div style={{ border: "1.5px dashed rgba(58,92,62,0.24)", borderRadius: 12, background: "linear-gradient(135deg, rgba(169,201,172,0.28), rgba(194,220,233,0.18))", minHeight: 230, padding: "0.9rem", display: "grid", alignContent: "space-between", gap: "1rem" }}>
+              <span style={{ width: "38%", height: 14, borderRadius: 999, background: "rgba(94,68,42,0.14)" }} />
+              <span style={{ display: "grid", gap: "0.5rem" }}>
+                {[0, 1, 2].map((item) => (
+                  <span key={item} style={{ width: item === 0 ? "86%" : item === 1 ? "68%" : "78%", height: 12, borderRadius: 999, background: "rgba(58,92,62,0.12)" }} />
+                ))}
+              </span>
+              <span style={{ display: "flex", gap: "0.42rem", flexWrap: "wrap" }}>
+                {[0, 1, 2, 3].map((item) => (
+                  <span key={item} style={{ width: 54, height: 24, borderRadius: 999, background: "rgba(250,247,241,0.78)", border: "1px solid rgba(94,68,42,0.09)" }} />
+                ))}
+              </span>
+            </div>
+            <div style={{ display: "grid", gap: "0.5rem" }}>
+              {[0, 1, 2, 3].map((item) => (
+                <span key={item} style={{ borderRadius: 10, minHeight: 48, background: item === 0 ? "var(--cherry-sage-light)" : item === 1 ? "var(--cherry-blue-light)" : item === 2 ? "var(--cherry-yellow-light)" : "var(--cherry-peach-light)", border: "1px solid rgba(94,68,42,0.11)", opacity: 0.78 }} />
+              ))}
+            </div>
+          </div>
+          <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.78rem", lineHeight: 1.5, fontWeight: 850 }}>
+            正在准备工具界面、学习记录和可复制输出。
+          </span>
+        </section>
       </div>
+      <style>{`
+        @media (max-width: 760px) {
+          .route-loading-shell {
+            max-width: 100% !important;
+          }
+
+          .route-loading-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </main>
   );
 }
