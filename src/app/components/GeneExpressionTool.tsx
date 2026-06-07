@@ -368,15 +368,15 @@ function aminoCountForRibosome(progress: number) {
 }
 
 function ribosomePeptideExitPoint(ribosomeCenter: Point) {
-  return { x: ribosomeCenter.x + 36, y: ribosomeCenter.y - 16 };
+  return { x: ribosomeCenter.x + 42, y: ribosomeCenter.y - 2 };
 }
 
 function peptideBeadPoint(exit: Point, index: number) {
   const points = [
-    { x: exit.x + 5, y: exit.y - 5 },
-    { x: exit.x + 20, y: exit.y - 18 },
-    { x: exit.x + 38, y: exit.y - 8 },
-    { x: exit.x + 56, y: exit.y - 22 },
+    { x: exit.x + 17, y: exit.y + 17 },
+    { x: exit.x + 40, y: exit.y + 34 },
+    { x: exit.x + 66, y: exit.y + 20 },
+    { x: exit.x + 92, y: exit.y + 39 },
   ];
   return points[index] ?? points[points.length - 1];
 }
@@ -463,21 +463,33 @@ function LiveExpressionProcess({
         const exit = ribosomePeptideExitPoint(ribosome.renderPoint);
         const beadPoints = codons.slice(0, aminoCount).map((_, aminoIndex) => peptideBeadPoint(exit, aminoIndex));
         const chainPath = [exit, ...beadPoints].map((point, aminoIndex) => `${aminoIndex === 0 ? "M" : "L"}${point.x} ${point.y}`).join(" ");
+        const calloutX = exit.x + 7;
+        const calloutY = exit.y + 3;
 
         return (
           <g className="live-peptide-bead-chain" key={`live-peptide-chain-${ribosomeIndex}`} opacity={ribosome.opacity}>
+            <rect
+              x={calloutX}
+              y={calloutY}
+              width={116}
+              height={58}
+              rx={17}
+              fill="rgba(169,201,172,0.24)"
+              stroke="rgba(93,140,101,0.24)"
+              strokeWidth={1.4}
+            />
             <path
-              d={`M${exit.x - 28} ${exit.y + 6} C${exit.x - 18} ${exit.y + 2} ${exit.x - 8} ${exit.y - 2} ${exit.x + 4} ${exit.y - 4}`}
+              d={`M${exit.x - 26} ${exit.y + 4} C${exit.x - 12} ${exit.y + 8} ${exit.x + 2} ${exit.y + 13} ${exit.x + 17} ${exit.y + 17}`}
               fill="none"
               stroke="var(--cherry-forest)"
               strokeWidth={6}
               strokeLinecap="round"
               opacity={0.46}
             />
-            {beadPoints.length > 0 ? <path d={chainPath} fill="none" stroke="var(--cherry-forest)" strokeWidth={5.4} strokeLinecap="round" strokeLinejoin="round" opacity={0.86} /> : null}
+            {beadPoints.length > 0 ? <path d={chainPath} fill="none" stroke="var(--cherry-forest)" strokeWidth={6.4} strokeLinecap="round" strokeLinejoin="round" opacity={0.86} /> : null}
             {ribosomeIndex === 0 ? (
-              <text x={exit.x + 30} y={exit.y - 39} fill="var(--cherry-forest)" fontSize={12} fontWeight={900}>
-                多肽链
+              <text x={calloutX + 12} y={calloutY + 14} fill="var(--cherry-forest)" fontSize={11} fontWeight={900}>
+                多肽链从出口长出
               </text>
             ) : null}
             {codons.slice(0, aminoCount).map((codon, aminoIndex) => {
@@ -485,8 +497,8 @@ function LiveExpressionProcess({
 
               return (
                 <g key={`live-peptide-${ribosomeIndex}-${codon.amino}`} transform={`translate(${point.x} ${point.y})`}>
-                  <circle r={12.5} fill={codon.color} stroke="rgba(94,68,42,0.18)" strokeWidth={1.7}>
-                    {prefersReducedMotion ? null : <animate attributeName="r" values="9;14;12.5" dur="0.7s" begin={`${aminoIndex * 0.08}s`} repeatCount="1" />}
+                  <circle r={13.8} fill={codon.color} stroke="#FAF7F1" strokeWidth={2.3}>
+                    {prefersReducedMotion ? null : <animate attributeName="r" values="10;15.5;13.8" dur="0.7s" begin={`${aminoIndex * 0.08}s`} repeatCount="1" />}
                   </circle>
                   <text textAnchor="middle" dominantBaseline="middle" fill="var(--cherry-warm-brown)" fontSize={7.4} fontWeight={900}>
                     {codon.amino}
@@ -1287,7 +1299,7 @@ ${expressionCompletionChecks.map((item, index) => `${index + 1}. ${item.done ? "
             <LiveExpressionProcess model={model} progress={cycleProgress} retainedMrnaCount={visibleMrnaCount} canTranslate={canTranslate} prefersReducedMotion={prefersReducedMotion} />
 
             <rect x={zones.ribosome.x} y={zones.ribosome.y} width={zones.ribosome.w} height={zones.ribosome.h} rx={22} fill={model.ribBound > 0 ? "rgba(232,121,95,0.15)" : "rgba(250,247,241,0.38)"} stroke="var(--cherry-peach)" strokeWidth={2} strokeDasharray="7 7" />
-            <text x={zones.ribosome.x + 22} y={zones.ribosome.y + 34} fill="var(--cherry-warm-brown)" fontSize={15} fontWeight={900}>
+            <text x={zones.ribosome.x + 22} y={zones.ribosome.y + zones.ribosome.h - 18} fill="var(--cherry-warm-brown)" fontSize={15} fontWeight={900}>
               核糖体入口
             </text>
             {[406, 520, 634].map((x, index) =>
