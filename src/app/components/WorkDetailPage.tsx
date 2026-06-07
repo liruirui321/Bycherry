@@ -5429,6 +5429,20 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
               ))}
             </g>
           </svg>
+          <div className="crispr-canvas-result-strip" role="list" aria-label="当前编辑结果摘要" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.5rem", padding: "0.72rem", background: "linear-gradient(180deg, rgba(250,247,241,0.92), rgba(245,241,234,0.96))", borderTop: "1.5px solid rgba(94,68,42,0.12)" }}>
+            {[
+              { label: "PAM 入口", value: pamSequence, body: pamSequence === "AGG" ? "NGG 入口成立，Cas9 可继续检查邻近序列。" : "PAM 需要先复核。", color: "var(--cherry-peach-light)" },
+              { label: "guide 匹配", value: `${activeGuide.score}%`, body: `${activeGuide.name}；${computedMismatches.length} 个错配。`, color: "var(--cherry-blue-light)" },
+              { label: "剪切位置", value: activeGuide.score >= 60 ? `第 ${cutIndex + 1} 位` : "不剪切", body: activeGuide.score >= 60 ? `PAM 上游 ${cutDistanceFromPam} nt 附近。` : "匹配不足，先换 guide。", color: "var(--cherry-yellow-light)" },
+              { label: "修复判读", value: effectiveRepair.title, body: guideDecision.level, color: guideDecision.bg },
+            ].map((item) => (
+              <div key={item.label} role="listitem" style={{ background: item.color, border: "1px solid rgba(94,68,42,0.12)", borderRadius: 10, padding: "0.48rem", minHeight: 70, display: "grid", alignContent: "start", gap: "0.16rem" }}>
+                <span style={{ color: "var(--cherry-forest)", fontSize: "0.64rem", lineHeight: 1.2, fontWeight: 950 }}>{item.label}</span>
+                <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.82rem", lineHeight: 1.18, fontWeight: 950 }}>{item.value}</strong>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.34, fontWeight: 820 }}>{item.body}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         <aside className="crispr-control-aside" style={{ display: "grid", gap: "0.68rem", alignContent: "start" }}>
@@ -5875,6 +5889,10 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             #crispr-simulator .crispr-start-path-strip {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
+
+            #crispr-simulator .crispr-canvas-result-strip {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
           }
 
           @media (max-width: 520px) {
@@ -5979,6 +5997,12 @@ ${boundaryItems.map((item, index) => `${index + 1}. ${item}`).join("\n")}
             #crispr-simulator .crispr-live-decision-grid {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
               gap: 0.44rem !important;
+            }
+
+            #crispr-simulator .crispr-canvas-result-strip {
+              grid-template-columns: 1fr !important;
+              gap: 0.44rem !important;
+              padding: 0.6rem !important;
             }
 
             #crispr-simulator .crispr-live-decision-card {

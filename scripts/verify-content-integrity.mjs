@@ -1149,6 +1149,10 @@ function verifyCrisprLearnerScenarios() {
     { label: "visible live decision title", text: "当前判读结果" },
     { label: "live decision grid", text: "crispr-live-decision-grid" },
     { label: "live decision card", text: "crispr-live-decision-card" },
+    { label: "canvas result strip", text: "crispr-canvas-result-strip" },
+    { label: "canvas result strip label", text: "当前编辑结果摘要" },
+    { label: "canvas result strip PAM", text: "PAM 入口" },
+    { label: "canvas result strip repair", text: "修复判读" },
     { label: "live go no go copy", text: "不用展开说明，也能先得到本轮 go/no-go、证据读数和风险边界。" },
     { label: "visible live decision copy action", text: 'copiedDecisionCard ? "已复制" : "复制决策卡"' },
     { label: "visible live risk audit copy action", text: 'copiedRiskAudit ? "已复制" : "复制风险核查"' },
@@ -1182,6 +1186,7 @@ function verifyCrisprLearnerScenarios() {
   expect(Array.from(crisprSource.matchAll(/\bgoal:\s*"/g)).length >= 3, "CRISPR simulator should expose at least three learner scenario goals.");
   expect(crisprSource.includes('className="crispr-flow-panel"') && crisprSource.includes('gridTemplateColumns: "repeat(3, minmax(0, 1fr))"') && crisprSource.includes('minHeight: 42'), "CRISPR desktop flow control must stay as compact three-step buttons.");
   expect(crisprSource.includes('className="crispr-canvas-panel"') && crisprSource.includes('borderRadius: 12') && !crisprSource.includes('borderRadius: 22, overflow: "hidden", boxShadow: "4px 7px 0px rgba(94,68,42,0.08)"'), "CRISPR canvas frame must stay compact instead of a heavy long card.");
+  expect(crisprSource.includes('className="crispr-canvas-result-strip"') && crisprSource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"') && crisprSource.includes("#crispr-simulator .crispr-canvas-result-strip") && crisprSource.includes("grid-template-columns: 1fr !important"), "CRISPR canvas must fill the lower panel area with a responsive edit-result strip instead of blank space.");
   expect(crisprSource.includes("#crispr-simulator .crispr-start-path-strip") && crisprSource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"') && crisprSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "CRISPR visible start path must stay compact across desktop and mobile.");
   expect(crisprSource.includes('aria-labelledby="crispr-live-decision-title"') && crisprSource.includes('className="crispr-live-decision-grid"') && crisprSource.includes('gridTemplateColumns: "repeat(4, minmax(0, 1fr))"') && crisprSource.includes("#crispr-simulator .crispr-live-decision-grid") && crisprSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important"), "CRISPR live decision result must be directly visible and compact across desktop and mobile.");
   expect(crisprSource.includes('<details className="crispr-quality-panel crispr-compact-details"') && crisprSource.includes(">修复结果</summary>") && crisprSource.includes("{effectiveRepair.title}：") && !crisprSource.includes('className="crispr-quality-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 22, padding: "1.1rem"'), "CRISPR repair result selector must stay folded and compact with the current result inside the panel, not in the summary.");
