@@ -811,6 +811,32 @@ ${activeTaskActions.map((item, index) => `${index + 1}. ${item}`).join("\n")}
     { label: "核引用", body: citationAuditItems.filter((item) => item.status === "已出现").length ? `${citationAuditItems.filter((item) => item.status === "已出现").length}/4 项已出现` : "先填来源标识", color: "var(--cherry-yellow-light)" },
     { label: "留记录", body: `复核记录 ${learnerResearchReviewScore}/4`, color: "var(--cherry-peach-light)" },
   ];
+  const researchOutputMap = [
+    {
+      label: "输入材料",
+      value: activePrompt.input,
+      detail: materialText ? `${materialLines.length} 行材料已进入本地分析` : "先粘贴摘要、图注、方法或讨论段落",
+      color: "var(--cherry-blue-light)",
+    },
+    {
+      label: "证据候选",
+      value: visibleEvidenceLines.length ? `${visibleEvidenceLines.length} 条` : "待填写",
+      detail: visibleEvidenceLines[0] ?? "只引用材料里实际出现的句子",
+      color: "var(--cherry-sage-light)",
+    },
+    {
+      label: "风险边界",
+      value: missingFields.length ? `${missingFields.length} 项待补` : "可初查",
+      detail: missingFields.length ? `缺少 ${missingFields.join("、")}` : "仍需回查来源、图表和统计标记",
+      color: "var(--cherry-yellow-light)",
+    },
+    {
+      label: "可复制产出",
+      value: "研究记录 + 引用核查",
+      detail: "复制前保留暂不采信结论和下一步动作",
+      color: "var(--cherry-peach-light)",
+    },
+  ];
   const researchMaterialGateCards = [
     {
       label: "来源标识",
@@ -1166,9 +1192,19 @@ ${localPreviewOutput}`;
                 </button>
               </div>
             </div>
-            <div id="prompt-copy-status" role="status" aria-live="polite" style={{ minHeight: "1.2rem", color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginBottom: "0.65rem" }}>
+            <div id="prompt-copy-status" role="status" aria-live="polite" style={{ minHeight: copyStatus ? "1.2rem" : 0, color: "var(--cherry-forest)", fontSize: "0.78rem", fontWeight: 900, marginBottom: copyStatus ? "0.5rem" : 0 }}>
               {copyStatus}
             </div>
+
+            <section className="research-output-map" aria-label="科研学习工作台输出地图" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.42rem", marginBottom: "0.62rem" }}>
+              {researchOutputMap.map((item) => (
+                <div key={item.label} className="research-output-map-card" style={{ background: item.color, border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.52rem", minHeight: 74, display: "grid", gap: "0.18rem", alignContent: "start", minWidth: 0 }}>
+                  <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", lineHeight: 1.2, fontWeight: 950 }}>{item.label}</span>
+                  <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.74rem", lineHeight: 1.25, fontWeight: 950, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item.value}</strong>
+                  <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.34, fontWeight: 820, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item.detail}</span>
+                </div>
+              ))}
+            </section>
 
             <div className="research-agent-mode-section" style={{ display: "grid", gap: "0.38rem", marginBottom: "0.62rem" }}>
               <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.78rem" }}>工作模式</div>
@@ -1812,6 +1848,7 @@ ${localPreviewOutput}`;
             #prompt-kit-builder .research-agent-status-strip,
             #prompt-kit-builder .research-agent-check-strip,
             #prompt-kit-builder .research-material-gate-strip,
+            #prompt-kit-builder .research-output-map,
             #prompt-kit-builder .research-live-preview-grid,
             #prompt-kit-builder .research-start-path-strip {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -2005,6 +2042,17 @@ ${localPreviewOutput}`;
             #prompt-kit-builder .research-material-gate-strip {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
               gap: 0.38rem !important;
+            }
+
+            #prompt-kit-builder .research-output-map {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.38rem !important;
+              margin-bottom: 0.54rem !important;
+            }
+
+            #prompt-kit-builder .research-output-map-card {
+              min-height: 66px !important;
+              padding: 0.42rem !important;
             }
 
             #prompt-kit-builder .research-material-starter-grid {
