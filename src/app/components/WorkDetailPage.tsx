@@ -3615,6 +3615,12 @@ function ConceptExplainerContent() {
               { title: "机制", body: active.mechanism.slice(0, 2).join("；"), tone: "var(--cherry-sage-light)" },
               { title: "边界", body: contextualEvidenceBoundary, tone: "var(--cherry-peach-light)" },
             ];
+  const conceptTopRoute = [
+    { label: "诊断", title: "先定位卡点", body: active.diagnostic.split("。")[0], tone: "var(--cherry-yellow-light)" },
+    { label: "类比", title: "再建立入口", body: active.analogy, tone: "var(--cherry-blue-light)" },
+    { label: visualMode, title: "画出结构", body: visualStructureItems.map((item) => item.title).join(" -> "), tone: "var(--cherry-sage-light)" },
+    { label: "迁移", title: "最后换情境", body: active.transferTask.split("，")[0], tone: "var(--cherry-peach-light)" },
+  ];
   const broadConceptSignals = /生物|遗传|免疫|生态|进化|代谢|细胞|植物|动物|科学|医学|基因|蛋白|学习|AI/.test(concept) && concept.length <= 4;
   const conceptScopeHints = [
     {
@@ -4127,8 +4133,22 @@ If any of these are missing, add them before the final answer.
         <div>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.28rem" }}>概念解释器</div>
           <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.58, fontWeight: 800 }}>
-            输入任意概念，按稳定解释流程生成学习卡：先自测，再看类比、机制步骤、常见误区、可视化流程、迁移练习和即时小测。
+            输入任意概念，先得到一条解释路径，再生成学习卡、可视化流程、迁移练习和即时小测。
           </div>
+        </div>
+        <div className="concept-top-route-strip" role="group" aria-label="当前概念解释路径" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.44rem" }}>
+          {conceptTopRoute.map((item, index) => (
+            <div key={`${item.label}-${index}`} style={{ background: item.tone, border: "1.5px solid rgba(94,68,42,0.11)", borderRadius: 10, padding: "0.48rem", minHeight: 72, display: "grid", gap: "0.24rem", alignContent: "start", minWidth: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.45rem", minWidth: 0 }}>
+                <span style={{ color: "var(--cherry-forest)", fontSize: "0.62rem", lineHeight: 1, fontWeight: 950, borderRadius: 999, background: "rgba(250,247,241,0.74)", padding: "0.16rem 0.38rem", whiteSpace: "nowrap" }}>{item.label}</span>
+                <span aria-hidden="true" style={{ color: "rgba(94,68,42,0.42)", fontSize: "0.66rem", fontWeight: 950 }}>{index < conceptTopRoute.length - 1 ? "->" : "✓"}</span>
+              </div>
+              <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem", lineHeight: 1.2, fontWeight: 950 }}>{item.title}</strong>
+              <span className="concept-top-route-body" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.35, fontWeight: 820, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                {item.body}
+              </span>
+            </div>
+          ))}
         </div>
         <div className="concept-quick-start-strip" style={{ display: "grid", gridTemplateColumns: "auto repeat(4, minmax(0, 1fr))", gap: "0.42rem", alignItems: "center", background: "rgba(250,247,241,0.62)", border: "1.5px solid rgba(94,68,42,0.1)", borderRadius: 10, padding: "0.44rem" }}>
           <span className="concept-quick-start-label" style={{ color: "var(--cherry-warm-brown)", fontSize: "0.72rem", lineHeight: 1.18, fontWeight: 900, whiteSpace: "nowrap" }}>快速开始</span>
@@ -4710,6 +4730,10 @@ If any of these are missing, add them before the final answer.
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
 
+            #concept-explainer-tool .concept-top-route-strip {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+
             #concept-explainer-tool .concept-visual-structure {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
@@ -4739,6 +4763,7 @@ If any of these are missing, add them before the final answer.
 
             #concept-explainer-tool .concept-input-quality-grid,
             #concept-explainer-tool .concept-scope-hint-strip,
+            #concept-explainer-tool .concept-top-route-strip,
             #concept-explainer-tool .concept-flow-map,
             #concept-explainer-tool .concept-agent-input-grid,
             #concept-explainer-tool .concept-pack-card-grid,
