@@ -90,6 +90,7 @@ const heroMobileDescriptions: Record<HeroVisualKind, string> = {
 };
 
 export function Hero() {
+  const worksHref = "/#works";
   const readingHref = "/reading";
   const entries = [
     ...works.map((work) => ({
@@ -123,14 +124,14 @@ export function Hero() {
         minHeight: "calc(100svh - 50px)",
         position: "relative",
         overflow: "hidden",
-        padding: "clamp(2.4rem, 5vh, 3.4rem) clamp(1rem, 3vw, 2.3rem) clamp(2.2rem, 4.8vh, 3.2rem)",
+        padding: "clamp(1.2rem, 2.8vh, 2rem) clamp(1rem, 2.6vw, 2.2rem) clamp(1.2rem, 2.8vh, 2rem)",
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
         background: "#F7F5EF",
         display: "grid",
-        alignItems: "center",
-        alignContent: "center",
+        alignItems: "start",
+        alignContent: "start",
       }}
     >
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
@@ -148,8 +149,8 @@ export function Hero() {
         <div className="hero-float-deco hero-float-leaf"><IconLeafSmall size={24} color="var(--cherry-sage)" /></div>
       </div>
 
-      <div className="hero-inner" style={{ position: "relative", top: 0, zIndex: 2, maxWidth: 1480, width: "100%", minWidth: 0, margin: "0 auto", marginTop: "clamp(-6.2rem, -10vh, -4.6rem)", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(420px, 0.48fr) minmax(660px, 0.72fr)", gap: "clamp(2rem, 4vw, 4.2rem)", alignItems: "center" }}>
-        <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.9rem", justifyItems: "start", textAlign: "left", alignContent: "center", paddingTop: "0" }}>
+      <div className="hero-inner" style={{ position: "relative", top: 0, zIndex: 2, maxWidth: 1440, width: "100%", minWidth: 0, margin: "0 auto", marginTop: "clamp(1.2rem, 3.4vh, 2.2rem)", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(390px, 0.38fr) minmax(760px, 0.62fr)", gap: "clamp(1.4rem, 2.8vw, 2.6rem)", alignItems: "stretch" }}>
+        <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.82rem", justifyItems: "start", textAlign: "left", alignContent: "start", paddingTop: "0.6rem" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.36rem 1.05rem", color: "var(--cherry-forest)", fontSize: "0.86rem", fontWeight: 850, background: "rgba(250,247,241,0.76)", letterSpacing: 0 }}>
             <IconBranch size={13} color="var(--cherry-forest)" />
             By Cherry · Science Studio
@@ -178,45 +179,72 @@ export function Hero() {
             {" & "}
             <span style={{ color: "var(--cherry-blue)" }}>AI</span>
           </h1>
-          <p className="hero-subtitle" style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1.05rem, 1.28vw, 1.32rem)", lineHeight: 1.62, fontWeight: 760, maxWidth: 560, overflowWrap: "anywhere", wordBreak: "break-word" }}>
+          <p className="hero-subtitle" style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(1rem, 1.18vw, 1.2rem)", lineHeight: 1.52, fontWeight: 760, maxWidth: 520, overflowWrap: "anywhere", wordBreak: "break-word" }}>
             科学模拟、科研阅读和 AI 学习工具，打开后直接进入内容。
           </p>
-          <div className="hero-studio-index" role="group" aria-label="当前站内内容" style={{ display: "grid", gap: "0.45rem", width: "100%", maxWidth: 430, marginTop: "0.08rem" }}>
-            {[
-              ["科学模拟", "基因表达、CRISPR 概念模拟"],
-              ["AI 学习工具", "科研材料整理、概念解释"],
-              ["演化项目", "植物演化时间轴与证据卡"],
-            ].map(([label, value]) => (
-              <div key={label} style={{ display: "grid", gridTemplateColumns: "5.2rem minmax(0, 1fr)", gap: "0.62rem", alignItems: "center", borderTop: "1px solid rgba(94,68,42,0.12)", paddingTop: "0.44rem" }}>
-                <span style={{ color: "var(--cherry-forest)", fontSize: "0.72rem", lineHeight: 1.25, fontWeight: 950 }}>{label}</span>
-                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.38, fontWeight: 820 }}>{value}</span>
-              </div>
-            ))}
+          <div className="hero-action-row" style={{ display: "flex", gap: "0.72rem", flexWrap: "wrap", alignItems: "center", marginTop: "0.08rem" }}>
+            <a
+              href={worksHref}
+              className="hero-primary-link"
+              onClick={(event) => openEntry(worksHref, event)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "var(--cherry-forest)",
+                color: "#FAF7F1",
+                border: "1.5px solid var(--cherry-forest)",
+                borderRadius: 999,
+                padding: "0.68rem 1.28rem",
+                textDecoration: "none",
+                fontWeight: 920,
+                fontSize: "0.86rem",
+                boxShadow: "3px 5px 0 rgba(58,92,62,0.22)",
+              }}
+            >
+              <IconBranch size={15} color="#FAF7F1" />
+              浏览内容
+            </a>
+            <a
+              href={readingHref}
+              className="hero-reading-link"
+              onClick={(event) => openEntry(readingHref, event)}
+              onMouseEnter={() => preloadRouteForHref(readingHref)}
+              onFocus={() => preloadRouteForHref(readingHref)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "rgba(250,247,241,0.72)",
+                color: "var(--cherry-warm-brown)",
+                border: "1.5px solid var(--border)",
+                borderRadius: 999,
+                padding: "0.68rem 1.16rem",
+                textDecoration: "none",
+                fontWeight: 900,
+                fontSize: "0.86rem",
+              }}
+            >
+              <IconBook size={15} color="var(--cherry-yellow)" />
+              读读笔记
+            </a>
           </div>
-          <a
-            href={readingHref}
-            className="hero-reading-link"
-            onClick={(event) => openEntry(readingHref, event)}
-            onMouseEnter={() => preloadRouteForHref(readingHref)}
-            onFocus={() => preloadRouteForHref(readingHref)}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              background: "rgba(250,247,241,0.72)",
-              color: "var(--cherry-warm-brown)",
-              border: "1.5px solid var(--border)",
-              borderRadius: 999,
-              padding: "0.62rem 1rem",
-              textDecoration: "none",
-              fontWeight: 900,
-              fontSize: "0.82rem",
-              marginTop: "0.18rem",
-            }}
-          >
-            <IconBook size={15} color="var(--cherry-yellow)" />
-            读读笔记
-          </a>
+          <div className="hero-workbench-visual" aria-hidden="true">
+            <span className="hero-workbench-note hero-workbench-note-dna">
+              <i />
+              <b>DNA</b>
+            </span>
+            <span className="hero-workbench-note hero-workbench-note-rna">
+              <i />
+              <b>RNA</b>
+            </span>
+            <span className="hero-workbench-note hero-workbench-note-evidence">
+              <i />
+              <b>Evidence</b>
+            </span>
+            <span className="hero-workbench-curve" />
+            <span className="hero-workbench-lens" />
+          </div>
         </div>
 
         <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.72rem", width: "100%", alignContent: "stretch" }}>
@@ -224,7 +252,7 @@ export function Hero() {
             <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.12rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>精选内容</h2>
             <span className="hero-entry-grid-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>{entries.length} 个内容</span>
           </div>
-          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.72rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
             {entries.map((entry, index) => (
               <a
                 className="hero-entry-card"
@@ -253,12 +281,11 @@ export function Hero() {
                   overflow: "hidden",
                   minWidth: 0,
                   maxWidth: "100%",
-                  minHeight: 154,
+                  minHeight: 176,
                   boxSizing: "border-box",
                   boxShadow: "0 12px 24px rgba(94,68,42,0.07)",
                   transform: "none",
-                  gridColumn: "span 2",
-                  gridRow: index === 0 ? "span 2" : undefined,
+                  gridColumn: index === 0 ? "span 2" : undefined,
                 }}
               >
                 <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: 36, height: 36, borderRadius: 10, background: "rgba(250,247,241,0.62)", border: "1px solid rgba(94,68,42,0.08)", flexShrink: 0, gridRow: "1 / span 2" }}>
@@ -446,6 +473,124 @@ export function Hero() {
           animation-delay: -1.8s;
         }
 
+        .hero-action-row a {
+          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+        }
+
+        .hero-action-row a:hover,
+        .hero-action-row a:focus-visible {
+          transform: translateY(-2px);
+        }
+
+        .hero-workbench-visual {
+          position: relative;
+          width: min(100%, 470px);
+          height: clamp(150px, 21vh, 210px);
+          margin-top: 0.2rem;
+          border-radius: 24px;
+          overflow: hidden;
+          background:
+            radial-gradient(circle at 14% 30%, rgba(184,68,51,0.11) 0 13%, transparent 14%),
+            radial-gradient(circle at 72% 58%, rgba(122,175,200,0.17) 0 22%, transparent 23%),
+            linear-gradient(135deg, rgba(250,247,241,0.58), rgba(245,237,204,0.54));
+          border: 1px dashed rgba(94,68,42,0.16);
+        }
+
+        .hero-workbench-visual::before {
+          content: "";
+          position: absolute;
+          left: 1.2rem;
+          right: 1.2rem;
+          bottom: 1.15rem;
+          height: 1px;
+          background: rgba(94,68,42,0.12);
+        }
+
+        .hero-workbench-note {
+          position: absolute;
+          display: grid;
+          grid-template-columns: 1.05rem auto;
+          gap: 0.42rem;
+          align-items: center;
+          padding: 0.44rem 0.62rem;
+          border-radius: 14px;
+          background: rgba(250,247,241,0.78);
+          border: 1px solid rgba(94,68,42,0.12);
+          color: var(--cherry-warm-brown);
+          font-size: 0.68rem;
+          line-height: 1;
+          font-weight: 950;
+          box-shadow: 0 12px 26px rgba(94,68,42,0.08);
+        }
+
+        .hero-workbench-note i {
+          width: 1rem;
+          height: 1rem;
+          border-radius: 999px;
+          background: var(--cherry-sage-light);
+          box-shadow: inset 0 0 0 0.32rem rgba(58,92,62,0.18);
+        }
+
+        .hero-workbench-note-dna {
+          left: 1.1rem;
+          top: 1.1rem;
+          transform: rotate(-3deg);
+        }
+
+        .hero-workbench-note-rna {
+          right: 1.7rem;
+          top: 2rem;
+          transform: rotate(2.5deg);
+        }
+
+        .hero-workbench-note-rna i {
+          background: var(--cherry-blue);
+        }
+
+        .hero-workbench-note-evidence {
+          left: 29%;
+          bottom: 1.65rem;
+          transform: rotate(1.5deg);
+        }
+
+        .hero-workbench-note-evidence i {
+          background: var(--cherry-yellow);
+        }
+
+        .hero-workbench-curve {
+          position: absolute;
+          left: 10%;
+          top: 48%;
+          width: 58%;
+          height: 38%;
+          border-bottom: 3px solid rgba(122,175,200,0.82);
+          border-radius: 50%;
+          transform: rotate(-7deg);
+        }
+
+        .hero-workbench-lens {
+          position: absolute;
+          right: 12%;
+          bottom: 18%;
+          width: 3.6rem;
+          height: 3.6rem;
+          border-radius: 999px;
+          background: rgba(250,247,241,0.6);
+          border: 3px solid rgba(58,92,62,0.36);
+        }
+
+        .hero-workbench-lens::after {
+          content: "";
+          position: absolute;
+          right: -1.05rem;
+          bottom: -0.55rem;
+          width: 1.8rem;
+          height: 0.42rem;
+          border-radius: 999px;
+          background: rgba(58,92,62,0.36);
+          transform: rotate(35deg);
+        }
+
         @keyframes heroFloatDeco {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-8px); }
@@ -502,21 +647,18 @@ export function Hero() {
         }
 
         .hero-entry-card:first-child .hero-entry-side {
-          flex-direction: column;
-          align-items: stretch;
-          justify-content: end;
-          min-height: 8.7rem;
+          min-height: 5.5rem;
         }
 
         .hero-entry-card:first-child .hero-mini-visual {
-          width: 100%;
-          height: 6.35rem;
+          width: min(100%, 17rem);
+          height: 4.55rem;
         }
 
         .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-dna {
-          left: 1.05rem;
-          top: 1rem;
-          width: 8.2rem;
+          left: 0.8rem;
+          top: 0.72rem;
+          width: 8rem;
           gap: 0.45rem;
         }
 
@@ -527,23 +669,23 @@ export function Hero() {
         }
 
         .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-rna {
-          left: 1.18rem;
-          top: 3.45rem;
-          width: 10.6rem;
-          height: 1.9rem;
+          left: 1.08rem;
+          top: 2.86rem;
+          width: 10.2rem;
+          height: 1.42rem;
           border-bottom-width: 4px;
         }
 
         .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-ribosome {
-          right: 2.4rem;
-          bottom: 0.84rem;
+          right: 2.1rem;
+          bottom: 0.72rem;
           width: 2rem;
           height: 1.42rem;
         }
 
         .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-chain {
-          right: 1.05rem;
-          bottom: 1.96rem;
+          right: 0.9rem;
+          bottom: 1.72rem;
           gap: 0.18rem;
         }
 
@@ -903,7 +1045,7 @@ export function Hero() {
           }
 
           .hero-entry-grid-note,
-          .hero-studio-index,
+          .hero-workbench-visual,
           .hero-entry-side,
           .hero-entry-path {
             display: none !important;
