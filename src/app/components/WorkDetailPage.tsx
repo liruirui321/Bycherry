@@ -4132,7 +4132,7 @@ If any of these are missing, add them before the final answer.
       <div className="concept-main-input-panel" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.78rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)", display: "grid", gap: "0.58rem" }}>
         <div>
           <div style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, marginBottom: "0.28rem" }}>概念解释器</div>
-          <div style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.58, fontWeight: 800 }}>
+          <div className="concept-main-description" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.8rem", lineHeight: 1.58, fontWeight: 800, overflowWrap: "anywhere", wordBreak: "break-word" }}>
             输入任意概念，先得到一条解释路径，再生成学习卡、可视化流程、迁移练习和即时小测。
           </div>
         </div>
@@ -4143,8 +4143,8 @@ If any of these are missing, add them before the final answer.
                 <span style={{ color: "var(--cherry-forest)", fontSize: "0.62rem", lineHeight: 1, fontWeight: 950, borderRadius: 999, background: "rgba(250,247,241,0.74)", padding: "0.16rem 0.38rem", whiteSpace: "nowrap" }}>{item.label}</span>
                 <span aria-hidden="true" style={{ color: "rgba(94,68,42,0.42)", fontSize: "0.66rem", fontWeight: 950 }}>{index < conceptTopRoute.length - 1 ? "->" : "✓"}</span>
               </div>
-              <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem", lineHeight: 1.2, fontWeight: 950 }}>{item.title}</strong>
-              <span className="concept-top-route-body" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.35, fontWeight: 820, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+              <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.78rem", lineHeight: 1.2, fontWeight: 950, overflowWrap: "anywhere", wordBreak: "break-word" }}>{item.title}</strong>
+              <span className="concept-top-route-body" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.66rem", lineHeight: 1.35, fontWeight: 820, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflowWrap: "anywhere", wordBreak: "break-word" }}>
                 {item.body}
               </span>
             </div>
