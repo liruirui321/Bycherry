@@ -2573,6 +2573,17 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
     <div id="plant-evolution-explorer" style={{ display: "grid", gap: "1rem", width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box", overflowX: "hidden" }}>
       <div className="plant-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) minmax(280px, 0.8fr)", gap: "0.68rem", alignItems: "start" }}>
         <div style={{ display: "grid", gap: "0.58rem", alignContent: "start" }}>
+          <div className="plant-mobile-stage-summary" style={{ display: "none" }}>
+            <span style={{ display: "flex", justifyContent: "space-between", gap: "0.55rem", alignItems: "baseline", minWidth: 0 }}>
+              <strong style={{ color: "var(--cherry-red)", fontSize: "0.72rem", lineHeight: 1.12, fontWeight: 950 }}>{activeChapter.time}</strong>
+              <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", lineHeight: 1.12, fontWeight: 950 }}>第 {activeChapterIndex + 1}/6 阶段</span>
+            </span>
+            <span style={{ color: "var(--cherry-warm-brown)", fontSize: "0.9rem", lineHeight: 1.2, fontWeight: 950, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{activeChapter.title}</span>
+            <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.4, fontWeight: 820, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+              {activeChapter.challenge}{" -> "}{activeChapter.innovation}
+            </span>
+          </div>
+
           <div className="plant-timeline-figure" style={{ background: "var(--card)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "0.72rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)", overflow: "hidden" }}>
             <svg className="plant-timeline-illustration" viewBox="0 0 520 760" preserveAspectRatio="xMidYMid slice" role="img" aria-label="植物从淡水绿藻到被子植物的竖向演化证据时间轴" style={{ width: "100%", display: "block", borderRadius: 10 }}>
               <defs>
@@ -3088,8 +3099,19 @@ ${timelineReviewChecks.map((item, index) => `${index + 1}. ${item.title}：${ite
               box-shadow: none !important;
             }
 
+            #plant-evolution-explorer .plant-mobile-stage-summary {
+              display: grid !important;
+              gap: 0.26rem !important;
+              background: var(--cherry-yellow-light) !important;
+              border: 1.5px solid var(--cherry-yellow) !important;
+              border-radius: 10px !important;
+              padding: 0.58rem 0.64rem !important;
+              min-width: 0 !important;
+              box-sizing: border-box !important;
+            }
+
             #plant-evolution-explorer .plant-timeline-illustration {
-              height: 318px !important;
+              height: 238px !important;
               border-radius: 8px !important;
             }
 
