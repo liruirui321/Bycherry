@@ -169,7 +169,7 @@ export function Hero() {
             {" & "}
             <span style={{ color: "var(--cherry-blue)" }}>AI</span>
           </h1>
-          <p style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(0.88rem, 0.95vw, 0.98rem)", lineHeight: 1.55, fontWeight: 760, maxWidth: 390 }}>
+          <p className="hero-subtitle" style={{ margin: 0, color: "var(--cherry-warm-mid)", fontSize: "clamp(0.88rem, 0.95vw, 0.98rem)", lineHeight: 1.55, fontWeight: 760, maxWidth: 390, overflowWrap: "anywhere", wordBreak: "break-word" }}>
             科学模拟、科研阅读和 AI 学习工具，打开后直接阅读、操作和练习。
           </p>
           <div className="hero-scope-row" role="group" aria-label="内容范围" style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
@@ -794,6 +794,12 @@ export function Hero() {
             line-height: 1.06 !important;
           }
 
+          .hero-subtitle {
+            max-width: 100% !important;
+            overflow-wrap: anywhere !important;
+            word-break: break-word !important;
+          }
+
           .hero-title-mobile-break {
             display: block;
           }
@@ -814,10 +820,11 @@ export function Hero() {
             width: 100% !important;
             max-width: 100% !important;
             gap: 0.5rem !important;
+            overflow: hidden !important;
           }
 
           .hero-entry-desc {
-            -webkit-line-clamp: 1 !important;
+            display: none !important;
           }
 
           .hero-entry-card strong {

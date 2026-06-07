@@ -4749,6 +4749,23 @@ If any of these are missing, add them before the final answer.
           }
 
           @media (max-width: 520px) {
+            #work-primary-tool {
+              padding-left: 0.75rem !important;
+              padding-right: 0.75rem !important;
+              max-width: 100vw !important;
+              overflow-x: hidden !important;
+            }
+
+            #concept-explainer-tool,
+            #concept-explainer-tool .concept-main-input-panel,
+            #concept-explainer-tool details {
+              width: 100% !important;
+              max-width: 100% !important;
+              min-width: 0 !important;
+              box-sizing: border-box !important;
+              overflow-x: hidden !important;
+            }
+
             #concept-explainer-tool .concept-explanation-pack,
             #concept-explainer-tool .concept-responsive-grid,
             #concept-explainer-tool .concept-agent-run-details,
@@ -4761,11 +4778,15 @@ If any of these are missing, add them before the final answer.
               border-radius: 12px !important;
             }
 
+            #concept-explainer-tool .concept-top-route-strip,
+            #concept-explainer-tool .concept-quick-start-strip {
+              grid-template-columns: 1fr !important;
+              gap: 0.4rem !important;
+            }
+
             #concept-explainer-tool .concept-input-quality-grid,
             #concept-explainer-tool .concept-scope-hint-strip,
-            #concept-explainer-tool .concept-top-route-strip,
             #concept-explainer-tool .concept-flow-map,
-            #concept-explainer-tool .concept-agent-input-grid,
             #concept-explainer-tool .concept-pack-card-grid,
             #concept-explainer-tool .concept-understanding-input-grid,
             #concept-explainer-tool .concept-understanding-check-grid,
@@ -4774,8 +4795,19 @@ If any of these are missing, add them before the final answer.
               gap: 0.44rem !important;
             }
 
+            #concept-explainer-tool .concept-agent-input-grid {
+              grid-template-columns: 1fr !important;
+              gap: 0.48rem !important;
+            }
+
+            #concept-explainer-tool .concept-agent-input-grid > * {
+              min-width: 0 !important;
+            }
+
             #concept-explainer-tool .concept-agent-input-grid textarea,
             #concept-explainer-tool .concept-agent-input-grid input {
+              width: 100% !important;
+              box-sizing: border-box !important;
               min-height: 42px !important;
               font-size: 0.7rem !important;
               padding: 0.46rem !important;
