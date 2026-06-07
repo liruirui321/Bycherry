@@ -701,8 +701,8 @@ export function Hero() {
           .hero-inner,
           .hero-featured-panel,
           .hero-entry-list {
-            width: calc(100vw - 1.7rem) !important;
-            max-width: calc(100vw - 1.7rem) !important;
+            width: 100% !important;
+            max-width: 100% !important;
           }
 
           .hero-title {
@@ -726,10 +726,27 @@ export function Hero() {
             min-height: 66px !important;
             padding: 0.48rem 0.56rem !important;
             width: 100% !important;
+            max-width: 100% !important;
+            gap: 0.5rem !important;
           }
 
           .hero-entry-desc {
             -webkit-line-clamp: 1 !important;
+          }
+
+          .hero-entry-row strong {
+            min-width: 0 !important;
+            overflow: hidden !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 1 !important;
+            -webkit-box-orient: vertical !important;
+          }
+
+          .hero-entry-row strong + span {
+            max-width: 4.8rem !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
           }
         }
 
