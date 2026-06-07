@@ -4449,6 +4449,19 @@ If any of these are missing, add them before the final answer.
               </div>
             ))}
           </div>
+          <div className="concept-live-visual-strip" role="group" aria-label={`${concept} 的首屏可视化解释`} style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.34rem", alignItems: "stretch" }}>
+            {visualStructureItems.map((item, index) => (
+              <div className="concept-live-visual-node" key={`live-${item.title}`} style={{ background: item.tone, border: "1.5px solid rgba(94,68,42,0.11)", borderRadius: 8, padding: "0.42rem 0.48rem", minWidth: 0, position: "relative", overflow: "hidden", display: "grid", gap: "0.18rem", alignContent: "start" }}>
+                <span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.34rem", minWidth: 0 }}>
+                  <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.66rem", lineHeight: 1.12, fontWeight: 950, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.title}</strong>
+                  <span aria-hidden="true" style={{ width: 17, height: 17, borderRadius: "50%", background: active.color, color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.56rem", fontWeight: 900, flexShrink: 0 }}>
+                    {index < visualStructureItems.length - 1 ? (visualMode === "对照表" ? "=" : visualMode === "循环图" && index === visualStructureItems.length - 2 ? "↺" : ">") : "✓"}
+                  </span>
+                </span>
+                <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.62rem", lineHeight: 1.3, fontWeight: 820, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item.body}</span>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="concept-freeform-brief-panel" style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.18)", borderRadius: 12, padding: "0.58rem", display: "grid", gap: "0.48rem" }}>
           <div className="concept-freeform-brief-header" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto auto", gap: "0.5rem", alignItems: "center" }}>
@@ -5019,6 +5032,7 @@ If any of these are missing, add them before the final answer.
 
             #concept-explainer-tool .concept-input-mode-grid,
             #concept-explainer-tool .concept-pack-card-grid,
+            #concept-explainer-tool .concept-live-visual-strip,
             #concept-explainer-tool .concept-understanding-input-grid,
             #concept-explainer-tool .concept-understanding-check-grid {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -5100,6 +5114,7 @@ If any of these are missing, add them before the final answer.
             #concept-explainer-tool .concept-scope-hint-strip,
             #concept-explainer-tool .concept-flow-map,
             #concept-explainer-tool .concept-pack-card-grid,
+            #concept-explainer-tool .concept-live-visual-strip,
             #concept-explainer-tool .concept-freeform-brief-card-grid,
             #concept-explainer-tool .concept-understanding-input-grid,
             #concept-explainer-tool .concept-understanding-check-grid,
@@ -5148,6 +5163,7 @@ If any of these are missing, add them before the final answer.
 
             #concept-explainer-tool .concept-pack-card,
             #concept-explainer-tool .concept-scope-hint-card,
+            #concept-explainer-tool .concept-live-visual-node,
             #concept-explainer-tool .concept-visual-node,
             #concept-explainer-tool .concept-understanding-check-card {
               min-height: 0 !important;
@@ -5204,6 +5220,7 @@ If any of these are missing, add them before the final answer.
             }
 
             #concept-explainer-tool .concept-pack-card span,
+            #concept-explainer-tool .concept-live-visual-node span,
             #concept-explainer-tool .concept-visual-node span,
             #concept-explainer-tool .concept-understanding-check-card span {
               font-size: 0.66rem !important;
@@ -5211,6 +5228,7 @@ If any of these are missing, add them before the final answer.
             }
 
             #concept-explainer-tool .concept-pack-card > span:nth-of-type(2),
+            #concept-explainer-tool .concept-live-visual-node > span:nth-child(2),
             #concept-explainer-tool .concept-visual-node > span,
             #concept-explainer-tool .concept-understanding-check-card > span:nth-of-type(2) {
               overflow: hidden !important;
