@@ -81,6 +81,14 @@ function HeroMiniVisual({ kind }: { kind: HeroVisualKind }) {
   );
 }
 
+const heroMobileDescriptions: Record<HeroVisualKind, string> = {
+  "gene-expression": "调节分子，观察 mRNA 和多肽链变化。",
+  "research-prompt-kit": "整理科研材料，生成证据核查记录。",
+  "concept-explainer": "输入概念，生成解释卡和即时小测。",
+  "crispr-interactive": "调整 guide RNA，查看匹配和风险。",
+  "plant-evolution-stories": "按阶段看关键创新、证据和自测。",
+};
+
 export function Hero() {
   const readingHref = "/reading";
   const entries = [
@@ -96,6 +104,7 @@ export function Hero() {
       path: work.path,
       outputs: work.outputs,
       visualKind: work.slug as HeroVisualKind,
+      mobileDesc: heroMobileDescriptions[work.slug as HeroVisualKind],
     })),
   ];
 
@@ -139,8 +148,8 @@ export function Hero() {
         <div className="hero-float-deco hero-float-leaf"><IconLeafSmall size={24} color="var(--cherry-sage)" /></div>
       </div>
 
-      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1840, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(300px, 0.5fr) minmax(780px, 1.5fr)", gap: "clamp(1.2rem, 2.8vw, 3.2rem)", alignItems: "center" }}>
-        <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.88rem", justifyItems: "start", textAlign: "left", alignContent: "center", paddingTop: "0" }}>
+      <div className="hero-inner" style={{ position: "relative", zIndex: 2, maxWidth: 1900, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(270px, 0.38fr) minmax(900px, 1.62fr)", gap: "clamp(1rem, 2.1vw, 2.4rem)", alignItems: "center" }}>
+        <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.78rem", justifyItems: "start", textAlign: "left", alignContent: "center", paddingTop: "0" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.36rem 1rem", color: "var(--cherry-forest)", fontSize: "0.8rem", fontWeight: 850, background: "rgba(250,247,241,0.76)", letterSpacing: 0 }}>
             <IconBranch size={13} color="var(--cherry-forest)" />
             By Cherry · Science Studio
@@ -150,7 +159,7 @@ export function Hero() {
             className="hero-title"
             style={{
               fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-              fontSize: "clamp(2.2rem, 4vw, 4.65rem)",
+              fontSize: "clamp(2.05rem, 3.15vw, 3.85rem)",
               fontWeight: 920,
               lineHeight: 1.03,
               color: "var(--cherry-warm-brown)",
@@ -224,12 +233,12 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.72rem", width: "100%", alignContent: "start" }}>
+        <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gap: "0.78rem", width: "100%", alignContent: "start" }}>
           <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.75rem", minWidth: 0 }}>
             <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.12rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>精选内容</h2>
             <span className="hero-entry-grid-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>{entries.length} 个内容</span>
           </div>
-          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(6, minmax(0, 1fr))", gap: "0.82rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
+          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(6, minmax(0, 1fr))", gap: "0.78rem", minWidth: 0, maxWidth: "100%", boxSizing: "border-box" }}>
             {entries.map((entry, index) => (
               <a
                 className="hero-entry-card"
@@ -241,11 +250,11 @@ export function Hero() {
                 onFocus={() => preloadRouteForHref(entry.href)}
                 onPointerDown={() => preloadRouteForHref(entry.href)}
                 style={{
-                  background: "rgba(250,247,241,0.76)",
+                  background: `linear-gradient(135deg, ${entry.color} 0%, rgba(250,247,241,0.84) 72%)`,
                   border: `1.5px solid ${entry.border}`,
-                  borderLeft: `0.45rem solid ${entry.border}`,
+                  borderLeft: `0.5rem solid ${entry.border}`,
                   borderRadius: 12,
-                  padding: "0.88rem 0.95rem 0.86rem 0.82rem",
+                  padding: "0.86rem 0.9rem 0.82rem 0.82rem",
                   color: "var(--cherry-warm-brown)",
                   textDecoration: "none",
                   textAlign: "left",
@@ -258,14 +267,15 @@ export function Hero() {
                   overflow: "hidden",
                   minWidth: 0,
                   maxWidth: "100%",
-                  minHeight: 198,
+                  minHeight: 218,
                   boxSizing: "border-box",
-                  boxShadow: "0 10px 22px rgba(94,68,42,0.06)",
+                  boxShadow: "0 12px 24px rgba(94,68,42,0.07)",
                   transform: "none",
-                  gridColumn: index >= 3 ? "span 3" : "span 2",
+                  gridColumn: "span 2",
+                  gridRow: index === 0 ? "span 2" : undefined,
                 }}
               >
-                <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: 34, height: 34, borderRadius: 9, background: entry.color, flexShrink: 0, gridRow: "1 / span 2" }}>
+                <span aria-hidden="true" style={{ display: "inline-grid", placeItems: "center", width: 36, height: 36, borderRadius: 10, background: "rgba(250,247,241,0.62)", border: "1px solid rgba(94,68,42,0.08)", flexShrink: 0, gridRow: "1 / span 2" }}>
                   <span style={{ transform: "scale(0.64)", display: "grid", placeItems: "center" }}>{entry.icon}</span>
                 </span>
                 <span className="hero-entry-text" style={{ minWidth: 0, display: "grid", gap: "0.35rem", alignContent: "start" }}>
@@ -273,8 +283,9 @@ export function Hero() {
                     <strong style={{ fontSize: "0.92rem", lineHeight: 1.14, minWidth: 0, overflowWrap: "anywhere", fontWeight: 950 }}>{entry.title}</strong>
                     <span style={{ flexShrink: 0, color: "var(--cherry-forest)", fontSize: "0.62rem", lineHeight: 1, fontWeight: 950, borderRadius: 999, background: "rgba(95,145,115,0.13)", padding: "0.16rem 0.38rem" }}>{entry.kind}</span>
                   </span>
-                  <span className="hero-entry-desc" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.42, fontWeight: 800, minWidth: 0, maxWidth: "100%" }}>
-                    {entry.desc}
+                  <span className="hero-entry-desc" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.42, fontWeight: 820, minWidth: 0, maxWidth: "100%" }}>
+                    <span className="hero-entry-desc-full">{entry.desc}</span>
+                    <span className="hero-entry-desc-short">{entry.mobileDesc}</span>
                   </span>
                 </span>
                 <span className="hero-entry-path" style={{ gridColumn: "2 / 3", display: "flex", gap: "0.24rem", flexWrap: "wrap", alignItems: "center", color: "var(--cherry-warm-mid)", fontSize: "0.62rem", lineHeight: 1.2, fontWeight: 900 }}>
@@ -285,7 +296,12 @@ export function Hero() {
                       </span>
                     ))}
                 </span>
-                <span className="hero-entry-side" aria-hidden="true" style={{ gridColumn: "1 / 3", display: "flex", justifyContent: "space-between", gap: "0.72rem", alignItems: "end", minHeight: "4.7rem" }}>
+                {index === 0 ? (
+                  <span className="hero-entry-focus-line" style={{ gridColumn: "2 / 3", color: "var(--cherry-forest)", fontSize: "0.66rem", lineHeight: 1.25, fontWeight: 950 }}>
+                    固定序列 ATG GAA TTT CCG · 看 mRNA 延伸和多肽链生成
+                  </span>
+                ) : null}
+                <span className="hero-entry-side" aria-hidden="true" style={{ gridColumn: "1 / 3", display: "flex", justifyContent: "space-between", gap: "0.68rem", alignItems: "end", minHeight: "5.2rem" }}>
                   {entry.visualKind ? <HeroMiniVisual kind={entry.visualKind} /> : <span style={{ color: "rgba(62,42,26,0.34)", fontSize: "0.74rem", lineHeight: 1, fontWeight: 950 }}>{String(index + 1).padStart(2, "0")}</span>}
                   <span className="hero-entry-output-list" style={{ display: "flex", flexWrap: "wrap", gap: "0.26rem", justifyContent: "flex-end", alignItems: "center", flex: "1 1 auto", minWidth: 0 }}>
                     {entry.outputs.slice(0, 3).map((output) => (
@@ -456,6 +472,10 @@ export function Hero() {
           -webkit-box-orient: vertical;
         }
 
+        .hero-entry-desc-short {
+          display: none;
+        }
+
         .hero-title-break {
           display: none;
         }
@@ -473,6 +493,83 @@ export function Hero() {
           transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
         }
 
+        .hero-entry-card::after {
+          content: "";
+          position: absolute;
+          right: -1.4rem;
+          bottom: -1.65rem;
+          width: 8.5rem;
+          height: 8.5rem;
+          border-radius: 999px;
+          background: rgba(250,247,241,0.28);
+          border: 1px solid rgba(94,68,42,0.06);
+          pointer-events: none;
+        }
+
+        .hero-entry-card > * {
+          position: relative;
+          z-index: 1;
+        }
+
+        .hero-entry-card:first-child {
+          grid-template-rows: auto auto auto !important;
+        }
+
+        .hero-entry-card:first-child .hero-entry-side {
+          flex-direction: column;
+          align-items: stretch;
+          justify-content: end;
+          min-height: 11.15rem;
+        }
+
+        .hero-entry-card:first-child .hero-mini-visual {
+          width: 100%;
+          height: 8.9rem;
+        }
+
+        .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-dna {
+          left: 1.05rem;
+          top: 1rem;
+          width: 8.2rem;
+          gap: 0.45rem;
+        }
+
+        .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-dna span {
+          width: 1.42rem;
+          height: 1.42rem;
+          font-size: 0.58rem;
+        }
+
+        .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-rna {
+          left: 1.18rem;
+          top: 4.02rem;
+          width: 10.6rem;
+          height: 1.9rem;
+          border-bottom-width: 4px;
+        }
+
+        .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-ribosome {
+          right: 2.4rem;
+          bottom: 1.24rem;
+          width: 2rem;
+          height: 1.42rem;
+        }
+
+        .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-chain {
+          right: 1.05rem;
+          bottom: 2.36rem;
+          gap: 0.18rem;
+        }
+
+        .hero-entry-card:first-child .hero-mini-visual-gene .hero-mini-chain i {
+          width: 0.62rem;
+          height: 0.62rem;
+        }
+
+        .hero-entry-card:first-child .hero-entry-output-list {
+          justify-content: flex-start !important;
+        }
+
         .hero-entry-card:hover,
         .hero-entry-card:focus-visible {
           background: rgba(250,247,241,0.92) !important;
@@ -483,8 +580,8 @@ export function Hero() {
         .hero-mini-visual {
           position: relative;
           display: block;
-          width: 8.35rem;
-          height: 4.35rem;
+          width: 10.2rem;
+          height: 5.05rem;
           border: 1px solid rgba(94,68,42,0.1);
           border-radius: 11px;
           background:
@@ -493,23 +590,24 @@ export function Hero() {
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
           pointer-events: none;
           flex: 0 0 auto;
+          z-index: 1;
         }
 
         .hero-mini-visual-gene .hero-mini-dna {
           position: absolute;
-          left: 0.48rem;
-          top: 0.58rem;
+          left: 0.62rem;
+          top: 0.64rem;
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 0.24rem;
-          width: 5.5rem;
+          gap: 0.3rem;
+          width: 6.4rem;
         }
 
         .hero-mini-visual-gene .hero-mini-dna span {
           display: grid;
           place-items: center;
-          width: 1.04rem;
-          height: 1.04rem;
+          width: 1.16rem;
+          height: 1.16rem;
           border-radius: 999px;
           background: rgba(95,145,115,0.18);
           color: var(--cherry-forest);
@@ -519,10 +617,10 @@ export function Hero() {
 
         .hero-mini-visual-gene .hero-mini-rna {
           position: absolute;
-          left: 0.86rem;
-          top: 2.04rem;
-          width: 4.2rem;
-          height: 1.15rem;
+          left: 0.92rem;
+          top: 2.36rem;
+          width: 5.4rem;
+          height: 1.28rem;
           border-bottom: 3px solid var(--cherry-blue);
           border-radius: 0 0 80% 70%;
           transform: rotate(-7deg);
@@ -530,36 +628,36 @@ export function Hero() {
 
         .hero-mini-visual-gene .hero-mini-ribosome {
           position: absolute;
-          right: 1.1rem;
-          bottom: 0.82rem;
-          width: 1.28rem;
-          height: 0.92rem;
+          right: 1.32rem;
+          bottom: 0.88rem;
+          width: 1.45rem;
+          height: 1.04rem;
           border-radius: 999px 999px 0.7rem 0.7rem;
           background: rgba(94,68,42,0.54);
         }
 
         .hero-mini-visual-gene .hero-mini-chain {
           position: absolute;
-          right: 0.42rem;
-          bottom: 1.48rem;
+          right: 0.52rem;
+          bottom: 1.72rem;
           display: flex;
-          gap: 0.12rem;
+          gap: 0.14rem;
           transform: rotate(-22deg);
         }
 
         .hero-mini-visual-gene .hero-mini-chain i {
-          width: 0.42rem;
-          height: 0.42rem;
+          width: 0.48rem;
+          height: 0.48rem;
           border-radius: 999px;
           background: var(--cherry-red);
         }
 
         .hero-mini-visual-research .hero-mini-paper {
           position: absolute;
-          left: 0.56rem;
-          top: 0.44rem;
-          width: 2.9rem;
-          height: 2.75rem;
+          left: 0.7rem;
+          top: 0.58rem;
+          width: 3.45rem;
+          height: 3.12rem;
           border-radius: 0.32rem;
           background: rgba(255,255,255,0.72);
           border: 1px solid rgba(94,68,42,0.13);
@@ -577,15 +675,15 @@ export function Hero() {
 
         .hero-mini-visual-research .hero-mini-checklist {
           position: absolute;
-          right: 0.82rem;
-          top: 0.92rem;
+          right: 0.95rem;
+          top: 1rem;
           display: grid;
-          gap: 0.26rem;
+          gap: 0.32rem;
         }
 
         .hero-mini-visual-research .hero-mini-checklist i {
-          width: 2.45rem;
-          height: 0.38rem;
+          width: 3.05rem;
+          height: 0.42rem;
           border-radius: 999px;
           background: linear-gradient(90deg, var(--cherry-forest) 0 0.28rem, rgba(94,68,42,0.22) 0.28rem);
         }
@@ -659,9 +757,9 @@ export function Hero() {
 
         .hero-mini-visual-plant .hero-mini-plant-line {
           position: absolute;
-          left: 0.68rem;
-          right: 0.68rem;
-          bottom: 0.78rem;
+          left: 0.82rem;
+          right: 0.82rem;
+          bottom: 0.9rem;
           height: 0.2rem;
           border-radius: 999px;
           background: rgba(95,145,115,0.28);
@@ -669,28 +767,28 @@ export function Hero() {
 
         .hero-mini-visual-plant .hero-mini-plant-stage {
           position: absolute;
-          bottom: 0.72rem;
+          bottom: 0.84rem;
           border-radius: 999px;
           background: var(--cherry-sage);
           box-shadow: 0 0 0 2px rgba(250,247,241,0.8);
         }
 
         .hero-mini-visual-plant .hero-mini-plant-algae {
-          left: 0.74rem;
+          left: 0.94rem;
           width: 0.42rem;
           height: 0.42rem;
           background: var(--cherry-blue);
         }
 
         .hero-mini-visual-plant .hero-mini-plant-moss {
-          left: 1.92rem;
+          left: 2.36rem;
           width: 0.54rem;
           height: 0.68rem;
           border-radius: 60% 40% 45% 55%;
         }
 
         .hero-mini-visual-plant .hero-mini-plant-fern {
-          left: 3.14rem;
+          left: 3.9rem;
           width: 0.6rem;
           height: 1.08rem;
           border-radius: 80% 20% 80% 20%;
@@ -700,7 +798,7 @@ export function Hero() {
         }
 
         .hero-mini-visual-plant .hero-mini-plant-flower {
-          right: 0.78rem;
+          right: 0.96rem;
           width: 0.68rem;
           height: 0.68rem;
           background: var(--cherry-red);
@@ -812,7 +910,8 @@ export function Hero() {
           .hero-entry-grid-note,
           .hero-scope-row,
           .hero-entry-side,
-          .hero-entry-path {
+          .hero-entry-path,
+          .hero-entry-focus-line {
             display: none !important;
           }
 
@@ -821,12 +920,16 @@ export function Hero() {
             grid-template-columns: 2.1rem minmax(0, 1fr) !important;
             grid-template-rows: auto auto !important;
             min-height: 106px !important;
-            padding: 0.58rem 0.64rem !important;
+            padding: 0.58rem 0.82rem 0.58rem 0.64rem !important;
             width: 100% !important;
             max-width: 100% !important;
             justify-self: start !important;
             gap: 0.5rem !important;
             overflow: hidden !important;
+          }
+
+          .hero-entry-card::after {
+            display: none !important;
           }
 
           .hero-entry-text,
@@ -847,6 +950,15 @@ export function Hero() {
             text-overflow: ellipsis !important;
             white-space: normal !important;
             overflow-wrap: anywhere !important;
+            padding-right: 0.12rem !important;
+          }
+
+          .hero-entry-desc-full {
+            display: none !important;
+          }
+
+          .hero-entry-desc-short {
+            display: inline !important;
           }
 
           .hero-entry-card strong {
