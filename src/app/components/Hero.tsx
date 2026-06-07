@@ -149,7 +149,7 @@ export function Hero() {
         <div className="hero-float-deco hero-float-leaf"><IconLeafSmall size={24} color="var(--cherry-sage)" /></div>
       </div>
 
-      <div className="hero-inner" style={{ position: "relative", top: 0, zIndex: 2, maxWidth: 1660, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(370px, 0.35fr) minmax(0, 0.65fr)", gap: "clamp(1.2rem, 2.2vw, 2rem)", alignItems: "stretch", minHeight: "min(760px, calc(100svh - 116px))" }}>
+      <div className="hero-inner" style={{ position: "relative", top: 0, zIndex: 2, maxWidth: 1660, width: "100%", minWidth: 0, margin: "0 auto", boxSizing: "border-box", display: "grid", gridTemplateColumns: "minmax(370px, 0.35fr) minmax(0, 0.65fr)", gap: "clamp(1.2rem, 2.2vw, 2rem)", alignItems: "center", minHeight: "min(760px, calc(100svh - 116px))" }}>
         <div className="hero-copy-panel" style={{ minWidth: 0, display: "grid", gap: "0.72rem", justifyItems: "start", textAlign: "left", alignContent: "start", paddingTop: "clamp(4.7rem, 8.5vh, 5.7rem)" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, width: "fit-content", border: "1.5px dashed var(--cherry-yellow)", borderRadius: 999, padding: "0.36rem 1.05rem", color: "var(--cherry-forest)", fontSize: "0.86rem", fontWeight: 850, background: "rgba(250,247,241,0.76)", letterSpacing: 0 }}>
             <IconBranch size={13} color="var(--cherry-forest)" />
@@ -247,12 +247,12 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gridTemplateRows: "auto minmax(0, 1fr)", gap: "0.72rem", width: "100%", alignContent: "stretch" }}>
+        <div className="hero-featured-panel" style={{ minWidth: 0, display: "grid", gridTemplateRows: "auto auto", gap: "0.72rem", width: "100%", alignContent: "center" }}>
           <div style={{ display: "flex", alignItems: "end", justifyContent: "space-between", gap: "0.75rem", minWidth: 0 }}>
             <h2 style={{ margin: 0, color: "var(--cherry-warm-brown)", fontSize: "1.18rem", lineHeight: 1.2, fontWeight: 950, textAlign: "left" }}>精选内容</h2>
             <span className="hero-entry-grid-note" style={{ color: "var(--cherry-warm-mid)", fontSize: "0.72rem", lineHeight: 1.2, fontWeight: 880, textAlign: "right" }}>{entries.length} 个内容</span>
           </div>
-          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gridAutoRows: "minmax(0, 1fr)", gap: "0.78rem", minWidth: 0, maxWidth: "100%", minHeight: 0, boxSizing: "border-box" }}>
+          <nav id="works" className="hero-entry-grid" aria-label="内容目录" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gridAutoRows: "minmax(158px, auto)", gap: "0.78rem", minWidth: 0, maxWidth: "100%", minHeight: 0, boxSizing: "border-box", alignContent: "start" }}>
             {entries.map((entry, index) => (
               <a
                 className={`hero-entry-card ${index === entries.length - 1 ? "hero-entry-card-wide" : ""}`}
@@ -996,6 +996,7 @@ export function Hero() {
 
           .hero-entry-grid {
             grid-template-columns: 1fr !important;
+            grid-auto-rows: auto !important;
             gap: 0.5rem !important;
             justify-items: start !important;
             width: calc(100% - 0.7rem) !important;
@@ -1035,7 +1036,7 @@ export function Hero() {
             grid-column: auto !important;
             grid-template-columns: 2.1rem minmax(0, 1fr) !important;
             grid-template-rows: auto auto !important;
-            min-height: 106px !important;
+            min-height: 86px !important;
             padding: 0.58rem 0.82rem 0.58rem 0.64rem !important;
             width: 100% !important;
             max-width: 100% !important;
