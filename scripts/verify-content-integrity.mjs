@@ -311,6 +311,8 @@ function verifyPlatformGuideConfigBuilder() {
   expect(articleSource.includes("platformLearningGoal"), "Platform guide must collect an observable learning goal before copying a config.");
   expect(articleSource.includes("platformQuestionCount") && articleSource.includes("platformTimeBudget"), "Platform guide must collect question count and time budget.");
   expect(articleSource.includes("platformTopicTemplates"), "Platform guide must provide one-click topic fill packages.");
+  expect(articleSource.includes("firstPlatformTemplate"), "Platform guide must expose a first-screen fill example from the topic templates.");
+  expect(articleSource.includes("article-platform-fill-example") && articleSource.includes("照填样例：") && articleSource.includes("套用到面板"), "Platform guide must show a compact fill example before the collapsed usage panel.");
   expect(articleSource.includes("applyPlatformTopicTemplate"), "Platform guide must let learners load a topic package into the platform config.");
   expect(articleSource.includes("常用主题照填包"), "Platform guide must visibly expose reusable topic packages.");
   expect(articleSource.includes(">平台使用面板</summary>") && !articleSource.includes("照填配置与审核面板 ·") && articleSource.includes("当前方案：{activePlatformPlan.title}"), "Platform guide details summary must stay short while keeping the active plan inside expanded content.");
@@ -1314,6 +1316,9 @@ function verifyLearnerFacingArticleCopy() {
     "预习诊断、概念检查或复习巩固",
     "平台速用卡",
     "进入 scifusion.top",
+    "article-platform-fill-example",
+    "照填样例：",
+    "套用到面板",
     "selectedPlatformPlanIndex",
     "activePlatformPlan",
     "activePlatformPlanText",

@@ -1013,6 +1013,7 @@ ${aiMaterialAuditFilled.revision}
         },
       ]
     : [];
+  const firstPlatformTemplate = platformTopicTemplates[0] ?? null;
   const platformAuditRubricText = platformQuestionAuditRubric.map((item, index) => `${index + 1}. ${item.title}
 通过标准：${item.pass}
 不合格处理：${item.fix}`).join("\n\n");
@@ -1709,6 +1710,36 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
                   <span style={{ color: "var(--cherry-warm-brown)", fontWeight: 900, fontSize: "0.84rem", lineHeight: 1.42 }}>{articleQuickStart.step}</span>
                 </div>
               </div>
+            ) : null}
+
+            {firstPlatformTemplate ? (
+              <section className="article-platform-fill-example" aria-labelledby="article-platform-fill-example-title" style={{ background: "var(--card)", border: "1.5px solid rgba(58,92,62,0.18)", borderRadius: 10, padding: "0.66rem 0.72rem", marginBottom: "0.58rem", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.62rem", alignItems: "center", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
+                <div style={{ display: "grid", gap: "0.46rem", minWidth: 0 }}>
+                  <div style={{ display: "flex", gap: "0.46rem", alignItems: "center", flexWrap: "wrap" }}>
+                    <strong id="article-platform-fill-example-title" style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", lineHeight: 1.25 }}>
+                      照填样例：{firstPlatformTemplate.title}概念检查
+                    </strong>
+                    <span style={{ color: "var(--cherry-forest)", background: "rgba(169,201,172,0.2)", border: "1px solid rgba(93,140,101,0.18)", borderRadius: 999, padding: "0.16rem 0.46rem", fontSize: "0.66rem", fontWeight: 900 }}>
+                      {firstPlatformTemplate.questionCount} / {firstPlatformTemplate.timeBudget}
+                    </span>
+                  </div>
+                  <div className="article-platform-fill-example-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "0.42rem" }}>
+                    {[
+                      ["学习阶段", firstPlatformTemplate.learnerLevel],
+                      ["知识点范围", firstPlatformTemplate.knowledgeRange],
+                      ["审核重点", firstPlatformTemplate.auditFocus],
+                    ].map(([label, body]) => (
+                      <div key={label} style={{ background: "var(--muted)", border: "1px solid rgba(94,68,42,0.08)", borderRadius: 8, padding: "0.46rem 0.5rem", display: "grid", gap: "0.2rem", minWidth: 0 }}>
+                        <span style={{ color: "var(--cherry-forest)", fontSize: "0.66rem", lineHeight: 1.2, fontWeight: 930 }}>{label}</span>
+                        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.7rem", lineHeight: 1.42, fontWeight: 800, overflowWrap: "anywhere" }}>{body}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <button type="button" onClick={() => applyPlatformTopicTemplate(firstPlatformTemplate)} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.44rem 0.74rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem", whiteSpace: "nowrap" }}>
+                  套用到面板
+                </button>
+              </section>
             ) : null}
 
             <div className="article-above-fold-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(280px, 0.38fr)", gap: "1rem", alignItems: "start", borderTop: "1px solid rgba(94,68,42,0.12)", paddingTop: "0.55rem", marginBottom: "0.65rem" }}>
@@ -2491,6 +2522,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           .article-detail-link:focus-visible,
           .article-start-action-button:focus-visible,
           .article-execution-panel button:focus-visible,
+          .article-platform-fill-example button:focus-visible,
           #article-primary-action:focus-visible,
           #article-body-points:focus-visible,
           .plant-evidence-chain-builder button:focus-visible,
@@ -2591,6 +2623,25 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               font-size: 0.74rem !important;
               margin-bottom: 0.38rem !important;
               box-sizing: border-box !important;
+            }
+
+            .article-platform-fill-example {
+              grid-template-columns: 1fr !important;
+              gap: 0.5rem !important;
+              padding: 0.58rem !important;
+              border-radius: 8px !important;
+              margin-bottom: 0.46rem !important;
+            }
+
+            .article-platform-fill-example-grid {
+              grid-template-columns: 1fr !important;
+              gap: 0.34rem !important;
+            }
+
+            .article-platform-fill-example button {
+              width: 100% !important;
+              border-radius: 8px !important;
+              padding: 0.42rem 0.56rem !important;
             }
 
             .article-above-fold-grid {
