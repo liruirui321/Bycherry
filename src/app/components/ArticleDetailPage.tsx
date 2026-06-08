@@ -1712,6 +1712,37 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               </div>
             ) : null}
 
+            {aiMaterialAuditPrompts.length ? (
+              <section className="article-ai-audit-runway" aria-labelledby="article-ai-audit-runway-title" style={{ background: "var(--card)", border: "1.5px solid rgba(85,137,179,0.2)", borderRadius: 10, padding: "0.66rem 0.72rem", marginBottom: "0.58rem", display: "grid", gap: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.72rem", flexWrap: "wrap" }}>
+                  <div style={{ display: "grid", gap: "0.18rem" }}>
+                    <strong id="article-ai-audit-runway-title" style={{ color: "var(--cherry-warm-brown)", fontSize: "0.86rem", lineHeight: 1.25 }}>
+                      先跑 4 个质检任务
+                    </strong>
+                    <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.74rem", lineHeight: 1.42, fontWeight: 800 }}>
+                      粘贴 AI 生成材料后，按顺序判断目标、误解、证据边界和练习有效性。
+                    </span>
+                  </div>
+                  <button type="button" onClick={copyAiMaterialAuditPrompts} aria-describedby="article-summary-copy-status" style={{ background: "var(--cherry-forest)", color: "#FAF7F1", border: "none", borderRadius: 999, padding: "0.38rem 0.72rem", fontWeight: 900, cursor: "pointer", fontSize: "0.74rem", whiteSpace: "nowrap" }}>
+                    {copiedAiAuditPrompts ? "已复制" : "复制质检流程"}
+                  </button>
+                </div>
+                <div className="article-ai-audit-runway-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "0.45rem" }}>
+                  {aiMaterialAuditPrompts.map((item, index) => (
+                    <div key={item.title} style={{ background: index % 2 === 0 ? "var(--cherry-blue-light)" : "var(--cherry-yellow-light)", border: "1px solid rgba(94,68,42,0.1)", borderRadius: 8, padding: "0.5rem", display: "grid", gridTemplateColumns: "22px minmax(0, 1fr)", gap: "0.38rem", alignItems: "start", minWidth: 0 }}>
+                      <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", background: "var(--cherry-forest)", color: "#FAF7F1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "0.66rem", fontWeight: 900 }}>
+                        {index + 1}
+                      </span>
+                      <span style={{ display: "grid", gap: "0.16rem", minWidth: 0 }}>
+                        <strong style={{ color: "var(--cherry-warm-brown)", fontSize: "0.76rem", lineHeight: 1.22, fontWeight: 930 }}>{item.title}</strong>
+                        <span style={{ color: "var(--cherry-warm-mid)", fontSize: "0.68rem", lineHeight: 1.36, fontWeight: 820, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item.output}</span>
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
             {firstPlatformTemplate ? (
               <section className="article-platform-fill-example" aria-labelledby="article-platform-fill-example-title" style={{ background: "var(--card)", border: "1.5px solid rgba(58,92,62,0.18)", borderRadius: 10, padding: "0.66rem 0.72rem", marginBottom: "0.58rem", display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "0.62rem", alignItems: "center", boxShadow: "0 8px 18px rgba(94,68,42,0.04)" }}>
                 <div style={{ display: "grid", gap: "0.46rem", minWidth: 0 }}>
@@ -2087,7 +2118,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             ) : null}
 
             {aiMaterialAuditBuilderEnabled ? (
-              <details className="ai-material-audit-table-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
+              <details open className="ai-material-audit-table-builder article-compact-tool-details" style={{ background: "var(--card)", border: "1.5px solid rgba(94,68,42,0.12)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem", boxShadow: "0 8px 18px rgba(94,68,42,0.05)" }}>
                 <summary>AI 学习材料质检表</summary>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
                   <div>
@@ -2316,7 +2347,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
             ) : null}
 
             {aiMaterialAuditPrompts.length ? (
-              <details className="article-compact-tool-details ai-material-audit-prompt-details" style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.22)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
+              <details open className="article-compact-tool-details ai-material-audit-prompt-details" style={{ background: "var(--cherry-blue-light)", border: "1.5px solid rgba(85,137,179,0.22)", borderRadius: 8, padding: "0.62rem 0.72rem", marginBottom: "0.56rem" }}>
                 <summary>AI 质检流程卡</summary>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap" }}>
                   <div>
@@ -2522,6 +2553,7 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
           .article-detail-link:focus-visible,
           .article-start-action-button:focus-visible,
           .article-execution-panel button:focus-visible,
+          .article-ai-audit-runway button:focus-visible,
           .article-platform-fill-example button:focus-visible,
           #article-primary-action:focus-visible,
           #article-body-points:focus-visible,
@@ -2631,6 +2663,17 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               padding: 0.58rem !important;
               border-radius: 8px !important;
               margin-bottom: 0.46rem !important;
+            }
+
+            .article-ai-audit-runway {
+              padding: 0.58rem !important;
+              border-radius: 8px !important;
+              margin-bottom: 0.46rem !important;
+            }
+
+            .article-ai-audit-runway-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 0.36rem !important;
             }
 
             .article-platform-fill-example-grid {
@@ -2756,6 +2799,12 @@ ${article.highlights.map((highlight, index) => `${index + 1}. ${highlight}`).joi
               overflow: hidden;
             }
 
+          }
+
+          @media (max-width: 520px) {
+            .article-ai-audit-runway-grid {
+              grid-template-columns: 1fr !important;
+            }
           }
         `}
       </style>

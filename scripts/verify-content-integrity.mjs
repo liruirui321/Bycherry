@@ -417,6 +417,9 @@ function verifyAiMaterialAuditTableBuilder() {
   expect(articleSource.includes("学习目标") && articleSource.includes("资料边界") && articleSource.includes("常见误解") && articleSource.includes("练习检查") && articleSource.includes("证据边界") && articleSource.includes("复盘动作"), "AI material audit table builder must keep goal, source, misconception, practice, evidence, and revision fields.");
   expect(articleSource.includes("避免把 AI 输出直接当成理解"), "AI material audit table builder must keep the output-is-not-understanding caution visible.");
   expect(articleSource.includes("ai-material-audit-table-builder") && articleSource.includes("ai-material-audit-table-grid"), "AI material audit table builder must have stable classes for layout checks.");
+  expect(articleSource.includes("article-ai-audit-runway") && articleSource.includes("article-ai-audit-runway-grid") && articleSource.includes("先跑 4 个质检任务") && articleSource.includes("粘贴 AI 生成材料后，按顺序判断目标、误解、证据边界和练习有效性。"), "AI material audit article must surface the audit workflow before the body instead of hiding it below the fold.");
+  expect(articleSource.includes('<details open className="ai-material-audit-table-builder') && articleSource.includes('<details open className="article-compact-tool-details ai-material-audit-prompt-details"'), "AI material audit table and prompt flow must be expanded by default.");
+  expect(articleSource.includes(".article-ai-audit-runway-grid") && articleSource.includes("grid-template-columns: repeat(2, minmax(0, 1fr)) !important") && articleSource.includes("@media (max-width: 520px)") && articleSource.includes("grid-template-columns: 1fr !important"), "AI material audit runway must stay readable on tablet and narrow mobile layouts.");
 }
 
 function verifyArticleOutcomeSnapshot() {
