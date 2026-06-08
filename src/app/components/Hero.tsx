@@ -1,8 +1,6 @@
 import type { CSSProperties, MouseEvent, ReactNode } from "react";
 import { works } from "./Works";
 import {
-  IconArrowDown,
-  IconBook,
   IconBranch,
   IconDNA,
   IconLeaf,
@@ -79,87 +77,77 @@ export function Hero() {
         <FloatDeco className="hero-float-seed"><IconSeedling size={26} color="var(--cherry-forest)" /></FloatDeco>
       </div>
 
-      <div className="hero-main">
-        <div className="hero-badge">
-          <IconSparkle size={13} color="var(--cherry-bark)" />
-          <span>By Cherry</span>
-          <IconSparkle size={13} color="var(--cherry-bark)" />
+      <div className="hero-layout">
+        <div className="hero-main">
+          <div className="hero-badge">
+            <IconSparkle size={13} color="var(--cherry-bark)" />
+            <span>By Cherry</span>
+            <IconSparkle size={13} color="var(--cherry-bark)" />
+          </div>
+
+          <h1 id="hero-heading" className="hero-title">
+            A tiny studio for{" "}
+            <span className="hero-title-science">science</span>,{" "}
+            <span className="hero-title-learning">learning</span>
+            {" & "}
+            <span className="hero-title-ai">AI</span>
+          </h1>
+
+          <p className="hero-subtitle">
+            科学模拟、科研阅读和 AI 学习工具，打开后直接进入内容。
+          </p>
+
+          <div className="hero-action-row">
+            <a href={worksHref} className="hero-primary-link" onClick={(event) => openEntry(worksHref, event)}>
+              <IconSeedling size={18} color="#FAF7F1" />
+              浏览主题作品
+            </a>
+            <a
+              href={readingHref}
+              className="hero-reading-link"
+              onClick={(event) => openEntry(readingHref, event)}
+              onMouseEnter={() => preloadRouteForHref(readingHref)}
+              onFocus={() => preloadRouteForHref(readingHref)}
+            >
+              <IconNotebook size={18} />
+              读读笔记
+            </a>
+          </div>
         </div>
 
-        <h1 id="hero-heading" className="hero-title">
-          A tiny studio for{" "}
-          <span className="hero-title-science">science</span>,{" "}
-          <span className="hero-title-learning">learning</span>
-          {" & "}
-          <span className="hero-title-ai">AI</span>
-        </h1>
-
-        <p className="hero-subtitle">
-          科学模拟、科研阅读和 AI 学习工具，打开后直接进入内容。
-        </p>
-
-        <div className="hero-action-row">
-          <a href={worksHref} className="hero-primary-link" onClick={(event) => openEntry(worksHref, event)}>
-            <IconSeedling size={18} color="#FAF7F1" />
-            看看主题作品
-          </a>
-          <a
-            href={readingHref}
-            className="hero-reading-link"
-            onClick={(event) => openEntry(readingHref, event)}
-            onMouseEnter={() => preloadRouteForHref(readingHref)}
-            onFocus={() => preloadRouteForHref(readingHref)}
-          >
-            <IconNotebook size={18} />
-            读读笔记
-          </a>
+        <div className="hero-showcase">
+          <div className="hero-showcase-head">
+            <strong>精选内容</strong>
+            <span>{entries.length} 个主题作品</span>
+          </div>
+          <nav id="works" className="hero-entry-grid" aria-label="内容目录">
+            {entries.map((entry) => (
+              <a
+                className="hero-entry-card"
+                key={entry.key}
+                href={entry.href}
+                aria-label={`打开${entry.title}：${entry.desc}`}
+                onClick={(event) => openEntry(entry.href, event)}
+                onMouseEnter={() => preloadRouteForHref(entry.href)}
+                onFocus={() => preloadRouteForHref(entry.href)}
+                onPointerDown={() => preloadRouteForHref(entry.href)}
+                style={{
+                  "--entry-color": entry.color,
+                  "--entry-border": entry.border,
+                } as CSSProperties}
+              >
+                <span className="hero-entry-icon" aria-hidden="true">{entry.icon}</span>
+                <span className="hero-entry-copy">
+                  <strong>{entry.title}</strong>
+                  <span>{entry.desc}</span>
+                </span>
+                <span className="hero-entry-meta">
+                  {entry.outputs.slice(0, 2).map((output) => <em key={output}>{output}</em>)}
+                </span>
+              </a>
+            ))}
+          </nav>
         </div>
-      </div>
-
-      <nav id="works" className="hero-entry-grid" aria-label="内容目录">
-        {entries.map((entry) => (
-          <a
-            className="hero-entry-card"
-            key={entry.key}
-            href={entry.href}
-            aria-label={`打开${entry.title}：${entry.desc}`}
-            onClick={(event) => openEntry(entry.href, event)}
-            onMouseEnter={() => preloadRouteForHref(entry.href)}
-            onFocus={() => preloadRouteForHref(entry.href)}
-            onPointerDown={() => preloadRouteForHref(entry.href)}
-            style={{
-              "--entry-color": entry.color,
-              "--entry-border": entry.border,
-            } as CSSProperties}
-          >
-            <span className="hero-entry-icon" aria-hidden="true">{entry.icon}</span>
-            <span className="hero-entry-copy">
-              <strong>{entry.title}</strong>
-              <span>{entry.outputs.slice(0, 2).join(" / ")}</span>
-            </span>
-          </a>
-        ))}
-        <a
-          className="hero-entry-card hero-entry-reading"
-          href={readingHref}
-          onClick={(event) => openEntry(readingHref, event)}
-          onMouseEnter={() => preloadRouteForHref(readingHref)}
-          onFocus={() => preloadRouteForHref(readingHref)}
-          style={{
-            "--entry-color": "var(--cherry-yellow-light)",
-            "--entry-border": "var(--cherry-yellow)",
-          } as CSSProperties}
-        >
-          <span className="hero-entry-icon" aria-hidden="true"><IconBook size={36} color="var(--cherry-yellow)" /></span>
-          <span className="hero-entry-copy">
-            <strong>阅读库</strong>
-            <span>科研证据 / 学习方法</span>
-          </span>
-        </a>
-      </nav>
-
-      <div className="hero-scroll-hint" aria-hidden="true">
-        <IconArrowDown size={16} />
       </div>
 
       <style>{`
@@ -167,11 +155,10 @@ export function Hero() {
           min-height: calc(100svh - 56px);
           position: relative;
           overflow: hidden;
-          display: grid;
-          grid-template-rows: minmax(0, 1fr) auto;
+          display: flex;
           align-items: center;
-          gap: clamp(1rem, 2.2vh, 1.6rem);
-          padding: clamp(3.3rem, 7vh, 5.2rem) clamp(1rem, 3vw, 2rem) clamp(1.1rem, 2.5vh, 1.6rem);
+          justify-content: center;
+          padding: clamp(2.6rem, 5.4vh, 4.2rem) clamp(1rem, 3vw, 2rem) clamp(1.4rem, 3vh, 2.2rem);
           background: var(--background);
           font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           box-sizing: border-box;
@@ -303,14 +290,21 @@ export function Hero() {
           animation-delay: -2s;
         }
 
-        .hero-main {
+        .hero-layout {
           position: relative;
           z-index: 2;
-          width: min(100%, 760px);
-          margin: 0 auto;
-          text-align: center;
+          width: min(100%, 1520px);
           display: grid;
-          justify-items: center;
+          grid-template-columns: minmax(390px, 0.9fr) minmax(620px, 1.35fr);
+          align-items: center;
+          gap: clamp(1.4rem, 3vw, 3.4rem);
+        }
+
+        .hero-main {
+          width: min(100%, 680px);
+          text-align: left;
+          display: grid;
+          justify-items: start;
           align-content: center;
         }
 
@@ -364,7 +358,7 @@ export function Hero() {
 
         .hero-subtitle {
           margin: 1rem 0 0;
-          max-width: 620px;
+          max-width: 580px;
           color: var(--cherry-warm-mid);
           font-size: clamp(1.02rem, 1.45vw, 1.28rem);
           line-height: 1.7;
@@ -374,7 +368,7 @@ export function Hero() {
         .hero-action-row {
           display: flex;
           gap: 0.85rem;
-          justify-content: center;
+          justify-content: flex-start;
           flex-wrap: wrap;
           margin-top: clamp(1.35rem, 2.9vh, 2.2rem);
         }
@@ -409,34 +403,60 @@ export function Hero() {
           transform: translateY(-2px);
         }
 
-        .hero-entry-grid {
-          position: relative;
-          z-index: 2;
-          width: min(100%, 1220px);
-          margin: 0 auto;
-          box-sizing: border-box;
+        .hero-showcase {
+          min-width: 0;
           display: grid;
-          grid-template-columns: repeat(6, minmax(0, 1fr));
-          gap: 0.68rem;
+          gap: 0.7rem;
+        }
+
+        .hero-showcase-head {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 1rem;
+          color: var(--cherry-warm-brown);
+          padding: 0 0.2rem;
+        }
+
+        .hero-showcase-head strong {
+          font-size: 1.08rem;
+          font-weight: 950;
+        }
+
+        .hero-showcase-head span {
+          color: var(--cherry-warm-mid);
+          font-size: 0.82rem;
+          font-weight: 900;
+        }
+
+        .hero-entry-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.85rem;
         }
 
         .hero-entry-card {
           min-width: 0;
-          min-height: 86px;
+          min-height: 150px;
           display: grid;
           box-sizing: border-box;
-          grid-template-columns: 2.45rem minmax(0, 1fr);
-          gap: 0.22rem 0.62rem;
-          align-items: center;
-          padding: 0.72rem 0.76rem;
-          border-radius: 14px;
-          border: 1.5px solid var(--entry-border);
-          border-top: 0.34rem solid var(--entry-border);
-          background: linear-gradient(145deg, var(--entry-color), rgba(250,247,241,0.84));
+          grid-template-columns: 2.7rem minmax(0, 1fr);
+          grid-template-rows: auto 1fr auto;
+          gap: 0.55rem 0.78rem;
+          align-items: start;
+          padding: 0.95rem;
+          border-radius: 18px;
+          border: 2px solid var(--entry-border);
+          background: linear-gradient(150deg, var(--entry-color), rgba(250,247,241,0.9));
           color: var(--cherry-warm-brown);
           text-decoration: none;
-          box-shadow: 0 12px 24px rgba(94,68,42,0.07);
+          box-shadow: 0 14px 26px rgba(94,68,42,0.08);
           transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+
+        .hero-entry-card:first-child,
+        .hero-entry-card:nth-child(3) {
+          min-height: 172px;
         }
 
         .hero-entry-card:hover,
@@ -455,8 +475,8 @@ export function Hero() {
           grid-row: 1 / 3;
           display: grid;
           place-items: center;
-          width: 2.35rem;
-          height: 2.35rem;
+          width: 2.5rem;
+          height: 2.5rem;
           border-radius: 12px;
           background: rgba(250,247,241,0.66);
           border: 1px solid rgba(94,68,42,0.08);
@@ -468,41 +488,46 @@ export function Hero() {
         }
 
         .hero-entry-copy {
+          grid-column: 2;
           min-width: 0;
           display: grid;
-          gap: 0.18rem;
+          gap: 0.42rem;
         }
 
         .hero-entry-copy strong {
-          min-width: 0;
           color: var(--cherry-warm-brown);
-          font-size: 0.86rem;
+          font-size: 1.08rem;
           line-height: 1.2;
           font-weight: 950;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
         }
 
         .hero-entry-copy span {
-          min-width: 0;
           color: var(--cherry-warm-mid);
-          font-size: 0.66rem;
-          line-height: 1.28;
+          font-size: 0.86rem;
+          line-height: 1.55;
           font-weight: 820;
-          white-space: nowrap;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
           overflow: hidden;
-          text-overflow: ellipsis;
         }
 
-        .hero-scroll-hint {
-          position: absolute;
-          left: calc(50% - 8px);
-          bottom: 0.38rem;
-          z-index: 2;
-          color: var(--cherry-warm-mid);
-          opacity: 0.38;
-          animation: heroFloatDeco 2.4s ease-in-out infinite;
+        .hero-entry-meta {
+          grid-column: 1 / -1;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.45rem;
+          align-self: end;
+        }
+
+        .hero-entry-meta em {
+          border-radius: 999px;
+          background: rgba(250,247,241,0.82);
+          color: var(--cherry-warm-brown);
+          padding: 0.24rem 0.52rem;
+          font-style: normal;
+          font-size: 0.72rem;
+          font-weight: 900;
         }
 
         @keyframes heroFloatDeco {
@@ -511,8 +536,24 @@ export function Hero() {
         }
 
         @media (max-width: 1100px) {
+          .hero-layout {
+            grid-template-columns: 1fr;
+            width: min(100%, 760px);
+            gap: 1.2rem;
+          }
+
+          .hero-main {
+            text-align: center;
+            justify-items: center;
+            margin: 0 auto;
+          }
+
+          .hero-action-row {
+            justify-content: center;
+          }
+
           .hero-entry-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
           }
         }
 
@@ -528,7 +569,7 @@ export function Hero() {
           }
 
           .hero-title {
-            font-size: clamp(2.1rem, 12vw, 3.2rem);
+            font-size: clamp(2rem, 9.4vw, 2.75rem);
           }
 
           .hero-subtitle {
@@ -537,14 +578,24 @@ export function Hero() {
           }
 
           .hero-entry-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: 1fr;
             gap: 0.56rem;
           }
 
           .hero-entry-card {
-            min-height: 78px;
-            padding: 0.62rem;
+            min-height: 74px;
+            padding: 0.8rem;
             border-radius: 12px;
+          }
+
+          .hero-entry-card:first-child,
+          .hero-entry-card:nth-child(3) {
+            min-height: 74px;
+          }
+
+          .hero-entry-copy span,
+          .hero-entry-meta {
+            display: none;
           }
 
           .hero-float-tube,
@@ -595,6 +646,11 @@ export function Hero() {
           .hero-entry-icon > svg {
             width: 1.55rem;
             height: 1.55rem;
+          }
+
+          .hero-entry-copy span,
+          .hero-entry-meta {
+            display: none;
           }
         }
 
